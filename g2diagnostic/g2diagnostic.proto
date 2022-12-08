@@ -1,0 +1,219 @@
+syntax = "proto3";
+package g2diagnostic;
+
+option go_package = "github.com/docktermj/go-xyzzy-grpc/g2diagnostic";
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.helloworld";
+option java_outer_classname = "HelloWorldProto";
+
+service G2Diagnostic {
+  rpc CheckDBPerf (CheckDBPerfRequest) returns (CheckDBPerfResponse) {}
+  rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
+  rpc CloseEntityListBySize (CloseEntityListBySizeRequest) returns (CloseEntityListBySizeResponse) {}
+  rpc Destroy (DestroyRequest) returns (DestroyResponse) {}
+  rpc FetchNextEntityBySize (FetchNextEntityBySizeRequest) returns (FetchNextEntityBySizeResponse) {}
+  rpc FindEntitiesByFeatureIDs (FindEntitiesByFeatureIDsRequest) returns (FindEntitiesByFeatureIDsResponse) {}
+  rpc GetAvailableMemory (GetAvailableMemoryRequest) returns (GetAvailableMemoryResponse) {}
+  rpc GetDataSourceCounts (GetDataSourceCountsRequest) returns (GetDataSourceCountsResponse) {}
+  rpc GetDBInfo (GetDBInfoRequest) returns (GetDBInfoResponse) {}
+  rpc GetEntityDetails (GetEntityDetailsRequest) returns (GetEntityDetailsResponse) {}
+  rpc GetEntityListBySize (GetEntityListBySizeRequest) returns (GetEntityListBySizeResponse) {}
+  rpc GetEntityResume (GetEntityResumeRequest) returns (GetEntityResumeResponse) {}
+  rpc GetEntitySizeBreakdown (GetEntitySizeBreakdownRequest) returns (GetEntitySizeBreakdownResponse) {}
+  rpc GetFeature (GetFeatureRequest) returns (GetFeatureResponse) {}
+  rpc GetGenericFeatures (GetGenericFeaturesRequest) returns (GetGenericFeaturesResponse) {}
+  rpc GetLastException (GetLastExceptionRequest) returns (GetLastExceptionResponse) {}
+  rpc GetLastExceptionCode (GetLastExceptionCodeRequest) returns (GetLastExceptionCodeResponse) {}
+  rpc GetLogicalCores (GetLogicalCoresRequest) returns (GetLogicalCoresResponse) {}
+  rpc GetMappingStatistics (GetMappingStatisticsRequest) returns (GetMappingStatisticsResponse) {}
+  rpc GetPhysicalCores (GetPhysicalCoresRequest) returns (GetPhysicalCoresResponse) {}
+  rpc GetRelationshipDetails (GetRelationshipDetailsRequest) returns (GetRelationshipDetailsResponse) {}
+  rpc GetResolutionStatistics (GetResolutionStatisticsRequest) returns (GetResolutionStatisticsResponse) {}
+  rpc GetTotalSystemMemory (GetTotalSystemMemoryRequest) returns (GetTotalSystemMemoryResponse) {}
+  rpc Init (InitRequest) returns (InitResponse) {}
+  rpc InitWithConfigID (InitWithConfigIDRequest) returns (InitWithConfigIDResponse) {}
+  rpc Reinit (ReinitRequest) returns (ReinitResponse) {}
+}
+
+message CheckDBPerfRequest {
+  int32 secondsToRun = 1;
+}
+
+message CheckDBPerfResponse {
+  string result = 1;
+}
+
+message ClearLastExceptionRequest {}
+
+message ClearLastExceptionResponse {}
+
+message CloseEntityListBySizeRequest {
+  string entityListBySizeHandle = 1;
+}
+
+message CloseEntityListBySizeResponse {}
+
+message DestroyRequest {}
+
+message DestroyResponse {}
+
+message FetchNextEntityBySizeRequest {
+  string entityListBySizeHandle = 1;
+}
+
+message FetchNextEntityBySizeResponse {
+  string result = 1;
+}
+
+message FindEntitiesByFeatureIDsRequest {
+  string features = 1;
+}
+
+message FindEntitiesByFeatureIDsResponse {
+  string result = 1;
+}
+
+message GetAvailableMemoryRequest {}
+
+message GetAvailableMemoryResponse {
+  int64 result = 1;
+}
+
+message GetDataSourceCountsRequest {}
+
+message GetDataSourceCountsResponse {
+  string result = 1;
+}
+
+message GetDBInfoRequest {}
+
+message GetDBInfoResponse {
+  string result = 1;
+}
+
+message GetEntityDetailsRequest {
+  int64 entityID = 1;
+  int32 includeInternalFeatures = 2;
+}
+
+message GetEntityDetailsResponse {
+  string result = 1;
+}
+
+message GetEntityListBySizeRequest {
+  int32 entitySize = 1;
+}
+
+message GetEntityListBySizeResponse {
+  string result = 1;
+}
+
+message GetEntityResumeRequest {
+  int64 entityID = 1;
+}
+
+message GetEntityResumeResponse {
+  string result = 1;
+}
+
+message GetEntitySizeBreakdownRequest {
+  int32 minimumEntitySize = 1;
+  int32 includeInternalFeatures = 2;
+}
+
+message GetEntitySizeBreakdownResponse {
+  string result = 1;
+}
+
+message GetFeatureRequest {
+  int64 libFeatID = 1;
+}
+
+message GetFeatureResponse {
+  string result = 1;
+}
+
+message GetGenericFeaturesRequest {
+  string featureType = 1;
+  int32 maximumEstimatedCount = 2;
+}
+
+message GetGenericFeaturesResponse {
+  string result = 1;
+}
+
+message GetLastExceptionRequest {}
+
+message GetLastExceptionResponse {
+  string result = 1;
+}
+
+message GetLastExceptionCodeRequest {}
+
+message GetLastExceptionCodeResponse {
+  string result = 1;
+}
+
+message GetLogicalCoresRequest {}
+
+message GetLogicalCoresResponse {
+  int32 result = 1;
+}
+
+message GetMappingStatisticsRequest {
+  int32 includeInternalFeatures = 1;
+}
+
+message GetMappingStatisticsResponse {
+  string result = 1;
+}
+
+message GetPhysicalCoresRequest {}
+
+message GetPhysicalCoresResponse {
+  int32 result = 1;
+}
+
+message GetRelationshipDetailsRequest {
+  int64 relationshipID = 1;
+  int32 includeInternalFeatures = 2;
+}
+
+message GetRelationshipDetailsResponse {
+  string result = 1;
+}
+
+message GetResolutionStatisticsRequest {}
+
+message GetResolutionStatisticsResponse {
+  string result = 1;
+}
+
+message GetTotalSystemMemoryRequest {}
+
+message GetTotalSystemMemoryResponse {
+  int64 result = 1;
+}
+
+message InitRequest {
+  string moduleName = 1;
+  string iniParams = 2;
+  int32 verboseLogging = 3;
+}
+
+message InitResponse {}
+
+message InitWithConfigIDRequest {
+  string moduleName = 1;
+  string iniParams = 2;
+  int64 initConfigID = 3;
+  int32 verboseLogging = 4;
+}
+
+message InitWithConfigIDResponse {}
+
+message ReinitRequest {
+  int64 initConfigID = 1;
+}
+
+message ReinitResponse {}
