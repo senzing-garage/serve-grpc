@@ -51,13 +51,6 @@ func (server *G2DiagnosticServer) CheckDBPerf(ctx context.Context, request *pb.C
 	return &response, err
 }
 
-func (server *G2DiagnosticServer) ClearLastException(ctx context.Context, request *pb.ClearLastExceptionRequest) (*pb.ClearLastExceptionResponse, error) {
-	g2diagnostic := getG2diagnostic()
-	err := g2diagnostic.ClearLastException(ctx)
-	response := pb.ClearLastExceptionResponse{}
-	return &response, err
-}
-
 func (server *G2DiagnosticServer) CloseEntityListBySize(ctx context.Context, request *pb.CloseEntityListBySizeRequest) (*pb.CloseEntityListBySizeResponse, error) {
 	g2diagnostic := getG2diagnostic()
 	entityListBySizeHandleInt, err := strconv.ParseUint(request.EntityListBySizeHandle, 10, 64)
