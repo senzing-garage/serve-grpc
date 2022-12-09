@@ -1,0 +1,69 @@
+syntax = "proto3";
+package g2hasher;
+
+option go_package = "github.com/senzing/g2-sdk-go-grpc/g2hasher";
+option java_multiple_files = true;
+option java_package = "com.senzing.g2.engine.grpc.G2Hasher";
+option java_outer_classname = "G2HasherProto";
+
+service G2Diagnostic {
+  rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
+  rpc Destroy (DestroyRequest) returns (DestroyResponse) {}
+  rpc ExportTokenLibrary (ExportTokenLibraryRequest) returns (ExportTokenLibraryResponse) {}
+  rpc GetLastException (GetLastExceptionRequest) returns (GetLastExceptionResponse) {}
+  rpc GetLastExceptionCode (GetLastExceptionCodeRequest) returns (GetLastExceptionCodeResponse) {}
+  rpc Init (InitRequest) returns (InitResponse) {}
+  rpc InitWithConfig (InitWithConfigRequest) returns (InitWithConfigResponse) {}
+  rpc Process (ProcessRequest) returns (ProcessResponse) {}
+}
+
+message ClearLastExceptionRequest {}
+
+message ClearLastExceptionResponse {}
+
+message DestroyRequest {}
+
+message DestroyResponse {}
+
+message ExportTokenLibraryRequest {}
+
+message ExportTokenLibraryResponse {
+  string result = 1;
+}
+
+message GetLastExceptionRequest {}
+
+message GetLastExceptionResponse {
+  string result = 1;
+}
+
+message GetLastExceptionCodeRequest {}
+
+message GetLastExceptionCodeResponse {
+  int32 configID = 1;
+}
+
+message InitRequest {
+  string moduleName = 1;
+  string iniParams = 2;
+  int32 verboseLogging = 3;
+}
+
+message InitResponse {}
+
+message InitWithConfigRequest {
+  string moduleName = 1;
+  string iniParams = 2;
+  string configJson = 3;
+  int32 verboseLogging = 4;
+}
+
+message InitWithConfigResponse {}
+
+message ProcessRequest {
+  string record = 1;
+}
+
+message ProcessResponse {
+  string result = 1;
+}

@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"sync"
 
-	sdkG2diagnostic "github.com/senzing/g2-sdk-go/g2diagnostic"
+	g2diagnosticsdk "github.com/senzing/g2-sdk-go/g2diagnostic"
 	"github.com/senzing/go-logging/messagelogger"
 	pb "github.com/senzing/go-servegrpc/g2diagnosticprotobuf"
 )
 
 var (
-	g2diagnostic *sdkG2diagnostic.G2diagnosticImpl
+	g2diagnostic *g2diagnosticsdk.G2diagnosticImpl
 	logger       messagelogger.MessageLoggerInterface
 	once         sync.Once
 )
@@ -30,9 +30,9 @@ func getLogger() messagelogger.MessageLoggerInterface {
 
 // Singleton pattern for g2diagnostic.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getG2diagnostic() *sdkG2diagnostic.G2diagnosticImpl {
+func getG2diagnostic() *g2diagnosticsdk.G2diagnosticImpl {
 	once.Do(func() {
-		g2diagnostic = &sdkG2diagnostic.G2diagnosticImpl{}
+		g2diagnostic = &g2diagnosticsdk.G2diagnosticImpl{}
 	})
 	return g2diagnostic
 }
@@ -206,28 +206,6 @@ func (server *G2DiagnosticServer) GetGenericFeatures(ctx context.Context, reques
 	g2diagnostic := getG2diagnostic()
 	result, err := g2diagnostic.GetGenericFeatures(ctx, request.FeatureType, int(request.MaximumEstimatedCount))
 	response := pb.GetGenericFeaturesResponse{
-		Result: result,
-	}
-	traceExit(5199, response)
-	return &response, err
-}
-
-func (server *G2DiagnosticServer) GetLastException(ctx context.Context, request *pb.GetLastExceptionRequest) (*pb.GetLastExceptionResponse, error) {
-	traceEnter(5198, request)
-	g2diagnostic := getG2diagnostic()
-	result, err := g2diagnostic.GetLastException(ctx)
-	response := pb.GetLastExceptionResponse{
-		Result: result,
-	}
-	traceExit(5199, response)
-	return &response, err
-}
-
-func (server *G2DiagnosticServer) GetLastExceptionCode(ctx context.Context, request *pb.GetLastExceptionCodeRequest) (*pb.GetLastExceptionCodeResponse, error) {
-	traceEnter(5198, request)
-	g2diagnostic := getG2diagnostic()
-	result, err := g2diagnostic.GetLastExceptionCode(ctx)
-	response := pb.GetLastExceptionCodeResponse{
 		Result: result,
 	}
 	traceExit(5199, response)

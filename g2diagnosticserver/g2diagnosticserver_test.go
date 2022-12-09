@@ -205,24 +205,6 @@ func TestGetGenericFeatures(test *testing.T) {
 	test.Log("Actual:", actual)
 }
 
-func TestGetLastException(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetLastExceptionRequest{}
-	actual, err := g2diagnosticServer.GetLastException(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
-}
-
-func TestGetLastExceptionCode(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetLastExceptionCodeRequest{}
-	actual, err := g2diagnosticServer.GetLastExceptionCode(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
-}
-
 func TestGetLogicalCores(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnosticServer, _ := getTestObject(ctx)

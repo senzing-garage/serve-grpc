@@ -1,0 +1,101 @@
+syntax = "proto3";
+package g2config;
+
+option go_package = "github.com/senzing/g2-sdk-go-grpc/g2config";
+option java_multiple_files = true;
+option java_package = "com.senzing.g2.engine.grpc.G2Config";
+option java_outer_classname = "G2ConfigProto";
+
+service G2Diagnostic {
+  rpc AddDataSource (AddDataSourceRequest) returns (AddDataSourceResponse) {}
+  rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
+  rpc Close (CloseRequest) returns (CloseResponse) {}
+  rpc Create (CreateRequest) returns (CreateResponse) {}
+  rpc DeleteDataSource (DeleteDataSourceRequest) returns (DeleteDataSourceResponse) {}
+  rpc Destroy (DestroyRequest) returns (DestroyResponse) {}
+  rpc GetLastException (GetLastExceptionRequest) returns (GetLastExceptionResponse) {}
+  rpc GetLastExceptionCode (GetLastExceptionCodeRequest) returns (GetLastExceptionCodeResponse) {}
+  rpc Init (InitRequest) returns (InitResponse) {}
+  rpc ListDataSources (ListDataSourcesRequest) returns (ListDataSourcesResponse) {}
+  rpc Load (LoadRequest) returns (LoadResponse) {}
+  rpc Save (SaveRequest) returns (SaveResponse) {}
+}
+
+message AddDataSourceRequest {
+  int64 configHandle = 1;
+  string inputJson = 2;
+}
+message AddDataSourceResponse {
+  string result = 1;
+}
+
+message ClearLastExceptionRequest {}
+
+message ClearLastExceptionResponse {}
+
+message CloseRequest {
+  int64 configHandle = 1;
+}
+
+message CloseResponse {}
+
+message CreateRequest {}
+
+message CreateResponse {
+  int64 result = 1;
+}
+
+message DeleteDataSourceRequest {
+  int64 configHandle = 1;
+  string inputJson = 2;
+}
+
+message DeleteDataSourceResponse {}
+
+message DestroyRequest {}
+
+message DestroyResponse {}
+
+message GetLastExceptionRequest {}
+
+message GetLastExceptionResponse {
+  string result = 1;
+}
+
+message GetLastExceptionCodeRequest {}
+
+message GetLastExceptionCodeResponse {
+  int32 result = 1;
+}
+
+message InitRequest {
+  string moduleName = 1;
+  string iniParams = 2;
+  int32 verboseLogging = 3;
+}
+
+message InitResponse {}
+
+message ListDataSourcesRequest {
+  int64 configHandle = 1;
+}
+
+message ListDataSourcesResponse {
+  string result = 1;
+}
+
+message LoadRequest {
+  string jsonConfig = 1;
+}
+
+message LoadResponse {
+  int64 result = 1;
+}
+
+message SaveRequest {
+  string configHandle = 1;
+}
+
+message SaveResponse {
+  string result = 1;
+}

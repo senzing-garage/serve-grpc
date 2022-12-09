@@ -1,0 +1,91 @@
+syntax = "proto3";
+package g2configmgr;
+
+option go_package = "github.com/senzing/g2-sdk-go-grpc/g2configmgr";
+option java_multiple_files = true;
+option java_package = "com.senzing.g2.engine.grpc.G2ConfigMgr";
+option java_outer_classname = "G2ConfigMgrProto";
+
+service G2Diagnostic {
+  rpc AddConfig (AddConfigRequest) returns (AddConfigResponse) {}
+  rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
+  rpc Destroy (DestroyRequest) returns (DestroyResponse) {}
+  rpc GetConfig (GetConfigRequest) returns (GetConfigResponse) {}
+  rpc GetConfigList (GetConfigListRequest) returns (GetConfigListResponse) {}
+  rpc GetDefaultConfigID (GetDefaultConfigIDRequest) returns (GetDefaultConfigIDResponse) {}
+  rpc GetLastException (GetLastExceptionRequest) returns (GetLastExceptionResponse) {}
+  rpc GetLastExceptionCode (GetLastExceptionCodeRequest) returns (GetLastExceptionCodeResponse) {}
+  rpc Init (InitRequest) returns (InitResponse) {}
+  rpc ReplaceDefaultConfigID (ReplaceDefaultConfigIDRequest) returns (ReplaceDefaultConfigIDResponse) {}
+  rpc SetDefaultConfigID (SetDefaultConfigIDRequest) returns (SetDefaultConfigIDResponse) {}
+}
+
+message AddConfigRequest {
+  string configStr = 1;
+  string configComments = 2;
+}
+
+message AddConfigResponse {
+  int64 result = 1;
+}
+
+message ClearLastExceptionRequest {}
+
+message ClearLastExceptionResponse {}
+
+message DestroyRequest {}
+
+message DestroyResponse {}
+
+message GetConfigRequest {
+  int64 configID = 1;
+}
+
+message GetConfigResponse {
+  string result = 1;
+}
+
+message GetConfigListRequest {}
+
+message GetConfigListResponse {
+  string result = 1;
+}
+
+message GetDefaultConfigIDRequest {}
+
+message GetDefaultConfigIDResponse {
+  int64 configID = 1;
+}
+
+message GetLastExceptionRequest {}
+
+message GetLastExceptionResponse {
+  string result = 1;
+}
+
+message GetLastExceptionCodeRequest {}
+
+message GetLastExceptionCodeResponse {
+  int32 configID = 1;
+}
+
+message InitRequest {
+  string moduleName = 1;
+  string iniParams = 2;
+  int32 verboseLogging = 3;
+}
+
+message InitResponse {}
+
+message ReplaceDefaultConfigIDRequest {
+  int64 oldConfigID = 1;
+  int64 newConfigID = 2;
+}
+
+message ReplaceDefaultConfigIDResponse {}
+
+message SetDefaultConfigIDRequest {
+  int64 configID = 1;
+}
+
+message SetDefaultConfigIDResponse {}

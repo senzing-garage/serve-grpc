@@ -1,0 +1,94 @@
+syntax = "proto3";
+package g2ssadm;
+
+option go_package = "github.com/senzing/g2-sdk-go-grpc/g2ssadm";
+option java_multiple_files = true;
+option java_package = "com.senzing.g2.engine.grpc.G2SSAdmin";
+option java_outer_classname = "G2SSAdminProto";
+
+service G2Diagnostic {
+  rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
+  rpc CreateSaltInStore (CreateSaltInStoreRequest) returns (CreateSaltInStoreResponse) {}
+  rpc Destroy (DestroyRequest) returns (DestroyResponse) {}
+  rpc GetLastException (GetLastExceptionRequest) returns (GetLastExceptionResponse) {}
+  rpc GetLastExceptionCode (GetLastExceptionCodeRequest) returns (GetLastExceptionCodeResponse) {}
+  rpc Init (InitRequest) returns (InitResponse) {}
+  rpc InitializeNewToken (InitializeNewTokenRequest) returns (InitializeNewTokenResponse) {}
+  rpc List (ListRequest) returns (ListResponse) {}
+  rpc Put (PutRequest) returns (PutResponse) {}
+  rpc ReinitializeToken (ReinitializeTokenRequest) returns (ReinitializeTokenResponse) {}
+  rpc SetupStore (SetupStoreRequest) returns (SetupStoreResponse) {}
+}
+
+message ClearLastExceptionRequest {}
+
+message ClearLastExceptionResponse {}
+
+message CreateSaltInStoreRequest {
+  string soPin = 1;
+  string name = 2;
+  string method = 3;
+}
+
+message CreateSaltInStoreResponse {
+  string result = 1;
+}
+
+message DestroyRequest {}
+
+message DestroyResponse {}
+
+message GetLastExceptionRequest {}
+
+message GetLastExceptionResponse {
+  string result = 1;
+}
+
+message GetLastExceptionCodeRequest {}
+
+message GetLastExceptionCodeResponse {
+  int32 result = 1;
+}
+
+message InitRequest {
+  string moduleName = 1;
+  string iniParams = 2;
+  int32 verboseLogging = 3;
+}
+
+message InitResponse {}
+
+message InitializeNewTokenRequest {
+  string defaultSOPin = 1;
+  string newSOPin = 2;
+  string label = 3;
+}
+
+message InitializeNewTokenResponse {}
+
+message ListRequest {}
+
+message ListResponse {
+  string result = 1;
+}
+
+message PutRequest {
+  string soPin = 1;
+  string label = 2;
+  string value = 3;
+}
+
+message PutResponse {}
+
+message ReinitializeTokenRequest {
+  string soPin = 1;
+  string label = 2;
+}
+
+message ReinitializeTokenResponse {}
+
+message SetupStoreRequest {
+  string soPin = 1;
+}
+
+message SetupStoreResponse {}
