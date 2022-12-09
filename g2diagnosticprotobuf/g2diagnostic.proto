@@ -1,14 +1,13 @@
 syntax = "proto3";
-package g2diagnostic;
+package g2diagnosticprotobuf;
 
-option go_package = "github.com/docktermj/go-xyzzy-grpc/g2diagnostic";
+option go_package = "github.com/senzing/go-servegrpc/g2diagnosticprotobuf";
 option java_multiple_files = true;
-option java_package = "io.grpc.examples.helloworld";
-option java_outer_classname = "HelloWorldProto";
+option java_package = "com.senzing.sdk.g2diagnostic.protobuf";
+option java_outer_classname = "G2DiagnosticProtobuf";
 
 service G2Diagnostic {
   rpc CheckDBPerf (CheckDBPerfRequest) returns (CheckDBPerfResponse) {}
-  rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
   rpc CloseEntityListBySize (CloseEntityListBySizeRequest) returns (CloseEntityListBySizeResponse) {}
   rpc Destroy (DestroyRequest) returns (DestroyResponse) {}
   rpc FetchNextEntityBySize (FetchNextEntityBySizeRequest) returns (FetchNextEntityBySizeResponse) {}
@@ -22,8 +21,6 @@ service G2Diagnostic {
   rpc GetEntitySizeBreakdown (GetEntitySizeBreakdownRequest) returns (GetEntitySizeBreakdownResponse) {}
   rpc GetFeature (GetFeatureRequest) returns (GetFeatureResponse) {}
   rpc GetGenericFeatures (GetGenericFeaturesRequest) returns (GetGenericFeaturesResponse) {}
-  rpc GetLastException (GetLastExceptionRequest) returns (GetLastExceptionResponse) {}
-  rpc GetLastExceptionCode (GetLastExceptionCodeRequest) returns (GetLastExceptionCodeResponse) {}
   rpc GetLogicalCores (GetLogicalCoresRequest) returns (GetLogicalCoresResponse) {}
   rpc GetMappingStatistics (GetMappingStatisticsRequest) returns (GetMappingStatisticsResponse) {}
   rpc GetPhysicalCores (GetPhysicalCoresRequest) returns (GetPhysicalCoresResponse) {}
