@@ -733,3 +733,53 @@ func ExampleG2diagnosticImpl_Init() {
 	fmt.Println(result)
 	// Output:
 }
+
+func ExampleG2diagnosticImpl_InitWithConfigID() {
+	ctx := context.TODO()
+	g2diagnostic := &G2DiagnosticServer{}
+	moduleName := "Test module name"
+	initConfigID := int64(1)
+	verboseLogging := 0
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	if err != nil {
+		fmt.Println(err)
+	}
+	request := &pb.InitWithConfigIDRequest{
+		ModuleName:     moduleName,
+		IniParams:      iniParams,
+		InitConfigID:   initConfigID,
+		VerboseLogging: int32(verboseLogging),
+	}
+	result, err := g2diagnostic.InitWithConfigID(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(result)
+	// Output:
+}
+
+func ExampleG2diagnosticImpl_Reinit() {
+	ctx := context.TODO()
+	g2diagnostic := getG2DiagnosticServer(ctx)
+	request := &pb.ReinitRequest{
+		InitConfigID: int64(testhelpers.TestConfigDataId),
+	}
+	result, err := g2diagnostic.Reinit(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(result)
+	// Output:
+}
+
+func ExampleG2diagnosticImpl_Destroy() {
+	ctx := context.TODO()
+	g2diagnostic := getG2DiagnosticServer(ctx)
+	request := &pb.DestroyRequest{}
+	result, err := g2diagnostic.Destroy(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(result)
+	// Output:
+}
