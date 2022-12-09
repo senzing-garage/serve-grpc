@@ -3,6 +3,7 @@ module github.com/senzing/go-servegrpc
 go 1.19
 
 require (
+	github.com/aquilax/truncate v1.0.0
 	github.com/senzing/g2-sdk-go v0.2.3
 	github.com/senzing/go-helpers v0.1.0
 	github.com/senzing/go-logging v1.1.1
