@@ -715,16 +715,14 @@ func ExampleG2DiagnosticServer_GetTotalSystemMemory() {
 func ExampleG2DiagnosticServer_Init() {
 	ctx := context.TODO()
 	g2diagnostic := &G2DiagnosticServer{}
-	moduleName := "Test module name"
-	verboseLogging := 0
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if err != nil {
 		fmt.Println(err)
 	}
 	request := &pb.InitRequest{
-		ModuleName:     moduleName,
+		ModuleName:     "Test module name",
 		IniParams:      iniParams,
-		VerboseLogging: int32(verboseLogging),
+		VerboseLogging: int32(0),
 	}
 	result, err := g2diagnostic.Init(ctx, request)
 	if err != nil {
@@ -737,18 +735,15 @@ func ExampleG2DiagnosticServer_Init() {
 func ExampleG2DiagnosticServer_InitWithConfigID() {
 	ctx := context.TODO()
 	g2diagnostic := &G2DiagnosticServer{}
-	moduleName := "Test module name"
-	initConfigID := int64(1)
-	verboseLogging := 0
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if err != nil {
 		fmt.Println(err)
 	}
 	request := &pb.InitWithConfigIDRequest{
-		ModuleName:     moduleName,
+		ModuleName:     "Test module name",
 		IniParams:      iniParams,
-		InitConfigID:   initConfigID,
-		VerboseLogging: int32(verboseLogging),
+		InitConfigID:   int64(1),
+		VerboseLogging: int32(0),
 	}
 	result, err := g2diagnostic.InitWithConfigID(ctx, request)
 	if err != nil {
