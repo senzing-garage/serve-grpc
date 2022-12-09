@@ -22,29 +22,46 @@ const (
 	defaultTruncation = 76
 )
 
+var (
+	g2diagnosticSingleton *G2DiagnosticServer
+)
+
 // ----------------------------------------------------------------------------
-// Internal functions - names begin with lowercase letter
+// Internal functions
 // ----------------------------------------------------------------------------
 
-func getTestObject(ctx context.Context) (G2DiagnosticServer, error) {
-	var err error = nil
-	g2diagnosticServer := G2DiagnosticServer{}
+func getTestObject(ctx context.Context, test *testing.T) G2DiagnosticServer {
+	if g2diagnosticSingleton == nil {
+		g2diagnosticSingleton = &G2DiagnosticServer{}
 
-	moduleName := "Test module name"
-	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
-	iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-	if jsonErr != nil {
-		return g2diagnosticServer, jsonErr
-	}
+		moduleName := "Test module name"
+		verboseLogging := 0
+		iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		if jsonErr != nil {
+			test.Logf("Cannot construct system configuration. Error: %v", jsonErr)
+		}
 
-	request := pb.InitRequest{
-		ModuleName:     moduleName,
-		IniParams:      iniParams,
-		VerboseLogging: int32(verboseLogging),
+		request := &pb.InitRequest{
+			ModuleName:     moduleName,
+			IniParams:      iniParams,
+			VerboseLogging: int32(verboseLogging),
+		}
+		g2diagnosticSingleton.Init(ctx, request)
 	}
-	_, err = g2diagnosticServer.Init(ctx, &request)
-	return g2diagnosticServer, err
+	return *g2diagnosticSingleton
 }
+
+// func getG2DiagnosticServer(ctx context.Context) G2DiagnosticServer {
+// 	g2diagnostic := &G2diagnosticImpl{}
+// 	moduleName := "Test module name"
+// 	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
+// 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	g2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
+// 	return g2diagnostic
+// }
 
 func truncate(aString string, length int) string {
 	return truncator.Truncate(aString, length, "...", truncator.PositionEnd)
@@ -60,14 +77,14 @@ func printActual(test *testing.T, actual interface{}) {
 	printResult(test, "Actual", actual)
 }
 
-func testError(test *testing.T, ctx context.Context, err error) {
+func testError(test *testing.T, ctx context.Context, g2diagnostic G2DiagnosticServer, err error) {
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
 	}
 }
 
-func testErrorNoFail(test *testing.T, ctx context.Context, err error) {
+func testErrorNoFail(test *testing.T, ctx context.Context, g2diagnostic G2DiagnosticServer, err error) {
 	if err != nil {
 		test.Log("Error:", err.Error())
 	}
@@ -92,7 +109,6 @@ func TestMain(m *testing.M) {
 }
 
 func setup() error {
-
 	var err error = nil
 	ctx := context.TODO()
 	now := time.Now()
@@ -213,7 +229,7 @@ func teardown() error {
 	return err
 }
 
-func TestG2engineImpl_BuildSimpleSystemConfigurationJson(test *testing.T) {
+func TestG2diagnosticImpl_BuildSimpleSystemConfigurationJson(test *testing.T) {
 	actual, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if err != nil {
 		test.Log("Error:", err.Error())
@@ -226,42 +242,24 @@ func TestG2engineImpl_BuildSimpleSystemConfigurationJson(test *testing.T) {
 // Test interface functions - names begin with "Test"
 // ----------------------------------------------------------------------------
 
-func TestCheckDBPerf(test *testing.T) {
+func TestG2diagnosticImpl_CheckDBPerf(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.CheckDBPerfRequest{
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.CheckDBPerfRequest{
 		SecondsToRun: int32(1),
 	}
-	actual, err := g2diagnosticServer.CheckDBPerf(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
-}
-
-func TestClearLastException(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.ClearLastExceptionRequest{}
-	actual, err := g2diagnosticServer.ClearLastException(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
-}
-
-func TestDestroy(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.DestroyRequest{}
-	actual, err := g2diagnosticServer.Destroy(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	actual, err := g2diagnostic.CheckDBPerf(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
 //func TestEntityListBySize(test *testing.T) {
 //	ctx := context.TODO()
-//	g2diagnosticServer, _ := getTestObject(ctx)
-//	request := pb.GetEntityListBySizeRequest{
+//	g2diagnostic, _ := getTestObject(ctx)
+//	request := &pb.GetEntityListBySizeRequest{
 //		EntitySize: int32(10),
 //	}
-//	actual, err := g2diagnosticServer.GetEntityListBySize(ctx, &request)
+//	actual, err := g2diagnostic.GetEntityListBySize(ctx, request)
 //	testError(test, ctx, err)
 //	test.Log("Actual:", actual)
 //
@@ -269,215 +267,224 @@ func TestDestroy(test *testing.T) {
 //	request2 := pb.FetchNextEntityBySizeRequest{
 //		EntityListBySizeHandle: entityListBySizeHandle,
 //	}
-//	actual2, err2 := g2diagnosticServer.FetchNextEntityBySize(ctx, &request2)
+//	actual2, err2 := g2diagnostic.FetchNextEntityBySize(ctx, request2)
 //	testError(test, ctx, err2)
 //	test.Log("Actual:", actual2)
 //
 //	request3 := pb.CloseEntityListBySizeRequest{
 //		EntityListBySizeHandle: entityListBySizeHandle,
 //	}
-//	actual3, err3 := g2diagnosticServer.CloseEntityListBySize(ctx, &request3)
+//	actual3, err3 := g2diagnostic.CloseEntityListBySize(ctx, request3)
 //	testError(test, ctx, err3)
 //	test.Log("Actual:", actual3)
 //}
 
-func TestFindEntitiesByFeatureIDs(test *testing.T) {
+func TestG2diagnosticImpl_FindEntitiesByFeatureIDs(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.FindEntitiesByFeatureIDsRequest{
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.FindEntitiesByFeatureIDsRequest{
 		Features: "{\"ENTITY_ID\":1,\"LIB_FEAT_IDS\":[1,3,4]}",
 	}
-	actual, err := g2diagnosticServer.FindEntitiesByFeatureIDs(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	actual, err := g2diagnostic.FindEntitiesByFeatureIDs(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetAvailableMemoryy(test *testing.T) {
+func TestG2diagnosticImpl_GetAvailableMemory(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetAvailableMemoryRequest{}
-	actual, err := g2diagnosticServer.GetAvailableMemory(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetAvailableMemoryRequest{}
+	actual, err := g2diagnostic.GetAvailableMemory(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetDataSourceCounts(test *testing.T) {
+func TestG2diagnosticImpl_GetDataSourceCounts(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetDataSourceCountsRequest{}
-	actual, err := g2diagnosticServer.GetDataSourceCounts(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetDataSourceCountsRequest{}
+	actual, err := g2diagnostic.GetDataSourceCounts(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetDBInfo(test *testing.T) {
+func TestG2diagnosticImpl_GetDBInfo(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetDBInfoRequest{}
-	actual, err := g2diagnosticServer.GetDBInfo(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetDBInfoRequest{}
+	actual, err := g2diagnostic.GetDBInfo(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetEntityDetails(test *testing.T) {
+func TestG2diagnosticImpl_GetEntityDetails(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetEntityDetailsRequest{
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetEntityDetailsRequest{
 		EntityID:                int64(1),
 		IncludeInternalFeatures: 1,
 	}
-	actual, err := g2diagnosticServer.GetEntityDetails(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	actual, err := g2diagnostic.GetEntityDetails(ctx, request)
+	testErrorNoFail(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetEntityResume(test *testing.T) {
+func TestG2diagnosticImpl_GetEntityResume(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetEntityResumeRequest{
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetEntityResumeRequest{
 		EntityID: int64(1),
 	}
-	actual, err := g2diagnosticServer.GetEntityResume(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	actual, err := g2diagnostic.GetEntityResume(ctx, request)
+	testErrorNoFail(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetEntitySizeBreakdown(test *testing.T) {
+func TestG2diagnosticImpl_GetEntitySizeBreakdown(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetEntitySizeBreakdownRequest{
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetEntitySizeBreakdownRequest{
 		MinimumEntitySize:       int32(1),
 		IncludeInternalFeatures: int32(1),
 	}
-	actual, err := g2diagnosticServer.GetEntitySizeBreakdown(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	actual, err := g2diagnostic.GetEntitySizeBreakdown(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetFeature(test *testing.T) {
+func TestG2diagnosticImpl_GetFeature(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetFeatureRequest{
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetFeatureRequest{
 		LibFeatID: int64(1),
 	}
-	actual, err := g2diagnosticServer.GetFeature(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	actual, err := g2diagnostic.GetFeature(ctx, request)
+	testErrorNoFail(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetGenericFeatures(test *testing.T) {
+func TestG2diagnosticImpl_GetGenericFeatures(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetGenericFeaturesRequest{
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetGenericFeaturesRequest{
 		FeatureType:           "PHONE",
 		MaximumEstimatedCount: 10,
 	}
-	actual, err := g2diagnosticServer.GetGenericFeatures(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	actual, err := g2diagnostic.GetGenericFeatures(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetLogicalCores(test *testing.T) {
+func TestG2diagnosticImpl_GetLogicalCores(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetLogicalCoresRequest{}
-	actual, err := g2diagnosticServer.GetLogicalCores(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetLogicalCoresRequest{}
+	actual, err := g2diagnostic.GetLogicalCores(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetMappingStatistics(test *testing.T) {
+func TestG2diagnosticImpl_GetMappingStatistics(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetMappingStatisticsRequest{
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetMappingStatisticsRequest{
 		IncludeInternalFeatures: 1,
 	}
-	actual, err := g2diagnosticServer.GetMappingStatistics(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	actual, err := g2diagnostic.GetMappingStatistics(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetPhysicalCores(test *testing.T) {
+func TestG2diagnosticImpl_GetPhysicalCores(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetPhysicalCoresRequest{}
-	actual, err := g2diagnosticServer.GetPhysicalCores(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetPhysicalCoresRequest{}
+	actual, err := g2diagnostic.GetPhysicalCores(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetRelationshipDetails(test *testing.T) {
+func TestG2diagnosticImpl_GetRelationshipDetails(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetRelationshipDetailsRequest{
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetRelationshipDetailsRequest{
 		RelationshipID:          int64(1),
 		IncludeInternalFeatures: 1,
 	}
-	actual, err := g2diagnosticServer.GetRelationshipDetails(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	actual, err := g2diagnostic.GetRelationshipDetails(ctx, request)
+	testErrorNoFail(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetResolutionStatistics(test *testing.T) {
+func TestG2diagnosticImpl_GetResolutionStatistics(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetResolutionStatisticsRequest{}
-	actual, err := g2diagnosticServer.GetResolutionStatistics(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetResolutionStatisticsRequest{}
+	actual, err := g2diagnostic.GetResolutionStatistics(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestGetTotalSystemMemory(test *testing.T) {
+func TestG2diagnosticImpl_GetTotalSystemMemory(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.GetTotalSystemMemoryRequest{}
-	actual, err := g2diagnosticServer.GetTotalSystemMemory(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetTotalSystemMemoryRequest{}
+	actual, err := g2diagnostic.GetTotalSystemMemory(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestInit(test *testing.T) {
+func TestG2diagnosticImpl_Init(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
+	g2diagnostic := getTestObject(ctx, test)
 	iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if jsonErr != nil {
 		assert.FailNow(test, jsonErr.Error())
 	}
-	request := pb.InitRequest{
+	request := &pb.InitRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
 		VerboseLogging: int32(0),
 	}
-	actual, err := g2diagnosticServer.Init(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	actual, err := g2diagnostic.Init(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestInitWithConfigID(test *testing.T) {
+func TestG2diagnosticImpl_InitWithConfigID(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
+	g2diagnostic := getTestObject(ctx, test)
 	iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if jsonErr != nil {
 		assert.FailNow(test, jsonErr.Error())
 	}
-	request := pb.InitWithConfigIDRequest{
+	request := &pb.InitWithConfigIDRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
 		InitConfigID:   int64(1),
 		VerboseLogging: int32(0),
 	}
-	actual, err := g2diagnosticServer.InitWithConfigID(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	actual, err := g2diagnostic.InitWithConfigID(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
 
-func TestReinit(test *testing.T) {
+func TestG2diagnosticImpl_Reinit(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-	request := pb.ReinitRequest{
-		InitConfigID: int64(1),
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.ReinitRequest{
+		InitConfigID: int64(testhelpers.TestConfigDataId),
 	}
-	actual, err := g2diagnosticServer.Reinit(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
+	actual, err := g2diagnostic.Reinit(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
+}
+
+func TestG2diagnosticImpl_Destroy(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.DestroyRequest{}
+	actual, err := g2diagnostic.Destroy(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	printActual(test, actual)
 }
