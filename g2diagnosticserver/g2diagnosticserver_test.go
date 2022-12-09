@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/senzing/go-helpers/g2engineconfigurationjson"
-	pb "github.com/senzing/go-servegrpc/g2diagnosticprotobuf"
+	pb "github.com/senzing/go-servegrpc/protobuf/g2diagnostic"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -7,7 +7,7 @@ import (
 
 	g2diagnosticsdk "github.com/senzing/g2-sdk-go/g2diagnostic"
 	"github.com/senzing/go-logging/messagelogger"
-	pb "github.com/senzing/go-servegrpc/g2diagnosticprotobuf"
+	pb "github.com/senzing/go-servegrpc/protobuf/g2diagnostic"
 )
 
 var (

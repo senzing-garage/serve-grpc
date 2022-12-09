@@ -1,7 +1,7 @@
 package g2diagnosticserver
 
 import (
-	pb "github.com/senzing/go-servegrpc/g2diagnosticprotobuf"
+	pb "github.com/senzing/go-servegrpc/protobuf/g2diagnostic"
 )
 
 // ----------------------------------------------------------------------------
