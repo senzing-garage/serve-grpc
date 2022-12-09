@@ -1,4 +1,4 @@
-package main
+package g2diagnosticservercli
 
 import (
 	"testing"
