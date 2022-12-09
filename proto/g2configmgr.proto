@@ -1,10 +1,7 @@
 syntax = "proto3";
-package g2configmgr;
+package g2configmgrprotobuf;
 
-option go_package = "github.com/senzing/g2-sdk-go-grpc/g2configmgr";
-option java_multiple_files = true;
-option java_package = "com.senzing.g2.engine.grpc.G2ConfigMgr";
-option java_outer_classname = "G2ConfigMgrProto";
+option go_package = "github.com/senzing/go-servegrpc/g2configmgrprotobuf";
 
 service G2Diagnostic {
   rpc AddConfig (AddConfigRequest) returns (AddConfigResponse) {}

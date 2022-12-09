@@ -1,10 +1,7 @@
 syntax = "proto3";
-package g2config;
+package g2configprotobuf;
 
-option go_package = "github.com/senzing/g2-sdk-go-grpc/g2config";
-option java_multiple_files = true;
-option java_package = "com.senzing.g2.engine.grpc.G2Config";
-option java_outer_classname = "G2ConfigProto";
+option go_package = "github.com/senzing/go-servegrpc/g2configprotobuf";
 
 service G2Diagnostic {
   rpc AddDataSource (AddDataSourceRequest) returns (AddDataSourceResponse) {}

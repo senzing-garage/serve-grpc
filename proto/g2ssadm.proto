@@ -1,10 +1,7 @@
 syntax = "proto3";
-package g2ssadm;
+package g2ssadmprotobuf;
 
-option go_package = "github.com/senzing/g2-sdk-go-grpc/g2ssadm";
-option java_multiple_files = true;
-option java_package = "com.senzing.g2.engine.grpc.G2SSAdmin";
-option java_outer_classname = "G2SSAdminProto";
+option go_package = "github.com/senzing/go-servegrpc/g2ssadmprotobuf";
 
 service G2Diagnostic {
   rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
