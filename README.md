@@ -12,6 +12,7 @@
     export GIT_REPOSITORY=go-servegrpc
     export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
     export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
+
     ```
 
 1. Identify Senzing subcomponents.
@@ -27,6 +28,7 @@
       "g2product" \
       "g2ssadm" \
     )
+
     ```
 
 1. Create files.
@@ -37,11 +39,12 @@
    do \
     export SENZING_OUTPUT_DIR=${GIT_REPOSITORY_DIR}/protobuf/${SENZING_COMPONENT}; \
     protoc \
-        --proto_path=${SENZING_OUTPUT_DIR} \
+        --proto_path=${GIT_REPOSITORY_DIR}/proto/ \
         --go_out=${SENZING_OUTPUT_DIR} \
         --go_opt=paths=source_relative \
         --go-grpc_out=${SENZING_OUTPUT_DIR} \
         --go-grpc_opt=paths=source_relative \
         ${GIT_REPOSITORY_DIR}/proto/${SENZING_COMPONENT}.proto; \
    done
+
     ```
