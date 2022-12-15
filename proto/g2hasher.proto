@@ -1,9 +1,9 @@
 syntax = "proto3";
-package g2hasherprotobuf;
+package g2hasher;
 
-option go_package = "github.com/senzing/go-servegrpc/g2hasherprotobuf";
+option go_package = "github.com/senzing/go-servegrpc/protobuf/g2hasher";
 
-service G2Diagnostic {
+service G2Hasher {
   rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
   rpc Destroy (DestroyRequest) returns (DestroyResponse) {}
   rpc ExportTokenLibrary (ExportTokenLibraryRequest) returns (ExportTokenLibraryResponse) {}

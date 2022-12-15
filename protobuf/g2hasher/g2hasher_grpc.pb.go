@@ -4,7 +4,7 @@
 // - protoc             v3.21.6
 // source: g2hasher.proto
 
-package g2hasherprotobuf
+package g2hasher
 
 import (
 	context "context"
@@ -18,10 +18,10 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// G2DiagnosticClient is the client API for G2Diagnostic service.
+// G2HasherClient is the client API for G2Hasher service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type G2DiagnosticClient interface {
+type G2HasherClient interface {
 	ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error)
 	Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error)
 	ExportTokenLibrary(ctx context.Context, in *ExportTokenLibraryRequest, opts ...grpc.CallOption) (*ExportTokenLibraryResponse, error)
@@ -32,90 +32,90 @@ type G2DiagnosticClient interface {
 	Process(ctx context.Context, in *ProcessRequest, opts ...grpc.CallOption) (*ProcessResponse, error)
 }
 
-type g2DiagnosticClient struct {
+type g2HasherClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewG2DiagnosticClient(cc grpc.ClientConnInterface) G2DiagnosticClient {
-	return &g2DiagnosticClient{cc}
+func NewG2HasherClient(cc grpc.ClientConnInterface) G2HasherClient {
+	return &g2HasherClient{cc}
 }
 
-func (c *g2DiagnosticClient) ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error) {
+func (c *g2HasherClient) ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error) {
 	out := new(ClearLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2hasherprotobuf.G2Diagnostic/ClearLastException", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2hasher.G2Hasher/ClearLastException", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error) {
+func (c *g2HasherClient) Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error) {
 	out := new(DestroyResponse)
-	err := c.cc.Invoke(ctx, "/g2hasherprotobuf.G2Diagnostic/Destroy", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2hasher.G2Hasher/Destroy", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ExportTokenLibrary(ctx context.Context, in *ExportTokenLibraryRequest, opts ...grpc.CallOption) (*ExportTokenLibraryResponse, error) {
+func (c *g2HasherClient) ExportTokenLibrary(ctx context.Context, in *ExportTokenLibraryRequest, opts ...grpc.CallOption) (*ExportTokenLibraryResponse, error) {
 	out := new(ExportTokenLibraryResponse)
-	err := c.cc.Invoke(ctx, "/g2hasherprotobuf.G2Diagnostic/ExportTokenLibrary", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2hasher.G2Hasher/ExportTokenLibrary", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error) {
+func (c *g2HasherClient) GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error) {
 	out := new(GetLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2hasherprotobuf.G2Diagnostic/GetLastException", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2hasher.G2Hasher/GetLastException", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error) {
+func (c *g2HasherClient) GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error) {
 	out := new(GetLastExceptionCodeResponse)
-	err := c.cc.Invoke(ctx, "/g2hasherprotobuf.G2Diagnostic/GetLastExceptionCode", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2hasher.G2Hasher/GetLastExceptionCode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error) {
+func (c *g2HasherClient) Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error) {
 	out := new(InitResponse)
-	err := c.cc.Invoke(ctx, "/g2hasherprotobuf.G2Diagnostic/Init", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2hasher.G2Hasher/Init", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) InitWithConfig(ctx context.Context, in *InitWithConfigRequest, opts ...grpc.CallOption) (*InitWithConfigResponse, error) {
+func (c *g2HasherClient) InitWithConfig(ctx context.Context, in *InitWithConfigRequest, opts ...grpc.CallOption) (*InitWithConfigResponse, error) {
 	out := new(InitWithConfigResponse)
-	err := c.cc.Invoke(ctx, "/g2hasherprotobuf.G2Diagnostic/InitWithConfig", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2hasher.G2Hasher/InitWithConfig", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Process(ctx context.Context, in *ProcessRequest, opts ...grpc.CallOption) (*ProcessResponse, error) {
+func (c *g2HasherClient) Process(ctx context.Context, in *ProcessRequest, opts ...grpc.CallOption) (*ProcessResponse, error) {
 	out := new(ProcessResponse)
-	err := c.cc.Invoke(ctx, "/g2hasherprotobuf.G2Diagnostic/Process", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2hasher.G2Hasher/Process", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// G2DiagnosticServer is the server API for G2Diagnostic service.
-// All implementations must embed UnimplementedG2DiagnosticServer
+// G2HasherServer is the server API for G2Hasher service.
+// All implementations must embed UnimplementedG2HasherServer
 // for forward compatibility
-type G2DiagnosticServer interface {
+type G2HasherServer interface {
 	ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error)
 	Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error)
 	ExportTokenLibrary(context.Context, *ExportTokenLibraryRequest) (*ExportTokenLibraryResponse, error)
@@ -124,232 +124,232 @@ type G2DiagnosticServer interface {
 	Init(context.Context, *InitRequest) (*InitResponse, error)
 	InitWithConfig(context.Context, *InitWithConfigRequest) (*InitWithConfigResponse, error)
 	Process(context.Context, *ProcessRequest) (*ProcessResponse, error)
-	mustEmbedUnimplementedG2DiagnosticServer()
+	mustEmbedUnimplementedG2HasherServer()
 }
 
-// UnimplementedG2DiagnosticServer must be embedded to have forward compatible implementations.
-type UnimplementedG2DiagnosticServer struct {
+// UnimplementedG2HasherServer must be embedded to have forward compatible implementations.
+type UnimplementedG2HasherServer struct {
 }
 
-func (UnimplementedG2DiagnosticServer) ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error) {
+func (UnimplementedG2HasherServer) ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ClearLastException not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
+func (UnimplementedG2HasherServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Destroy not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ExportTokenLibrary(context.Context, *ExportTokenLibraryRequest) (*ExportTokenLibraryResponse, error) {
+func (UnimplementedG2HasherServer) ExportTokenLibrary(context.Context, *ExportTokenLibraryRequest) (*ExportTokenLibraryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExportTokenLibrary not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error) {
+func (UnimplementedG2HasherServer) GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLastException not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error) {
+func (UnimplementedG2HasherServer) GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLastExceptionCode not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Init(context.Context, *InitRequest) (*InitResponse, error) {
+func (UnimplementedG2HasherServer) Init(context.Context, *InitRequest) (*InitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Init not implemented")
 }
-func (UnimplementedG2DiagnosticServer) InitWithConfig(context.Context, *InitWithConfigRequest) (*InitWithConfigResponse, error) {
+func (UnimplementedG2HasherServer) InitWithConfig(context.Context, *InitWithConfigRequest) (*InitWithConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InitWithConfig not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Process(context.Context, *ProcessRequest) (*ProcessResponse, error) {
+func (UnimplementedG2HasherServer) Process(context.Context, *ProcessRequest) (*ProcessResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Process not implemented")
 }
-func (UnimplementedG2DiagnosticServer) mustEmbedUnimplementedG2DiagnosticServer() {}
+func (UnimplementedG2HasherServer) mustEmbedUnimplementedG2HasherServer() {}
 
-// UnsafeG2DiagnosticServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to G2DiagnosticServer will
+// UnsafeG2HasherServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to G2HasherServer will
 // result in compilation errors.
-type UnsafeG2DiagnosticServer interface {
-	mustEmbedUnimplementedG2DiagnosticServer()
+type UnsafeG2HasherServer interface {
+	mustEmbedUnimplementedG2HasherServer()
 }
 
-func RegisterG2DiagnosticServer(s grpc.ServiceRegistrar, srv G2DiagnosticServer) {
-	s.RegisterService(&G2Diagnostic_ServiceDesc, srv)
+func RegisterG2HasherServer(s grpc.ServiceRegistrar, srv G2HasherServer) {
+	s.RegisterService(&G2Hasher_ServiceDesc, srv)
 }
 
-func _G2Diagnostic_ClearLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Hasher_ClearLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ClearLastExceptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ClearLastException(ctx, in)
+		return srv.(G2HasherServer).ClearLastException(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2hasherprotobuf.G2Diagnostic/ClearLastException",
+		FullMethod: "/g2hasher.G2Hasher/ClearLastException",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ClearLastException(ctx, req.(*ClearLastExceptionRequest))
+		return srv.(G2HasherServer).ClearLastException(ctx, req.(*ClearLastExceptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Destroy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Hasher_Destroy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DestroyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Destroy(ctx, in)
+		return srv.(G2HasherServer).Destroy(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2hasherprotobuf.G2Diagnostic/Destroy",
+		FullMethod: "/g2hasher.G2Hasher/Destroy",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Destroy(ctx, req.(*DestroyRequest))
+		return srv.(G2HasherServer).Destroy(ctx, req.(*DestroyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ExportTokenLibrary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Hasher_ExportTokenLibrary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ExportTokenLibraryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ExportTokenLibrary(ctx, in)
+		return srv.(G2HasherServer).ExportTokenLibrary(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2hasherprotobuf.G2Diagnostic/ExportTokenLibrary",
+		FullMethod: "/g2hasher.G2Hasher/ExportTokenLibrary",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ExportTokenLibrary(ctx, req.(*ExportTokenLibraryRequest))
+		return srv.(G2HasherServer).ExportTokenLibrary(ctx, req.(*ExportTokenLibraryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Hasher_GetLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetLastExceptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetLastException(ctx, in)
+		return srv.(G2HasherServer).GetLastException(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2hasherprotobuf.G2Diagnostic/GetLastException",
+		FullMethod: "/g2hasher.G2Hasher/GetLastException",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetLastException(ctx, req.(*GetLastExceptionRequest))
+		return srv.(G2HasherServer).GetLastException(ctx, req.(*GetLastExceptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetLastExceptionCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Hasher_GetLastExceptionCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetLastExceptionCodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetLastExceptionCode(ctx, in)
+		return srv.(G2HasherServer).GetLastExceptionCode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2hasherprotobuf.G2Diagnostic/GetLastExceptionCode",
+		FullMethod: "/g2hasher.G2Hasher/GetLastExceptionCode",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetLastExceptionCode(ctx, req.(*GetLastExceptionCodeRequest))
+		return srv.(G2HasherServer).GetLastExceptionCode(ctx, req.(*GetLastExceptionCodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Init_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Hasher_Init_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InitRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Init(ctx, in)
+		return srv.(G2HasherServer).Init(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2hasherprotobuf.G2Diagnostic/Init",
+		FullMethod: "/g2hasher.G2Hasher/Init",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Init(ctx, req.(*InitRequest))
+		return srv.(G2HasherServer).Init(ctx, req.(*InitRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_InitWithConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Hasher_InitWithConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InitWithConfigRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).InitWithConfig(ctx, in)
+		return srv.(G2HasherServer).InitWithConfig(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2hasherprotobuf.G2Diagnostic/InitWithConfig",
+		FullMethod: "/g2hasher.G2Hasher/InitWithConfig",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).InitWithConfig(ctx, req.(*InitWithConfigRequest))
+		return srv.(G2HasherServer).InitWithConfig(ctx, req.(*InitWithConfigRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Process_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Hasher_Process_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProcessRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Process(ctx, in)
+		return srv.(G2HasherServer).Process(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2hasherprotobuf.G2Diagnostic/Process",
+		FullMethod: "/g2hasher.G2Hasher/Process",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Process(ctx, req.(*ProcessRequest))
+		return srv.(G2HasherServer).Process(ctx, req.(*ProcessRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// G2Diagnostic_ServiceDesc is the grpc.ServiceDesc for G2Diagnostic service.
+// G2Hasher_ServiceDesc is the grpc.ServiceDesc for G2Hasher service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var G2Diagnostic_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "g2hasherprotobuf.G2Diagnostic",
-	HandlerType: (*G2DiagnosticServer)(nil),
+var G2Hasher_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "g2hasher.G2Hasher",
+	HandlerType: (*G2HasherServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "ClearLastException",
-			Handler:    _G2Diagnostic_ClearLastException_Handler,
+			Handler:    _G2Hasher_ClearLastException_Handler,
 		},
 		{
 			MethodName: "Destroy",
-			Handler:    _G2Diagnostic_Destroy_Handler,
+			Handler:    _G2Hasher_Destroy_Handler,
 		},
 		{
 			MethodName: "ExportTokenLibrary",
-			Handler:    _G2Diagnostic_ExportTokenLibrary_Handler,
+			Handler:    _G2Hasher_ExportTokenLibrary_Handler,
 		},
 		{
 			MethodName: "GetLastException",
-			Handler:    _G2Diagnostic_GetLastException_Handler,
+			Handler:    _G2Hasher_GetLastException_Handler,
 		},
 		{
 			MethodName: "GetLastExceptionCode",
-			Handler:    _G2Diagnostic_GetLastExceptionCode_Handler,
+			Handler:    _G2Hasher_GetLastExceptionCode_Handler,
 		},
 		{
 			MethodName: "Init",
-			Handler:    _G2Diagnostic_Init_Handler,
+			Handler:    _G2Hasher_Init_Handler,
 		},
 		{
 			MethodName: "InitWithConfig",
-			Handler:    _G2Diagnostic_InitWithConfig_Handler,
+			Handler:    _G2Hasher_InitWithConfig_Handler,
 		},
 		{
 			MethodName: "Process",
-			Handler:    _G2Diagnostic_Process_Handler,
+			Handler:    _G2Hasher_Process_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -1,9 +1,9 @@
 syntax = "proto3";
-package g2productprotobuf;
+package g2product;
 
-option go_package = "github.com/senzing/go-servegrpc/g2productprotobuf";
+option go_package = "github.com/senzing/go-servegrpc/protobuf/g2product";
 
-service G2Diagnostic {
+service G2Product {
   rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
   rpc Destroy (DestroyRequest) returns (DestroyResponse) {}
   rpc GetLastException (GetLastExceptionRequest) returns (GetLastExceptionResponse) {}

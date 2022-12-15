@@ -4,7 +4,7 @@
 // - protoc             v3.21.6
 // source: g2ssadm.proto
 
-package g2ssadmprotobuf
+package g2ssadm
 
 import (
 	context "context"
@@ -18,10 +18,10 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// G2DiagnosticClient is the client API for G2Diagnostic service.
+// G2SsadmClient is the client API for G2Ssadm service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type G2DiagnosticClient interface {
+type G2SsadmClient interface {
 	ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error)
 	CreateSaltInStore(ctx context.Context, in *CreateSaltInStoreRequest, opts ...grpc.CallOption) (*CreateSaltInStoreResponse, error)
 	Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error)
@@ -35,117 +35,117 @@ type G2DiagnosticClient interface {
 	SetupStore(ctx context.Context, in *SetupStoreRequest, opts ...grpc.CallOption) (*SetupStoreResponse, error)
 }
 
-type g2DiagnosticClient struct {
+type g2SsadmClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewG2DiagnosticClient(cc grpc.ClientConnInterface) G2DiagnosticClient {
-	return &g2DiagnosticClient{cc}
+func NewG2SsadmClient(cc grpc.ClientConnInterface) G2SsadmClient {
+	return &g2SsadmClient{cc}
 }
 
-func (c *g2DiagnosticClient) ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error) {
+func (c *g2SsadmClient) ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error) {
 	out := new(ClearLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadmprotobuf.G2Diagnostic/ClearLastException", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/ClearLastException", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) CreateSaltInStore(ctx context.Context, in *CreateSaltInStoreRequest, opts ...grpc.CallOption) (*CreateSaltInStoreResponse, error) {
+func (c *g2SsadmClient) CreateSaltInStore(ctx context.Context, in *CreateSaltInStoreRequest, opts ...grpc.CallOption) (*CreateSaltInStoreResponse, error) {
 	out := new(CreateSaltInStoreResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadmprotobuf.G2Diagnostic/CreateSaltInStore", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/CreateSaltInStore", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error) {
+func (c *g2SsadmClient) Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error) {
 	out := new(DestroyResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadmprotobuf.G2Diagnostic/Destroy", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/Destroy", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error) {
+func (c *g2SsadmClient) GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error) {
 	out := new(GetLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadmprotobuf.G2Diagnostic/GetLastException", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/GetLastException", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error) {
+func (c *g2SsadmClient) GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error) {
 	out := new(GetLastExceptionCodeResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadmprotobuf.G2Diagnostic/GetLastExceptionCode", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/GetLastExceptionCode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error) {
+func (c *g2SsadmClient) Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error) {
 	out := new(InitResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadmprotobuf.G2Diagnostic/Init", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/Init", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) InitializeNewToken(ctx context.Context, in *InitializeNewTokenRequest, opts ...grpc.CallOption) (*InitializeNewTokenResponse, error) {
+func (c *g2SsadmClient) InitializeNewToken(ctx context.Context, in *InitializeNewTokenRequest, opts ...grpc.CallOption) (*InitializeNewTokenResponse, error) {
 	out := new(InitializeNewTokenResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadmprotobuf.G2Diagnostic/InitializeNewToken", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/InitializeNewToken", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+func (c *g2SsadmClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
 	out := new(ListResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadmprotobuf.G2Diagnostic/List", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/List", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Put(ctx context.Context, in *PutRequest, opts ...grpc.CallOption) (*PutResponse, error) {
+func (c *g2SsadmClient) Put(ctx context.Context, in *PutRequest, opts ...grpc.CallOption) (*PutResponse, error) {
 	out := new(PutResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadmprotobuf.G2Diagnostic/Put", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/Put", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ReinitializeToken(ctx context.Context, in *ReinitializeTokenRequest, opts ...grpc.CallOption) (*ReinitializeTokenResponse, error) {
+func (c *g2SsadmClient) ReinitializeToken(ctx context.Context, in *ReinitializeTokenRequest, opts ...grpc.CallOption) (*ReinitializeTokenResponse, error) {
 	out := new(ReinitializeTokenResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadmprotobuf.G2Diagnostic/ReinitializeToken", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/ReinitializeToken", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) SetupStore(ctx context.Context, in *SetupStoreRequest, opts ...grpc.CallOption) (*SetupStoreResponse, error) {
+func (c *g2SsadmClient) SetupStore(ctx context.Context, in *SetupStoreRequest, opts ...grpc.CallOption) (*SetupStoreResponse, error) {
 	out := new(SetupStoreResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadmprotobuf.G2Diagnostic/SetupStore", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/SetupStore", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// G2DiagnosticServer is the server API for G2Diagnostic service.
-// All implementations must embed UnimplementedG2DiagnosticServer
+// G2SsadmServer is the server API for G2Ssadm service.
+// All implementations must embed UnimplementedG2SsadmServer
 // for forward compatibility
-type G2DiagnosticServer interface {
+type G2SsadmServer interface {
 	ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error)
 	CreateSaltInStore(context.Context, *CreateSaltInStoreRequest) (*CreateSaltInStoreResponse, error)
 	Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error)
@@ -157,307 +157,307 @@ type G2DiagnosticServer interface {
 	Put(context.Context, *PutRequest) (*PutResponse, error)
 	ReinitializeToken(context.Context, *ReinitializeTokenRequest) (*ReinitializeTokenResponse, error)
 	SetupStore(context.Context, *SetupStoreRequest) (*SetupStoreResponse, error)
-	mustEmbedUnimplementedG2DiagnosticServer()
+	mustEmbedUnimplementedG2SsadmServer()
 }
 
-// UnimplementedG2DiagnosticServer must be embedded to have forward compatible implementations.
-type UnimplementedG2DiagnosticServer struct {
+// UnimplementedG2SsadmServer must be embedded to have forward compatible implementations.
+type UnimplementedG2SsadmServer struct {
 }
 
-func (UnimplementedG2DiagnosticServer) ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error) {
+func (UnimplementedG2SsadmServer) ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ClearLastException not implemented")
 }
-func (UnimplementedG2DiagnosticServer) CreateSaltInStore(context.Context, *CreateSaltInStoreRequest) (*CreateSaltInStoreResponse, error) {
+func (UnimplementedG2SsadmServer) CreateSaltInStore(context.Context, *CreateSaltInStoreRequest) (*CreateSaltInStoreResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSaltInStore not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
+func (UnimplementedG2SsadmServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Destroy not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error) {
+func (UnimplementedG2SsadmServer) GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLastException not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error) {
+func (UnimplementedG2SsadmServer) GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLastExceptionCode not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Init(context.Context, *InitRequest) (*InitResponse, error) {
+func (UnimplementedG2SsadmServer) Init(context.Context, *InitRequest) (*InitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Init not implemented")
 }
-func (UnimplementedG2DiagnosticServer) InitializeNewToken(context.Context, *InitializeNewTokenRequest) (*InitializeNewTokenResponse, error) {
+func (UnimplementedG2SsadmServer) InitializeNewToken(context.Context, *InitializeNewTokenRequest) (*InitializeNewTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InitializeNewToken not implemented")
 }
-func (UnimplementedG2DiagnosticServer) List(context.Context, *ListRequest) (*ListResponse, error) {
+func (UnimplementedG2SsadmServer) List(context.Context, *ListRequest) (*ListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Put(context.Context, *PutRequest) (*PutResponse, error) {
+func (UnimplementedG2SsadmServer) Put(context.Context, *PutRequest) (*PutResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Put not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ReinitializeToken(context.Context, *ReinitializeTokenRequest) (*ReinitializeTokenResponse, error) {
+func (UnimplementedG2SsadmServer) ReinitializeToken(context.Context, *ReinitializeTokenRequest) (*ReinitializeTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReinitializeToken not implemented")
 }
-func (UnimplementedG2DiagnosticServer) SetupStore(context.Context, *SetupStoreRequest) (*SetupStoreResponse, error) {
+func (UnimplementedG2SsadmServer) SetupStore(context.Context, *SetupStoreRequest) (*SetupStoreResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetupStore not implemented")
 }
-func (UnimplementedG2DiagnosticServer) mustEmbedUnimplementedG2DiagnosticServer() {}
+func (UnimplementedG2SsadmServer) mustEmbedUnimplementedG2SsadmServer() {}
 
-// UnsafeG2DiagnosticServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to G2DiagnosticServer will
+// UnsafeG2SsadmServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to G2SsadmServer will
 // result in compilation errors.
-type UnsafeG2DiagnosticServer interface {
-	mustEmbedUnimplementedG2DiagnosticServer()
+type UnsafeG2SsadmServer interface {
+	mustEmbedUnimplementedG2SsadmServer()
 }
 
-func RegisterG2DiagnosticServer(s grpc.ServiceRegistrar, srv G2DiagnosticServer) {
-	s.RegisterService(&G2Diagnostic_ServiceDesc, srv)
+func RegisterG2SsadmServer(s grpc.ServiceRegistrar, srv G2SsadmServer) {
+	s.RegisterService(&G2Ssadm_ServiceDesc, srv)
 }
 
-func _G2Diagnostic_ClearLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Ssadm_ClearLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ClearLastExceptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ClearLastException(ctx, in)
+		return srv.(G2SsadmServer).ClearLastException(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2ssadmprotobuf.G2Diagnostic/ClearLastException",
+		FullMethod: "/g2ssadm.G2Ssadm/ClearLastException",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ClearLastException(ctx, req.(*ClearLastExceptionRequest))
+		return srv.(G2SsadmServer).ClearLastException(ctx, req.(*ClearLastExceptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_CreateSaltInStore_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Ssadm_CreateSaltInStore_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateSaltInStoreRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).CreateSaltInStore(ctx, in)
+		return srv.(G2SsadmServer).CreateSaltInStore(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2ssadmprotobuf.G2Diagnostic/CreateSaltInStore",
+		FullMethod: "/g2ssadm.G2Ssadm/CreateSaltInStore",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).CreateSaltInStore(ctx, req.(*CreateSaltInStoreRequest))
+		return srv.(G2SsadmServer).CreateSaltInStore(ctx, req.(*CreateSaltInStoreRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Destroy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Ssadm_Destroy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DestroyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Destroy(ctx, in)
+		return srv.(G2SsadmServer).Destroy(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2ssadmprotobuf.G2Diagnostic/Destroy",
+		FullMethod: "/g2ssadm.G2Ssadm/Destroy",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Destroy(ctx, req.(*DestroyRequest))
+		return srv.(G2SsadmServer).Destroy(ctx, req.(*DestroyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Ssadm_GetLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetLastExceptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetLastException(ctx, in)
+		return srv.(G2SsadmServer).GetLastException(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2ssadmprotobuf.G2Diagnostic/GetLastException",
+		FullMethod: "/g2ssadm.G2Ssadm/GetLastException",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetLastException(ctx, req.(*GetLastExceptionRequest))
+		return srv.(G2SsadmServer).GetLastException(ctx, req.(*GetLastExceptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetLastExceptionCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Ssadm_GetLastExceptionCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetLastExceptionCodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetLastExceptionCode(ctx, in)
+		return srv.(G2SsadmServer).GetLastExceptionCode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2ssadmprotobuf.G2Diagnostic/GetLastExceptionCode",
+		FullMethod: "/g2ssadm.G2Ssadm/GetLastExceptionCode",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetLastExceptionCode(ctx, req.(*GetLastExceptionCodeRequest))
+		return srv.(G2SsadmServer).GetLastExceptionCode(ctx, req.(*GetLastExceptionCodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Init_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Ssadm_Init_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InitRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Init(ctx, in)
+		return srv.(G2SsadmServer).Init(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2ssadmprotobuf.G2Diagnostic/Init",
+		FullMethod: "/g2ssadm.G2Ssadm/Init",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Init(ctx, req.(*InitRequest))
+		return srv.(G2SsadmServer).Init(ctx, req.(*InitRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_InitializeNewToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Ssadm_InitializeNewToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InitializeNewTokenRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).InitializeNewToken(ctx, in)
+		return srv.(G2SsadmServer).InitializeNewToken(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2ssadmprotobuf.G2Diagnostic/InitializeNewToken",
+		FullMethod: "/g2ssadm.G2Ssadm/InitializeNewToken",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).InitializeNewToken(ctx, req.(*InitializeNewTokenRequest))
+		return srv.(G2SsadmServer).InitializeNewToken(ctx, req.(*InitializeNewTokenRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Ssadm_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).List(ctx, in)
+		return srv.(G2SsadmServer).List(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2ssadmprotobuf.G2Diagnostic/List",
+		FullMethod: "/g2ssadm.G2Ssadm/List",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).List(ctx, req.(*ListRequest))
+		return srv.(G2SsadmServer).List(ctx, req.(*ListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Put_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Ssadm_Put_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PutRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Put(ctx, in)
+		return srv.(G2SsadmServer).Put(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2ssadmprotobuf.G2Diagnostic/Put",
+		FullMethod: "/g2ssadm.G2Ssadm/Put",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Put(ctx, req.(*PutRequest))
+		return srv.(G2SsadmServer).Put(ctx, req.(*PutRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ReinitializeToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Ssadm_ReinitializeToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReinitializeTokenRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ReinitializeToken(ctx, in)
+		return srv.(G2SsadmServer).ReinitializeToken(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2ssadmprotobuf.G2Diagnostic/ReinitializeToken",
+		FullMethod: "/g2ssadm.G2Ssadm/ReinitializeToken",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ReinitializeToken(ctx, req.(*ReinitializeTokenRequest))
+		return srv.(G2SsadmServer).ReinitializeToken(ctx, req.(*ReinitializeTokenRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_SetupStore_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Ssadm_SetupStore_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetupStoreRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).SetupStore(ctx, in)
+		return srv.(G2SsadmServer).SetupStore(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2ssadmprotobuf.G2Diagnostic/SetupStore",
+		FullMethod: "/g2ssadm.G2Ssadm/SetupStore",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).SetupStore(ctx, req.(*SetupStoreRequest))
+		return srv.(G2SsadmServer).SetupStore(ctx, req.(*SetupStoreRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// G2Diagnostic_ServiceDesc is the grpc.ServiceDesc for G2Diagnostic service.
+// G2Ssadm_ServiceDesc is the grpc.ServiceDesc for G2Ssadm service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var G2Diagnostic_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "g2ssadmprotobuf.G2Diagnostic",
-	HandlerType: (*G2DiagnosticServer)(nil),
+var G2Ssadm_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "g2ssadm.G2Ssadm",
+	HandlerType: (*G2SsadmServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "ClearLastException",
-			Handler:    _G2Diagnostic_ClearLastException_Handler,
+			Handler:    _G2Ssadm_ClearLastException_Handler,
 		},
 		{
 			MethodName: "CreateSaltInStore",
-			Handler:    _G2Diagnostic_CreateSaltInStore_Handler,
+			Handler:    _G2Ssadm_CreateSaltInStore_Handler,
 		},
 		{
 			MethodName: "Destroy",
-			Handler:    _G2Diagnostic_Destroy_Handler,
+			Handler:    _G2Ssadm_Destroy_Handler,
 		},
 		{
 			MethodName: "GetLastException",
-			Handler:    _G2Diagnostic_GetLastException_Handler,
+			Handler:    _G2Ssadm_GetLastException_Handler,
 		},
 		{
 			MethodName: "GetLastExceptionCode",
-			Handler:    _G2Diagnostic_GetLastExceptionCode_Handler,
+			Handler:    _G2Ssadm_GetLastExceptionCode_Handler,
 		},
 		{
 			MethodName: "Init",
-			Handler:    _G2Diagnostic_Init_Handler,
+			Handler:    _G2Ssadm_Init_Handler,
 		},
 		{
 			MethodName: "InitializeNewToken",
-			Handler:    _G2Diagnostic_InitializeNewToken_Handler,
+			Handler:    _G2Ssadm_InitializeNewToken_Handler,
 		},
 		{
 			MethodName: "List",
-			Handler:    _G2Diagnostic_List_Handler,
+			Handler:    _G2Ssadm_List_Handler,
 		},
 		{
 			MethodName: "Put",
-			Handler:    _G2Diagnostic_Put_Handler,
+			Handler:    _G2Ssadm_Put_Handler,
 		},
 		{
 			MethodName: "ReinitializeToken",
-			Handler:    _G2Diagnostic_ReinitializeToken_Handler,
+			Handler:    _G2Ssadm_ReinitializeToken_Handler,
 		},
 		{
 			MethodName: "SetupStore",
-			Handler:    _G2Diagnostic_SetupStore_Handler,
+			Handler:    _G2Ssadm_SetupStore_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

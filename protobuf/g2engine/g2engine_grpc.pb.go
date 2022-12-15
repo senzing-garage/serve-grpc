@@ -4,7 +4,7 @@
 // - protoc             v3.21.6
 // source: g2engine.proto
 
-package g2engineprotobuf
+package g2engine
 
 import (
 	context "context"
@@ -18,10 +18,10 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// G2DiagnosticClient is the client API for G2Diagnostic service.
+// G2EngineClient is the client API for G2Engine service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type G2DiagnosticClient interface {
+type G2EngineClient interface {
 	AddRecord(ctx context.Context, in *AddRecordRequestRequest, opts ...grpc.CallOption) (*AddRecordResponseResponse, error)
 	AddRecordWithInfo(ctx context.Context, in *AddRecordWithInfoRequest, opts ...grpc.CallOption) (*AddRecordWithInfoResponse, error)
 	AddRecordWithInfoWithReturnedRecordID(ctx context.Context, in *AddRecordWithInfoWithReturnedRecordIDRequest, opts ...grpc.CallOption) (*AddRecordWithInfoWithReturnedRecordIDResponse, error)
@@ -101,711 +101,711 @@ type G2DiagnosticClient interface {
 	WhyRecords_V2(ctx context.Context, in *WhyRecords_V2Request, opts ...grpc.CallOption) (*WhyRecords_V2Response, error)
 }
 
-type g2DiagnosticClient struct {
+type g2EngineClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewG2DiagnosticClient(cc grpc.ClientConnInterface) G2DiagnosticClient {
-	return &g2DiagnosticClient{cc}
+func NewG2EngineClient(cc grpc.ClientConnInterface) G2EngineClient {
+	return &g2EngineClient{cc}
 }
 
-func (c *g2DiagnosticClient) AddRecord(ctx context.Context, in *AddRecordRequestRequest, opts ...grpc.CallOption) (*AddRecordResponseResponse, error) {
+func (c *g2EngineClient) AddRecord(ctx context.Context, in *AddRecordRequestRequest, opts ...grpc.CallOption) (*AddRecordResponseResponse, error) {
 	out := new(AddRecordResponseResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/AddRecord", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/AddRecord", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) AddRecordWithInfo(ctx context.Context, in *AddRecordWithInfoRequest, opts ...grpc.CallOption) (*AddRecordWithInfoResponse, error) {
+func (c *g2EngineClient) AddRecordWithInfo(ctx context.Context, in *AddRecordWithInfoRequest, opts ...grpc.CallOption) (*AddRecordWithInfoResponse, error) {
 	out := new(AddRecordWithInfoResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/AddRecordWithInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/AddRecordWithInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) AddRecordWithInfoWithReturnedRecordID(ctx context.Context, in *AddRecordWithInfoWithReturnedRecordIDRequest, opts ...grpc.CallOption) (*AddRecordWithInfoWithReturnedRecordIDResponse, error) {
+func (c *g2EngineClient) AddRecordWithInfoWithReturnedRecordID(ctx context.Context, in *AddRecordWithInfoWithReturnedRecordIDRequest, opts ...grpc.CallOption) (*AddRecordWithInfoWithReturnedRecordIDResponse, error) {
 	out := new(AddRecordWithInfoWithReturnedRecordIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/AddRecordWithInfoWithReturnedRecordID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/AddRecordWithInfoWithReturnedRecordID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) AddRecordWithReturnedRecordID(ctx context.Context, in *AddRecordWithReturnedRecordIDRequest, opts ...grpc.CallOption) (*AddRecordWithReturnedRecordIDResponse, error) {
+func (c *g2EngineClient) AddRecordWithReturnedRecordID(ctx context.Context, in *AddRecordWithReturnedRecordIDRequest, opts ...grpc.CallOption) (*AddRecordWithReturnedRecordIDResponse, error) {
 	out := new(AddRecordWithReturnedRecordIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/AddRecordWithReturnedRecordID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/AddRecordWithReturnedRecordID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) CheckRecord(ctx context.Context, in *CheckRecordRequest, opts ...grpc.CallOption) (*CheckRecordResponse, error) {
+func (c *g2EngineClient) CheckRecord(ctx context.Context, in *CheckRecordRequest, opts ...grpc.CallOption) (*CheckRecordResponse, error) {
 	out := new(CheckRecordResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/CheckRecord", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/CheckRecord", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error) {
+func (c *g2EngineClient) ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error) {
 	out := new(ClearLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ClearLastException", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ClearLastException", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) CloseExport(ctx context.Context, in *CloseExportRequest, opts ...grpc.CallOption) (*CloseExportResponse, error) {
+func (c *g2EngineClient) CloseExport(ctx context.Context, in *CloseExportRequest, opts ...grpc.CallOption) (*CloseExportResponse, error) {
 	out := new(CloseExportResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/CloseExport", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/CloseExport", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) CountRedoRecords(ctx context.Context, in *CountRedoRecordsRequest, opts ...grpc.CallOption) (*CountRedoRecordsResponse, error) {
+func (c *g2EngineClient) CountRedoRecords(ctx context.Context, in *CountRedoRecordsRequest, opts ...grpc.CallOption) (*CountRedoRecordsResponse, error) {
 	out := new(CountRedoRecordsResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/CountRedoRecords", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/CountRedoRecords", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) DeleteRecord(ctx context.Context, in *DeleteRecordRequest, opts ...grpc.CallOption) (*DeleteRecordResponse, error) {
+func (c *g2EngineClient) DeleteRecord(ctx context.Context, in *DeleteRecordRequest, opts ...grpc.CallOption) (*DeleteRecordResponse, error) {
 	out := new(DeleteRecordResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/DeleteRecord", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/DeleteRecord", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) DeleteRecordWithInfo(ctx context.Context, in *DeleteRecordWithInfoRequest, opts ...grpc.CallOption) (*DeleteRecordWithInfoResponse, error) {
+func (c *g2EngineClient) DeleteRecordWithInfo(ctx context.Context, in *DeleteRecordWithInfoRequest, opts ...grpc.CallOption) (*DeleteRecordWithInfoResponse, error) {
 	out := new(DeleteRecordWithInfoResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/DeleteRecordWithInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/DeleteRecordWithInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error) {
+func (c *g2EngineClient) Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error) {
 	out := new(DestroyResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/Destroy", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/Destroy", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ExportConfig(ctx context.Context, in *ExportConfigRequest, opts ...grpc.CallOption) (*ExportConfigResponse, error) {
+func (c *g2EngineClient) ExportConfig(ctx context.Context, in *ExportConfigRequest, opts ...grpc.CallOption) (*ExportConfigResponse, error) {
 	out := new(ExportConfigResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ExportConfig", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ExportConfig", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ExportConfigAndConfigID(ctx context.Context, in *ExportConfigAndConfigIDRequest, opts ...grpc.CallOption) (*ExportConfigAndConfigIDResponse, error) {
+func (c *g2EngineClient) ExportConfigAndConfigID(ctx context.Context, in *ExportConfigAndConfigIDRequest, opts ...grpc.CallOption) (*ExportConfigAndConfigIDResponse, error) {
 	out := new(ExportConfigAndConfigIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ExportConfigAndConfigID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ExportConfigAndConfigID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ExportCSVEntityReport(ctx context.Context, in *ExportCSVEntityReportRequest, opts ...grpc.CallOption) (*ExportCSVEntityReportResponse, error) {
+func (c *g2EngineClient) ExportCSVEntityReport(ctx context.Context, in *ExportCSVEntityReportRequest, opts ...grpc.CallOption) (*ExportCSVEntityReportResponse, error) {
 	out := new(ExportCSVEntityReportResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ExportCSVEntityReport", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ExportCSVEntityReport", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ExportJSONEntityReport(ctx context.Context, in *ExportJSONEntityReportRequest, opts ...grpc.CallOption) (*ExportJSONEntityReportResponse, error) {
+func (c *g2EngineClient) ExportJSONEntityReport(ctx context.Context, in *ExportJSONEntityReportRequest, opts ...grpc.CallOption) (*ExportJSONEntityReportResponse, error) {
 	out := new(ExportJSONEntityReportResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ExportJSONEntityReport", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ExportJSONEntityReport", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FetchNext(ctx context.Context, in *FetchNextRequest, opts ...grpc.CallOption) (*FetchNextResponse, error) {
+func (c *g2EngineClient) FetchNext(ctx context.Context, in *FetchNextRequest, opts ...grpc.CallOption) (*FetchNextResponse, error) {
 	out := new(FetchNextResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FetchNext", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FetchNext", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindInterestingEntitiesByEntityID(ctx context.Context, in *FindInterestingEntitiesByEntityIDRequest, opts ...grpc.CallOption) (*FindInterestingEntitiesByEntityIDResponse, error) {
+func (c *g2EngineClient) FindInterestingEntitiesByEntityID(ctx context.Context, in *FindInterestingEntitiesByEntityIDRequest, opts ...grpc.CallOption) (*FindInterestingEntitiesByEntityIDResponse, error) {
 	out := new(FindInterestingEntitiesByEntityIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindInterestingEntitiesByEntityID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindInterestingEntitiesByEntityID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindInterestingEntitiesByRecordID(ctx context.Context, in *FindInterestingEntitiesByRecordIDRequest, opts ...grpc.CallOption) (*FindInterestingEntitiesByRecordIDResponse, error) {
+func (c *g2EngineClient) FindInterestingEntitiesByRecordID(ctx context.Context, in *FindInterestingEntitiesByRecordIDRequest, opts ...grpc.CallOption) (*FindInterestingEntitiesByRecordIDResponse, error) {
 	out := new(FindInterestingEntitiesByRecordIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindInterestingEntitiesByRecordID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindInterestingEntitiesByRecordID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindNetworkByEntityID(ctx context.Context, in *FindNetworkByEntityIDRequest, opts ...grpc.CallOption) (*FindNetworkByEntityIDResponse, error) {
+func (c *g2EngineClient) FindNetworkByEntityID(ctx context.Context, in *FindNetworkByEntityIDRequest, opts ...grpc.CallOption) (*FindNetworkByEntityIDResponse, error) {
 	out := new(FindNetworkByEntityIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindNetworkByEntityID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindNetworkByEntityID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindNetworkByEntityID_V2(ctx context.Context, in *FindNetworkByEntityID_V2Request, opts ...grpc.CallOption) (*FindNetworkByEntityID_V2Response, error) {
+func (c *g2EngineClient) FindNetworkByEntityID_V2(ctx context.Context, in *FindNetworkByEntityID_V2Request, opts ...grpc.CallOption) (*FindNetworkByEntityID_V2Response, error) {
 	out := new(FindNetworkByEntityID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindNetworkByEntityID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindNetworkByEntityID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindNetworkByRecordID(ctx context.Context, in *FindNetworkByRecordIDRequest, opts ...grpc.CallOption) (*FindNetworkByRecordIDResponse, error) {
+func (c *g2EngineClient) FindNetworkByRecordID(ctx context.Context, in *FindNetworkByRecordIDRequest, opts ...grpc.CallOption) (*FindNetworkByRecordIDResponse, error) {
 	out := new(FindNetworkByRecordIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindNetworkByRecordID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindNetworkByRecordID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindNetworkByRecordID_V2(ctx context.Context, in *FindNetworkByRecordID_V2Request, opts ...grpc.CallOption) (*FindNetworkByRecordID_V2Response, error) {
+func (c *g2EngineClient) FindNetworkByRecordID_V2(ctx context.Context, in *FindNetworkByRecordID_V2Request, opts ...grpc.CallOption) (*FindNetworkByRecordID_V2Response, error) {
 	out := new(FindNetworkByRecordID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindNetworkByRecordID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindNetworkByRecordID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindPathByEntityID(ctx context.Context, in *FindPathByEntityIDRequest, opts ...grpc.CallOption) (*FindPathByEntityIDResponse, error) {
+func (c *g2EngineClient) FindPathByEntityID(ctx context.Context, in *FindPathByEntityIDRequest, opts ...grpc.CallOption) (*FindPathByEntityIDResponse, error) {
 	out := new(FindPathByEntityIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindPathByEntityID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindPathByEntityID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindPathByEntityID_V2(ctx context.Context, in *FindPathByEntityID_V2Request, opts ...grpc.CallOption) (*FindPathByEntityID_V2Response, error) {
+func (c *g2EngineClient) FindPathByEntityID_V2(ctx context.Context, in *FindPathByEntityID_V2Request, opts ...grpc.CallOption) (*FindPathByEntityID_V2Response, error) {
 	out := new(FindPathByEntityID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindPathByEntityID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindPathByEntityID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindPathByRecordID(ctx context.Context, in *FindPathByRecordIDRequest, opts ...grpc.CallOption) (*FindPathByRecordIDResponse, error) {
+func (c *g2EngineClient) FindPathByRecordID(ctx context.Context, in *FindPathByRecordIDRequest, opts ...grpc.CallOption) (*FindPathByRecordIDResponse, error) {
 	out := new(FindPathByRecordIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindPathByRecordID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindPathByRecordID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindPathByRecordID_V2(ctx context.Context, in *FindPathByRecordID_V2Request, opts ...grpc.CallOption) (*FindPathByRecordID_V2Response, error) {
+func (c *g2EngineClient) FindPathByRecordID_V2(ctx context.Context, in *FindPathByRecordID_V2Request, opts ...grpc.CallOption) (*FindPathByRecordID_V2Response, error) {
 	out := new(FindPathByRecordID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindPathByRecordID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindPathByRecordID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindPathExcludingByEntityID(ctx context.Context, in *FindPathExcludingByEntityIDRequest, opts ...grpc.CallOption) (*FindPathExcludingByEntityIDResponse, error) {
+func (c *g2EngineClient) FindPathExcludingByEntityID(ctx context.Context, in *FindPathExcludingByEntityIDRequest, opts ...grpc.CallOption) (*FindPathExcludingByEntityIDResponse, error) {
 	out := new(FindPathExcludingByEntityIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindPathExcludingByEntityID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindPathExcludingByEntityID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindPathExcludingByEntityID_V2(ctx context.Context, in *FindPathExcludingByEntityID_V2Request, opts ...grpc.CallOption) (*FindPathExcludingByEntityID_V2Response, error) {
+func (c *g2EngineClient) FindPathExcludingByEntityID_V2(ctx context.Context, in *FindPathExcludingByEntityID_V2Request, opts ...grpc.CallOption) (*FindPathExcludingByEntityID_V2Response, error) {
 	out := new(FindPathExcludingByEntityID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindPathExcludingByEntityID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindPathExcludingByEntityID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindPathExcludingByRecordID(ctx context.Context, in *FindPathExcludingByRecordIDRequest, opts ...grpc.CallOption) (*FindPathExcludingByRecordIDResponse, error) {
+func (c *g2EngineClient) FindPathExcludingByRecordID(ctx context.Context, in *FindPathExcludingByRecordIDRequest, opts ...grpc.CallOption) (*FindPathExcludingByRecordIDResponse, error) {
 	out := new(FindPathExcludingByRecordIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindPathExcludingByRecordID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindPathExcludingByRecordID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindPathExcludingByRecordID_V2(ctx context.Context, in *FindPathExcludingByRecordID_V2Request, opts ...grpc.CallOption) (*FindPathExcludingByRecordID_V2Response, error) {
+func (c *g2EngineClient) FindPathExcludingByRecordID_V2(ctx context.Context, in *FindPathExcludingByRecordID_V2Request, opts ...grpc.CallOption) (*FindPathExcludingByRecordID_V2Response, error) {
 	out := new(FindPathExcludingByRecordID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindPathExcludingByRecordID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindPathExcludingByRecordID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindPathIncludingSourceByEntityID(ctx context.Context, in *FindPathIncludingSourceByEntityIDRequest, opts ...grpc.CallOption) (*FindPathIncludingSourceByEntityIDResponse, error) {
+func (c *g2EngineClient) FindPathIncludingSourceByEntityID(ctx context.Context, in *FindPathIncludingSourceByEntityIDRequest, opts ...grpc.CallOption) (*FindPathIncludingSourceByEntityIDResponse, error) {
 	out := new(FindPathIncludingSourceByEntityIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindPathIncludingSourceByEntityID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindPathIncludingSourceByEntityID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindPathIncludingSourceByEntityID_V2(ctx context.Context, in *FindPathIncludingSourceByEntityID_V2Request, opts ...grpc.CallOption) (*FindPathIncludingSourceByEntityID_V2Response, error) {
+func (c *g2EngineClient) FindPathIncludingSourceByEntityID_V2(ctx context.Context, in *FindPathIncludingSourceByEntityID_V2Request, opts ...grpc.CallOption) (*FindPathIncludingSourceByEntityID_V2Response, error) {
 	out := new(FindPathIncludingSourceByEntityID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindPathIncludingSourceByEntityID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindPathIncludingSourceByEntityID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindPathIncludingSourceByRecordID(ctx context.Context, in *FindPathIncludingSourceByRecordIDRequest, opts ...grpc.CallOption) (*FindPathIncludingSourceByRecordIDResponse, error) {
+func (c *g2EngineClient) FindPathIncludingSourceByRecordID(ctx context.Context, in *FindPathIncludingSourceByRecordIDRequest, opts ...grpc.CallOption) (*FindPathIncludingSourceByRecordIDResponse, error) {
 	out := new(FindPathIncludingSourceByRecordIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindPathIncludingSourceByRecordID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindPathIncludingSourceByRecordID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) FindPathIncludingSourceByRecordID_V2(ctx context.Context, in *FindPathIncludingSourceByRecordID_V2Request, opts ...grpc.CallOption) (*FindPathIncludingSourceByRecordID_V2Response, error) {
+func (c *g2EngineClient) FindPathIncludingSourceByRecordID_V2(ctx context.Context, in *FindPathIncludingSourceByRecordID_V2Request, opts ...grpc.CallOption) (*FindPathIncludingSourceByRecordID_V2Response, error) {
 	out := new(FindPathIncludingSourceByRecordID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/FindPathIncludingSourceByRecordID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/FindPathIncludingSourceByRecordID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetActiveConfigID(ctx context.Context, in *GetActiveConfigIDRequest, opts ...grpc.CallOption) (*GetActiveConfigIDResponse, error) {
+func (c *g2EngineClient) GetActiveConfigID(ctx context.Context, in *GetActiveConfigIDRequest, opts ...grpc.CallOption) (*GetActiveConfigIDResponse, error) {
 	out := new(GetActiveConfigIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetActiveConfigID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetActiveConfigID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetEntityByEntityID(ctx context.Context, in *GetEntityByEntityIDRequest, opts ...grpc.CallOption) (*GetEntityByEntityIDResponse, error) {
+func (c *g2EngineClient) GetEntityByEntityID(ctx context.Context, in *GetEntityByEntityIDRequest, opts ...grpc.CallOption) (*GetEntityByEntityIDResponse, error) {
 	out := new(GetEntityByEntityIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetEntityByEntityID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetEntityByEntityID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetEntityByEntityID_V2(ctx context.Context, in *GetEntityByEntityID_V2Request, opts ...grpc.CallOption) (*GetEntityByEntityID_V2Response, error) {
+func (c *g2EngineClient) GetEntityByEntityID_V2(ctx context.Context, in *GetEntityByEntityID_V2Request, opts ...grpc.CallOption) (*GetEntityByEntityID_V2Response, error) {
 	out := new(GetEntityByEntityID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetEntityByEntityID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetEntityByEntityID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetEntityByRecordID(ctx context.Context, in *GetEntityByRecordIDRequest, opts ...grpc.CallOption) (*GetEntityByRecordIDResponse, error) {
+func (c *g2EngineClient) GetEntityByRecordID(ctx context.Context, in *GetEntityByRecordIDRequest, opts ...grpc.CallOption) (*GetEntityByRecordIDResponse, error) {
 	out := new(GetEntityByRecordIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetEntityByRecordID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetEntityByRecordID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetEntityByRecordID_V2(ctx context.Context, in *GetEntityByRecordID_V2Request, opts ...grpc.CallOption) (*GetEntityByRecordID_V2Response, error) {
+func (c *g2EngineClient) GetEntityByRecordID_V2(ctx context.Context, in *GetEntityByRecordID_V2Request, opts ...grpc.CallOption) (*GetEntityByRecordID_V2Response, error) {
 	out := new(GetEntityByRecordID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetEntityByRecordID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetEntityByRecordID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error) {
+func (c *g2EngineClient) GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error) {
 	out := new(GetLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetLastException", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetLastException", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error) {
+func (c *g2EngineClient) GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error) {
 	out := new(GetLastExceptionCodeResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetLastExceptionCode", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetLastExceptionCode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetRecord(ctx context.Context, in *GetRecordRequest, opts ...grpc.CallOption) (*GetRecordResponse, error) {
+func (c *g2EngineClient) GetRecord(ctx context.Context, in *GetRecordRequest, opts ...grpc.CallOption) (*GetRecordResponse, error) {
 	out := new(GetRecordResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetRecord", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetRecord", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetRecord_V2(ctx context.Context, in *GetRecord_V2Request, opts ...grpc.CallOption) (*GetRecord_V2Response, error) {
+func (c *g2EngineClient) GetRecord_V2(ctx context.Context, in *GetRecord_V2Request, opts ...grpc.CallOption) (*GetRecord_V2Response, error) {
 	out := new(GetRecord_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetRecord_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetRecord_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetRedoRecord(ctx context.Context, in *GetRedoRecordRequest, opts ...grpc.CallOption) (*GetRedoRecordResponse, error) {
+func (c *g2EngineClient) GetRedoRecord(ctx context.Context, in *GetRedoRecordRequest, opts ...grpc.CallOption) (*GetRedoRecordResponse, error) {
 	out := new(GetRedoRecordResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetRedoRecord", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetRedoRecord", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetRepositoryLastModifiedTime(ctx context.Context, in *GetRepositoryLastModifiedTimeRequest, opts ...grpc.CallOption) (*GetRepositoryLastModifiedTimeResponse, error) {
+func (c *g2EngineClient) GetRepositoryLastModifiedTime(ctx context.Context, in *GetRepositoryLastModifiedTimeRequest, opts ...grpc.CallOption) (*GetRepositoryLastModifiedTimeResponse, error) {
 	out := new(GetRepositoryLastModifiedTimeResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetRepositoryLastModifiedTime", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetRepositoryLastModifiedTime", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetVirtualEntityByRecordID(ctx context.Context, in *GetVirtualEntityByRecordIDRequest, opts ...grpc.CallOption) (*GetVirtualEntityByRecordIDResponse, error) {
+func (c *g2EngineClient) GetVirtualEntityByRecordID(ctx context.Context, in *GetVirtualEntityByRecordIDRequest, opts ...grpc.CallOption) (*GetVirtualEntityByRecordIDResponse, error) {
 	out := new(GetVirtualEntityByRecordIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetVirtualEntityByRecordID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetVirtualEntityByRecordID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetVirtualEntityByRecordID_V2(ctx context.Context, in *GetVirtualEntityByRecordID_V2Request, opts ...grpc.CallOption) (*GetVirtualEntityByRecordID_V2Response, error) {
+func (c *g2EngineClient) GetVirtualEntityByRecordID_V2(ctx context.Context, in *GetVirtualEntityByRecordID_V2Request, opts ...grpc.CallOption) (*GetVirtualEntityByRecordID_V2Response, error) {
 	out := new(GetVirtualEntityByRecordID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/GetVirtualEntityByRecordID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetVirtualEntityByRecordID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) HowEntityByEntityID(ctx context.Context, in *HowEntityByEntityIDRequest, opts ...grpc.CallOption) (*HowEntityByEntityIDResponse, error) {
+func (c *g2EngineClient) HowEntityByEntityID(ctx context.Context, in *HowEntityByEntityIDRequest, opts ...grpc.CallOption) (*HowEntityByEntityIDResponse, error) {
 	out := new(HowEntityByEntityIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/HowEntityByEntityID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/HowEntityByEntityID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) HowEntityByEntityID_V2(ctx context.Context, in *HowEntityByEntityID_V2Request, opts ...grpc.CallOption) (*HowEntityByEntityID_V2Response, error) {
+func (c *g2EngineClient) HowEntityByEntityID_V2(ctx context.Context, in *HowEntityByEntityID_V2Request, opts ...grpc.CallOption) (*HowEntityByEntityID_V2Response, error) {
 	out := new(HowEntityByEntityID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/HowEntityByEntityID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/HowEntityByEntityID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error) {
+func (c *g2EngineClient) Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error) {
 	out := new(InitResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/Init", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/Init", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) InitWithConfigID(ctx context.Context, in *InitWithConfigIDRequest, opts ...grpc.CallOption) (*InitWithConfigIDResponse, error) {
+func (c *g2EngineClient) InitWithConfigID(ctx context.Context, in *InitWithConfigIDRequest, opts ...grpc.CallOption) (*InitWithConfigIDResponse, error) {
 	out := new(InitWithConfigIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/InitWithConfigID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/InitWithConfigID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) PrimeEngine(ctx context.Context, in *PrimeEngineRequest, opts ...grpc.CallOption) (*PrimeEngineResponse, error) {
+func (c *g2EngineClient) PrimeEngine(ctx context.Context, in *PrimeEngineRequest, opts ...grpc.CallOption) (*PrimeEngineResponse, error) {
 	out := new(PrimeEngineResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/PrimeEngine", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/PrimeEngine", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Process(ctx context.Context, in *ProcessRequest, opts ...grpc.CallOption) (*ProcessResponse, error) {
+func (c *g2EngineClient) Process(ctx context.Context, in *ProcessRequest, opts ...grpc.CallOption) (*ProcessResponse, error) {
 	out := new(ProcessResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/Process", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/Process", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ProcessRedoRecord(ctx context.Context, in *ProcessRedoRecordRequest, opts ...grpc.CallOption) (*ProcessRedoRecordResponse, error) {
+func (c *g2EngineClient) ProcessRedoRecord(ctx context.Context, in *ProcessRedoRecordRequest, opts ...grpc.CallOption) (*ProcessRedoRecordResponse, error) {
 	out := new(ProcessRedoRecordResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ProcessRedoRecord", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ProcessRedoRecord", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ProcessRedoRecordWithInfo(ctx context.Context, in *ProcessRedoRecordWithInfoRequest, opts ...grpc.CallOption) (*ProcessRedoRecordWithInfoResponse, error) {
+func (c *g2EngineClient) ProcessRedoRecordWithInfo(ctx context.Context, in *ProcessRedoRecordWithInfoRequest, opts ...grpc.CallOption) (*ProcessRedoRecordWithInfoResponse, error) {
 	out := new(ProcessRedoRecordWithInfoResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ProcessRedoRecordWithInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ProcessRedoRecordWithInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ProcessWithInfo(ctx context.Context, in *ProcessWithInfoRequest, opts ...grpc.CallOption) (*ProcessWithInfoResponse, error) {
+func (c *g2EngineClient) ProcessWithInfo(ctx context.Context, in *ProcessWithInfoRequest, opts ...grpc.CallOption) (*ProcessWithInfoResponse, error) {
 	out := new(ProcessWithInfoResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ProcessWithInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ProcessWithInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ProcessWithResponse(ctx context.Context, in *ProcessWithResponseRequest, opts ...grpc.CallOption) (*ProcessWithResponseResponse, error) {
+func (c *g2EngineClient) ProcessWithResponse(ctx context.Context, in *ProcessWithResponseRequest, opts ...grpc.CallOption) (*ProcessWithResponseResponse, error) {
 	out := new(ProcessWithResponseResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ProcessWithResponse", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ProcessWithResponse", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ProcessWithResponseResize(ctx context.Context, in *ProcessWithResponseResizeRequest, opts ...grpc.CallOption) (*ProcessWithResponseResizeResponse, error) {
+func (c *g2EngineClient) ProcessWithResponseResize(ctx context.Context, in *ProcessWithResponseResizeRequest, opts ...grpc.CallOption) (*ProcessWithResponseResizeResponse, error) {
 	out := new(ProcessWithResponseResizeResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ProcessWithResponseResize", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ProcessWithResponseResize", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) PurgeRepository(ctx context.Context, in *PurgeRepositoryRequest, opts ...grpc.CallOption) (*PurgeRepositoryResponse, error) {
+func (c *g2EngineClient) PurgeRepository(ctx context.Context, in *PurgeRepositoryRequest, opts ...grpc.CallOption) (*PurgeRepositoryResponse, error) {
 	out := new(PurgeRepositoryResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/PurgeRepository", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/PurgeRepository", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ReevaluateEntity(ctx context.Context, in *ReevaluateEntityRequest, opts ...grpc.CallOption) (*ReevaluateEntityResponse, error) {
+func (c *g2EngineClient) ReevaluateEntity(ctx context.Context, in *ReevaluateEntityRequest, opts ...grpc.CallOption) (*ReevaluateEntityResponse, error) {
 	out := new(ReevaluateEntityResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ReevaluateEntity", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ReevaluateEntity", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ReevaluateEntityWithInfo(ctx context.Context, in *ReevaluateEntityWithInfoRequest, opts ...grpc.CallOption) (*ReevaluateEntityWithInfoResponse, error) {
+func (c *g2EngineClient) ReevaluateEntityWithInfo(ctx context.Context, in *ReevaluateEntityWithInfoRequest, opts ...grpc.CallOption) (*ReevaluateEntityWithInfoResponse, error) {
 	out := new(ReevaluateEntityWithInfoResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ReevaluateEntityWithInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ReevaluateEntityWithInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ReevaluateRecord(ctx context.Context, in *ReevaluateRecordRequest, opts ...grpc.CallOption) (*ReevaluateRecordResponse, error) {
+func (c *g2EngineClient) ReevaluateRecord(ctx context.Context, in *ReevaluateRecordRequest, opts ...grpc.CallOption) (*ReevaluateRecordResponse, error) {
 	out := new(ReevaluateRecordResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ReevaluateRecord", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ReevaluateRecord", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ReevaluateRecordWithInfo(ctx context.Context, in *ReevaluateRecordWithInfoRequest, opts ...grpc.CallOption) (*ReevaluateRecordWithInfoResponse, error) {
+func (c *g2EngineClient) ReevaluateRecordWithInfo(ctx context.Context, in *ReevaluateRecordWithInfoRequest, opts ...grpc.CallOption) (*ReevaluateRecordWithInfoResponse, error) {
 	out := new(ReevaluateRecordWithInfoResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ReevaluateRecordWithInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ReevaluateRecordWithInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Reinit(ctx context.Context, in *ReinitRequest, opts ...grpc.CallOption) (*ReinitResponse, error) {
+func (c *g2EngineClient) Reinit(ctx context.Context, in *ReinitRequest, opts ...grpc.CallOption) (*ReinitResponse, error) {
 	out := new(ReinitResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/Reinit", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/Reinit", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ReplaceRecord(ctx context.Context, in *ReplaceRecordRequest, opts ...grpc.CallOption) (*ReplaceRecordResponse, error) {
+func (c *g2EngineClient) ReplaceRecord(ctx context.Context, in *ReplaceRecordRequest, opts ...grpc.CallOption) (*ReplaceRecordResponse, error) {
 	out := new(ReplaceRecordResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ReplaceRecord", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ReplaceRecord", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ReplaceRecordWithInfo(ctx context.Context, in *ReplaceRecordWithInfoRequest, opts ...grpc.CallOption) (*ReplaceRecordWithInfoResponse, error) {
+func (c *g2EngineClient) ReplaceRecordWithInfo(ctx context.Context, in *ReplaceRecordWithInfoRequest, opts ...grpc.CallOption) (*ReplaceRecordWithInfoResponse, error) {
 	out := new(ReplaceRecordWithInfoResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/ReplaceRecordWithInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ReplaceRecordWithInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) SearchByAttributes(ctx context.Context, in *SearchByAttributesRequest, opts ...grpc.CallOption) (*SearchByAttributesResponse, error) {
+func (c *g2EngineClient) SearchByAttributes(ctx context.Context, in *SearchByAttributesRequest, opts ...grpc.CallOption) (*SearchByAttributesResponse, error) {
 	out := new(SearchByAttributesResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/SearchByAttributes", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/SearchByAttributes", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) SearchByAttributes_V2(ctx context.Context, in *SearchByAttributes_V2Request, opts ...grpc.CallOption) (*SearchByAttributes_V2Response, error) {
+func (c *g2EngineClient) SearchByAttributes_V2(ctx context.Context, in *SearchByAttributes_V2Request, opts ...grpc.CallOption) (*SearchByAttributes_V2Response, error) {
 	out := new(SearchByAttributes_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/SearchByAttributes_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/SearchByAttributes_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Stats(ctx context.Context, in *StatsRequest, opts ...grpc.CallOption) (*StatsResponse, error) {
+func (c *g2EngineClient) Stats(ctx context.Context, in *StatsRequest, opts ...grpc.CallOption) (*StatsResponse, error) {
 	out := new(StatsResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/Stats", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/Stats", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) WhyEntities(ctx context.Context, in *WhyEntitiesRequest, opts ...grpc.CallOption) (*WhyEntitiesResponse, error) {
+func (c *g2EngineClient) WhyEntities(ctx context.Context, in *WhyEntitiesRequest, opts ...grpc.CallOption) (*WhyEntitiesResponse, error) {
 	out := new(WhyEntitiesResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/WhyEntities", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/WhyEntities", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) WhyEntities_V2(ctx context.Context, in *WhyEntities_V2Request, opts ...grpc.CallOption) (*WhyEntities_V2Response, error) {
+func (c *g2EngineClient) WhyEntities_V2(ctx context.Context, in *WhyEntities_V2Request, opts ...grpc.CallOption) (*WhyEntities_V2Response, error) {
 	out := new(WhyEntities_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/WhyEntities_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/WhyEntities_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) WhyEntityByEntityID(ctx context.Context, in *WhyEntityByEntityIDRequest, opts ...grpc.CallOption) (*WhyEntityByEntityIDResponse, error) {
+func (c *g2EngineClient) WhyEntityByEntityID(ctx context.Context, in *WhyEntityByEntityIDRequest, opts ...grpc.CallOption) (*WhyEntityByEntityIDResponse, error) {
 	out := new(WhyEntityByEntityIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/WhyEntityByEntityID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/WhyEntityByEntityID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) WhyEntityByEntityID_V2(ctx context.Context, in *WhyEntityByEntityID_V2Request, opts ...grpc.CallOption) (*WhyEntityByEntityID_V2Response, error) {
+func (c *g2EngineClient) WhyEntityByEntityID_V2(ctx context.Context, in *WhyEntityByEntityID_V2Request, opts ...grpc.CallOption) (*WhyEntityByEntityID_V2Response, error) {
 	out := new(WhyEntityByEntityID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/WhyEntityByEntityID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/WhyEntityByEntityID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) WhyEntityByRecordID(ctx context.Context, in *WhyEntityByRecordIDRequest, opts ...grpc.CallOption) (*WhyEntityByRecordIDResponse, error) {
+func (c *g2EngineClient) WhyEntityByRecordID(ctx context.Context, in *WhyEntityByRecordIDRequest, opts ...grpc.CallOption) (*WhyEntityByRecordIDResponse, error) {
 	out := new(WhyEntityByRecordIDResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/WhyEntityByRecordID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/WhyEntityByRecordID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) WhyEntityByRecordID_V2(ctx context.Context, in *WhyEntityByRecordID_V2Request, opts ...grpc.CallOption) (*WhyEntityByRecordID_V2Response, error) {
+func (c *g2EngineClient) WhyEntityByRecordID_V2(ctx context.Context, in *WhyEntityByRecordID_V2Request, opts ...grpc.CallOption) (*WhyEntityByRecordID_V2Response, error) {
 	out := new(WhyEntityByRecordID_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/WhyEntityByRecordID_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/WhyEntityByRecordID_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) WhyRecords(ctx context.Context, in *WhyRecordsRequest, opts ...grpc.CallOption) (*WhyRecordsResponse, error) {
+func (c *g2EngineClient) WhyRecords(ctx context.Context, in *WhyRecordsRequest, opts ...grpc.CallOption) (*WhyRecordsResponse, error) {
 	out := new(WhyRecordsResponse)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/WhyRecords", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/WhyRecords", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) WhyRecords_V2(ctx context.Context, in *WhyRecords_V2Request, opts ...grpc.CallOption) (*WhyRecords_V2Response, error) {
+func (c *g2EngineClient) WhyRecords_V2(ctx context.Context, in *WhyRecords_V2Request, opts ...grpc.CallOption) (*WhyRecords_V2Response, error) {
 	out := new(WhyRecords_V2Response)
-	err := c.cc.Invoke(ctx, "/g2engineprotobuf.G2Diagnostic/WhyRecords_V2", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/WhyRecords_V2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// G2DiagnosticServer is the server API for G2Diagnostic service.
-// All implementations must embed UnimplementedG2DiagnosticServer
+// G2EngineServer is the server API for G2Engine service.
+// All implementations must embed UnimplementedG2EngineServer
 // for forward compatibility
-type G2DiagnosticServer interface {
+type G2EngineServer interface {
 	AddRecord(context.Context, *AddRecordRequestRequest) (*AddRecordResponseResponse, error)
 	AddRecordWithInfo(context.Context, *AddRecordWithInfoRequest) (*AddRecordWithInfoResponse, error)
 	AddRecordWithInfoWithReturnedRecordID(context.Context, *AddRecordWithInfoWithReturnedRecordIDRequest) (*AddRecordWithInfoWithReturnedRecordIDResponse, error)
@@ -883,1957 +883,1957 @@ type G2DiagnosticServer interface {
 	WhyEntityByRecordID_V2(context.Context, *WhyEntityByRecordID_V2Request) (*WhyEntityByRecordID_V2Response, error)
 	WhyRecords(context.Context, *WhyRecordsRequest) (*WhyRecordsResponse, error)
 	WhyRecords_V2(context.Context, *WhyRecords_V2Request) (*WhyRecords_V2Response, error)
-	mustEmbedUnimplementedG2DiagnosticServer()
+	mustEmbedUnimplementedG2EngineServer()
 }
 
-// UnimplementedG2DiagnosticServer must be embedded to have forward compatible implementations.
-type UnimplementedG2DiagnosticServer struct {
+// UnimplementedG2EngineServer must be embedded to have forward compatible implementations.
+type UnimplementedG2EngineServer struct {
 }
 
-func (UnimplementedG2DiagnosticServer) AddRecord(context.Context, *AddRecordRequestRequest) (*AddRecordResponseResponse, error) {
+func (UnimplementedG2EngineServer) AddRecord(context.Context, *AddRecordRequestRequest) (*AddRecordResponseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddRecord not implemented")
 }
-func (UnimplementedG2DiagnosticServer) AddRecordWithInfo(context.Context, *AddRecordWithInfoRequest) (*AddRecordWithInfoResponse, error) {
+func (UnimplementedG2EngineServer) AddRecordWithInfo(context.Context, *AddRecordWithInfoRequest) (*AddRecordWithInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddRecordWithInfo not implemented")
 }
-func (UnimplementedG2DiagnosticServer) AddRecordWithInfoWithReturnedRecordID(context.Context, *AddRecordWithInfoWithReturnedRecordIDRequest) (*AddRecordWithInfoWithReturnedRecordIDResponse, error) {
+func (UnimplementedG2EngineServer) AddRecordWithInfoWithReturnedRecordID(context.Context, *AddRecordWithInfoWithReturnedRecordIDRequest) (*AddRecordWithInfoWithReturnedRecordIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddRecordWithInfoWithReturnedRecordID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) AddRecordWithReturnedRecordID(context.Context, *AddRecordWithReturnedRecordIDRequest) (*AddRecordWithReturnedRecordIDResponse, error) {
+func (UnimplementedG2EngineServer) AddRecordWithReturnedRecordID(context.Context, *AddRecordWithReturnedRecordIDRequest) (*AddRecordWithReturnedRecordIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddRecordWithReturnedRecordID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) CheckRecord(context.Context, *CheckRecordRequest) (*CheckRecordResponse, error) {
+func (UnimplementedG2EngineServer) CheckRecord(context.Context, *CheckRecordRequest) (*CheckRecordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckRecord not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error) {
+func (UnimplementedG2EngineServer) ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ClearLastException not implemented")
 }
-func (UnimplementedG2DiagnosticServer) CloseExport(context.Context, *CloseExportRequest) (*CloseExportResponse, error) {
+func (UnimplementedG2EngineServer) CloseExport(context.Context, *CloseExportRequest) (*CloseExportResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CloseExport not implemented")
 }
-func (UnimplementedG2DiagnosticServer) CountRedoRecords(context.Context, *CountRedoRecordsRequest) (*CountRedoRecordsResponse, error) {
+func (UnimplementedG2EngineServer) CountRedoRecords(context.Context, *CountRedoRecordsRequest) (*CountRedoRecordsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CountRedoRecords not implemented")
 }
-func (UnimplementedG2DiagnosticServer) DeleteRecord(context.Context, *DeleteRecordRequest) (*DeleteRecordResponse, error) {
+func (UnimplementedG2EngineServer) DeleteRecord(context.Context, *DeleteRecordRequest) (*DeleteRecordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteRecord not implemented")
 }
-func (UnimplementedG2DiagnosticServer) DeleteRecordWithInfo(context.Context, *DeleteRecordWithInfoRequest) (*DeleteRecordWithInfoResponse, error) {
+func (UnimplementedG2EngineServer) DeleteRecordWithInfo(context.Context, *DeleteRecordWithInfoRequest) (*DeleteRecordWithInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteRecordWithInfo not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
+func (UnimplementedG2EngineServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Destroy not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ExportConfig(context.Context, *ExportConfigRequest) (*ExportConfigResponse, error) {
+func (UnimplementedG2EngineServer) ExportConfig(context.Context, *ExportConfigRequest) (*ExportConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExportConfig not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ExportConfigAndConfigID(context.Context, *ExportConfigAndConfigIDRequest) (*ExportConfigAndConfigIDResponse, error) {
+func (UnimplementedG2EngineServer) ExportConfigAndConfigID(context.Context, *ExportConfigAndConfigIDRequest) (*ExportConfigAndConfigIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExportConfigAndConfigID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ExportCSVEntityReport(context.Context, *ExportCSVEntityReportRequest) (*ExportCSVEntityReportResponse, error) {
+func (UnimplementedG2EngineServer) ExportCSVEntityReport(context.Context, *ExportCSVEntityReportRequest) (*ExportCSVEntityReportResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExportCSVEntityReport not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ExportJSONEntityReport(context.Context, *ExportJSONEntityReportRequest) (*ExportJSONEntityReportResponse, error) {
+func (UnimplementedG2EngineServer) ExportJSONEntityReport(context.Context, *ExportJSONEntityReportRequest) (*ExportJSONEntityReportResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExportJSONEntityReport not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FetchNext(context.Context, *FetchNextRequest) (*FetchNextResponse, error) {
+func (UnimplementedG2EngineServer) FetchNext(context.Context, *FetchNextRequest) (*FetchNextResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FetchNext not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindInterestingEntitiesByEntityID(context.Context, *FindInterestingEntitiesByEntityIDRequest) (*FindInterestingEntitiesByEntityIDResponse, error) {
+func (UnimplementedG2EngineServer) FindInterestingEntitiesByEntityID(context.Context, *FindInterestingEntitiesByEntityIDRequest) (*FindInterestingEntitiesByEntityIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindInterestingEntitiesByEntityID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindInterestingEntitiesByRecordID(context.Context, *FindInterestingEntitiesByRecordIDRequest) (*FindInterestingEntitiesByRecordIDResponse, error) {
+func (UnimplementedG2EngineServer) FindInterestingEntitiesByRecordID(context.Context, *FindInterestingEntitiesByRecordIDRequest) (*FindInterestingEntitiesByRecordIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindInterestingEntitiesByRecordID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindNetworkByEntityID(context.Context, *FindNetworkByEntityIDRequest) (*FindNetworkByEntityIDResponse, error) {
+func (UnimplementedG2EngineServer) FindNetworkByEntityID(context.Context, *FindNetworkByEntityIDRequest) (*FindNetworkByEntityIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindNetworkByEntityID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindNetworkByEntityID_V2(context.Context, *FindNetworkByEntityID_V2Request) (*FindNetworkByEntityID_V2Response, error) {
+func (UnimplementedG2EngineServer) FindNetworkByEntityID_V2(context.Context, *FindNetworkByEntityID_V2Request) (*FindNetworkByEntityID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindNetworkByEntityID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindNetworkByRecordID(context.Context, *FindNetworkByRecordIDRequest) (*FindNetworkByRecordIDResponse, error) {
+func (UnimplementedG2EngineServer) FindNetworkByRecordID(context.Context, *FindNetworkByRecordIDRequest) (*FindNetworkByRecordIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindNetworkByRecordID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindNetworkByRecordID_V2(context.Context, *FindNetworkByRecordID_V2Request) (*FindNetworkByRecordID_V2Response, error) {
+func (UnimplementedG2EngineServer) FindNetworkByRecordID_V2(context.Context, *FindNetworkByRecordID_V2Request) (*FindNetworkByRecordID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindNetworkByRecordID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindPathByEntityID(context.Context, *FindPathByEntityIDRequest) (*FindPathByEntityIDResponse, error) {
+func (UnimplementedG2EngineServer) FindPathByEntityID(context.Context, *FindPathByEntityIDRequest) (*FindPathByEntityIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindPathByEntityID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindPathByEntityID_V2(context.Context, *FindPathByEntityID_V2Request) (*FindPathByEntityID_V2Response, error) {
+func (UnimplementedG2EngineServer) FindPathByEntityID_V2(context.Context, *FindPathByEntityID_V2Request) (*FindPathByEntityID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindPathByEntityID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindPathByRecordID(context.Context, *FindPathByRecordIDRequest) (*FindPathByRecordIDResponse, error) {
+func (UnimplementedG2EngineServer) FindPathByRecordID(context.Context, *FindPathByRecordIDRequest) (*FindPathByRecordIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindPathByRecordID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindPathByRecordID_V2(context.Context, *FindPathByRecordID_V2Request) (*FindPathByRecordID_V2Response, error) {
+func (UnimplementedG2EngineServer) FindPathByRecordID_V2(context.Context, *FindPathByRecordID_V2Request) (*FindPathByRecordID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindPathByRecordID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindPathExcludingByEntityID(context.Context, *FindPathExcludingByEntityIDRequest) (*FindPathExcludingByEntityIDResponse, error) {
+func (UnimplementedG2EngineServer) FindPathExcludingByEntityID(context.Context, *FindPathExcludingByEntityIDRequest) (*FindPathExcludingByEntityIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindPathExcludingByEntityID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindPathExcludingByEntityID_V2(context.Context, *FindPathExcludingByEntityID_V2Request) (*FindPathExcludingByEntityID_V2Response, error) {
+func (UnimplementedG2EngineServer) FindPathExcludingByEntityID_V2(context.Context, *FindPathExcludingByEntityID_V2Request) (*FindPathExcludingByEntityID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindPathExcludingByEntityID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindPathExcludingByRecordID(context.Context, *FindPathExcludingByRecordIDRequest) (*FindPathExcludingByRecordIDResponse, error) {
+func (UnimplementedG2EngineServer) FindPathExcludingByRecordID(context.Context, *FindPathExcludingByRecordIDRequest) (*FindPathExcludingByRecordIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindPathExcludingByRecordID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindPathExcludingByRecordID_V2(context.Context, *FindPathExcludingByRecordID_V2Request) (*FindPathExcludingByRecordID_V2Response, error) {
+func (UnimplementedG2EngineServer) FindPathExcludingByRecordID_V2(context.Context, *FindPathExcludingByRecordID_V2Request) (*FindPathExcludingByRecordID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindPathExcludingByRecordID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindPathIncludingSourceByEntityID(context.Context, *FindPathIncludingSourceByEntityIDRequest) (*FindPathIncludingSourceByEntityIDResponse, error) {
+func (UnimplementedG2EngineServer) FindPathIncludingSourceByEntityID(context.Context, *FindPathIncludingSourceByEntityIDRequest) (*FindPathIncludingSourceByEntityIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindPathIncludingSourceByEntityID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindPathIncludingSourceByEntityID_V2(context.Context, *FindPathIncludingSourceByEntityID_V2Request) (*FindPathIncludingSourceByEntityID_V2Response, error) {
+func (UnimplementedG2EngineServer) FindPathIncludingSourceByEntityID_V2(context.Context, *FindPathIncludingSourceByEntityID_V2Request) (*FindPathIncludingSourceByEntityID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindPathIncludingSourceByEntityID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindPathIncludingSourceByRecordID(context.Context, *FindPathIncludingSourceByRecordIDRequest) (*FindPathIncludingSourceByRecordIDResponse, error) {
+func (UnimplementedG2EngineServer) FindPathIncludingSourceByRecordID(context.Context, *FindPathIncludingSourceByRecordIDRequest) (*FindPathIncludingSourceByRecordIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindPathIncludingSourceByRecordID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) FindPathIncludingSourceByRecordID_V2(context.Context, *FindPathIncludingSourceByRecordID_V2Request) (*FindPathIncludingSourceByRecordID_V2Response, error) {
+func (UnimplementedG2EngineServer) FindPathIncludingSourceByRecordID_V2(context.Context, *FindPathIncludingSourceByRecordID_V2Request) (*FindPathIncludingSourceByRecordID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindPathIncludingSourceByRecordID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetActiveConfigID(context.Context, *GetActiveConfigIDRequest) (*GetActiveConfigIDResponse, error) {
+func (UnimplementedG2EngineServer) GetActiveConfigID(context.Context, *GetActiveConfigIDRequest) (*GetActiveConfigIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetActiveConfigID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetEntityByEntityID(context.Context, *GetEntityByEntityIDRequest) (*GetEntityByEntityIDResponse, error) {
+func (UnimplementedG2EngineServer) GetEntityByEntityID(context.Context, *GetEntityByEntityIDRequest) (*GetEntityByEntityIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEntityByEntityID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetEntityByEntityID_V2(context.Context, *GetEntityByEntityID_V2Request) (*GetEntityByEntityID_V2Response, error) {
+func (UnimplementedG2EngineServer) GetEntityByEntityID_V2(context.Context, *GetEntityByEntityID_V2Request) (*GetEntityByEntityID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEntityByEntityID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetEntityByRecordID(context.Context, *GetEntityByRecordIDRequest) (*GetEntityByRecordIDResponse, error) {
+func (UnimplementedG2EngineServer) GetEntityByRecordID(context.Context, *GetEntityByRecordIDRequest) (*GetEntityByRecordIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEntityByRecordID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetEntityByRecordID_V2(context.Context, *GetEntityByRecordID_V2Request) (*GetEntityByRecordID_V2Response, error) {
+func (UnimplementedG2EngineServer) GetEntityByRecordID_V2(context.Context, *GetEntityByRecordID_V2Request) (*GetEntityByRecordID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEntityByRecordID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error) {
+func (UnimplementedG2EngineServer) GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLastException not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error) {
+func (UnimplementedG2EngineServer) GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLastExceptionCode not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetRecord(context.Context, *GetRecordRequest) (*GetRecordResponse, error) {
+func (UnimplementedG2EngineServer) GetRecord(context.Context, *GetRecordRequest) (*GetRecordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRecord not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetRecord_V2(context.Context, *GetRecord_V2Request) (*GetRecord_V2Response, error) {
+func (UnimplementedG2EngineServer) GetRecord_V2(context.Context, *GetRecord_V2Request) (*GetRecord_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRecord_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetRedoRecord(context.Context, *GetRedoRecordRequest) (*GetRedoRecordResponse, error) {
+func (UnimplementedG2EngineServer) GetRedoRecord(context.Context, *GetRedoRecordRequest) (*GetRedoRecordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRedoRecord not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetRepositoryLastModifiedTime(context.Context, *GetRepositoryLastModifiedTimeRequest) (*GetRepositoryLastModifiedTimeResponse, error) {
+func (UnimplementedG2EngineServer) GetRepositoryLastModifiedTime(context.Context, *GetRepositoryLastModifiedTimeRequest) (*GetRepositoryLastModifiedTimeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRepositoryLastModifiedTime not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetVirtualEntityByRecordID(context.Context, *GetVirtualEntityByRecordIDRequest) (*GetVirtualEntityByRecordIDResponse, error) {
+func (UnimplementedG2EngineServer) GetVirtualEntityByRecordID(context.Context, *GetVirtualEntityByRecordIDRequest) (*GetVirtualEntityByRecordIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVirtualEntityByRecordID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetVirtualEntityByRecordID_V2(context.Context, *GetVirtualEntityByRecordID_V2Request) (*GetVirtualEntityByRecordID_V2Response, error) {
+func (UnimplementedG2EngineServer) GetVirtualEntityByRecordID_V2(context.Context, *GetVirtualEntityByRecordID_V2Request) (*GetVirtualEntityByRecordID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVirtualEntityByRecordID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) HowEntityByEntityID(context.Context, *HowEntityByEntityIDRequest) (*HowEntityByEntityIDResponse, error) {
+func (UnimplementedG2EngineServer) HowEntityByEntityID(context.Context, *HowEntityByEntityIDRequest) (*HowEntityByEntityIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HowEntityByEntityID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) HowEntityByEntityID_V2(context.Context, *HowEntityByEntityID_V2Request) (*HowEntityByEntityID_V2Response, error) {
+func (UnimplementedG2EngineServer) HowEntityByEntityID_V2(context.Context, *HowEntityByEntityID_V2Request) (*HowEntityByEntityID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HowEntityByEntityID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Init(context.Context, *InitRequest) (*InitResponse, error) {
+func (UnimplementedG2EngineServer) Init(context.Context, *InitRequest) (*InitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Init not implemented")
 }
-func (UnimplementedG2DiagnosticServer) InitWithConfigID(context.Context, *InitWithConfigIDRequest) (*InitWithConfigIDResponse, error) {
+func (UnimplementedG2EngineServer) InitWithConfigID(context.Context, *InitWithConfigIDRequest) (*InitWithConfigIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InitWithConfigID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) PrimeEngine(context.Context, *PrimeEngineRequest) (*PrimeEngineResponse, error) {
+func (UnimplementedG2EngineServer) PrimeEngine(context.Context, *PrimeEngineRequest) (*PrimeEngineResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PrimeEngine not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Process(context.Context, *ProcessRequest) (*ProcessResponse, error) {
+func (UnimplementedG2EngineServer) Process(context.Context, *ProcessRequest) (*ProcessResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Process not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ProcessRedoRecord(context.Context, *ProcessRedoRecordRequest) (*ProcessRedoRecordResponse, error) {
+func (UnimplementedG2EngineServer) ProcessRedoRecord(context.Context, *ProcessRedoRecordRequest) (*ProcessRedoRecordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ProcessRedoRecord not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ProcessRedoRecordWithInfo(context.Context, *ProcessRedoRecordWithInfoRequest) (*ProcessRedoRecordWithInfoResponse, error) {
+func (UnimplementedG2EngineServer) ProcessRedoRecordWithInfo(context.Context, *ProcessRedoRecordWithInfoRequest) (*ProcessRedoRecordWithInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ProcessRedoRecordWithInfo not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ProcessWithInfo(context.Context, *ProcessWithInfoRequest) (*ProcessWithInfoResponse, error) {
+func (UnimplementedG2EngineServer) ProcessWithInfo(context.Context, *ProcessWithInfoRequest) (*ProcessWithInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ProcessWithInfo not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ProcessWithResponse(context.Context, *ProcessWithResponseRequest) (*ProcessWithResponseResponse, error) {
+func (UnimplementedG2EngineServer) ProcessWithResponse(context.Context, *ProcessWithResponseRequest) (*ProcessWithResponseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ProcessWithResponse not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ProcessWithResponseResize(context.Context, *ProcessWithResponseResizeRequest) (*ProcessWithResponseResizeResponse, error) {
+func (UnimplementedG2EngineServer) ProcessWithResponseResize(context.Context, *ProcessWithResponseResizeRequest) (*ProcessWithResponseResizeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ProcessWithResponseResize not implemented")
 }
-func (UnimplementedG2DiagnosticServer) PurgeRepository(context.Context, *PurgeRepositoryRequest) (*PurgeRepositoryResponse, error) {
+func (UnimplementedG2EngineServer) PurgeRepository(context.Context, *PurgeRepositoryRequest) (*PurgeRepositoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PurgeRepository not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ReevaluateEntity(context.Context, *ReevaluateEntityRequest) (*ReevaluateEntityResponse, error) {
+func (UnimplementedG2EngineServer) ReevaluateEntity(context.Context, *ReevaluateEntityRequest) (*ReevaluateEntityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReevaluateEntity not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ReevaluateEntityWithInfo(context.Context, *ReevaluateEntityWithInfoRequest) (*ReevaluateEntityWithInfoResponse, error) {
+func (UnimplementedG2EngineServer) ReevaluateEntityWithInfo(context.Context, *ReevaluateEntityWithInfoRequest) (*ReevaluateEntityWithInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReevaluateEntityWithInfo not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ReevaluateRecord(context.Context, *ReevaluateRecordRequest) (*ReevaluateRecordResponse, error) {
+func (UnimplementedG2EngineServer) ReevaluateRecord(context.Context, *ReevaluateRecordRequest) (*ReevaluateRecordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReevaluateRecord not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ReevaluateRecordWithInfo(context.Context, *ReevaluateRecordWithInfoRequest) (*ReevaluateRecordWithInfoResponse, error) {
+func (UnimplementedG2EngineServer) ReevaluateRecordWithInfo(context.Context, *ReevaluateRecordWithInfoRequest) (*ReevaluateRecordWithInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReevaluateRecordWithInfo not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Reinit(context.Context, *ReinitRequest) (*ReinitResponse, error) {
+func (UnimplementedG2EngineServer) Reinit(context.Context, *ReinitRequest) (*ReinitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reinit not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ReplaceRecord(context.Context, *ReplaceRecordRequest) (*ReplaceRecordResponse, error) {
+func (UnimplementedG2EngineServer) ReplaceRecord(context.Context, *ReplaceRecordRequest) (*ReplaceRecordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReplaceRecord not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ReplaceRecordWithInfo(context.Context, *ReplaceRecordWithInfoRequest) (*ReplaceRecordWithInfoResponse, error) {
+func (UnimplementedG2EngineServer) ReplaceRecordWithInfo(context.Context, *ReplaceRecordWithInfoRequest) (*ReplaceRecordWithInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReplaceRecordWithInfo not implemented")
 }
-func (UnimplementedG2DiagnosticServer) SearchByAttributes(context.Context, *SearchByAttributesRequest) (*SearchByAttributesResponse, error) {
+func (UnimplementedG2EngineServer) SearchByAttributes(context.Context, *SearchByAttributesRequest) (*SearchByAttributesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchByAttributes not implemented")
 }
-func (UnimplementedG2DiagnosticServer) SearchByAttributes_V2(context.Context, *SearchByAttributes_V2Request) (*SearchByAttributes_V2Response, error) {
+func (UnimplementedG2EngineServer) SearchByAttributes_V2(context.Context, *SearchByAttributes_V2Request) (*SearchByAttributes_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchByAttributes_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Stats(context.Context, *StatsRequest) (*StatsResponse, error) {
+func (UnimplementedG2EngineServer) Stats(context.Context, *StatsRequest) (*StatsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Stats not implemented")
 }
-func (UnimplementedG2DiagnosticServer) WhyEntities(context.Context, *WhyEntitiesRequest) (*WhyEntitiesResponse, error) {
+func (UnimplementedG2EngineServer) WhyEntities(context.Context, *WhyEntitiesRequest) (*WhyEntitiesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WhyEntities not implemented")
 }
-func (UnimplementedG2DiagnosticServer) WhyEntities_V2(context.Context, *WhyEntities_V2Request) (*WhyEntities_V2Response, error) {
+func (UnimplementedG2EngineServer) WhyEntities_V2(context.Context, *WhyEntities_V2Request) (*WhyEntities_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WhyEntities_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) WhyEntityByEntityID(context.Context, *WhyEntityByEntityIDRequest) (*WhyEntityByEntityIDResponse, error) {
+func (UnimplementedG2EngineServer) WhyEntityByEntityID(context.Context, *WhyEntityByEntityIDRequest) (*WhyEntityByEntityIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WhyEntityByEntityID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) WhyEntityByEntityID_V2(context.Context, *WhyEntityByEntityID_V2Request) (*WhyEntityByEntityID_V2Response, error) {
+func (UnimplementedG2EngineServer) WhyEntityByEntityID_V2(context.Context, *WhyEntityByEntityID_V2Request) (*WhyEntityByEntityID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WhyEntityByEntityID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) WhyEntityByRecordID(context.Context, *WhyEntityByRecordIDRequest) (*WhyEntityByRecordIDResponse, error) {
+func (UnimplementedG2EngineServer) WhyEntityByRecordID(context.Context, *WhyEntityByRecordIDRequest) (*WhyEntityByRecordIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WhyEntityByRecordID not implemented")
 }
-func (UnimplementedG2DiagnosticServer) WhyEntityByRecordID_V2(context.Context, *WhyEntityByRecordID_V2Request) (*WhyEntityByRecordID_V2Response, error) {
+func (UnimplementedG2EngineServer) WhyEntityByRecordID_V2(context.Context, *WhyEntityByRecordID_V2Request) (*WhyEntityByRecordID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WhyEntityByRecordID_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) WhyRecords(context.Context, *WhyRecordsRequest) (*WhyRecordsResponse, error) {
+func (UnimplementedG2EngineServer) WhyRecords(context.Context, *WhyRecordsRequest) (*WhyRecordsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WhyRecords not implemented")
 }
-func (UnimplementedG2DiagnosticServer) WhyRecords_V2(context.Context, *WhyRecords_V2Request) (*WhyRecords_V2Response, error) {
+func (UnimplementedG2EngineServer) WhyRecords_V2(context.Context, *WhyRecords_V2Request) (*WhyRecords_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WhyRecords_V2 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) mustEmbedUnimplementedG2DiagnosticServer() {}
+func (UnimplementedG2EngineServer) mustEmbedUnimplementedG2EngineServer() {}
 
-// UnsafeG2DiagnosticServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to G2DiagnosticServer will
+// UnsafeG2EngineServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to G2EngineServer will
 // result in compilation errors.
-type UnsafeG2DiagnosticServer interface {
-	mustEmbedUnimplementedG2DiagnosticServer()
+type UnsafeG2EngineServer interface {
+	mustEmbedUnimplementedG2EngineServer()
 }
 
-func RegisterG2DiagnosticServer(s grpc.ServiceRegistrar, srv G2DiagnosticServer) {
-	s.RegisterService(&G2Diagnostic_ServiceDesc, srv)
+func RegisterG2EngineServer(s grpc.ServiceRegistrar, srv G2EngineServer) {
+	s.RegisterService(&G2Engine_ServiceDesc, srv)
 }
 
-func _G2Diagnostic_AddRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_AddRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddRecordRequestRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).AddRecord(ctx, in)
+		return srv.(G2EngineServer).AddRecord(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/AddRecord",
+		FullMethod: "/g2engine.G2Engine/AddRecord",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).AddRecord(ctx, req.(*AddRecordRequestRequest))
+		return srv.(G2EngineServer).AddRecord(ctx, req.(*AddRecordRequestRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_AddRecordWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_AddRecordWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddRecordWithInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).AddRecordWithInfo(ctx, in)
+		return srv.(G2EngineServer).AddRecordWithInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/AddRecordWithInfo",
+		FullMethod: "/g2engine.G2Engine/AddRecordWithInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).AddRecordWithInfo(ctx, req.(*AddRecordWithInfoRequest))
+		return srv.(G2EngineServer).AddRecordWithInfo(ctx, req.(*AddRecordWithInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_AddRecordWithInfoWithReturnedRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_AddRecordWithInfoWithReturnedRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddRecordWithInfoWithReturnedRecordIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).AddRecordWithInfoWithReturnedRecordID(ctx, in)
+		return srv.(G2EngineServer).AddRecordWithInfoWithReturnedRecordID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/AddRecordWithInfoWithReturnedRecordID",
+		FullMethod: "/g2engine.G2Engine/AddRecordWithInfoWithReturnedRecordID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).AddRecordWithInfoWithReturnedRecordID(ctx, req.(*AddRecordWithInfoWithReturnedRecordIDRequest))
+		return srv.(G2EngineServer).AddRecordWithInfoWithReturnedRecordID(ctx, req.(*AddRecordWithInfoWithReturnedRecordIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_AddRecordWithReturnedRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_AddRecordWithReturnedRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddRecordWithReturnedRecordIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).AddRecordWithReturnedRecordID(ctx, in)
+		return srv.(G2EngineServer).AddRecordWithReturnedRecordID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/AddRecordWithReturnedRecordID",
+		FullMethod: "/g2engine.G2Engine/AddRecordWithReturnedRecordID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).AddRecordWithReturnedRecordID(ctx, req.(*AddRecordWithReturnedRecordIDRequest))
+		return srv.(G2EngineServer).AddRecordWithReturnedRecordID(ctx, req.(*AddRecordWithReturnedRecordIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_CheckRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_CheckRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CheckRecordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).CheckRecord(ctx, in)
+		return srv.(G2EngineServer).CheckRecord(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/CheckRecord",
+		FullMethod: "/g2engine.G2Engine/CheckRecord",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).CheckRecord(ctx, req.(*CheckRecordRequest))
+		return srv.(G2EngineServer).CheckRecord(ctx, req.(*CheckRecordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ClearLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ClearLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ClearLastExceptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ClearLastException(ctx, in)
+		return srv.(G2EngineServer).ClearLastException(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ClearLastException",
+		FullMethod: "/g2engine.G2Engine/ClearLastException",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ClearLastException(ctx, req.(*ClearLastExceptionRequest))
+		return srv.(G2EngineServer).ClearLastException(ctx, req.(*ClearLastExceptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_CloseExport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_CloseExport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CloseExportRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).CloseExport(ctx, in)
+		return srv.(G2EngineServer).CloseExport(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/CloseExport",
+		FullMethod: "/g2engine.G2Engine/CloseExport",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).CloseExport(ctx, req.(*CloseExportRequest))
+		return srv.(G2EngineServer).CloseExport(ctx, req.(*CloseExportRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_CountRedoRecords_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_CountRedoRecords_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CountRedoRecordsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).CountRedoRecords(ctx, in)
+		return srv.(G2EngineServer).CountRedoRecords(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/CountRedoRecords",
+		FullMethod: "/g2engine.G2Engine/CountRedoRecords",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).CountRedoRecords(ctx, req.(*CountRedoRecordsRequest))
+		return srv.(G2EngineServer).CountRedoRecords(ctx, req.(*CountRedoRecordsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_DeleteRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_DeleteRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteRecordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).DeleteRecord(ctx, in)
+		return srv.(G2EngineServer).DeleteRecord(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/DeleteRecord",
+		FullMethod: "/g2engine.G2Engine/DeleteRecord",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).DeleteRecord(ctx, req.(*DeleteRecordRequest))
+		return srv.(G2EngineServer).DeleteRecord(ctx, req.(*DeleteRecordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_DeleteRecordWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_DeleteRecordWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteRecordWithInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).DeleteRecordWithInfo(ctx, in)
+		return srv.(G2EngineServer).DeleteRecordWithInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/DeleteRecordWithInfo",
+		FullMethod: "/g2engine.G2Engine/DeleteRecordWithInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).DeleteRecordWithInfo(ctx, req.(*DeleteRecordWithInfoRequest))
+		return srv.(G2EngineServer).DeleteRecordWithInfo(ctx, req.(*DeleteRecordWithInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Destroy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_Destroy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DestroyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Destroy(ctx, in)
+		return srv.(G2EngineServer).Destroy(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/Destroy",
+		FullMethod: "/g2engine.G2Engine/Destroy",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Destroy(ctx, req.(*DestroyRequest))
+		return srv.(G2EngineServer).Destroy(ctx, req.(*DestroyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ExportConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ExportConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ExportConfigRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ExportConfig(ctx, in)
+		return srv.(G2EngineServer).ExportConfig(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ExportConfig",
+		FullMethod: "/g2engine.G2Engine/ExportConfig",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ExportConfig(ctx, req.(*ExportConfigRequest))
+		return srv.(G2EngineServer).ExportConfig(ctx, req.(*ExportConfigRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ExportConfigAndConfigID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ExportConfigAndConfigID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ExportConfigAndConfigIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ExportConfigAndConfigID(ctx, in)
+		return srv.(G2EngineServer).ExportConfigAndConfigID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ExportConfigAndConfigID",
+		FullMethod: "/g2engine.G2Engine/ExportConfigAndConfigID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ExportConfigAndConfigID(ctx, req.(*ExportConfigAndConfigIDRequest))
+		return srv.(G2EngineServer).ExportConfigAndConfigID(ctx, req.(*ExportConfigAndConfigIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ExportCSVEntityReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ExportCSVEntityReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ExportCSVEntityReportRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ExportCSVEntityReport(ctx, in)
+		return srv.(G2EngineServer).ExportCSVEntityReport(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ExportCSVEntityReport",
+		FullMethod: "/g2engine.G2Engine/ExportCSVEntityReport",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ExportCSVEntityReport(ctx, req.(*ExportCSVEntityReportRequest))
+		return srv.(G2EngineServer).ExportCSVEntityReport(ctx, req.(*ExportCSVEntityReportRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ExportJSONEntityReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ExportJSONEntityReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ExportJSONEntityReportRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ExportJSONEntityReport(ctx, in)
+		return srv.(G2EngineServer).ExportJSONEntityReport(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ExportJSONEntityReport",
+		FullMethod: "/g2engine.G2Engine/ExportJSONEntityReport",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ExportJSONEntityReport(ctx, req.(*ExportJSONEntityReportRequest))
+		return srv.(G2EngineServer).ExportJSONEntityReport(ctx, req.(*ExportJSONEntityReportRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FetchNext_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FetchNext_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FetchNextRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FetchNext(ctx, in)
+		return srv.(G2EngineServer).FetchNext(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FetchNext",
+		FullMethod: "/g2engine.G2Engine/FetchNext",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FetchNext(ctx, req.(*FetchNextRequest))
+		return srv.(G2EngineServer).FetchNext(ctx, req.(*FetchNextRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindInterestingEntitiesByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindInterestingEntitiesByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindInterestingEntitiesByEntityIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindInterestingEntitiesByEntityID(ctx, in)
+		return srv.(G2EngineServer).FindInterestingEntitiesByEntityID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindInterestingEntitiesByEntityID",
+		FullMethod: "/g2engine.G2Engine/FindInterestingEntitiesByEntityID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindInterestingEntitiesByEntityID(ctx, req.(*FindInterestingEntitiesByEntityIDRequest))
+		return srv.(G2EngineServer).FindInterestingEntitiesByEntityID(ctx, req.(*FindInterestingEntitiesByEntityIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindInterestingEntitiesByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindInterestingEntitiesByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindInterestingEntitiesByRecordIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindInterestingEntitiesByRecordID(ctx, in)
+		return srv.(G2EngineServer).FindInterestingEntitiesByRecordID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindInterestingEntitiesByRecordID",
+		FullMethod: "/g2engine.G2Engine/FindInterestingEntitiesByRecordID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindInterestingEntitiesByRecordID(ctx, req.(*FindInterestingEntitiesByRecordIDRequest))
+		return srv.(G2EngineServer).FindInterestingEntitiesByRecordID(ctx, req.(*FindInterestingEntitiesByRecordIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindNetworkByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindNetworkByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindNetworkByEntityIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindNetworkByEntityID(ctx, in)
+		return srv.(G2EngineServer).FindNetworkByEntityID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindNetworkByEntityID",
+		FullMethod: "/g2engine.G2Engine/FindNetworkByEntityID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindNetworkByEntityID(ctx, req.(*FindNetworkByEntityIDRequest))
+		return srv.(G2EngineServer).FindNetworkByEntityID(ctx, req.(*FindNetworkByEntityIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindNetworkByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindNetworkByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindNetworkByEntityID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindNetworkByEntityID_V2(ctx, in)
+		return srv.(G2EngineServer).FindNetworkByEntityID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindNetworkByEntityID_V2",
+		FullMethod: "/g2engine.G2Engine/FindNetworkByEntityID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindNetworkByEntityID_V2(ctx, req.(*FindNetworkByEntityID_V2Request))
+		return srv.(G2EngineServer).FindNetworkByEntityID_V2(ctx, req.(*FindNetworkByEntityID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindNetworkByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindNetworkByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindNetworkByRecordIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindNetworkByRecordID(ctx, in)
+		return srv.(G2EngineServer).FindNetworkByRecordID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindNetworkByRecordID",
+		FullMethod: "/g2engine.G2Engine/FindNetworkByRecordID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindNetworkByRecordID(ctx, req.(*FindNetworkByRecordIDRequest))
+		return srv.(G2EngineServer).FindNetworkByRecordID(ctx, req.(*FindNetworkByRecordIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindNetworkByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindNetworkByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindNetworkByRecordID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindNetworkByRecordID_V2(ctx, in)
+		return srv.(G2EngineServer).FindNetworkByRecordID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindNetworkByRecordID_V2",
+		FullMethod: "/g2engine.G2Engine/FindNetworkByRecordID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindNetworkByRecordID_V2(ctx, req.(*FindNetworkByRecordID_V2Request))
+		return srv.(G2EngineServer).FindNetworkByRecordID_V2(ctx, req.(*FindNetworkByRecordID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindPathByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindPathByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindPathByEntityIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindPathByEntityID(ctx, in)
+		return srv.(G2EngineServer).FindPathByEntityID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindPathByEntityID",
+		FullMethod: "/g2engine.G2Engine/FindPathByEntityID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindPathByEntityID(ctx, req.(*FindPathByEntityIDRequest))
+		return srv.(G2EngineServer).FindPathByEntityID(ctx, req.(*FindPathByEntityIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindPathByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindPathByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindPathByEntityID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindPathByEntityID_V2(ctx, in)
+		return srv.(G2EngineServer).FindPathByEntityID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindPathByEntityID_V2",
+		FullMethod: "/g2engine.G2Engine/FindPathByEntityID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindPathByEntityID_V2(ctx, req.(*FindPathByEntityID_V2Request))
+		return srv.(G2EngineServer).FindPathByEntityID_V2(ctx, req.(*FindPathByEntityID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindPathByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindPathByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindPathByRecordIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindPathByRecordID(ctx, in)
+		return srv.(G2EngineServer).FindPathByRecordID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindPathByRecordID",
+		FullMethod: "/g2engine.G2Engine/FindPathByRecordID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindPathByRecordID(ctx, req.(*FindPathByRecordIDRequest))
+		return srv.(G2EngineServer).FindPathByRecordID(ctx, req.(*FindPathByRecordIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindPathByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindPathByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindPathByRecordID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindPathByRecordID_V2(ctx, in)
+		return srv.(G2EngineServer).FindPathByRecordID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindPathByRecordID_V2",
+		FullMethod: "/g2engine.G2Engine/FindPathByRecordID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindPathByRecordID_V2(ctx, req.(*FindPathByRecordID_V2Request))
+		return srv.(G2EngineServer).FindPathByRecordID_V2(ctx, req.(*FindPathByRecordID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindPathExcludingByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindPathExcludingByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindPathExcludingByEntityIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindPathExcludingByEntityID(ctx, in)
+		return srv.(G2EngineServer).FindPathExcludingByEntityID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindPathExcludingByEntityID",
+		FullMethod: "/g2engine.G2Engine/FindPathExcludingByEntityID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindPathExcludingByEntityID(ctx, req.(*FindPathExcludingByEntityIDRequest))
+		return srv.(G2EngineServer).FindPathExcludingByEntityID(ctx, req.(*FindPathExcludingByEntityIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindPathExcludingByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindPathExcludingByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindPathExcludingByEntityID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindPathExcludingByEntityID_V2(ctx, in)
+		return srv.(G2EngineServer).FindPathExcludingByEntityID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindPathExcludingByEntityID_V2",
+		FullMethod: "/g2engine.G2Engine/FindPathExcludingByEntityID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindPathExcludingByEntityID_V2(ctx, req.(*FindPathExcludingByEntityID_V2Request))
+		return srv.(G2EngineServer).FindPathExcludingByEntityID_V2(ctx, req.(*FindPathExcludingByEntityID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindPathExcludingByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindPathExcludingByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindPathExcludingByRecordIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindPathExcludingByRecordID(ctx, in)
+		return srv.(G2EngineServer).FindPathExcludingByRecordID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindPathExcludingByRecordID",
+		FullMethod: "/g2engine.G2Engine/FindPathExcludingByRecordID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindPathExcludingByRecordID(ctx, req.(*FindPathExcludingByRecordIDRequest))
+		return srv.(G2EngineServer).FindPathExcludingByRecordID(ctx, req.(*FindPathExcludingByRecordIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindPathExcludingByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindPathExcludingByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindPathExcludingByRecordID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindPathExcludingByRecordID_V2(ctx, in)
+		return srv.(G2EngineServer).FindPathExcludingByRecordID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindPathExcludingByRecordID_V2",
+		FullMethod: "/g2engine.G2Engine/FindPathExcludingByRecordID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindPathExcludingByRecordID_V2(ctx, req.(*FindPathExcludingByRecordID_V2Request))
+		return srv.(G2EngineServer).FindPathExcludingByRecordID_V2(ctx, req.(*FindPathExcludingByRecordID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindPathIncludingSourceByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindPathIncludingSourceByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindPathIncludingSourceByEntityIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindPathIncludingSourceByEntityID(ctx, in)
+		return srv.(G2EngineServer).FindPathIncludingSourceByEntityID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindPathIncludingSourceByEntityID",
+		FullMethod: "/g2engine.G2Engine/FindPathIncludingSourceByEntityID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindPathIncludingSourceByEntityID(ctx, req.(*FindPathIncludingSourceByEntityIDRequest))
+		return srv.(G2EngineServer).FindPathIncludingSourceByEntityID(ctx, req.(*FindPathIncludingSourceByEntityIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindPathIncludingSourceByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindPathIncludingSourceByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindPathIncludingSourceByEntityID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindPathIncludingSourceByEntityID_V2(ctx, in)
+		return srv.(G2EngineServer).FindPathIncludingSourceByEntityID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindPathIncludingSourceByEntityID_V2",
+		FullMethod: "/g2engine.G2Engine/FindPathIncludingSourceByEntityID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindPathIncludingSourceByEntityID_V2(ctx, req.(*FindPathIncludingSourceByEntityID_V2Request))
+		return srv.(G2EngineServer).FindPathIncludingSourceByEntityID_V2(ctx, req.(*FindPathIncludingSourceByEntityID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindPathIncludingSourceByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindPathIncludingSourceByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindPathIncludingSourceByRecordIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindPathIncludingSourceByRecordID(ctx, in)
+		return srv.(G2EngineServer).FindPathIncludingSourceByRecordID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindPathIncludingSourceByRecordID",
+		FullMethod: "/g2engine.G2Engine/FindPathIncludingSourceByRecordID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindPathIncludingSourceByRecordID(ctx, req.(*FindPathIncludingSourceByRecordIDRequest))
+		return srv.(G2EngineServer).FindPathIncludingSourceByRecordID(ctx, req.(*FindPathIncludingSourceByRecordIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_FindPathIncludingSourceByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_FindPathIncludingSourceByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindPathIncludingSourceByRecordID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).FindPathIncludingSourceByRecordID_V2(ctx, in)
+		return srv.(G2EngineServer).FindPathIncludingSourceByRecordID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/FindPathIncludingSourceByRecordID_V2",
+		FullMethod: "/g2engine.G2Engine/FindPathIncludingSourceByRecordID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).FindPathIncludingSourceByRecordID_V2(ctx, req.(*FindPathIncludingSourceByRecordID_V2Request))
+		return srv.(G2EngineServer).FindPathIncludingSourceByRecordID_V2(ctx, req.(*FindPathIncludingSourceByRecordID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetActiveConfigID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetActiveConfigID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetActiveConfigIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetActiveConfigID(ctx, in)
+		return srv.(G2EngineServer).GetActiveConfigID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetActiveConfigID",
+		FullMethod: "/g2engine.G2Engine/GetActiveConfigID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetActiveConfigID(ctx, req.(*GetActiveConfigIDRequest))
+		return srv.(G2EngineServer).GetActiveConfigID(ctx, req.(*GetActiveConfigIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetEntityByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetEntityByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetEntityByEntityIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetEntityByEntityID(ctx, in)
+		return srv.(G2EngineServer).GetEntityByEntityID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetEntityByEntityID",
+		FullMethod: "/g2engine.G2Engine/GetEntityByEntityID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetEntityByEntityID(ctx, req.(*GetEntityByEntityIDRequest))
+		return srv.(G2EngineServer).GetEntityByEntityID(ctx, req.(*GetEntityByEntityIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetEntityByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetEntityByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetEntityByEntityID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetEntityByEntityID_V2(ctx, in)
+		return srv.(G2EngineServer).GetEntityByEntityID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetEntityByEntityID_V2",
+		FullMethod: "/g2engine.G2Engine/GetEntityByEntityID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetEntityByEntityID_V2(ctx, req.(*GetEntityByEntityID_V2Request))
+		return srv.(G2EngineServer).GetEntityByEntityID_V2(ctx, req.(*GetEntityByEntityID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetEntityByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetEntityByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetEntityByRecordIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetEntityByRecordID(ctx, in)
+		return srv.(G2EngineServer).GetEntityByRecordID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetEntityByRecordID",
+		FullMethod: "/g2engine.G2Engine/GetEntityByRecordID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetEntityByRecordID(ctx, req.(*GetEntityByRecordIDRequest))
+		return srv.(G2EngineServer).GetEntityByRecordID(ctx, req.(*GetEntityByRecordIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetEntityByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetEntityByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetEntityByRecordID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetEntityByRecordID_V2(ctx, in)
+		return srv.(G2EngineServer).GetEntityByRecordID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetEntityByRecordID_V2",
+		FullMethod: "/g2engine.G2Engine/GetEntityByRecordID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetEntityByRecordID_V2(ctx, req.(*GetEntityByRecordID_V2Request))
+		return srv.(G2EngineServer).GetEntityByRecordID_V2(ctx, req.(*GetEntityByRecordID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetLastExceptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetLastException(ctx, in)
+		return srv.(G2EngineServer).GetLastException(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetLastException",
+		FullMethod: "/g2engine.G2Engine/GetLastException",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetLastException(ctx, req.(*GetLastExceptionRequest))
+		return srv.(G2EngineServer).GetLastException(ctx, req.(*GetLastExceptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetLastExceptionCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetLastExceptionCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetLastExceptionCodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetLastExceptionCode(ctx, in)
+		return srv.(G2EngineServer).GetLastExceptionCode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetLastExceptionCode",
+		FullMethod: "/g2engine.G2Engine/GetLastExceptionCode",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetLastExceptionCode(ctx, req.(*GetLastExceptionCodeRequest))
+		return srv.(G2EngineServer).GetLastExceptionCode(ctx, req.(*GetLastExceptionCodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRecordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetRecord(ctx, in)
+		return srv.(G2EngineServer).GetRecord(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetRecord",
+		FullMethod: "/g2engine.G2Engine/GetRecord",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetRecord(ctx, req.(*GetRecordRequest))
+		return srv.(G2EngineServer).GetRecord(ctx, req.(*GetRecordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetRecord_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetRecord_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRecord_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetRecord_V2(ctx, in)
+		return srv.(G2EngineServer).GetRecord_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetRecord_V2",
+		FullMethod: "/g2engine.G2Engine/GetRecord_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetRecord_V2(ctx, req.(*GetRecord_V2Request))
+		return srv.(G2EngineServer).GetRecord_V2(ctx, req.(*GetRecord_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetRedoRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetRedoRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRedoRecordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetRedoRecord(ctx, in)
+		return srv.(G2EngineServer).GetRedoRecord(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetRedoRecord",
+		FullMethod: "/g2engine.G2Engine/GetRedoRecord",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetRedoRecord(ctx, req.(*GetRedoRecordRequest))
+		return srv.(G2EngineServer).GetRedoRecord(ctx, req.(*GetRedoRecordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetRepositoryLastModifiedTime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetRepositoryLastModifiedTime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRepositoryLastModifiedTimeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetRepositoryLastModifiedTime(ctx, in)
+		return srv.(G2EngineServer).GetRepositoryLastModifiedTime(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetRepositoryLastModifiedTime",
+		FullMethod: "/g2engine.G2Engine/GetRepositoryLastModifiedTime",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetRepositoryLastModifiedTime(ctx, req.(*GetRepositoryLastModifiedTimeRequest))
+		return srv.(G2EngineServer).GetRepositoryLastModifiedTime(ctx, req.(*GetRepositoryLastModifiedTimeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetVirtualEntityByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetVirtualEntityByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetVirtualEntityByRecordIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetVirtualEntityByRecordID(ctx, in)
+		return srv.(G2EngineServer).GetVirtualEntityByRecordID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetVirtualEntityByRecordID",
+		FullMethod: "/g2engine.G2Engine/GetVirtualEntityByRecordID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetVirtualEntityByRecordID(ctx, req.(*GetVirtualEntityByRecordIDRequest))
+		return srv.(G2EngineServer).GetVirtualEntityByRecordID(ctx, req.(*GetVirtualEntityByRecordIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetVirtualEntityByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_GetVirtualEntityByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetVirtualEntityByRecordID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetVirtualEntityByRecordID_V2(ctx, in)
+		return srv.(G2EngineServer).GetVirtualEntityByRecordID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/GetVirtualEntityByRecordID_V2",
+		FullMethod: "/g2engine.G2Engine/GetVirtualEntityByRecordID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetVirtualEntityByRecordID_V2(ctx, req.(*GetVirtualEntityByRecordID_V2Request))
+		return srv.(G2EngineServer).GetVirtualEntityByRecordID_V2(ctx, req.(*GetVirtualEntityByRecordID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_HowEntityByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_HowEntityByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(HowEntityByEntityIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).HowEntityByEntityID(ctx, in)
+		return srv.(G2EngineServer).HowEntityByEntityID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/HowEntityByEntityID",
+		FullMethod: "/g2engine.G2Engine/HowEntityByEntityID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).HowEntityByEntityID(ctx, req.(*HowEntityByEntityIDRequest))
+		return srv.(G2EngineServer).HowEntityByEntityID(ctx, req.(*HowEntityByEntityIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_HowEntityByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_HowEntityByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(HowEntityByEntityID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).HowEntityByEntityID_V2(ctx, in)
+		return srv.(G2EngineServer).HowEntityByEntityID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/HowEntityByEntityID_V2",
+		FullMethod: "/g2engine.G2Engine/HowEntityByEntityID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).HowEntityByEntityID_V2(ctx, req.(*HowEntityByEntityID_V2Request))
+		return srv.(G2EngineServer).HowEntityByEntityID_V2(ctx, req.(*HowEntityByEntityID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Init_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_Init_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InitRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Init(ctx, in)
+		return srv.(G2EngineServer).Init(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/Init",
+		FullMethod: "/g2engine.G2Engine/Init",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Init(ctx, req.(*InitRequest))
+		return srv.(G2EngineServer).Init(ctx, req.(*InitRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_InitWithConfigID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_InitWithConfigID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InitWithConfigIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).InitWithConfigID(ctx, in)
+		return srv.(G2EngineServer).InitWithConfigID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/InitWithConfigID",
+		FullMethod: "/g2engine.G2Engine/InitWithConfigID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).InitWithConfigID(ctx, req.(*InitWithConfigIDRequest))
+		return srv.(G2EngineServer).InitWithConfigID(ctx, req.(*InitWithConfigIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_PrimeEngine_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_PrimeEngine_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PrimeEngineRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).PrimeEngine(ctx, in)
+		return srv.(G2EngineServer).PrimeEngine(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/PrimeEngine",
+		FullMethod: "/g2engine.G2Engine/PrimeEngine",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).PrimeEngine(ctx, req.(*PrimeEngineRequest))
+		return srv.(G2EngineServer).PrimeEngine(ctx, req.(*PrimeEngineRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Process_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_Process_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProcessRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Process(ctx, in)
+		return srv.(G2EngineServer).Process(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/Process",
+		FullMethod: "/g2engine.G2Engine/Process",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Process(ctx, req.(*ProcessRequest))
+		return srv.(G2EngineServer).Process(ctx, req.(*ProcessRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ProcessRedoRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ProcessRedoRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProcessRedoRecordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ProcessRedoRecord(ctx, in)
+		return srv.(G2EngineServer).ProcessRedoRecord(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ProcessRedoRecord",
+		FullMethod: "/g2engine.G2Engine/ProcessRedoRecord",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ProcessRedoRecord(ctx, req.(*ProcessRedoRecordRequest))
+		return srv.(G2EngineServer).ProcessRedoRecord(ctx, req.(*ProcessRedoRecordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ProcessRedoRecordWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ProcessRedoRecordWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProcessRedoRecordWithInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ProcessRedoRecordWithInfo(ctx, in)
+		return srv.(G2EngineServer).ProcessRedoRecordWithInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ProcessRedoRecordWithInfo",
+		FullMethod: "/g2engine.G2Engine/ProcessRedoRecordWithInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ProcessRedoRecordWithInfo(ctx, req.(*ProcessRedoRecordWithInfoRequest))
+		return srv.(G2EngineServer).ProcessRedoRecordWithInfo(ctx, req.(*ProcessRedoRecordWithInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ProcessWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ProcessWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProcessWithInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ProcessWithInfo(ctx, in)
+		return srv.(G2EngineServer).ProcessWithInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ProcessWithInfo",
+		FullMethod: "/g2engine.G2Engine/ProcessWithInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ProcessWithInfo(ctx, req.(*ProcessWithInfoRequest))
+		return srv.(G2EngineServer).ProcessWithInfo(ctx, req.(*ProcessWithInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ProcessWithResponse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ProcessWithResponse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProcessWithResponseRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ProcessWithResponse(ctx, in)
+		return srv.(G2EngineServer).ProcessWithResponse(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ProcessWithResponse",
+		FullMethod: "/g2engine.G2Engine/ProcessWithResponse",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ProcessWithResponse(ctx, req.(*ProcessWithResponseRequest))
+		return srv.(G2EngineServer).ProcessWithResponse(ctx, req.(*ProcessWithResponseRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ProcessWithResponseResize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ProcessWithResponseResize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProcessWithResponseResizeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ProcessWithResponseResize(ctx, in)
+		return srv.(G2EngineServer).ProcessWithResponseResize(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ProcessWithResponseResize",
+		FullMethod: "/g2engine.G2Engine/ProcessWithResponseResize",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ProcessWithResponseResize(ctx, req.(*ProcessWithResponseResizeRequest))
+		return srv.(G2EngineServer).ProcessWithResponseResize(ctx, req.(*ProcessWithResponseResizeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_PurgeRepository_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_PurgeRepository_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PurgeRepositoryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).PurgeRepository(ctx, in)
+		return srv.(G2EngineServer).PurgeRepository(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/PurgeRepository",
+		FullMethod: "/g2engine.G2Engine/PurgeRepository",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).PurgeRepository(ctx, req.(*PurgeRepositoryRequest))
+		return srv.(G2EngineServer).PurgeRepository(ctx, req.(*PurgeRepositoryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ReevaluateEntity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ReevaluateEntity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReevaluateEntityRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ReevaluateEntity(ctx, in)
+		return srv.(G2EngineServer).ReevaluateEntity(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ReevaluateEntity",
+		FullMethod: "/g2engine.G2Engine/ReevaluateEntity",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ReevaluateEntity(ctx, req.(*ReevaluateEntityRequest))
+		return srv.(G2EngineServer).ReevaluateEntity(ctx, req.(*ReevaluateEntityRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ReevaluateEntityWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ReevaluateEntityWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReevaluateEntityWithInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ReevaluateEntityWithInfo(ctx, in)
+		return srv.(G2EngineServer).ReevaluateEntityWithInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ReevaluateEntityWithInfo",
+		FullMethod: "/g2engine.G2Engine/ReevaluateEntityWithInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ReevaluateEntityWithInfo(ctx, req.(*ReevaluateEntityWithInfoRequest))
+		return srv.(G2EngineServer).ReevaluateEntityWithInfo(ctx, req.(*ReevaluateEntityWithInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ReevaluateRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ReevaluateRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReevaluateRecordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ReevaluateRecord(ctx, in)
+		return srv.(G2EngineServer).ReevaluateRecord(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ReevaluateRecord",
+		FullMethod: "/g2engine.G2Engine/ReevaluateRecord",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ReevaluateRecord(ctx, req.(*ReevaluateRecordRequest))
+		return srv.(G2EngineServer).ReevaluateRecord(ctx, req.(*ReevaluateRecordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ReevaluateRecordWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ReevaluateRecordWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReevaluateRecordWithInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ReevaluateRecordWithInfo(ctx, in)
+		return srv.(G2EngineServer).ReevaluateRecordWithInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ReevaluateRecordWithInfo",
+		FullMethod: "/g2engine.G2Engine/ReevaluateRecordWithInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ReevaluateRecordWithInfo(ctx, req.(*ReevaluateRecordWithInfoRequest))
+		return srv.(G2EngineServer).ReevaluateRecordWithInfo(ctx, req.(*ReevaluateRecordWithInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Reinit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_Reinit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReinitRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Reinit(ctx, in)
+		return srv.(G2EngineServer).Reinit(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/Reinit",
+		FullMethod: "/g2engine.G2Engine/Reinit",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Reinit(ctx, req.(*ReinitRequest))
+		return srv.(G2EngineServer).Reinit(ctx, req.(*ReinitRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ReplaceRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ReplaceRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReplaceRecordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ReplaceRecord(ctx, in)
+		return srv.(G2EngineServer).ReplaceRecord(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ReplaceRecord",
+		FullMethod: "/g2engine.G2Engine/ReplaceRecord",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ReplaceRecord(ctx, req.(*ReplaceRecordRequest))
+		return srv.(G2EngineServer).ReplaceRecord(ctx, req.(*ReplaceRecordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ReplaceRecordWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_ReplaceRecordWithInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReplaceRecordWithInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ReplaceRecordWithInfo(ctx, in)
+		return srv.(G2EngineServer).ReplaceRecordWithInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/ReplaceRecordWithInfo",
+		FullMethod: "/g2engine.G2Engine/ReplaceRecordWithInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ReplaceRecordWithInfo(ctx, req.(*ReplaceRecordWithInfoRequest))
+		return srv.(G2EngineServer).ReplaceRecordWithInfo(ctx, req.(*ReplaceRecordWithInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_SearchByAttributes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_SearchByAttributes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SearchByAttributesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).SearchByAttributes(ctx, in)
+		return srv.(G2EngineServer).SearchByAttributes(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/SearchByAttributes",
+		FullMethod: "/g2engine.G2Engine/SearchByAttributes",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).SearchByAttributes(ctx, req.(*SearchByAttributesRequest))
+		return srv.(G2EngineServer).SearchByAttributes(ctx, req.(*SearchByAttributesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_SearchByAttributes_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_SearchByAttributes_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SearchByAttributes_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).SearchByAttributes_V2(ctx, in)
+		return srv.(G2EngineServer).SearchByAttributes_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/SearchByAttributes_V2",
+		FullMethod: "/g2engine.G2Engine/SearchByAttributes_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).SearchByAttributes_V2(ctx, req.(*SearchByAttributes_V2Request))
+		return srv.(G2EngineServer).SearchByAttributes_V2(ctx, req.(*SearchByAttributes_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Stats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_Stats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StatsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Stats(ctx, in)
+		return srv.(G2EngineServer).Stats(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/Stats",
+		FullMethod: "/g2engine.G2Engine/Stats",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Stats(ctx, req.(*StatsRequest))
+		return srv.(G2EngineServer).Stats(ctx, req.(*StatsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_WhyEntities_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_WhyEntities_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WhyEntitiesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).WhyEntities(ctx, in)
+		return srv.(G2EngineServer).WhyEntities(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/WhyEntities",
+		FullMethod: "/g2engine.G2Engine/WhyEntities",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).WhyEntities(ctx, req.(*WhyEntitiesRequest))
+		return srv.(G2EngineServer).WhyEntities(ctx, req.(*WhyEntitiesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_WhyEntities_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_WhyEntities_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WhyEntities_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).WhyEntities_V2(ctx, in)
+		return srv.(G2EngineServer).WhyEntities_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/WhyEntities_V2",
+		FullMethod: "/g2engine.G2Engine/WhyEntities_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).WhyEntities_V2(ctx, req.(*WhyEntities_V2Request))
+		return srv.(G2EngineServer).WhyEntities_V2(ctx, req.(*WhyEntities_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_WhyEntityByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_WhyEntityByEntityID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WhyEntityByEntityIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).WhyEntityByEntityID(ctx, in)
+		return srv.(G2EngineServer).WhyEntityByEntityID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/WhyEntityByEntityID",
+		FullMethod: "/g2engine.G2Engine/WhyEntityByEntityID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).WhyEntityByEntityID(ctx, req.(*WhyEntityByEntityIDRequest))
+		return srv.(G2EngineServer).WhyEntityByEntityID(ctx, req.(*WhyEntityByEntityIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_WhyEntityByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_WhyEntityByEntityID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WhyEntityByEntityID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).WhyEntityByEntityID_V2(ctx, in)
+		return srv.(G2EngineServer).WhyEntityByEntityID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/WhyEntityByEntityID_V2",
+		FullMethod: "/g2engine.G2Engine/WhyEntityByEntityID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).WhyEntityByEntityID_V2(ctx, req.(*WhyEntityByEntityID_V2Request))
+		return srv.(G2EngineServer).WhyEntityByEntityID_V2(ctx, req.(*WhyEntityByEntityID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_WhyEntityByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_WhyEntityByRecordID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WhyEntityByRecordIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).WhyEntityByRecordID(ctx, in)
+		return srv.(G2EngineServer).WhyEntityByRecordID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/WhyEntityByRecordID",
+		FullMethod: "/g2engine.G2Engine/WhyEntityByRecordID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).WhyEntityByRecordID(ctx, req.(*WhyEntityByRecordIDRequest))
+		return srv.(G2EngineServer).WhyEntityByRecordID(ctx, req.(*WhyEntityByRecordIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_WhyEntityByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_WhyEntityByRecordID_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WhyEntityByRecordID_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).WhyEntityByRecordID_V2(ctx, in)
+		return srv.(G2EngineServer).WhyEntityByRecordID_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/WhyEntityByRecordID_V2",
+		FullMethod: "/g2engine.G2Engine/WhyEntityByRecordID_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).WhyEntityByRecordID_V2(ctx, req.(*WhyEntityByRecordID_V2Request))
+		return srv.(G2EngineServer).WhyEntityByRecordID_V2(ctx, req.(*WhyEntityByRecordID_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_WhyRecords_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_WhyRecords_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WhyRecordsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).WhyRecords(ctx, in)
+		return srv.(G2EngineServer).WhyRecords(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/WhyRecords",
+		FullMethod: "/g2engine.G2Engine/WhyRecords",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).WhyRecords(ctx, req.(*WhyRecordsRequest))
+		return srv.(G2EngineServer).WhyRecords(ctx, req.(*WhyRecordsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_WhyRecords_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Engine_WhyRecords_V2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WhyRecords_V2Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).WhyRecords_V2(ctx, in)
+		return srv.(G2EngineServer).WhyRecords_V2(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2engineprotobuf.G2Diagnostic/WhyRecords_V2",
+		FullMethod: "/g2engine.G2Engine/WhyRecords_V2",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).WhyRecords_V2(ctx, req.(*WhyRecords_V2Request))
+		return srv.(G2EngineServer).WhyRecords_V2(ctx, req.(*WhyRecords_V2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// G2Diagnostic_ServiceDesc is the grpc.ServiceDesc for G2Diagnostic service.
+// G2Engine_ServiceDesc is the grpc.ServiceDesc for G2Engine service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var G2Diagnostic_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "g2engineprotobuf.G2Diagnostic",
-	HandlerType: (*G2DiagnosticServer)(nil),
+var G2Engine_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "g2engine.G2Engine",
+	HandlerType: (*G2EngineServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "AddRecord",
-			Handler:    _G2Diagnostic_AddRecord_Handler,
+			Handler:    _G2Engine_AddRecord_Handler,
 		},
 		{
 			MethodName: "AddRecordWithInfo",
-			Handler:    _G2Diagnostic_AddRecordWithInfo_Handler,
+			Handler:    _G2Engine_AddRecordWithInfo_Handler,
 		},
 		{
 			MethodName: "AddRecordWithInfoWithReturnedRecordID",
-			Handler:    _G2Diagnostic_AddRecordWithInfoWithReturnedRecordID_Handler,
+			Handler:    _G2Engine_AddRecordWithInfoWithReturnedRecordID_Handler,
 		},
 		{
 			MethodName: "AddRecordWithReturnedRecordID",
-			Handler:    _G2Diagnostic_AddRecordWithReturnedRecordID_Handler,
+			Handler:    _G2Engine_AddRecordWithReturnedRecordID_Handler,
 		},
 		{
 			MethodName: "CheckRecord",
-			Handler:    _G2Diagnostic_CheckRecord_Handler,
+			Handler:    _G2Engine_CheckRecord_Handler,
 		},
 		{
 			MethodName: "ClearLastException",
-			Handler:    _G2Diagnostic_ClearLastException_Handler,
+			Handler:    _G2Engine_ClearLastException_Handler,
 		},
 		{
 			MethodName: "CloseExport",
-			Handler:    _G2Diagnostic_CloseExport_Handler,
+			Handler:    _G2Engine_CloseExport_Handler,
 		},
 		{
 			MethodName: "CountRedoRecords",
-			Handler:    _G2Diagnostic_CountRedoRecords_Handler,
+			Handler:    _G2Engine_CountRedoRecords_Handler,
 		},
 		{
 			MethodName: "DeleteRecord",
-			Handler:    _G2Diagnostic_DeleteRecord_Handler,
+			Handler:    _G2Engine_DeleteRecord_Handler,
 		},
 		{
 			MethodName: "DeleteRecordWithInfo",
-			Handler:    _G2Diagnostic_DeleteRecordWithInfo_Handler,
+			Handler:    _G2Engine_DeleteRecordWithInfo_Handler,
 		},
 		{
 			MethodName: "Destroy",
-			Handler:    _G2Diagnostic_Destroy_Handler,
+			Handler:    _G2Engine_Destroy_Handler,
 		},
 		{
 			MethodName: "ExportConfig",
-			Handler:    _G2Diagnostic_ExportConfig_Handler,
+			Handler:    _G2Engine_ExportConfig_Handler,
 		},
 		{
 			MethodName: "ExportConfigAndConfigID",
-			Handler:    _G2Diagnostic_ExportConfigAndConfigID_Handler,
+			Handler:    _G2Engine_ExportConfigAndConfigID_Handler,
 		},
 		{
 			MethodName: "ExportCSVEntityReport",
-			Handler:    _G2Diagnostic_ExportCSVEntityReport_Handler,
+			Handler:    _G2Engine_ExportCSVEntityReport_Handler,
 		},
 		{
 			MethodName: "ExportJSONEntityReport",
-			Handler:    _G2Diagnostic_ExportJSONEntityReport_Handler,
+			Handler:    _G2Engine_ExportJSONEntityReport_Handler,
 		},
 		{
 			MethodName: "FetchNext",
-			Handler:    _G2Diagnostic_FetchNext_Handler,
+			Handler:    _G2Engine_FetchNext_Handler,
 		},
 		{
 			MethodName: "FindInterestingEntitiesByEntityID",
-			Handler:    _G2Diagnostic_FindInterestingEntitiesByEntityID_Handler,
+			Handler:    _G2Engine_FindInterestingEntitiesByEntityID_Handler,
 		},
 		{
 			MethodName: "FindInterestingEntitiesByRecordID",
-			Handler:    _G2Diagnostic_FindInterestingEntitiesByRecordID_Handler,
+			Handler:    _G2Engine_FindInterestingEntitiesByRecordID_Handler,
 		},
 		{
 			MethodName: "FindNetworkByEntityID",
-			Handler:    _G2Diagnostic_FindNetworkByEntityID_Handler,
+			Handler:    _G2Engine_FindNetworkByEntityID_Handler,
 		},
 		{
 			MethodName: "FindNetworkByEntityID_V2",
-			Handler:    _G2Diagnostic_FindNetworkByEntityID_V2_Handler,
+			Handler:    _G2Engine_FindNetworkByEntityID_V2_Handler,
 		},
 		{
 			MethodName: "FindNetworkByRecordID",
-			Handler:    _G2Diagnostic_FindNetworkByRecordID_Handler,
+			Handler:    _G2Engine_FindNetworkByRecordID_Handler,
 		},
 		{
 			MethodName: "FindNetworkByRecordID_V2",
-			Handler:    _G2Diagnostic_FindNetworkByRecordID_V2_Handler,
+			Handler:    _G2Engine_FindNetworkByRecordID_V2_Handler,
 		},
 		{
 			MethodName: "FindPathByEntityID",
-			Handler:    _G2Diagnostic_FindPathByEntityID_Handler,
+			Handler:    _G2Engine_FindPathByEntityID_Handler,
 		},
 		{
 			MethodName: "FindPathByEntityID_V2",
-			Handler:    _G2Diagnostic_FindPathByEntityID_V2_Handler,
+			Handler:    _G2Engine_FindPathByEntityID_V2_Handler,
 		},
 		{
 			MethodName: "FindPathByRecordID",
-			Handler:    _G2Diagnostic_FindPathByRecordID_Handler,
+			Handler:    _G2Engine_FindPathByRecordID_Handler,
 		},
 		{
 			MethodName: "FindPathByRecordID_V2",
-			Handler:    _G2Diagnostic_FindPathByRecordID_V2_Handler,
+			Handler:    _G2Engine_FindPathByRecordID_V2_Handler,
 		},
 		{
 			MethodName: "FindPathExcludingByEntityID",
-			Handler:    _G2Diagnostic_FindPathExcludingByEntityID_Handler,
+			Handler:    _G2Engine_FindPathExcludingByEntityID_Handler,
 		},
 		{
 			MethodName: "FindPathExcludingByEntityID_V2",
-			Handler:    _G2Diagnostic_FindPathExcludingByEntityID_V2_Handler,
+			Handler:    _G2Engine_FindPathExcludingByEntityID_V2_Handler,
 		},
 		{
 			MethodName: "FindPathExcludingByRecordID",
-			Handler:    _G2Diagnostic_FindPathExcludingByRecordID_Handler,
+			Handler:    _G2Engine_FindPathExcludingByRecordID_Handler,
 		},
 		{
 			MethodName: "FindPathExcludingByRecordID_V2",
-			Handler:    _G2Diagnostic_FindPathExcludingByRecordID_V2_Handler,
+			Handler:    _G2Engine_FindPathExcludingByRecordID_V2_Handler,
 		},
 		{
 			MethodName: "FindPathIncludingSourceByEntityID",
-			Handler:    _G2Diagnostic_FindPathIncludingSourceByEntityID_Handler,
+			Handler:    _G2Engine_FindPathIncludingSourceByEntityID_Handler,
 		},
 		{
 			MethodName: "FindPathIncludingSourceByEntityID_V2",
-			Handler:    _G2Diagnostic_FindPathIncludingSourceByEntityID_V2_Handler,
+			Handler:    _G2Engine_FindPathIncludingSourceByEntityID_V2_Handler,
 		},
 		{
 			MethodName: "FindPathIncludingSourceByRecordID",
-			Handler:    _G2Diagnostic_FindPathIncludingSourceByRecordID_Handler,
+			Handler:    _G2Engine_FindPathIncludingSourceByRecordID_Handler,
 		},
 		{
 			MethodName: "FindPathIncludingSourceByRecordID_V2",
-			Handler:    _G2Diagnostic_FindPathIncludingSourceByRecordID_V2_Handler,
+			Handler:    _G2Engine_FindPathIncludingSourceByRecordID_V2_Handler,
 		},
 		{
 			MethodName: "GetActiveConfigID",
-			Handler:    _G2Diagnostic_GetActiveConfigID_Handler,
+			Handler:    _G2Engine_GetActiveConfigID_Handler,
 		},
 		{
 			MethodName: "GetEntityByEntityID",
-			Handler:    _G2Diagnostic_GetEntityByEntityID_Handler,
+			Handler:    _G2Engine_GetEntityByEntityID_Handler,
 		},
 		{
 			MethodName: "GetEntityByEntityID_V2",
-			Handler:    _G2Diagnostic_GetEntityByEntityID_V2_Handler,
+			Handler:    _G2Engine_GetEntityByEntityID_V2_Handler,
 		},
 		{
 			MethodName: "GetEntityByRecordID",
-			Handler:    _G2Diagnostic_GetEntityByRecordID_Handler,
+			Handler:    _G2Engine_GetEntityByRecordID_Handler,
 		},
 		{
 			MethodName: "GetEntityByRecordID_V2",
-			Handler:    _G2Diagnostic_GetEntityByRecordID_V2_Handler,
+			Handler:    _G2Engine_GetEntityByRecordID_V2_Handler,
 		},
 		{
 			MethodName: "GetLastException",
-			Handler:    _G2Diagnostic_GetLastException_Handler,
+			Handler:    _G2Engine_GetLastException_Handler,
 		},
 		{
 			MethodName: "GetLastExceptionCode",
-			Handler:    _G2Diagnostic_GetLastExceptionCode_Handler,
+			Handler:    _G2Engine_GetLastExceptionCode_Handler,
 		},
 		{
 			MethodName: "GetRecord",
-			Handler:    _G2Diagnostic_GetRecord_Handler,
+			Handler:    _G2Engine_GetRecord_Handler,
 		},
 		{
 			MethodName: "GetRecord_V2",
-			Handler:    _G2Diagnostic_GetRecord_V2_Handler,
+			Handler:    _G2Engine_GetRecord_V2_Handler,
 		},
 		{
 			MethodName: "GetRedoRecord",
-			Handler:    _G2Diagnostic_GetRedoRecord_Handler,
+			Handler:    _G2Engine_GetRedoRecord_Handler,
 		},
 		{
 			MethodName: "GetRepositoryLastModifiedTime",
-			Handler:    _G2Diagnostic_GetRepositoryLastModifiedTime_Handler,
+			Handler:    _G2Engine_GetRepositoryLastModifiedTime_Handler,
 		},
 		{
 			MethodName: "GetVirtualEntityByRecordID",
-			Handler:    _G2Diagnostic_GetVirtualEntityByRecordID_Handler,
+			Handler:    _G2Engine_GetVirtualEntityByRecordID_Handler,
 		},
 		{
 			MethodName: "GetVirtualEntityByRecordID_V2",
-			Handler:    _G2Diagnostic_GetVirtualEntityByRecordID_V2_Handler,
+			Handler:    _G2Engine_GetVirtualEntityByRecordID_V2_Handler,
 		},
 		{
 			MethodName: "HowEntityByEntityID",
-			Handler:    _G2Diagnostic_HowEntityByEntityID_Handler,
+			Handler:    _G2Engine_HowEntityByEntityID_Handler,
 		},
 		{
 			MethodName: "HowEntityByEntityID_V2",
-			Handler:    _G2Diagnostic_HowEntityByEntityID_V2_Handler,
+			Handler:    _G2Engine_HowEntityByEntityID_V2_Handler,
 		},
 		{
 			MethodName: "Init",
-			Handler:    _G2Diagnostic_Init_Handler,
+			Handler:    _G2Engine_Init_Handler,
 		},
 		{
 			MethodName: "InitWithConfigID",
-			Handler:    _G2Diagnostic_InitWithConfigID_Handler,
+			Handler:    _G2Engine_InitWithConfigID_Handler,
 		},
 		{
 			MethodName: "PrimeEngine",
-			Handler:    _G2Diagnostic_PrimeEngine_Handler,
+			Handler:    _G2Engine_PrimeEngine_Handler,
 		},
 		{
 			MethodName: "Process",
-			Handler:    _G2Diagnostic_Process_Handler,
+			Handler:    _G2Engine_Process_Handler,
 		},
 		{
 			MethodName: "ProcessRedoRecord",
-			Handler:    _G2Diagnostic_ProcessRedoRecord_Handler,
+			Handler:    _G2Engine_ProcessRedoRecord_Handler,
 		},
 		{
 			MethodName: "ProcessRedoRecordWithInfo",
-			Handler:    _G2Diagnostic_ProcessRedoRecordWithInfo_Handler,
+			Handler:    _G2Engine_ProcessRedoRecordWithInfo_Handler,
 		},
 		{
 			MethodName: "ProcessWithInfo",
-			Handler:    _G2Diagnostic_ProcessWithInfo_Handler,
+			Handler:    _G2Engine_ProcessWithInfo_Handler,
 		},
 		{
 			MethodName: "ProcessWithResponse",
-			Handler:    _G2Diagnostic_ProcessWithResponse_Handler,
+			Handler:    _G2Engine_ProcessWithResponse_Handler,
 		},
 		{
 			MethodName: "ProcessWithResponseResize",
-			Handler:    _G2Diagnostic_ProcessWithResponseResize_Handler,
+			Handler:    _G2Engine_ProcessWithResponseResize_Handler,
 		},
 		{
 			MethodName: "PurgeRepository",
-			Handler:    _G2Diagnostic_PurgeRepository_Handler,
+			Handler:    _G2Engine_PurgeRepository_Handler,
 		},
 		{
 			MethodName: "ReevaluateEntity",
-			Handler:    _G2Diagnostic_ReevaluateEntity_Handler,
+			Handler:    _G2Engine_ReevaluateEntity_Handler,
 		},
 		{
 			MethodName: "ReevaluateEntityWithInfo",
-			Handler:    _G2Diagnostic_ReevaluateEntityWithInfo_Handler,
+			Handler:    _G2Engine_ReevaluateEntityWithInfo_Handler,
 		},
 		{
 			MethodName: "ReevaluateRecord",
-			Handler:    _G2Diagnostic_ReevaluateRecord_Handler,
+			Handler:    _G2Engine_ReevaluateRecord_Handler,
 		},
 		{
 			MethodName: "ReevaluateRecordWithInfo",
-			Handler:    _G2Diagnostic_ReevaluateRecordWithInfo_Handler,
+			Handler:    _G2Engine_ReevaluateRecordWithInfo_Handler,
 		},
 		{
 			MethodName: "Reinit",
-			Handler:    _G2Diagnostic_Reinit_Handler,
+			Handler:    _G2Engine_Reinit_Handler,
 		},
 		{
 			MethodName: "ReplaceRecord",
-			Handler:    _G2Diagnostic_ReplaceRecord_Handler,
+			Handler:    _G2Engine_ReplaceRecord_Handler,
 		},
 		{
 			MethodName: "ReplaceRecordWithInfo",
-			Handler:    _G2Diagnostic_ReplaceRecordWithInfo_Handler,
+			Handler:    _G2Engine_ReplaceRecordWithInfo_Handler,
 		},
 		{
 			MethodName: "SearchByAttributes",
-			Handler:    _G2Diagnostic_SearchByAttributes_Handler,
+			Handler:    _G2Engine_SearchByAttributes_Handler,
 		},
 		{
 			MethodName: "SearchByAttributes_V2",
-			Handler:    _G2Diagnostic_SearchByAttributes_V2_Handler,
+			Handler:    _G2Engine_SearchByAttributes_V2_Handler,
 		},
 		{
 			MethodName: "Stats",
-			Handler:    _G2Diagnostic_Stats_Handler,
+			Handler:    _G2Engine_Stats_Handler,
 		},
 		{
 			MethodName: "WhyEntities",
-			Handler:    _G2Diagnostic_WhyEntities_Handler,
+			Handler:    _G2Engine_WhyEntities_Handler,
 		},
 		{
 			MethodName: "WhyEntities_V2",
-			Handler:    _G2Diagnostic_WhyEntities_V2_Handler,
+			Handler:    _G2Engine_WhyEntities_V2_Handler,
 		},
 		{
 			MethodName: "WhyEntityByEntityID",
-			Handler:    _G2Diagnostic_WhyEntityByEntityID_Handler,
+			Handler:    _G2Engine_WhyEntityByEntityID_Handler,
 		},
 		{
 			MethodName: "WhyEntityByEntityID_V2",
-			Handler:    _G2Diagnostic_WhyEntityByEntityID_V2_Handler,
+			Handler:    _G2Engine_WhyEntityByEntityID_V2_Handler,
 		},
 		{
 			MethodName: "WhyEntityByRecordID",
-			Handler:    _G2Diagnostic_WhyEntityByRecordID_Handler,
+			Handler:    _G2Engine_WhyEntityByRecordID_Handler,
 		},
 		{
 			MethodName: "WhyEntityByRecordID_V2",
-			Handler:    _G2Diagnostic_WhyEntityByRecordID_V2_Handler,
+			Handler:    _G2Engine_WhyEntityByRecordID_V2_Handler,
 		},
 		{
 			MethodName: "WhyRecords",
-			Handler:    _G2Diagnostic_WhyRecords_Handler,
+			Handler:    _G2Engine_WhyRecords_Handler,
 		},
 		{
 			MethodName: "WhyRecords_V2",
-			Handler:    _G2Diagnostic_WhyRecords_V2_Handler,
+			Handler:    _G2Engine_WhyRecords_V2_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

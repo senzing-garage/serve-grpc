@@ -1,9 +1,9 @@
 syntax = "proto3";
-package g2engineprotobuf;
+package g2engine;
 
-option go_package = "github.com/senzing/go-servegrpc/g2engineprotobuf";
+option go_package = "github.com/senzing/go-servegrpc/protobuf/g2engine";
 
-service G2Diagnostic {
+service G2Engine {
   rpc AddRecord(AddRecordRequestRequest) returns (AddRecordResponseResponse) {}
   rpc AddRecordWithInfo(AddRecordWithInfoRequest) returns (AddRecordWithInfoResponse) {}
   rpc AddRecordWithInfoWithReturnedRecordID(AddRecordWithInfoWithReturnedRecordIDRequest) returns (AddRecordWithInfoWithReturnedRecordIDResponse) {}

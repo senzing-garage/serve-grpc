@@ -4,7 +4,7 @@
 // - protoc             v3.21.6
 // source: g2diagnostic.proto
 
-package g2diagnosticprotobuf
+package g2diagnostic
 
 import (
 	context "context"
@@ -57,7 +57,7 @@ func NewG2DiagnosticClient(cc grpc.ClientConnInterface) G2DiagnosticClient {
 
 func (c *g2DiagnosticClient) CheckDBPerf(ctx context.Context, in *CheckDBPerfRequest, opts ...grpc.CallOption) (*CheckDBPerfResponse, error) {
 	out := new(CheckDBPerfResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/CheckDBPerf", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/CheckDBPerf", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (c *g2DiagnosticClient) CheckDBPerf(ctx context.Context, in *CheckDBPerfReq
 
 func (c *g2DiagnosticClient) CloseEntityListBySize(ctx context.Context, in *CloseEntityListBySizeRequest, opts ...grpc.CallOption) (*CloseEntityListBySizeResponse, error) {
 	out := new(CloseEntityListBySizeResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/CloseEntityListBySize", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/CloseEntityListBySize", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (c *g2DiagnosticClient) CloseEntityListBySize(ctx context.Context, in *Clos
 
 func (c *g2DiagnosticClient) Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error) {
 	out := new(DestroyResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/Destroy", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/Destroy", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (c *g2DiagnosticClient) Destroy(ctx context.Context, in *DestroyRequest, op
 
 func (c *g2DiagnosticClient) FetchNextEntityBySize(ctx context.Context, in *FetchNextEntityBySizeRequest, opts ...grpc.CallOption) (*FetchNextEntityBySizeResponse, error) {
 	out := new(FetchNextEntityBySizeResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/FetchNextEntityBySize", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/FetchNextEntityBySize", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +93,7 @@ func (c *g2DiagnosticClient) FetchNextEntityBySize(ctx context.Context, in *Fetc
 
 func (c *g2DiagnosticClient) FindEntitiesByFeatureIDs(ctx context.Context, in *FindEntitiesByFeatureIDsRequest, opts ...grpc.CallOption) (*FindEntitiesByFeatureIDsResponse, error) {
 	out := new(FindEntitiesByFeatureIDsResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/FindEntitiesByFeatureIDs", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/FindEntitiesByFeatureIDs", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func (c *g2DiagnosticClient) FindEntitiesByFeatureIDs(ctx context.Context, in *F
 
 func (c *g2DiagnosticClient) GetAvailableMemory(ctx context.Context, in *GetAvailableMemoryRequest, opts ...grpc.CallOption) (*GetAvailableMemoryResponse, error) {
 	out := new(GetAvailableMemoryResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetAvailableMemory", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetAvailableMemory", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +111,7 @@ func (c *g2DiagnosticClient) GetAvailableMemory(ctx context.Context, in *GetAvai
 
 func (c *g2DiagnosticClient) GetDataSourceCounts(ctx context.Context, in *GetDataSourceCountsRequest, opts ...grpc.CallOption) (*GetDataSourceCountsResponse, error) {
 	out := new(GetDataSourceCountsResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetDataSourceCounts", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetDataSourceCounts", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +120,7 @@ func (c *g2DiagnosticClient) GetDataSourceCounts(ctx context.Context, in *GetDat
 
 func (c *g2DiagnosticClient) GetDBInfo(ctx context.Context, in *GetDBInfoRequest, opts ...grpc.CallOption) (*GetDBInfoResponse, error) {
 	out := new(GetDBInfoResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetDBInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetDBInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +129,7 @@ func (c *g2DiagnosticClient) GetDBInfo(ctx context.Context, in *GetDBInfoRequest
 
 func (c *g2DiagnosticClient) GetEntityDetails(ctx context.Context, in *GetEntityDetailsRequest, opts ...grpc.CallOption) (*GetEntityDetailsResponse, error) {
 	out := new(GetEntityDetailsResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetEntityDetails", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetEntityDetails", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +138,7 @@ func (c *g2DiagnosticClient) GetEntityDetails(ctx context.Context, in *GetEntity
 
 func (c *g2DiagnosticClient) GetEntityListBySize(ctx context.Context, in *GetEntityListBySizeRequest, opts ...grpc.CallOption) (*GetEntityListBySizeResponse, error) {
 	out := new(GetEntityListBySizeResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetEntityListBySize", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetEntityListBySize", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +147,7 @@ func (c *g2DiagnosticClient) GetEntityListBySize(ctx context.Context, in *GetEnt
 
 func (c *g2DiagnosticClient) GetEntityResume(ctx context.Context, in *GetEntityResumeRequest, opts ...grpc.CallOption) (*GetEntityResumeResponse, error) {
 	out := new(GetEntityResumeResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetEntityResume", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetEntityResume", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +156,7 @@ func (c *g2DiagnosticClient) GetEntityResume(ctx context.Context, in *GetEntityR
 
 func (c *g2DiagnosticClient) GetEntitySizeBreakdown(ctx context.Context, in *GetEntitySizeBreakdownRequest, opts ...grpc.CallOption) (*GetEntitySizeBreakdownResponse, error) {
 	out := new(GetEntitySizeBreakdownResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetEntitySizeBreakdown", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetEntitySizeBreakdown", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +165,7 @@ func (c *g2DiagnosticClient) GetEntitySizeBreakdown(ctx context.Context, in *Get
 
 func (c *g2DiagnosticClient) GetFeature(ctx context.Context, in *GetFeatureRequest, opts ...grpc.CallOption) (*GetFeatureResponse, error) {
 	out := new(GetFeatureResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetFeature", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetFeature", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -174,7 +174,7 @@ func (c *g2DiagnosticClient) GetFeature(ctx context.Context, in *GetFeatureReque
 
 func (c *g2DiagnosticClient) GetGenericFeatures(ctx context.Context, in *GetGenericFeaturesRequest, opts ...grpc.CallOption) (*GetGenericFeaturesResponse, error) {
 	out := new(GetGenericFeaturesResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetGenericFeatures", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetGenericFeatures", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +183,7 @@ func (c *g2DiagnosticClient) GetGenericFeatures(ctx context.Context, in *GetGene
 
 func (c *g2DiagnosticClient) GetLogicalCores(ctx context.Context, in *GetLogicalCoresRequest, opts ...grpc.CallOption) (*GetLogicalCoresResponse, error) {
 	out := new(GetLogicalCoresResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetLogicalCores", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetLogicalCores", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -192,7 +192,7 @@ func (c *g2DiagnosticClient) GetLogicalCores(ctx context.Context, in *GetLogical
 
 func (c *g2DiagnosticClient) GetMappingStatistics(ctx context.Context, in *GetMappingStatisticsRequest, opts ...grpc.CallOption) (*GetMappingStatisticsResponse, error) {
 	out := new(GetMappingStatisticsResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetMappingStatistics", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetMappingStatistics", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -201,7 +201,7 @@ func (c *g2DiagnosticClient) GetMappingStatistics(ctx context.Context, in *GetMa
 
 func (c *g2DiagnosticClient) GetPhysicalCores(ctx context.Context, in *GetPhysicalCoresRequest, opts ...grpc.CallOption) (*GetPhysicalCoresResponse, error) {
 	out := new(GetPhysicalCoresResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetPhysicalCores", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetPhysicalCores", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -210,7 +210,7 @@ func (c *g2DiagnosticClient) GetPhysicalCores(ctx context.Context, in *GetPhysic
 
 func (c *g2DiagnosticClient) GetRelationshipDetails(ctx context.Context, in *GetRelationshipDetailsRequest, opts ...grpc.CallOption) (*GetRelationshipDetailsResponse, error) {
 	out := new(GetRelationshipDetailsResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetRelationshipDetails", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetRelationshipDetails", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -219,7 +219,7 @@ func (c *g2DiagnosticClient) GetRelationshipDetails(ctx context.Context, in *Get
 
 func (c *g2DiagnosticClient) GetResolutionStatistics(ctx context.Context, in *GetResolutionStatisticsRequest, opts ...grpc.CallOption) (*GetResolutionStatisticsResponse, error) {
 	out := new(GetResolutionStatisticsResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetResolutionStatistics", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetResolutionStatistics", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -228,7 +228,7 @@ func (c *g2DiagnosticClient) GetResolutionStatistics(ctx context.Context, in *Ge
 
 func (c *g2DiagnosticClient) GetTotalSystemMemory(ctx context.Context, in *GetTotalSystemMemoryRequest, opts ...grpc.CallOption) (*GetTotalSystemMemoryResponse, error) {
 	out := new(GetTotalSystemMemoryResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/GetTotalSystemMemory", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/GetTotalSystemMemory", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -237,7 +237,7 @@ func (c *g2DiagnosticClient) GetTotalSystemMemory(ctx context.Context, in *GetTo
 
 func (c *g2DiagnosticClient) Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error) {
 	out := new(InitResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/Init", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/Init", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -246,7 +246,7 @@ func (c *g2DiagnosticClient) Init(ctx context.Context, in *InitRequest, opts ...
 
 func (c *g2DiagnosticClient) InitWithConfigID(ctx context.Context, in *InitWithConfigIDRequest, opts ...grpc.CallOption) (*InitWithConfigIDResponse, error) {
 	out := new(InitWithConfigIDResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/InitWithConfigID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/InitWithConfigID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -255,7 +255,7 @@ func (c *g2DiagnosticClient) InitWithConfigID(ctx context.Context, in *InitWithC
 
 func (c *g2DiagnosticClient) Reinit(ctx context.Context, in *ReinitRequest, opts ...grpc.CallOption) (*ReinitResponse, error) {
 	out := new(ReinitResponse)
-	err := c.cc.Invoke(ctx, "/g2diagnosticprotobuf.G2Diagnostic/Reinit", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/Reinit", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -388,7 +388,7 @@ func _G2Diagnostic_CheckDBPerf_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/CheckDBPerf",
+		FullMethod: "/g2diagnostic.G2Diagnostic/CheckDBPerf",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).CheckDBPerf(ctx, req.(*CheckDBPerfRequest))
@@ -406,7 +406,7 @@ func _G2Diagnostic_CloseEntityListBySize_Handler(srv interface{}, ctx context.Co
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/CloseEntityListBySize",
+		FullMethod: "/g2diagnostic.G2Diagnostic/CloseEntityListBySize",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).CloseEntityListBySize(ctx, req.(*CloseEntityListBySizeRequest))
@@ -424,7 +424,7 @@ func _G2Diagnostic_Destroy_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/Destroy",
+		FullMethod: "/g2diagnostic.G2Diagnostic/Destroy",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).Destroy(ctx, req.(*DestroyRequest))
@@ -442,7 +442,7 @@ func _G2Diagnostic_FetchNextEntityBySize_Handler(srv interface{}, ctx context.Co
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/FetchNextEntityBySize",
+		FullMethod: "/g2diagnostic.G2Diagnostic/FetchNextEntityBySize",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).FetchNextEntityBySize(ctx, req.(*FetchNextEntityBySizeRequest))
@@ -460,7 +460,7 @@ func _G2Diagnostic_FindEntitiesByFeatureIDs_Handler(srv interface{}, ctx context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/FindEntitiesByFeatureIDs",
+		FullMethod: "/g2diagnostic.G2Diagnostic/FindEntitiesByFeatureIDs",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).FindEntitiesByFeatureIDs(ctx, req.(*FindEntitiesByFeatureIDsRequest))
@@ -478,7 +478,7 @@ func _G2Diagnostic_GetAvailableMemory_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetAvailableMemory",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetAvailableMemory",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetAvailableMemory(ctx, req.(*GetAvailableMemoryRequest))
@@ -496,7 +496,7 @@ func _G2Diagnostic_GetDataSourceCounts_Handler(srv interface{}, ctx context.Cont
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetDataSourceCounts",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetDataSourceCounts",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetDataSourceCounts(ctx, req.(*GetDataSourceCountsRequest))
@@ -514,7 +514,7 @@ func _G2Diagnostic_GetDBInfo_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetDBInfo",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetDBInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetDBInfo(ctx, req.(*GetDBInfoRequest))
@@ -532,7 +532,7 @@ func _G2Diagnostic_GetEntityDetails_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetEntityDetails",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetEntityDetails",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetEntityDetails(ctx, req.(*GetEntityDetailsRequest))
@@ -550,7 +550,7 @@ func _G2Diagnostic_GetEntityListBySize_Handler(srv interface{}, ctx context.Cont
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetEntityListBySize",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetEntityListBySize",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetEntityListBySize(ctx, req.(*GetEntityListBySizeRequest))
@@ -568,7 +568,7 @@ func _G2Diagnostic_GetEntityResume_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetEntityResume",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetEntityResume",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetEntityResume(ctx, req.(*GetEntityResumeRequest))
@@ -586,7 +586,7 @@ func _G2Diagnostic_GetEntitySizeBreakdown_Handler(srv interface{}, ctx context.C
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetEntitySizeBreakdown",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetEntitySizeBreakdown",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetEntitySizeBreakdown(ctx, req.(*GetEntitySizeBreakdownRequest))
@@ -604,7 +604,7 @@ func _G2Diagnostic_GetFeature_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetFeature",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetFeature",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetFeature(ctx, req.(*GetFeatureRequest))
@@ -622,7 +622,7 @@ func _G2Diagnostic_GetGenericFeatures_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetGenericFeatures",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetGenericFeatures",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetGenericFeatures(ctx, req.(*GetGenericFeaturesRequest))
@@ -640,7 +640,7 @@ func _G2Diagnostic_GetLogicalCores_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetLogicalCores",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetLogicalCores",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetLogicalCores(ctx, req.(*GetLogicalCoresRequest))
@@ -658,7 +658,7 @@ func _G2Diagnostic_GetMappingStatistics_Handler(srv interface{}, ctx context.Con
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetMappingStatistics",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetMappingStatistics",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetMappingStatistics(ctx, req.(*GetMappingStatisticsRequest))
@@ -676,7 +676,7 @@ func _G2Diagnostic_GetPhysicalCores_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetPhysicalCores",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetPhysicalCores",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetPhysicalCores(ctx, req.(*GetPhysicalCoresRequest))
@@ -694,7 +694,7 @@ func _G2Diagnostic_GetRelationshipDetails_Handler(srv interface{}, ctx context.C
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetRelationshipDetails",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetRelationshipDetails",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetRelationshipDetails(ctx, req.(*GetRelationshipDetailsRequest))
@@ -712,7 +712,7 @@ func _G2Diagnostic_GetResolutionStatistics_Handler(srv interface{}, ctx context.
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetResolutionStatistics",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetResolutionStatistics",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetResolutionStatistics(ctx, req.(*GetResolutionStatisticsRequest))
@@ -730,7 +730,7 @@ func _G2Diagnostic_GetTotalSystemMemory_Handler(srv interface{}, ctx context.Con
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/GetTotalSystemMemory",
+		FullMethod: "/g2diagnostic.G2Diagnostic/GetTotalSystemMemory",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).GetTotalSystemMemory(ctx, req.(*GetTotalSystemMemoryRequest))
@@ -748,7 +748,7 @@ func _G2Diagnostic_Init_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/Init",
+		FullMethod: "/g2diagnostic.G2Diagnostic/Init",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).Init(ctx, req.(*InitRequest))
@@ -766,7 +766,7 @@ func _G2Diagnostic_InitWithConfigID_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/InitWithConfigID",
+		FullMethod: "/g2diagnostic.G2Diagnostic/InitWithConfigID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).InitWithConfigID(ctx, req.(*InitWithConfigIDRequest))
@@ -784,7 +784,7 @@ func _G2Diagnostic_Reinit_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2diagnosticprotobuf.G2Diagnostic/Reinit",
+		FullMethod: "/g2diagnostic.G2Diagnostic/Reinit",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2DiagnosticServer).Reinit(ctx, req.(*ReinitRequest))
@@ -796,7 +796,7 @@ func _G2Diagnostic_Reinit_Handler(srv interface{}, ctx context.Context, dec func
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var G2Diagnostic_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "g2diagnosticprotobuf.G2Diagnostic",
+	ServiceName: "g2diagnostic.G2Diagnostic",
 	HandlerType: (*G2DiagnosticServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

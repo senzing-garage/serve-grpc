@@ -10,6 +10,7 @@ import (
 	"github.com/senzing/go-servegrpc/g2diagnosticserver"
 	pb "github.com/senzing/go-servegrpc/protobuf/g2diagnostic"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 // ----------------------------------------------------------------------------
@@ -64,6 +65,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 	pb.RegisterG2DiagnosticServer(grpcServer, &g2diagnosticserver.G2DiagnosticServer{})
+	reflection.Register(grpcServer)
 	logger.Log(2001, listener.Addr())
 	if err := grpcServer.Serve(listener); err != nil {
 		logger.Log(5001, err)

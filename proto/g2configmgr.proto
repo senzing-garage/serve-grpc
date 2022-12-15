@@ -1,9 +1,9 @@
 syntax = "proto3";
-package g2configmgrprotobuf;
+package g2configmgr;
 
-option go_package = "github.com/senzing/go-servegrpc/g2configmgrprotobuf";
+option go_package = "github.com/senzing/go-servegrpc/protobuf/g2configmgr";
 
-service G2Diagnostic {
+service G2ConfigMgr {
   rpc AddConfig (AddConfigRequest) returns (AddConfigResponse) {}
   rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
   rpc Destroy (DestroyRequest) returns (DestroyResponse) {}

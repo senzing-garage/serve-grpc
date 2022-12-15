@@ -4,7 +4,7 @@
 // - protoc             v3.21.6
 // source: g2product.proto
 
-package g2productprotobuf
+package g2product
 
 import (
 	context "context"
@@ -18,10 +18,10 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// G2DiagnosticClient is the client API for G2Diagnostic service.
+// G2ProductClient is the client API for G2Product service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type G2DiagnosticClient interface {
+type G2ProductClient interface {
 	ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error)
 	Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error)
 	GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error)
@@ -33,99 +33,99 @@ type G2DiagnosticClient interface {
 	Version(ctx context.Context, in *VersionRequest, opts ...grpc.CallOption) (*VersionResponse, error)
 }
 
-type g2DiagnosticClient struct {
+type g2ProductClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewG2DiagnosticClient(cc grpc.ClientConnInterface) G2DiagnosticClient {
-	return &g2DiagnosticClient{cc}
+func NewG2ProductClient(cc grpc.ClientConnInterface) G2ProductClient {
+	return &g2ProductClient{cc}
 }
 
-func (c *g2DiagnosticClient) ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error) {
+func (c *g2ProductClient) ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error) {
 	out := new(ClearLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2productprotobuf.G2Diagnostic/ClearLastException", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2product.G2Product/ClearLastException", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error) {
+func (c *g2ProductClient) Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error) {
 	out := new(DestroyResponse)
-	err := c.cc.Invoke(ctx, "/g2productprotobuf.G2Diagnostic/Destroy", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2product.G2Product/Destroy", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error) {
+func (c *g2ProductClient) GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error) {
 	out := new(GetLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2productprotobuf.G2Diagnostic/GetLastException", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2product.G2Product/GetLastException", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error) {
+func (c *g2ProductClient) GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error) {
 	out := new(GetLastExceptionCodeResponse)
-	err := c.cc.Invoke(ctx, "/g2productprotobuf.G2Diagnostic/GetLastExceptionCode", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2product.G2Product/GetLastExceptionCode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error) {
+func (c *g2ProductClient) Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error) {
 	out := new(InitResponse)
-	err := c.cc.Invoke(ctx, "/g2productprotobuf.G2Diagnostic/Init", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2product.G2Product/Init", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) License(ctx context.Context, in *LicenseRequest, opts ...grpc.CallOption) (*LicenseResponse, error) {
+func (c *g2ProductClient) License(ctx context.Context, in *LicenseRequest, opts ...grpc.CallOption) (*LicenseResponse, error) {
 	out := new(LicenseResponse)
-	err := c.cc.Invoke(ctx, "/g2productprotobuf.G2Diagnostic/License", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2product.G2Product/License", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ValidateLicenseFile(ctx context.Context, in *ValidateLicenseFileRequest, opts ...grpc.CallOption) (*ValidateLicenseFileResponse, error) {
+func (c *g2ProductClient) ValidateLicenseFile(ctx context.Context, in *ValidateLicenseFileRequest, opts ...grpc.CallOption) (*ValidateLicenseFileResponse, error) {
 	out := new(ValidateLicenseFileResponse)
-	err := c.cc.Invoke(ctx, "/g2productprotobuf.G2Diagnostic/ValidateLicenseFile", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2product.G2Product/ValidateLicenseFile", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) ValidateLicenseStringBase64(ctx context.Context, in *ValidateLicenseStringBase64Request, opts ...grpc.CallOption) (*ValidateLicenseStringBase64Response, error) {
+func (c *g2ProductClient) ValidateLicenseStringBase64(ctx context.Context, in *ValidateLicenseStringBase64Request, opts ...grpc.CallOption) (*ValidateLicenseStringBase64Response, error) {
 	out := new(ValidateLicenseStringBase64Response)
-	err := c.cc.Invoke(ctx, "/g2productprotobuf.G2Diagnostic/ValidateLicenseStringBase64", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2product.G2Product/ValidateLicenseStringBase64", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *g2DiagnosticClient) Version(ctx context.Context, in *VersionRequest, opts ...grpc.CallOption) (*VersionResponse, error) {
+func (c *g2ProductClient) Version(ctx context.Context, in *VersionRequest, opts ...grpc.CallOption) (*VersionResponse, error) {
 	out := new(VersionResponse)
-	err := c.cc.Invoke(ctx, "/g2productprotobuf.G2Diagnostic/Version", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/g2product.G2Product/Version", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// G2DiagnosticServer is the server API for G2Diagnostic service.
-// All implementations must embed UnimplementedG2DiagnosticServer
+// G2ProductServer is the server API for G2Product service.
+// All implementations must embed UnimplementedG2ProductServer
 // for forward compatibility
-type G2DiagnosticServer interface {
+type G2ProductServer interface {
 	ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error)
 	Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error)
 	GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error)
@@ -135,257 +135,257 @@ type G2DiagnosticServer interface {
 	ValidateLicenseFile(context.Context, *ValidateLicenseFileRequest) (*ValidateLicenseFileResponse, error)
 	ValidateLicenseStringBase64(context.Context, *ValidateLicenseStringBase64Request) (*ValidateLicenseStringBase64Response, error)
 	Version(context.Context, *VersionRequest) (*VersionResponse, error)
-	mustEmbedUnimplementedG2DiagnosticServer()
+	mustEmbedUnimplementedG2ProductServer()
 }
 
-// UnimplementedG2DiagnosticServer must be embedded to have forward compatible implementations.
-type UnimplementedG2DiagnosticServer struct {
+// UnimplementedG2ProductServer must be embedded to have forward compatible implementations.
+type UnimplementedG2ProductServer struct {
 }
 
-func (UnimplementedG2DiagnosticServer) ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error) {
+func (UnimplementedG2ProductServer) ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ClearLastException not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
+func (UnimplementedG2ProductServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Destroy not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error) {
+func (UnimplementedG2ProductServer) GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLastException not implemented")
 }
-func (UnimplementedG2DiagnosticServer) GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error) {
+func (UnimplementedG2ProductServer) GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLastExceptionCode not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Init(context.Context, *InitRequest) (*InitResponse, error) {
+func (UnimplementedG2ProductServer) Init(context.Context, *InitRequest) (*InitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Init not implemented")
 }
-func (UnimplementedG2DiagnosticServer) License(context.Context, *LicenseRequest) (*LicenseResponse, error) {
+func (UnimplementedG2ProductServer) License(context.Context, *LicenseRequest) (*LicenseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method License not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ValidateLicenseFile(context.Context, *ValidateLicenseFileRequest) (*ValidateLicenseFileResponse, error) {
+func (UnimplementedG2ProductServer) ValidateLicenseFile(context.Context, *ValidateLicenseFileRequest) (*ValidateLicenseFileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateLicenseFile not implemented")
 }
-func (UnimplementedG2DiagnosticServer) ValidateLicenseStringBase64(context.Context, *ValidateLicenseStringBase64Request) (*ValidateLicenseStringBase64Response, error) {
+func (UnimplementedG2ProductServer) ValidateLicenseStringBase64(context.Context, *ValidateLicenseStringBase64Request) (*ValidateLicenseStringBase64Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateLicenseStringBase64 not implemented")
 }
-func (UnimplementedG2DiagnosticServer) Version(context.Context, *VersionRequest) (*VersionResponse, error) {
+func (UnimplementedG2ProductServer) Version(context.Context, *VersionRequest) (*VersionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Version not implemented")
 }
-func (UnimplementedG2DiagnosticServer) mustEmbedUnimplementedG2DiagnosticServer() {}
+func (UnimplementedG2ProductServer) mustEmbedUnimplementedG2ProductServer() {}
 
-// UnsafeG2DiagnosticServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to G2DiagnosticServer will
+// UnsafeG2ProductServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to G2ProductServer will
 // result in compilation errors.
-type UnsafeG2DiagnosticServer interface {
-	mustEmbedUnimplementedG2DiagnosticServer()
+type UnsafeG2ProductServer interface {
+	mustEmbedUnimplementedG2ProductServer()
 }
 
-func RegisterG2DiagnosticServer(s grpc.ServiceRegistrar, srv G2DiagnosticServer) {
-	s.RegisterService(&G2Diagnostic_ServiceDesc, srv)
+func RegisterG2ProductServer(s grpc.ServiceRegistrar, srv G2ProductServer) {
+	s.RegisterService(&G2Product_ServiceDesc, srv)
 }
 
-func _G2Diagnostic_ClearLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Product_ClearLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ClearLastExceptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ClearLastException(ctx, in)
+		return srv.(G2ProductServer).ClearLastException(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2productprotobuf.G2Diagnostic/ClearLastException",
+		FullMethod: "/g2product.G2Product/ClearLastException",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ClearLastException(ctx, req.(*ClearLastExceptionRequest))
+		return srv.(G2ProductServer).ClearLastException(ctx, req.(*ClearLastExceptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Destroy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Product_Destroy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DestroyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Destroy(ctx, in)
+		return srv.(G2ProductServer).Destroy(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2productprotobuf.G2Diagnostic/Destroy",
+		FullMethod: "/g2product.G2Product/Destroy",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Destroy(ctx, req.(*DestroyRequest))
+		return srv.(G2ProductServer).Destroy(ctx, req.(*DestroyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Product_GetLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetLastExceptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetLastException(ctx, in)
+		return srv.(G2ProductServer).GetLastException(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2productprotobuf.G2Diagnostic/GetLastException",
+		FullMethod: "/g2product.G2Product/GetLastException",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetLastException(ctx, req.(*GetLastExceptionRequest))
+		return srv.(G2ProductServer).GetLastException(ctx, req.(*GetLastExceptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_GetLastExceptionCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Product_GetLastExceptionCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetLastExceptionCodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).GetLastExceptionCode(ctx, in)
+		return srv.(G2ProductServer).GetLastExceptionCode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2productprotobuf.G2Diagnostic/GetLastExceptionCode",
+		FullMethod: "/g2product.G2Product/GetLastExceptionCode",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).GetLastExceptionCode(ctx, req.(*GetLastExceptionCodeRequest))
+		return srv.(G2ProductServer).GetLastExceptionCode(ctx, req.(*GetLastExceptionCodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Init_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Product_Init_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InitRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Init(ctx, in)
+		return srv.(G2ProductServer).Init(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2productprotobuf.G2Diagnostic/Init",
+		FullMethod: "/g2product.G2Product/Init",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Init(ctx, req.(*InitRequest))
+		return srv.(G2ProductServer).Init(ctx, req.(*InitRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_License_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Product_License_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LicenseRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).License(ctx, in)
+		return srv.(G2ProductServer).License(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2productprotobuf.G2Diagnostic/License",
+		FullMethod: "/g2product.G2Product/License",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).License(ctx, req.(*LicenseRequest))
+		return srv.(G2ProductServer).License(ctx, req.(*LicenseRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ValidateLicenseFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Product_ValidateLicenseFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ValidateLicenseFileRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ValidateLicenseFile(ctx, in)
+		return srv.(G2ProductServer).ValidateLicenseFile(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2productprotobuf.G2Diagnostic/ValidateLicenseFile",
+		FullMethod: "/g2product.G2Product/ValidateLicenseFile",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ValidateLicenseFile(ctx, req.(*ValidateLicenseFileRequest))
+		return srv.(G2ProductServer).ValidateLicenseFile(ctx, req.(*ValidateLicenseFileRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_ValidateLicenseStringBase64_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Product_ValidateLicenseStringBase64_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ValidateLicenseStringBase64Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).ValidateLicenseStringBase64(ctx, in)
+		return srv.(G2ProductServer).ValidateLicenseStringBase64(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2productprotobuf.G2Diagnostic/ValidateLicenseStringBase64",
+		FullMethod: "/g2product.G2Product/ValidateLicenseStringBase64",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).ValidateLicenseStringBase64(ctx, req.(*ValidateLicenseStringBase64Request))
+		return srv.(G2ProductServer).ValidateLicenseStringBase64(ctx, req.(*ValidateLicenseStringBase64Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2Diagnostic_Version_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _G2Product_Version_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(VersionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(G2DiagnosticServer).Version(ctx, in)
+		return srv.(G2ProductServer).Version(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/g2productprotobuf.G2Diagnostic/Version",
+		FullMethod: "/g2product.G2Product/Version",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2DiagnosticServer).Version(ctx, req.(*VersionRequest))
+		return srv.(G2ProductServer).Version(ctx, req.(*VersionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// G2Diagnostic_ServiceDesc is the grpc.ServiceDesc for G2Diagnostic service.
+// G2Product_ServiceDesc is the grpc.ServiceDesc for G2Product service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var G2Diagnostic_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "g2productprotobuf.G2Diagnostic",
-	HandlerType: (*G2DiagnosticServer)(nil),
+var G2Product_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "g2product.G2Product",
+	HandlerType: (*G2ProductServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "ClearLastException",
-			Handler:    _G2Diagnostic_ClearLastException_Handler,
+			Handler:    _G2Product_ClearLastException_Handler,
 		},
 		{
 			MethodName: "Destroy",
-			Handler:    _G2Diagnostic_Destroy_Handler,
+			Handler:    _G2Product_Destroy_Handler,
 		},
 		{
 			MethodName: "GetLastException",
-			Handler:    _G2Diagnostic_GetLastException_Handler,
+			Handler:    _G2Product_GetLastException_Handler,
 		},
 		{
 			MethodName: "GetLastExceptionCode",
-			Handler:    _G2Diagnostic_GetLastExceptionCode_Handler,
+			Handler:    _G2Product_GetLastExceptionCode_Handler,
 		},
 		{
 			MethodName: "Init",
-			Handler:    _G2Diagnostic_Init_Handler,
+			Handler:    _G2Product_Init_Handler,
 		},
 		{
 			MethodName: "License",
-			Handler:    _G2Diagnostic_License_Handler,
+			Handler:    _G2Product_License_Handler,
 		},
 		{
 			MethodName: "ValidateLicenseFile",
-			Handler:    _G2Diagnostic_ValidateLicenseFile_Handler,
+			Handler:    _G2Product_ValidateLicenseFile_Handler,
 		},
 		{
 			MethodName: "ValidateLicenseStringBase64",
-			Handler:    _G2Diagnostic_ValidateLicenseStringBase64_Handler,
+			Handler:    _G2Product_ValidateLicenseStringBase64_Handler,
 		},
 		{
 			MethodName: "Version",
-			Handler:    _G2Diagnostic_Version_Handler,
+			Handler:    _G2Product_Version_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
