@@ -91,21 +91,13 @@
         1. Choose a `.proto` file
     1. In left-hand pane,
         1. Choose the `Init` message.
-        1. Set the request values:
+        1. Set the request values.
+           Example:
 
             ```json
             {
               "moduleName": "Test of gRPC",
-              "iniParams": {
-                "PIPELINE": {
-                  "CONFIGPATH": "/etc/opt/senzing",
-                  "RESOURCEPATH": "/opt/senzing/g2/resources",
-                  "SUPPORTPATH": "/opt/senzing/data"
-                },
-                "SQL": {
-                  "CONNECTION": "sqlite3://na:na@/tmp/sqlite/G2C.db"
-                }
-              },
+              "iniParams": "{"PIPELINE":{"CONFIGPATH":"/etc/opt/senzing","RESOURCEPATH":"/opt/senzing/g2/resources","SUPPORTPATH":"/opt/senzing/data"},"SQL":
               "verboseLogging": 0
             }
             ```
