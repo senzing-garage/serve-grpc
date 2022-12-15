@@ -68,7 +68,9 @@ test:
 #	@go test -v ./g2diagnosticserver
 	@go test -v ./g2diagnosticservercli
 
-
+.PHONY: test-servegrpc
+test-servegrpc:
+	@go test -v ./g2diagnosticservercli
 
 # -----------------------------------------------------------------------------
 # Run

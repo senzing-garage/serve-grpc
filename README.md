@@ -49,3 +49,66 @@
    done
 
     ```
+
+### Test server
+
+1. Install the  [bloomrpc](https://github.com/bloomrpc/bloomrpc) gRPC test client.
+   1. Example for Ubuntu.
+
+       1. Find [latest release](https://github.com/bloomrpc/bloomrpc/releases).
+
+       1. :pencil2: Install.
+          Example:
+
+           ```console
+           wget https://github.com/bloomrpc/bloomrpc/releases/download/1.5.3/bloomrpc_1.5.3_amd64.deb
+           sudo apt install ./bloomrpc_1.5.3_amd64.deb
+
+           ```
+
+1. Start the test server.
+   Example:
+
+     ```console
+     cd ${GIT_REPOSITORY_DIR}
+     make test-servegrpc
+     ```
+
+1. From the `senzing-99992001` message, copy the value of "SENZING_ENGINE_CONFIGURATION_JSON".
+   It is in escaped JSON format.
+   It will be used when working with the gRPC test client.
+
+1. Start the gRPC test client.
+   Example:
+
+    ```console
+    bloomrpc
+    ```
+
+1. In `bloomrpc`:
+    1. In upper-left, click on plus sign ("+").
+        1. Navigate to the ${GIT_REPOSITORY_DIR}/proto directory
+        1. Choose a `.proto` file
+    1. In left-hand pane,
+        1. Choose the `Init` message.
+        1. Set the request values:
+
+            ```json
+            {
+              "moduleName": "Test of gRPC",
+              "iniParams": {
+                "PIPELINE": {
+                  "CONFIGPATH": "/etc/opt/senzing",
+                  "RESOURCEPATH": "/opt/senzing/g2/resources",
+                  "SUPPORTPATH": "/opt/senzing/data"
+                },
+                "SQL": {
+                  "CONNECTION": "sqlite3://na:na@/tmp/sqlite/G2C.db"
+                }
+              },
+              "verboseLogging": 0
+            }
+            ```
+
+        1. Near the center, click the green "play" button.
+        1. The Senzing object is initialized and other messages can be tried.

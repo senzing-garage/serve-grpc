@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/senzing/go-helpers/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/messagelogger"
 	"github.com/senzing/go-servegrpc/g2diagnosticserver"
 	pb "github.com/senzing/go-servegrpc/protobuf/g2diagnostic"
@@ -26,7 +27,8 @@ const ProductId = 9999
 
 // Message templates.
 var IdMessages = map[int]string{
-	2001: "Server listening at %v",
+	2001: "SENZING_ENGINE_CONFIGURATION_JSON: %v",
+	2002: "Server listening at %v",
 	4001: "Call to net.Listen(tcp, %s) failed.",
 	5001: "Failed to serve.",
 }
@@ -54,6 +56,12 @@ func main() {
 
 	flag.Parse()
 
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	if err != nil {
+		logger.Log(5902, err)
+	}
+	logger.Log(2001, iniParams)
+
 	// Set up socket listener.
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
@@ -66,7 +74,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 	pb.RegisterG2DiagnosticServer(grpcServer, &g2diagnosticserver.G2DiagnosticServer{})
 	reflection.Register(grpcServer)
-	logger.Log(2001, listener.Addr())
+	logger.Log(2002, listener.Addr())
 	if err := grpcServer.Serve(listener); err != nil {
 		logger.Log(5001, err)
 	}
