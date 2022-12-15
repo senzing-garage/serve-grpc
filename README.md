@@ -66,6 +66,17 @@
 
            ```
 
+1. Identify repository.
+   Example:
+
+    ```console
+    export GIT_ACCOUNT=senzing
+    export GIT_REPOSITORY=go-servegrpc
+    export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
+    export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
+
+    ```
+
 1. Start the test server.
    Example:
 
@@ -78,7 +89,7 @@
    It is in escaped JSON format.
    It will be used when working with the gRPC test client.
 
-1. Start the gRPC test client.
+1. In a separate terminal, start the gRPC test client.
    Example:
 
     ```console
@@ -104,4 +115,4 @@
             ```
 
         1. Near the center, click the green "play" button.
-        1. The Senzing object is initialized and other messages can be tried.
+    1. The Senzing object is initialized and other messages can be tried.
