@@ -23,7 +23,7 @@ const (
 )
 
 var (
-	g2diagnosticSingleton *G2DiagnosticServer
+	g2diagnosticTestSingleton *G2DiagnosticServer
 )
 
 // ----------------------------------------------------------------------------
@@ -31,8 +31,8 @@ var (
 // ----------------------------------------------------------------------------
 
 func getTestObject(ctx context.Context, test *testing.T) G2DiagnosticServer {
-	if g2diagnosticSingleton == nil {
-		g2diagnosticSingleton = &G2DiagnosticServer{}
+	if g2diagnosticTestSingleton == nil {
+		g2diagnosticTestSingleton = &G2DiagnosticServer{}
 
 		moduleName := "Test module name"
 		verboseLogging := 0
@@ -46,9 +46,9 @@ func getTestObject(ctx context.Context, test *testing.T) G2DiagnosticServer {
 			IniParams:      iniParams,
 			VerboseLogging: int32(verboseLogging),
 		}
-		g2diagnosticSingleton.Init(ctx, request)
+		g2diagnosticTestSingleton.Init(ctx, request)
 	}
-	return *g2diagnosticSingleton
+	return *g2diagnosticTestSingleton
 }
 
 func getG2DiagnosticServer(ctx context.Context) G2DiagnosticServer {
