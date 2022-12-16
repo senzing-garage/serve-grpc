@@ -4,13 +4,13 @@ import (
 	"context"
 	"sync"
 
-	g2configsdk "github.com/senzing/g2-sdk-go/g2config"
+	g2sdk "github.com/senzing/g2-sdk-go/g2config"
 	pb "github.com/senzing/go-servegrpc/protobuf/g2config"
 )
 
 var (
-	g2configXX   *g2configsdk.G2configImpl
-	onceG2config sync.Once
+	g2configSingleton *g2sdk.G2configImpl
+	g2configSyncOnce  sync.Once
 )
 
 // ----------------------------------------------------------------------------
@@ -19,11 +19,11 @@ var (
 
 // Singleton pattern for g2config.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getG2config() *g2configsdk.G2configImpl {
-	onceG2config.Do(func() {
-		g2configXX = &g2configsdk.G2configImpl{}
+func getG2config() *g2sdk.G2configImpl {
+	g2configSyncOnce.Do(func() {
+		g2configSingleton = &g2sdk.G2configImpl{}
 	})
-	return g2configXX
+	return g2configSingleton
 }
 
 // ----------------------------------------------------------------------------

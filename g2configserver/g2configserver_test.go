@@ -234,7 +234,7 @@ func teardown() error {
 	return err
 }
 
-func TestG2ConfigServer_BuildSimpleSystemConfigurationJson(test *testing.T) {
+func TestG2configserver_BuildSimpleSystemConfigurationJson(test *testing.T) {
 	actual, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if err != nil {
 		test.Log("Error:", err.Error())

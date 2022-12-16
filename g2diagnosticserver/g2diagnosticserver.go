@@ -6,19 +6,19 @@ import (
 	"strconv"
 	"sync"
 
-	g2diagnosticsdk "github.com/senzing/g2-sdk-go/g2diagnostic"
+	g2sdk "github.com/senzing/g2-sdk-go/g2diagnostic"
 	pb "github.com/senzing/go-servegrpc/protobuf/g2diagnostic"
 )
 
 var (
-	g2diagnostic *g2diagnosticsdk.G2diagnosticImpl
+	g2diagnosticSingleton *g2sdk.G2diagnosticImpl
 	// logger           messagelogger.MessageLoggerInterface
 	// onceLogger       sync.Once
-	onceG2diagnostic sync.Once
+	g2diagnosticSyncOnce sync.Once
 )
 
 // ----------------------------------------------------------------------------
-// Internal methods 
+// Internal methods
 // ----------------------------------------------------------------------------
 
 // func getLogger() messagelogger.MessageLoggerInterface {
@@ -31,11 +31,11 @@ var (
 
 // Singleton pattern for g2diagnostic.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getG2diagnostic() *g2diagnosticsdk.G2diagnosticImpl {
-	onceG2diagnostic.Do(func() {
-		g2diagnostic = &g2diagnosticsdk.G2diagnosticImpl{}
+func getG2diagnostic() *g2sdk.G2diagnosticImpl {
+	g2diagnosticSyncOnce.Do(func() {
+		g2diagnosticSingleton = &g2sdk.G2diagnosticImpl{}
 	})
-	return g2diagnostic
+	return g2diagnosticSingleton
 }
 
 // ----------------------------------------------------------------------------
