@@ -65,10 +65,11 @@ test:
 	@cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
 #	@go test -v -p 1 ./...
 #	@go test -v ./.
-	@go test -v ./g2configserver
-#	@go test -v ./g2configservercli
+#	@go test -v ./g2configserver
 #	@go test -v ./g2diagnosticserver
 #	@go test -v ./g2diagnosticservercli
+#	@go test -v ./g2engineserver
+	@go test -v ./g2productserver
 
 .PHONY: test-servegrpc
 test-servegrpc:
