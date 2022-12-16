@@ -18,7 +18,7 @@ var (
 )
 
 // ----------------------------------------------------------------------------
-// Internal methods - names begin with lower case
+// Internal methods 
 // ----------------------------------------------------------------------------
 
 // func getLogger() messagelogger.MessageLoggerInterface {

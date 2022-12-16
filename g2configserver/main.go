@@ -1,7 +1,7 @@
-package g2diagnosticserver
+package g2configserver
 
 import (
-	pb "github.com/senzing/go-servegrpc/protobuf/g2diagnostic"
+	pb "github.com/senzing/go-servegrpc/protobuf/g2config"
 )
 
 // ----------------------------------------------------------------------------
@@ -9,8 +9,8 @@ import (
 // ----------------------------------------------------------------------------
 
 // server is used to implement helloworld.GreeterServer.
-type G2DiagnosticServer struct {
-	pb.UnimplementedG2DiagnosticServer
+type G2ConfigServer struct {
+	pb.UnimplementedG2ConfigServer
 }
 
 // ----------------------------------------------------------------------------

@@ -244,7 +244,7 @@ func TestG2diagnosticserver_BuildSimpleSystemConfigurationJson(test *testing.T) 
 }
 
 // ----------------------------------------------------------------------------
-// Test interface functions - names begin with "Test"
+// Test interface functions
 // ----------------------------------------------------------------------------
 
 func TestG2diagnosticserver_CheckDBPerf(test *testing.T) {
@@ -258,31 +258,31 @@ func TestG2diagnosticserver_CheckDBPerf(test *testing.T) {
 	printActual(test, actual)
 }
 
-//func TestEntityListBySize(test *testing.T) {
-//	ctx := context.TODO()
-//	g2diagnostic, _ := getTestObject(ctx)
-//	request := &pb.GetEntityListBySizeRequest{
-//		EntitySize: int32(10),
-//	}
-//	actual, err := g2diagnostic.GetEntityListBySize(ctx, request)
-//	testError(test, ctx, err)
-//	test.Log("Actual:", actual)
-//
-//	entityListBySizeHandle := actual.Result
-//	request2 := pb.FetchNextEntityBySizeRequest{
-//		EntityListBySizeHandle: entityListBySizeHandle,
-//	}
-//	actual2, err2 := g2diagnostic.FetchNextEntityBySize(ctx, request2)
-//	testError(test, ctx, err2)
-//	test.Log("Actual:", actual2)
-//
-//	request3 := pb.CloseEntityListBySizeRequest{
-//		EntityListBySizeHandle: entityListBySizeHandle,
-//	}
-//	actual3, err3 := g2diagnostic.CloseEntityListBySize(ctx, request3)
-//	testError(test, ctx, err3)
-//	test.Log("Actual:", actual3)
-//}
+func TestEntityListBySize(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnostic := getTestObject(ctx, test)
+	request := &pb.GetEntityListBySizeRequest{
+		EntitySize: int32(10),
+	}
+	actual, err := g2diagnostic.GetEntityListBySize(ctx, request)
+	testError(test, ctx, g2diagnostic, err)
+	test.Log("Actual:", actual)
+
+	entityListBySizeHandle := actual.Result
+	request2 := &pb.FetchNextEntityBySizeRequest{
+		EntityListBySizeHandle: entityListBySizeHandle,
+	}
+	actual2, err2 := g2diagnostic.FetchNextEntityBySize(ctx, request2)
+	testError(test, ctx, g2diagnostic, err2)
+	test.Log("Actual:", actual2)
+
+	request3 := &pb.CloseEntityListBySizeRequest{
+		EntityListBySizeHandle: entityListBySizeHandle,
+	}
+	actual3, err3 := g2diagnostic.CloseEntityListBySize(ctx, request3)
+	testError(test, ctx, g2diagnostic, err3)
+	test.Log("Actual:", actual3)
+}
 
 func TestG2diagnosticserver_FindEntitiesByFeatureIDs(test *testing.T) {
 	ctx := context.TODO()
