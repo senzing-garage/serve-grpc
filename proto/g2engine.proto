@@ -4,7 +4,7 @@ package g2engine;
 option go_package = "github.com/senzing/go-servegrpc/protobuf/g2engine";
 
 service G2Engine {
-  rpc AddRecord(AddRecordRequestRequest) returns (AddRecordResponseResponse) {}
+  rpc AddRecord(AddRecordRequest) returns (AddRecordResponse) {}
   rpc AddRecordWithInfo(AddRecordWithInfoRequest) returns (AddRecordWithInfoResponse) {}
   rpc AddRecordWithInfoWithReturnedRecordID(AddRecordWithInfoWithReturnedRecordIDRequest) returns (AddRecordWithInfoWithReturnedRecordIDResponse) {}
   rpc AddRecordWithReturnedRecordID(AddRecordWithReturnedRecordIDRequest) returns (AddRecordWithReturnedRecordIDResponse) {}
@@ -83,14 +83,14 @@ service G2Engine {
   rpc WhyRecords_V2(WhyRecords_V2Request) returns (WhyRecords_V2Response) {}
 }
 
-message AddRecordRequestRequest {
+message AddRecordRequest {
   string dataSourceCode = 1;
   string recordID = 2;
   string jsonData = 3;
   string loadID = 4;
 }
 
-message AddRecordResponseResponse {}
+message AddRecordResponse {}
 
 message AddRecordWithInfoRequest {
   string dataSourceCode = 1;

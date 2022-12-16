@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type G2EngineClient interface {
-	AddRecord(ctx context.Context, in *AddRecordRequestRequest, opts ...grpc.CallOption) (*AddRecordResponseResponse, error)
+	AddRecord(ctx context.Context, in *AddRecordRequest, opts ...grpc.CallOption) (*AddRecordResponse, error)
 	AddRecordWithInfo(ctx context.Context, in *AddRecordWithInfoRequest, opts ...grpc.CallOption) (*AddRecordWithInfoResponse, error)
 	AddRecordWithInfoWithReturnedRecordID(ctx context.Context, in *AddRecordWithInfoWithReturnedRecordIDRequest, opts ...grpc.CallOption) (*AddRecordWithInfoWithReturnedRecordIDResponse, error)
 	AddRecordWithReturnedRecordID(ctx context.Context, in *AddRecordWithReturnedRecordIDRequest, opts ...grpc.CallOption) (*AddRecordWithReturnedRecordIDResponse, error)
@@ -109,8 +109,8 @@ func NewG2EngineClient(cc grpc.ClientConnInterface) G2EngineClient {
 	return &g2EngineClient{cc}
 }
 
-func (c *g2EngineClient) AddRecord(ctx context.Context, in *AddRecordRequestRequest, opts ...grpc.CallOption) (*AddRecordResponseResponse, error) {
-	out := new(AddRecordResponseResponse)
+func (c *g2EngineClient) AddRecord(ctx context.Context, in *AddRecordRequest, opts ...grpc.CallOption) (*AddRecordResponse, error) {
+	out := new(AddRecordResponse)
 	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/AddRecord", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -806,7 +806,7 @@ func (c *g2EngineClient) WhyRecords_V2(ctx context.Context, in *WhyRecords_V2Req
 // All implementations must embed UnimplementedG2EngineServer
 // for forward compatibility
 type G2EngineServer interface {
-	AddRecord(context.Context, *AddRecordRequestRequest) (*AddRecordResponseResponse, error)
+	AddRecord(context.Context, *AddRecordRequest) (*AddRecordResponse, error)
 	AddRecordWithInfo(context.Context, *AddRecordWithInfoRequest) (*AddRecordWithInfoResponse, error)
 	AddRecordWithInfoWithReturnedRecordID(context.Context, *AddRecordWithInfoWithReturnedRecordIDRequest) (*AddRecordWithInfoWithReturnedRecordIDResponse, error)
 	AddRecordWithReturnedRecordID(context.Context, *AddRecordWithReturnedRecordIDRequest) (*AddRecordWithReturnedRecordIDResponse, error)
@@ -890,7 +890,7 @@ type G2EngineServer interface {
 type UnimplementedG2EngineServer struct {
 }
 
-func (UnimplementedG2EngineServer) AddRecord(context.Context, *AddRecordRequestRequest) (*AddRecordResponseResponse, error) {
+func (UnimplementedG2EngineServer) AddRecord(context.Context, *AddRecordRequest) (*AddRecordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddRecord not implemented")
 }
 func (UnimplementedG2EngineServer) AddRecordWithInfo(context.Context, *AddRecordWithInfoRequest) (*AddRecordWithInfoResponse, error) {
@@ -1135,7 +1135,7 @@ func RegisterG2EngineServer(s grpc.ServiceRegistrar, srv G2EngineServer) {
 }
 
 func _G2Engine_AddRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddRecordRequestRequest)
+	in := new(AddRecordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1147,7 +1147,7 @@ func _G2Engine_AddRecord_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: "/g2engine.G2Engine/AddRecord",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2EngineServer).AddRecord(ctx, req.(*AddRecordRequestRequest))
+		return srv.(G2EngineServer).AddRecord(ctx, req.(*AddRecordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
