@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	g2config     *g2configsdk.G2configImpl
+	g2configXX   *g2configsdk.G2configImpl
 	onceG2config sync.Once
 )
 
@@ -21,9 +21,9 @@ var (
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
 func getG2config() *g2configsdk.G2configImpl {
 	onceG2config.Do(func() {
-		g2config = &g2configsdk.G2configImpl{}
+		g2configXX = &g2configsdk.G2configImpl{}
 	})
-	return g2config
+	return g2configXX
 }
 
 // ----------------------------------------------------------------------------
