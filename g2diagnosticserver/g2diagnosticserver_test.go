@@ -258,7 +258,7 @@ func TestG2diagnosticserver_CheckDBPerf(test *testing.T) {
 	printActual(test, actual)
 }
 
-func TestEntityListBySize(test *testing.T) {
+func TestG2diagnosticserver_EntityListBySize(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
 	request := &pb.GetEntityListBySizeRequest{
@@ -266,7 +266,7 @@ func TestEntityListBySize(test *testing.T) {
 	}
 	actual, err := g2diagnostic.GetEntityListBySize(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	test.Log("Actual:", actual)
+	printActual(test, actual)
 
 	entityListBySizeHandle := actual.Result
 	request2 := &pb.FetchNextEntityBySizeRequest{
@@ -274,14 +274,15 @@ func TestEntityListBySize(test *testing.T) {
 	}
 	actual2, err2 := g2diagnostic.FetchNextEntityBySize(ctx, request2)
 	testError(test, ctx, g2diagnostic, err2)
-	test.Log("Actual:", actual2)
+	printActual(test, actual2)
 
 	request3 := &pb.CloseEntityListBySizeRequest{
 		EntityListBySizeHandle: entityListBySizeHandle,
 	}
 	actual3, err3 := g2diagnostic.CloseEntityListBySize(ctx, request3)
 	testError(test, ctx, g2diagnostic, err3)
-	test.Log("Actual:", actual3)
+	printActual(test, actual3)
+
 }
 
 func TestG2diagnosticserver_FindEntitiesByFeatureIDs(test *testing.T) {
