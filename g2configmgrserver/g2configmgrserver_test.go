@@ -8,19 +8,21 @@ import (
 	"time"
 
 	truncator "github.com/aquilax/truncate"
-
 	"github.com/senzing/g2-sdk-go/g2config"
 	"github.com/senzing/g2-sdk-go/g2configmgr"
 	"github.com/senzing/g2-sdk-go/g2engine"
 	"github.com/senzing/g2-sdk-go/testhelpers"
 	"github.com/senzing/go-helpers/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-servegrpc/g2configserver"
+	pbconfig "github.com/senzing/go-servegrpc/protobuf/g2config"
 	pb "github.com/senzing/go-servegrpc/protobuf/g2configmgr"
 	"github.com/stretchr/testify/assert"
 )
 
 const (
 	defaultTruncation = 76
+	printResults      = false
 )
 
 var (
@@ -52,6 +54,23 @@ func getTestObject(ctx context.Context, test *testing.T) G2ConfigmgrServer {
 	return *g2configmgrTestSingleton
 }
 
+func getG2ConfigServer(ctx context.Context) g2configserver.G2ConfigServer {
+	G2ConfigServer := &g2configserver.G2ConfigServer{}
+	moduleName := "Test module name"
+	verboseLogging := 0
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	if err != nil {
+		fmt.Println(err)
+	}
+	request := &pbconfig.InitRequest{
+		ModuleName:     moduleName,
+		IniParams:      iniParams,
+		VerboseLogging: int32(verboseLogging),
+	}
+	G2ConfigServer.Init(ctx, request)
+	return *G2ConfigServer
+}
+
 func getG2ConfigmgrServer(ctx context.Context) G2ConfigmgrServer {
 	G2ConfigmgrServer := &G2ConfigmgrServer{}
 	moduleName := "Test module name"
@@ -74,7 +93,7 @@ func truncate(aString string, length int) string {
 }
 
 func printResult(test *testing.T, title string, result interface{}) {
-	if 1 == 0 {
+	if printResults {
 		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
 	}
 }
@@ -250,74 +269,134 @@ func TestG2ConfigmgrServer_BuildSimpleSystemConfigurationJson(test *testing.T) {
 
 func TestG2configmgrserver_AddConfig(test *testing.T) {
 	ctx := context.TODO()
+	now := time.Now()
+	g2config := getG2ConfigServer(ctx)
+
+	// G2config Create() to create a Senzing configuration.
+	requestToCreate := &pbconfig.CreateRequest{}
+	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
+	if err != nil {
+		test.Log(err)
+	}
+
+	// G2config Save() to create a JSON string.
+	requestToSave := &pbconfig.SaveRequest{
+		ConfigHandle: responseFromCreate.GetResult(),
+	}
+	responseFromSave, err := g2config.Save(ctx, requestToSave)
+	if err != nil {
+		test.Log(err)
+	}
+
+	// Test.
 	g2configmgr := getTestObject(ctx, test)
-	request := &pb.AddConfigRequest{}
-	actual, err := g2configmgr.AddConfig(ctx, request)
+	request := &pb.AddConfigRequest{
+		ConfigStr:      responseFromSave.GetResult(),
+		ConfigComments: fmt.Sprintf("g2configmgrserver_test at %s", now.UTC()),
+	}
+	response, err := g2configmgr.AddConfig(ctx, request)
 	testError(test, ctx, g2configmgr, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2configmgrImpl_GetConfig(test *testing.T) {
 	ctx := context.TODO()
 	g2configmgr := getTestObject(ctx, test)
-	request := &pb.GetConfigRequest{}
-	actual, err := g2configmgr.GetConfig(ctx, request)
+
+	// GetDefaultConfigID().
+	requestToGetDefaultConfigID := &pb.GetDefaultConfigIDRequest{}
+	responseFromGetDefaultConfigID, err := g2configmgr.GetDefaultConfigID(ctx, requestToGetDefaultConfigID)
 	testError(test, ctx, g2configmgr, err)
-	printActual(test, actual)
+	printActual(test, responseFromGetDefaultConfigID)
+
+	// Test.
+	request := &pb.GetConfigRequest{
+		ConfigID: responseFromGetDefaultConfigID.GetConfigID(),
+	}
+	response, err := g2configmgr.GetConfig(ctx, request)
+	testError(test, ctx, g2configmgr, err)
+	printActual(test, response)
 }
 
 func TestG2configmgrImpl_GetConfigList(test *testing.T) {
 	ctx := context.TODO()
 	g2configmgr := getTestObject(ctx, test)
 	request := &pb.GetConfigListRequest{}
-	actual, err := g2configmgr.GetConfigList(ctx, request)
+	response, err := g2configmgr.GetConfigList(ctx, request)
 	testError(test, ctx, g2configmgr, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2configmgrImpl_GetDefaultConfigID(test *testing.T) {
 	ctx := context.TODO()
 	g2configmgr := getTestObject(ctx, test)
 	request := &pb.GetDefaultConfigIDRequest{}
-	actual, err := g2configmgr.GetDefaultConfigID(ctx, request)
+	response, err := g2configmgr.GetDefaultConfigID(ctx, request)
 	testError(test, ctx, g2configmgr, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2configmgrImpl_Init(test *testing.T) {
 	ctx := context.TODO()
 	g2configmgr := getTestObject(ctx, test)
-	request := &pb.InitRequest{}
-	actual, err := g2configmgr.Init(ctx, request)
+	iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	if jsonErr != nil {
+		assert.FailNow(test, jsonErr.Error())
+	}
+	request := &pb.InitRequest{
+		ModuleName:     "Test module name",
+		IniParams:      iniParams,
+		VerboseLogging: int32(0),
+	}
+	response, err := g2configmgr.Init(ctx, request)
 	testError(test, ctx, g2configmgr, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2configmgrImpl_ReplaceDefaultConfigID(test *testing.T) {
 	ctx := context.TODO()
 	g2configmgr := getTestObject(ctx, test)
-	request := &pb.ReplaceDefaultConfigIDRequest{}
-	actual, err := g2configmgr.ReplaceDefaultConfigID(ctx, request)
+
+	// GetDefaultConfigID()
+	requestToGetDefaultConfigID := &pb.GetDefaultConfigIDRequest{}
+	responseFromGetDefaultConfigID, err := g2configmgr.GetDefaultConfigID(ctx, requestToGetDefaultConfigID)
 	testError(test, ctx, g2configmgr, err)
-	printActual(test, actual)
+
+	// Test.
+	request := &pb.ReplaceDefaultConfigIDRequest{
+		OldConfigID: responseFromGetDefaultConfigID.GetConfigID(),
+		NewConfigID: responseFromGetDefaultConfigID.GetConfigID(),
+	}
+	response, err := g2configmgr.ReplaceDefaultConfigID(ctx, request)
+	testError(test, ctx, g2configmgr, err)
+	printActual(test, response)
 }
 
 func TestG2configmgrImpl_SetDefaultConfigID(test *testing.T) {
 	ctx := context.TODO()
 	g2configmgr := getTestObject(ctx, test)
-	request := &pb.SetDefaultConfigIDRequest{}
-	actual, err := g2configmgr.SetDefaultConfigID(ctx, request)
+
+	// GetDefaultConfigID()
+	requestToGetDefaultConfigID := &pb.GetDefaultConfigIDRequest{}
+	responseFromGetDefaultConfigID, err := g2configmgr.GetDefaultConfigID(ctx, requestToGetDefaultConfigID)
 	testError(test, ctx, g2configmgr, err)
-	printActual(test, actual)
+
+	// Test.
+	request := &pb.SetDefaultConfigIDRequest{
+		ConfigID: responseFromGetDefaultConfigID.GetConfigID(),
+	}
+	response, err := g2configmgr.SetDefaultConfigID(ctx, request)
+	testError(test, ctx, g2configmgr, err)
+	printActual(test, response)
 }
 
 func TestG2configmgrImpl_Destroy(test *testing.T) {
 	ctx := context.TODO()
 	g2configmgr := getTestObject(ctx, test)
 	request := &pb.DestroyRequest{}
-	actual, err := g2configmgr.Destroy(ctx, request)
+	response, err := g2configmgr.Destroy(ctx, request)
 	testError(test, ctx, g2configmgr, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 // ----------------------------------------------------------------------------

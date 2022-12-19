@@ -31,49 +31,65 @@ func getG2configmgr() *g2sdk.G2configmgrImpl {
 // ----------------------------------------------------------------------------
 
 func (server *G2ConfigmgrServer) AddConfig(ctx context.Context, request *pb.AddConfigRequest) (*pb.AddConfigResponse, error) {
-	var err error = nil
-	response := pb.AddConfigResponse{}
+	g2configmgr := getG2configmgr()
+	result, err := g2configmgr.AddConfig(ctx, request.GetConfigStr(), request.GetConfigComments())
+	response := pb.AddConfigResponse{
+		Result: result,
+	}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) Destroy(ctx context.Context, request *pb.DestroyRequest) (*pb.DestroyResponse, error) {
-	var err error = nil
+	g2configmgr := getG2configmgr()
+	err := g2configmgr.Destroy(ctx)
 	response := pb.DestroyResponse{}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) GetConfig(ctx context.Context, request *pb.GetConfigRequest) (*pb.GetConfigResponse, error) {
-	var err error = nil
-	response := pb.GetConfigResponse{}
+	g2configmgr := getG2configmgr()
+	result, err := g2configmgr.GetConfig(ctx, request.GetConfigID())
+	response := pb.GetConfigResponse{
+		Result: result,
+	}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) GetConfigList(ctx context.Context, request *pb.GetConfigListRequest) (*pb.GetConfigListResponse, error) {
-	var err error = nil
-	response := pb.GetConfigListResponse{}
+	g2configmgr := getG2configmgr()
+	result, err := g2configmgr.GetConfigList(ctx)
+	response := pb.GetConfigListResponse{
+		Result: result,
+	}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) GetDefaultConfigID(ctx context.Context, request *pb.GetDefaultConfigIDRequest) (*pb.GetDefaultConfigIDResponse, error) {
-	var err error = nil
-	response := pb.GetDefaultConfigIDResponse{}
+	g2configmgr := getG2configmgr()
+	result, err := g2configmgr.GetDefaultConfigID(ctx)
+	response := pb.GetDefaultConfigIDResponse{
+		ConfigID: result,
+	}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.InitResponse, error) {
-	var err error = nil
+	g2configmgr := getG2configmgr()
+	err := g2configmgr.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
 	response := pb.InitResponse{}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) ReplaceDefaultConfigID(ctx context.Context, request *pb.ReplaceDefaultConfigIDRequest) (*pb.ReplaceDefaultConfigIDResponse, error) {
-	var err error = nil
+	g2configmgr := getG2configmgr()
+	err := g2configmgr.ReplaceDefaultConfigID(ctx, request.GetOldConfigID(), request.GetNewConfigID())
 	response := pb.ReplaceDefaultConfigIDResponse{}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) SetDefaultConfigID(ctx context.Context, request *pb.SetDefaultConfigIDRequest) (*pb.SetDefaultConfigIDResponse, error) {
-	var err error = nil
+	g2configmgr := getG2configmgr()
+	err := g2configmgr.SetDefaultConfigID(ctx, request.GetConfigID())
 	response := pb.SetDefaultConfigIDResponse{}
 	return &response, err
 }

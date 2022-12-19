@@ -297,9 +297,9 @@ func TestG2configserver_Create(test *testing.T) {
 	ctx := context.TODO()
 	g2config := getTestObject(ctx, test)
 	requestToCreate := &pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
+	response, err := g2config.Create(ctx, requestToCreate)
 	testError(test, ctx, g2config, err)
-	printActual(test, responseFromCreate.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestG2configserver_DeleteDataSource(test *testing.T) {
@@ -370,9 +370,9 @@ func TestG2configserver_Init(test *testing.T) {
 		IniParams:      iniParams,
 		VerboseLogging: int32(0),
 	}
-	actual, err := g2config.Init(ctx, request)
+	response, err := g2config.Init(ctx, request)
 	testError(test, ctx, g2config, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2configserver_ListDataSources(test *testing.T) {
@@ -465,9 +465,9 @@ func TestG2configserver_Destroy(test *testing.T) {
 	ctx := context.TODO()
 	g2config := getTestObject(ctx, test)
 	request := &pb.DestroyRequest{}
-	actual, err := g2config.Destroy(ctx, request)
+	response, err := g2config.Destroy(ctx, request)
 	testError(test, ctx, g2config, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 // ----------------------------------------------------------------------------

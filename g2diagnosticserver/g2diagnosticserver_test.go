@@ -254,35 +254,38 @@ func TestG2diagnosticserver_CheckDBPerf(test *testing.T) {
 	request := &pb.CheckDBPerfRequest{
 		SecondsToRun: int32(1),
 	}
-	actual, err := g2diagnostic.CheckDBPerf(ctx, request)
+	response, err := g2diagnostic.CheckDBPerf(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_EntityListBySize(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetEntityListBySizeRequest{
+
+	// GetEntityListBySize()
+	requestForGetEntityListBySizeRequest := &pb.GetEntityListBySizeRequest{
 		EntitySize: int32(10),
 	}
-	actual, err := g2diagnostic.GetEntityListBySize(ctx, request)
+	responseFromGetEntityListBySize, err := g2diagnostic.GetEntityListBySize(ctx, requestForGetEntityListBySizeRequest)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, responseFromGetEntityListBySize)
 
-	entityListBySizeHandle := actual.Result
-	request2 := &pb.FetchNextEntityBySizeRequest{
-		EntityListBySizeHandle: entityListBySizeHandle,
+	// FetchNextEntityBySize()
+	requestFetchNextEntityBySize := &pb.FetchNextEntityBySizeRequest{
+		EntityListBySizeHandle: responseFromGetEntityListBySize.GetResult(),
 	}
-	actual2, err2 := g2diagnostic.FetchNextEntityBySize(ctx, request2)
+	responseFromFetchNextEntityBySize, err2 := g2diagnostic.FetchNextEntityBySize(ctx, requestFetchNextEntityBySize)
 	testError(test, ctx, g2diagnostic, err2)
-	printActual(test, actual2)
+	printActual(test, responseFromFetchNextEntityBySize)
 
-	request3 := &pb.CloseEntityListBySizeRequest{
-		EntityListBySizeHandle: entityListBySizeHandle,
+	// CloseEntityListBySize()
+	requestCloseEntityListBySize := &pb.CloseEntityListBySizeRequest{
+		EntityListBySizeHandle: responseFromGetEntityListBySize.GetResult(),
 	}
-	actual3, err3 := g2diagnostic.CloseEntityListBySize(ctx, request3)
+	responseFromCloseEntityListBySize, err3 := g2diagnostic.CloseEntityListBySize(ctx, requestCloseEntityListBySize)
 	testError(test, ctx, g2diagnostic, err3)
-	printActual(test, actual3)
+	printActual(test, responseFromCloseEntityListBySize)
 
 }
 
@@ -292,36 +295,36 @@ func TestG2diagnosticserver_FindEntitiesByFeatureIDs(test *testing.T) {
 	request := &pb.FindEntitiesByFeatureIDsRequest{
 		Features: "{\"ENTITY_ID\":1,\"LIB_FEAT_IDS\":[1,3,4]}",
 	}
-	actual, err := g2diagnostic.FindEntitiesByFeatureIDs(ctx, request)
+	response, err := g2diagnostic.FindEntitiesByFeatureIDs(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetAvailableMemory(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
 	request := &pb.GetAvailableMemoryRequest{}
-	actual, err := g2diagnostic.GetAvailableMemory(ctx, request)
+	response, err := g2diagnostic.GetAvailableMemory(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetDataSourceCounts(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
 	request := &pb.GetDataSourceCountsRequest{}
-	actual, err := g2diagnostic.GetDataSourceCounts(ctx, request)
+	response, err := g2diagnostic.GetDataSourceCounts(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetDBInfo(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
 	request := &pb.GetDBInfoRequest{}
-	actual, err := g2diagnostic.GetDBInfo(ctx, request)
+	response, err := g2diagnostic.GetDBInfo(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetEntityDetails(test *testing.T) {
@@ -331,9 +334,9 @@ func TestG2diagnosticserver_GetEntityDetails(test *testing.T) {
 		EntityID:                int64(1),
 		IncludeInternalFeatures: 1,
 	}
-	actual, err := g2diagnostic.GetEntityDetails(ctx, request)
+	response, err := g2diagnostic.GetEntityDetails(ctx, request)
 	testErrorNoFail(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetEntityResume(test *testing.T) {
@@ -342,9 +345,9 @@ func TestG2diagnosticserver_GetEntityResume(test *testing.T) {
 	request := &pb.GetEntityResumeRequest{
 		EntityID: int64(1),
 	}
-	actual, err := g2diagnostic.GetEntityResume(ctx, request)
+	response, err := g2diagnostic.GetEntityResume(ctx, request)
 	testErrorNoFail(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetEntitySizeBreakdown(test *testing.T) {
@@ -354,9 +357,9 @@ func TestG2diagnosticserver_GetEntitySizeBreakdown(test *testing.T) {
 		MinimumEntitySize:       int32(1),
 		IncludeInternalFeatures: int32(1),
 	}
-	actual, err := g2diagnostic.GetEntitySizeBreakdown(ctx, request)
+	response, err := g2diagnostic.GetEntitySizeBreakdown(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetFeature(test *testing.T) {
@@ -365,9 +368,9 @@ func TestG2diagnosticserver_GetFeature(test *testing.T) {
 	request := &pb.GetFeatureRequest{
 		LibFeatID: int64(1),
 	}
-	actual, err := g2diagnostic.GetFeature(ctx, request)
+	response, err := g2diagnostic.GetFeature(ctx, request)
 	testErrorNoFail(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetGenericFeatures(test *testing.T) {
@@ -377,18 +380,18 @@ func TestG2diagnosticserver_GetGenericFeatures(test *testing.T) {
 		FeatureType:           "PHONE",
 		MaximumEstimatedCount: 10,
 	}
-	actual, err := g2diagnostic.GetGenericFeatures(ctx, request)
+	response, err := g2diagnostic.GetGenericFeatures(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetLogicalCores(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
 	request := &pb.GetLogicalCoresRequest{}
-	actual, err := g2diagnostic.GetLogicalCores(ctx, request)
+	response, err := g2diagnostic.GetLogicalCores(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetMappingStatistics(test *testing.T) {
@@ -397,18 +400,18 @@ func TestG2diagnosticserver_GetMappingStatistics(test *testing.T) {
 	request := &pb.GetMappingStatisticsRequest{
 		IncludeInternalFeatures: 1,
 	}
-	actual, err := g2diagnostic.GetMappingStatistics(ctx, request)
+	response, err := g2diagnostic.GetMappingStatistics(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetPhysicalCores(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
 	request := &pb.GetPhysicalCoresRequest{}
-	actual, err := g2diagnostic.GetPhysicalCores(ctx, request)
+	response, err := g2diagnostic.GetPhysicalCores(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetRelationshipDetails(test *testing.T) {
@@ -418,27 +421,27 @@ func TestG2diagnosticserver_GetRelationshipDetails(test *testing.T) {
 		RelationshipID:          int64(1),
 		IncludeInternalFeatures: 1,
 	}
-	actual, err := g2diagnostic.GetRelationshipDetails(ctx, request)
+	response, err := g2diagnostic.GetRelationshipDetails(ctx, request)
 	testErrorNoFail(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetResolutionStatistics(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
 	request := &pb.GetResolutionStatisticsRequest{}
-	actual, err := g2diagnostic.GetResolutionStatistics(ctx, request)
+	response, err := g2diagnostic.GetResolutionStatistics(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_GetTotalSystemMemory(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
 	request := &pb.GetTotalSystemMemoryRequest{}
-	actual, err := g2diagnostic.GetTotalSystemMemory(ctx, request)
+	response, err := g2diagnostic.GetTotalSystemMemory(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_Init(test *testing.T) {
@@ -453,9 +456,9 @@ func TestG2diagnosticserver_Init(test *testing.T) {
 		IniParams:      iniParams,
 		VerboseLogging: int32(0),
 	}
-	actual, err := g2diagnostic.Init(ctx, request)
+	response, err := g2diagnostic.Init(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_InitWithConfigID(test *testing.T) {
@@ -471,9 +474,9 @@ func TestG2diagnosticserver_InitWithConfigID(test *testing.T) {
 		InitConfigID:   int64(1),
 		VerboseLogging: int32(0),
 	}
-	actual, err := g2diagnostic.InitWithConfigID(ctx, request)
+	response, err := g2diagnostic.InitWithConfigID(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_Reinit(test *testing.T) {
@@ -482,18 +485,18 @@ func TestG2diagnosticserver_Reinit(test *testing.T) {
 	request := &pb.ReinitRequest{
 		InitConfigID: int64(testhelpers.TestConfigDataId),
 	}
-	actual, err := g2diagnostic.Reinit(ctx, request)
+	response, err := g2diagnostic.Reinit(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2diagnosticserver_Destroy(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
 	request := &pb.DestroyRequest{}
-	actual, err := g2diagnostic.Destroy(ctx, request)
+	response, err := g2diagnostic.Destroy(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 // ----------------------------------------------------------------------------
