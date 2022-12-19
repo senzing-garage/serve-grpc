@@ -226,26 +226,6 @@ func setup() error {
 		return logger.Error(5905, err)
 	}
 
-	// Add records.
-
-	aG2engine = &g2engine.G2engineImpl{}
-	err = aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
-	if err != nil {
-		return logger.Error(5916, err)
-	}
-
-	for _, testRecord := range testhelpers.TestRecords {
-		err := aG2engine.AddRecord(ctx, testRecord.DataSource, testRecord.Id, testRecord.Data, testRecord.LoadId)
-		if err != nil {
-			return logger.Error(5917, err)
-		}
-	}
-
-	err = aG2engine.Destroy(ctx)
-	if err != nil {
-		return logger.Error(5918, err)
-	}
-
 	return err
 }
 
@@ -404,21 +384,44 @@ func TestG2configmgrImpl_Destroy(test *testing.T) {
 // ----------------------------------------------------------------------------
 
 func ExampleG2configmgrImpl_AddConfig() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
-	g2configmgr := getG2ConfigmgrServer(ctx)
-	request := &pb.AddConfigRequest{}
-	result, err := g2configmgr.AddConfig(ctx, request)
+	now := time.Now()
+	g2config := getG2ConfigServer(ctx)
+
+	// G2config Create() to create a Senzing configuration.
+	requestToCreate := &pbconfig.CreateRequest{}
+	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
-	// Output:
+
+	// G2config Save() to create a JSON string.
+	requestToSave := &pbconfig.SaveRequest{
+		ConfigHandle: responseFromCreate.GetResult(),
+	}
+	responseFromSave, err := g2config.Save(ctx, requestToSave)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// Test.
+	g2configmgr := getG2ConfigmgrServer(ctx)
+	request := &pb.AddConfigRequest{
+		ConfigStr:      responseFromSave.GetResult(),
+		ConfigComments: fmt.Sprintf("g2configmgrserver_test at %s", now.UTC()),
+	}
+	response, err := g2configmgr.AddConfig(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(response.GetResult() > 0) // Dummy output.
+	// Output: true
 
 }
 
 func ExampleG2configmgrImpl_Destroy() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &pb.DestroyRequest{}
@@ -431,79 +434,145 @@ func ExampleG2configmgrImpl_Destroy() {
 }
 
 func ExampleG2configmgrImpl_GetConfig() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
-	request := &pb.GetConfigRequest{}
-	result, err := g2configmgr.GetConfig(ctx, request)
+	requestToGetDefaultConfigID := &pb.GetDefaultConfigIDRequest{}
+	responseFromGetDefaultConfigID, err := g2configmgr.GetDefaultConfigID(ctx, requestToGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	request := &pb.GetConfigRequest{
+		ConfigID: responseFromGetDefaultConfigID.GetConfigID(),
+	}
+	response, err := g2configmgr.GetConfig(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(truncate(response.GetResult(), defaultTruncation))
 	// Output: {"G2_CONFIG":{"CFG_ATTR":[{"ATTR_ID":1001,"ATTR_CODE":"DATA_SOURCE","ATTR...
 }
 
 func ExampleG2configmgrImpl_GetConfigList() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &pb.GetConfigListRequest{}
-	result, err := g2configmgr.GetConfigList(ctx, request)
+	response, err := g2configmgr.GetConfigList(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	fmt.Println(truncate(response.GetResult(), 28))
 	// Output: {"CONFIGS":[{"CONFIG_ID":...
 }
 
 func ExampleG2configmgrImpl_GetDefaultConfigID() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &pb.GetDefaultConfigIDRequest{}
-	result, err := g2configmgr.GetDefaultConfigID(ctx, request)
+	response, err := g2configmgr.GetDefaultConfigID(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	fmt.Println(response.GetConfigID() > 0) // Dummy output.
 	// Output: true
 }
 
 func ExampleG2configmgrImpl_Init() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
-	g2configmgr := getG2ConfigmgrServer(ctx)
-	request := &pb.InitRequest{}
-	result, err := g2configmgr.Init(ctx, request)
+	g2config := getG2ConfigmgrServer(ctx)
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	request := &pb.InitRequest{
+		ModuleName:     "Test module name",
+		IniParams:      iniParams,
+		VerboseLogging: int32(0),
+	}
+	response, err := g2config.Init(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(response)
 	// Output:
 }
 
 func ExampleG2configmgrImpl_ReplaceDefaultConfigID() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
+	now := time.Now()
+	g2config := getG2ConfigServer(ctx)
 	g2configmgr := getG2ConfigmgrServer(ctx)
-	request := &pb.ReplaceDefaultConfigIDRequest{}
-	result, err := g2configmgr.ReplaceDefaultConfigID(ctx, request)
+
+	// GetDefaultConfigID()
+	requestForGetDefaultConfigID := &pb.GetDefaultConfigIDRequest{}
+	responseFromGetDefaultConfigID, err := g2configmgr.GetDefaultConfigID(ctx, requestForGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+
+	// G2config Create() to create a Senzing configuration.
+	requestToCreate := &pbconfig.CreateRequest{}
+	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// G2config Save() to create a JSON string.
+	requestToSave := &pbconfig.SaveRequest{
+		ConfigHandle: responseFromCreate.GetResult(),
+	}
+	responseFromSave, err := g2config.Save(ctx, requestToSave)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// AddConfig()
+	requestForAddConfig := &pb.AddConfigRequest{
+		ConfigStr:      responseFromSave.GetResult(),
+		ConfigComments: fmt.Sprintf("g2configmgrserver_test at %s", now.UTC()),
+	}
+	responseFromAddConfig, err := g2configmgr.AddConfig(ctx, requestForAddConfig)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// Test.
+	request := &pb.ReplaceDefaultConfigIDRequest{
+		OldConfigID: responseFromGetDefaultConfigID.GetConfigID(),
+		NewConfigID: responseFromAddConfig.GetResult(),
+	}
+	response, err := g2configmgr.ReplaceDefaultConfigID(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(response)
 	// Output:
 }
 
 func ExampleG2configmgrImpl_SetDefaultConfigID() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
-	request := &pb.SetDefaultConfigIDRequest{}
-	result, err := g2configmgr.SetDefaultConfigID(ctx, request)
+
+	// GetDefaultConfigID()
+	requestForGetDefaultConfigID := &pb.GetDefaultConfigIDRequest{}
+	responseFromGetDefaultConfigID, err := g2configmgr.GetDefaultConfigID(ctx, requestForGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+
+	// Test.
+	request := &pb.SetDefaultConfigIDRequest{
+		ConfigID: responseFromGetDefaultConfigID.GetConfigID(),
+	}
+	response, err := g2configmgr.SetDefaultConfigID(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(response)
 	// Output:
 }
