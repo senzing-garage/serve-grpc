@@ -501,220 +501,237 @@ func TestG2diagnosticserver_Destroy(test *testing.T) {
 // ----------------------------------------------------------------------------
 
 func ExampleG2DiagnosticServer_CheckDBPerf() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.CheckDBPerfRequest{
 		SecondsToRun: int32(1),
 	}
-	result, err := g2diagnostic.CheckDBPerf(ctx, request)
+	response, err := g2diagnostic.CheckDBPerf(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(truncate(result.Result, 25))
+	fmt.Println(truncate(response.GetResult(), 25))
 	// Output: {"numRecordsInserted":...
 }
 
 func ExampleG2DiagnosticServer_FindEntitiesByFeatureIDs() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.FindEntitiesByFeatureIDsRequest{
 		Features: "{\"ENTITY_ID\":1,\"LIB_FEAT_IDS\":[1,3,4]}",
 	}
-	result, err := g2diagnostic.FindEntitiesByFeatureIDs(ctx, request)
+	response, err := g2diagnostic.FindEntitiesByFeatureIDs(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result)
+	fmt.Println(response.GetResult())
 	// Output: [{"LIB_FEAT_ID":4,"USAGE_TYPE":"","RES_ENT_ID":2}]
 }
 
 func ExampleG2DiagnosticServer_GetAvailableMemory() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetAvailableMemoryRequest{}
-	result, err := g2diagnostic.GetAvailableMemory(ctx, request)
+	response, err := g2diagnostic.GetAvailableMemory(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result > 0) // Dummy output.
+	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
 }
 
 func ExampleG2DiagnosticServer_GetDataSourceCounts() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetDataSourceCountsRequest{}
-	result, err := g2diagnostic.GetDataSourceCounts(ctx, request)
+	response, err := g2diagnostic.GetDataSourceCounts(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result)
+	fmt.Println(response.GetResult())
 	// Output: [{"DSRC_ID":1001,"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_ID":3,"ETYPE_CODE":"GENERIC","OBS_ENT_COUNT":2,"DSRC_RECORD_COUNT":3}]
 }
 
 func ExampleG2DiagnosticServer_GetDBInfo() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetDBInfoRequest{}
-	result, err := g2diagnostic.GetDBInfo(ctx, request)
+	response, err := g2diagnostic.GetDBInfo(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(truncate(result.Result, 52))
+	fmt.Println(truncate(response.GetResult(), 52))
 	// Output: {"Hybrid Mode":false,"Database Details":[{"Name":...
 }
 
 func ExampleG2DiagnosticServer_GetEntityDetails() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetEntityDetailsRequest{
 		EntityID:                int64(1),
 		IncludeInternalFeatures: 1,
 	}
-	result, err := g2diagnostic.GetEntityDetails(ctx, request)
+	response, err := g2diagnostic.GetEntityDetails(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result)
+	fmt.Println(response.GetResult())
 	// Output: [{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"No","FTYPE_CODE":"NAME","USAGE_TYPE":"","FEAT_DESC":"JOHNSON"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"No","FTYPE_CODE":"DOB","USAGE_TYPE":"","FEAT_DESC":"4/8/1983"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"No","FTYPE_CODE":"GENDER","USAGE_TYPE":"","FEAT_DESC":"F"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"No","FTYPE_CODE":"ADDRESS","USAGE_TYPE":"","FEAT_DESC":"772 Armstrong RD Delhi LA 71232"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"No","FTYPE_CODE":"PHONE","USAGE_TYPE":"","FEAT_DESC":"225-671-0796"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"No","FTYPE_CODE":"SSN","USAGE_TYPE":"","FEAT_DESC":"053-39-3251"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"No","FTYPE_CODE":"LOGIN_ID","USAGE_TYPE":"","FEAT_DESC":"flavorh"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"No","FTYPE_CODE":"ACCT_NUM","USAGE_TYPE":"CC","FEAT_DESC":"5534202208773608"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"JNSN|DOB.MMDD_HASH=0804"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"JNSN|DOB.MMYY_HASH=0483"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"JNSN"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"JNSN|ADDRESS.CITY_STD=TL"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"JNSN|DOB=80804"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"JNSN|POST=71232"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"JNSN|PHONE.PHONE_LAST_5=10796"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"JNSN|SSN=3251"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"ADDR_KEY","USAGE_TYPE":"","FEAT_DESC":"772|ARMSTRNK||TL"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"ADDR_KEY","USAGE_TYPE":"","FEAT_DESC":"772|ARMSTRNK||71232"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"ID_KEY","USAGE_TYPE":"","FEAT_DESC":"ACCT_NUM=5534202208773608"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"ID_KEY","USAGE_TYPE":"","FEAT_DESC":"SSN=053-39-3251"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"PHONE_KEY","USAGE_TYPE":"","FEAT_DESC":"2256710796"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"SEARCH_KEY","USAGE_TYPE":"","FEAT_DESC":"LOGIN_ID:FLAVORH|"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","DERIVED":"Yes","FTYPE_CODE":"SEARCH_KEY","USAGE_TYPE":"","FEAT_DESC":"SSN:3251|80804|"}]
 }
 
 func ExampleG2DiagnosticServer_GetEntityResume() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetEntityResumeRequest{
 		EntityID: int64(1),
 	}
-	result, err := g2diagnostic.GetEntityResume(ctx, request)
+	response, err := g2diagnostic.GetEntityResume(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result)
+	fmt.Println(response.GetResult())
 	// Output: [{"RES_ENT_ID":1,"REL_ENT_ID":0,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9001","ENT_SRC_DESC":"JOHNSON","JSON_DATA":"{\"SOCIAL_HANDLE\":\"flavorh\",\"DATE_OF_BIRTH\":\"4/8/1983\",\"ADDR_STATE\":\"LA\",\"ADDR_POSTAL_CODE\":\"71232\",\"SSN_NUMBER\":\"053-39-3251\",\"GENDER\":\"F\",\"srccode\":\"MDMPER\",\"CC_ACCOUNT_NUMBER\":\"5534202208773608\",\"ADDR_CITY\":\"Delhi\",\"DRIVERS_LICENSE_STATE\":\"DE\",\"PHONE_NUMBER\":\"225-671-0796\",\"NAME_LAST\":\"JOHNSON\",\"entityid\":\"284430058\",\"ADDR_LINE1\":\"772 Armstrong RD\",\"DATA_SOURCE\":\"EXAMPLE_DATA_SOURCE\",\"ENTITY_TYPE\":\"GENERIC\",\"DSRC_ACTION\":\"A\",\"RECORD_ID\":\"9001\"}"},{"RES_ENT_ID":1,"REL_ENT_ID":0,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9002","ENT_SRC_DESC":"JOHNSON","JSON_DATA":"{\"SOCIAL_HANDLE\":\"flavorh\",\"DATE_OF_BIRTH\":\"4/8/1983\",\"ADDR_STATE\":\"LA\",\"ADDR_POSTAL_CODE\":\"71232\",\"SSN_NUMBER\":\"053-39-3251\",\"GENDER\":\"F\",\"srccode\":\"MDMPER\",\"CC_ACCOUNT_NUMBER\":\"5534202208773608\",\"ADDR_CITY\":\"Delhi\",\"DRIVERS_LICENSE_STATE\":\"DE\",\"PHONE_NUMBER\":\"225-671-0796\",\"NAME_LAST\":\"JOHNSON\",\"entityid\":\"284430058\",\"ADDR_LINE1\":\"772 Armstrong RD\",\"DATA_SOURCE\":\"EXAMPLE_DATA_SOURCE\",\"ENTITY_TYPE\":\"GENERIC\",\"DSRC_ACTION\":\"A\",\"RECORD_ID\":\"9002\"}"},{"RES_ENT_ID":1,"REL_ENT_ID":2,"ERRULE_CODE":"MFF","MATCH_KEY":"+ADDRESS+PHONE-GENDER","DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","RECORD_ID":"9003","ENT_SRC_DESC":"Smith","JSON_DATA":"{\"ADDR_STATE\":\"LA\",\"ADDR_POSTAL_CODE\":\"71232\",\"GENDER\":\"M\",\"srccode\":\"MDMPER\",\"ADDR_CITY\":\"Delhi\",\"PHONE_NUMBER\":\"225-671-0796\",\"NAME_LAST\":\"Smith\",\"entityid\":\"284430058\",\"ADDR_LINE1\":\"772 Armstrong RD\",\"DATA_SOURCE\":\"EXAMPLE_DATA_SOURCE\",\"ENTITY_TYPE\":\"GENERIC\",\"DSRC_ACTION\":\"A\",\"RECORD_ID\":\"9003\"}"}]
 }
 
 func ExampleG2DiagnosticServer_GetEntitySizeBreakdown() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetEntitySizeBreakdownRequest{
 		MinimumEntitySize:       int32(1),
 		IncludeInternalFeatures: int32(1),
 	}
-	result, err := g2diagnostic.GetEntitySizeBreakdown(ctx, request)
+	response, err := g2diagnostic.GetEntitySizeBreakdown(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result)
+	fmt.Println(response.GetResult())
 	// Output: [{"ENTITY_SIZE": 1,"ENTITY_COUNT": 2,"NAME": 1.00,"DOB": 0.50,"GENDER": 1.00,"ADDRESS": 1.00,"PHONE": 1.00,"SSN": 0.50,"LOGIN_ID": 0.50,"ACCT_NUM": 0.50,"NAME_KEY": 6.00,"ADDR_KEY": 2.00,"ID_KEY": 1.00,"PHONE_KEY": 1.00,"SEARCH_KEY": 1.00,"MIN_RES_ENT_ID": 1,"MAX_RES_ENT_ID": 2}]
 }
 
 func ExampleG2DiagnosticServer_GetFeature() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetFeatureRequest{
 		LibFeatID: int64(1),
 	}
-	result, err := g2diagnostic.GetFeature(ctx, request)
+	response, err := g2diagnostic.GetFeature(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result)
+	fmt.Println(response.GetResult())
 	// Output: {"LIB_FEAT_ID":1,"FTYPE_CODE":"NAME","ELEMENTS":[{"FELEM_CODE":"TOKENIZED_NM","FELEM_VALUE":"JOHNSON"},{"FELEM_CODE":"CATEGORY","FELEM_VALUE":"PERSON"},{"FELEM_CODE":"CULTURE","FELEM_VALUE":"ANGLO"},{"FELEM_CODE":"SUR_NAME","FELEM_VALUE":"JOHNSON"},{"FELEM_CODE":"FULL_NAME","FELEM_VALUE":"JOHNSON"}]}
 }
 
 func ExampleG2DiagnosticServer_GetGenericFeatures() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetGenericFeaturesRequest{
 		FeatureType:           "PHONE",
 		MaximumEstimatedCount: 10,
 	}
-	result, err := g2diagnostic.GetGenericFeatures(ctx, request)
+	response, err := g2diagnostic.GetGenericFeatures(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result)
+	fmt.Println(response.GetResult())
 	// Output: []
 }
 
 func ExampleG2DiagnosticServer_GetLogicalCores() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetLogicalCoresRequest{}
-	result, err := g2diagnostic.GetLogicalCores(ctx, request)
+	response, err := g2diagnostic.GetLogicalCores(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result > 0) // Dummy output.
+	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
 }
 
 func ExampleG2DiagnosticServer_GetMappingStatistics() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetMappingStatisticsRequest{
 		IncludeInternalFeatures: 1,
 	}
-	result, err := g2diagnostic.GetMappingStatistics(ctx, request)
+	response, err := g2diagnostic.GetMappingStatistics(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result)
+	fmt.Println(response.GetResult())
 	// Output: [{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"NAME","USAGE_TYPE":"","REC_COUNT":2,"REC_PCT":1.0,"UNIQ_COUNT":2,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"JOHNSON","MAX_FEAT_DESC":"Smith"},{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"DOB","USAGE_TYPE":"","REC_COUNT":1,"REC_PCT":0.5,"UNIQ_COUNT":1,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"4/8/1983","MAX_FEAT_DESC":"4/8/1983"},{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"GENDER","USAGE_TYPE":"","REC_COUNT":2,"REC_PCT":1.0,"UNIQ_COUNT":2,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"F","MAX_FEAT_DESC":"M"},{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"ADDRESS","USAGE_TYPE":"","REC_COUNT":2,"REC_PCT":1.0,"UNIQ_COUNT":1,"UNIQ_PCT":0.5,"MIN_FEAT_DESC":"772 Armstrong RD Delhi LA 71232","MAX_FEAT_DESC":"772 Armstrong RD Delhi LA 71232"},{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"PHONE","USAGE_TYPE":"","REC_COUNT":2,"REC_PCT":1.0,"UNIQ_COUNT":1,"UNIQ_PCT":0.5,"MIN_FEAT_DESC":"225-671-0796","MAX_FEAT_DESC":"225-671-0796"},{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"SSN","USAGE_TYPE":"","REC_COUNT":1,"REC_PCT":0.5,"UNIQ_COUNT":1,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"053-39-3251","MAX_FEAT_DESC":"053-39-3251"},{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"LOGIN_ID","USAGE_TYPE":"","REC_COUNT":1,"REC_PCT":0.5,"UNIQ_COUNT":1,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"flavorh","MAX_FEAT_DESC":"flavorh"},{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"ACCT_NUM","USAGE_TYPE":"CC","REC_COUNT":1,"REC_PCT":0.5,"UNIQ_COUNT":1,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"5534202208773608","MAX_FEAT_DESC":"5534202208773608"},{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","REC_COUNT":12,"REC_PCT":6.0,"UNIQ_COUNT":12,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"JNSN","MAX_FEAT_DESC":"SM0|POST=71232"},{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"Yes","FTYPE_CODE":"ADDR_KEY","USAGE_TYPE":"","REC_COUNT":4,"REC_PCT":2.0,"UNIQ_COUNT":2,"UNIQ_PCT":0.5,"MIN_FEAT_DESC":"772|ARMSTRNK||71232","MAX_FEAT_DESC":"772|ARMSTRNK||TL"},{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"Yes","FTYPE_CODE":"ID_KEY","USAGE_TYPE":"","REC_COUNT":2,"REC_PCT":1.0,"UNIQ_COUNT":2,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"ACCT_NUM=5534202208773608","MAX_FEAT_DESC":"SSN=053-39-3251"},{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"Yes","FTYPE_CODE":"PHONE_KEY","USAGE_TYPE":"","REC_COUNT":2,"REC_PCT":1.0,"UNIQ_COUNT":1,"UNIQ_PCT":0.5,"MIN_FEAT_DESC":"2256710796","MAX_FEAT_DESC":"2256710796"},{"DSRC_CODE":"EXAMPLE_DATA_SOURCE","ETYPE_CODE":"GENERIC","DERIVED":"Yes","FTYPE_CODE":"SEARCH_KEY","USAGE_TYPE":"","REC_COUNT":2,"REC_PCT":1.0,"UNIQ_COUNT":2,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"LOGIN_ID:FLAVORH|","MAX_FEAT_DESC":"SSN:3251|80804|"}]
 }
 
 func ExampleG2DiagnosticServer_GetPhysicalCores() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetPhysicalCoresRequest{}
-	result, err := g2diagnostic.GetPhysicalCores(ctx, request)
+	response, err := g2diagnostic.GetPhysicalCores(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result > 0) // Dummy output.
+	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
 }
 
 func ExampleG2DiagnosticServer_GetRelationshipDetails() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetRelationshipDetailsRequest{
 		RelationshipID:          int64(1),
 		IncludeInternalFeatures: 1,
 	}
-	result, err := g2diagnostic.GetRelationshipDetails(ctx, request)
+	response, err := g2diagnostic.GetRelationshipDetails(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result)
+	fmt.Println(response.GetResult())
 	// Output: [{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME","FEAT_DESC":"JOHNSON"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"DOB","FEAT_DESC":"4/8/1983"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"GENDER","FEAT_DESC":"F"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"ADDRESS","FEAT_DESC":"772 Armstrong RD Delhi LA 71232"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"PHONE","FEAT_DESC":"225-671-0796"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"SSN","FEAT_DESC":"053-39-3251"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"LOGIN_ID","FEAT_DESC":"flavorh"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"ACCT_NUM","FEAT_DESC":"5534202208773608"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JNSN|DOB.MMDD_HASH=0804"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JNSN|DOB.MMYY_HASH=0483"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JNSN"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JNSN|ADDRESS.CITY_STD=TL"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JNSN|DOB=80804"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JNSN|POST=71232"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JNSN|PHONE.PHONE_LAST_5=10796"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JNSN|SSN=3251"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"ADDR_KEY","FEAT_DESC":"772|ARMSTRNK||TL"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"ADDR_KEY","FEAT_DESC":"772|ARMSTRNK||71232"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"ID_KEY","FEAT_DESC":"ACCT_NUM=5534202208773608"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"ID_KEY","FEAT_DESC":"SSN=053-39-3251"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"PHONE_KEY","FEAT_DESC":"2256710796"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"SEARCH_KEY","FEAT_DESC":"LOGIN_ID:FLAVORH|"},{"RES_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"SEARCH_KEY","FEAT_DESC":"SSN:3251|80804|"},{"RES_ENT_ID":2,"ERRULE_CODE":"MFF","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME","FEAT_DESC":"Smith"},{"RES_ENT_ID":2,"ERRULE_CODE":"MFF","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"GENDER","FEAT_DESC":"M"},{"RES_ENT_ID":2,"ERRULE_CODE":"MFF","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"ADDRESS","FEAT_DESC":"772 Armstrong RD Delhi LA 71232"},{"RES_ENT_ID":2,"ERRULE_CODE":"MFF","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"PHONE","FEAT_DESC":"225-671-0796"},{"RES_ENT_ID":2,"ERRULE_CODE":"MFF","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"SM0|POST=71232"},{"RES_ENT_ID":2,"ERRULE_CODE":"MFF","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"SM0|ADDRESS.CITY_STD=TL"},{"RES_ENT_ID":2,"ERRULE_CODE":"MFF","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"SM0|PHONE.PHONE_LAST_5=10796"},{"RES_ENT_ID":2,"ERRULE_CODE":"MFF","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"SM0"},{"RES_ENT_ID":2,"ERRULE_CODE":"MFF","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"ADDR_KEY","FEAT_DESC":"772|ARMSTRNK||TL"},{"RES_ENT_ID":2,"ERRULE_CODE":"MFF","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"ADDR_KEY","FEAT_DESC":"772|ARMSTRNK||71232"},{"RES_ENT_ID":2,"ERRULE_CODE":"MFF","MATCH_KEY":"+ADDRESS+PHONE-GENDER","FTYPE_CODE":"PHONE_KEY","FEAT_DESC":"2256710796"}]
 }
 
 func ExampleG2DiagnosticServer_GetResolutionStatistics() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetResolutionStatisticsRequest{}
-	result, err := g2diagnostic.GetResolutionStatistics(ctx, request)
+	response, err := g2diagnostic.GetResolutionStatistics(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result)
+	fmt.Println(response.GetResult())
 	// Output: [{"MATCH_LEVEL":3,"MATCH_KEY":"+ADDRESS+PHONE-GENDER","RAW_MATCH_KEYS":[{"MATCH_KEY":"+ADDRESS+PHONE-GENDER"}],"ERRULE_ID":200,"ERRULE_CODE":"MFF","IS_AMBIGUOUS":"No","RECORD_COUNT":1,"MIN_RES_ENT_ID":1,"MAX_RES_ENT_ID":2,"MIN_RES_REL_ID":1,"MAX_RES_REL_ID":1}]
 }
 
 func ExampleG2DiagnosticServer_GetTotalSystemMemory() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.GetTotalSystemMemoryRequest{}
-	result, err := g2diagnostic.GetTotalSystemMemory(ctx, request)
+	response, err := g2diagnostic.GetTotalSystemMemory(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result.Result > 0) // Dummy output.
+	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
 }
 
 func ExampleG2DiagnosticServer_Init() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := &G2DiagnosticServer{}
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
@@ -726,15 +743,16 @@ func ExampleG2DiagnosticServer_Init() {
 		IniParams:      iniParams,
 		VerboseLogging: int32(0),
 	}
-	result, err := g2diagnostic.Init(ctx, request)
+	response, err := g2diagnostic.Init(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	fmt.Println(response)
 	// Output:
 }
 
 func ExampleG2DiagnosticServer_InitWithConfigID() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := &G2DiagnosticServer{}
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
@@ -747,36 +765,38 @@ func ExampleG2DiagnosticServer_InitWithConfigID() {
 		InitConfigID:   int64(1),
 		VerboseLogging: int32(0),
 	}
-	result, err := g2diagnostic.InitWithConfigID(ctx, request)
+	response, err := g2diagnostic.InitWithConfigID(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	fmt.Println(response)
 	// Output:
 }
 
 func ExampleG2DiagnosticServer_Reinit() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.ReinitRequest{
 		InitConfigID: int64(testhelpers.TestConfigDataId),
 	}
-	result, err := g2diagnostic.Reinit(ctx, request)
+	response, err := g2diagnostic.Reinit(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	fmt.Println(response)
 	// Output:
 }
 
 func ExampleG2DiagnosticServer_Destroy() {
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &pb.DestroyRequest{}
-	result, err := g2diagnostic.Destroy(ctx, request)
+	response, err := g2diagnostic.Destroy(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	fmt.Println(response)
 	// Output:
 }

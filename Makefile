@@ -67,7 +67,7 @@ test:
 #	@go test -v ./.
 	@go test -v ./g2configserver
 #	@go test -v ./g2configserver
-#	@go test -v ./g2diagnosticserver
+	@go test -v ./g2diagnosticserver
 #	@go test -v ./g2diagnosticservercli
 #	@go test -v ./g2engineserver
 #	@go test -v ./g2productserver
