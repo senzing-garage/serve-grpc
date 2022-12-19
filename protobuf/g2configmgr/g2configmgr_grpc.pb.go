@@ -23,13 +23,10 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type G2ConfigMgrClient interface {
 	AddConfig(ctx context.Context, in *AddConfigRequest, opts ...grpc.CallOption) (*AddConfigResponse, error)
-	ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error)
 	Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error)
 	GetConfig(ctx context.Context, in *GetConfigRequest, opts ...grpc.CallOption) (*GetConfigResponse, error)
 	GetConfigList(ctx context.Context, in *GetConfigListRequest, opts ...grpc.CallOption) (*GetConfigListResponse, error)
 	GetDefaultConfigID(ctx context.Context, in *GetDefaultConfigIDRequest, opts ...grpc.CallOption) (*GetDefaultConfigIDResponse, error)
-	GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error)
-	GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error)
 	Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error)
 	ReplaceDefaultConfigID(ctx context.Context, in *ReplaceDefaultConfigIDRequest, opts ...grpc.CallOption) (*ReplaceDefaultConfigIDResponse, error)
 	SetDefaultConfigID(ctx context.Context, in *SetDefaultConfigIDRequest, opts ...grpc.CallOption) (*SetDefaultConfigIDResponse, error)
@@ -46,15 +43,6 @@ func NewG2ConfigMgrClient(cc grpc.ClientConnInterface) G2ConfigMgrClient {
 func (c *g2ConfigMgrClient) AddConfig(ctx context.Context, in *AddConfigRequest, opts ...grpc.CallOption) (*AddConfigResponse, error) {
 	out := new(AddConfigResponse)
 	err := c.cc.Invoke(ctx, "/g2configmgr.G2ConfigMgr/AddConfig", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *g2ConfigMgrClient) ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error) {
-	out := new(ClearLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2configmgr.G2ConfigMgr/ClearLastException", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -97,24 +85,6 @@ func (c *g2ConfigMgrClient) GetDefaultConfigID(ctx context.Context, in *GetDefau
 	return out, nil
 }
 
-func (c *g2ConfigMgrClient) GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error) {
-	out := new(GetLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2configmgr.G2ConfigMgr/GetLastException", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *g2ConfigMgrClient) GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error) {
-	out := new(GetLastExceptionCodeResponse)
-	err := c.cc.Invoke(ctx, "/g2configmgr.G2ConfigMgr/GetLastExceptionCode", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *g2ConfigMgrClient) Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error) {
 	out := new(InitResponse)
 	err := c.cc.Invoke(ctx, "/g2configmgr.G2ConfigMgr/Init", in, out, opts...)
@@ -147,13 +117,10 @@ func (c *g2ConfigMgrClient) SetDefaultConfigID(ctx context.Context, in *SetDefau
 // for forward compatibility
 type G2ConfigMgrServer interface {
 	AddConfig(context.Context, *AddConfigRequest) (*AddConfigResponse, error)
-	ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error)
 	Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error)
 	GetConfig(context.Context, *GetConfigRequest) (*GetConfigResponse, error)
 	GetConfigList(context.Context, *GetConfigListRequest) (*GetConfigListResponse, error)
 	GetDefaultConfigID(context.Context, *GetDefaultConfigIDRequest) (*GetDefaultConfigIDResponse, error)
-	GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error)
-	GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error)
 	Init(context.Context, *InitRequest) (*InitResponse, error)
 	ReplaceDefaultConfigID(context.Context, *ReplaceDefaultConfigIDRequest) (*ReplaceDefaultConfigIDResponse, error)
 	SetDefaultConfigID(context.Context, *SetDefaultConfigIDRequest) (*SetDefaultConfigIDResponse, error)
@@ -167,9 +134,6 @@ type UnimplementedG2ConfigMgrServer struct {
 func (UnimplementedG2ConfigMgrServer) AddConfig(context.Context, *AddConfigRequest) (*AddConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddConfig not implemented")
 }
-func (UnimplementedG2ConfigMgrServer) ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ClearLastException not implemented")
-}
 func (UnimplementedG2ConfigMgrServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Destroy not implemented")
 }
@@ -181,12 +145,6 @@ func (UnimplementedG2ConfigMgrServer) GetConfigList(context.Context, *GetConfigL
 }
 func (UnimplementedG2ConfigMgrServer) GetDefaultConfigID(context.Context, *GetDefaultConfigIDRequest) (*GetDefaultConfigIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDefaultConfigID not implemented")
-}
-func (UnimplementedG2ConfigMgrServer) GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLastException not implemented")
-}
-func (UnimplementedG2ConfigMgrServer) GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLastExceptionCode not implemented")
 }
 func (UnimplementedG2ConfigMgrServer) Init(context.Context, *InitRequest) (*InitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Init not implemented")
@@ -224,24 +182,6 @@ func _G2ConfigMgr_AddConfig_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2ConfigMgrServer).AddConfig(ctx, req.(*AddConfigRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _G2ConfigMgr_ClearLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ClearLastExceptionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(G2ConfigMgrServer).ClearLastException(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/g2configmgr.G2ConfigMgr/ClearLastException",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2ConfigMgrServer).ClearLastException(ctx, req.(*ClearLastExceptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -318,42 +258,6 @@ func _G2ConfigMgr_GetDefaultConfigID_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _G2ConfigMgr_GetLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLastExceptionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(G2ConfigMgrServer).GetLastException(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/g2configmgr.G2ConfigMgr/GetLastException",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2ConfigMgrServer).GetLastException(ctx, req.(*GetLastExceptionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _G2ConfigMgr_GetLastExceptionCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLastExceptionCodeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(G2ConfigMgrServer).GetLastExceptionCode(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/g2configmgr.G2ConfigMgr/GetLastExceptionCode",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2ConfigMgrServer).GetLastExceptionCode(ctx, req.(*GetLastExceptionCodeRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _G2ConfigMgr_Init_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InitRequest)
 	if err := dec(in); err != nil {
@@ -420,10 +324,6 @@ var G2ConfigMgr_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _G2ConfigMgr_AddConfig_Handler,
 		},
 		{
-			MethodName: "ClearLastException",
-			Handler:    _G2ConfigMgr_ClearLastException_Handler,
-		},
-		{
 			MethodName: "Destroy",
 			Handler:    _G2ConfigMgr_Destroy_Handler,
 		},
@@ -438,14 +338,6 @@ var G2ConfigMgr_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetDefaultConfigID",
 			Handler:    _G2ConfigMgr_GetDefaultConfigID_Handler,
-		},
-		{
-			MethodName: "GetLastException",
-			Handler:    _G2ConfigMgr_GetLastException_Handler,
-		},
-		{
-			MethodName: "GetLastExceptionCode",
-			Handler:    _G2ConfigMgr_GetLastExceptionCode_Handler,
 		},
 		{
 			MethodName: "Init",

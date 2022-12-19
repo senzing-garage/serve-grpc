@@ -27,7 +27,6 @@ type G2EngineClient interface {
 	AddRecordWithInfoWithReturnedRecordID(ctx context.Context, in *AddRecordWithInfoWithReturnedRecordIDRequest, opts ...grpc.CallOption) (*AddRecordWithInfoWithReturnedRecordIDResponse, error)
 	AddRecordWithReturnedRecordID(ctx context.Context, in *AddRecordWithReturnedRecordIDRequest, opts ...grpc.CallOption) (*AddRecordWithReturnedRecordIDResponse, error)
 	CheckRecord(ctx context.Context, in *CheckRecordRequest, opts ...grpc.CallOption) (*CheckRecordResponse, error)
-	ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error)
 	CloseExport(ctx context.Context, in *CloseExportRequest, opts ...grpc.CallOption) (*CloseExportResponse, error)
 	CountRedoRecords(ctx context.Context, in *CountRedoRecordsRequest, opts ...grpc.CallOption) (*CountRedoRecordsResponse, error)
 	DeleteRecord(ctx context.Context, in *DeleteRecordRequest, opts ...grpc.CallOption) (*DeleteRecordResponse, error)
@@ -61,8 +60,6 @@ type G2EngineClient interface {
 	GetEntityByEntityID_V2(ctx context.Context, in *GetEntityByEntityID_V2Request, opts ...grpc.CallOption) (*GetEntityByEntityID_V2Response, error)
 	GetEntityByRecordID(ctx context.Context, in *GetEntityByRecordIDRequest, opts ...grpc.CallOption) (*GetEntityByRecordIDResponse, error)
 	GetEntityByRecordID_V2(ctx context.Context, in *GetEntityByRecordID_V2Request, opts ...grpc.CallOption) (*GetEntityByRecordID_V2Response, error)
-	GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error)
-	GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error)
 	GetRecord(ctx context.Context, in *GetRecordRequest, opts ...grpc.CallOption) (*GetRecordResponse, error)
 	GetRecord_V2(ctx context.Context, in *GetRecord_V2Request, opts ...grpc.CallOption) (*GetRecord_V2Response, error)
 	GetRedoRecord(ctx context.Context, in *GetRedoRecordRequest, opts ...grpc.CallOption) (*GetRedoRecordResponse, error)
@@ -148,15 +145,6 @@ func (c *g2EngineClient) AddRecordWithReturnedRecordID(ctx context.Context, in *
 func (c *g2EngineClient) CheckRecord(ctx context.Context, in *CheckRecordRequest, opts ...grpc.CallOption) (*CheckRecordResponse, error) {
 	out := new(CheckRecordResponse)
 	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/CheckRecord", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *g2EngineClient) ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error) {
-	out := new(ClearLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/ClearLastException", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -454,24 +442,6 @@ func (c *g2EngineClient) GetEntityByRecordID(ctx context.Context, in *GetEntityB
 func (c *g2EngineClient) GetEntityByRecordID_V2(ctx context.Context, in *GetEntityByRecordID_V2Request, opts ...grpc.CallOption) (*GetEntityByRecordID_V2Response, error) {
 	out := new(GetEntityByRecordID_V2Response)
 	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetEntityByRecordID_V2", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *g2EngineClient) GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error) {
-	out := new(GetLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetLastException", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *g2EngineClient) GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error) {
-	out := new(GetLastExceptionCodeResponse)
-	err := c.cc.Invoke(ctx, "/g2engine.G2Engine/GetLastExceptionCode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -811,7 +781,6 @@ type G2EngineServer interface {
 	AddRecordWithInfoWithReturnedRecordID(context.Context, *AddRecordWithInfoWithReturnedRecordIDRequest) (*AddRecordWithInfoWithReturnedRecordIDResponse, error)
 	AddRecordWithReturnedRecordID(context.Context, *AddRecordWithReturnedRecordIDRequest) (*AddRecordWithReturnedRecordIDResponse, error)
 	CheckRecord(context.Context, *CheckRecordRequest) (*CheckRecordResponse, error)
-	ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error)
 	CloseExport(context.Context, *CloseExportRequest) (*CloseExportResponse, error)
 	CountRedoRecords(context.Context, *CountRedoRecordsRequest) (*CountRedoRecordsResponse, error)
 	DeleteRecord(context.Context, *DeleteRecordRequest) (*DeleteRecordResponse, error)
@@ -845,8 +814,6 @@ type G2EngineServer interface {
 	GetEntityByEntityID_V2(context.Context, *GetEntityByEntityID_V2Request) (*GetEntityByEntityID_V2Response, error)
 	GetEntityByRecordID(context.Context, *GetEntityByRecordIDRequest) (*GetEntityByRecordIDResponse, error)
 	GetEntityByRecordID_V2(context.Context, *GetEntityByRecordID_V2Request) (*GetEntityByRecordID_V2Response, error)
-	GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error)
-	GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error)
 	GetRecord(context.Context, *GetRecordRequest) (*GetRecordResponse, error)
 	GetRecord_V2(context.Context, *GetRecord_V2Request) (*GetRecord_V2Response, error)
 	GetRedoRecord(context.Context, *GetRedoRecordRequest) (*GetRedoRecordResponse, error)
@@ -904,9 +871,6 @@ func (UnimplementedG2EngineServer) AddRecordWithReturnedRecordID(context.Context
 }
 func (UnimplementedG2EngineServer) CheckRecord(context.Context, *CheckRecordRequest) (*CheckRecordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckRecord not implemented")
-}
-func (UnimplementedG2EngineServer) ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ClearLastException not implemented")
 }
 func (UnimplementedG2EngineServer) CloseExport(context.Context, *CloseExportRequest) (*CloseExportResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CloseExport not implemented")
@@ -1006,12 +970,6 @@ func (UnimplementedG2EngineServer) GetEntityByRecordID(context.Context, *GetEnti
 }
 func (UnimplementedG2EngineServer) GetEntityByRecordID_V2(context.Context, *GetEntityByRecordID_V2Request) (*GetEntityByRecordID_V2Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEntityByRecordID_V2 not implemented")
-}
-func (UnimplementedG2EngineServer) GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLastException not implemented")
-}
-func (UnimplementedG2EngineServer) GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLastExceptionCode not implemented")
 }
 func (UnimplementedG2EngineServer) GetRecord(context.Context, *GetRecordRequest) (*GetRecordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRecord not implemented")
@@ -1220,24 +1178,6 @@ func _G2Engine_CheckRecord_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2EngineServer).CheckRecord(ctx, req.(*CheckRecordRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _G2Engine_ClearLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ClearLastExceptionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(G2EngineServer).ClearLastException(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/g2engine.G2Engine/ClearLastException",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2EngineServer).ClearLastException(ctx, req.(*ClearLastExceptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1832,42 +1772,6 @@ func _G2Engine_GetEntityByRecordID_V2_Handler(srv interface{}, ctx context.Conte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2EngineServer).GetEntityByRecordID_V2(ctx, req.(*GetEntityByRecordID_V2Request))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _G2Engine_GetLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLastExceptionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(G2EngineServer).GetLastException(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/g2engine.G2Engine/GetLastException",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2EngineServer).GetLastException(ctx, req.(*GetLastExceptionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _G2Engine_GetLastExceptionCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLastExceptionCodeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(G2EngineServer).GetLastExceptionCode(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/g2engine.G2Engine/GetLastExceptionCode",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2EngineServer).GetLastExceptionCode(ctx, req.(*GetLastExceptionCodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2548,10 +2452,6 @@ var G2Engine_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _G2Engine_CheckRecord_Handler,
 		},
 		{
-			MethodName: "ClearLastException",
-			Handler:    _G2Engine_ClearLastException_Handler,
-		},
-		{
 			MethodName: "CloseExport",
 			Handler:    _G2Engine_CloseExport_Handler,
 		},
@@ -2682,14 +2582,6 @@ var G2Engine_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetEntityByRecordID_V2",
 			Handler:    _G2Engine_GetEntityByRecordID_V2_Handler,
-		},
-		{
-			MethodName: "GetLastException",
-			Handler:    _G2Engine_GetLastException_Handler,
-		},
-		{
-			MethodName: "GetLastExceptionCode",
-			Handler:    _G2Engine_GetLastExceptionCode_Handler,
 		},
 		{
 			MethodName: "GetRecord",

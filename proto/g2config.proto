@@ -5,13 +5,10 @@ option go_package = "github.com/senzing/go-servegrpc/protobuf/g2config";
 
 service G2Config {
   rpc AddDataSource (AddDataSourceRequest) returns (AddDataSourceResponse) {}
-  rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
   rpc Close (CloseRequest) returns (CloseResponse) {}
   rpc Create (CreateRequest) returns (CreateResponse) {}
   rpc DeleteDataSource (DeleteDataSourceRequest) returns (DeleteDataSourceResponse) {}
   rpc Destroy (DestroyRequest) returns (DestroyResponse) {}
-  rpc GetLastException (GetLastExceptionRequest) returns (GetLastExceptionResponse) {}
-  rpc GetLastExceptionCode (GetLastExceptionCodeRequest) returns (GetLastExceptionCodeResponse) {}
   rpc Init (InitRequest) returns (InitResponse) {}
   rpc ListDataSources (ListDataSourcesRequest) returns (ListDataSourcesResponse) {}
   rpc Load (LoadRequest) returns (LoadResponse) {}
@@ -25,10 +22,6 @@ message AddDataSourceRequest {
 message AddDataSourceResponse {
   string result = 1;
 }
-
-message ClearLastExceptionRequest {}
-
-message ClearLastExceptionResponse {}
 
 message CloseRequest {
   int64 configHandle = 1;
@@ -52,18 +45,6 @@ message DeleteDataSourceResponse {}
 message DestroyRequest {}
 
 message DestroyResponse {}
-
-message GetLastExceptionRequest {}
-
-message GetLastExceptionResponse {
-  string result = 1;
-}
-
-message GetLastExceptionCodeRequest {}
-
-message GetLastExceptionCodeResponse {
-  int32 result = 1;
-}
 
 message InitRequest {
   string moduleName = 1;

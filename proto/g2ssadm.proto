@@ -4,11 +4,8 @@ package g2ssadm;
 option go_package = "github.com/senzing/go-servegrpc/protobuf/g2ssadm";
 
 service G2Ssadm {
-  rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
   rpc CreateSaltInStore (CreateSaltInStoreRequest) returns (CreateSaltInStoreResponse) {}
   rpc Destroy (DestroyRequest) returns (DestroyResponse) {}
-  rpc GetLastException (GetLastExceptionRequest) returns (GetLastExceptionResponse) {}
-  rpc GetLastExceptionCode (GetLastExceptionCodeRequest) returns (GetLastExceptionCodeResponse) {}
   rpc Init (InitRequest) returns (InitResponse) {}
   rpc InitializeNewToken (InitializeNewTokenRequest) returns (InitializeNewTokenResponse) {}
   rpc List (ListRequest) returns (ListResponse) {}
@@ -16,10 +13,6 @@ service G2Ssadm {
   rpc ReinitializeToken (ReinitializeTokenRequest) returns (ReinitializeTokenResponse) {}
   rpc SetupStore (SetupStoreRequest) returns (SetupStoreResponse) {}
 }
-
-message ClearLastExceptionRequest {}
-
-message ClearLastExceptionResponse {}
 
 message CreateSaltInStoreRequest {
   string soPin = 1;
@@ -34,18 +27,6 @@ message CreateSaltInStoreResponse {
 message DestroyRequest {}
 
 message DestroyResponse {}
-
-message GetLastExceptionRequest {}
-
-message GetLastExceptionResponse {
-  string result = 1;
-}
-
-message GetLastExceptionCodeRequest {}
-
-message GetLastExceptionCodeResponse {
-  int32 result = 1;
-}
 
 message InitRequest {
   string moduleName = 1;

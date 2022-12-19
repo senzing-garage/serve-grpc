@@ -9,7 +9,6 @@ service G2Engine {
   rpc AddRecordWithInfoWithReturnedRecordID(AddRecordWithInfoWithReturnedRecordIDRequest) returns (AddRecordWithInfoWithReturnedRecordIDResponse) {}
   rpc AddRecordWithReturnedRecordID(AddRecordWithReturnedRecordIDRequest) returns (AddRecordWithReturnedRecordIDResponse) {}
   rpc CheckRecord(CheckRecordRequest) returns (CheckRecordResponse) {}
-  rpc ClearLastException(ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
   rpc CloseExport(CloseExportRequest) returns (CloseExportResponse) {}
   rpc CountRedoRecords(CountRedoRecordsRequest) returns (CountRedoRecordsResponse) {}
   rpc DeleteRecord(DeleteRecordRequest) returns (DeleteRecordResponse) {}
@@ -43,8 +42,6 @@ service G2Engine {
   rpc GetEntityByEntityID_V2(GetEntityByEntityID_V2Request) returns (GetEntityByEntityID_V2Response) {}
   rpc GetEntityByRecordID(GetEntityByRecordIDRequest) returns (GetEntityByRecordIDResponse) {}
   rpc GetEntityByRecordID_V2(GetEntityByRecordID_V2Request) returns (GetEntityByRecordID_V2Response) {}
-  rpc GetLastException(GetLastExceptionRequest) returns (GetLastExceptionResponse) {}
-  rpc GetLastExceptionCode(GetLastExceptionCodeRequest) returns (GetLastExceptionCodeResponse) {}
   rpc GetRecord(GetRecordRequest) returns (GetRecordResponse) {}
   rpc GetRecord_V2(GetRecord_V2Request) returns (GetRecord_V2Response) {}
   rpc GetRedoRecord(GetRedoRecordRequest) returns (GetRedoRecordResponse) {}
@@ -134,10 +131,6 @@ message CheckRecordRequest {
 message CheckRecordResponse {
   string result = 1;
 }
-
-message ClearLastExceptionRequest {}
-
-message ClearLastExceptionResponse {}
 
 message CloseExportRequest {
   string responseHandle = 1;
@@ -465,18 +458,6 @@ message GetEntityByRecordID_V2Request {
 
 message GetEntityByRecordID_V2Response {
   string result = 1;
-}
-
-message GetLastExceptionRequest {}
-
-message GetLastExceptionResponse {
-  string result = 1;
-}
-
-message GetLastExceptionCodeRequest {}
-
-message GetLastExceptionCodeResponse {
-  int32 result = 1;
 }
 
 message GetRecordRequest {

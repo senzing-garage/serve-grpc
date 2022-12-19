@@ -37,10 +37,6 @@ message CheckDBPerfResponse {
   string result = 1;
 }
 
-message ClearLastExceptionRequest {}
-
-message ClearLastExceptionResponse {}
-
 message CloseEntityListBySizeRequest {
   string entityListBySizeHandle = 1;
 }
@@ -133,18 +129,6 @@ message GetGenericFeaturesRequest {
 }
 
 message GetGenericFeaturesResponse {
-  string result = 1;
-}
-
-message GetLastExceptionRequest {}
-
-message GetLastExceptionResponse {
-  string result = 1;
-}
-
-message GetLastExceptionCodeRequest {}
-
-message GetLastExceptionCodeResponse {
   string result = 1;
 }
 

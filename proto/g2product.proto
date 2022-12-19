@@ -4,10 +4,7 @@ package g2product;
 option go_package = "github.com/senzing/go-servegrpc/protobuf/g2product";
 
 service G2Product {
-  rpc ClearLastException (ClearLastExceptionRequest) returns (ClearLastExceptionResponse) {}
   rpc Destroy (DestroyRequest) returns (DestroyResponse) {}
-  rpc GetLastException (GetLastExceptionRequest) returns (GetLastExceptionResponse) {}
-  rpc GetLastExceptionCode (GetLastExceptionCodeRequest) returns (GetLastExceptionCodeResponse) {}
   rpc Init (InitRequest) returns (InitResponse) {}
   rpc License (LicenseRequest) returns (LicenseResponse) {}
   rpc ValidateLicenseFile (ValidateLicenseFileRequest) returns (ValidateLicenseFileResponse) {}
@@ -15,25 +12,9 @@ service G2Product {
   rpc Version (VersionRequest) returns (VersionResponse) {}
 }
 
-message ClearLastExceptionRequest {}
-
-message ClearLastExceptionResponse {}
-
 message DestroyRequest {}
 
 message DestroyResponse {}
-
-message GetLastExceptionRequest {}
-
-message GetLastExceptionResponse {
-  string result = 1;
-}
-
-message GetLastExceptionCodeRequest {}
-
-message GetLastExceptionCodeResponse {
-  int32 configID = 1;
-}
 
 message InitRequest {
   string moduleName = 1;

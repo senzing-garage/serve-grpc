@@ -22,11 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type G2SsadmClient interface {
-	ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error)
 	CreateSaltInStore(ctx context.Context, in *CreateSaltInStoreRequest, opts ...grpc.CallOption) (*CreateSaltInStoreResponse, error)
 	Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error)
-	GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error)
-	GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error)
 	Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error)
 	InitializeNewToken(ctx context.Context, in *InitializeNewTokenRequest, opts ...grpc.CallOption) (*InitializeNewTokenResponse, error)
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
@@ -43,15 +40,6 @@ func NewG2SsadmClient(cc grpc.ClientConnInterface) G2SsadmClient {
 	return &g2SsadmClient{cc}
 }
 
-func (c *g2SsadmClient) ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error) {
-	out := new(ClearLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/ClearLastException", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *g2SsadmClient) CreateSaltInStore(ctx context.Context, in *CreateSaltInStoreRequest, opts ...grpc.CallOption) (*CreateSaltInStoreResponse, error) {
 	out := new(CreateSaltInStoreResponse)
 	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/CreateSaltInStore", in, out, opts...)
@@ -64,24 +52,6 @@ func (c *g2SsadmClient) CreateSaltInStore(ctx context.Context, in *CreateSaltInS
 func (c *g2SsadmClient) Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error) {
 	out := new(DestroyResponse)
 	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/Destroy", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *g2SsadmClient) GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error) {
-	out := new(GetLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/GetLastException", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *g2SsadmClient) GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error) {
-	out := new(GetLastExceptionCodeResponse)
-	err := c.cc.Invoke(ctx, "/g2ssadm.G2Ssadm/GetLastExceptionCode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -146,11 +116,8 @@ func (c *g2SsadmClient) SetupStore(ctx context.Context, in *SetupStoreRequest, o
 // All implementations must embed UnimplementedG2SsadmServer
 // for forward compatibility
 type G2SsadmServer interface {
-	ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error)
 	CreateSaltInStore(context.Context, *CreateSaltInStoreRequest) (*CreateSaltInStoreResponse, error)
 	Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error)
-	GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error)
-	GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error)
 	Init(context.Context, *InitRequest) (*InitResponse, error)
 	InitializeNewToken(context.Context, *InitializeNewTokenRequest) (*InitializeNewTokenResponse, error)
 	List(context.Context, *ListRequest) (*ListResponse, error)
@@ -164,20 +131,11 @@ type G2SsadmServer interface {
 type UnimplementedG2SsadmServer struct {
 }
 
-func (UnimplementedG2SsadmServer) ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ClearLastException not implemented")
-}
 func (UnimplementedG2SsadmServer) CreateSaltInStore(context.Context, *CreateSaltInStoreRequest) (*CreateSaltInStoreResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSaltInStore not implemented")
 }
 func (UnimplementedG2SsadmServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Destroy not implemented")
-}
-func (UnimplementedG2SsadmServer) GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLastException not implemented")
-}
-func (UnimplementedG2SsadmServer) GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLastExceptionCode not implemented")
 }
 func (UnimplementedG2SsadmServer) Init(context.Context, *InitRequest) (*InitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Init not implemented")
@@ -208,24 +166,6 @@ type UnsafeG2SsadmServer interface {
 
 func RegisterG2SsadmServer(s grpc.ServiceRegistrar, srv G2SsadmServer) {
 	s.RegisterService(&G2Ssadm_ServiceDesc, srv)
-}
-
-func _G2Ssadm_ClearLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ClearLastExceptionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(G2SsadmServer).ClearLastException(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/g2ssadm.G2Ssadm/ClearLastException",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2SsadmServer).ClearLastException(ctx, req.(*ClearLastExceptionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _G2Ssadm_CreateSaltInStore_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -260,42 +200,6 @@ func _G2Ssadm_Destroy_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2SsadmServer).Destroy(ctx, req.(*DestroyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _G2Ssadm_GetLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLastExceptionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(G2SsadmServer).GetLastException(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/g2ssadm.G2Ssadm/GetLastException",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2SsadmServer).GetLastException(ctx, req.(*GetLastExceptionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _G2Ssadm_GetLastExceptionCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLastExceptionCodeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(G2SsadmServer).GetLastExceptionCode(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/g2ssadm.G2Ssadm/GetLastExceptionCode",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2SsadmServer).GetLastExceptionCode(ctx, req.(*GetLastExceptionCodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -416,24 +320,12 @@ var G2Ssadm_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*G2SsadmServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ClearLastException",
-			Handler:    _G2Ssadm_ClearLastException_Handler,
-		},
-		{
 			MethodName: "CreateSaltInStore",
 			Handler:    _G2Ssadm_CreateSaltInStore_Handler,
 		},
 		{
 			MethodName: "Destroy",
 			Handler:    _G2Ssadm_Destroy_Handler,
-		},
-		{
-			MethodName: "GetLastException",
-			Handler:    _G2Ssadm_GetLastException_Handler,
-		},
-		{
-			MethodName: "GetLastExceptionCode",
-			Handler:    _G2Ssadm_GetLastExceptionCode_Handler,
 		},
 		{
 			MethodName: "Init",

@@ -22,11 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type G2HasherClient interface {
-	ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error)
 	Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error)
 	ExportTokenLibrary(ctx context.Context, in *ExportTokenLibraryRequest, opts ...grpc.CallOption) (*ExportTokenLibraryResponse, error)
-	GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error)
-	GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error)
 	Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*InitResponse, error)
 	InitWithConfig(ctx context.Context, in *InitWithConfigRequest, opts ...grpc.CallOption) (*InitWithConfigResponse, error)
 	Process(ctx context.Context, in *ProcessRequest, opts ...grpc.CallOption) (*ProcessResponse, error)
@@ -38,15 +35,6 @@ type g2HasherClient struct {
 
 func NewG2HasherClient(cc grpc.ClientConnInterface) G2HasherClient {
 	return &g2HasherClient{cc}
-}
-
-func (c *g2HasherClient) ClearLastException(ctx context.Context, in *ClearLastExceptionRequest, opts ...grpc.CallOption) (*ClearLastExceptionResponse, error) {
-	out := new(ClearLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2hasher.G2Hasher/ClearLastException", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *g2HasherClient) Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error) {
@@ -61,24 +49,6 @@ func (c *g2HasherClient) Destroy(ctx context.Context, in *DestroyRequest, opts .
 func (c *g2HasherClient) ExportTokenLibrary(ctx context.Context, in *ExportTokenLibraryRequest, opts ...grpc.CallOption) (*ExportTokenLibraryResponse, error) {
 	out := new(ExportTokenLibraryResponse)
 	err := c.cc.Invoke(ctx, "/g2hasher.G2Hasher/ExportTokenLibrary", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *g2HasherClient) GetLastException(ctx context.Context, in *GetLastExceptionRequest, opts ...grpc.CallOption) (*GetLastExceptionResponse, error) {
-	out := new(GetLastExceptionResponse)
-	err := c.cc.Invoke(ctx, "/g2hasher.G2Hasher/GetLastException", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *g2HasherClient) GetLastExceptionCode(ctx context.Context, in *GetLastExceptionCodeRequest, opts ...grpc.CallOption) (*GetLastExceptionCodeResponse, error) {
-	out := new(GetLastExceptionCodeResponse)
-	err := c.cc.Invoke(ctx, "/g2hasher.G2Hasher/GetLastExceptionCode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -116,11 +86,8 @@ func (c *g2HasherClient) Process(ctx context.Context, in *ProcessRequest, opts .
 // All implementations must embed UnimplementedG2HasherServer
 // for forward compatibility
 type G2HasherServer interface {
-	ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error)
 	Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error)
 	ExportTokenLibrary(context.Context, *ExportTokenLibraryRequest) (*ExportTokenLibraryResponse, error)
-	GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error)
-	GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error)
 	Init(context.Context, *InitRequest) (*InitResponse, error)
 	InitWithConfig(context.Context, *InitWithConfigRequest) (*InitWithConfigResponse, error)
 	Process(context.Context, *ProcessRequest) (*ProcessResponse, error)
@@ -131,20 +98,11 @@ type G2HasherServer interface {
 type UnimplementedG2HasherServer struct {
 }
 
-func (UnimplementedG2HasherServer) ClearLastException(context.Context, *ClearLastExceptionRequest) (*ClearLastExceptionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ClearLastException not implemented")
-}
 func (UnimplementedG2HasherServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Destroy not implemented")
 }
 func (UnimplementedG2HasherServer) ExportTokenLibrary(context.Context, *ExportTokenLibraryRequest) (*ExportTokenLibraryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExportTokenLibrary not implemented")
-}
-func (UnimplementedG2HasherServer) GetLastException(context.Context, *GetLastExceptionRequest) (*GetLastExceptionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLastException not implemented")
-}
-func (UnimplementedG2HasherServer) GetLastExceptionCode(context.Context, *GetLastExceptionCodeRequest) (*GetLastExceptionCodeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLastExceptionCode not implemented")
 }
 func (UnimplementedG2HasherServer) Init(context.Context, *InitRequest) (*InitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Init not implemented")
@@ -166,24 +124,6 @@ type UnsafeG2HasherServer interface {
 
 func RegisterG2HasherServer(s grpc.ServiceRegistrar, srv G2HasherServer) {
 	s.RegisterService(&G2Hasher_ServiceDesc, srv)
-}
-
-func _G2Hasher_ClearLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ClearLastExceptionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(G2HasherServer).ClearLastException(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/g2hasher.G2Hasher/ClearLastException",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2HasherServer).ClearLastException(ctx, req.(*ClearLastExceptionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _G2Hasher_Destroy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -218,42 +158,6 @@ func _G2Hasher_ExportTokenLibrary_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(G2HasherServer).ExportTokenLibrary(ctx, req.(*ExportTokenLibraryRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _G2Hasher_GetLastException_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLastExceptionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(G2HasherServer).GetLastException(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/g2hasher.G2Hasher/GetLastException",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2HasherServer).GetLastException(ctx, req.(*GetLastExceptionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _G2Hasher_GetLastExceptionCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLastExceptionCodeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(G2HasherServer).GetLastExceptionCode(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/g2hasher.G2Hasher/GetLastExceptionCode",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(G2HasherServer).GetLastExceptionCode(ctx, req.(*GetLastExceptionCodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -320,24 +224,12 @@ var G2Hasher_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*G2HasherServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ClearLastException",
-			Handler:    _G2Hasher_ClearLastException_Handler,
-		},
-		{
 			MethodName: "Destroy",
 			Handler:    _G2Hasher_Destroy_Handler,
 		},
 		{
 			MethodName: "ExportTokenLibrary",
 			Handler:    _G2Hasher_ExportTokenLibrary_Handler,
-		},
-		{
-			MethodName: "GetLastException",
-			Handler:    _G2Hasher_GetLastException_Handler,
-		},
-		{
-			MethodName: "GetLastExceptionCode",
-			Handler:    _G2Hasher_GetLastExceptionCode_Handler,
 		},
 		{
 			MethodName: "Init",
