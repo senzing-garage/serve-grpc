@@ -20,6 +20,7 @@ import (
 
 const (
 	defaultTruncation = 76
+	printResults      = false
 )
 
 var (
@@ -73,7 +74,7 @@ func truncate(aString string, length int) string {
 }
 
 func printResult(test *testing.T, title string, result interface{}) {
-	if 1 == 0 {
+	if printResults {
 		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
 	}
 }
@@ -250,37 +251,107 @@ func TestG2configserver_BuildSimpleSystemConfigurationJson(test *testing.T) {
 func TestG2configserver_AddDataSource(test *testing.T) {
 	ctx := context.TODO()
 	g2config := getTestObject(ctx, test)
-	request := &pb.AddDataSourceRequest{}
-	actual, err := g2config.AddDataSource(ctx, request)
+
+	requestToCreate := &pb.CreateRequest{}
+	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	testError(test, ctx, g2config, err)
-	printActual(test, actual)
+	printActual(test, responseFromCreate.GetResult())
+
+	requestToAddDataSource := &pb.AddDataSourceRequest{
+		ConfigHandle: responseFromCreate.GetResult(),
+		InputJson:    `{"DSRC_CODE": "GO_TEST"}`,
+	}
+	responseFromAddDataSource, err := g2config.AddDataSource(ctx, requestToAddDataSource)
+	testError(test, ctx, g2config, err)
+	printActual(test, responseFromAddDataSource.GetResult())
+
+	requestToClose := &pb.CloseRequest{
+		ConfigHandle: responseFromCreate.GetResult(),
+	}
+	_, err = g2config.Close(ctx, requestToClose)
+	testError(test, ctx, g2config, err)
 }
 
 func TestG2configserver_Close(test *testing.T) {
 	ctx := context.TODO()
 	g2config := getTestObject(ctx, test)
-	request := &pb.CloseRequest{}
-	actual, err := g2config.Close(ctx, request)
+
+	requestToCreate := &pb.CreateRequest{}
+	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	testError(test, ctx, g2config, err)
-	printActual(test, actual)
+	printActual(test, responseFromCreate.GetResult())
+
+	requestToClose := &pb.CloseRequest{
+		ConfigHandle: responseFromCreate.GetResult(),
+	}
+	_, err = g2config.Close(ctx, requestToClose)
+	testError(test, ctx, g2config, err)
 }
 
 func TestG2configserver_Create(test *testing.T) {
 	ctx := context.TODO()
 	g2config := getTestObject(ctx, test)
-	request := &pb.CreateRequest{}
-	actual, err := g2config.Create(ctx, request)
+
+	requestToCreate := &pb.CreateRequest{}
+	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	testError(test, ctx, g2config, err)
-	printActual(test, actual)
+	printActual(test, responseFromCreate.GetResult())
 }
 
 func TestG2configserver_DeleteDataSource(test *testing.T) {
 	ctx := context.TODO()
 	g2config := getTestObject(ctx, test)
-	request := &pb.DeleteDataSourceRequest{}
-	actual, err := g2config.DeleteDataSource(ctx, request)
+
+	// Create.
+	requestToCreate := &pb.CreateRequest{}
+	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	testError(test, ctx, g2config, err)
-	printActual(test, actual)
+	printActual(test, responseFromCreate.GetResult())
+
+	// List #1.
+	requestToListDataSources := &pb.ListDataSourcesRequest{
+		ConfigHandle: responseFromCreate.GetResult(),
+	}
+	responseFromListDataSources, err := g2config.ListDataSources(ctx, requestToListDataSources)
+	testError(test, ctx, g2config, err)
+	listBefore := responseFromListDataSources.GetResult()
+	printActual(test, listBefore)
+
+	// Add data source.
+	requestToAddDataSource := &pb.AddDataSourceRequest{
+		ConfigHandle: responseFromCreate.GetResult(),
+		InputJson:    `{"DSRC_CODE": "GO_TEST"}`,
+	}
+	responseFromAddDataSource, err := g2config.AddDataSource(ctx, requestToAddDataSource)
+	testError(test, ctx, g2config, err)
+	printActual(test, responseFromAddDataSource.GetResult())
+
+	// List #2.
+	responseFromListDataSources2, err := g2config.ListDataSources(ctx, requestToListDataSources)
+	testError(test, ctx, g2config, err)
+	printActual(test, responseFromListDataSources2.GetResult())
+
+	// Delete.
+	requestToDeleteDataSource := &pb.DeleteDataSourceRequest{
+		ConfigHandle: responseFromCreate.GetResult(),
+		InputJson:    `{"DSRC_CODE": "GO_TEST"}`,
+	}
+	_, err = g2config.DeleteDataSource(ctx, requestToDeleteDataSource)
+	testError(test, ctx, g2config, err)
+
+	// List #3.
+	responseFromListDataSources3, err := g2config.ListDataSources(ctx, requestToListDataSources)
+	testError(test, ctx, g2config, err)
+	printActual(test, responseFromListDataSources3.GetResult())
+	assert.Equal(test, listBefore, responseFromListDataSources3.GetResult())
+
+	// Close.
+	requestToClose := &pb.CloseRequest{
+		ConfigHandle: responseFromCreate.GetResult(),
+	}
+	_, err = g2config.Close(ctx, requestToClose)
+	testError(test, ctx, g2config, err)
+
 }
 
 func TestG2configserver_Init(test *testing.T) {
