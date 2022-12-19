@@ -405,7 +405,7 @@ func ExampleG2configmgrImpl_AddConfig() {
 		fmt.Println(err)
 	}
 
-	// Test.
+	// Example
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &pb.AddConfigRequest{
 		ConfigStr:      responseFromSave.GetResult(),
@@ -437,11 +437,15 @@ func ExampleG2configmgrImpl_GetConfig() {
 	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
+
+	// GetDefaultConfigID() to get a configuration ID.
 	requestToGetDefaultConfigID := &pb.GetDefaultConfigIDRequest{}
 	responseFromGetDefaultConfigID, err := g2configmgr.GetDefaultConfigID(ctx, requestToGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	// Example
 	request := &pb.GetConfigRequest{
 		ConfigID: responseFromGetDefaultConfigID.GetConfigID(),
 	}
@@ -507,7 +511,7 @@ func ExampleG2configmgrImpl_ReplaceDefaultConfigID() {
 	g2config := getG2ConfigServer(ctx)
 	g2configmgr := getG2ConfigmgrServer(ctx)
 
-	// GetDefaultConfigID()
+	// GetDefaultConfigID() to get the current configuration ID.
 	requestForGetDefaultConfigID := &pb.GetDefaultConfigIDRequest{}
 	responseFromGetDefaultConfigID, err := g2configmgr.GetDefaultConfigID(ctx, requestForGetDefaultConfigID)
 	if err != nil {
@@ -530,7 +534,7 @@ func ExampleG2configmgrImpl_ReplaceDefaultConfigID() {
 		fmt.Println(err)
 	}
 
-	// AddConfig()
+	// AddConfig() to modify the configuration.
 	requestForAddConfig := &pb.AddConfigRequest{
 		ConfigStr:      responseFromSave.GetResult(),
 		ConfigComments: fmt.Sprintf("g2configmgrserver_test at %s", now.UTC()),
@@ -540,7 +544,7 @@ func ExampleG2configmgrImpl_ReplaceDefaultConfigID() {
 		fmt.Println(err)
 	}
 
-	// Test.
+	// Example
 	request := &pb.ReplaceDefaultConfigIDRequest{
 		OldConfigID: responseFromGetDefaultConfigID.GetConfigID(),
 		NewConfigID: responseFromAddConfig.GetResult(),
@@ -558,14 +562,14 @@ func ExampleG2configmgrImpl_SetDefaultConfigID() {
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 
-	// GetDefaultConfigID()
+	// GetDefaultConfigID() to get an actual configuration ID.
 	requestForGetDefaultConfigID := &pb.GetDefaultConfigIDRequest{}
 	responseFromGetDefaultConfigID, err := g2configmgr.GetDefaultConfigID(ctx, requestForGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	// Test.
+	// Example - Using current default ID as an example.
 	request := &pb.SetDefaultConfigIDRequest{
 		ConfigID: responseFromGetDefaultConfigID.GetConfigID(),
 	}
