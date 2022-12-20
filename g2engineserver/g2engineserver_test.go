@@ -334,33 +334,6 @@ func TestG2engineServer_CheckRecord(test *testing.T) {
 	printResponse(test, response)
 }
 
-func TestG2engineServer_DeleteRecord(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &pb.DeleteRecordRequest{
-		DataSourceCode: "TEST",
-		RecordID:       "333",
-		LoadID:         "TEST",
-	}
-	response, err := g2engine.DeleteRecord(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_DeleteRecordWithInfo(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &pb.DeleteRecordWithInfoRequest{
-		DataSourceCode: "TEST",
-		RecordID:       "333",
-		LoadID:         "TEST",
-		Flags:          0,
-	}
-	response, err := g2engine.DeleteRecordWithInfo(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
 func TestG2engineServer_ExportJSONEntityReport(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
@@ -1160,6 +1133,33 @@ func TestG2engineServer_WhyRecords_V2(test *testing.T) {
 		Flags:           0,
 	}
 	response, err := g2engine.WhyRecords_V2(ctx, request)
+	testError(test, ctx, g2engine, err)
+	printResponse(test, response)
+}
+
+func TestG2engineServer_DeleteRecord(test *testing.T) {
+	ctx := context.TODO()
+	g2engine := getTestObject(ctx, test)
+	request := &pb.DeleteRecordRequest{
+		DataSourceCode: "TEST",
+		RecordID:       "333",
+		LoadID:         "TEST",
+	}
+	response, err := g2engine.DeleteRecord(ctx, request)
+	testError(test, ctx, g2engine, err)
+	printResponse(test, response)
+}
+
+func TestG2engineServer_DeleteRecordWithInfo(test *testing.T) {
+	ctx := context.TODO()
+	g2engine := getTestObject(ctx, test)
+	request := &pb.DeleteRecordWithInfoRequest{
+		DataSourceCode: "TEST",
+		RecordID:       "333",
+		LoadID:         "TEST",
+		Flags:          0,
+	}
+	response, err := g2engine.DeleteRecordWithInfo(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
 }
