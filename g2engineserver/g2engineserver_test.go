@@ -334,6 +334,33 @@ func TestG2engineServer_CheckRecord(test *testing.T) {
 	printResponse(test, response)
 }
 
+func TestG2engineServer_DeleteRecord(test *testing.T) {
+	ctx := context.TODO()
+	g2engine := getTestObject(ctx, test)
+	request := &pb.DeleteRecordRequest{
+		DataSourceCode: "TEST",
+		RecordID:       "333",
+		LoadID:         "TEST",
+	}
+	response, err := g2engine.DeleteRecord(ctx, request)
+	testError(test, ctx, g2engine, err)
+	printResponse(test, response)
+}
+
+func TestG2engineServer_DeleteRecordWithInfo(test *testing.T) {
+	ctx := context.TODO()
+	g2engine := getTestObject(ctx, test)
+	request := &pb.DeleteRecordWithInfoRequest{
+		DataSourceCode: "TEST",
+		RecordID:       "333",
+		LoadID:         "TEST",
+		Flags:          0,
+	}
+	response, err := g2engine.DeleteRecordWithInfo(ctx, request)
+	testError(test, ctx, g2engine, err)
+	printResponse(test, response)
+}
+
 func TestG2engineServer_ExportJSONEntityReport(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
@@ -1137,33 +1164,6 @@ func TestG2engineServer_WhyRecords_V2(test *testing.T) {
 	printResponse(test, response)
 }
 
-func TestG2engineServer_DeleteRecord(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &pb.DeleteRecordRequest{
-		DataSourceCode: "TEST",
-		RecordID:       "111",
-		LoadID:         "TEST",
-	}
-	response, err := g2engine.DeleteRecord(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_DeleteRecordWithInfo(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &pb.DeleteRecordWithInfoRequest{
-		DataSourceCode: "TEST",
-		RecordID:       "111",
-		LoadID:         "TEST",
-		Flags:          0,
-	}
-	response, err := g2engine.DeleteRecordWithInfo(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
 func TestG2engineServer_Destroy(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
@@ -1216,7 +1216,7 @@ func ExampleG2EngineServer_AddRecord_secondRecord() {
 	request := &pb.AddRecordRequest{
 		DataSourceCode: "TEST",
 		RecordID:       "222",
-		JsonData:       `{"SOCIAL_HANDLE": "flavorh", "DATE_OF_BIRTH": "4/8/1983", "ADDR_STATE": "LA", "ADDR_POSTAL_CODE": "71232", "SSN_NUMBER": "053-39-3251", "ENTITY_TYPE": "TEST", "GENDER": "F", "srccode": "MDMPER", "CC_ACCOUNT_NUMBER": "5534202208773608", "RECORD_ID": "222", "DSRC_ACTION": "A", "ADDR_CITY": "Delhi", "DRIVERS_LICENSE_STATE": "DE", "PHONE_NUMBER": "225-671-0796", "NAME_LAST": "JOHNSON", "entityid": "284430058", "ADDR_LINE1": "772 Armstrong RD"}`,
+		JsonData:       `{"SOCIAL_HANDLE": "flavorh2", "DATE_OF_BIRTH": "6/9/1983", "ADDR_STATE": "WI", "ADDR_POSTAL_CODE": "53543", "SSN_NUMBER": "153-33-5185", "ENTITY_TYPE": "TEST", "GENDER": "F", "srccode": "MDMPER", "CC_ACCOUNT_NUMBER": "5534202208773608", "RECORD_ID": "222", "DSRC_ACTION": "A", "ADDR_CITY": "Delhi", "DRIVERS_LICENSE_STATE": "DE", "PHONE_NUMBER": "225-671-0796", "NAME_LAST": "OCEANGUY", "entityid": "284430058", "ADDR_LINE1": "772 Armstrong RD"}`,
 		LoadID:         "TEST",
 	}
 	response, err := g2engine.AddRecord(ctx, request)
@@ -1253,6 +1253,7 @@ func ExampleG2EngineServer_AddRecordWithInfoWithReturnedRecordID() {
 		DataSourceCode: "TEST",
 		JsonData:       `{"SOCIAL_HANDLE": "flavorh", "DATE_OF_BIRTH": "4/8/1983", "ADDR_STATE": "LA", "ADDR_POSTAL_CODE": "71232", "SSN_NUMBER": "053-39-3251", "ENTITY_TYPE": "TEST", "GENDER": "F", "srccode": "MDMPER", "CC_ACCOUNT_NUMBER": "5534202208773608", "DSRC_ACTION": "A", "ADDR_CITY": "Delhi", "DRIVERS_LICENSE_STATE": "DE", "PHONE_NUMBER": "225-671-0796", "NAME_LAST": "JOHNSON", "entityid": "284430058", "ADDR_LINE1": "772 Armstrong RD"}`,
 		LoadID:         "TEST",
+		Flags:          0,
 	}
 	response, err := g2engine.AddRecordWithInfoWithReturnedRecordID(ctx, request)
 	if err != nil {
@@ -1299,8 +1300,16 @@ func ExampleG2EngineServer_CloseExport() {
 	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2engine/g2engine_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
+
+	// Create a handle for the example.
+	requestToExportJSONEntityReport := &pb.ExportJSONEntityReportRequest{
+		Flags: 0,
+	}
+	responseFromExportJSONEntityReport, err := g2engine.ExportJSONEntityReport(ctx, requestToExportJSONEntityReport)
+
+	// Example
 	request := &pb.CloseExportRequest{
-		ResponseHandle: 0,
+		ResponseHandle: responseFromExportJSONEntityReport.GetResult(),
 	}
 	response, err := g2engine.CloseExport(ctx, request)
 	if err != nil {
@@ -1321,6 +1330,41 @@ func ExampleG2EngineServer_CountRedoRecords() {
 	}
 	fmt.Println(response.GetResult())
 	// Output: 0
+}
+
+func ExampleG2EngineServer_DeleteRecord() {
+	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2engine/g2engine_test.go
+	ctx := context.TODO()
+	g2engine := getG2EngineServer(ctx)
+	request := &pb.DeleteRecordRequest{
+		DataSourceCode: "TEST",
+		RecordID:       "333",
+		LoadID:         "TEST",
+	}
+	response, err := g2engine.DeleteRecord(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(response)
+	// Output:
+}
+
+func ExampleG2EngineServer_DeleteRecordWithInfo() {
+	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2engine/g2engine_test.go
+	ctx := context.TODO()
+	g2engine := getG2EngineServer(ctx)
+	request := &pb.DeleteRecordWithInfoRequest{
+		DataSourceCode: "TEST",
+		RecordID:       "333",
+		LoadID:         "TEST",
+		Flags:          0,
+	}
+	response, err := g2engine.DeleteRecordWithInfo(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(response.GetResult())
+	// Output: {"DATA_SOURCE":"TEST","RECORD_ID":"333","AFFECTED_ENTITIES":[],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
 
 func ExampleG2EngineServer_ExportCSVEntityReport() {
@@ -1384,7 +1428,16 @@ func ExampleG2EngineServer_FetchNext() {
 	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2engine/g2engine_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FetchNextRequest{}
+
+	// Create a handle for the example.
+	requestToExportJSONEntityReport := &pb.ExportJSONEntityReportRequest{
+		Flags: 0,
+	}
+	responseFromExportJSONEntityReport, err := g2engine.ExportJSONEntityReport(ctx, requestToExportJSONEntityReport)
+
+	request := &pb.FetchNextRequest{
+		ResponseHandle: responseFromExportJSONEntityReport.GetResult(),
+	}
 	response, err := g2engine.FetchNext(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -1468,7 +1521,7 @@ func ExampleG2EngineServer_FindNetworkByRecordID() {
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &pb.FindNetworkByRecordIDRequest{
-		RecordList:     `{"RECORDS": [{"DATA_SOURCE": "TEST", "RECORD_ID": "111"}, {"DATA_SOURCE": "TEST", "RECORD_ID": "222"}, {"DATA_SOURCE": "TEST", "RECORD_ID": "333"}]}`,
+		RecordList:     `{"RECORDS": [{"DATA_SOURCE": "TEST", "RECORD_ID": "111"}, {"DATA_SOURCE": "TEST", "RECORD_ID": "222"}]}`,
 		MaxDegree:      1,
 		BuildOutDegree: 2,
 		MaxEntities:    10,
@@ -1486,7 +1539,7 @@ func ExampleG2EngineServer_FindNetworkByRecordID_V2() {
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &pb.FindNetworkByRecordID_V2Request{
-		RecordList:     `{"RECORDS": [{"DATA_SOURCE": "TEST", "RECORD_ID": "111"}, {"DATA_SOURCE": "TEST", "RECORD_ID": "222"}, {"DATA_SOURCE": "TEST", "RECORD_ID": "333"}]}`,
+		RecordList:     `{"RECORDS": [{"DATA_SOURCE": "TEST", "RECORD_ID": "111"}, {"DATA_SOURCE": "TEST", "RECORD_ID": "222"}]}`,
 		MaxDegree:      1,
 		BuildOutDegree: 2,
 		MaxEntities:    10,
@@ -1667,7 +1720,7 @@ func ExampleG2EngineServer_FindPathIncludingSourceByEntityID() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 106))
 	// Output: {"ENTITY_PATHS":[{"START_ENTITY_ID":1,"END_ENTITY_ID":2,"ENTITIES":[]}],"ENTITIES":[{"RESOLVED_ENTITY":...
 }
 
@@ -1687,7 +1740,7 @@ func ExampleG2EngineServer_FindPathIncludingSourceByEntityID_V2() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"ENTITY_PATHS":[{"START_ENTITY_ID":1,"END_ENTITY_ID":2,"ENTITIES":[]}],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":1}},{"RESOLVED_ENTITY":{"ENTITY_ID":2}}]}
 }
 
@@ -1708,7 +1761,7 @@ func ExampleG2EngineServer_FindPathIncludingSourceByRecordID() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 119))
 	// Output: {"ENTITY_PATHS":[{"START_ENTITY_ID":1,"END_ENTITY_ID":2,"ENTITIES":[]}],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":...
 }
 
@@ -1730,7 +1783,7 @@ func ExampleG2EngineServer_FindPathIncludingSourceByRecordID_V2() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"ENTITY_PATHS":[{"START_ENTITY_ID":1,"END_ENTITY_ID":2,"ENTITIES":[]}],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":1}},{"RESOLVED_ENTITY":{"ENTITY_ID":2}}]}
 }
 
@@ -1743,7 +1796,7 @@ func ExampleG2EngineServer_GetActiveConfigID() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
 }
 
@@ -1758,7 +1811,7 @@ func ExampleG2EngineServer_GetEntityByEntityID() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 51))
 	// Output: {"RESOLVED_ENTITY":{"ENTITY_ID":1,"ENTITY_NAME":...
 }
 
@@ -1774,7 +1827,7 @@ func ExampleG2EngineServer_GetEntityByEntityID_V2() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"RESOLVED_ENTITY":{"ENTITY_ID":1}}
 }
 
@@ -1790,7 +1843,7 @@ func ExampleG2EngineServer_GetEntityByRecordID() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 35))
 	// Output: {"RESOLVED_ENTITY":{"ENTITY_ID":...
 }
 
@@ -1807,7 +1860,7 @@ func ExampleG2EngineServer_GetEntityByRecordID_V2() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"RESOLVED_ENTITY":{"ENTITY_ID":1}}
 }
 
@@ -1823,7 +1876,7 @@ func ExampleG2EngineServer_GetRecord() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"DATA_SOURCE":"TEST","RECORD_ID":"111","JSON_DATA":{"SOCIAL_HANDLE":"flavorh","DATE_OF_BIRTH":"4/8/1983","ADDR_STATE":"LA","ADDR_POSTAL_CODE":"71232","SSN_NUMBER":"053-39-3251","GENDER":"F","srccode":"MDMPER","CC_ACCOUNT_NUMBER":"5534202208773608","ADDR_CITY":"Delhi","DRIVERS_LICENSE_STATE":"DE","PHONE_NUMBER":"225-671-0796","NAME_LAST":"JOHNSON","entityid":"284430058","ADDR_LINE1":"772 Armstrong RD","DATA_SOURCE":"TEST","ENTITY_TYPE":"TEST","DSRC_ACTION":"A","RECORD_ID":"111"}}
 }
 
@@ -1840,7 +1893,7 @@ func ExampleG2EngineServer_GetRecord_V2() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"DATA_SOURCE":"TEST","RECORD_ID":"111"}
 }
 
@@ -1853,7 +1906,7 @@ func ExampleG2EngineServer_GetRedoRecord() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output:
 }
 
@@ -1866,7 +1919,7 @@ func ExampleG2EngineServer_GetRepositoryLastModifiedTime() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
 }
 
@@ -1881,7 +1934,7 @@ func ExampleG2EngineServer_GetVirtualEntityByRecordID() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 51))
 	// Output: {"RESOLVED_ENTITY":{"ENTITY_ID":1,"ENTITY_NAME":...
 }
 
@@ -1897,7 +1950,7 @@ func ExampleG2EngineServer_GetVirtualEntityByRecordID_V2() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"RESOLVED_ENTITY":{"ENTITY_ID":1}}
 }
 
@@ -1912,7 +1965,7 @@ func ExampleG2EngineServer_HowEntityByEntityID() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"HOW_RESULTS":{"RESOLUTION_STEPS":[],"FINAL_STATE":{"NEED_REEVALUATION":0,"VIRTUAL_ENTITIES":[{"VIRTUAL_ENTITY_ID":"V1","MEMBER_RECORDS":[{"INTERNAL_ID":1,"RECORDS":[{"DATA_SOURCE":"TEST","RECORD_ID":"111"},{"DATA_SOURCE":"TEST","RECORD_ID":"FCCE9793DAAD23159DBCCEB97FF2745B92CE7919"}]}]}]}}}
 }
 
@@ -1928,7 +1981,7 @@ func ExampleG2EngineServer_HowEntityByEntityID_V2() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"HOW_RESULTS":{"RESOLUTION_STEPS":[],"FINAL_STATE":{"NEED_REEVALUATION":0,"VIRTUAL_ENTITIES":[{"VIRTUAL_ENTITY_ID":"V1","MEMBER_RECORDS":[{"INTERNAL_ID":1,"RECORDS":[{"DATA_SOURCE":"TEST","RECORD_ID":"111"},{"DATA_SOURCE":"TEST","RECORD_ID":"FCCE9793DAAD23159DBCCEB97FF2745B92CE7919"}]}]}]}}}
 }
 
@@ -2045,7 +2098,7 @@ func ExampleG2EngineServer_ProcessWithInfo() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"DATA_SOURCE":"TEST","RECORD_ID":"555","AFFECTED_ENTITIES":[{"ENTITY_ID":1}],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
 
@@ -2060,7 +2113,7 @@ func ExampleG2EngineServer_ProcessWithResponse() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"MESSAGE": "ER SKIPPED - DUPLICATE RECORD IN G2"}
 }
 
@@ -2075,7 +2128,7 @@ func ExampleG2EngineServer_ProcessWithResponseResize() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"MESSAGE": "ER SKIPPED - DUPLICATE RECORD IN G2"}
 }
 
@@ -2106,7 +2159,7 @@ func ExampleG2EngineServer_ReevaluateEntityWithInfo() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"DATA_SOURCE":"TEST","RECORD_ID":"111","AFFECTED_ENTITIES":[{"ENTITY_ID":1}],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
 
@@ -2140,7 +2193,7 @@ func ExampleG2EngineServer_ReevaluateRecordWithInfo() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"DATA_SOURCE":"TEST","RECORD_ID":"111","AFFECTED_ENTITIES":[{"ENTITY_ID":1}],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 
 }
@@ -2172,7 +2225,7 @@ func ExampleG2EngineServer_ReplaceRecord() {
 	request := &pb.ReplaceRecordRequest{
 		DataSourceCode: "TEST",
 		RecordID:       "111",
-		JsonData:       `{"SOCIAL_HANDLE": "flavorh", "DATE_OF_BIRTH": "4/8/1984", "ADDR_STATE": "LA", "ADDR_POSTAL_CODE": "71232", "SSN_NUMBER": "053-39-3251", "ENTITY_TYPE": "TEST", "GENDER": "F", "srccode": "MDMPER", "CC_ACCOUNT_NUMBER": "5534202208773608", "RECORD_ID": "111", "DSRC_ACTION": "A", "ADDR_CITY": "Delhi", "DRIVERS_LICENSE_STATE": "DE", "PHONE_NUMBER": "225-671-0796", "NAME_LAST": "JOHNSON", "entityid": "284430058", "ADDR_LINE1": "772 Armstrong RD"}`,
+		JsonData:       `{"SOCIAL_HANDLE": "flavorh", "DATE_OF_BIRTH": "4/8/1985", "ADDR_STATE": "LA", "ADDR_POSTAL_CODE": "71232", "SSN_NUMBER": "053-39-3251", "ENTITY_TYPE": "TEST", "GENDER": "F", "srccode": "MDMPER", "CC_ACCOUNT_NUMBER": "5534202208773608", "RECORD_ID": "111", "DSRC_ACTION": "A", "ADDR_CITY": "Delhi", "DRIVERS_LICENSE_STATE": "DE", "PHONE_NUMBER": "225-671-0796", "NAME_LAST": "JOHNSON", "entityid": "284430058", "ADDR_LINE1": "772 Armstrong RD"}`,
 		LoadID:         "TEST",
 	}
 	response, err := g2engine.ReplaceRecord(ctx, request)
@@ -2198,7 +2251,7 @@ func ExampleG2EngineServer_ReplaceRecordWithInfo() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"DATA_SOURCE":"TEST","RECORD_ID":"111","AFFECTED_ENTITIES":[],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
 
@@ -2213,7 +2266,7 @@ func ExampleG2EngineServer_SearchByAttributes() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 54))
 	// Output: {"RESOLVED_ENTITIES":[{"MATCH_INFO":{"MATCH_LEVEL":...
 }
 
@@ -2229,7 +2282,7 @@ func ExampleG2EngineServer_SearchByAttributes_V2() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"RESOLVED_ENTITIES":[{"MATCH_INFO":{"MATCH_LEVEL":1,"MATCH_LEVEL_CODE":"RESOLVED","MATCH_KEY":"+NAME+SSN","ERRULE_CODE":"SF1_PNAME_CSTAB"},"ENTITY":{"RESOLVED_ENTITY":{"ENTITY_ID":1}}}]}
 }
 
@@ -2242,7 +2295,7 @@ func ExampleG2EngineServer_Stats() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 125))
 	// Output: { "workload": { "loadedRecords": 5,  "addedRecords": 2,  "deletedRecords": 0,  "reevaluations": 0,  "repairedEntities": 0,...
 }
 
@@ -2258,7 +2311,7 @@ func ExampleG2EngineServer_WhyEntities() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 74))
 	// Output: {"WHY_RESULTS":[{"ENTITY_ID":1,"ENTITY_ID_2":2,"MATCH_INFO":{"WHY_KEY":...
 }
 
@@ -2275,7 +2328,7 @@ func ExampleG2EngineServer_WhyEntities_V2() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"WHY_RESULTS":[{"ENTITY_ID":1,"ENTITY_ID_2":2,"MATCH_INFO":{"WHY_KEY":"+PHONE+ACCT_NUM-SSN","WHY_ERRULE_CODE":"SF1","MATCH_LEVEL_CODE":"POSSIBLY_RELATED"}}],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":1}},{"RESOLVED_ENTITY":{"ENTITY_ID":2}}]}
 }
 
@@ -2290,7 +2343,7 @@ func ExampleG2EngineServer_WhyEntityByEntityID() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 101))
 	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":1,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"TEST","RECORD_ID":...
 }
 
@@ -2306,7 +2359,7 @@ func ExampleG2EngineServer_WhyEntityByEntityID_V2() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 101))
 	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":1,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"TEST","RECORD_ID":...
 }
 
@@ -2322,7 +2375,7 @@ func ExampleG2EngineServer_WhyEntityByRecordID() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 101))
 	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":1,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"TEST","RECORD_ID":...
 }
 
@@ -2339,7 +2392,7 @@ func ExampleG2EngineServer_WhyEntityByRecordID_V2() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 101))
 	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":1,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"TEST","RECORD_ID":...
 }
 
@@ -2357,7 +2410,7 @@ func ExampleG2EngineServer_WhyRecords() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(truncate(response.GetResult(), 114))
 	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":100001,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"TEST","RECORD_ID":"111"}],...
 }
 
@@ -2376,43 +2429,8 @@ func ExampleG2EngineServer_WhyRecords_V2() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
+	fmt.Println(response.GetResult())
 	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":100001,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"TEST","RECORD_ID":"111"}],"INTERNAL_ID_2":2,"ENTITY_ID_2":2,"FOCUS_RECORDS_2":[{"DATA_SOURCE":"TEST","RECORD_ID":"222"}],"MATCH_INFO":{"WHY_KEY":"+PHONE+ACCT_NUM-DOB-SSN","WHY_ERRULE_CODE":"SF1","MATCH_LEVEL_CODE":"POSSIBLY_RELATED"}}],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":1}},{"RESOLVED_ENTITY":{"ENTITY_ID":2}}]}
-}
-
-func ExampleG2EngineServer_DeleteRecord() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2engine/g2engine_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &pb.DeleteRecordRequest{
-		DataSourceCode: "TEST",
-		RecordID:       "111",
-		LoadID:         "TEST",
-	}
-	response, err := g2engine.DeleteRecord(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response)
-	// Output:
-}
-
-func ExampleG2EngineServer_DeleteRecordWithInfo() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2engine/g2engine_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &pb.DeleteRecordWithInfoRequest{
-		DataSourceCode: "TEST",
-		RecordID:       "111",
-		LoadID:         "TEST",
-		Flags:          0,
-	}
-	response, err := g2engine.DeleteRecordWithInfo(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response)
-	// Output: {"DATA_SOURCE":"TEST","RECORD_ID":"333","AFFECTED_ENTITIES":[],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
 
 func ExampleG2EngineServer_Destroy() {
@@ -2429,15 +2447,15 @@ func ExampleG2EngineServer_Destroy() {
 }
 
 // PurgeRepository() is first to start with a clean database.
-func ExampleG2EngineServer_PurgeRepository_finalCleanup() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2engine/g2engine_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &pb.PurgeRepositoryRequest{}
-	response, err := g2engine.PurgeRepository(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response)
-	// Output:
-}
+// func ExampleG2EngineServer_PurgeRepository_finalCleanup() {
+// 	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2engine/g2engine_test.go
+// 	ctx := context.TODO()
+// 	g2engine := getG2EngineServer(ctx)
+// 	request := &pb.PurgeRepositoryRequest{}
+// 	response, err := g2engine.PurgeRepository(ctx, request)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	fmt.Println(response)
+// 	// Output:
+// }
