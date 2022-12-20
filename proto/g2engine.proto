@@ -133,7 +133,7 @@ message CheckRecordResponse {
 }
 
 message CloseExportRequest {
-  string responseHandle = 1;
+  int64 responseHandle = 1;
 }
 
 message CloseExportResponse {}
@@ -186,7 +186,7 @@ message ExportCSVEntityReportRequest {
 }
 
 message ExportCSVEntityReportResponse {
-  string result = 1;
+  int64 result = 1;
 }
 
 message ExportJSONEntityReportRequest {
@@ -194,11 +194,11 @@ message ExportJSONEntityReportRequest {
 }
 
 message ExportJSONEntityReportResponse {
-  string result = 1;
+  int64 result = 1;
 }
 
 message FetchNextRequest {
-  string responseHandle = 1;
+  int64 responseHandle = 1;
 }
 
 message FetchNextResponse {

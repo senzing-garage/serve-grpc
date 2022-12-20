@@ -69,8 +69,8 @@ test:
 #	@go test -v ./g2configmgrserver
 #	@go test -v ./g2diagnosticserver
 #	@go test -v ./g2diagnosticservercli
-#	@go test -v ./g2engineserver
-	@go test -v ./g2productserver
+	@go test -v ./g2engineserver
+#	@go test -v ./g2productserver
 
 .PHONY: test-servegrpc
 test-servegrpc:
