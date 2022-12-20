@@ -562,14 +562,14 @@ func ExampleG2configmgrImpl_SetDefaultConfigID() {
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 
-	// GetDefaultConfigID() to get an actual configuration ID.
+	// GetDefaultConfigID() to get an example configuration ID.
 	requestForGetDefaultConfigID := &pb.GetDefaultConfigIDRequest{}
 	responseFromGetDefaultConfigID, err := g2configmgr.GetDefaultConfigID(ctx, requestForGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	// Example - Using current default ID as an example.
+	// Example
 	request := &pb.SetDefaultConfigIDRequest{
 		ConfigID: responseFromGetDefaultConfigID.GetConfigID(),
 	}

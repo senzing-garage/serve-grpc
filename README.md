@@ -1,5 +1,21 @@
 # go-servegrpc
 
+## :warning: WARNING: go-servegrpc is still in development :warning: _
+
+At the moment, this is "work-in-progress" with Semantic Versions of `0.n.x`.
+Although it can be reviewed and commented on,
+the recommendation is not to use it yet.
+
+## Synopsi
+
+The Senzing servegrpc...
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/senzing/go-servegrpc.svg)](https://pkg.go.dev/github.com/senzing/go-servegrpc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/senzing/go-servegrpc)](https://goreportcard.com/report/github.com/senzing/go-servegrpc)
+[![go-test.yaml](https://github.com/Senzing/go-servegrpc/actions/workflows/go-test.yaml/badge.svg)](https://github.com/Senzing/go-servegrpc/actions/workflows/go-test.yaml)
+
+## Overview
+
 ## Development
 
 ### Create protobuf directories

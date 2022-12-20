@@ -479,7 +479,7 @@ func ExampleG2ConfigServer_AddDataSource() {
 	ctx := context.TODO()
 	g2config := getG2ConfigServer(ctx)
 
-	// G2config Create() to create a Senzing configuration.
+	// Create() to create an in-memory Senzing configuration.
 	requestToCreate := &pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {
@@ -504,7 +504,7 @@ func ExampleG2ConfigServer_Close() {
 	ctx := context.TODO()
 	g2config := getG2ConfigServer(ctx)
 
-	// G2config Create() to create a Senzing configuration.
+	// Create() to create an in-memory Senzing configuration.
 	requestToCreate := &pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {
@@ -540,7 +540,7 @@ func ExampleG2ConfigServer_DeleteDataSource() {
 	ctx := context.TODO()
 	g2config := getG2ConfigServer(ctx)
 
-	// G2config Create() to create a Senzing configuration.
+	// Create() to create an in-memory Senzing configuration.
 	requestToCreate := &pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {
@@ -598,7 +598,7 @@ func ExampleG2ConfigServer_ListDataSources() {
 	ctx := context.TODO()
 	g2config := getG2ConfigServer(ctx)
 
-	// G2config Create() to create a Senzing configuration.
+	// Create() to create an in-memory Senzing configuration.
 	requestToCreate := &pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {
@@ -622,14 +622,14 @@ func ExampleG2ConfigServer_Load() {
 	ctx := context.TODO()
 	g2config := getG2ConfigServer(ctx)
 
-	// G2config Create() to create a Senzing configuration.
+	// Create() to create an in-memory Senzing configuration.
 	requestToCreate := &pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	// G2config Save() to create a JSON string.
+	// Save() to create a JSON string.
 	requestToSave := &pb.SaveRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
@@ -656,7 +656,7 @@ func ExampleG2ConfigServer_Save() {
 	ctx := context.TODO()
 	g2config := getG2ConfigServer(ctx)
 
-	// G2config Create() to create a Senzing configuration.
+	// Create() to create an in-memory Senzing configuration.
 	requestToCreate := &pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {

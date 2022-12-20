@@ -1435,6 +1435,7 @@ func ExampleG2EngineServer_FetchNext() {
 	}
 	responseFromExportJSONEntityReport, err := g2engine.ExportJSONEntityReport(ctx, requestToExportJSONEntityReport)
 
+	// Example
 	request := &pb.FetchNextRequest{
 		ResponseHandle: responseFromExportJSONEntityReport.GetResult(),
 	}
@@ -2207,6 +2208,7 @@ func ExampleG2EngineServer_Reinit() {
 	requestToGetActiveConfigID := &pb.GetActiveConfigIDRequest{}
 	responseFromGetActiveConfigID, err := g2engine.GetActiveConfigID(ctx, requestToGetActiveConfigID)
 
+	// Example
 	request := &pb.ReinitRequest{
 		InitConfigID: responseFromGetActiveConfigID.GetResult(),
 	}
