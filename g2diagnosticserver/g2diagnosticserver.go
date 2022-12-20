@@ -44,7 +44,7 @@ func getG2diagnostic() *g2sdk.G2diagnosticImpl {
 
 func (server *G2DiagnosticServer) CheckDBPerf(ctx context.Context, request *pb.CheckDBPerfRequest) (*pb.CheckDBPerfResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	result, err := g2diagnostic.CheckDBPerf(ctx, int(request.SecondsToRun))
+	result, err := g2diagnostic.CheckDBPerf(ctx, int(request.GetSecondsToRun()))
 	response := pb.CheckDBPerfResponse{
 		Result: result,
 	}
@@ -53,7 +53,7 @@ func (server *G2DiagnosticServer) CheckDBPerf(ctx context.Context, request *pb.C
 
 func (server *G2DiagnosticServer) CloseEntityListBySize(ctx context.Context, request *pb.CloseEntityListBySizeRequest) (*pb.CloseEntityListBySizeResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	entityListBySizeHandleInt, err := strconv.ParseUint(request.EntityListBySizeHandle, 10, 64)
+	entityListBySizeHandleInt, err := strconv.ParseUint(request.GetEntityListBySizeHandle(), 10, 64)
 	if err == nil {
 		err = g2diagnostic.CloseEntityListBySize(ctx, uintptr(entityListBySizeHandleInt))
 	}
@@ -71,7 +71,7 @@ func (server *G2DiagnosticServer) Destroy(ctx context.Context, request *pb.Destr
 func (server *G2DiagnosticServer) FetchNextEntityBySize(ctx context.Context, request *pb.FetchNextEntityBySizeRequest) (*pb.FetchNextEntityBySizeResponse, error) {
 	var result string = ""
 	g2diagnostic := getG2diagnostic()
-	entityListBySizeHandleInt, err := strconv.ParseUint(request.EntityListBySizeHandle, 10, 64)
+	entityListBySizeHandleInt, err := strconv.ParseUint(request.GetEntityListBySizeHandle(), 10, 64)
 	if err == nil {
 		result, err = g2diagnostic.FetchNextEntityBySize(ctx, uintptr(entityListBySizeHandleInt))
 
@@ -84,7 +84,7 @@ func (server *G2DiagnosticServer) FetchNextEntityBySize(ctx context.Context, req
 
 func (server *G2DiagnosticServer) FindEntitiesByFeatureIDs(ctx context.Context, request *pb.FindEntitiesByFeatureIDsRequest) (*pb.FindEntitiesByFeatureIDsResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	result, err := g2diagnostic.FindEntitiesByFeatureIDs(ctx, request.Features)
+	result, err := g2diagnostic.FindEntitiesByFeatureIDs(ctx, request.GetFeatures())
 	response := pb.FindEntitiesByFeatureIDsResponse{
 		Result: result,
 	}
@@ -120,7 +120,7 @@ func (server *G2DiagnosticServer) GetDBInfo(ctx context.Context, request *pb.Get
 
 func (server *G2DiagnosticServer) GetEntityDetails(ctx context.Context, request *pb.GetEntityDetailsRequest) (*pb.GetEntityDetailsResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	result, err := g2diagnostic.GetEntityDetails(ctx, request.EntityID, int(request.IncludeInternalFeatures))
+	result, err := g2diagnostic.GetEntityDetails(ctx, request.GetEntityID(), int(request.GetIncludeInternalFeatures()))
 	response := pb.GetEntityDetailsResponse{
 		Result: result,
 	}
@@ -129,7 +129,7 @@ func (server *G2DiagnosticServer) GetEntityDetails(ctx context.Context, request 
 
 func (server *G2DiagnosticServer) GetEntityListBySize(ctx context.Context, request *pb.GetEntityListBySizeRequest) (*pb.GetEntityListBySizeResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	result, err := g2diagnostic.GetEntityListBySize(ctx, int(request.EntitySize))
+	result, err := g2diagnostic.GetEntityListBySize(ctx, int(request.GetEntitySize()))
 	response := pb.GetEntityListBySizeResponse{
 		Result: fmt.Sprintf("%v", result),
 	}
@@ -138,7 +138,7 @@ func (server *G2DiagnosticServer) GetEntityListBySize(ctx context.Context, reque
 
 func (server *G2DiagnosticServer) GetEntityResume(ctx context.Context, request *pb.GetEntityResumeRequest) (*pb.GetEntityResumeResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	result, err := g2diagnostic.GetEntityResume(ctx, request.EntityID)
+	result, err := g2diagnostic.GetEntityResume(ctx, request.GetEntityID())
 	response := pb.GetEntityResumeResponse{
 		Result: result,
 	}
@@ -147,7 +147,7 @@ func (server *G2DiagnosticServer) GetEntityResume(ctx context.Context, request *
 
 func (server *G2DiagnosticServer) GetEntitySizeBreakdown(ctx context.Context, request *pb.GetEntitySizeBreakdownRequest) (*pb.GetEntitySizeBreakdownResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	result, err := g2diagnostic.GetEntitySizeBreakdown(ctx, int(request.MinimumEntitySize), int(request.IncludeInternalFeatures))
+	result, err := g2diagnostic.GetEntitySizeBreakdown(ctx, int(request.GetMinimumEntitySize()), int(request.GetIncludeInternalFeatures()))
 	response := pb.GetEntitySizeBreakdownResponse{
 		Result: result,
 	}
@@ -156,7 +156,7 @@ func (server *G2DiagnosticServer) GetEntitySizeBreakdown(ctx context.Context, re
 
 func (server *G2DiagnosticServer) GetFeature(ctx context.Context, request *pb.GetFeatureRequest) (*pb.GetFeatureResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	result, err := g2diagnostic.GetFeature(ctx, request.LibFeatID)
+	result, err := g2diagnostic.GetFeature(ctx, request.GetLibFeatID())
 	response := pb.GetFeatureResponse{
 		Result: result,
 	}
@@ -165,7 +165,7 @@ func (server *G2DiagnosticServer) GetFeature(ctx context.Context, request *pb.Ge
 
 func (server *G2DiagnosticServer) GetGenericFeatures(ctx context.Context, request *pb.GetGenericFeaturesRequest) (*pb.GetGenericFeaturesResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	result, err := g2diagnostic.GetGenericFeatures(ctx, request.FeatureType, int(request.MaximumEstimatedCount))
+	result, err := g2diagnostic.GetGenericFeatures(ctx, request.GetFeatureType(), int(request.GetMaximumEstimatedCount()))
 	response := pb.GetGenericFeaturesResponse{
 		Result: result,
 	}
@@ -183,7 +183,7 @@ func (server *G2DiagnosticServer) GetLogicalCores(ctx context.Context, request *
 
 func (server *G2DiagnosticServer) GetMappingStatistics(ctx context.Context, request *pb.GetMappingStatisticsRequest) (*pb.GetMappingStatisticsResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	result, err := g2diagnostic.GetMappingStatistics(ctx, int(request.IncludeInternalFeatures))
+	result, err := g2diagnostic.GetMappingStatistics(ctx, int(request.GetIncludeInternalFeatures()))
 	response := pb.GetMappingStatisticsResponse{
 		Result: result,
 	}
@@ -201,7 +201,7 @@ func (server *G2DiagnosticServer) GetPhysicalCores(ctx context.Context, request 
 
 func (server *G2DiagnosticServer) GetRelationshipDetails(ctx context.Context, request *pb.GetRelationshipDetailsRequest) (*pb.GetRelationshipDetailsResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	result, err := g2diagnostic.GetRelationshipDetails(ctx, request.RelationshipID, int(request.IncludeInternalFeatures))
+	result, err := g2diagnostic.GetRelationshipDetails(ctx, request.GetRelationshipID(), int(request.GetIncludeInternalFeatures()))
 	response := pb.GetRelationshipDetailsResponse{
 		Result: result,
 	}
@@ -228,21 +228,21 @@ func (server *G2DiagnosticServer) GetTotalSystemMemory(ctx context.Context, requ
 
 func (server *G2DiagnosticServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.InitResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	err := g2diagnostic.Init(ctx, request.ModuleName, request.IniParams, int(request.VerboseLogging))
+	err := g2diagnostic.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
 	response := pb.InitResponse{}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) InitWithConfigID(ctx context.Context, request *pb.InitWithConfigIDRequest) (*pb.InitWithConfigIDResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	err := g2diagnostic.InitWithConfigID(ctx, request.ModuleName, request.IniParams, int64(request.InitConfigID), int(request.VerboseLogging))
+	err := g2diagnostic.InitWithConfigID(ctx, request.GetModuleName(), request.GetIniParams(), int64(request.GetInitConfigID()), int(request.GetVerboseLogging()))
 	response := pb.InitWithConfigIDResponse{}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) Reinit(ctx context.Context, request *pb.ReinitRequest) (*pb.ReinitResponse, error) {
 	g2diagnostic := getG2diagnostic()
-	err := g2diagnostic.Reinit(ctx, int64(request.InitConfigID))
+	err := g2diagnostic.Reinit(ctx, int64(request.GetInitConfigID()))
 	response := pb.ReinitResponse{}
 	return &response, err
 }
