@@ -14,6 +14,7 @@ import (
 
 const (
 	defaultTruncation = 76
+	printResults      = false
 )
 
 var (
@@ -67,7 +68,7 @@ func truncate(aString string, length int) string {
 }
 
 func printResult(test *testing.T, title string, result interface{}) {
-	if 1 == 0 {
+	if printResults {
 		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
 	}
 }
@@ -133,10 +134,18 @@ func TestG2productserver_BuildSimpleSystemConfigurationJson(test *testing.T) {
 func TestG2productServer_Init(test *testing.T) {
 	ctx := context.TODO()
 	g2product := getTestObject(ctx, test)
-	request := &pb.InitRequest{}
-	actual, err := g2product.Init(ctx, request)
+	iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	if jsonErr != nil {
+		assert.FailNow(test, jsonErr.Error())
+	}
+	request := &pb.InitRequest{
+		ModuleName:     "Test module name",
+		IniParams:      iniParams,
+		VerboseLogging: int32(0),
+	}
+	response, err := g2product.Init(ctx, request)
 	testError(test, ctx, g2product, err)
-	printActual(test, actual)
+	printActual(test, response)
 }
 
 func TestG2productServer_License(test *testing.T) {
@@ -151,7 +160,9 @@ func TestG2productServer_License(test *testing.T) {
 func TestG2productServer_ValidateLicenseFile(test *testing.T) {
 	ctx := context.TODO()
 	g2product := getTestObject(ctx, test)
-	request := &pb.ValidateLicenseFileRequest{}
+	request := &pb.ValidateLicenseFileRequest{
+		LicenseFilePath: "/etc/opt/senzing/g2.lic",
+	}
 	actual, err := g2product.ValidateLicenseFile(ctx, request)
 	testError(test, ctx, g2product, err)
 	printActual(test, actual)
@@ -160,7 +171,9 @@ func TestG2productServer_ValidateLicenseFile(test *testing.T) {
 func TestG2productServer_ValidateLicenseStringBase64(test *testing.T) {
 	ctx := context.TODO()
 	g2product := getTestObject(ctx, test)
-	request := &pb.ValidateLicenseStringBase64Request{}
+	request := &pb.ValidateLicenseStringBase64Request{
+		LicenseString: "AQAAADgCAAAAAAAAU2VuemluZyBQdWJsaWMgVGVzdCBMaWNlbnNlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARVZBTFVBVElPTiAtIHN1cHBvcnRAc2VuemluZy5jb20AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADIwMjItMTEtMjkAAAAAAAAAAAAARVZBTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFNUQU5EQVJEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFDDAAAAAAAAMjAyMy0xMS0yOQAAAAAAAAAAAABNT05USExZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQfw5e19QAHetkvd+vk0cYHtLaQCLmgx2WUfLorDfLQq15UXmOawNIXc1XguPd8zJtnOaeI6CB2smxVaj10mJE2ndGPZ1JjGk9likrdAj3rw+h6+C/Lyzx/52U8AuaN1kWgErDKdNE9qL6AnnN5LLi7Xs87opP7wbVMOdzsfXx2Xi3H7dSDIam7FitF6brSFoBFtIJac/V/Zc3b8jL/a1o5b1eImQldaYcT4jFrRZkdiVO/SiuLslEb8or3alzT0XsoUJnfQWmh0BjehBK9W74jGw859v/L1SGn1zBYKQ4m8JBiUOytmc9ekLbUKjIg/sCdmGMIYLywKqxb9mZo2TLZBNOpYWVwfaD/6O57jSixfJEHcLx30RPd9PKRO0Nm+4nPdOMMLmd4aAcGPtGMpI6ldTiK9hQyUfrvc9z4gYE3dWhz2Qu3mZFpaAEuZLlKtxaqEtVLWIfKGxwxPargPEfcLsv+30fdjSy8QaHeU638tj67I0uCEgnn5aB8pqZYxLxJx67hvVKOVsnbXQRTSZ00QGX1yTA+fNygqZ5W65wZShhICq5Fz8wPUeSbF7oCcE5VhFfDnSyi5v0YTNlYbF8LOAqXPTi+0KP11Wo24PjLsqYCBVvmOg9ohZ89iOoINwUB32G8VucRfgKKhpXhom47jObq4kSnihxRbTwJRx4o",
+	}
 	actual, err := g2product.ValidateLicenseStringBase64(ctx, request)
 	testError(test, ctx, g2product, err)
 	printActual(test, actual)
@@ -193,11 +206,11 @@ func ExampleG2ProductServer_Destroy() {
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &pb.DestroyRequest{}
-	result, err := g2product.Destroy(ctx, request)
+	response, err := g2product.Destroy(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	fmt.Println(response)
 	// Output:
 }
 
@@ -205,12 +218,20 @@ func ExampleG2ProductServer_Init() {
 	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2product/g2product_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
-	request := &pb.InitRequest{}
-	result, err := g2product.Init(ctx, request)
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	request := &pb.InitRequest{
+		ModuleName:     "Test module name",
+		IniParams:      iniParams,
+		VerboseLogging: int32(0),
+	}
+	response, err := g2product.Init(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(response)
 	// Output:
 }
 
@@ -219,11 +240,11 @@ func ExampleG2ProductServer_License() {
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &pb.LicenseRequest{}
-	result, err := g2product.License(ctx, request)
+	response, err := g2product.License(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	fmt.Println(response.GetResult())
 	// Output: {"customer":"Senzing Public Test License","contract":"EVALUATION - support@senzing.com","issueDate":"2022-11-29","licenseType":"EVAL (Solely for non-productive use)","licenseLevel":"STANDARD","billing":"MONTHLY","expireDate":"2023-11-29","recordLimit":50000}
 }
 
@@ -231,12 +252,14 @@ func ExampleG2ProductServer_ValidateLicenseFile() {
 	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2product/g2product_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
-	request := &pb.ValidateLicenseFileRequest{}
-	result, err := g2product.ValidateLicenseFile(ctx, request)
+	request := &pb.ValidateLicenseFileRequest{
+		LicenseFilePath: "/etc/opt/senzing/g2.lic",
+	}
+	response, err := g2product.ValidateLicenseFile(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	fmt.Println(response.GetResult())
 	// Output: Success
 }
 
@@ -244,12 +267,14 @@ func ExampleG2ProductServer_ValidateLicenseStringBase64() {
 	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2product/g2product_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
-	request := &pb.ValidateLicenseStringBase64Request{}
-	result, err := g2product.ValidateLicenseStringBase64(ctx, request)
+	request := &pb.ValidateLicenseStringBase64Request{
+		LicenseString: "AQAAADgCAAAAAAAAU2VuemluZyBQdWJsaWMgVGVzdCBMaWNlbnNlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARVZBTFVBVElPTiAtIHN1cHBvcnRAc2VuemluZy5jb20AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADIwMjItMTEtMjkAAAAAAAAAAAAARVZBTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFNUQU5EQVJEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFDDAAAAAAAAMjAyMy0xMS0yOQAAAAAAAAAAAABNT05USExZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQfw5e19QAHetkvd+vk0cYHtLaQCLmgx2WUfLorDfLQq15UXmOawNIXc1XguPd8zJtnOaeI6CB2smxVaj10mJE2ndGPZ1JjGk9likrdAj3rw+h6+C/Lyzx/52U8AuaN1kWgErDKdNE9qL6AnnN5LLi7Xs87opP7wbVMOdzsfXx2Xi3H7dSDIam7FitF6brSFoBFtIJac/V/Zc3b8jL/a1o5b1eImQldaYcT4jFrRZkdiVO/SiuLslEb8or3alzT0XsoUJnfQWmh0BjehBK9W74jGw859v/L1SGn1zBYKQ4m8JBiUOytmc9ekLbUKjIg/sCdmGMIYLywKqxb9mZo2TLZBNOpYWVwfaD/6O57jSixfJEHcLx30RPd9PKRO0Nm+4nPdOMMLmd4aAcGPtGMpI6ldTiK9hQyUfrvc9z4gYE3dWhz2Qu3mZFpaAEuZLlKtxaqEtVLWIfKGxwxPargPEfcLsv+30fdjSy8QaHeU638tj67I0uCEgnn5aB8pqZYxLxJx67hvVKOVsnbXQRTSZ00QGX1yTA+fNygqZ5W65wZShhICq5Fz8wPUeSbF7oCcE5VhFfDnSyi5v0YTNlYbF8LOAqXPTi+0KP11Wo24PjLsqYCBVvmOg9ohZ89iOoINwUB32G8VucRfgKKhpXhom47jObq4kSnihxRbTwJRx4o",
+	}
+	response, err := g2product.ValidateLicenseStringBase64(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	fmt.Println(response.GetResult())
 	// Output: Success
 }
 
@@ -258,10 +283,10 @@ func ExampleG2ProductServer_Version() {
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &pb.VersionRequest{}
-	result, err := g2product.Version(ctx, request)
+	response, err := g2product.Version(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	fmt.Println(response.GetResult())
 	// Output: {"PRODUCT_NAME":"Senzing API","VERSION":"3.3.2","BUILD_VERSION":"3.3.2.22299","BUILD_DATE":"2022-10-26","BUILD_NUMBER":"2022_10_26__19_38","COMPATIBILITY_VERSION":{"CONFIG_VERSION":"10"},"SCHEMA_VERSION":{"ENGINE_SCHEMA_VERSION":"3.3","MINIMUM_REQUIRED_SCHEMA_VERSION":"3.0","MAXIMUM_REQUIRED_SCHEMA_VERSION":"3.99"}}
 }
