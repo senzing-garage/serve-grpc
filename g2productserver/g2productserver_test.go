@@ -84,11 +84,11 @@ func testError(test *testing.T, ctx context.Context, g2product G2ProductServer, 
 	}
 }
 
-func testErrorNoFail(test *testing.T, ctx context.Context, g2product G2ProductServer, err error) {
-	if err != nil {
-		test.Log("Error:", err.Error())
-	}
-}
+// func testErrorNoFail(test *testing.T, ctx context.Context, g2product G2ProductServer, err error) {
+// 	if err != nil {
+// 		test.Log("Error:", err.Error())
+// 	}
+// }
 
 // ----------------------------------------------------------------------------
 // Test harness
@@ -202,7 +202,7 @@ func TestG2productServer_Destroy(test *testing.T) {
 // ----------------------------------------------------------------------------
 
 func ExampleG2ProductServer_Destroy() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2product/g2product_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &pb.DestroyRequest{}
@@ -215,7 +215,7 @@ func ExampleG2ProductServer_Destroy() {
 }
 
 func ExampleG2ProductServer_Init() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2product/g2product_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
@@ -236,7 +236,7 @@ func ExampleG2ProductServer_Init() {
 }
 
 func ExampleG2ProductServer_License() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2product/g2product_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &pb.LicenseRequest{}
@@ -249,7 +249,7 @@ func ExampleG2ProductServer_License() {
 }
 
 func ExampleG2ProductServer_ValidateLicenseFile() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2product/g2product_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &pb.ValidateLicenseFileRequest{
@@ -264,7 +264,7 @@ func ExampleG2ProductServer_ValidateLicenseFile() {
 }
 
 func ExampleG2ProductServer_ValidateLicenseStringBase64() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2product/g2product_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &pb.ValidateLicenseStringBase64Request{
@@ -279,7 +279,7 @@ func ExampleG2ProductServer_ValidateLicenseStringBase64() {
 }
 
 func ExampleG2ProductServer_Version() {
-	// For more information, visit https://github.com/Senzing/g2-sdk-go/blob/main/g2product/g2product_test.go
+	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &pb.VersionRequest{}

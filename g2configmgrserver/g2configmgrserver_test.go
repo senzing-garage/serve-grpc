@@ -425,11 +425,11 @@ func ExampleG2configmgrImpl_Destroy() {
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &pb.DestroyRequest{}
-	result, err := g2configmgr.Destroy(ctx, request)
+	response, err := g2configmgr.Destroy(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	fmt.Println(response)
 	// Output:
 }
 
