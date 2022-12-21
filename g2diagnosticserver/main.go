@@ -1,6 +1,7 @@
 package g2diagnosticserver
 
 import (
+	"github.com/senzing/go-logging/messagelogger"
 	pb "github.com/senzing/go-servegrpc/protobuf/g2diagnostic"
 )
 
@@ -11,6 +12,7 @@ import (
 // server is used to implement helloworld.GreeterServer.
 type G2DiagnosticServer struct {
 	pb.UnimplementedG2DiagnosticServer
+	LogLevel messagelogger.Level
 }
 
 // ----------------------------------------------------------------------------

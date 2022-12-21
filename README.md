@@ -117,7 +117,7 @@ The Senzing servegrpc...
     1. Near top-center, use the address of `0.0.0.0:8258` to reach the local gRPC server.
     1. In upper-left, click on plus sign ("+").
         1. Navigate to the ${GIT_REPOSITORY_DIR}/proto directory
-        1. Choose a `.proto` file
+        1. Choose one or more `.proto` files.
     1. In left-hand pane,
         1. Choose the `Init` message.
         1. Set the request values.

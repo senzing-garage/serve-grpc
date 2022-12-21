@@ -1,6 +1,7 @@
 package g2engineserver
 
 import (
+	"github.com/senzing/go-logging/messagelogger"
 	pb "github.com/senzing/go-servegrpc/protobuf/g2engine"
 )
 
@@ -11,6 +12,7 @@ import (
 // server is used to implement helloworld.GreeterServer.
 type G2EngineServer struct {
 	pb.UnimplementedG2EngineServer
+	LogLevel messagelogger.Level
 }
 
 // ----------------------------------------------------------------------------
