@@ -69,21 +69,21 @@ func (server *G2ConfigServer) AddDataSource(ctx context.Context, request *pb.Add
 
 func (server *G2ConfigServer) Close(ctx context.Context, request *pb.CloseRequest) (*pb.CloseResponse, error) {
 	if server.isTrace {
-		server.traceEntry(3, request)
+		server.traceEntry(5, request)
 	}
 	entryTime := time.Now()
 	g2config := getG2config()
 	err := g2config.Close(ctx, uintptr(request.GetConfigHandle()))
 	response := pb.CloseResponse{}
 	if server.isTrace {
-		defer server.traceExit(4, request, err, time.Since(entryTime))
+		defer server.traceExit(6, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ConfigServer) Create(ctx context.Context, request *pb.CreateRequest) (*pb.CreateResponse, error) {
 	if server.isTrace {
-		server.traceEntry(5, request)
+		server.traceEntry(7, request)
 	}
 	entryTime := time.Now()
 	g2config := getG2config()
@@ -92,56 +92,56 @@ func (server *G2ConfigServer) Create(ctx context.Context, request *pb.CreateRequ
 		Result: int64(result),
 	}
 	if server.isTrace {
-		defer server.traceExit(6, request, result, err, time.Since(entryTime))
+		defer server.traceExit(8, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ConfigServer) DeleteDataSource(ctx context.Context, request *pb.DeleteDataSourceRequest) (*pb.DeleteDataSourceResponse, error) {
 	if server.isTrace {
-		server.traceEntry(7, request)
+		server.traceEntry(9, request)
 	}
 	entryTime := time.Now()
 	g2config := getG2config()
 	err := g2config.DeleteDataSource(ctx, uintptr(request.GetConfigHandle()), request.GetInputJson())
 	response := pb.DeleteDataSourceResponse{}
 	if server.isTrace {
-		defer server.traceExit(8, request, err, time.Since(entryTime))
+		defer server.traceExit(10, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ConfigServer) Destroy(ctx context.Context, request *pb.DestroyRequest) (*pb.DestroyResponse, error) {
 	if server.isTrace {
-		server.traceEntry(9, request)
+		server.traceEntry(11, request)
 	}
 	entryTime := time.Now()
 	g2config := getG2config()
 	err := g2config.Destroy(ctx)
 	response := pb.DestroyResponse{}
 	if server.isTrace {
-		defer server.traceExit(10, request, err, time.Since(entryTime))
+		defer server.traceExit(12, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ConfigServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.InitResponse, error) {
 	if server.isTrace {
-		server.traceEntry(11, request)
+		server.traceEntry(17, request)
 	}
 	entryTime := time.Now()
 	g2config := getG2config()
 	err := g2config.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
 	response := pb.InitResponse{}
 	if server.isTrace {
-		defer server.traceExit(12, request, err, time.Since(entryTime))
+		defer server.traceExit(18, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ConfigServer) ListDataSources(ctx context.Context, request *pb.ListDataSourcesRequest) (*pb.ListDataSourcesResponse, error) {
 	if server.isTrace {
-		server.traceEntry(13, request)
+		server.traceEntry(19, request)
 	}
 	entryTime := time.Now()
 	g2config := getG2config()
@@ -150,28 +150,28 @@ func (server *G2ConfigServer) ListDataSources(ctx context.Context, request *pb.L
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(14, request, result, err, time.Since(entryTime))
+		defer server.traceExit(20, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ConfigServer) Load(ctx context.Context, request *pb.LoadRequest) (*pb.LoadResponse, error) {
 	if server.isTrace {
-		server.traceEntry(15, request)
+		server.traceEntry(21, request)
 	}
 	entryTime := time.Now()
 	g2config := getG2config()
 	err := g2config.Load(ctx, uintptr(request.GetConfigHandle()), (request.GetJsonConfig()))
 	response := pb.LoadResponse{}
 	if server.isTrace {
-		defer server.traceExit(16, request, err, time.Since(entryTime))
+		defer server.traceExit(22, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ConfigServer) Save(ctx context.Context, request *pb.SaveRequest) (*pb.SaveResponse, error) {
 	if server.isTrace {
-		server.traceEntry(17, request)
+		server.traceEntry(23, request)
 	}
 	entryTime := time.Now()
 	g2config := getG2config()
@@ -180,7 +180,7 @@ func (server *G2ConfigServer) Save(ctx context.Context, request *pb.SaveRequest)
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(18, request, result, err, time.Since(entryTime))
+		defer server.traceExit(24, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
@@ -194,7 +194,7 @@ Input
 */
 func (server *G2ConfigServer) SetLogLevel(ctx context.Context, logLevel logger.Level) error {
 	if server.isTrace {
-		server.traceEntry(19, logLevel)
+		server.traceEntry(25, logLevel)
 	}
 	entryTime := time.Now()
 	var err error = nil
@@ -203,7 +203,7 @@ func (server *G2ConfigServer) SetLogLevel(ctx context.Context, logLevel logger.L
 	server.getLogger().SetLogLevel(messagelogger.Level(logLevel))
 	server.isTrace = (server.getLogger().GetLogLevel() == messagelogger.LevelTrace)
 	if server.isTrace {
-		defer server.traceExit(20, logLevel, err, time.Since(entryTime))
+		defer server.traceExit(26, logLevel, err, time.Since(entryTime))
 	}
 	return err
 }
