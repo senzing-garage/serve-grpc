@@ -52,24 +52,45 @@ func (server *G2ProductServer) traceExit(errorNumber int, details ...interface{}
 // ----------------------------------------------------------------------------
 
 func (server *G2ProductServer) Destroy(ctx context.Context, request *pb.DestroyRequest) (*pb.DestroyResponse, error) {
+	if server.isTrace {
+		server.traceEntry(1, request)
+	}
+	entryTime := time.Now()
 	g2product := getG2product()
 	err := g2product.Destroy(ctx)
 	response := pb.DestroyResponse{}
+	if server.isTrace {
+		defer server.traceExit(2, request, err, time.Since(entryTime))
+	}
 	return &response, err
 }
 
 func (server *G2ProductServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.InitResponse, error) {
+	if server.isTrace {
+		server.traceEntry(1, request)
+	}
+	entryTime := time.Now()
 	g2product := getG2product()
 	err := g2product.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
 	response := pb.InitResponse{}
+	if server.isTrace {
+		defer server.traceExit(2, request, err, time.Since(entryTime))
+	}
 	return &response, err
 }
 
 func (server *G2ProductServer) License(ctx context.Context, request *pb.LicenseRequest) (*pb.LicenseResponse, error) {
+	if server.isTrace {
+		server.traceEntry(1, request)
+	}
+	entryTime := time.Now()
 	g2product := getG2product()
 	result, err := g2product.License(ctx)
 	response := pb.LicenseResponse{
 		Result: result,
+	}
+	if server.isTrace {
+		defer server.traceExit(2, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
@@ -98,28 +119,49 @@ func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevel logger.
 }
 
 func (server *G2ProductServer) ValidateLicenseFile(ctx context.Context, request *pb.ValidateLicenseFileRequest) (*pb.ValidateLicenseFileResponse, error) {
+	if server.isTrace {
+		server.traceEntry(1, request)
+	}
+	entryTime := time.Now()
 	g2product := getG2product()
 	result, err := g2product.ValidateLicenseFile(ctx, request.GetLicenseFilePath())
 	response := pb.ValidateLicenseFileResponse{
 		Result: result,
 	}
+	if server.isTrace {
+		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+	}
 	return &response, err
 }
 
 func (server *G2ProductServer) ValidateLicenseStringBase64(ctx context.Context, request *pb.ValidateLicenseStringBase64Request) (*pb.ValidateLicenseStringBase64Response, error) {
+	if server.isTrace {
+		server.traceEntry(1, request)
+	}
+	entryTime := time.Now()
 	g2product := getG2product()
 	result, err := g2product.ValidateLicenseStringBase64(ctx, request.GetLicenseString())
 	response := pb.ValidateLicenseStringBase64Response{
 		Result: result,
 	}
+	if server.isTrace {
+		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+	}
 	return &response, err
 }
 
 func (server *G2ProductServer) Version(ctx context.Context, request *pb.VersionRequest) (*pb.VersionResponse, error) {
+	if server.isTrace {
+		server.traceEntry(1, request)
+	}
+	entryTime := time.Now()
 	g2product := getG2product()
 	result, err := g2product.Version(ctx)
 	response := pb.VersionResponse{
 		Result: result,
+	}
+	if server.isTrace {
+		defer server.traceExit(2, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
