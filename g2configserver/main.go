@@ -34,7 +34,7 @@ var IdMessages = map[int]string{
 	5:    "Enter Close(%+v).",
 	6:    "Exit  Close(%+v) returned (%v).",
 	7:    "Enter Create(%+v).",
-	8:    "Exit  Create(%+v) returned (%+v, %v).",
+	8:    "Exit  Create(%+v) returned (%v, %v).",
 	9:    "Enter DeleteDataSource(%+v).",
 	10:   "Exit  DeleteDataSource(%+v) returned (%v).",
 	11:   "Enter Destroy(%+v).",
