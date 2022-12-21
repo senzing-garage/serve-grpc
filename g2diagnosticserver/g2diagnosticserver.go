@@ -15,9 +15,7 @@ import (
 
 var (
 	g2diagnosticSingleton *g2sdk.G2diagnosticImpl
-	// logger           messagelogger.MessageLoggerInterface
-	// onceLogger       sync.Once
-	g2diagnosticSyncOnce sync.Once
+	g2diagnosticSyncOnce  sync.Once
 )
 
 // ----------------------------------------------------------------------------
