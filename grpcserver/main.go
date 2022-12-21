@@ -23,8 +23,10 @@ const ProductId = 9999
 
 // Message templates.
 var IdMessages = map[int]string{
+	2000: "Entry: %+v",
 	2001: "SENZING_ENGINE_CONFIGURATION_JSON: %v",
-	2002: "Server listening at %v",
+	2002: "Enabling all services",
+	2003: "Server listening at %v",
 	4001: "Call to net.Listen(tcp, %s) failed.",
 	5001: "Failed to serve.",
 }

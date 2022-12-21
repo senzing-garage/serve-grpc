@@ -128,6 +128,8 @@ func (server *G2ConfigmgrServer) SetLogLevel(ctx context.Context, logLevel logge
 	}
 	entryTime := time.Now()
 	var err error = nil
+	g2configmgr := getG2configmgr()
+	g2configmgr.SetLogLevel(ctx, logLevel)
 	server.getLogger().SetLogLevel(messagelogger.Level(logLevel))
 	server.isTrace = (server.getLogger().GetLogLevel() == messagelogger.LevelTrace)
 	if server.isTrace {

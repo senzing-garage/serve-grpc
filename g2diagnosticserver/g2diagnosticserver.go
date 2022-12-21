@@ -281,6 +281,8 @@ func (server *G2DiagnosticServer) SetLogLevel(ctx context.Context, logLevel logg
 	}
 	entryTime := time.Now()
 	var err error = nil
+	g2diagnostic := getG2diagnostic()
+	g2diagnostic.SetLogLevel(ctx, logLevel)
 	server.getLogger().SetLogLevel(messagelogger.Level(logLevel))
 	server.isTrace = (server.getLogger().GetLogLevel() == messagelogger.LevelTrace)
 	if server.isTrace {

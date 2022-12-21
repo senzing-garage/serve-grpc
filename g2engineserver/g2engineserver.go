@@ -626,6 +626,8 @@ func (server *G2EngineServer) SetLogLevel(ctx context.Context, logLevel logger.L
 	}
 	entryTime := time.Now()
 	var err error = nil
+	g2engine := getG2engine()
+	g2engine.SetLogLevel(ctx, logLevel)
 	server.getLogger().SetLogLevel(messagelogger.Level(logLevel))
 	server.isTrace = (server.getLogger().GetLogLevel() == messagelogger.LevelTrace)
 	if server.isTrace {

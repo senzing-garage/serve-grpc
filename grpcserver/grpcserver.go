@@ -50,7 +50,11 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 	var err error = nil
 	logger, _ := messagelogger.NewSenzingApiLogger(ProductId, IdMessages, IdStatuses, grpcServer.LogLevel)
 
-	// Log SENZING_ENGINE_CONFIGURATION_JSON for user to see, even though it's not used in the code.
+	// Log entry parameters.
+
+	logger.Log(2000, grpcServer)
+
+	// FIXME: Log SENZING_ENGINE_CONFIGURATION_JSON for user to see, even though it's not used in the code.
 
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if err != nil {
@@ -61,6 +65,7 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 	// Determine which services to start. If no services are explicitly set, then all services are started.
 
 	if !grpcServer.EnableG2config && !grpcServer.EnableG2configmgr && !grpcServer.EnableG2diagnostic && !grpcServer.EnableG2engine && !grpcServer.EnableG2product {
+		logger.Log(2002)
 		grpcServer.EnableG2config = true
 		grpcServer.EnableG2configmgr = true
 		grpcServer.EnableG2diagnostic = true
@@ -74,7 +79,7 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 	if err != nil {
 		logger.Log(4001, grpcServer.Port, err)
 	}
-	logger.Log(2002, listener.Addr())
+	logger.Log(2003, listener.Addr())
 
 	// Create server.
 

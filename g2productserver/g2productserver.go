@@ -87,6 +87,8 @@ func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevel logger.
 	}
 	entryTime := time.Now()
 	var err error = nil
+	g2product := getG2product()
+	g2product.SetLogLevel(ctx, logLevel)
 	server.getLogger().SetLogLevel(messagelogger.Level(logLevel))
 	server.isTrace = (server.getLogger().GetLogLevel() == messagelogger.LevelTrace)
 	if server.isTrace {

@@ -162,7 +162,7 @@ func teardown() error {
 func TestGrpcServerImpl_Serve(test *testing.T) {
 	ctx := context.TODO()
 	grpcServer := &GrpcServerImpl{
-		LogLevel: logger.LevelInfo,
+		LogLevel: logger.LevelTrace,
 		Port:     8258,
 	}
 	grpcServer.Serve(ctx)
