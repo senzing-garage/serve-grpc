@@ -114,7 +114,7 @@ The Senzing servegrpc...
     ```
 
 1. In `bloomrpc`:
-    1. Near top-center, use the address of `0.0.0.0:50051` to reach the local gRPC server.
+    1. Near top-center, use the address of `0.0.0.0:8258` to reach the local gRPC server.
     1. In upper-left, click on plus sign ("+").
         1. Navigate to the ${GIT_REPOSITORY_DIR}/proto directory
         1. Choose a `.proto` file
