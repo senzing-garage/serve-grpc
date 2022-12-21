@@ -1,10 +1,12 @@
 package grpcserver
 
 import (
+	"context"
 	"fmt"
 	"net"
 
 	"github.com/senzing/go-helpers/g2engineconfigurationjson"
+	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
 	"github.com/senzing/go-servegrpc/g2configmgrserver"
 	"github.com/senzing/go-servegrpc/g2configserver"
@@ -26,8 +28,13 @@ import (
 
 // GrpcServerImpl is the default implementation of the GrpcServer interface.
 type GrpcServerImpl struct {
-	Port     int
-	LogLevel messagelogger.Level
+	EnableG2config     bool
+	EnableG2configmgr  bool
+	EnableG2diagnostic bool
+	EnableG2engine     bool
+	EnableG2product    bool
+	Port               int
+	LogLevel           logger.Level
 	// FIXME:  All variables go in here. Cobra will be used outside to set the variables.
 }
 
@@ -39,17 +46,27 @@ type GrpcServerImpl struct {
 // Main
 // ----------------------------------------------------------------------------
 
-func (grpcServer *GrpcServerImpl) Serve() error {
+func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 	var err error = nil
 	logger, _ := messagelogger.NewSenzingApiLogger(ProductId, IdMessages, IdStatuses, grpcServer.LogLevel)
 
-	// Log SENZING_ENGINE_CONFIGURATION_JSON for user to see. (However, it's not used.)
+	// Log SENZING_ENGINE_CONFIGURATION_JSON for user to see, even though it's not used in the code.
 
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if err != nil {
 		logger.Log(5902, err)
 	}
 	logger.Log(2001, iniParams)
+
+	// Determine which services to start. If no services are explicitly set, then all services are started.
+
+	if !grpcServer.EnableG2config && !grpcServer.EnableG2configmgr && !grpcServer.EnableG2diagnostic && !grpcServer.EnableG2engine && !grpcServer.EnableG2product {
+		grpcServer.EnableG2config = true
+		grpcServer.EnableG2configmgr = true
+		grpcServer.EnableG2diagnostic = true
+		grpcServer.EnableG2engine = true
+		grpcServer.EnableG2product = true
+	}
 
 	// Set up socket listener.
 
@@ -65,11 +82,36 @@ func (grpcServer *GrpcServerImpl) Serve() error {
 
 	// Configure server.
 
-	g2config.RegisterG2ConfigServer(aGrpcServer, &g2configserver.G2ConfigServer{})
-	g2configmgr.RegisterG2ConfigMgrServer(aGrpcServer, &g2configmgrserver.G2ConfigmgrServer{})
-	g2diagnostic.RegisterG2DiagnosticServer(aGrpcServer, &g2diagnosticserver.G2DiagnosticServer{})
-	g2engine.RegisterG2EngineServer(aGrpcServer, &g2engineserver.G2EngineServer{})
-	g2product.RegisterG2ProductServer(aGrpcServer, &g2productserver.G2ProductServer{})
+	if grpcServer.EnableG2config {
+		server := &g2configserver.G2ConfigServer{}
+		server.SetLogLevel(ctx, grpcServer.LogLevel)
+		g2config.RegisterG2ConfigServer(aGrpcServer, server)
+	}
+
+	if grpcServer.EnableG2configmgr {
+		server := &g2configmgrserver.G2ConfigmgrServer{}
+		server.SetLogLevel(ctx, grpcServer.LogLevel)
+		g2configmgr.RegisterG2ConfigMgrServer(aGrpcServer, server)
+	}
+
+	if grpcServer.EnableG2diagnostic {
+		server := &g2diagnosticserver.G2DiagnosticServer{}
+		server.SetLogLevel(ctx, grpcServer.LogLevel)
+		g2diagnostic.RegisterG2DiagnosticServer(aGrpcServer, server)
+	}
+
+	if grpcServer.EnableG2engine {
+		server := &g2engineserver.G2EngineServer{}
+		server.SetLogLevel(ctx, grpcServer.LogLevel)
+		g2engine.RegisterG2EngineServer(aGrpcServer, server)
+	}
+
+	if grpcServer.EnableG2product {
+		server := &g2productserver.G2ProductServer{}
+		server.SetLogLevel(ctx, grpcServer.LogLevel)
+		g2product.RegisterG2ProductServer(aGrpcServer, server)
+	}
+
 	reflection.Register(aGrpcServer)
 
 	// Run server.

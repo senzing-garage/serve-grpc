@@ -12,6 +12,7 @@ import (
 	"github.com/senzing/g2-sdk-go/g2engine"
 	"github.com/senzing/g2-sdk-go/testhelpers"
 	"github.com/senzing/go-helpers/g2engineconfigurationjson"
+	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
 )
 
@@ -159,9 +160,10 @@ func teardown() error {
 // ----------------------------------------------------------------------------
 
 func TestGrpcServerImpl_Serve(test *testing.T) {
+	ctx := context.TODO()
 	grpcServer := &GrpcServerImpl{
-		LogLevel: messagelogger.LevelInfo,
+		LogLevel: logger.LevelInfo,
 		Port:     8258,
 	}
-	grpcServer.Serve()
+	grpcServer.Serve(ctx)
 }

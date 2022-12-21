@@ -12,7 +12,8 @@ import (
 // server is used to implement helloworld.GreeterServer.
 type G2EngineServer struct {
 	pb.UnimplementedG2EngineServer
-	LogLevel messagelogger.Level
+	isTrace bool
+	logger  messagelogger.MessageLoggerInterface
 }
 
 // ----------------------------------------------------------------------------
