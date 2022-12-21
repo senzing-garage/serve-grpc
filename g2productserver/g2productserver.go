@@ -53,35 +53,35 @@ func (server *G2ProductServer) traceExit(errorNumber int, details ...interface{}
 
 func (server *G2ProductServer) Destroy(ctx context.Context, request *pb.DestroyRequest) (*pb.DestroyResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(3, request)
 	}
 	entryTime := time.Now()
 	g2product := getG2product()
 	err := g2product.Destroy(ctx)
 	response := pb.DestroyResponse{}
 	if server.isTrace {
-		defer server.traceExit(2, request, err, time.Since(entryTime))
+		defer server.traceExit(4, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ProductServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.InitResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(9, request)
 	}
 	entryTime := time.Now()
 	g2product := getG2product()
 	err := g2product.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
 	response := pb.InitResponse{}
 	if server.isTrace {
-		defer server.traceExit(2, request, err, time.Since(entryTime))
+		defer server.traceExit(10, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ProductServer) License(ctx context.Context, request *pb.LicenseRequest) (*pb.LicenseResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(11, request)
 	}
 	entryTime := time.Now()
 	g2product := getG2product()
@@ -90,7 +90,7 @@ func (server *G2ProductServer) License(ctx context.Context, request *pb.LicenseR
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(12, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
@@ -104,7 +104,7 @@ Input
 */
 func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevel logger.Level) error {
 	if server.isTrace {
-		server.traceEntry(1, logLevel)
+		server.traceEntry(13, logLevel)
 	}
 	entryTime := time.Now()
 	var err error = nil
@@ -113,14 +113,14 @@ func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevel logger.
 	server.getLogger().SetLogLevel(messagelogger.Level(logLevel))
 	server.isTrace = (server.getLogger().GetLogLevel() == messagelogger.LevelTrace)
 	if server.isTrace {
-		defer server.traceExit(1, logLevel, err, time.Since(entryTime))
+		defer server.traceExit(14, logLevel, err, time.Since(entryTime))
 	}
 	return err
 }
 
 func (server *G2ProductServer) ValidateLicenseFile(ctx context.Context, request *pb.ValidateLicenseFileRequest) (*pb.ValidateLicenseFileResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(14, request)
 	}
 	entryTime := time.Now()
 	g2product := getG2product()
@@ -129,14 +129,14 @@ func (server *G2ProductServer) ValidateLicenseFile(ctx context.Context, request 
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(16, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ProductServer) ValidateLicenseStringBase64(ctx context.Context, request *pb.ValidateLicenseStringBase64Request) (*pb.ValidateLicenseStringBase64Response, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(17, request)
 	}
 	entryTime := time.Now()
 	g2product := getG2product()
@@ -145,14 +145,14 @@ func (server *G2ProductServer) ValidateLicenseStringBase64(ctx context.Context, 
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(18, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ProductServer) Version(ctx context.Context, request *pb.VersionRequest) (*pb.VersionResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(19, request)
 	}
 	entryTime := time.Now()
 	g2product := getG2product()
@@ -161,7 +161,7 @@ func (server *G2ProductServer) Version(ctx context.Context, request *pb.VersionR
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(20, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }

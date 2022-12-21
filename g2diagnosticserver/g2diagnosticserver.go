@@ -81,7 +81,7 @@ func (server *G2DiagnosticServer) CheckDBPerf(ctx context.Context, request *pb.C
 
 func (server *G2DiagnosticServer) CloseEntityListBySize(ctx context.Context, request *pb.CloseEntityListBySizeRequest) (*pb.CloseEntityListBySizeResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(5, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -91,21 +91,21 @@ func (server *G2DiagnosticServer) CloseEntityListBySize(ctx context.Context, req
 	}
 	response := pb.CloseEntityListBySizeResponse{}
 	if server.isTrace {
-		defer server.traceExit(2, request, err, time.Since(entryTime))
+		defer server.traceExit(6, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) Destroy(ctx context.Context, request *pb.DestroyRequest) (*pb.DestroyResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(7, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
 	err := g2diagnostic.Destroy(ctx)
 	response := pb.DestroyResponse{}
 	if server.isTrace {
-		defer server.traceExit(2, request, err, time.Since(entryTime))
+		defer server.traceExit(8, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
@@ -113,7 +113,7 @@ func (server *G2DiagnosticServer) Destroy(ctx context.Context, request *pb.Destr
 func (server *G2DiagnosticServer) FetchNextEntityBySize(ctx context.Context, request *pb.FetchNextEntityBySizeRequest) (*pb.FetchNextEntityBySizeResponse, error) {
 	var result string = ""
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(9, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -126,14 +126,14 @@ func (server *G2DiagnosticServer) FetchNextEntityBySize(ctx context.Context, req
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(10, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) FindEntitiesByFeatureIDs(ctx context.Context, request *pb.FindEntitiesByFeatureIDsRequest) (*pb.FindEntitiesByFeatureIDsResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(11, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -142,14 +142,14 @@ func (server *G2DiagnosticServer) FindEntitiesByFeatureIDs(ctx context.Context, 
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(12, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetAvailableMemory(ctx context.Context, request *pb.GetAvailableMemoryRequest) (*pb.GetAvailableMemoryResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(13, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -158,14 +158,14 @@ func (server *G2DiagnosticServer) GetAvailableMemory(ctx context.Context, reques
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(14, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetDataSourceCounts(ctx context.Context, request *pb.GetDataSourceCountsRequest) (*pb.GetDataSourceCountsResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(15, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -174,14 +174,14 @@ func (server *G2DiagnosticServer) GetDataSourceCounts(ctx context.Context, reque
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(16, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetDBInfo(ctx context.Context, request *pb.GetDBInfoRequest) (*pb.GetDBInfoResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(17, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -190,14 +190,14 @@ func (server *G2DiagnosticServer) GetDBInfo(ctx context.Context, request *pb.Get
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(18, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetEntityDetails(ctx context.Context, request *pb.GetEntityDetailsRequest) (*pb.GetEntityDetailsResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(19, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -206,14 +206,14 @@ func (server *G2DiagnosticServer) GetEntityDetails(ctx context.Context, request 
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(20, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetEntityListBySize(ctx context.Context, request *pb.GetEntityListBySizeRequest) (*pb.GetEntityListBySizeResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(21, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -222,14 +222,14 @@ func (server *G2DiagnosticServer) GetEntityListBySize(ctx context.Context, reque
 		Result: fmt.Sprintf("%v", result),
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(22, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetEntityResume(ctx context.Context, request *pb.GetEntityResumeRequest) (*pb.GetEntityResumeResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(23, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -238,14 +238,14 @@ func (server *G2DiagnosticServer) GetEntityResume(ctx context.Context, request *
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(24, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetEntitySizeBreakdown(ctx context.Context, request *pb.GetEntitySizeBreakdownRequest) (*pb.GetEntitySizeBreakdownResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(25, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -254,14 +254,14 @@ func (server *G2DiagnosticServer) GetEntitySizeBreakdown(ctx context.Context, re
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(26, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetFeature(ctx context.Context, request *pb.GetFeatureRequest) (*pb.GetFeatureResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(27, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -270,14 +270,14 @@ func (server *G2DiagnosticServer) GetFeature(ctx context.Context, request *pb.Ge
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(28, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetGenericFeatures(ctx context.Context, request *pb.GetGenericFeaturesRequest) (*pb.GetGenericFeaturesResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(29, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -286,14 +286,14 @@ func (server *G2DiagnosticServer) GetGenericFeatures(ctx context.Context, reques
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(30, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetLogicalCores(ctx context.Context, request *pb.GetLogicalCoresRequest) (*pb.GetLogicalCoresResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(35, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -302,14 +302,14 @@ func (server *G2DiagnosticServer) GetLogicalCores(ctx context.Context, request *
 		Result: int32(result),
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(36, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetMappingStatistics(ctx context.Context, request *pb.GetMappingStatisticsRequest) (*pb.GetMappingStatisticsResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(37, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -318,14 +318,14 @@ func (server *G2DiagnosticServer) GetMappingStatistics(ctx context.Context, requ
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(38, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetPhysicalCores(ctx context.Context, request *pb.GetPhysicalCoresRequest) (*pb.GetPhysicalCoresResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(39, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -334,14 +334,14 @@ func (server *G2DiagnosticServer) GetPhysicalCores(ctx context.Context, request 
 		Result: int32(result),
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(40, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetRelationshipDetails(ctx context.Context, request *pb.GetRelationshipDetailsRequest) (*pb.GetRelationshipDetailsResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(41, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -350,14 +350,14 @@ func (server *G2DiagnosticServer) GetRelationshipDetails(ctx context.Context, re
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(42, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetResolutionStatistics(ctx context.Context, request *pb.GetResolutionStatisticsRequest) (*pb.GetResolutionStatisticsResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(43, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -366,14 +366,14 @@ func (server *G2DiagnosticServer) GetResolutionStatistics(ctx context.Context, r
 		Result: result,
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(44, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) GetTotalSystemMemory(ctx context.Context, request *pb.GetTotalSystemMemoryRequest) (*pb.GetTotalSystemMemoryResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(45, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
@@ -382,49 +382,49 @@ func (server *G2DiagnosticServer) GetTotalSystemMemory(ctx context.Context, requ
 		Result: int64(result),
 	}
 	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
+		defer server.traceExit(46, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.InitResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(47, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
 	err := g2diagnostic.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
 	response := pb.InitResponse{}
 	if server.isTrace {
-		defer server.traceExit(2, request, err, time.Since(entryTime))
+		defer server.traceExit(48, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) InitWithConfigID(ctx context.Context, request *pb.InitWithConfigIDRequest) (*pb.InitWithConfigIDResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(49, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
 	err := g2diagnostic.InitWithConfigID(ctx, request.GetModuleName(), request.GetIniParams(), int64(request.GetInitConfigID()), int(request.GetVerboseLogging()))
 	response := pb.InitWithConfigIDResponse{}
 	if server.isTrace {
-		defer server.traceExit(2, request, err, time.Since(entryTime))
+		defer server.traceExit(50, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2DiagnosticServer) Reinit(ctx context.Context, request *pb.ReinitRequest) (*pb.ReinitResponse, error) {
 	if server.isTrace {
-		server.traceEntry(1, request)
+		server.traceEntry(51, request)
 	}
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
 	err := g2diagnostic.Reinit(ctx, int64(request.GetInitConfigID()))
 	response := pb.ReinitResponse{}
 	if server.isTrace {
-		defer server.traceExit(2, request, err, time.Since(entryTime))
+		defer server.traceExit(52, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
@@ -438,7 +438,7 @@ Input
 */
 func (server *G2DiagnosticServer) SetLogLevel(ctx context.Context, logLevel logger.Level) error {
 	if server.isTrace {
-		server.traceEntry(1, logLevel)
+		server.traceEntry(53, logLevel)
 	}
 	entryTime := time.Now()
 	var err error = nil
@@ -447,7 +447,7 @@ func (server *G2DiagnosticServer) SetLogLevel(ctx context.Context, logLevel logg
 	server.getLogger().SetLogLevel(messagelogger.Level(logLevel))
 	server.isTrace = (server.getLogger().GetLogLevel() == messagelogger.LevelTrace)
 	if server.isTrace {
-		defer server.traceExit(1, logLevel, err, time.Since(entryTime))
+		defer server.traceExit(54, logLevel, err, time.Since(entryTime))
 	}
 	return err
 }
