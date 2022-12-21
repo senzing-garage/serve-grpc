@@ -21,7 +21,7 @@ type G2ConfigServer struct {
 // ----------------------------------------------------------------------------
 
 // Identfier of the g2config package found messages having the format "senzing-6999xxxx".
-const ProductId = 6999
+const ProductId = 6011
 
 // ----------------------------------------------------------------------------
 // Variables
@@ -29,32 +29,26 @@ const ProductId = 6999
 
 // Message templates for the g2config package.
 var IdMessages = map[int]string{
-	1:  "Enter AddDataSource(%v, %s).",
-	2:  "Exit  AddDataSource(%v, %s) returned (%s, %v).",
-	3:  "Enter ClearLastException().",
-	4:  "Exit  ClearLastException() returned (%v).",
-	5:  "Enter Close(%v).",
-	6:  "Exit  Close(%v) returned (%v).",
-	7:  "Enter Create().",
-	8:  "Exit  Create() returned (%v, %v).",
-	9:  "Enter DeleteDataSource(%v, %s).",
-	10: "Exit  DeleteDataSource(%v, %s) returned (%v).",
-	11: "Enter Destroy().",
-	12: "Exit  Destroy() returned (%v).",
-	13: "Enter GetLastException().",
-	14: "Exit  GetLastException() returned (%s, %v).",
-	15: "Enter GetLastExceptionCode().",
-	16: "Exit  GetLastExceptionCode() returned (%d, %v).",
-	17: "Enter Init(%s, %s, %d).",
-	18: "Exit  Init(%s, %s, %d) returned (%v).",
-	19: "Enter ListDataSources(%v).",
-	20: "Exit  ListDataSources(%v) returned (%s, %v).",
-	21: "Enter Load(%v, %s).",
-	22: "Exit  Load(%v, %s) returned (%v).",
-	23: "Enter Save(%v).",
-	24: "Exit  Save(%v) returned (%s, %v).",
-	25: "Enter SetLogLevel(%v).",
-	26: "Exit  SetLogLevel(%v) returned (%v).",
+	1:  "Enter AddDataSource(%+v).",
+	2:  "Exit  AddDataSource(%+v) returned (%s, %v).",
+	3:  "Enter Close(%+v).",
+	4:  "Exit  Close(%+v) returned (%v).",
+	5:  "Enter Create(%+v).",
+	6:  "Exit  Create(%+v) returned (%+v, %v).",
+	7:  "Enter DeleteDataSource(%+v).",
+	8:  "Exit  DeleteDataSource(%+v) returned (%v).",
+	9:  "Enter Destroy(%+v).",
+	10: "Exit  Destroy(%+v) returned (%v).",
+	11: "Enter Init(%+v).",
+	12: "Exit  Init(%+v) returned (%v).",
+	13: "Enter ListDataSources(%+v).",
+	14: "Exit  ListDataSources(%+v) returned (%s, %v).",
+	15: "Enter Load(%+v).",
+	16: "Exit  Load(%+v) returned (%v).",
+	17: "Enter Save(%+v).",
+	18: "Exit  Save(%+v) returned (%s, %v).",
+	19: "Enter SetLogLevel(%+v).",
+	20: "Exit  SetLogLevel(%+v) returned (%v).",
 }
 
 // Status strings for specific g2config messages.

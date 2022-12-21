@@ -21,7 +21,7 @@ type G2ProductServer struct {
 // ----------------------------------------------------------------------------
 
 // Identfier of the g2productserver package found messages having the format "senzing-6999xxxx".
-const ProductId = 6999
+const ProductId = 6016
 
 // ----------------------------------------------------------------------------
 // Variables
