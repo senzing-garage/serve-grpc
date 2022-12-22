@@ -76,7 +76,7 @@ test:
 
 .PHONY: test-servegrpc
 test-servegrpc:
-	@go test -v ./grpcserver
+	@go run main.go
 
 # -----------------------------------------------------------------------------
 # Run
