@@ -16,14 +16,14 @@ import (
 
 var (
 	cfgFile            string
-	enableG2config     bool = false
-	enableG2configmgr  bool = false
-	enableG2diagnostic bool = false
-	enableG2engine     bool = false
-	enableG2product    bool = false
-	ok                 bool
-	port               int          = 8258
+	enableG2config     bool         = false
+	enableG2configmgr  bool         = false
+	enableG2diagnostic bool         = false
+	enableG2engine     bool         = false
+	enableG2product    bool         = false
 	logLevel           logger.Level = logger.LevelInfo
+	ok                 bool
+	port               int = 8258
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -34,9 +34,9 @@ var RootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := context.TODO()
 
-		for _, key := range viper.AllKeys() {
-			fmt.Printf(">>> Key: %s = %v\n", key, viper.Get(key))
-		}
+		// for _, key := range viper.AllKeys() {
+		// 	fmt.Printf(">>> Key: %s = %v\n", key, viper.Get(key))
+		// }
 
 		grpcserver := &grpcserver.GrpcServerImpl{
 			EnableG2config:     enableG2config,
@@ -121,14 +121,13 @@ func initConfig() {
 
 	viper.AutomaticEnv() // read in environment variables that match
 	viper.SetEnvPrefix("senzing_tools")
-	// viper.BindEnv("enable_g2config")
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
 
-	// Set variables for use in command.
+	// Set local variables for use in command.
 
 	enableG2config = viper.GetBool("enable_g2config")
 	enableG2configmgr = viper.GetBool("enable_g2configmgr")
@@ -141,6 +140,6 @@ func initConfig() {
 		logLevel = logger.LevelInfo
 	}
 
-	port = viper.GetInt("port")
+	port = viper.GetInt("grpc_port")
 
 }

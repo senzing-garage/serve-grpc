@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/senzing/go-helpers/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
 	"github.com/senzing/go-servegrpc/g2configmgrserver"
@@ -53,14 +52,6 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 	// Log entry parameters.
 
 	logger.Log(2000, grpcServer)
-
-	// FIXME: Log SENZING_ENGINE_CONFIGURATION_JSON for user to see, even though it's not used in the code.
-
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-	if err != nil {
-		logger.Log(5902, err)
-	}
-	logger.Log(2001, iniParams)
 
 	// Determine which services to start. If no services are explicitly set, then all services are started.
 
