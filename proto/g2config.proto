@@ -1,7 +1,7 @@
 syntax = "proto3";
 package g2config;
 
-option go_package = "github.com/senzing/go-servegrpc/protobuf/g2config";
+option go_package = "github.com/senzing/servegrpc/protobuf/g2config";
 
 service G2Config {
   rpc AddDataSource (AddDataSourceRequest) returns (AddDataSourceResponse) {}

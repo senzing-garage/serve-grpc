@@ -83,7 +83,7 @@ The variables are used throughout the installation procedure.
 
 ```console
 export GIT_ACCOUNT=senzing
-export GIT_REPOSITORY=go-servegrpc
+export GIT_REPOSITORY=servegrpc
 ```
 
 Synthesize environment variables.

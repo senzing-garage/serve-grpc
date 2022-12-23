@@ -108,7 +108,7 @@ ARG PROGRAM_NAME
 
 # Copy files from prior step.
 
-COPY --from=fpm_builder "/output/linux/${PROGRAM_NAME}"    "/output/linux/${PROGRAM_NAME}"
-COPY --from=fpm_builder "/output/go-servegrpc-*"           "/output/"
+COPY --from=fpm_builder "/output/linux/${PROGRAM_NAME}" "/output/linux/${PROGRAM_NAME}"
+COPY --from=fpm_builder "/output/servegrpc-*"           "/output/"
 
 CMD ["/bin/bash"]

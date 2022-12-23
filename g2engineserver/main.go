@@ -2,7 +2,7 @@ package g2engineserver
 
 import (
 	"github.com/senzing/go-logging/messagelogger"
-	pb "github.com/senzing/go-servegrpc/protobuf/g2engine"
+	pb "github.com/senzing/servegrpc/protobuf/g2engine"
 )
 
 // ----------------------------------------------------------------------------

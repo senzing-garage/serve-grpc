@@ -1,4 +1,4 @@
-module github.com/senzing/go-servegrpc
+module github.com/senzing/servegrpc
 
 go 1.19
 

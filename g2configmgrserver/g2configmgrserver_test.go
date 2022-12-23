@@ -14,9 +14,9 @@ import (
 	"github.com/senzing/g2-sdk-go/testhelpers"
 	"github.com/senzing/go-helpers/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/messagelogger"
-	"github.com/senzing/go-servegrpc/g2configserver"
-	pbconfig "github.com/senzing/go-servegrpc/protobuf/g2config"
-	pb "github.com/senzing/go-servegrpc/protobuf/g2configmgr"
+	"github.com/senzing/servegrpc/g2configserver"
+	pbconfig "github.com/senzing/servegrpc/protobuf/g2config"
+	pb "github.com/senzing/servegrpc/protobuf/g2configmgr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -384,7 +384,7 @@ func TestG2configmgrImpl_Destroy(test *testing.T) {
 // ----------------------------------------------------------------------------
 
 func ExampleG2configmgrImpl_AddConfig() {
-	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	now := time.Now()
 	g2config := getG2ConfigServer(ctx)
@@ -421,7 +421,7 @@ func ExampleG2configmgrImpl_AddConfig() {
 }
 
 func ExampleG2configmgrImpl_Destroy() {
-	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &pb.DestroyRequest{}
@@ -434,7 +434,7 @@ func ExampleG2configmgrImpl_Destroy() {
 }
 
 func ExampleG2configmgrImpl_GetConfig() {
-	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 
@@ -458,7 +458,7 @@ func ExampleG2configmgrImpl_GetConfig() {
 }
 
 func ExampleG2configmgrImpl_GetConfigList() {
-	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &pb.GetConfigListRequest{}
@@ -471,7 +471,7 @@ func ExampleG2configmgrImpl_GetConfigList() {
 }
 
 func ExampleG2configmgrImpl_GetDefaultConfigID() {
-	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &pb.GetDefaultConfigIDRequest{}
@@ -484,7 +484,7 @@ func ExampleG2configmgrImpl_GetDefaultConfigID() {
 }
 
 func ExampleG2configmgrImpl_Init() {
-	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	g2config := getG2ConfigmgrServer(ctx)
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
@@ -505,7 +505,7 @@ func ExampleG2configmgrImpl_Init() {
 }
 
 func ExampleG2configmgrImpl_ReplaceDefaultConfigID() {
-	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	now := time.Now()
 	g2config := getG2ConfigServer(ctx)
@@ -558,7 +558,7 @@ func ExampleG2configmgrImpl_ReplaceDefaultConfigID() {
 }
 
 func ExampleG2configmgrImpl_SetDefaultConfigID() {
-	// For more information, visit https://github.com/Senzing/go-servegrpc/blob/main/g2configmgr/g2configmgr_test.go
+	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgr/g2configmgr_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 

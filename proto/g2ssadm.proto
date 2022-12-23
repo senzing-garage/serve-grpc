@@ -1,7 +1,7 @@
 syntax = "proto3";
 package g2ssadm;
 
-option go_package = "github.com/senzing/go-servegrpc/protobuf/g2ssadm";
+option go_package = "github.com/senzing/servegrpc/protobuf/g2ssadm";
 
 service G2Ssadm {
   rpc CreateSaltInStore (CreateSaltInStoreRequest) returns (CreateSaltInStoreResponse) {}

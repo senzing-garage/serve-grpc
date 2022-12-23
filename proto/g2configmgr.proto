@@ -1,7 +1,7 @@
 syntax = "proto3";
 package g2configmgr;
 
-option go_package = "github.com/senzing/go-servegrpc/protobuf/g2configmgr";
+option go_package = "github.com/senzing/servegrpc/protobuf/g2configmgr";
 
 service G2ConfigMgr {
   rpc AddConfig (AddConfigRequest) returns (AddConfigResponse) {}

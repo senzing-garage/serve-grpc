@@ -1,7 +1,7 @@
 syntax = "proto3";
 package g2hasher;
 
-option go_package = "github.com/senzing/go-servegrpc/protobuf/g2hasher";
+option go_package = "github.com/senzing/servegrpc/protobuf/g2hasher";
 
 service G2Hasher {
   rpc Destroy (DestroyRequest) returns (DestroyResponse) {}

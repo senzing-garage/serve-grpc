@@ -1,6 +1,6 @@
-# go-servegrpc
+# servegrpc
 
-## :warning: WARNING: go-servegrpc is still in development :warning: _
+## :warning: WARNING: servegrpc is still in development :warning: _
 
 At the moment, this is "work-in-progress" with Semantic Versions of `0.n.x`.
 Although it can be reviewed and commented on,
@@ -10,9 +10,9 @@ the recommendation is not to use it yet.
 
 The Senzing servegrpc...
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/senzing/go-servegrpc.svg)](https://pkg.go.dev/github.com/senzing/go-servegrpc)
-[![Go Report Card](https://goreportcard.com/badge/github.com/senzing/go-servegrpc)](https://goreportcard.com/report/github.com/senzing/go-servegrpc)
-[![go-test.yaml](https://github.com/Senzing/go-servegrpc/actions/workflows/go-test.yaml/badge.svg)](https://github.com/Senzing/go-servegrpc/actions/workflows/go-test.yaml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/senzing/servegrpc.svg)](https://pkg.go.dev/github.com/senzing/servegrpc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/senzing/servegrpc)](https://goreportcard.com/report/github.com/senzing/servegrpc)
+[![go-test.yaml](https://github.com/Senzing/servegrpc/actions/workflows/go-test.yaml/badge.svg)](https://github.com/Senzing/servegrpc/actions/workflows/go-test.yaml)
 
 ## Overview
 
@@ -25,7 +25,7 @@ The Senzing servegrpc...
 
     ```console
     export GIT_ACCOUNT=senzing
-    export GIT_REPOSITORY=go-servegrpc
+    export GIT_REPOSITORY=servegrpc
     export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
     export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
 
@@ -87,7 +87,7 @@ The Senzing servegrpc...
 
     ```console
     export GIT_ACCOUNT=senzing
-    export GIT_REPOSITORY=go-servegrpc
+    export GIT_REPOSITORY=servegrpc
     export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
     export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
 

@@ -9,7 +9,7 @@ import (
 	"os"
 
 	"github.com/senzing/go-logging/logger"
-	"github.com/senzing/go-servegrpc/grpcserver"
+	"github.com/senzing/servegrpc/grpcserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -30,7 +30,7 @@ var (
 var RootCmd = &cobra.Command{
 	Use:   "servegrpc",
 	Short: "Start a gRPC server for the Senzing SDK API",
-	Long:  `For more information, visit https://github.com/Senzing/go-servegrpc`,
+	Long:  `For more information, visit https://github.com/Senzing/servegrpc`,
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := context.TODO()
 
@@ -102,7 +102,7 @@ func initConfig() {
 		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
-		// Search config in home directory with name ".go-servegrpc" (without extension).
+		// Search config in home directory with name ".servegrpc" (without extension).
 		viper.AddConfigPath(home + "/.senzing-tools")
 		viper.AddConfigPath(home)
 		viper.AddConfigPath("/etc/senzing-tools")

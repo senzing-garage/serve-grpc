@@ -5,7 +5,7 @@ package main
 import (
 	"log"
 
-	"github.com/senzing/go-servegrpc/cmd"
+	"github.com/senzing/servegrpc/cmd"
 )
 
 func main() {

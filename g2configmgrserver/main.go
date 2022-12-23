@@ -2,7 +2,7 @@ package g2configmgrserver
 
 import (
 	"github.com/senzing/go-logging/messagelogger"
-	pb "github.com/senzing/go-servegrpc/protobuf/g2configmgr"
+	pb "github.com/senzing/servegrpc/protobuf/g2configmgr"
 )
 
 // ----------------------------------------------------------------------------
