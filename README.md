@@ -102,7 +102,7 @@ The Senzing servegrpc...
 
      ```
 
-1. From the `senzing-99992001` message, copy the value of "SENZING_ENGINE_CONFIGURATION_JSON".
+1. From the `senzing-62042001` message, copy the value of "SENZING_ENGINE_CONFIGURATION_JSON".
    It is in escaped JSON format.
    It will be used when working with the gRPC test client.
 
@@ -210,6 +210,7 @@ The Senzing servegrpc...
    Example:
 
     ```console
+    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
     servegrpc
 
     ```
