@@ -133,3 +133,79 @@ The Senzing servegrpc...
 
         1. Near the center, click the green "play" button.
     1. The Senzing object is initialized and other messages can be tried.
+
+## Package
+
+### Package RPM and DEB files
+
+1. Use make target to run a docker images that builds RPM and DEB files.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make package
+    ```
+
+   The results will be in the `${GIT_REPOSITORY_DIR}/target` directory.
+
+### Test DEB package on Ubuntu
+
+1. Determine if `servegrpc` is installed.
+   Example:
+
+    ```console
+    apt list --installed | grep servegrpc
+    ```
+
+1. :pencil2: Install `servegrpc`.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}/target
+    sudo apt install ./servegrpc_0.0.0_amd64.deb
+    ```
+
+1. Run command.
+   Example:
+
+    ```console
+    servegrpc
+    ```
+
+1. Remove `servegrpc` from system.
+   Example:
+
+    ```console
+    sudo apt-get remove servegrpc
+    ```
+
+### Test RPM package on Centos
+
+1. Determine if `servegrpc` is installed.
+   Example:
+
+    ```console
+    yum list installed | grep servegrpc
+    ```
+
+1. :pencil2: Install `servegrpc`.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}/target
+    sudo yum install ./servegrpc_0.0.0_amd64.rpm
+    ```
+
+1. Run command.
+   Example:
+
+    ```console
+    servegrpc
+    ```
+
+1. Remove `servegrpc` from system.
+   Example:
+
+    ```console
+    sudo yum remove servegrpc
+    ```
