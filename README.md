@@ -19,6 +19,7 @@ The Senzing servegrpc...
 ## Use
 
 ```
+export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
 servegrpc [flags]
 ```
 
