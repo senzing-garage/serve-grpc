@@ -99,6 +99,7 @@ The Senzing servegrpc...
      ```console
      cd ${GIT_REPOSITORY_DIR}
      make test-servegrpc
+
      ```
 
 1. From the `senzing-99992001` message, copy the value of "SENZING_ENGINE_CONFIGURATION_JSON".
@@ -110,6 +111,7 @@ The Senzing servegrpc...
 
     ```console
     bloomrpc
+
 
     ```
 
@@ -144,6 +146,7 @@ The Senzing servegrpc...
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make package
+
     ```
 
    The results will be in the `${GIT_REPOSITORY_DIR}/target` directory.
@@ -155,6 +158,7 @@ The Senzing servegrpc...
 
     ```console
     apt list --installed | grep servegrpc
+
     ```
 
 1. :pencil2: Install `servegrpc`.
@@ -162,14 +166,17 @@ The Senzing servegrpc...
 
     ```console
     cd ${GIT_REPOSITORY_DIR}/target
-    sudo apt install ./servegrpc_0.0.0_amd64.deb
+    sudo apt install ./servegrpc-0.0.0.deb
+
     ```
 
 1. Run command.
    Example:
 
     ```console
+    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
     servegrpc
+
     ```
 
 1. Remove `servegrpc` from system.
@@ -177,6 +184,7 @@ The Senzing servegrpc...
 
     ```console
     sudo apt-get remove servegrpc
+
     ```
 
 ### Test RPM package on Centos
@@ -186,6 +194,7 @@ The Senzing servegrpc...
 
     ```console
     yum list installed | grep servegrpc
+
     ```
 
 1. :pencil2: Install `servegrpc`.
@@ -193,7 +202,8 @@ The Senzing servegrpc...
 
     ```console
     cd ${GIT_REPOSITORY_DIR}/target
-    sudo yum install ./servegrpc_0.0.0_amd64.rpm
+    sudo yum install ./servegrpc-0.0.0.rpm
+
     ```
 
 1. Run command.
@@ -201,6 +211,7 @@ The Senzing servegrpc...
 
     ```console
     servegrpc
+
     ```
 
 1. Remove `servegrpc` from system.
@@ -208,4 +219,5 @@ The Senzing servegrpc...
 
     ```console
     sudo yum remove servegrpc
+
     ```
