@@ -86,7 +86,7 @@ servegrpc [flags]
 
     ```
 
-### Test server
+### Test the server
 
 1. Install the  [bloomrpc](https://github.com/bloomrpc/bloomrpc) gRPC test client.
    1. Example for Ubuntu.
@@ -122,16 +122,11 @@ servegrpc [flags]
 
      ```
 
-1. From the `senzing-62042001` message, copy the value of "SENZING_ENGINE_CONFIGURATION_JSON".
-   It is in escaped JSON format.
-   It will be used when working with the gRPC test client.
-
 1. In a separate terminal, start the gRPC test client.
    Example:
 
     ```console
     bloomrpc
-
 
     ```
 

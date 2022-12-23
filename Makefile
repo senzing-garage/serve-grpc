@@ -23,7 +23,7 @@ CC = gcc
 # Conditional assignment. ('?=')
 
 SENZING_G2_DIR ?= /opt/senzing/g2
-SENZING_DATABASE_URL ?= postgresql://postgres:postgres@127.0.0.1:5432/G2
+# SENZING_DATABASE_URL ?= postgresql://postgres:postgres@127.0.0.1:5432/G2
 
 # Exports
 
