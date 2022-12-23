@@ -6,7 +6,7 @@ At the moment, this is "work-in-progress" with Semantic Versions of `0.n.x`.
 Although it can be reviewed and commented on,
 the recommendation is not to use it yet.
 
-## Synopsi
+## Synopsis
 
 The Senzing servegrpc...
 
@@ -15,6 +15,25 @@ The Senzing servegrpc...
 [![go-test.yaml](https://github.com/Senzing/servegrpc/actions/workflows/go-test.yaml/badge.svg)](https://github.com/Senzing/servegrpc/actions/workflows/go-test.yaml)
 
 ## Overview
+
+## Use
+
+```
+servegrpc [flags]
+```
+
+### Options
+
+```
+      --enable-g2config       enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]
+      --enable-g2configmgr    enable G2ConfigMgr service [SENZING_TOOLS_ENABLE_G2CONFIGMGR]
+      --enable-g2diagnostic   enable G2Diagnostic service [SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]
+      --enable-g2engine       enable G2Config service [SENZING_TOOLS_ENABLE_G2ENGINE]
+      --enable-g2product      enable G2Config service [SENZING_TOOLS_ENABLE_G2PRODUCT]
+      --grpc-port int         port used to serve gRPC [SENZING_TOOLS_GRPC_PORT] (default 8258)
+  -h, --help                  help for servegrpc
+      --log-level string      log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [SENZING_TOOLS_LOG_LEVEL] (default "INFO")
+```
 
 ## Development
 
