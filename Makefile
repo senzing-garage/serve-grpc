@@ -75,7 +75,7 @@ test:
 	@rm -rf /tmp/sqlite
 	@mkdir  /tmp/sqlite
 	@cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
-#	@go test -v -p 1 ./...
+	@go test -v -p 1 ./...
 #	@go test -v ./.
 #	@go test -v ./g2configserver
 #	@go test -v ./g2configmgrserver
@@ -115,11 +115,11 @@ docker-build-package:
 		--build-arg BUILD_VERSION=$(BUILD_VERSION) \
 		--build-arg GO_PACKAGE_NAME=$(GO_PACKAGE_NAME) \
 		--build-arg PROGRAM_NAME=$(PROGRAM_NAME) \
+		--no-cache \
 		--file package.Dockerfile \
 		--tag $(DOCKER_BUILD_IMAGE_NAME) \
 		.
 
-		# --no-cache \
 
 # -----------------------------------------------------------------------------
 # Package
