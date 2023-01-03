@@ -90,6 +90,10 @@ servegrpc [flags]
 
 ### Build
 
+1. Verify Senzing C SDK header files and shared objects are installed.
+    1. `/opt/senzing/g2/lib`
+    1. `/opt/senzing/g2/sdk/c`
+
 1. Identify repository.
    Example:
 
@@ -213,6 +217,7 @@ files can be copied from an existing Docker image.
 
     ```console
     cp /opt/senzing/g2/lib/* ${GIT_REPOSITORY_DIR}/rootfs/opt/senzing/g2/lib/
+
     ```
 
 1. Use make target to run a docker images that builds RPM and DEB files.
@@ -224,7 +229,13 @@ files can be copied from an existing Docker image.
 
     ```
 
-   The results will be in the `${GIT_REPOSITORY_DIR}/target` directory.
+1. The results will be in the `${GIT_REPOSITORY_DIR}/target` directory.
+   Example:
+
+    ```console
+    tree ${GIT_REPOSITORY_DIR}/target
+
+    ```
 
 ### Test DEB package on Ubuntu
 
