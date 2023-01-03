@@ -202,10 +202,9 @@ servegrpc [flags]
 
 ## Package
 
-:warning: This won't work until `/opt/senzing/g2/sdk/c/*.h` files can be copied from an existing Docker image.
-
 ### Package RPM and DEB files
 
+1. :warning: This won't work until `/opt/senzing/g2/sdk/c/*.h` files can be copied from an existing Docker image.
 1. Use make target to run a docker images that builds RPM and DEB files.
    Example:
 
