@@ -18,14 +18,14 @@ The Senzing servegrpc...
 
 ## Use
 
-```
+```console
 export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
 servegrpc [flags]
 ```
 
 ### Options
 
-```
+```console
       --enable-g2config       enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]
       --enable-g2configmgr    enable G2ConfigMgr service [SENZING_TOOLS_ENABLE_G2CONFIGMGR]
       --enable-g2diagnostic   enable G2Diagnostic service [SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]
@@ -112,6 +112,15 @@ servegrpc [flags]
     export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
 
     ```
+
+1. Create a test database.
+   Example:
+
+     ```console
+     mkdir /tmp/sqlite
+     cp ${GIT_REPOSITORY_DIR}/testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
+
+     ```
 
 1. Start the test server.
    Example:

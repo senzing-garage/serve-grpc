@@ -92,7 +92,7 @@ test:
 
 .PHONY: test-servegrpc
 test-servegrpc:
-	@go run main.go -v
+	@go run main.go
 
 # -----------------------------------------------------------------------------
 # docker-build
