@@ -263,7 +263,7 @@ servegrpc [flags]
 
 ### Make documents
 
-Make documents that are visible at
+Make documents visible at
 [hub.senzing.com/servegrpc](https://hub.senzing.com/servegrpc).
 
 1. Identify repository.
