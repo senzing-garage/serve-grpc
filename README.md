@@ -88,7 +88,45 @@ servegrpc [flags]
 
     ```
 
-### Test the server
+### Build
+
+1. Identify repository.
+   Example:
+
+    ```console
+    export GIT_ACCOUNT=senzing
+    export GIT_REPOSITORY=servegrpc
+    export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
+    export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
+
+    ```
+
+1. Build the binaries.
+   Example:
+
+     ```console
+     cd ${GIT_REPOSITORY_DIR}
+     make build
+
+     ```
+
+1. The binaries will be found in ${GIT_REPOSITORY_DIR}/target.
+   Example:
+
+    ```console
+    tree ${GIT_REPOSITORY_DIR}/target
+    ```
+
+1. Clean up.
+   Example:
+
+     ```console
+     cd ${GIT_REPOSITORY_DIR}
+     make clean
+
+     ```
+
+### Test
 
 1. Install the  [bloomrpc](https://github.com/bloomrpc/bloomrpc) gRPC test client.
    1. Example for Ubuntu.
