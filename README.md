@@ -69,6 +69,7 @@ servegrpc [flags]
 
     ```console
     tree ${GIT_REPOSITORY_DIR}/target
+
     ```
 
 1. Clean up.
@@ -158,9 +159,10 @@ servegrpc [flags]
 
 ### Package RPM and DEB files
 
-1. :warning: FIXME: This won't work automatically until
-`/opt/senzing/g2/sdk/c/*.h` and `/opt/senzing/g2/lib/`
-files can be copied from an existing Docker image.
+1. :warning: **FIXME:**
+   This won't work automatically until
+   `/opt/senzing/g2/sdk/c/*.h` and `/opt/senzing/g2/lib/`
+   files can be copied from an existing Docker image.
 1. :thinking: *Work-around:*
    Copy files from `/opt/senzing/g2/lib` into the repository.
    Example:
@@ -256,5 +258,30 @@ files can be copied from an existing Docker image.
 
     ```console
     sudo yum remove servegrpc
+
+    ```
+
+### Make documents
+
+Make documents that are visible at
+[hub.senzing.com/servegrpc](https://hub.senzing.com/servegrpc).
+
+1. Identify repository.
+   Example:
+
+    ```console
+    export GIT_ACCOUNT=senzing
+    export GIT_REPOSITORY=servegrpc
+    export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
+    export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
+
+    ```
+
+1. Make documents.
+   Example:
+
+    ```console
+    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    servegrpc docs --dir ${GIT_REPOSITORY_DIR}/docs
 
     ```

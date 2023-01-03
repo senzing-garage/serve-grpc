@@ -1,5 +1,7 @@
-# template-repository
+# servegrpc
 
-Placeholder for [GitHub pages](https://pages.github.com/).
+## Commands
 
-See [https://senzing.github.io/template-repository](https://senzing.github.io/template-repository).
+1. [servegrpc](servegrpc.md)
+1. [servegrpc completion](completion.md)
+1. [servegrpc docs](docs.md)
