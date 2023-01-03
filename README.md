@@ -40,7 +40,7 @@ servegrpc [flags]
 
 ### Create protobuf directories
 
-FIXME:  Remove this section after <https://github.com/Senzing/g2-sdk-proto/tree/issue-7.dockter.1/go> works.
+:warning: FIXME:  Remove this section after <https://github.com/Senzing/g2-sdk-proto/tree/issue-7.dockter.1/go> works.
 
 1. Identify repository.
    Example:
