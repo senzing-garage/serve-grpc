@@ -204,7 +204,17 @@ servegrpc [flags]
 
 ### Package RPM and DEB files
 
-1. :warning: FIXME: This won't work until `/opt/senzing/g2/sdk/c/*.h` files can be copied from an existing Docker image.
+1. :warning: FIXME: This won't work automatically until
+`/opt/senzing/g2/sdk/c/*.h` and `/opt/senzing/g2/lib/`
+files can be copied from an existing Docker image.
+1. :thinking: *Work-around:*
+   Copy files from `/opt/senzing/g2/lib` into the repository.
+   Example:
+
+    ```console
+    cp /opt/senzing/g2/lib/* ${GIT_REPOSITORY_DIR}/rootfs/opt/senzing/g2/lib/
+    ```
+
 1. Use make target to run a docker images that builds RPM and DEB files.
    Example:
 
