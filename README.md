@@ -23,18 +23,8 @@ export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
 servegrpc [flags]
 ```
 
-### Options
-
-```console
-      --enable-g2config       enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]
-      --enable-g2configmgr    enable G2ConfigMgr service [SENZING_TOOLS_ENABLE_G2CONFIGMGR]
-      --enable-g2diagnostic   enable G2Diagnostic service [SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]
-      --enable-g2engine       enable G2Config service [SENZING_TOOLS_ENABLE_G2ENGINE]
-      --enable-g2product      enable G2Config service [SENZING_TOOLS_ENABLE_G2PRODUCT]
-      --grpc-port int         port used to serve gRPC [SENZING_TOOLS_GRPC_PORT] (default 8258)
-  -h, --help                  help for servegrpc
-      --log-level string      log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [SENZING_TOOLS_LOG_LEVEL] (default "INFO")
-```
+For options and flags, see
+[hub.senzing.com/servegrpc/](https://hub.senzing.com/servegrpc/).
 
 ## Development
 
