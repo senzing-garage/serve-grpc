@@ -6,9 +6,9 @@ import (
 	"time"
 
 	g2sdk "github.com/senzing/g2-sdk-go/g2configmgr"
+	pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
-	pb "github.com/senzing/servegrpc/protobuf/g2configmgr"
 )
 
 var (

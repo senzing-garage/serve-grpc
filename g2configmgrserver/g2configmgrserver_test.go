@@ -12,11 +12,11 @@ import (
 	"github.com/senzing/g2-sdk-go/g2configmgr"
 	"github.com/senzing/g2-sdk-go/g2engine"
 	"github.com/senzing/g2-sdk-go/testhelpers"
+	pbconfig "github.com/senzing/g2-sdk-proto/go/g2config"
+	pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
 	"github.com/senzing/go-helpers/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/messagelogger"
 	"github.com/senzing/servegrpc/g2configserver"
-	pbconfig "github.com/senzing/servegrpc/protobuf/g2config"
-	pb "github.com/senzing/servegrpc/protobuf/g2configmgr"
 	"github.com/stretchr/testify/assert"
 )
 

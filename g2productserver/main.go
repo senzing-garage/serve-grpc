@@ -1,8 +1,8 @@
 package g2productserver
 
 import (
+	pb "github.com/senzing/g2-sdk-proto/go/g2product"
 	"github.com/senzing/go-logging/messagelogger"
-	pb "github.com/senzing/servegrpc/protobuf/g2product"
 )
 
 // ----------------------------------------------------------------------------

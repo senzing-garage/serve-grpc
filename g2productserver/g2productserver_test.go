@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	truncator "github.com/aquilax/truncate"
+	pb "github.com/senzing/g2-sdk-proto/go/g2product"
 	"github.com/senzing/go-helpers/g2engineconfigurationjson"
-	pb "github.com/senzing/servegrpc/protobuf/g2product"
 	"github.com/stretchr/testify/assert"
 )
 

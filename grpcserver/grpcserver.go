@@ -5,6 +5,11 @@ import (
 	"fmt"
 	"net"
 
+	"github.com/senzing/g2-sdk-proto/go/g2config"
+	"github.com/senzing/g2-sdk-proto/go/g2configmgr"
+	"github.com/senzing/g2-sdk-proto/go/g2diagnostic"
+	"github.com/senzing/g2-sdk-proto/go/g2engine"
+	"github.com/senzing/g2-sdk-proto/go/g2product"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
 	"github.com/senzing/servegrpc/g2configmgrserver"
@@ -12,11 +17,6 @@ import (
 	"github.com/senzing/servegrpc/g2diagnosticserver"
 	"github.com/senzing/servegrpc/g2engineserver"
 	"github.com/senzing/servegrpc/g2productserver"
-	"github.com/senzing/servegrpc/protobuf/g2config"
-	"github.com/senzing/servegrpc/protobuf/g2configmgr"
-	"github.com/senzing/servegrpc/protobuf/g2diagnostic"
-	"github.com/senzing/servegrpc/protobuf/g2engine"
-	"github.com/senzing/servegrpc/protobuf/g2product"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )

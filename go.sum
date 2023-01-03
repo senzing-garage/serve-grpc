@@ -161,6 +161,8 @@ github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/senzing/g2-sdk-go v0.2.4 h1:Ydn+XgNBcXk8CXAURz9JhR0WeCr3OV8X1BS1hFT0xTE=
 github.com/senzing/g2-sdk-go v0.2.4/go.mod h1:2GiDLp1qjDITmFN0UFqLKi8yU2AISMmuNednt7dAzkM=
+github.com/senzing/g2-sdk-proto/go v0.0.0-20230103210552-6474035b3cd4 h1:zmbR+M2jq3KLGMDPyGJJwDOSVnyM9hwLHJpE6HBbRJw=
+github.com/senzing/g2-sdk-proto/go v0.0.0-20230103210552-6474035b3cd4/go.mod h1:MJDH/VHktx3vOOmFLKmi84HZuv3kcgiO544XzcqhVV4=
 github.com/senzing/go-helpers v0.1.0 h1:xsBNNiAKmodgUC4rUDyubsIKaZXTxllzVRV7+sPEXlM=
 github.com/senzing/go-helpers v0.1.0/go.mod h1:EmY93Zn5sw07VmswPcmdV4VeXDtrnQXKj7PClp1pbto=
 github.com/senzing/go-logging v1.1.1 h1:04+oQ5fPLr4QUg+VXS29/gux2IK9Lx6ctbs8G0MlBZ8=

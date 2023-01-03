@@ -12,9 +12,9 @@ import (
 	"github.com/senzing/g2-sdk-go/g2configmgr"
 	"github.com/senzing/g2-sdk-go/g2engine"
 	"github.com/senzing/g2-sdk-go/testhelpers"
+	pb "github.com/senzing/g2-sdk-proto/go/g2diagnostic"
 	"github.com/senzing/go-helpers/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/messagelogger"
-	pb "github.com/senzing/servegrpc/protobuf/g2diagnostic"
 	"github.com/stretchr/testify/assert"
 )
 
