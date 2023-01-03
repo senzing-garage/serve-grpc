@@ -24,7 +24,7 @@ servegrpc [flags]
 ```
 
 For options and flags, see
-[hub.senzing.com/servegrpc/](https://hub.senzing.com/servegrpc/).
+[hub.senzing.com/servegrpc](https://hub.senzing.com/servegrpc/).
 
 ## Development
 
@@ -145,9 +145,9 @@ For options and flags, see
         1. Near the center, click the green "play" button.
     1. The Senzing object is initialized and other messages can be tried.
 
-## Package
+### Package
 
-### Package RPM and DEB files
+#### Package RPM and DEB files
 
 1. :warning: **FIXME:**
    This won't work automatically until
@@ -179,7 +179,7 @@ For options and flags, see
 
     ```
 
-### Test DEB package on Ubuntu
+#### Test DEB package on Ubuntu
 
 1. Determine if `servegrpc` is installed.
    Example:
@@ -215,7 +215,7 @@ For options and flags, see
 
     ```
 
-### Test RPM package on Centos
+#### Test RPM package on Centos
 
 1. Determine if `servegrpc` is installed.
    Example:
