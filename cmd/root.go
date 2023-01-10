@@ -15,9 +15,9 @@ import (
 )
 
 var (
-	cfgFile        string
-	buildVersion   string = "0.0.0"
-	buildIteration string = "0"
+	configurationFile string
+	buildVersion      string = "0.0.0"
+	buildIteration    string = "0"
 )
 
 func makeVersion(version string, iteration string) string {
@@ -118,9 +118,9 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	if cfgFile != "" {
+	if configurationFile != "" {
 		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
+		viper.SetConfigFile(configurationFile)
 	} else {
 		// Find home directory.
 		home, err := os.UserHomeDir()

@@ -26,6 +26,19 @@ servegrpc [flags]
 For options and flags, see
 [hub.senzing.com/servegrpc](https://hub.senzing.com/servegrpc/).
 
+## Docker
+
+1. XXx
+   Example:
+
+    ```console
+    docker run \
+
+        --interactive \
+        --tty \
+        --rm \
+        senzing/servegrpc
+
 ## Development
 
 ### Build
