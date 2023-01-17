@@ -10,7 +10,6 @@ import (
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing/g2-sdk-go/g2config"
 	"github.com/senzing/g2-sdk-go/g2configmgr"
-	"github.com/senzing/g2-sdk-go/g2engine"
 	"github.com/senzing/g2-sdk-go/testhelpers"
 	pb "github.com/senzing/g2-sdk-proto/go/g2engine"
 	"github.com/senzing/go-helpers/g2engineconfigurationjson"
@@ -53,20 +52,23 @@ func getTestObject(ctx context.Context, test *testing.T) G2EngineServer {
 }
 
 func getG2EngineServer(ctx context.Context) G2EngineServer {
-	G2EngineServer := &G2EngineServer{}
-	moduleName := "Test module name"
-	verboseLogging := 0
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-	if err != nil {
-		fmt.Println(err)
+	if g2engineTestSingleton == nil {
+
+		g2engineTestSingleton := &G2EngineServer{}
+		moduleName := "Test module name"
+		verboseLogging := 0
+		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		if err != nil {
+			fmt.Println(err)
+		}
+		request := &pb.InitRequest{
+			ModuleName:     moduleName,
+			IniParams:      iniParams,
+			VerboseLogging: int32(verboseLogging),
+		}
+		g2engineTestSingleton.Init(ctx, request)
 	}
-	request := &pb.InitRequest{
-		ModuleName:     moduleName,
-		IniParams:      iniParams,
-		VerboseLogging: int32(verboseLogging),
-	}
-	G2EngineServer.Init(ctx, request)
-	return *G2EngineServer
+	return *g2engineTestSingleton
 }
 
 func truncate(aString string, length int) string {
@@ -186,44 +188,6 @@ func setup() error {
 	err = aG2configmgr.Destroy(ctx)
 	if err != nil {
 		return logger.Error(5915, err)
-	}
-
-	// Purge repository.
-
-	aG2engine := &g2engine.G2engineImpl{}
-	err = aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
-	if err != nil {
-		return logger.Error(5903, err)
-	}
-
-	err = aG2engine.PurgeRepository(ctx)
-	if err != nil {
-		return logger.Error(5904, err)
-	}
-
-	err = aG2engine.Destroy(ctx)
-	if err != nil {
-		return logger.Error(5905, err)
-	}
-
-	// Add records.
-
-	aG2engine = &g2engine.G2engineImpl{}
-	err = aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
-	if err != nil {
-		return logger.Error(5916, err)
-	}
-
-	for _, testRecord := range testhelpers.TestRecords {
-		err := aG2engine.AddRecord(ctx, testRecord.DataSource, testRecord.Id, testRecord.Data, testRecord.LoadId)
-		if err != nil {
-			return logger.Error(5917, err)
-		}
-	}
-
-	err = aG2engine.Destroy(ctx)
-	if err != nil {
-		return logger.Error(5918, err)
 	}
 
 	return err
