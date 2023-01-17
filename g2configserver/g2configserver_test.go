@@ -2,6 +2,7 @@ package g2configserver
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"testing"
@@ -34,39 +35,35 @@ var (
 func getTestObject(ctx context.Context, test *testing.T) G2ConfigServer {
 	if g2configTestSingleton == nil {
 		g2configTestSingleton = &G2ConfigServer{}
-
 		moduleName := "Test module name"
 		verboseLogging := 0
-		iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-		if jsonErr != nil {
-			test.Logf("Cannot construct system configuration. Error: %v", jsonErr)
+		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		if err != nil {
+			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
-
-		request := &pb.InitRequest{
-			ModuleName:     moduleName,
-			IniParams:      iniParams,
-			VerboseLogging: int32(verboseLogging),
+		err = GetSdkG2config().Init(ctx, moduleName, iniParams, verboseLogging)
+		if err != nil {
+			test.Logf("Cannot Init. Error: %v", err)
 		}
-		g2configTestSingleton.Init(ctx, request)
 	}
 	return *g2configTestSingleton
 }
 
 func getG2ConfigServer(ctx context.Context) G2ConfigServer {
-	G2ConfigServer := &G2ConfigServer{}
-	moduleName := "Test module name"
-	verboseLogging := 0
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-	if err != nil {
-		fmt.Println(err)
+	if g2configTestSingleton == nil {
+		g2configTestSingleton = &G2ConfigServer{}
+		moduleName := "Test module name"
+		verboseLogging := 0
+		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		if err != nil {
+			fmt.Println(err)
+		}
+		err = GetSdkG2config().Init(ctx, moduleName, iniParams, verboseLogging)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
-	request := &pb.InitRequest{
-		ModuleName:     moduleName,
-		IniParams:      iniParams,
-		VerboseLogging: int32(verboseLogging),
-	}
-	G2ConfigServer.Init(ctx, request)
-	return *G2ConfigServer
+	return *g2configTestSingleton
 }
 
 func truncate(aString string, length int) string {
@@ -87,6 +84,19 @@ func testError(test *testing.T, ctx context.Context, g2config G2ConfigServer, er
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
+	}
+}
+
+func expectError(test *testing.T, ctx context.Context, g2config G2ConfigServer, err error, messageId string) {
+	if err != nil {
+		var dictionary map[string]interface{}
+		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
+		if unmarshalErr != nil {
+			test.Log("Unmarshal Error:", unmarshalErr.Error())
+		}
+		assert.Equal(test, messageId, dictionary["id"].(string))
+	} else {
+		assert.FailNow(test, "Should have failed with", messageId)
 	}
 }
 
@@ -371,7 +381,7 @@ func TestG2configserver_Init(test *testing.T) {
 		VerboseLogging: int32(0),
 	}
 	response, err := g2config.Init(ctx, request)
-	testError(test, ctx, g2config, err)
+	expectError(test, ctx, g2config, err, "senzing-60114002")
 	printActual(test, response)
 }
 
@@ -466,7 +476,7 @@ func TestG2configserver_Destroy(test *testing.T) {
 	g2config := getTestObject(ctx, test)
 	request := &pb.DestroyRequest{}
 	response, err := g2config.Destroy(ctx, request)
-	testError(test, ctx, g2config, err)
+	expectError(test, ctx, g2config, err, "senzing-60114001")
 	printActual(test, response)
 }
 
@@ -566,7 +576,7 @@ func ExampleG2ConfigServer_Destroy() {
 	request := &pb.DestroyRequest{}
 	response, err := g2config.Destroy(ctx, request)
 	if err != nil {
-		fmt.Println(err)
+		// This should produce a "senzing-60114001" error.
 	}
 	fmt.Println(response)
 	// Output:
@@ -587,7 +597,7 @@ func ExampleG2ConfigServer_Init() {
 	}
 	response, err := g2config.Init(ctx, request)
 	if err != nil {
-		fmt.Println(err)
+		// This should produce a "senzing-60114002" error.
 	}
 	fmt.Println(response)
 	// Output:

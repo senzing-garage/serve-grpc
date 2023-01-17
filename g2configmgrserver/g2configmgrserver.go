@@ -29,6 +29,10 @@ func getG2configmgr() *g2sdk.G2configmgrImpl {
 	return g2configmgrSingleton
 }
 
+func GetSdkG2configmgr() *g2sdk.G2configmgrImpl {
+	return getG2configmgr()
+}
+
 // Get the Logger singleton.
 func (server *G2ConfigmgrServer) getLogger() messagelogger.MessageLoggerInterface {
 	if server.logger == nil {
@@ -48,7 +52,7 @@ func (server *G2ConfigmgrServer) traceExit(errorNumber int, details ...interface
 }
 
 // ----------------------------------------------------------------------------
-// Interface methods
+// Interface methods for github.com/senzing/g2-sdk-go/g2configmgr.G2configmgr
 // ----------------------------------------------------------------------------
 
 func (server *G2ConfigmgrServer) AddConfig(ctx context.Context, request *pb.AddConfigRequest) (*pb.AddConfigResponse, error) {
@@ -72,8 +76,9 @@ func (server *G2ConfigmgrServer) Destroy(ctx context.Context, request *pb.Destro
 		server.traceEntry(5, request)
 	}
 	entryTime := time.Now()
-	g2configmgr := getG2configmgr()
-	err := g2configmgr.Destroy(ctx)
+	// g2configmgr := getG2configmgr()
+	// err := g2configmgr.Destroy(ctx)
+	err := server.getLogger().Error(4001)
 	response := pb.DestroyResponse{}
 	if server.isTrace {
 		defer server.traceExit(6, request, err, time.Since(entryTime))
@@ -134,8 +139,9 @@ func (server *G2ConfigmgrServer) Init(ctx context.Context, request *pb.InitReque
 		server.traceEntry(17, request)
 	}
 	entryTime := time.Now()
-	g2configmgr := getG2configmgr()
-	err := g2configmgr.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
+	// g2configmgr := getG2configmgr()
+	// err := g2configmgr.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
+	err := server.getLogger().Error(4002)
 	response := pb.InitResponse{}
 	if server.isTrace {
 		defer server.traceExit(18, request, err, time.Since(entryTime))

@@ -39,6 +39,10 @@ func getG2diagnostic() *g2sdk.G2diagnosticImpl {
 	return g2diagnosticSingleton
 }
 
+func GetSdkG2diagnostic() *g2sdk.G2diagnosticImpl {
+	return getG2diagnostic()
+}
+
 // Get the Logger singleton.
 func (server *G2DiagnosticServer) getLogger() messagelogger.MessageLoggerInterface {
 	if server.logger == nil {
@@ -58,7 +62,7 @@ func (server *G2DiagnosticServer) traceExit(errorNumber int, details ...interfac
 }
 
 // ----------------------------------------------------------------------------
-// Interface methods
+// Interface methods for github.com/senzing/g2-sdk-go/g2diagnostic.G2diagnostic
 // ----------------------------------------------------------------------------
 
 func (server *G2DiagnosticServer) CheckDBPerf(ctx context.Context, request *pb.CheckDBPerfRequest) (*pb.CheckDBPerfResponse, error) {
@@ -99,8 +103,9 @@ func (server *G2DiagnosticServer) Destroy(ctx context.Context, request *pb.Destr
 		server.traceEntry(7, request)
 	}
 	entryTime := time.Now()
-	g2diagnostic := getG2diagnostic()
-	err := g2diagnostic.Destroy(ctx)
+	// g2diagnostic := getG2diagnostic()
+	// err := g2diagnostic.Destroy(ctx)
+	err := server.getLogger().Error(4001)
 	response := pb.DestroyResponse{}
 	if server.isTrace {
 		defer server.traceExit(8, request, err, time.Since(entryTime))
@@ -390,8 +395,9 @@ func (server *G2DiagnosticServer) Init(ctx context.Context, request *pb.InitRequ
 		server.traceEntry(47, request)
 	}
 	entryTime := time.Now()
-	g2diagnostic := getG2diagnostic()
-	err := g2diagnostic.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
+	// g2diagnostic := getG2diagnostic()
+	// err := g2diagnostic.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
+	err := server.getLogger().Error(4002)
 	response := pb.InitResponse{}
 	if server.isTrace {
 		defer server.traceExit(48, request, err, time.Since(entryTime))
@@ -404,8 +410,9 @@ func (server *G2DiagnosticServer) InitWithConfigID(ctx context.Context, request 
 		server.traceEntry(49, request)
 	}
 	entryTime := time.Now()
-	g2diagnostic := getG2diagnostic()
-	err := g2diagnostic.InitWithConfigID(ctx, request.GetModuleName(), request.GetIniParams(), int64(request.GetInitConfigID()), int(request.GetVerboseLogging()))
+	// g2diagnostic := getG2diagnostic()
+	// err := g2diagnostic.InitWithConfigID(ctx, request.GetModuleName(), request.GetIniParams(), int64(request.GetInitConfigID()), int(request.GetVerboseLogging()))
+	err := server.getLogger().Error(4003)
 	response := pb.InitWithConfigIDResponse{}
 	if server.isTrace {
 		defer server.traceExit(50, request, err, time.Since(entryTime))

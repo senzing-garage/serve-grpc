@@ -29,6 +29,10 @@ func getG2engine() *g2sdk.G2engineImpl {
 	return g2engineSingleton
 }
 
+func GetSdkG2engine() *g2sdk.G2engineImpl {
+	return getG2engine()
+}
+
 // Get the Logger singleton.
 func (server *G2EngineServer) getLogger() messagelogger.MessageLoggerInterface {
 	if server.logger == nil {
@@ -48,7 +52,7 @@ func (server *G2EngineServer) traceExit(errorNumber int, details ...interface{})
 }
 
 // ----------------------------------------------------------------------------
-// Interface methods
+// Interface methods for github.com/senzing/g2-sdk-go/g2engine.G2engine
 // ----------------------------------------------------------------------------
 
 func (server *G2EngineServer) AddRecord(ctx context.Context, request *pb.AddRecordRequest) (*pb.AddRecordResponse, error) {
@@ -195,8 +199,9 @@ func (server *G2EngineServer) Destroy(ctx context.Context, request *pb.DestroyRe
 		server.traceEntry(21, request)
 	}
 	entryTime := time.Now()
-	g2engine := getG2engine()
-	err := g2engine.Destroy(ctx)
+	// g2engine := getG2engine()
+	// err := g2engine.Destroy(ctx)
+	err := server.getLogger().Error(4001)
 	response := pb.DestroyResponse{}
 	if server.isTrace {
 		defer server.traceExit(22, request, err, time.Since(entryTime))
@@ -786,8 +791,9 @@ func (server *G2EngineServer) Init(ctx context.Context, request *pb.InitRequest)
 		server.traceEntry(99, request)
 	}
 	entryTime := time.Now()
-	g2engine := getG2engine()
-	err := g2engine.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
+	// g2engine := getG2engine()
+	// err := g2engine.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
+	err := server.getLogger().Error(4002)
 	response := pb.InitResponse{}
 	if server.isTrace {
 		defer server.traceExit(100, request, err, time.Since(entryTime))
@@ -800,8 +806,9 @@ func (server *G2EngineServer) InitWithConfigID(ctx context.Context, request *pb.
 		server.traceEntry(101, request)
 	}
 	entryTime := time.Now()
-	g2engine := getG2engine()
-	err := g2engine.InitWithConfigID(ctx, request.GetModuleName(), request.GetIniParams(), request.GetInitConfigID(), int(request.GetVerboseLogging()))
+	// g2engine := getG2engine()
+	// err := g2engine.InitWithConfigID(ctx, request.GetModuleName(), request.GetIniParams(), request.GetInitConfigID(), int(request.GetVerboseLogging()))
+	err := server.getLogger().Error(4003)
 	response := pb.InitWithConfigIDResponse{}
 	if server.isTrace {
 		defer server.traceExit(102, request, err, time.Since(entryTime))
@@ -923,8 +930,9 @@ func (server *G2EngineServer) PurgeRepository(ctx context.Context, request *pb.P
 		server.traceEntry(117, request)
 	}
 	entryTime := time.Now()
-	g2engine := getG2engine()
-	err := g2engine.PurgeRepository(ctx)
+	// g2engine := getG2engine()
+	// err := g2engine.PurgeRepository(ctx)
+	err := server.getLogger().Error(4004)
 	response := pb.PurgeRepositoryResponse{}
 	if server.isTrace {
 		defer server.traceExit(118, request, err, time.Since(entryTime))

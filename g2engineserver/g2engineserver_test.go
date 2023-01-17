@@ -2,6 +2,7 @@ package g2engineserver
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"testing"
@@ -35,16 +36,14 @@ func getTestObject(ctx context.Context, test *testing.T) G2EngineServer {
 		g2engineTestSingleton = &G2EngineServer{}
 		moduleName := "Test module name"
 		verboseLogging := 0
-		iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-		if jsonErr != nil {
-			test.Logf("Cannot construct system configuration. Error: %v", jsonErr)
+		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		if err != nil {
+			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
-		request := &pb.InitRequest{
-			ModuleName:     moduleName,
-			IniParams:      iniParams,
-			VerboseLogging: int32(verboseLogging),
+		err = GetSdkG2engine().Init(ctx, moduleName, iniParams, verboseLogging)
+		if err != nil {
+			test.Logf("Cannot Init. Error: %v", err)
 		}
-		g2engineTestSingleton.Init(ctx, request)
 	}
 	return *g2engineTestSingleton
 }
@@ -58,12 +57,10 @@ func getG2EngineServer(ctx context.Context) G2EngineServer {
 		if err != nil {
 			fmt.Println(err)
 		}
-		request := &pb.InitRequest{
-			ModuleName:     moduleName,
-			IniParams:      iniParams,
-			VerboseLogging: int32(verboseLogging),
+		err = GetSdkG2engine().Init(ctx, moduleName, iniParams, verboseLogging)
+		if err != nil {
+			fmt.Println(err)
 		}
-		g2engineTestSingleton.Init(ctx, request)
 	}
 	return *g2engineTestSingleton
 }
@@ -86,6 +83,19 @@ func testError(test *testing.T, ctx context.Context, g2engine G2EngineServer, er
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
+	}
+}
+
+func expectError(test *testing.T, ctx context.Context, g2engine G2EngineServer, err error, messageId string) {
+	if err != nil {
+		var dictionary map[string]interface{}
+		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
+		if unmarshalErr != nil {
+			test.Log("Unmarshal Error:", unmarshalErr.Error())
+		}
+		assert.Equal(test, messageId, dictionary["id"].(string))
+	} else {
+		assert.FailNow(test, "Should have failed with", messageId)
 	}
 }
 
@@ -211,15 +221,19 @@ func TestG2engineserver_BuildSimpleSystemConfigurationJson(test *testing.T) {
 // Start with a clean database.
 func TestG2engineServer_CleanStart(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &pb.PurgeRepositoryRequest{}
-	response, err := g2engine.PurgeRepository(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-	request2 := &pb.DestroyRequest{}
-	response2, err := g2engine.Destroy(ctx, request2)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response2)
+	getTestObject(ctx, test) // Prime the engine.
+	sdkG2engine := GetSdkG2engine()
+
+	err := sdkG2engine.PurgeRepository(ctx)
+	if err != nil {
+		assert.FailNow(test, err.Error())
+	}
+
+	err = sdkG2engine.Destroy(ctx)
+	if err != nil {
+		assert.FailNow(test, err.Error())
+	}
+
 	g2engineTestSingleton = nil
 }
 
@@ -778,7 +792,7 @@ func TestG2engineServer_Init(test *testing.T) {
 		VerboseLogging: 0,
 	}
 	response, err := g2engine.Init(ctx, request)
-	testError(test, ctx, g2engine, err)
+	expectError(test, ctx, g2engine, err, "senzing-60144002")
 	printResponse(test, response)
 }
 
@@ -796,7 +810,7 @@ func TestG2engineServer_InitWithConfigID(test *testing.T) {
 		VerboseLogging: 0,
 	}
 	response, err := g2engine.InitWithConfigID(ctx, request)
-	testError(test, ctx, g2engine, err)
+	expectError(test, ctx, g2engine, err, "senzing-60144003")
 	printResponse(test, response)
 }
 
@@ -1136,7 +1150,7 @@ func TestG2engineServer_PurgeRepository(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	request := &pb.PurgeRepositoryRequest{}
 	response, err := g2engine.PurgeRepository(ctx, request)
-	testError(test, ctx, g2engine, err)
+	expectError(test, ctx, g2engine, err, "senzing-60144004")
 	printResponse(test, response)
 }
 
@@ -1145,8 +1159,25 @@ func TestG2engineServer_Destroy(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	request := &pb.DestroyRequest{}
 	response, err := g2engine.Destroy(ctx, request)
-	testError(test, ctx, g2engine, err)
+	expectError(test, ctx, g2engine, err, "senzing-60144001")
 	printResponse(test, response)
+	g2engineTestSingleton = nil
+}
+
+func TestG2engineServer_CleanFinish(test *testing.T) {
+	ctx := context.TODO()
+	sdkG2engine := GetSdkG2engine()
+
+	err := sdkG2engine.PurgeRepository(ctx)
+	if err != nil {
+		assert.FailNow(test, err.Error())
+	}
+
+	err = sdkG2engine.Destroy(ctx)
+	if err != nil {
+		assert.FailNow(test, err.Error())
+	}
+
 	g2engineTestSingleton = nil
 }
 
@@ -1965,7 +1996,7 @@ func ExampleG2EngineServer_Init() {
 	}
 	response, err := g2engine.Init(ctx, request)
 	if err != nil {
-		fmt.Println(err)
+		// This should produce a "senzing-60144002" error.
 	}
 	fmt.Println(response)
 	// Output:
@@ -1988,7 +2019,7 @@ func ExampleG2EngineServer_InitWithConfigID() {
 	}
 	response, err := g2engine.InitWithConfigID(ctx, request)
 	if err != nil {
-		fmt.Println(err)
+		// This should produce a "senzing-60144003" error.
 	}
 	fmt.Println(response)
 	// Output:
@@ -2405,7 +2436,7 @@ func ExampleG2EngineServer_PurgeRepository() {
 	request := &pb.PurgeRepositoryRequest{}
 	response, err := g2engine.PurgeRepository(ctx, request)
 	if err != nil {
-		fmt.Println(err)
+		// This should produce a "senzing-60144004" error.
 	}
 	fmt.Println(response)
 	// Output:
@@ -2418,7 +2449,7 @@ func ExampleG2EngineServer_Destroy() {
 	request := &pb.DestroyRequest{}
 	response, err := g2engine.Destroy(ctx, request)
 	if err != nil {
-		fmt.Println(err)
+		// This should produce a "senzing-60164001" error.
 	}
 	fmt.Println(response)
 	// Output:

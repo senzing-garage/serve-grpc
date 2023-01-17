@@ -2,6 +2,7 @@ package g2productserver
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"testing"
@@ -28,39 +29,35 @@ var (
 func getTestObject(ctx context.Context, test *testing.T) G2ProductServer {
 	if g2productTestSingleton == nil {
 		g2productTestSingleton = &G2ProductServer{}
-
 		moduleName := "Test module name"
 		verboseLogging := 0
-		iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-		if jsonErr != nil {
-			test.Logf("Cannot construct system configuration. Error: %v", jsonErr)
+		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		if err != nil {
+			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
-
-		request := &pb.InitRequest{
-			ModuleName:     moduleName,
-			IniParams:      iniParams,
-			VerboseLogging: int32(verboseLogging),
+		err = GetSdkG2product().Init(ctx, moduleName, iniParams, verboseLogging)
+		if err != nil {
+			test.Logf("Cannot Init. Error: %v", err)
 		}
-		g2productTestSingleton.Init(ctx, request)
 	}
 	return *g2productTestSingleton
 }
 
 func getG2ProductServer(ctx context.Context) G2ProductServer {
-	g2productserver := &G2ProductServer{}
-	moduleName := "Test module name"
-	verboseLogging := 0
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-	if err != nil {
-		fmt.Println(err)
+	if g2productTestSingleton == nil {
+		g2productTestSingleton = &G2ProductServer{}
+		moduleName := "Test module name"
+		verboseLogging := 0
+		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		if err != nil {
+			fmt.Println(err)
+		}
+		err = GetSdkG2product().Init(ctx, moduleName, iniParams, verboseLogging)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
-	request := &pb.InitRequest{
-		ModuleName:     moduleName,
-		IniParams:      iniParams,
-		VerboseLogging: int32(verboseLogging),
-	}
-	g2productserver.Init(ctx, request)
-	return *g2productserver
+	return *g2productTestSingleton
 }
 
 func truncate(aString string, length int) string {
@@ -84,11 +81,24 @@ func testError(test *testing.T, ctx context.Context, g2product G2ProductServer, 
 	}
 }
 
-// func testErrorNoFail(test *testing.T, ctx context.Context, g2product G2ProductServer, err error) {
-// 	if err != nil {
-// 		test.Log("Error:", err.Error())
-// 	}
-// }
+func expectError(test *testing.T, ctx context.Context, g2product G2ProductServer, err error, messageId string) {
+	if err != nil {
+		var dictionary map[string]interface{}
+		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
+		if unmarshalErr != nil {
+			test.Log("Unmarshal Error:", unmarshalErr.Error())
+		}
+		assert.Equal(test, messageId, dictionary["id"].(string))
+	} else {
+		assert.FailNow(test, "Should have failed with", messageId)
+	}
+}
+
+func testErrorNoFail(test *testing.T, ctx context.Context, g2product G2ProductServer, err error) {
+	if err != nil {
+		test.Log("Error:", err.Error())
+	}
+}
 
 // ----------------------------------------------------------------------------
 // Test harness
@@ -144,7 +154,7 @@ func TestG2productServer_Init(test *testing.T) {
 		VerboseLogging: int32(0),
 	}
 	response, err := g2product.Init(ctx, request)
-	testError(test, ctx, g2product, err)
+	expectError(test, ctx, g2product, err, "senzing-60164002")
 	printActual(test, response)
 }
 
@@ -193,7 +203,7 @@ func TestG2productServer_Destroy(test *testing.T) {
 	g2product := getTestObject(ctx, test)
 	request := &pb.DestroyRequest{}
 	actual, err := g2product.Destroy(ctx, request)
-	testError(test, ctx, g2product, err)
+	expectError(test, ctx, g2product, err, "senzing-60164001")
 	printActual(test, actual)
 }
 
@@ -208,7 +218,7 @@ func ExampleG2ProductServer_Destroy() {
 	request := &pb.DestroyRequest{}
 	response, err := g2product.Destroy(ctx, request)
 	if err != nil {
-		fmt.Println(err)
+		// This should produce a "senzing-60164001" error.
 	}
 	fmt.Println(response)
 	// Output:
@@ -229,7 +239,7 @@ func ExampleG2ProductServer_Init() {
 	}
 	response, err := g2product.Init(ctx, request)
 	if err != nil {
-		fmt.Println(err)
+		// This should produce a "senzing-60164002" error.
 	}
 	fmt.Println(response)
 	// Output:

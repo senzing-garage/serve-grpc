@@ -2,6 +2,7 @@ package g2diagnosticserver
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"testing"
@@ -34,39 +35,35 @@ var (
 func getTestObject(ctx context.Context, test *testing.T) G2DiagnosticServer {
 	if g2diagnosticTestSingleton == nil {
 		g2diagnosticTestSingleton = &G2DiagnosticServer{}
-
 		moduleName := "Test module name"
 		verboseLogging := 0
-		iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-		if jsonErr != nil {
-			test.Logf("Cannot construct system configuration. Error: %v", jsonErr)
+		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		if err != nil {
+			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
-
-		request := &pb.InitRequest{
-			ModuleName:     moduleName,
-			IniParams:      iniParams,
-			VerboseLogging: int32(verboseLogging),
+		err = GetSdkG2diagnostic().Init(ctx, moduleName, iniParams, verboseLogging)
+		if err != nil {
+			test.Logf("Cannot Init. Error: %v", err)
 		}
-		g2diagnosticTestSingleton.Init(ctx, request)
 	}
 	return *g2diagnosticTestSingleton
 }
 
 func getG2DiagnosticServer(ctx context.Context) G2DiagnosticServer {
-	g2diagnosticServer := &G2DiagnosticServer{}
-	moduleName := "Test module name"
-	verboseLogging := 0
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-	if err != nil {
-		fmt.Println(err)
+	if g2diagnosticTestSingleton == nil {
+		g2diagnosticTestSingleton = &G2DiagnosticServer{}
+		moduleName := "Test module name"
+		verboseLogging := 0
+		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		if err != nil {
+			fmt.Println(err)
+		}
+		err = GetSdkG2diagnostic().Init(ctx, moduleName, iniParams, verboseLogging)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
-	request := &pb.InitRequest{
-		ModuleName:     moduleName,
-		IniParams:      iniParams,
-		VerboseLogging: int32(verboseLogging),
-	}
-	g2diagnosticServer.Init(ctx, request)
-	return *g2diagnosticServer
+	return *g2diagnosticTestSingleton
 }
 
 func truncate(aString string, length int) string {
@@ -87,6 +84,19 @@ func testError(test *testing.T, ctx context.Context, g2diagnostic G2DiagnosticSe
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
+	}
+}
+
+func expectError(test *testing.T, ctx context.Context, g2diagnostic G2DiagnosticServer, err error, messageId string) {
+	if err != nil {
+		var dictionary map[string]interface{}
+		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
+		if unmarshalErr != nil {
+			test.Log("Unmarshal Error:", unmarshalErr.Error())
+		}
+		assert.Equal(test, messageId, dictionary["id"].(string))
+	} else {
+		assert.FailNow(test, "Should have failed with", messageId)
 	}
 }
 
@@ -457,7 +467,7 @@ func TestG2diagnosticserver_Init(test *testing.T) {
 		VerboseLogging: int32(0),
 	}
 	response, err := g2diagnostic.Init(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
+	expectError(test, ctx, g2diagnostic, err, "senzing-60134002")
 	printActual(test, response)
 }
 
@@ -475,7 +485,7 @@ func TestG2diagnosticserver_InitWithConfigID(test *testing.T) {
 		VerboseLogging: int32(0),
 	}
 	response, err := g2diagnostic.InitWithConfigID(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
+	expectError(test, ctx, g2diagnostic, err, "senzing-60134003")
 	printActual(test, response)
 }
 
@@ -495,7 +505,7 @@ func TestG2diagnosticserver_Destroy(test *testing.T) {
 	g2diagnostic := getTestObject(ctx, test)
 	request := &pb.DestroyRequest{}
 	response, err := g2diagnostic.Destroy(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
+	expectError(test, ctx, g2diagnostic, err, "senzing-60134001")
 	printActual(test, response)
 }
 
@@ -748,7 +758,7 @@ func ExampleG2DiagnosticServer_Init() {
 	}
 	response, err := g2diagnostic.Init(ctx, request)
 	if err != nil {
-		fmt.Println(err)
+		// This should produce a "senzing-60134002" error.
 	}
 	fmt.Println(response)
 	// Output:
@@ -770,7 +780,7 @@ func ExampleG2DiagnosticServer_InitWithConfigID() {
 	}
 	response, err := g2diagnostic.InitWithConfigID(ctx, request)
 	if err != nil {
-		fmt.Println(err)
+		// This should produce a "senzing-60134003" error.
 	}
 	fmt.Println(response)
 	// Output:
@@ -798,7 +808,7 @@ func ExampleG2DiagnosticServer_Destroy() {
 	request := &pb.DestroyRequest{}
 	response, err := g2diagnostic.Destroy(ctx, request)
 	if err != nil {
-		fmt.Println(err)
+		// This should produce a "senzing-60134001" error.
 	}
 	fmt.Println(response)
 	// Output:
