@@ -33,14 +33,12 @@ var (
 func getTestObject(ctx context.Context, test *testing.T) G2EngineServer {
 	if g2engineTestSingleton == nil {
 		g2engineTestSingleton = &G2EngineServer{}
-
 		moduleName := "Test module name"
 		verboseLogging := 0
 		iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 		if jsonErr != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", jsonErr)
 		}
-
 		request := &pb.InitRequest{
 			ModuleName:     moduleName,
 			IniParams:      iniParams,
@@ -53,8 +51,7 @@ func getTestObject(ctx context.Context, test *testing.T) G2EngineServer {
 
 func getG2EngineServer(ctx context.Context) G2EngineServer {
 	if g2engineTestSingleton == nil {
-
-		g2engineTestSingleton := &G2EngineServer{}
+		g2engineTestSingleton = &G2EngineServer{}
 		moduleName := "Test module name"
 		verboseLogging := 0
 		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
@@ -211,14 +208,19 @@ func TestG2engineserver_BuildSimpleSystemConfigurationJson(test *testing.T) {
 // Test interface functions
 // ----------------------------------------------------------------------------
 
-// PurgeRepository() is first to start with a clean database.
-func TestG2engineServer_PurgeRepository(test *testing.T) {
+// Start with a clean database.
+func TestG2engineServer_CleanStart(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	request := &pb.PurgeRepositoryRequest{}
 	response, err := g2engine.PurgeRepository(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
+	request2 := &pb.DestroyRequest{}
+	response2, err := g2engine.Destroy(ctx, request2)
+	testError(test, ctx, g2engine, err)
+	printResponse(test, response2)
+	g2engineTestSingleton = nil
 }
 
 func TestG2engineServer_AddRecord(test *testing.T) {
@@ -1128,6 +1130,16 @@ func TestG2engineServer_DeleteRecordWithInfo(test *testing.T) {
 	printResponse(test, response)
 }
 
+// PurgeRepository() is first to start with a clean database.
+func TestG2engineServer_PurgeRepository(test *testing.T) {
+	ctx := context.TODO()
+	g2engine := getTestObject(ctx, test)
+	request := &pb.PurgeRepositoryRequest{}
+	response, err := g2engine.PurgeRepository(ctx, request)
+	testError(test, ctx, g2engine, err)
+	printResponse(test, response)
+}
+
 func TestG2engineServer_Destroy(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
@@ -1135,25 +1147,12 @@ func TestG2engineServer_Destroy(test *testing.T) {
 	response, err := g2engine.Destroy(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
+	g2engineTestSingleton = nil
 }
 
 // ----------------------------------------------------------------------------
 // Examples for godoc documentation
 // ----------------------------------------------------------------------------
-
-// PurgeRepository() is first to start with a clean database.
-func ExampleG2EngineServer_PurgeRepository() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &pb.PurgeRepositoryRequest{}
-	response, err := g2engine.PurgeRepository(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response)
-	// Output:
-}
 
 func ExampleG2EngineServer_AddRecord() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
@@ -2399,12 +2398,12 @@ func ExampleG2EngineServer_WhyRecords_V2() {
 	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":100001,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"TEST","RECORD_ID":"111"}],"INTERNAL_ID_2":2,"ENTITY_ID_2":2,"FOCUS_RECORDS_2":[{"DATA_SOURCE":"TEST","RECORD_ID":"222"}],"MATCH_INFO":{"WHY_KEY":"+PHONE+ACCT_NUM-DOB-SSN","WHY_ERRULE_CODE":"SF1","MATCH_LEVEL_CODE":"POSSIBLY_RELATED"}}],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":1}},{"RESOLVED_ENTITY":{"ENTITY_ID":2}}]}
 }
 
-func ExampleG2EngineServer_Destroy() {
+func ExampleG2EngineServer_PurgeRepository() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.DestroyRequest{}
-	response, err := g2engine.Destroy(ctx, request)
+	request := &pb.PurgeRepositoryRequest{}
+	response, err := g2engine.PurgeRepository(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -2412,13 +2411,12 @@ func ExampleG2EngineServer_Destroy() {
 	// Output:
 }
 
-// PurgeRepository() is first to start with a clean database.
-func ExampleG2EngineServer_PurgeRepository_finalCleanup() {
+func ExampleG2EngineServer_Destroy() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.PurgeRepositoryRequest{}
-	response, err := g2engine.PurgeRepository(ctx, request)
+	request := &pb.DestroyRequest{}
+	response, err := g2engine.Destroy(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
