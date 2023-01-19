@@ -82,6 +82,28 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 
 	// Configure server.
 
+	// Configure G2Engine first, because if purge is chosen,
+	// all other G2Objects should initialized after the purge.
+
+	if grpcServer.EnableG2engine {
+		sdkG2engine := g2engineserver.GetSdkG2engine()
+		sdkG2engine.Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+		if grpcServer.PurgeDatabase {
+			err := sdkG2engine.PurgeRepository(ctx)
+			if err != nil {
+				logger.Log(4002, err)
+			}
+			err = sdkG2engine.Destroy(ctx)
+			if err != nil {
+				logger.Log(4003, err)
+			}
+			sdkG2engine.Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+		}
+		server := &g2engineserver.G2EngineServer{}
+		server.SetLogLevel(ctx, grpcServer.LogLevel)
+		g2engine.RegisterG2EngineServer(aGrpcServer, server)
+	}
+
 	if grpcServer.EnableG2config {
 		g2configserver.GetSdkG2config().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
 		server := &g2configserver.G2ConfigServer{}
@@ -101,25 +123,6 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 		server := &g2diagnosticserver.G2DiagnosticServer{}
 		server.SetLogLevel(ctx, grpcServer.LogLevel)
 		g2diagnostic.RegisterG2DiagnosticServer(aGrpcServer, server)
-	}
-
-	if grpcServer.EnableG2engine {
-		sdkG2engine := g2engineserver.GetSdkG2engine()
-		sdkG2engine.Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
-		if grpcServer.PurgeDatabase {
-			err := sdkG2engine.PurgeRepository(ctx)
-			if err != nil {
-				logger.Log(4002, err)
-			}
-			err = sdkG2engine.Destroy(ctx)
-			if err != nil {
-				logger.Log(4003, err)
-			}
-			sdkG2engine.Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
-		}
-		server := &g2engineserver.G2EngineServer{}
-		server.SetLogLevel(ctx, grpcServer.LogLevel)
-		g2engine.RegisterG2EngineServer(aGrpcServer, server)
 	}
 
 	if grpcServer.EnableG2product {
