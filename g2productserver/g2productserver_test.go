@@ -144,9 +144,9 @@ func TestG2productserver_BuildSimpleSystemConfigurationJson(test *testing.T) {
 func TestG2productServer_Init(test *testing.T) {
 	ctx := context.TODO()
 	g2product := getTestObject(ctx, test)
-	iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-	if jsonErr != nil {
-		assert.FailNow(test, jsonErr.Error())
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	if err != nil {
+		assert.FailNow(test, err.Error())
 	}
 	request := &pb.InitRequest{
 		ModuleName:     "Test module name",

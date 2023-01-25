@@ -457,9 +457,9 @@ func TestG2diagnosticserver_GetTotalSystemMemory(test *testing.T) {
 func TestG2diagnosticserver_Init(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-	if jsonErr != nil {
-		assert.FailNow(test, jsonErr.Error())
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	if err != nil {
+		assert.FailNow(test, err.Error())
 	}
 	request := &pb.InitRequest{
 		ModuleName:     "Test module name",
@@ -474,9 +474,9 @@ func TestG2diagnosticserver_Init(test *testing.T) {
 func TestG2diagnosticserver_InitWithConfigID(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-	if jsonErr != nil {
-		assert.FailNow(test, jsonErr.Error())
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	if err != nil {
+		assert.FailNow(test, err.Error())
 	}
 	request := &pb.InitWithConfigIDRequest{
 		ModuleName:     "Test module name",

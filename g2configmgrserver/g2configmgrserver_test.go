@@ -10,11 +10,10 @@ import (
 
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing/g2-sdk-go/g2config"
-	"github.com/senzing/g2-sdk-go/g2configmgr"
 	"github.com/senzing/g2-sdk-go/g2engine"
-	"github.com/senzing/g2-sdk-go/testhelpers"
 	pbconfig "github.com/senzing/g2-sdk-proto/go/g2config"
 	pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
+	"github.com/senzing/go-common/testrecords01"
 	"github.com/senzing/go-helpers/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/messagelogger"
 	"github.com/senzing/servegrpc/g2configserver"
@@ -27,7 +26,8 @@ const (
 )
 
 var (
-	g2configmgrTestSingleton *G2ConfigmgrServer
+	g2configmgrSingleton *G2ConfigmgrServer
+	localLogger          messagelogger.MessageLoggerInterface
 )
 
 // ----------------------------------------------------------------------------
@@ -35,8 +35,8 @@ var (
 // ----------------------------------------------------------------------------
 
 func getTestObject(ctx context.Context, test *testing.T) G2ConfigmgrServer {
-	if g2configmgrTestSingleton == nil {
-		g2configmgrTestSingleton = &G2ConfigmgrServer{}
+	if g2configmgrSingleton == nil {
+		g2configmgrSingleton = &G2ConfigmgrServer{}
 		moduleName := "Test module name"
 		verboseLogging := 0
 		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
@@ -48,12 +48,12 @@ func getTestObject(ctx context.Context, test *testing.T) G2ConfigmgrServer {
 			test.Logf("Cannot Init. Error: %v", err)
 		}
 	}
-	return *g2configmgrTestSingleton
+	return *g2configmgrSingleton
 }
 
 func getG2ConfigmgrServer(ctx context.Context) G2ConfigmgrServer {
-	if g2configmgrTestSingleton == nil {
-		g2configmgrTestSingleton = &G2ConfigmgrServer{}
+	if g2configmgrSingleton == nil {
+		g2configmgrSingleton = &G2ConfigmgrServer{}
 		moduleName := "Test module name"
 		verboseLogging := 0
 		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
@@ -65,7 +65,7 @@ func getG2ConfigmgrServer(ctx context.Context) G2ConfigmgrServer {
 			fmt.Println(err)
 		}
 	}
-	return *g2configmgrTestSingleton
+	return *g2configmgrSingleton
 }
 
 func getG2ConfigServer(ctx context.Context) g2configserver.G2ConfigServer {
@@ -141,6 +141,87 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
+func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
+	now := time.Now()
+
+	aG2config := &g2config.G2configImpl{}
+	err := aG2config.Init(ctx, moduleName, iniParams, verboseLogging)
+	if err != nil {
+		return localLogger.Error(5906, err)
+	}
+
+	configHandle, err := aG2config.Create(ctx)
+	if err != nil {
+		return localLogger.Error(5907, err)
+	}
+
+	for _, testDataSource := range testrecords01.TestDataSources {
+		_, err := aG2config.AddDataSource(ctx, configHandle, testDataSource.Data)
+		if err != nil {
+			return localLogger.Error(5908, err)
+		}
+	}
+
+	configStr, err := aG2config.Save(ctx, configHandle)
+	if err != nil {
+		return localLogger.Error(5909, err)
+	}
+
+	err = aG2config.Close(ctx, configHandle)
+	if err != nil {
+		return localLogger.Error(5910, err)
+	}
+
+	err = aG2config.Destroy(ctx)
+	if err != nil {
+		return localLogger.Error(5911, err)
+	}
+
+	// Persist the Senzing configuration to the Senzing repository.
+
+	aG2configmgr := &G2configmgrImpl{}
+	err = aG2configmgr.Init(ctx, moduleName, iniParams, verboseLogging)
+	if err != nil {
+		return localLogger.Error(5912, err)
+	}
+
+	configComments := fmt.Sprintf("Created by g2diagnostic_test at %s", now.UTC())
+	configID, err := aG2configmgr.AddConfig(ctx, configStr, configComments)
+	if err != nil {
+		return localLogger.Error(5913, err)
+	}
+
+	err = aG2configmgr.SetDefaultConfigID(ctx, configID)
+	if err != nil {
+		return localLogger.Error(5914, err)
+	}
+
+	err = aG2configmgr.Destroy(ctx)
+	if err != nil {
+		return localLogger.Error(5915, err)
+	}
+	return err
+}
+
+func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
+	aG2engine := &g2engine.G2engineImpl{}
+	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
+	if err != nil {
+		return localLogger.Error(5903, err)
+	}
+
+	err = aG2engine.PurgeRepository(ctx)
+	if err != nil {
+		return localLogger.Error(5904, err)
+	}
+
+	err = aG2engine.Destroy(ctx)
+	if err != nil {
+		return localLogger.Error(5905, err)
+	}
+	return err
+}
+
 func setup() error {
 	var err error = nil
 	ctx := context.TODO()
@@ -157,81 +238,18 @@ func setup() error {
 		return logger.Error(5902, err)
 	}
 
-	// Add Data Sources to in-memory Senzing configuration.
+	// Add Data Sources to Senzing configuration.
 
-	aG2config := &g2config.G2configImpl{}
-	err = aG2config.Init(ctx, moduleName, iniParams, verboseLogging)
+	err = setupSenzingConfig(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
-		return logger.Error(5906, err)
-	}
-
-	configHandle, err := aG2config.Create(ctx)
-	if err != nil {
-		return logger.Error(5907, err)
-	}
-
-	for _, testDataSource := range testhelpers.TestDataSources {
-		_, err := aG2config.AddDataSource(ctx, configHandle, testDataSource.Data)
-		if err != nil {
-			return logger.Error(5908, err)
-		}
-	}
-
-	configStr, err := aG2config.Save(ctx, configHandle)
-	if err != nil {
-		return logger.Error(5909, err)
-	}
-
-	err = aG2config.Close(ctx, configHandle)
-	if err != nil {
-		return logger.Error(5910, err)
-	}
-
-	err = aG2config.Destroy(ctx)
-	if err != nil {
-		return logger.Error(5911, err)
-	}
-
-	// Persist the Senzing configuration to the Senzing repository.
-
-	aG2configmgr := &g2configmgr.G2configmgrImpl{}
-	err = aG2configmgr.Init(ctx, moduleName, iniParams, verboseLogging)
-	if err != nil {
-		return logger.Error(5912, err)
-	}
-
-	configComments := fmt.Sprintf("Created by g2diagnostic_test at %s", now.UTC())
-	configID, err := aG2configmgr.AddConfig(ctx, configStr, configComments)
-	if err != nil {
-		return logger.Error(5913, err)
-	}
-
-	err = aG2configmgr.SetDefaultConfigID(ctx, configID)
-	if err != nil {
-		return logger.Error(5914, err)
-	}
-
-	err = aG2configmgr.Destroy(ctx)
-	if err != nil {
-		return logger.Error(5915, err)
+		return localLogger.Error(5920, err)
 	}
 
 	// Purge repository.
 
-	aG2engine := &g2engine.G2engineImpl{}
-	err = aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
+	err = setupPurgeRepository(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
-		return logger.Error(5903, err)
-	}
-
-	err = aG2engine.PurgeRepository(ctx)
-	if err != nil {
-		return logger.Error(5904, err)
-	}
-
-	err = aG2engine.Destroy(ctx)
-	if err != nil {
-		return logger.Error(5905, err)
+		return localLogger.Error(5921, err)
 	}
 
 	return err
@@ -327,9 +345,9 @@ func TestG2configmgrImpl_GetDefaultConfigID(test *testing.T) {
 func TestG2configmgrImpl_Init(test *testing.T) {
 	ctx := context.TODO()
 	g2configmgr := getTestObject(ctx, test)
-	iniParams, jsonErr := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-	if jsonErr != nil {
-		assert.FailNow(test, jsonErr.Error())
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	if err != nil {
+		assert.FailNow(test, err.Error())
 	}
 	request := &pb.InitRequest{
 		ModuleName:     "Test module name",
