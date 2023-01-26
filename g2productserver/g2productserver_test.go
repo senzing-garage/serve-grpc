@@ -211,19 +211,6 @@ func TestG2productServer_Destroy(test *testing.T) {
 // Examples for godoc documentation
 // ----------------------------------------------------------------------------
 
-func ExampleG2ProductServer_Destroy() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2productserver/g2productserver_test.go
-	ctx := context.TODO()
-	g2product := getG2ProductServer(ctx)
-	request := &pb.DestroyRequest{}
-	response, err := g2product.Destroy(ctx, request)
-	if err != nil {
-		// This should produce a "senzing-60164001" error.
-	}
-	fmt.Println(response)
-	// Output:
-}
-
 func ExampleG2ProductServer_Init() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
@@ -299,4 +286,17 @@ func ExampleG2ProductServer_Version() {
 	}
 	fmt.Println(response.GetResult())
 	// Output: {"PRODUCT_NAME":"Senzing API","VERSION":"3.4.0","BUILD_VERSION":"3.4.0.23005","BUILD_DATE":"2023-01-04","BUILD_NUMBER":"2023_01_04__23_02","COMPATIBILITY_VERSION":{"CONFIG_VERSION":"10"},"SCHEMA_VERSION":{"ENGINE_SCHEMA_VERSION":"3.4","MINIMUM_REQUIRED_SCHEMA_VERSION":"3.0","MAXIMUM_REQUIRED_SCHEMA_VERSION":"3.99"}}
+}
+
+func ExampleG2ProductServer_Destroy() {
+	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2productserver/g2productserver_test.go
+	ctx := context.TODO()
+	g2product := getG2ProductServer(ctx)
+	request := &pb.DestroyRequest{}
+	response, err := g2product.Destroy(ctx, request)
+	if err != nil {
+		// This should produce a "senzing-60164001" error.
+	}
+	fmt.Println(response)
+	// Output:
 }

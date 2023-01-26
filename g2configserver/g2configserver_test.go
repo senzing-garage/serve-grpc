@@ -128,7 +128,7 @@ func teardown() error {
 	return err
 }
 
-func TestG2configserver_BuildSimpleSystemConfigurationJson(test *testing.T) {
+func TestBuildSimpleSystemConfigurationJson(test *testing.T) {
 	actual, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if err != nil {
 		test.Log("Error:", err.Error())
@@ -251,23 +251,6 @@ func TestG2configserver_DeleteDataSource(test *testing.T) {
 	assert.Equal(test, listBefore, responseFromListDataSources3.GetResult())
 }
 
-func TestG2configserver_Init(test *testing.T) {
-	ctx := context.TODO()
-	g2config := getTestObject(ctx, test)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-	if err != nil {
-		assert.FailNow(test, err.Error())
-	}
-	request := &pb.InitRequest{
-		ModuleName:     "Test module name",
-		IniParams:      iniParams,
-		VerboseLogging: int32(0),
-	}
-	response, err := g2config.Init(ctx, request)
-	expectError(test, ctx, g2config, err, "senzing-60114002")
-	printActual(test, response)
-}
-
 func TestG2configserver_ListDataSources(test *testing.T) {
 	ctx := context.TODO()
 	g2config := getTestObject(ctx, test)
@@ -352,6 +335,23 @@ func TestG2configserver_Save(test *testing.T) {
 	}
 	_, err = g2config.Close(ctx, requestToClose)
 	testError(test, ctx, g2config, err)
+}
+
+func TestG2configserver_Init(test *testing.T) {
+	ctx := context.TODO()
+	g2config := getTestObject(ctx, test)
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	if err != nil {
+		assert.FailNow(test, err.Error())
+	}
+	request := &pb.InitRequest{
+		ModuleName:     "Test module name",
+		IniParams:      iniParams,
+		VerboseLogging: int32(0),
+	}
+	response, err := g2config.Init(ctx, request)
+	expectError(test, ctx, g2config, err, "senzing-60114002")
+	printActual(test, response)
 }
 
 func TestG2configserver_Destroy(test *testing.T) {
