@@ -128,7 +128,7 @@ func teardown() error {
 	return err
 }
 
-func TestG2productserver_BuildSimpleSystemConfigurationJson(test *testing.T) {
+func TestBuildSimpleSystemConfigurationJson(test *testing.T) {
 	actual, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if err != nil {
 		test.Log("Error:", err.Error())
@@ -285,7 +285,7 @@ func ExampleG2ProductServer_Version() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output: {"PRODUCT_NAME":"Senzing API","VERSION":"3.4.0","BUILD_VERSION":"3.4.0.23005","BUILD_DATE":"2023-01-04","BUILD_NUMBER":"2023_01_04__23_02","COMPATIBILITY_VERSION":{"CONFIG_VERSION":"10"},"SCHEMA_VERSION":{"ENGINE_SCHEMA_VERSION":"3.4","MINIMUM_REQUIRED_SCHEMA_VERSION":"3.0","MAXIMUM_REQUIRED_SCHEMA_VERSION":"3.99"}}
+	// Output: {"PRODUCT_NAME":"Senzing API","VERSION":"3.4.1","BUILD_VERSION":"3.4.1.23023","BUILD_DATE":"2023-01-22","BUILD_NUMBER":"2023_01_22__23_01","COMPATIBILITY_VERSION":{"CONFIG_VERSION":"10"},"SCHEMA_VERSION":{"ENGINE_SCHEMA_VERSION":"3.4","MINIMUM_REQUIRED_SCHEMA_VERSION":"3.0","MAXIMUM_REQUIRED_SCHEMA_VERSION":"3.99"}}
 }
 
 func ExampleG2ProductServer_Destroy() {
