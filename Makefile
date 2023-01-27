@@ -80,14 +80,14 @@ test:
 	@rm -rf /tmp/sqlite
 	@mkdir  /tmp/sqlite
 	@cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
-	@go test -v -p 1 ./...
+#	@go test -v -p 1 ./...
 #	@go test -v ./.
 #	@go test -v ./g2configserver
 #	@go test -v ./g2configmgrserver
 #	@go test -v ./g2diagnosticserver
 #	@go test -v ./g2engineserver
 #	@go test -v ./g2productserver
-#	@go test -v ./grpcserver
+	@go test -v ./grpcserver
 
 
 .PHONY: test-servegrpc
