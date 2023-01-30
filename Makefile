@@ -53,8 +53,10 @@ dependencies:
 	@go get -t -u ./...
 	@go mod tidy
 
+
 .PHONY: build
 build: dependencies build-linux
+
 
 .PHONY: build-linux
 build-linux:
@@ -83,7 +85,6 @@ test:
 #	@go test -v ./g2configserver
 #	@go test -v ./g2configmgrserver
 #	@go test -v ./g2diagnosticserver
-#	@go test -v ./g2diagnosticservercli
 #	@go test -v ./g2engineserver
 #	@go test -v ./g2productserver
 #	@go test -v ./grpcserver
@@ -123,7 +124,6 @@ docker-build-package:
 		--tag $(DOCKER_BUILD_IMAGE_NAME) \
 		.
 
-
 # -----------------------------------------------------------------------------
 # Package
 # -----------------------------------------------------------------------------
@@ -151,6 +151,14 @@ docker-run:
 	    --tty \
 	    --name $(DOCKER_CONTAINER_NAME) \
 	    $(DOCKER_IMAGE_NAME)
+
+
+.PHONY: run-servegrpc
+run-servegrpc: build
+	@rm -rf /tmp/sqlite
+	@mkdir  /tmp/sqlite
+	@cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
+	@target/linux/servegrpc
 
 # -----------------------------------------------------------------------------
 # Utility targets

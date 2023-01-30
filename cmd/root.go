@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/senzing/go-helpers/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/servegrpc/grpcserver"
 	"github.com/spf13/cobra"
@@ -45,13 +46,16 @@ var RootCmd = &cobra.Command{
 		}
 
 		grpcserver := &grpcserver.GrpcServerImpl{
-			EnableG2config:     viper.GetBool("enable-g2config"),
-			EnableG2configmgr:  viper.GetBool("enable-g2configmgr"),
-			EnableG2diagnostic: viper.GetBool("enable-g2diagnostic"),
-			EnableG2engine:     viper.GetBool("enable-g2engine"),
-			EnableG2product:    viper.GetBool("enable-g2product"),
-			Port:               viper.GetInt("grpc-port"),
-			LogLevel:           logLevel,
+			EnableG2config:                 viper.GetBool("enable-g2config"),
+			EnableG2configmgr:              viper.GetBool("enable-g2configmgr"),
+			EnableG2diagnostic:             viper.GetBool("enable-g2diagnostic"),
+			EnableG2engine:                 viper.GetBool("enable-g2engine"),
+			EnableG2product:                viper.GetBool("enable-g2product"),
+			Port:                           viper.GetInt("grpc-port"),
+			LogLevel:                       logLevel,
+			SenzingEngineConfigurationJson: viper.GetString("engine-configuration-json"),
+			SenzingModuleName:              viper.GetString("module-name"),
+			SenzingVerboseLogging:          0,
 		}
 		grpcserver.Serve(ctx)
 		return err
@@ -71,6 +75,11 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
+	engineConfigurationJson, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	if err != nil {
+		engineConfigurationJson = err.Error()
+	}
+
 	// Define flags for command.
 
 	RootCmd.Flags().BoolP("enable-g2config", "", false, "enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]")
@@ -79,7 +88,9 @@ func init() {
 	RootCmd.Flags().BoolP("enable-g2engine", "", false, "enable G2Config service [SENZING_TOOLS_ENABLE_G2ENGINE]")
 	RootCmd.Flags().BoolP("enable-g2product", "", false, "enable G2Config service [SENZING_TOOLS_ENABLE_G2PRODUCT]")
 	RootCmd.Flags().Int("grpc-port", 8258, "port used to serve gRPC [SENZING_TOOLS_GRPC_PORT]")
+	RootCmd.Flags().String("engine-configuration-json", engineConfigurationJson, "JSON string sent to Senzing's init() function [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON]")
 	RootCmd.Flags().String("log-level", "INFO", "log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [SENZING_TOOLS_LOG_LEVEL]")
+	RootCmd.Flags().String("module-name", "gRPC", "An identifier sent to Senzing's init() function [SENZING_TOOLS_MODULE_NAME]")
 
 	// Integrate with Viper.
 
@@ -107,8 +118,14 @@ func init() {
 	viper.SetDefault("grpc-port", 8258)
 	viper.BindPFlag("grpc-port", RootCmd.Flags().Lookup("grpc-port"))
 
+	viper.SetDefault("engine-configuration-json", engineConfigurationJson)
+	viper.BindPFlag("engine-configuration-json", RootCmd.Flags().Lookup("engine-configuration-json"))
+
 	viper.SetDefault("log-level", "INFO")
 	viper.BindPFlag("log-level", RootCmd.Flags().Lookup("log-level"))
+
+	viper.SetDefault("module-name", "gRPC")
+	viper.BindPFlag("module-name", RootCmd.Flags().Lookup("module-name"))
 
 	// Set version template.
 

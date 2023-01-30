@@ -29,6 +29,10 @@ func getG2product() *g2sdk.G2productImpl {
 	return g2productSingleton
 }
 
+func GetSdkG2product() *g2sdk.G2productImpl {
+	return getG2product()
+}
+
 // Get the Logger singleton.
 func (server *G2ProductServer) getLogger() messagelogger.MessageLoggerInterface {
 	if server.logger == nil {
@@ -48,7 +52,7 @@ func (server *G2ProductServer) traceExit(errorNumber int, details ...interface{}
 }
 
 // ----------------------------------------------------------------------------
-// Interface methods
+// Interface methods for github.com/senzing/g2-sdk-go/g2product.G2product
 // ----------------------------------------------------------------------------
 
 func (server *G2ProductServer) Destroy(ctx context.Context, request *pb.DestroyRequest) (*pb.DestroyResponse, error) {
@@ -56,8 +60,9 @@ func (server *G2ProductServer) Destroy(ctx context.Context, request *pb.DestroyR
 		server.traceEntry(3, request)
 	}
 	entryTime := time.Now()
-	g2product := getG2product()
-	err := g2product.Destroy(ctx)
+	// g2product := getG2product()
+	// err := g2product.Destroy(ctx)
+	err := server.getLogger().Error(4001)
 	response := pb.DestroyResponse{}
 	if server.isTrace {
 		defer server.traceExit(4, request, err, time.Since(entryTime))
@@ -70,8 +75,9 @@ func (server *G2ProductServer) Init(ctx context.Context, request *pb.InitRequest
 		server.traceEntry(9, request)
 	}
 	entryTime := time.Now()
-	g2product := getG2product()
-	err := g2product.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
+	// g2product := getG2product()
+	// err := g2product.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
+	err := server.getLogger().Error(4002)
 	response := pb.InitResponse{}
 	if server.isTrace {
 		defer server.traceExit(10, request, err, time.Since(entryTime))
