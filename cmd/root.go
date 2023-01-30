@@ -52,7 +52,6 @@ var RootCmd = &cobra.Command{
 			EnableG2engine:                 viper.GetBool("enable-g2engine"),
 			EnableG2product:                viper.GetBool("enable-g2product"),
 			Port:                           viper.GetInt("grpc-port"),
-			PurgeDatabase:                  viper.GetBool("purge-database") && viper.GetBool("confirm-purge-database"),
 			LogLevel:                       logLevel,
 			SenzingEngineConfigurationJson: viper.GetString("engine-configuration-json"),
 			SenzingModuleName:              viper.GetString("module-name"),
@@ -83,13 +82,11 @@ func init() {
 
 	// Define flags for command.
 
-	RootCmd.Flags().BoolP("confirm-purge-database", "", false, "Confirm purge G2 database before starting gRPC service [SENZING_TOOLS_CONFIRM_PURGE_DATABASE]")
 	RootCmd.Flags().BoolP("enable-g2config", "", false, "enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]")
 	RootCmd.Flags().BoolP("enable-g2configmgr", "", false, "enable G2ConfigMgr service [SENZING_TOOLS_ENABLE_G2CONFIGMGR]")
 	RootCmd.Flags().BoolP("enable-g2diagnostic", "", false, "enable G2Diagnostic service [SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]")
 	RootCmd.Flags().BoolP("enable-g2engine", "", false, "enable G2Config service [SENZING_TOOLS_ENABLE_G2ENGINE]")
 	RootCmd.Flags().BoolP("enable-g2product", "", false, "enable G2Config service [SENZING_TOOLS_ENABLE_G2PRODUCT]")
-	RootCmd.Flags().BoolP("purge-database", "", false, "dangerous: purge G2 database before starting gRPC service [SENZING_TOOLS_PURGE_DATABASE]")
 	RootCmd.Flags().Int("grpc-port", 8258, "port used to serve gRPC [SENZING_TOOLS_GRPC_PORT]")
 	RootCmd.Flags().String("engine-configuration-json", engineConfigurationJson, "JSON string sent to Senzing's init() function [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON]")
 	RootCmd.Flags().String("log-level", "INFO", "log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [SENZING_TOOLS_LOG_LEVEL]")
@@ -102,9 +99,6 @@ func init() {
 	viper.SetEnvPrefix("SENZING_TOOLS")
 
 	// Define flags in Viper.
-
-	viper.SetDefault("confirm-purge-database", false)
-	viper.BindPFlag("confirm-purge-database", RootCmd.Flags().Lookup("confirm-purge-database"))
 
 	viper.SetDefault("enable-g2config", false)
 	viper.BindPFlag("enable-g2config", RootCmd.Flags().Lookup("enable-g2config"))
@@ -120,9 +114,6 @@ func init() {
 
 	viper.SetDefault("enable-g2product", false)
 	viper.BindPFlag("enable-g2product", RootCmd.Flags().Lookup("enable-g2product"))
-
-	viper.SetDefault("purge-database", false)
-	viper.BindPFlag("purge-database", RootCmd.Flags().Lookup("purge-database"))
 
 	viper.SetDefault("grpc-port", 8258)
 	viper.BindPFlag("grpc-port", RootCmd.Flags().Lookup("grpc-port"))

@@ -34,7 +34,6 @@ type GrpcServerImpl struct {
 	EnableG2product                bool
 	LogLevel                       logger.Level
 	Port                           int
-	PurgeDatabase                  bool
 	SenzingEngineConfigurationJson string
 	SenzingModuleName              string
 	SenzingVerboseLogging          int
@@ -88,17 +87,6 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 	if grpcServer.EnableG2engine {
 		sdkG2engine := g2engineserver.GetSdkG2engine()
 		sdkG2engine.Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
-		if grpcServer.PurgeDatabase {
-			err := sdkG2engine.PurgeRepository(ctx)
-			if err != nil {
-				logger.Log(4002, err)
-			}
-			err = sdkG2engine.Destroy(ctx)
-			if err != nil {
-				logger.Log(4003, err)
-			}
-			sdkG2engine.Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
-		}
 		server := &g2engineserver.G2EngineServer{}
 		server.SetLogLevel(ctx, grpcServer.LogLevel)
 		g2engine.RegisterG2EngineServer(aGrpcServer, server)

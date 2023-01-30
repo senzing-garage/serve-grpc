@@ -46,7 +46,6 @@ var IdMessages = map[int]string{
 	4001: "Destroy() not supported in gRPC",
 	4002: "Init() not supported in gRPC",
 	4003: "InitWithConfigID() not supported in gRPC",
-	4004: "PurgeRepository() not supported in gRPC",
 	5901: "setup() call to messagelogger.NewSenzingApiLogger() failed.",
 	5902: "setup() call to g2eg2engineconfigurationjson.BuildSimpleSystemConfigurationJson() failed.",
 	5903: "setup() call to g2engine.Init() failed.",

@@ -2638,7 +2638,7 @@ func ExampleG2EngineServer_PurgeRepository() {
 	request := &pb.PurgeRepositoryRequest{}
 	response, err := g2engine.PurgeRepository(ctx, request)
 	if err != nil {
-		// This should produce a "senzing-60144004" error.
+		fmt.Println(err)
 	}
 	fmt.Println(response)
 	// Output:

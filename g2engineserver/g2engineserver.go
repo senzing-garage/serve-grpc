@@ -932,7 +932,6 @@ func (server *G2EngineServer) PurgeRepository(ctx context.Context, request *pb.P
 	entryTime := time.Now()
 	g2engine := getG2engine()
 	err := g2engine.PurgeRepository(ctx)
-	// err := server.getLogger().Error(4004)
 	response := pb.PurgeRepositoryResponse{}
 	if server.isTrace {
 		defer server.traceExit(118, request, err, time.Since(entryTime))
