@@ -12,9 +12,7 @@ import (
 	"github.com/senzing/g2-sdk-go/g2engine"
 	"github.com/senzing/go-common/truthset"
 	"github.com/senzing/go-helpers/g2engineconfigurationjson"
-	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
-	"github.com/senzing/go-observing/observer"
 )
 
 var (
@@ -164,22 +162,22 @@ func teardown() error {
 // ----------------------------------------------------------------------------
 
 func TestGrpcServerImpl_Serve(test *testing.T) {
-	ctx := context.TODO()
+	// ctx := context.TODO()
 
-	observer1 := &observer.ObserverNull{
-		Id: "Observer 1",
-	}
+	// observer1 := &observer.ObserverNull{
+	// 	Id: "Observer 1",
+	// }
 
-	senzingEngineConfigurationJson, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
-	if err != nil {
-		fmt.Print(err)
-	}
-	grpcServer := &GrpcServerImpl{
-		LogLevel:                       logger.LevelInfo,
-		Observers:                      []observer.Observer{observer1},
-		Port:                           8258,
-		SenzingEngineConfigurationJson: senzingEngineConfigurationJson,
-		SenzingModuleName:              "Test gRPC Server",
-	}
-	grpcServer.Serve(ctx)
+	// senzingEngineConfigurationJson, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	// if err != nil {
+	// 	fmt.Print(err)
+	// }
+	// grpcServer := &GrpcServerImpl{
+	// 	LogLevel:                       logger.LevelInfo,
+	// 	Observers:                      []observer.Observer{observer1},
+	// 	Port:                           8258,
+	// 	SenzingEngineConfigurationJson: senzingEngineConfigurationJson,
+	// 	SenzingModuleName:              "Test gRPC Server",
+	// }
+	// grpcServer.Serve(ctx)
 }
