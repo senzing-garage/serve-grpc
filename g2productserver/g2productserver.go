@@ -9,6 +9,7 @@ import (
 	pb "github.com/senzing/g2-sdk-proto/go/g2product"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-observing/observer"
 )
 
 var (
@@ -101,6 +102,11 @@ func (server *G2ProductServer) License(ctx context.Context, request *pb.LicenseR
 	return &response, err
 }
 
+func (server *G2ProductServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	g2product := getG2product()
+	return g2product.RegisterObserver(ctx, observer)
+}
+
 /*
 The SetLogLevel method sets the level of logging.
 
@@ -122,6 +128,11 @@ func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevel logger.
 		defer server.traceExit(14, logLevel, err, time.Since(entryTime))
 	}
 	return err
+}
+
+func (server *G2ProductServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	g2product := getG2product()
+	return g2product.UnregisterObserver(ctx, observer)
 }
 
 func (server *G2ProductServer) ValidateLicenseFile(ctx context.Context, request *pb.ValidateLicenseFileRequest) (*pb.ValidateLicenseFileResponse, error) {
