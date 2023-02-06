@@ -157,8 +157,8 @@ github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFR
 github.com/rogpeppe/go-internal v1.6.1 h1:/FiVV8dS/e+YqF2JvO3yXRFbBLTIuSDkuC7aBOAvL+k=
 github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf35Ld67mk=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
-github.com/senzing/g2-sdk-go v0.2.6 h1:g2n4EoJecsm4RJYe5k6heFMRmT81qlVu84VWZpCXdJE=
-github.com/senzing/g2-sdk-go v0.2.6/go.mod h1:Q4CDt2YumZN7tLMu4eWdeqJw3dDxQ8kTEjcmTOCh+60=
+github.com/senzing/g2-sdk-go v0.3.0 h1:sZybgI/wdYjiPo2lhiPyiL4x86prmO3AHSk/IppE/jM=
+github.com/senzing/g2-sdk-go v0.3.0/go.mod h1:UFRWJEBIdaEPG4KNspOem8NlIaRIzxd2jXy3Z5Hf+Y8=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230126140313-273e96bc7dbd h1:FWU5eJlkfWAPkzha9YlJiJ+Xqurs5uQtfW/iYB0TsJA=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230126140313-273e96bc7dbd/go.mod h1:MJDH/VHktx3vOOmFLKmi84HZuv3kcgiO544XzcqhVV4=
 github.com/senzing/go-common v0.0.0-20230126153452-241288b3f6e1 h1:RsEPjljngKS/O76V59c5zEFSjzaA50H1xtmmomul2i0=
@@ -167,6 +167,8 @@ github.com/senzing/go-helpers v0.1.0 h1:xsBNNiAKmodgUC4rUDyubsIKaZXTxllzVRV7+sPE
 github.com/senzing/go-helpers v0.1.0/go.mod h1:EmY93Zn5sw07VmswPcmdV4VeXDtrnQXKj7PClp1pbto=
 github.com/senzing/go-logging v1.1.3 h1:eTWuEgI+4bwyS0gSpYKNbz8gL8ATAqByA3q1sbRJCu4=
 github.com/senzing/go-logging v1.1.3/go.mod h1:FarStyY/kYd7+ymtawOXvOk48j/6fHRZ8unSwpi4FzI=
+github.com/senzing/go-observing v0.0.0-20230202152745-fc1b5119812f h1:1enroY9miMyCxOjCUga+ZwVbvvA+utC35nSp9QV7YZ8=
+github.com/senzing/go-observing v0.0.0-20230202152745-fc1b5119812f/go.mod h1:S7ejdiEwbWj7sVsheJR9G4cTfSqr2goenR/6tyQt5OI=
 github.com/spf13/afero v1.9.3 h1:41FoI0fD7OR7mGcKE/aOiLkGreyf8ifIOQmJANWogMk=
 github.com/spf13/afero v1.9.3/go.mod h1:iUV7ddyEEZPO5gA3zD4fJt6iStLlL+Lg4m2cihcDf8Y=
 github.com/spf13/cast v1.5.0 h1:rj3WzYc11XZaIZMPKmwP96zkFEnnAmV8s6XbB2aY32w=
