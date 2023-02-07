@@ -9,6 +9,7 @@ import (
 	pb "github.com/senzing/g2-sdk-proto/go/g2config"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-observing/observer"
 )
 
 var (
@@ -175,6 +176,11 @@ func (server *G2ConfigServer) Load(ctx context.Context, request *pb.LoadRequest)
 	return &response, err
 }
 
+func (server *G2ConfigServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	g2config := getG2config()
+	return g2config.RegisterObserver(ctx, observer)
+}
+
 func (server *G2ConfigServer) Save(ctx context.Context, request *pb.SaveRequest) (*pb.SaveResponse, error) {
 	if server.isTrace {
 		server.traceEntry(23, request)
@@ -212,4 +218,9 @@ func (server *G2ConfigServer) SetLogLevel(ctx context.Context, logLevel logger.L
 		defer server.traceExit(26, logLevel, err, time.Since(entryTime))
 	}
 	return err
+}
+
+func (server *G2ConfigServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	g2config := getG2config()
+	return g2config.UnregisterObserver(ctx, observer)
 }

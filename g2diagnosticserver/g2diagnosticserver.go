@@ -11,6 +11,7 @@ import (
 	pb "github.com/senzing/g2-sdk-proto/go/g2diagnostic"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-observing/observer"
 )
 
 var (
@@ -420,6 +421,11 @@ func (server *G2DiagnosticServer) InitWithConfigID(ctx context.Context, request 
 	return &response, err
 }
 
+func (server G2DiagnosticServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	g2diagnostic := getG2diagnostic()
+	return g2diagnostic.RegisterObserver(ctx, observer)
+}
+
 func (server *G2DiagnosticServer) Reinit(ctx context.Context, request *pb.ReinitRequest) (*pb.ReinitResponse, error) {
 	if server.isTrace {
 		server.traceEntry(51, request)
@@ -455,4 +461,9 @@ func (server *G2DiagnosticServer) SetLogLevel(ctx context.Context, logLevel logg
 		defer server.traceExit(54, logLevel, err, time.Since(entryTime))
 	}
 	return err
+}
+
+func (server *G2DiagnosticServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	g2diagnostic := getG2diagnostic()
+	return g2diagnostic.UnregisterObserver(ctx, observer)
 }

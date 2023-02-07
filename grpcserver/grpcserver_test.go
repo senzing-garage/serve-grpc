@@ -163,15 +163,21 @@ func teardown() error {
 
 func TestGrpcServerImpl_Serve(test *testing.T) {
 	// ctx := context.TODO()
+
+	// observer1 := &observer.ObserverNull{
+	// 	Id: "Observer 1",
+	// }
+
 	// senzingEngineConfigurationJson, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	// if err != nil {
 	// 	fmt.Print(err)
 	// }
 	// grpcServer := &GrpcServerImpl{
+	// 	LogLevel:                       logger.LevelInfo,
+	// 	Observers:                      []observer.Observer{observer1},
+	// 	Port:                           8258,
 	// 	SenzingEngineConfigurationJson: senzingEngineConfigurationJson,
 	// 	SenzingModuleName:              "Test gRPC Server",
-	// 	LogLevel:                       logger.LevelInfo,
-	// 	Port:                           8258,
 	// }
 	// grpcServer.Serve(ctx)
 }

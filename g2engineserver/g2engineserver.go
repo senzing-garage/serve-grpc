@@ -9,6 +9,7 @@ import (
 	pb "github.com/senzing/g2-sdk-proto/go/g2engine"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-observing/observer"
 )
 
 var (
@@ -999,6 +1000,11 @@ func (server *G2EngineServer) ReevaluateRecordWithInfo(ctx context.Context, requ
 	return &response, err
 }
 
+func (server *G2EngineServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	g2engine := getG2engine()
+	return g2engine.RegisterObserver(ctx, observer)
+}
+
 func (server *G2EngineServer) Reinit(ctx context.Context, request *pb.ReinitRequest) (*pb.ReinitResponse, error) {
 	if server.isTrace {
 		server.traceEntry(127, request)
@@ -1112,6 +1118,11 @@ func (server *G2EngineServer) Stats(ctx context.Context, request *pb.StatsReques
 		defer server.traceExit(140, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
+}
+
+func (server *G2EngineServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	g2engine := getG2engine()
+	return g2engine.UnregisterObserver(ctx, observer)
 }
 
 func (server *G2EngineServer) WhyEntities(ctx context.Context, request *pb.WhyEntitiesRequest) (*pb.WhyEntitiesResponse, error) {

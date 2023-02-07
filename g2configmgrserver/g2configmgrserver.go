@@ -9,6 +9,7 @@ import (
 	pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-observing/observer"
 )
 
 var (
@@ -149,6 +150,11 @@ func (server *G2ConfigmgrServer) Init(ctx context.Context, request *pb.InitReque
 	return &response, err
 }
 
+func (server *G2ConfigmgrServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	g2configmgr := getG2configmgr()
+	return g2configmgr.RegisterObserver(ctx, observer)
+}
+
 func (server *G2ConfigmgrServer) ReplaceDefaultConfigID(ctx context.Context, request *pb.ReplaceDefaultConfigIDRequest) (*pb.ReplaceDefaultConfigIDResponse, error) {
 	if server.isTrace {
 		server.traceEntry(19, request)
@@ -198,4 +204,9 @@ func (server *G2ConfigmgrServer) SetLogLevel(ctx context.Context, logLevel logge
 		defer server.traceExit(24, logLevel, err, time.Since(entryTime))
 	}
 	return err
+}
+
+func (server *G2ConfigmgrServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	g2configmgr := getG2configmgr()
+	return g2configmgr.UnregisterObserver(ctx, observer)
 }

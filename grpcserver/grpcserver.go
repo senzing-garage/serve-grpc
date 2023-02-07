@@ -12,6 +12,7 @@ import (
 	"github.com/senzing/g2-sdk-proto/go/g2product"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-observing/observer"
 	"github.com/senzing/servegrpc/g2configmgrserver"
 	"github.com/senzing/servegrpc/g2configserver"
 	"github.com/senzing/servegrpc/g2diagnosticserver"
@@ -33,6 +34,7 @@ type GrpcServerImpl struct {
 	EnableG2engine                 bool
 	EnableG2product                bool
 	LogLevel                       logger.Level
+	Observers                      []observer.Observer
 	Port                           int
 	SenzingEngineConfigurationJson string
 	SenzingModuleName              string
@@ -85,6 +87,11 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 		g2configserver.GetSdkG2config().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
 		server := &g2configserver.G2ConfigServer{}
 		server.SetLogLevel(ctx, grpcServer.LogLevel)
+		if grpcServer.Observers != nil {
+			for _, observer := range grpcServer.Observers {
+				server.RegisterObserver(ctx, observer)
+			}
+		}
 		g2config.RegisterG2ConfigServer(aGrpcServer, server)
 	}
 
@@ -92,6 +99,11 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 		g2configmgrserver.GetSdkG2configmgr().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
 		server := &g2configmgrserver.G2ConfigmgrServer{}
 		server.SetLogLevel(ctx, grpcServer.LogLevel)
+		if grpcServer.Observers != nil {
+			for _, observer := range grpcServer.Observers {
+				server.RegisterObserver(ctx, observer)
+			}
+		}
 		g2configmgr.RegisterG2ConfigMgrServer(aGrpcServer, server)
 	}
 
@@ -99,6 +111,11 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 		g2diagnosticserver.GetSdkG2diagnostic().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
 		server := &g2diagnosticserver.G2DiagnosticServer{}
 		server.SetLogLevel(ctx, grpcServer.LogLevel)
+		if grpcServer.Observers != nil {
+			for _, observer := range grpcServer.Observers {
+				server.RegisterObserver(ctx, observer)
+			}
+		}
 		g2diagnostic.RegisterG2DiagnosticServer(aGrpcServer, server)
 	}
 
@@ -107,6 +124,11 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 		sdkG2engine.Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
 		server := &g2engineserver.G2EngineServer{}
 		server.SetLogLevel(ctx, grpcServer.LogLevel)
+		if grpcServer.Observers != nil {
+			for _, observer := range grpcServer.Observers {
+				server.RegisterObserver(ctx, observer)
+			}
+		}
 		g2engine.RegisterG2EngineServer(aGrpcServer, server)
 	}
 
@@ -114,6 +136,11 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 		g2productserver.GetSdkG2product().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
 		server := &g2productserver.G2ProductServer{}
 		server.SetLogLevel(ctx, grpcServer.LogLevel)
+		if grpcServer.Observers != nil {
+			for _, observer := range grpcServer.Observers {
+				server.RegisterObserver(ctx, observer)
+			}
+		}
 		g2product.RegisterG2ProductServer(aGrpcServer, server)
 	}
 
