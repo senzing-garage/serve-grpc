@@ -19,4 +19,4 @@ jobs:
       - name: Pull new module version
         uses: andrewslotin/go-proxy-pull-action@v1.1.0
         with:
-          import_path: github.com/senzing
+          import_path: github.com/senzing/servegrpc
