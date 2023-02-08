@@ -23,25 +23,17 @@ CC = gcc
 # Conditional assignment. ('?=')
 
 SENZING_G2_DIR ?= /opt/senzing/g2
+LD_LIBRARY_PATH ?= ${SENZING_G2_DIR}/lib
+SENZING_TOOLS_DATABASE_URL ?= sqlite3://na:na@/tmp/sqlite/G2C.db
 
-# Exports
+# Export environment variables.
 
-export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
+.EXPORT_ALL_VARIABLES:
 
 # The first "make" target runs as default.
 
 .PHONY: default
 default: help
-
-# -----------------------------------------------------------------------------
-# Export environment variables.
-# -----------------------------------------------------------------------------
-
-.EXPORT_ALL_VARIABLES:
-
-# Flags for the C compiler
-
-LD_LIBRARY_PATH ?= ${SENZING_G2_DIR}/lib
 
 # -----------------------------------------------------------------------------
 # Build
@@ -148,6 +140,10 @@ docker-run:
 .PHONY: run-servegrpc
 run-servegrpc: build
 	@target/linux/servegrpc
+
+.PHONY: run-servegrpc-trace
+run-servegrpc-trace: build
+	@target/linux/servegrpc --log-level TRACE
 
 # -----------------------------------------------------------------------------
 # Utility targets
