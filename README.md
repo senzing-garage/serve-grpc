@@ -288,3 +288,58 @@ Make documents visible at
     servegrpc docs --dir ${GIT_REPOSITORY_DIR}/docs
 
     ```
+
+## Alternatives
+
+### Postgres database
+
+The following steps will bring up a docker-compose stack with a PostgreSQL database.
+
+1. Identify a directory to place docker-compose artifacts.
+   Example:
+
+    ```console
+    export SENZING_DEMO_DIR=~/my-senzing-demo
+
+    ```
+
+1. Bring up the docker-compose stack.
+   Example:
+
+    ```console
+    export PGADMIN_DIR=${SENZING_DEMO_DIR}/pgadmin
+    export POSTGRES_DIR=${SENZING_DEMO_DIR}/postgres
+    export RABBITMQ_DIR=${SENZING_DEMO_DIR}/rabbitmq
+    export SENZING_VAR_DIR=${SENZING_DEMO_DIR}/var
+    export SENZING_UID=$(id -u)
+    export SENZING_GID=$(id -g)
+
+    rm -rf ${SENZING_DEMO_DIR:-/tmp/nowhere/for/safety}
+    mkdir ${SENZING_DEMO_DIR}
+    mkdir -p ${PGADMIN_DIR} ${POSTGRES_DIR} ${RABBITMQ_DIR} ${SENZING_VAR_DIR}
+    chmod -R 777 ${SENZING_DEMO_DIR}
+
+    curl -X GET \
+        --output ${SENZING_DEMO_DIR}/docker-versions-stable.sh \
+        <https://raw.githubusercontent.com/Senzing/knowledge-base/main/lists/docker-versions-stable.sh>
+    source ${SENZING_DEMO_DIR}/docker-versions-stable.sh
+    curl -X GET \
+        --output ${SENZING_DEMO_DIR}/docker-compose.yaml \
+        "https://raw.githubusercontent.com/Senzing/docker-compose-demo/main/resources/postgresql/docker-compose-rabbitmq-postgresql-backing-services-only.yaml"
+
+    cd ${SENZING_DEMO_DIR}
+    sudo --preserve-env docker-compose up
+
+    ```
+
+1. Run `servegrpc`.
+   Example:
+
+    ```console
+    export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
+    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
+
+    cd ~/senzing.git/servegrpc
+    clear; make clean run-servegrpc
+
+    ```
