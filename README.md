@@ -10,15 +10,20 @@ the recommendation is not to use it yet.
 
 The Senzing servegrpc is an application on top of
 [senzing/g2-sdk-go](https://github.com/Senzing/g2-sdk-go)
-which allows calls to the Senzing Go SDK via network access using
+which create a server that supports requests to the Senzing Go SDK via network access using
 [gRPC](https://grpc.io/).
 ...
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/senzing/servegrpc.svg)](https://pkg.go.dev/github.com/senzing/servegrpc)
 [![Go Report Card](https://goreportcard.com/badge/github.com/senzing/servegrpc)](https://goreportcard.com/report/github.com/senzing/servegrpc)
-[![go-test.yaml](https://github.com/Senzing/servegrpc/actions/workflows/go-test.yaml/badge.svg)](https://github.com/Senzing/servegrpc/actions/workflows/go-test.yaml)
 
 ## Overview
+
+`servegrpc` supports the [Senzing Protocol Buffer definitions](https://github.com/Senzing/g2-sdk-proto).
+
+Under the covers, the gRPC request is translated into a Senzing Go SDK API call using
+[senzing/g2-sdk-go](https://github.com/Senzing/g2-sdk-go).
+The response from the Senzing Go SDK API is returned to the gRPC client.
 
 ## Use
 
@@ -28,19 +33,42 @@ servegrpc [flags]
 ```
 
 For options and flags, see
-[hub.senzing.com/servegrpc](https://hub.senzing.com/servegrpc/).
+[hub.senzing.com/servegrpc](https://hub.senzing.com/servegrpc/) or run:
+
+```console
+export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+servegrpc --help
+```
 
 ## Docker
 
-1. XXx
+1. Build `senzing/servegrpc`.
+   Example:
+
+    ```console
+    make docker-build
+
+    ```
+
+1. Identify the database URL.
+   Example:
+
+    ```console
+    export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
+    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
+
+    ```
+
+1. Run `senzing/servegrpc`.
    Example:
 
     ```console
     docker run \
-
+        --env SENZING_TOOLS_DATABASE_URL \
         --interactive \
-        --tty \
+        --publish 8258:8258 \
         --rm \
+        --tty \
         senzing/servegrpc
 
 ## Development

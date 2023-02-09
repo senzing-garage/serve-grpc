@@ -2,7 +2,7 @@
 # Stages
 # -----------------------------------------------------------------------------
 
-ARG IMAGE_GO_BUILDER=golang:1.19.4
+ARG IMAGE_GO_BUILDER=golang:1.20.0
 ARG IMAGE_FPM_BUILDER=dockter/fpm:latest
 ARG IMAGE_FINAL=alpine
 
