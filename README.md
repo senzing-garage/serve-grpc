@@ -296,6 +296,7 @@ Make documents visible at
 The following steps will bring up a docker-compose stack with a PostgreSQL database.
 
 1. Identify a directory to place docker-compose artifacts.
+   The directory specified will be deleted and re-created.
    Example:
 
     ```console
@@ -343,3 +344,5 @@ The following steps will bring up a docker-compose stack with a PostgreSQL datab
     clear; make clean run-servegrpc
 
     ```
+
+1. PgAdmin is available at [localhost:9171](http://localhost:9171)
