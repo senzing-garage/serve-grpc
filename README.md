@@ -339,7 +339,7 @@ The following steps will bring up a docker-compose stack with a PostgreSQL datab
     export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
     export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
 
-    cd ~/senzing.git/servegrpc
+    cd ${GIT_REPOSITORY_DIR}
     clear; make clean run-servegrpc
 
     ```
