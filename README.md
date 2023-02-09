@@ -8,7 +8,11 @@ the recommendation is not to use it yet.
 
 ## Synopsis
 
-The Senzing servegrpc...
+The Senzing servegrpc is an application on top of
+[senzing/g2-sdk-go](https://github.com/Senzing/g2-sdk-go)
+which allows calls to the Senzing Go SDK via network access using
+[gRPC](https://grpc.io/).
+...
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/senzing/servegrpc.svg)](https://pkg.go.dev/github.com/senzing/servegrpc)
 [![Go Report Card](https://goreportcard.com/badge/github.com/senzing/servegrpc)](https://goreportcard.com/report/github.com/senzing/servegrpc)
@@ -333,7 +337,7 @@ The following steps will bring up a docker-compose stack with a PostgreSQL datab
 
     ```
 
-1. Run `servegrpc`.
+1. In a separate terminal window, run `servegrpc`.
    Example:
 
     ```console
