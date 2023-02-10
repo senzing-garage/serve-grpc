@@ -5,7 +5,8 @@ import (
 	"sync"
 	"time"
 
-	g2sdk "github.com/senzing/g2-sdk-go/g2configmgr"
+	g2sdk "github.com/senzing/g2-sdk-go-base/g2configmgr"
+	g2api "github.com/senzing/g2-sdk-go/g2configmgr"
 	pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"

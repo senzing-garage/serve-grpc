@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/senzing/go-helpers/g2engineconfigurationjson"
+	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/servegrpc/grpcserver"
 	"github.com/spf13/cobra"

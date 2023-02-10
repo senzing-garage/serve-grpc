@@ -9,7 +9,7 @@ import (
 
 	truncator "github.com/aquilax/truncate"
 	pb "github.com/senzing/g2-sdk-proto/go/g2config"
-	"github.com/senzing/go-helpers/g2engineconfigurationjson"
+	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -14,9 +14,9 @@ import (
 	"github.com/senzing/g2-sdk-go/g2configmgr"
 	"github.com/senzing/g2-sdk-go/g2engine"
 	pb "github.com/senzing/g2-sdk-proto/go/g2engine"
+	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/senzing/go-common/record"
 	"github.com/senzing/go-common/truthset"
-	"github.com/senzing/go-helpers/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/messagelogger"
 	"github.com/stretchr/testify/assert"
 )
