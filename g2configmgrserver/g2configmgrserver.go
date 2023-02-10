@@ -7,7 +7,7 @@ import (
 
 	g2sdk "github.com/senzing/g2-sdk-go-base/g2configmgr"
 	g2api "github.com/senzing/g2-sdk-go/g2configmgr"
-	pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
+	g2pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
 	"github.com/senzing/go-observing/observer"
@@ -57,14 +57,14 @@ func (server *G2ConfigmgrServer) traceExit(errorNumber int, details ...interface
 // Interface methods for github.com/senzing/g2-sdk-go/g2configmgr.G2configmgr
 // ----------------------------------------------------------------------------
 
-func (server *G2ConfigmgrServer) AddConfig(ctx context.Context, request *pb.AddConfigRequest) (*pb.AddConfigResponse, error) {
+func (server *G2ConfigmgrServer) AddConfig(ctx context.Context, request *g2pb.AddConfigRequest) (*g2pb.AddConfigResponse, error) {
 	if server.isTrace {
 		server.traceEntry(1, request)
 	}
 	entryTime := time.Now()
 	g2configmgr := getG2configmgr()
 	result, err := g2configmgr.AddConfig(ctx, request.GetConfigStr(), request.GetConfigComments())
-	response := pb.AddConfigResponse{
+	response := g2pb.AddConfigResponse{
 		Result: result,
 	}
 	if server.isTrace {
@@ -73,7 +73,7 @@ func (server *G2ConfigmgrServer) AddConfig(ctx context.Context, request *pb.AddC
 	return &response, err
 }
 
-func (server *G2ConfigmgrServer) Destroy(ctx context.Context, request *pb.DestroyRequest) (*pb.DestroyResponse, error) {
+func (server *G2ConfigmgrServer) Destroy(ctx context.Context, request *g2pb.DestroyRequest) (*g2pb.DestroyResponse, error) {
 	if server.isTrace {
 		server.traceEntry(5, request)
 	}
@@ -81,21 +81,21 @@ func (server *G2ConfigmgrServer) Destroy(ctx context.Context, request *pb.Destro
 	// g2configmgr := getG2configmgr()
 	// err := g2configmgr.Destroy(ctx)
 	err := server.getLogger().Error(4001)
-	response := pb.DestroyResponse{}
+	response := g2pb.DestroyResponse{}
 	if server.isTrace {
 		defer server.traceExit(6, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
-func (server *G2ConfigmgrServer) GetConfig(ctx context.Context, request *pb.GetConfigRequest) (*pb.GetConfigResponse, error) {
+func (server *G2ConfigmgrServer) GetConfig(ctx context.Context, request *g2pb.GetConfigRequest) (*g2pb.GetConfigResponse, error) {
 	if server.isTrace {
 		server.traceEntry(7, request)
 	}
 	entryTime := time.Now()
 	g2configmgr := getG2configmgr()
 	result, err := g2configmgr.GetConfig(ctx, request.GetConfigID())
-	response := pb.GetConfigResponse{
+	response := g2pb.GetConfigResponse{
 		Result: result,
 	}
 	if server.isTrace {
@@ -104,14 +104,14 @@ func (server *G2ConfigmgrServer) GetConfig(ctx context.Context, request *pb.GetC
 	return &response, err
 }
 
-func (server *G2ConfigmgrServer) GetConfigList(ctx context.Context, request *pb.GetConfigListRequest) (*pb.GetConfigListResponse, error) {
+func (server *G2ConfigmgrServer) GetConfigList(ctx context.Context, request *g2pb.GetConfigListRequest) (*g2pb.GetConfigListResponse, error) {
 	if server.isTrace {
 		server.traceEntry(9, request)
 	}
 	entryTime := time.Now()
 	g2configmgr := getG2configmgr()
 	result, err := g2configmgr.GetConfigList(ctx)
-	response := pb.GetConfigListResponse{
+	response := g2pb.GetConfigListResponse{
 		Result: result,
 	}
 	if server.isTrace {
@@ -120,14 +120,14 @@ func (server *G2ConfigmgrServer) GetConfigList(ctx context.Context, request *pb.
 	return &response, err
 }
 
-func (server *G2ConfigmgrServer) GetDefaultConfigID(ctx context.Context, request *pb.GetDefaultConfigIDRequest) (*pb.GetDefaultConfigIDResponse, error) {
+func (server *G2ConfigmgrServer) GetDefaultConfigID(ctx context.Context, request *g2pb.GetDefaultConfigIDRequest) (*g2pb.GetDefaultConfigIDResponse, error) {
 	if server.isTrace {
 		server.traceEntry(11, request)
 	}
 	entryTime := time.Now()
 	g2configmgr := getG2configmgr()
 	result, err := g2configmgr.GetDefaultConfigID(ctx)
-	response := pb.GetDefaultConfigIDResponse{
+	response := g2pb.GetDefaultConfigIDResponse{
 		ConfigID: result,
 	}
 	if server.isTrace {
@@ -136,7 +136,7 @@ func (server *G2ConfigmgrServer) GetDefaultConfigID(ctx context.Context, request
 	return &response, err
 }
 
-func (server *G2ConfigmgrServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.InitResponse, error) {
+func (server *G2ConfigmgrServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
 	if server.isTrace {
 		server.traceEntry(17, request)
 	}
@@ -144,7 +144,7 @@ func (server *G2ConfigmgrServer) Init(ctx context.Context, request *pb.InitReque
 	// g2configmgr := getG2configmgr()
 	// err := g2configmgr.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
 	err := server.getLogger().Error(4002)
-	response := pb.InitResponse{}
+	response := g2pb.InitResponse{}
 	if server.isTrace {
 		defer server.traceExit(18, request, err, time.Since(entryTime))
 	}
@@ -156,28 +156,28 @@ func (server *G2ConfigmgrServer) RegisterObserver(ctx context.Context, observer 
 	return g2configmgr.RegisterObserver(ctx, observer)
 }
 
-func (server *G2ConfigmgrServer) ReplaceDefaultConfigID(ctx context.Context, request *pb.ReplaceDefaultConfigIDRequest) (*pb.ReplaceDefaultConfigIDResponse, error) {
+func (server *G2ConfigmgrServer) ReplaceDefaultConfigID(ctx context.Context, request *g2pb.ReplaceDefaultConfigIDRequest) (*g2pb.ReplaceDefaultConfigIDResponse, error) {
 	if server.isTrace {
 		server.traceEntry(19, request)
 	}
 	entryTime := time.Now()
 	g2configmgr := getG2configmgr()
 	err := g2configmgr.ReplaceDefaultConfigID(ctx, request.GetOldConfigID(), request.GetNewConfigID())
-	response := pb.ReplaceDefaultConfigIDResponse{}
+	response := g2pb.ReplaceDefaultConfigIDResponse{}
 	if server.isTrace {
 		defer server.traceExit(20, request, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
-func (server *G2ConfigmgrServer) SetDefaultConfigID(ctx context.Context, request *pb.SetDefaultConfigIDRequest) (*pb.SetDefaultConfigIDResponse, error) {
+func (server *G2ConfigmgrServer) SetDefaultConfigID(ctx context.Context, request *g2pb.SetDefaultConfigIDRequest) (*g2pb.SetDefaultConfigIDResponse, error) {
 	if server.isTrace {
 		server.traceEntry(21, request)
 	}
 	entryTime := time.Now()
 	g2configmgr := getG2configmgr()
 	err := g2configmgr.SetDefaultConfigID(ctx, request.GetConfigID())
-	response := pb.SetDefaultConfigIDResponse{}
+	response := g2pb.SetDefaultConfigIDResponse{}
 	if server.isTrace {
 		defer server.traceExit(22, request, err, time.Since(entryTime))
 	}
