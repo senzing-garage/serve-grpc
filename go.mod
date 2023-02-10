@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/aquilax/truncate v1.0.0
 	github.com/senzing/g2-sdk-go v0.3.1
+	github.com/senzing/g2-sdk-go-base v0.0.0-20230209201723-0d99b7147739
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20230126140313-273e96bc7dbd
 	github.com/senzing/go-common v0.1.1
 	github.com/senzing/go-logging v1.1.3
@@ -39,4 +40,8 @@ require (
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+)
+
+replace (
+	github.com/senzing/g2-sdk-go-base v0.0.0-20230209201723-0d99b7147739 => /home/senzing/senzing.git/g2-sdk-go-base
 )
