@@ -359,7 +359,7 @@ The following steps will bring up a docker-compose stack with a PostgreSQL datab
     source ${SENZING_DEMO_DIR}/docker-versions-stable.sh
     curl -X GET \
         --output ${SENZING_DEMO_DIR}/docker-compose.yaml \
-        "https://github.com/Senzing/docker-compose-demo/blob/main/resources/postgresql/docker-compose-postgresql.yaml"
+        "https://raw.githubusercontent.com/Senzing/docker-compose-demo/main/resources/postgresql/docker-compose-postgresql.yaml"
 
     cd ${SENZING_DEMO_DIR}
     sudo --preserve-env docker-compose up
