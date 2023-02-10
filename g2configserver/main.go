@@ -1,7 +1,7 @@
 package g2configserver
 
 import (
-	pb "github.com/senzing/g2-sdk-proto/go/g2config"
+	g2pb "github.com/senzing/g2-sdk-proto/go/g2config"
 	"github.com/senzing/go-logging/messagelogger"
 )
 
@@ -11,7 +11,7 @@ import (
 
 // server is used to implement helloworld.GreeterServer.
 type G2ConfigServer struct {
-	pb.UnimplementedG2ConfigServer
+	g2pb.UnimplementedG2ConfigServer
 	isTrace bool
 	logger  messagelogger.MessageLoggerInterface
 }

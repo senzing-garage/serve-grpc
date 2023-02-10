@@ -6,7 +6,7 @@ import (
 	"time"
 
 	g2sdk "github.com/senzing/g2-sdk-go-base/g2configmgr"
-	g2api "github.com/senzing/g2-sdk-go/g2configmgr"
+	"github.com/senzing/g2-sdk-go/g2api"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/go-logging/messagelogger"
@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	g2configmgrSingleton g2api.G2configmgr
+	g2configmgrSingleton g2api.G2configmgrInterface
 	g2configmgrSyncOnce  sync.Once
 )
 
@@ -24,14 +24,14 @@ var (
 
 // Singleton pattern for g2configmgr.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getG2configmgr() g2api.G2configmgr {
+func getG2configmgr() g2api.G2configmgrInterface {
 	g2configmgrSyncOnce.Do(func() {
 		g2configmgrSingleton = &g2sdk.G2configmgr{}
 	})
 	return g2configmgrSingleton
 }
 
-func GetSdkG2configmgr() g2api.G2configmgr {
+func GetSdkG2configmgr() g2api.G2configmgrInterface {
 	return getG2configmgr()
 }
 

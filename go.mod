@@ -43,5 +43,6 @@ require (
 )
 
 replace (
+	github.com/senzing/g2-sdk-go v0.3.1 => /home/senzing/senzing.git/g2-sdk-go
 	github.com/senzing/g2-sdk-go-base v0.0.0-20230209201723-0d99b7147739 => /home/senzing/senzing.git/g2-sdk-go-base
 )

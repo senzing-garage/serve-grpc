@@ -10,10 +10,10 @@ import (
 	"time"
 
 	truncator "github.com/aquilax/truncate"
-	"github.com/senzing/g2-sdk-go/g2config"
-	"github.com/senzing/g2-sdk-go/g2configmgr"
-	"github.com/senzing/g2-sdk-go/g2engine"
-	pb "github.com/senzing/g2-sdk-proto/go/g2engine"
+	"github.com/senzing/g2-sdk-go-base/g2config"
+	"github.com/senzing/g2-sdk-go-base/g2configmgr"
+	"github.com/senzing/g2-sdk-go-base/g2engine"
+	g2pb "github.com/senzing/g2-sdk-proto/go/g2engine"
 	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/senzing/go-common/record"
 	"github.com/senzing/go-common/truthset"
@@ -80,7 +80,7 @@ func getEntityIdForRecord(datasource string, id string) int64 {
 	ctx := context.TODO()
 	var result int64 = 0
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.GetEntityByRecordIDRequest{
+	request := &g2pb.GetEntityByRecordIDRequest{
 		DataSourceCode: datasource,
 		RecordID:       id,
 	}
@@ -172,7 +172,7 @@ func TestMain(m *testing.M) {
 func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
 	now := time.Now()
 
-	aG2config := &g2config.G2configImpl{}
+	aG2config := &g2config.G2config{}
 	err := aG2config.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return localLogger.Error(5906, err)
@@ -209,7 +209,7 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 
 	// Persist the Senzing configuration to the Senzing repository.
 
-	aG2configmgr := &g2configmgr.G2configmgrImpl{}
+	aG2configmgr := &g2configmgr.G2configmgr{}
 	err = aG2configmgr.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return localLogger.Error(5912, err)
@@ -234,7 +234,7 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 }
 
 func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
-	aG2engine := &g2engine.G2engineImpl{}
+	aG2engine := &g2engine.G2engine{}
 	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return localLogger.Error(5903, err)
@@ -306,7 +306,7 @@ func TestG2engineServer_AddRecord(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	record1 := truthset.CustomerRecords["1001"]
 	record2 := truthset.CustomerRecords["1002"]
-	request1 := &pb.AddRecordRequest{
+	request1 := &g2pb.AddRecordRequest{
 		DataSourceCode: record1.DataSource,
 		RecordID:       record1.Id,
 		JsonData:       record1.Json,
@@ -315,7 +315,7 @@ func TestG2engineServer_AddRecord(test *testing.T) {
 	response1, err := g2engine.AddRecord(ctx, request1)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response1)
-	request2 := &pb.AddRecordRequest{
+	request2 := &g2pb.AddRecordRequest{
 		DataSourceCode: record2.DataSource,
 		RecordID:       record2.Id,
 		JsonData:       record2.Json,
@@ -330,7 +330,7 @@ func TestG2engineServer_AddRecordWithInfo(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1003"]
-	request := &pb.AddRecordWithInfoRequest{
+	request := &g2pb.AddRecordWithInfoRequest{
 		DataSourceCode: record.DataSource,
 		RecordID:       record.Id,
 		JsonData:       record.Json,
@@ -345,7 +345,7 @@ func TestG2engineServer_AddRecordWithInfoWithReturnedRecordID(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	record := truthset.TestRecordsWithoutRecordId[0]
-	request := &pb.AddRecordWithInfoWithReturnedRecordIDRequest{
+	request := &g2pb.AddRecordWithInfoWithReturnedRecordIDRequest{
 		DataSourceCode: record.DataSource,
 		JsonData:       record.Json,
 		LoadID:         loadId,
@@ -359,7 +359,7 @@ func TestG2engineServer_AddRecordWithReturnedRecordID(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	record := truthset.TestRecordsWithoutRecordId[1]
-	request := &pb.AddRecordWithReturnedRecordIDRequest{
+	request := &g2pb.AddRecordWithReturnedRecordIDRequest{
 		DataSourceCode: record.DataSource,
 		JsonData:       record.Json,
 		LoadID:         loadId,
@@ -374,7 +374,7 @@ func TestG2engineServer_CheckRecord(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	recordQueryList := `{"RECORDS": [{"DATA_SOURCE": "` + record.DataSource + `","RECORD_ID": "` + record.Id + `"},{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "123456789"}]}`
-	request := &pb.CheckRecordRequest{
+	request := &g2pb.CheckRecordRequest{
 		Record:          record.Json,
 		RecordQueryList: recordQueryList,
 	}
@@ -386,7 +386,7 @@ func TestG2engineServer_CheckRecord(test *testing.T) {
 func TestG2engineServer_CountRedoRecords(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
-	request := &pb.CountRedoRecordsRequest{}
+	request := &g2pb.CountRedoRecordsRequest{}
 	response, err := g2engine.CountRedoRecords(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
@@ -396,7 +396,7 @@ func TestG2engineServer_ExportJSONEntityReport(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	flags := int64(0)
-	request := &pb.ExportJSONEntityReportRequest{
+	request := &g2pb.ExportJSONEntityReportRequest{
 		Flags: flags,
 	}
 	response, err := g2engine.ExportJSONEntityReport(ctx, request)
@@ -407,7 +407,7 @@ func TestG2engineServer_ExportJSONEntityReport(test *testing.T) {
 func TestG2engineServer_ExportConfigAndConfigID(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
-	request := &pb.ExportConfigAndConfigIDRequest{}
+	request := &g2pb.ExportConfigAndConfigIDRequest{}
 	response, err := g2engine.ExportConfigAndConfigID(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
@@ -416,7 +416,7 @@ func TestG2engineServer_ExportConfigAndConfigID(test *testing.T) {
 func TestG2engineServer_ExportConfig(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
-	request := &pb.ExportConfigRequest{}
+	request := &g2pb.ExportConfigRequest{}
 	response, err := g2engine.ExportConfig(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
@@ -425,7 +425,7 @@ func TestG2engineServer_ExportConfig(test *testing.T) {
 func TestG2engineServer_ExportCSVEntityReport(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
-	request := &pb.ExportCSVEntityReportRequest{
+	request := &g2pb.ExportCSVEntityReportRequest{
 		CsvColumnList: "",
 		Flags:         0,
 	}
@@ -439,7 +439,7 @@ func TestG2engineServer_FindInterestingEntitiesByEntityID(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	entityID := getEntityId(truthset.CustomerRecords["1001"])
 	var flags int64 = 0
-	request := &pb.FindInterestingEntitiesByEntityIDRequest{
+	request := &g2pb.FindInterestingEntitiesByEntityIDRequest{
 		EntityID: entityID,
 		Flags:    flags,
 	}
@@ -453,7 +453,7 @@ func TestG2engineServer_FindInterestingEntitiesByRecordID(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	var flags int64 = 0
-	request := &pb.FindInterestingEntitiesByRecordIDRequest{
+	request := &g2pb.FindInterestingEntitiesByRecordIDRequest{
 		DataSourceCode: record.DataSource,
 		RecordID:       record.Id,
 		Flags:          flags,
@@ -472,7 +472,7 @@ func TestG2engineServer_FindNetworkByEntityID(test *testing.T) {
 	maxDegree := 2
 	buildOutDegree := 1
 	maxEntities := 10
-	request := &pb.FindNetworkByEntityIDRequest{
+	request := &g2pb.FindNetworkByEntityIDRequest{
 		EntityList:     entityList,
 		MaxDegree:      int32(maxDegree),
 		BuildOutDegree: int32(buildOutDegree),
@@ -493,7 +493,7 @@ func TestG2engineServer_FindNetworkByEntityID_V2(test *testing.T) {
 	buildOutDegree := 1
 	maxEntities := 10
 	var flags int64 = 0
-	request := &pb.FindNetworkByEntityID_V2Request{
+	request := &g2pb.FindNetworkByEntityID_V2Request{
 		EntityList:     entityList,
 		MaxDegree:      int32(maxDegree),
 		BuildOutDegree: int32(buildOutDegree),
@@ -515,7 +515,7 @@ func TestG2engineServer_FindNetworkByRecordID(test *testing.T) {
 	maxDegree := 1
 	buildOutDegree := 2
 	maxEntities := 10
-	request := &pb.FindNetworkByRecordIDRequest{
+	request := &g2pb.FindNetworkByRecordIDRequest{
 		RecordList:     recordList,
 		MaxDegree:      int32(maxDegree),
 		BuildOutDegree: int32(buildOutDegree),
@@ -537,7 +537,7 @@ func TestG2engineServer_FindNetworkByRecordID_V2(test *testing.T) {
 	buildOutDegree := 2
 	maxEntities := 10
 	var flags int64 = 0
-	request := &pb.FindNetworkByRecordID_V2Request{
+	request := &g2pb.FindNetworkByRecordID_V2Request{
 		RecordList:     recordList,
 		MaxDegree:      int32(maxDegree),
 		BuildOutDegree: int32(buildOutDegree),
@@ -555,7 +555,7 @@ func TestG2engineServer_FindPathByEntityID(test *testing.T) {
 	entityID1 := getEntityId(truthset.CustomerRecords["1001"])
 	entityID2 := getEntityId(truthset.CustomerRecords["1002"])
 	maxDegree := 1
-	request := &pb.FindPathByEntityIDRequest{
+	request := &g2pb.FindPathByEntityIDRequest{
 		EntityID1: entityID1,
 		EntityID2: entityID2,
 		MaxDegree: int32(maxDegree),
@@ -572,7 +572,7 @@ func TestG2engineServer_FindPathByEntityID_V2(test *testing.T) {
 	entityID2 := getEntityId(truthset.CustomerRecords["1002"])
 	maxDegree := 1
 	var flags int64 = 0
-	request := &pb.FindPathByEntityID_V2Request{
+	request := &g2pb.FindPathByEntityID_V2Request{
 		EntityID1: entityID1,
 		EntityID2: entityID2,
 		MaxDegree: int32(maxDegree),
@@ -589,7 +589,7 @@ func TestG2engineServer_FindPathByRecordID(test *testing.T) {
 	record1 := truthset.CustomerRecords["1001"]
 	record2 := truthset.CustomerRecords["1002"]
 	maxDegree := 1
-	request := &pb.FindPathByRecordIDRequest{
+	request := &g2pb.FindPathByRecordIDRequest{
 		DataSourceCode1: record1.DataSource,
 		RecordID1:       record1.Id,
 		DataSourceCode2: record2.DataSource,
@@ -608,7 +608,7 @@ func TestG2engineServer_FindPathByRecordID_V2(test *testing.T) {
 	record2 := truthset.CustomerRecords["1002"]
 	maxDegree := 1
 	var flags int64 = 0
-	request := &pb.FindPathByRecordID_V2Request{
+	request := &g2pb.FindPathByRecordID_V2Request{
 		DataSourceCode1: record1.DataSource,
 		RecordID1:       record1.Id,
 		DataSourceCode2: record2.DataSource,
@@ -629,7 +629,7 @@ func TestG2engineServer_FindPathExcludingByEntityID(test *testing.T) {
 	entityID2 := getEntityId(truthset.CustomerRecords["1002"])
 	maxDegree := 1
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdString(record1) + `}]}`
-	request := &pb.FindPathExcludingByEntityIDRequest{
+	request := &g2pb.FindPathExcludingByEntityIDRequest{
 		EntityID1:        entityID1,
 		EntityID2:        entityID2,
 		MaxDegree:        int32(maxDegree),
@@ -649,7 +649,7 @@ func TestG2engineServer_FindPathExcludingByEntityID_V2(test *testing.T) {
 	maxDegree := 1
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdString(record1) + `}]}`
 	var flags int64 = 0
-	request := &pb.FindPathExcludingByEntityID_V2Request{
+	request := &g2pb.FindPathExcludingByEntityID_V2Request{
 		EntityID1:        entityID1,
 		EntityID2:        entityID2,
 		MaxDegree:        int32(maxDegree),
@@ -668,7 +668,7 @@ func TestG2engineServer_FindPathExcludingByRecordID(test *testing.T) {
 	record2 := truthset.CustomerRecords["1002"]
 	maxDegree := 1
 	excludedRecords := `{"RECORDS": [{ "DATA_SOURCE": "` + record1.DataSource + `", "RECORD_ID": "` + record1.Id + `"}]}`
-	request := &pb.FindPathExcludingByRecordIDRequest{
+	request := &g2pb.FindPathExcludingByRecordIDRequest{
 		DataSourceCode1: record1.DataSource,
 		RecordID1:       record1.Id,
 		DataSourceCode2: record2.DataSource,
@@ -689,7 +689,7 @@ func TestG2engineServer_FindPathExcludingByRecordID_V2(test *testing.T) {
 	maxDegree := 1
 	excludedRecords := `{"RECORDS": [{ "DATA_SOURCE": "` + record1.DataSource + `", "RECORD_ID": "` + record1.Id + `"}]}`
 	var flags int64 = 0
-	request := &pb.FindPathExcludingByRecordID_V2Request{
+	request := &g2pb.FindPathExcludingByRecordID_V2Request{
 		DataSourceCode1: record1.DataSource,
 		RecordID1:       record1.Id,
 		DataSourceCode2: record2.DataSource,
@@ -712,7 +712,7 @@ func TestG2engineServer_FindPathIncludingSourceByEntityID(test *testing.T) {
 	maxDegree := 1
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdString(record1) + `}]}`
 	requiredDsrcs := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
-	request := &pb.FindPathIncludingSourceByEntityIDRequest{
+	request := &g2pb.FindPathIncludingSourceByEntityIDRequest{
 		EntityID1:        entityID1,
 		EntityID2:        entityID2,
 		MaxDegree:        int32(maxDegree),
@@ -734,7 +734,7 @@ func TestG2engineServer_FindPathIncludingSourceByEntityID_V2(test *testing.T) {
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdString(record1) + `}]}`
 	requiredDsrcs := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
 	var flags int64 = 0
-	request := &pb.FindPathIncludingSourceByEntityID_V2Request{
+	request := &g2pb.FindPathIncludingSourceByEntityID_V2Request{
 		EntityID1:        entityID1,
 		EntityID2:        entityID2,
 		MaxDegree:        int32(maxDegree),
@@ -755,7 +755,7 @@ func TestG2engineServer_FindPathIncludingSourceByRecordID(test *testing.T) {
 	maxDegree := 1
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdString(record1) + `}]}`
 	requiredDsrcs := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
-	request := &pb.FindPathIncludingSourceByRecordIDRequest{
+	request := &g2pb.FindPathIncludingSourceByRecordIDRequest{
 		DataSourceCode1: record1.DataSource,
 		RecordID1:       record1.Id,
 		DataSourceCode2: record2.DataSource,
@@ -778,7 +778,7 @@ func TestG2engineServer_FindPathIncludingSourceByRecordID_V2(test *testing.T) {
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdString(record1) + `}]}`
 	requiredDsrcs := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
 	var flags int64 = 0
-	request := &pb.FindPathIncludingSourceByRecordID_V2Request{
+	request := &g2pb.FindPathIncludingSourceByRecordID_V2Request{
 		DataSourceCode1: record1.DataSource,
 		RecordID1:       record1.Id,
 		DataSourceCode2: record2.DataSource,
@@ -796,7 +796,7 @@ func TestG2engineServer_FindPathIncludingSourceByRecordID_V2(test *testing.T) {
 func TestG2engineServer_GetActiveConfigID(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
-	request := &pb.GetActiveConfigIDRequest{}
+	request := &g2pb.GetActiveConfigIDRequest{}
 	response, err := g2engine.GetActiveConfigID(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
@@ -806,7 +806,7 @@ func TestG2engineServer_GetEntityByEntityID(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	entityID := getEntityId(truthset.CustomerRecords["1001"])
-	request := &pb.GetEntityByEntityIDRequest{
+	request := &g2pb.GetEntityByEntityIDRequest{
 		EntityID: entityID,
 	}
 	response, err := g2engine.GetEntityByEntityID(ctx, request)
@@ -818,7 +818,7 @@ func TestG2engineServer_GetEntityByEntityID_V2(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	entityID := getEntityId(truthset.CustomerRecords["1001"])
-	request := &pb.GetEntityByEntityID_V2Request{
+	request := &g2pb.GetEntityByEntityID_V2Request{
 		EntityID: entityID,
 		Flags:    0,
 	}
@@ -831,7 +831,7 @@ func TestG2engineServer_GetEntityByRecordID(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
-	request := &pb.GetEntityByRecordIDRequest{
+	request := &g2pb.GetEntityByRecordIDRequest{
 		DataSourceCode: record.DataSource,
 		RecordID:       record.Id,
 	}
@@ -845,7 +845,7 @@ func TestG2engineServer_GetEntityByRecordID_V2(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	var flags int64 = 0
-	request := &pb.GetEntityByRecordID_V2Request{
+	request := &g2pb.GetEntityByRecordID_V2Request{
 		DataSourceCode: record.DataSource,
 		RecordID:       record.Id,
 		Flags:          flags,
@@ -859,7 +859,7 @@ func TestG2engineServer_GetRecord(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
-	request := &pb.GetRecordRequest{
+	request := &g2pb.GetRecordRequest{
 		DataSourceCode: record.DataSource,
 		RecordID:       record.Id,
 	}
@@ -873,7 +873,7 @@ func TestG2engineServer_GetRecord_V2(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	var flags int64 = 0
-	request := &pb.GetRecord_V2Request{
+	request := &g2pb.GetRecord_V2Request{
 		DataSourceCode: record.DataSource,
 		RecordID:       record.Id,
 		Flags:          flags,
@@ -886,7 +886,7 @@ func TestG2engineServer_GetRecord_V2(test *testing.T) {
 func TestG2engineServer_GetRedoRecord(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
-	request := &pb.GetRedoRecordRequest{}
+	request := &g2pb.GetRedoRecordRequest{}
 	response, err := g2engine.GetRedoRecord(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
@@ -895,7 +895,7 @@ func TestG2engineServer_GetRedoRecord(test *testing.T) {
 func TestG2engineServer_GetRepositoryLastModifiedTime(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
-	request := &pb.GetRepositoryLastModifiedTimeRequest{}
+	request := &g2pb.GetRepositoryLastModifiedTimeRequest{}
 	response, err := g2engine.GetRepositoryLastModifiedTime(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
@@ -907,7 +907,7 @@ func TestG2engineServer_GetVirtualEntityByRecordID(test *testing.T) {
 	record1 := truthset.CustomerRecords["1001"]
 	record2 := truthset.CustomerRecords["1002"]
 	recordList := `{"RECORDS": [{"DATA_SOURCE": "` + record1.DataSource + `", "RECORD_ID": "` + record1.Id + `"}, {"DATA_SOURCE": "` + record2.DataSource + `", "RECORD_ID": "` + record2.Id + `"}]}`
-	request := &pb.GetVirtualEntityByRecordIDRequest{
+	request := &g2pb.GetVirtualEntityByRecordIDRequest{
 		RecordList: recordList,
 	}
 	response, err := g2engine.GetVirtualEntityByRecordID(ctx, request)
@@ -922,7 +922,7 @@ func TestG2engineServer_GetVirtualEntityByRecordID_V2(test *testing.T) {
 	record2 := truthset.CustomerRecords["1002"]
 	recordList := `{"RECORDS": [{"DATA_SOURCE": "` + record1.DataSource + `", "RECORD_ID": "` + record1.Id + `"}, {"DATA_SOURCE": "` + record2.DataSource + `", "RECORD_ID": "` + record2.Id + `"}]}`
 	var flags int64 = 0
-	request := &pb.GetVirtualEntityByRecordID_V2Request{
+	request := &g2pb.GetVirtualEntityByRecordID_V2Request{
 		RecordList: recordList,
 		Flags:      flags,
 	}
@@ -935,7 +935,7 @@ func TestG2engineServer_HowEntityByEntityID(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	entityID := getEntityId(truthset.CustomerRecords["1001"])
-	request := &pb.HowEntityByEntityIDRequest{
+	request := &g2pb.HowEntityByEntityIDRequest{
 		EntityID: entityID,
 	}
 	response, err := g2engine.HowEntityByEntityID(ctx, request)
@@ -947,7 +947,7 @@ func TestG2engineServer_HowEntityByEntityID_V2(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	entityID := getEntityId(truthset.CustomerRecords["1001"])
-	request := &pb.HowEntityByEntityID_V2Request{
+	request := &g2pb.HowEntityByEntityID_V2Request{
 		EntityID: entityID,
 		Flags:    0,
 	}
@@ -959,7 +959,7 @@ func TestG2engineServer_HowEntityByEntityID_V2(test *testing.T) {
 func TestG2engineServer_PrimeEngine(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
-	request := &pb.PrimeEngineRequest{}
+	request := &g2pb.PrimeEngineRequest{}
 	response, err := g2engine.PrimeEngine(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
@@ -969,7 +969,7 @@ func TestG2engineServer_Process(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
-	request := &pb.ProcessRequest{
+	request := &g2pb.ProcessRequest{
 		Record: record.Json,
 	}
 	response, err := g2engine.Process(ctx, request)
@@ -980,7 +980,7 @@ func TestG2engineServer_Process(test *testing.T) {
 func TestG2engineServer_ProcessRedoRecord(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
-	request := &pb.ProcessRedoRecordRequest{}
+	request := &g2pb.ProcessRedoRecordRequest{}
 	response, err := g2engine.ProcessRedoRecord(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
@@ -990,7 +990,7 @@ func TestG2engineServer_ProcessRedoRecordWithInfo(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	var flags int64 = 0
-	request := &pb.ProcessRedoRecordWithInfoRequest{
+	request := &g2pb.ProcessRedoRecordWithInfoRequest{
 		Flags: flags,
 	}
 	response, err := g2engine.ProcessRedoRecordWithInfo(ctx, request)
@@ -1003,7 +1003,7 @@ func TestG2engineServer_ProcessWithInfo(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	var flags int64 = 0
-	request := &pb.ProcessWithInfoRequest{
+	request := &g2pb.ProcessWithInfoRequest{
 		Record: record.Json,
 		Flags:  flags,
 	}
@@ -1016,7 +1016,7 @@ func TestG2engineServer_ProcessWithResponse(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
-	request := &pb.ProcessWithResponseRequest{
+	request := &g2pb.ProcessWithResponseRequest{
 		Record: record.Json,
 	}
 	response, err := g2engine.ProcessWithResponse(ctx, request)
@@ -1028,7 +1028,7 @@ func TestG2engineServer_ProcessWithResponseResize(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
-	request := &pb.ProcessWithResponseResizeRequest{
+	request := &g2pb.ProcessWithResponseResizeRequest{
 		Record: record.Json,
 	}
 	response, err := g2engine.ProcessWithResponseResize(ctx, request)
@@ -1041,7 +1041,7 @@ func TestG2engineServer_ReevaluateEntity(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	entityID := getEntityId(truthset.CustomerRecords["1001"])
 	var flags int64 = 0
-	request := &pb.ReevaluateEntityRequest{
+	request := &g2pb.ReevaluateEntityRequest{
 		EntityID: entityID,
 		Flags:    flags,
 	}
@@ -1055,7 +1055,7 @@ func TestG2engineServer_ReevaluateEntityWithInfo(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	entityID := getEntityId(truthset.CustomerRecords["1001"])
 	var flags int64 = 0
-	request := &pb.ReevaluateEntityWithInfoRequest{
+	request := &g2pb.ReevaluateEntityWithInfoRequest{
 		EntityID: entityID,
 		Flags:    flags,
 	}
@@ -1069,7 +1069,7 @@ func TestG2engineServer_ReevaluateRecord(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	var flags int64 = 0
-	request := &pb.ReevaluateRecordRequest{
+	request := &g2pb.ReevaluateRecordRequest{
 		DataSourceCode: record.DataSource,
 		RecordID:       record.Id,
 		Flags:          flags,
@@ -1084,7 +1084,7 @@ func TestG2engineServer_ReevaluateRecordWithInfo(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	var flags int64 = 0
-	request := &pb.ReevaluateRecordWithInfoRequest{
+	request := &g2pb.ReevaluateRecordWithInfoRequest{
 		DataSourceCode: record.DataSource,
 		RecordID:       record.Id,
 		Flags:          flags,
@@ -1098,7 +1098,7 @@ func TestG2engineServer_ReevaluateRecordWithInfo(test *testing.T) {
 // func TestG2engineServer_ReplaceRecord(test *testing.T) {
 // 	ctx := context.TODO()
 // 	g2engine := getTestObject(ctx, test)
-// 	request := &pb.ReplaceRecordRequest{
+// 	request := &g2pb.ReplaceRecordRequest{
 // 		DataSourceCode: "CUSTOMERS",
 // 		RecordID:       "1001",
 // 		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
@@ -1113,7 +1113,7 @@ func TestG2engineServer_ReevaluateRecordWithInfo(test *testing.T) {
 // func TestG2engineServer_ReplaceRecordWithInfo(test *testing.T) {
 // 	ctx := context.TODO()
 // 	g2engine := getTestObject(ctx, test)
-// 	request := &pb.ReplaceRecordWithInfoRequest{
+// 	request := &g2pb.ReplaceRecordWithInfoRequest{
 // 		DataSourceCode: "CUSTOMERS",
 // 		RecordID:       "1001",
 // 		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
@@ -1129,7 +1129,7 @@ func TestG2engineServer_SearchByAttributes(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	jsonData := `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
-	request := &pb.SearchByAttributesRequest{
+	request := &g2pb.SearchByAttributesRequest{
 		JsonData: jsonData,
 	}
 	response, err := g2engine.SearchByAttributes(ctx, request)
@@ -1142,7 +1142,7 @@ func TestG2engineServer_SearchByAttributes_V2(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	jsonData := `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
 	var flags int64 = 0
-	request := &pb.SearchByAttributes_V2Request{
+	request := &g2pb.SearchByAttributes_V2Request{
 		JsonData: jsonData,
 		Flags:    flags,
 	}
@@ -1154,7 +1154,7 @@ func TestG2engineServer_SearchByAttributes_V2(test *testing.T) {
 func TestG2engineServer_Stats(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
-	request := &pb.StatsRequest{}
+	request := &g2pb.StatsRequest{}
 	response, err := g2engine.Stats(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
@@ -1165,7 +1165,7 @@ func TestG2engineServer_WhyEntities(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	entityID1 := getEntityId(truthset.CustomerRecords["1001"])
 	entityID2 := getEntityId(truthset.CustomerRecords["1002"])
-	request := &pb.WhyEntitiesRequest{
+	request := &g2pb.WhyEntitiesRequest{
 		EntityID1: entityID1,
 		EntityID2: entityID2,
 	}
@@ -1180,7 +1180,7 @@ func TestG2engineServer_WhyEntities_V2(test *testing.T) {
 	entityID1 := getEntityId(truthset.CustomerRecords["1001"])
 	entityID2 := getEntityId(truthset.CustomerRecords["1002"])
 	var flags int64 = 0
-	request := &pb.WhyEntities_V2Request{
+	request := &g2pb.WhyEntities_V2Request{
 		EntityID1: entityID1,
 		EntityID2: entityID2,
 		Flags:     flags,
@@ -1194,7 +1194,7 @@ func TestG2engineServer_WhyEntityByEntityID(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	entityID := getEntityId(truthset.CustomerRecords["1001"])
-	request := &pb.WhyEntityByEntityIDRequest{
+	request := &g2pb.WhyEntityByEntityIDRequest{
 		EntityID: entityID,
 	}
 	response, err := g2engine.WhyEntityByEntityID(ctx, request)
@@ -1207,7 +1207,7 @@ func TestG2engineServer_WhyEntityByEntityID_V2(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	entityID := getEntityId(truthset.CustomerRecords["1001"])
 	var flags int64 = 0
-	request := &pb.WhyEntityByEntityID_V2Request{
+	request := &g2pb.WhyEntityByEntityID_V2Request{
 		EntityID: entityID,
 		Flags:    flags,
 	}
@@ -1220,7 +1220,7 @@ func TestG2engineServer_WhyEntityByRecordID(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
-	request := &pb.WhyEntityByRecordIDRequest{
+	request := &g2pb.WhyEntityByRecordIDRequest{
 		DataSourceCode: record.DataSource,
 		RecordID:       record.Id,
 	}
@@ -1234,7 +1234,7 @@ func TestG2engineServer_WhyEntityByRecordID_V2(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	var flags int64 = 0
-	request := &pb.WhyEntityByRecordID_V2Request{
+	request := &g2pb.WhyEntityByRecordID_V2Request{
 		DataSourceCode: record.DataSource,
 		RecordID:       record.Id,
 		Flags:          flags,
@@ -1249,7 +1249,7 @@ func TestG2engineServer_WhyRecords(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	record1 := truthset.CustomerRecords["1001"]
 	record2 := truthset.CustomerRecords["1002"]
-	request := &pb.WhyRecordsRequest{
+	request := &g2pb.WhyRecordsRequest{
 		DataSourceCode1: record1.DataSource,
 		RecordID1:       record1.Id,
 		DataSourceCode2: record2.DataSource,
@@ -1266,7 +1266,7 @@ func TestG2engineServer_WhyRecords_V2(test *testing.T) {
 	record1 := truthset.CustomerRecords["1001"]
 	record2 := truthset.CustomerRecords["1002"]
 	var flags int64 = 0
-	request := &pb.WhyRecords_V2Request{
+	request := &g2pb.WhyRecords_V2Request{
 		DataSourceCode1: record1.DataSource,
 		RecordID1:       record1.Id,
 		DataSourceCode2: record2.DataSource,
@@ -1287,7 +1287,7 @@ func TestG2engineServer_Init(test *testing.T) {
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}
-	request := &pb.InitRequest{
+	request := &g2pb.InitRequest{
 		ModuleName:     moduleName,
 		IniParams:      iniParams,
 		VerboseLogging: int32(verboseLogging),
@@ -1307,7 +1307,7 @@ func TestG2engineServer_InitWithConfigID(test *testing.T) {
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}
-	request := &pb.InitWithConfigIDRequest{
+	request := &g2pb.InitWithConfigIDRequest{
 		ModuleName:     moduleName,
 		IniParams:      iniParams,
 		InitConfigID:   initConfigID,
@@ -1322,11 +1322,11 @@ func TestG2engineServer_Reinit(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 
-	requestToGetActiveConfigID := &pb.GetActiveConfigIDRequest{}
+	requestToGetActiveConfigID := &g2pb.GetActiveConfigIDRequest{}
 	responseFromGetActiveConfigID, err := g2engine.GetActiveConfigID(ctx, requestToGetActiveConfigID)
 	testError(test, ctx, g2engine, err)
 
-	request := &pb.ReinitRequest{
+	request := &g2pb.ReinitRequest{
 		InitConfigID: responseFromGetActiveConfigID.GetResult(),
 	}
 	response, err := g2engine.Reinit(ctx, request)
@@ -1338,7 +1338,7 @@ func TestG2engineServer_DeleteRecord(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1003"]
-	request := &pb.DeleteRecordRequest{
+	request := &g2pb.DeleteRecordRequest{
 		DataSourceCode: record.DataSource,
 		RecordID:       record.Id,
 		LoadID:         loadId,
@@ -1353,7 +1353,7 @@ func TestG2engineServer_DeleteRecordWithInfo(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1003"]
 	var flags int64 = 0
-	request := &pb.DeleteRecordWithInfoRequest{
+	request := &g2pb.DeleteRecordWithInfoRequest{
 		DataSourceCode: record.DataSource,
 		RecordID:       record.Id,
 		LoadID:         loadId,
@@ -1367,7 +1367,7 @@ func TestG2engineServer_DeleteRecordWithInfo(test *testing.T) {
 func TestG2engineServer_Destroy(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
-	request := &pb.DestroyRequest{}
+	request := &g2pb.DestroyRequest{}
 	response, err := g2engine.Destroy(ctx, request)
 	expectError(test, ctx, g2engine, err, "senzing-60144001")
 	printResponse(test, response)
@@ -1382,7 +1382,7 @@ func ExampleG2EngineServer_AddRecord() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.AddRecordRequest{
+	request := &g2pb.AddRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1001",
 		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
@@ -1400,7 +1400,7 @@ func ExampleG2EngineServer_AddRecord_secondRecord() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.AddRecordRequest{
+	request := &g2pb.AddRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1002",
 		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1002", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Bob", "DATE_OF_BIRTH": "11/12/1978", "ADDR_TYPE": "HOME", "ADDR_LINE1": "1515 Adela Lane", "ADDR_CITY": "Las Vegas", "ADDR_STATE": "NV", "ADDR_POSTAL_CODE": "89111", "PHONE_TYPE": "MOBILE", "PHONE_NUMBER": "702-919-1300", "DATE": "3/10/17", "STATUS": "Inactive", "AMOUNT": "200"}`,
@@ -1418,7 +1418,7 @@ func ExampleG2EngineServer_AddRecordWithInfo() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.AddRecordWithInfoRequest{
+	request := &g2pb.AddRecordWithInfoRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1003",
 		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1003", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Bob", "PRIMARY_NAME_MIDDLE": "J", "DATE_OF_BIRTH": "12/11/1978", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "4/9/16", "STATUS": "Inactive", "AMOUNT": "300"}`,
@@ -1436,7 +1436,7 @@ func ExampleG2EngineServer_AddRecordWithInfoWithReturnedRecordID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.AddRecordWithInfoWithReturnedRecordIDRequest{
+	request := &g2pb.AddRecordWithInfoWithReturnedRecordIDRequest{
 		DataSourceCode: "CUSTOMERS",
 		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Kellar", "PRIMARY_NAME_FIRST": "Candace", "ADDR_LINE1": "1824 AspenOak Way", "ADDR_CITY": "Elmwood Park", "ADDR_STATE": "CA", "ADDR_POSTAL_CODE": "95865", "EMAIL_ADDRESS": "info@ca-state.gov"}`,
 		LoadID:         "G2Engine_test",
@@ -1454,7 +1454,7 @@ func ExampleG2EngineServer_AddRecordWithReturnedRecordID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.AddRecordWithReturnedRecordIDRequest{
+	request := &g2pb.AddRecordWithReturnedRecordIDRequest{
 		DataSourceCode: "CUSTOMERS",
 		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Sanders", "PRIMARY_NAME_FIRST": "Sandy", "ADDR_LINE1": "1376 BlueBell Rd", "ADDR_CITY": "Sacramento", "ADDR_STATE": "CA", "ADDR_POSTAL_CODE": "95823", "EMAIL_ADDRESS": "info@ca-state.gov"}`,
 		LoadID:         "G2Engine_test",
@@ -1471,7 +1471,7 @@ func ExampleG2EngineServer_CheckRecord() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.CheckRecordRequest{
+	request := &g2pb.CheckRecordRequest{
 		Record:          `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
 		RecordQueryList: `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1001"},{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "123456789"}]}`,
 	}
@@ -1489,13 +1489,13 @@ func ExampleG2EngineServer_CloseExport() {
 	g2engine := getG2EngineServer(ctx)
 
 	// Create a handle for the example.
-	requestToExportJSONEntityReport := &pb.ExportJSONEntityReportRequest{
+	requestToExportJSONEntityReport := &g2pb.ExportJSONEntityReportRequest{
 		Flags: 0,
 	}
 	responseFromExportJSONEntityReport, err := g2engine.ExportJSONEntityReport(ctx, requestToExportJSONEntityReport)
 
 	// Example
-	request := &pb.CloseExportRequest{
+	request := &g2pb.CloseExportRequest{
 		ResponseHandle: responseFromExportJSONEntityReport.GetResult(),
 	}
 	response, err := g2engine.CloseExport(ctx, request)
@@ -1510,7 +1510,7 @@ func ExampleG2EngineServer_CountRedoRecords() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.CountRedoRecordsRequest{}
+	request := &g2pb.CountRedoRecordsRequest{}
 	response, err := g2engine.CountRedoRecords(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -1523,7 +1523,7 @@ func ExampleG2EngineServer_ExportCSVEntityReport() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ExportCSVEntityReportRequest{
+	request := &g2pb.ExportCSVEntityReportRequest{
 		CsvColumnList: "",
 		Flags:         0,
 	}
@@ -1539,7 +1539,7 @@ func ExampleG2EngineServer_ExportConfig() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ExportConfigRequest{}
+	request := &g2pb.ExportConfigRequest{}
 	response, err := g2engine.ExportConfig(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -1552,7 +1552,7 @@ func ExampleG2EngineServer_ExportConfigAndConfigID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ExportConfigAndConfigIDRequest{}
+	request := &g2pb.ExportConfigAndConfigIDRequest{}
 	response, err := g2engine.ExportConfigAndConfigID(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -1565,7 +1565,7 @@ func ExampleG2EngineServer_ExportJSONEntityReport() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ExportJSONEntityReportRequest{
+	request := &g2pb.ExportJSONEntityReportRequest{
 		Flags: 0,
 	}
 	response, err := g2engine.ExportJSONEntityReport(ctx, request)
@@ -1582,13 +1582,13 @@ func ExampleG2EngineServer_FetchNext() {
 	g2engine := getG2EngineServer(ctx)
 
 	// Create a handle for the example.
-	requestToExportJSONEntityReport := &pb.ExportJSONEntityReportRequest{
+	requestToExportJSONEntityReport := &g2pb.ExportJSONEntityReportRequest{
 		Flags: 0,
 	}
 	responseFromExportJSONEntityReport, err := g2engine.ExportJSONEntityReport(ctx, requestToExportJSONEntityReport)
 
 	// Example
-	request := &pb.FetchNextRequest{
+	request := &g2pb.FetchNextRequest{
 		ResponseHandle: responseFromExportJSONEntityReport.GetResult(),
 	}
 	response, err := g2engine.FetchNext(ctx, request)
@@ -1603,7 +1603,7 @@ func ExampleG2EngineServer_FindInterestingEntitiesByEntityID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FindInterestingEntitiesByEntityIDRequest{
+	request := &g2pb.FindInterestingEntitiesByEntityIDRequest{
 		EntityID: getEntityIdForRecord("CUSTOMERS", "1001"),
 		Flags:    0,
 	}
@@ -1619,7 +1619,7 @@ func ExampleG2EngineServer_FindInterestingEntitiesByRecordID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FindInterestingEntitiesByRecordIDRequest{
+	request := &g2pb.FindInterestingEntitiesByRecordIDRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1001",
 		Flags:          0,
@@ -1637,7 +1637,7 @@ func ExampleG2EngineServer_FindNetworkByEntityID() {
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	entityList := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1001") + `}, {"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1002") + `}]}`
-	request := &pb.FindNetworkByEntityIDRequest{
+	request := &g2pb.FindNetworkByEntityIDRequest{
 		EntityList:     entityList,
 		MaxDegree:      2,
 		BuildOutDegree: 1,
@@ -1656,7 +1656,7 @@ func ExampleG2EngineServer_FindNetworkByEntityID_V2() {
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	entityList := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1001") + `}, {"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1002") + `}]}`
-	request := &pb.FindNetworkByEntityID_V2Request{
+	request := &g2pb.FindNetworkByEntityID_V2Request{
 		EntityList:     entityList,
 		MaxDegree:      2,
 		BuildOutDegree: 1,
@@ -1675,7 +1675,7 @@ func ExampleG2EngineServer_FindNetworkByRecordID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FindNetworkByRecordIDRequest{
+	request := &g2pb.FindNetworkByRecordIDRequest{
 		RecordList:     `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001"}, {"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1002"}]}`,
 		MaxDegree:      1,
 		BuildOutDegree: 2,
@@ -1693,7 +1693,7 @@ func ExampleG2EngineServer_FindNetworkByRecordID_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FindNetworkByRecordID_V2Request{
+	request := &g2pb.FindNetworkByRecordID_V2Request{
 		RecordList:     `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001"}, {"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1002"}]}`,
 		MaxDegree:      1,
 		BuildOutDegree: 2,
@@ -1712,7 +1712,7 @@ func ExampleG2EngineServer_FindPathByEntityID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FindPathByEntityIDRequest{
+	request := &g2pb.FindPathByEntityIDRequest{
 		EntityID1: getEntityIdForRecord("CUSTOMERS", "1001"),
 		EntityID2: getEntityIdForRecord("CUSTOMERS", "1002"),
 		MaxDegree: 1,
@@ -1729,7 +1729,7 @@ func ExampleG2EngineServer_FindPathByEntityID_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FindPathByEntityID_V2Request{
+	request := &g2pb.FindPathByEntityID_V2Request{
 		EntityID1: getEntityIdForRecord("CUSTOMERS", "1001"),
 		EntityID2: getEntityIdForRecord("CUSTOMERS", "1002"),
 		MaxDegree: 1,
@@ -1747,7 +1747,7 @@ func ExampleG2EngineServer_FindPathByRecordID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FindPathByRecordIDRequest{
+	request := &g2pb.FindPathByRecordIDRequest{
 		DataSourceCode1: "CUSTOMERS",
 		RecordID1:       "1001",
 		DataSourceCode2: "CUSTOMERS",
@@ -1766,7 +1766,7 @@ func ExampleG2EngineServer_FindPathByRecordID_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FindPathByRecordID_V2Request{
+	request := &g2pb.FindPathByRecordID_V2Request{
 		DataSourceCode1: "CUSTOMERS",
 		RecordID1:       "1001",
 		DataSourceCode2: "CUSTOMERS",
@@ -1787,7 +1787,7 @@ func ExampleG2EngineServer_FindPathExcludingByEntityID() {
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
-	request := &pb.FindPathExcludingByEntityIDRequest{
+	request := &g2pb.FindPathExcludingByEntityIDRequest{
 		EntityID1:        getEntityIdForRecord("CUSTOMERS", "1001"),
 		EntityID2:        getEntityIdForRecord("CUSTOMERS", "1002"),
 		MaxDegree:        1,
@@ -1806,7 +1806,7 @@ func ExampleG2EngineServer_FindPathExcludingByEntityID_V2() {
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
-	request := &pb.FindPathExcludingByEntityID_V2Request{
+	request := &g2pb.FindPathExcludingByEntityID_V2Request{
 		EntityID1:        getEntityIdForRecord("CUSTOMERS", "1001"),
 		EntityID2:        getEntityIdForRecord("CUSTOMERS", "1002"),
 		MaxDegree:        1,
@@ -1825,7 +1825,7 @@ func ExampleG2EngineServer_FindPathExcludingByRecordID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FindPathExcludingByRecordIDRequest{
+	request := &g2pb.FindPathExcludingByRecordIDRequest{
 		DataSourceCode1: "CUSTOMERS",
 		RecordID1:       "1001",
 		DataSourceCode2: "CUSTOMERS",
@@ -1845,7 +1845,7 @@ func ExampleG2EngineServer_FindPathExcludingByRecordID_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FindPathExcludingByRecordID_V2Request{
+	request := &g2pb.FindPathExcludingByRecordID_V2Request{
 		DataSourceCode1: "CUSTOMERS",
 		RecordID1:       "1001",
 		DataSourceCode2: "CUSTOMERS",
@@ -1867,7 +1867,7 @@ func ExampleG2EngineServer_FindPathIncludingSourceByEntityID() {
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
-	request := &pb.FindPathIncludingSourceByEntityIDRequest{
+	request := &g2pb.FindPathIncludingSourceByEntityIDRequest{
 		EntityID1:        getEntityIdForRecord("CUSTOMERS", "1001"),
 		EntityID2:        getEntityIdForRecord("CUSTOMERS", "1002"),
 		MaxDegree:        1,
@@ -1887,7 +1887,7 @@ func ExampleG2EngineServer_FindPathIncludingSourceByEntityID_V2() {
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
-	request := &pb.FindPathIncludingSourceByEntityID_V2Request{
+	request := &g2pb.FindPathIncludingSourceByEntityID_V2Request{
 		EntityID1:        getEntityIdForRecord("CUSTOMERS", "1001"),
 		EntityID2:        getEntityIdForRecord("CUSTOMERS", "1002"),
 		MaxDegree:        1,
@@ -1907,7 +1907,7 @@ func ExampleG2EngineServer_FindPathIncludingSourceByRecordID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FindPathIncludingSourceByRecordIDRequest{
+	request := &g2pb.FindPathIncludingSourceByRecordIDRequest{
 		DataSourceCode1: "CUSTOMERS",
 		RecordID1:       "1001",
 		DataSourceCode2: "CUSTOMERS",
@@ -1928,7 +1928,7 @@ func ExampleG2EngineServer_FindPathIncludingSourceByRecordID_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.FindPathIncludingSourceByRecordID_V2Request{
+	request := &g2pb.FindPathIncludingSourceByRecordID_V2Request{
 		DataSourceCode1: "CUSTOMERS",
 		RecordID1:       "1001",
 		DataSourceCode2: "CUSTOMERS",
@@ -1950,7 +1950,7 @@ func ExampleG2EngineServer_GetActiveConfigID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.GetActiveConfigIDRequest{}
+	request := &g2pb.GetActiveConfigIDRequest{}
 	response, err := g2engine.GetActiveConfigID(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -1963,7 +1963,7 @@ func ExampleG2EngineServer_GetEntityByEntityID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.GetEntityByEntityIDRequest{
+	request := &g2pb.GetEntityByEntityIDRequest{
 		EntityID: getEntityIdForRecord("CUSTOMERS", "1001"),
 	}
 	response, err := g2engine.GetEntityByEntityID(ctx, request)
@@ -1978,7 +1978,7 @@ func ExampleG2EngineServer_GetEntityByEntityID_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.GetEntityByEntityID_V2Request{
+	request := &g2pb.GetEntityByEntityID_V2Request{
 		EntityID: getEntityIdForRecord("CUSTOMERS", "1001"),
 		Flags:    0,
 	}
@@ -1994,7 +1994,7 @@ func ExampleG2EngineServer_GetEntityByRecordID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.GetEntityByRecordIDRequest{
+	request := &g2pb.GetEntityByRecordIDRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1001",
 	}
@@ -2010,7 +2010,7 @@ func ExampleG2EngineServer_GetEntityByRecordID_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.GetEntityByRecordID_V2Request{
+	request := &g2pb.GetEntityByRecordID_V2Request{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1001",
 		Flags:          0,
@@ -2027,7 +2027,7 @@ func ExampleG2EngineServer_GetRecord() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.GetRecordRequest{
+	request := &g2pb.GetRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1001",
 	}
@@ -2043,7 +2043,7 @@ func ExampleG2EngineServer_GetRecord_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.GetRecord_V2Request{
+	request := &g2pb.GetRecord_V2Request{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1001",
 		Flags:          0,
@@ -2060,7 +2060,7 @@ func ExampleG2EngineServer_GetRedoRecord() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.GetRedoRecordRequest{}
+	request := &g2pb.GetRedoRecordRequest{}
 	response, err := g2engine.GetRedoRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -2073,7 +2073,7 @@ func ExampleG2EngineServer_GetRepositoryLastModifiedTime() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.GetRepositoryLastModifiedTimeRequest{}
+	request := &g2pb.GetRepositoryLastModifiedTimeRequest{}
 	response, err := g2engine.GetRepositoryLastModifiedTime(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -2086,7 +2086,7 @@ func ExampleG2EngineServer_GetVirtualEntityByRecordID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.GetVirtualEntityByRecordIDRequest{
+	request := &g2pb.GetVirtualEntityByRecordIDRequest{
 		RecordList: `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1001"},{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1002"}]}`,
 	}
 	response, err := g2engine.GetVirtualEntityByRecordID(ctx, request)
@@ -2101,7 +2101,7 @@ func ExampleG2EngineServer_GetVirtualEntityByRecordID_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.GetVirtualEntityByRecordID_V2Request{
+	request := &g2pb.GetVirtualEntityByRecordID_V2Request{
 		RecordList: `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1001"},{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1002"}]}`,
 		Flags:      0,
 	}
@@ -2117,7 +2117,7 @@ func ExampleG2EngineServer_HowEntityByEntityID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.HowEntityByEntityIDRequest{
+	request := &g2pb.HowEntityByEntityIDRequest{
 		EntityID: getEntityIdForRecord("CUSTOMERS", "1001"),
 	}
 	response, err := g2engine.HowEntityByEntityID(ctx, request)
@@ -2132,7 +2132,7 @@ func ExampleG2EngineServer_HowEntityByEntityID_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.HowEntityByEntityID_V2Request{
+	request := &g2pb.HowEntityByEntityID_V2Request{
 		EntityID: getEntityIdForRecord("CUSTOMERS", "1001"),
 		Flags:    0,
 	}
@@ -2148,7 +2148,7 @@ func ExampleG2EngineServer_PrimeEngine() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.PrimeEngineRequest{}
+	request := &g2pb.PrimeEngineRequest{}
 	response, err := g2engine.PrimeEngine(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -2161,7 +2161,7 @@ func ExampleG2EngineServer_SearchByAttributes() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.SearchByAttributesRequest{
+	request := &g2pb.SearchByAttributesRequest{
 		JsonData: `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "Smith"}], "EMAIL_ADDRESS": "bsmith@work.com"}`,
 	}
 	response, err := g2engine.SearchByAttributes(ctx, request)
@@ -2176,7 +2176,7 @@ func ExampleG2EngineServer_SearchByAttributes_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.SearchByAttributes_V2Request{
+	request := &g2pb.SearchByAttributes_V2Request{
 		JsonData: `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "Smith"}], "EMAIL_ADDRESS": "bsmith@work.com"}`,
 		Flags:    0,
 	}
@@ -2195,7 +2195,7 @@ func ExampleG2EngineServer_Stats() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.StatsRequest{}
+	request := &g2pb.StatsRequest{}
 	response, err := g2engine.Stats(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -2208,7 +2208,7 @@ func ExampleG2EngineServer_WhyEntities() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.WhyEntitiesRequest{
+	request := &g2pb.WhyEntitiesRequest{
 		EntityID1: getEntityIdForRecord("CUSTOMERS", "1001"),
 		EntityID2: getEntityIdForRecord("CUSTOMERS", "1002"),
 	}
@@ -2224,7 +2224,7 @@ func ExampleG2EngineServer_WhyEntities_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.WhyEntities_V2Request{
+	request := &g2pb.WhyEntities_V2Request{
 		EntityID1: getEntityIdForRecord("CUSTOMERS", "1001"),
 		EntityID2: getEntityIdForRecord("CUSTOMERS", "1002"),
 		Flags:     0,
@@ -2241,7 +2241,7 @@ func ExampleG2EngineServer_WhyEntityByEntityID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.WhyEntityByEntityIDRequest{
+	request := &g2pb.WhyEntityByEntityIDRequest{
 		EntityID: getEntityIdForRecord("CUSTOMERS", "1001"),
 	}
 	response, err := g2engine.WhyEntityByEntityID(ctx, request)
@@ -2256,7 +2256,7 @@ func ExampleG2EngineServer_WhyEntityByEntityID_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.WhyEntityByEntityID_V2Request{
+	request := &g2pb.WhyEntityByEntityID_V2Request{
 		EntityID: getEntityIdForRecord("CUSTOMERS", "1001"),
 		Flags:    0,
 	}
@@ -2272,7 +2272,7 @@ func ExampleG2EngineServer_WhyEntityByRecordID() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.WhyEntityByRecordIDRequest{
+	request := &g2pb.WhyEntityByRecordIDRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1001",
 	}
@@ -2288,7 +2288,7 @@ func ExampleG2EngineServer_WhyEntityByRecordID_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.WhyEntityByRecordID_V2Request{
+	request := &g2pb.WhyEntityByRecordID_V2Request{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1001",
 		Flags:          0,
@@ -2305,7 +2305,7 @@ func ExampleG2EngineServer_WhyRecords() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.WhyRecordsRequest{
+	request := &g2pb.WhyRecordsRequest{
 		DataSourceCode1: "CUSTOMERS",
 		RecordID1:       "1001",
 		DataSourceCode2: "CUSTOMERS",
@@ -2323,7 +2323,7 @@ func ExampleG2EngineServer_WhyRecords_V2() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.WhyRecords_V2Request{
+	request := &g2pb.WhyRecords_V2Request{
 		DataSourceCode1: "CUSTOMERS",
 		RecordID1:       "1001",
 		DataSourceCode2: "CUSTOMERS",
@@ -2342,7 +2342,7 @@ func ExampleG2EngineServer_Process() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ProcessRequest{
+	request := &g2pb.ProcessRequest{
 		Record: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
 	}
 	response, err := g2engine.Process(ctx, request)
@@ -2357,7 +2357,7 @@ func ExampleG2EngineServer_ProcessRedoRecord() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ProcessRedoRecordRequest{}
+	request := &g2pb.ProcessRedoRecordRequest{}
 	response, err := g2engine.ProcessRedoRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -2370,7 +2370,7 @@ func ExampleG2EngineServer_ProcessRedoRecordWithInfo() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ProcessRedoRecordWithInfoRequest{
+	request := &g2pb.ProcessRedoRecordWithInfoRequest{
 		Flags: 0,
 	}
 	response, err := g2engine.ProcessRedoRecordWithInfo(ctx, request)
@@ -2385,7 +2385,7 @@ func ExampleG2EngineServer_ProcessWithInfo() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ProcessWithInfoRequest{
+	request := &g2pb.ProcessWithInfoRequest{
 		Record: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
 		Flags:  0,
 	}
@@ -2401,7 +2401,7 @@ func ExampleG2EngineServer_ProcessWithResponse() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ProcessWithResponseRequest{
+	request := &g2pb.ProcessWithResponseRequest{
 		Record: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
 	}
 	response, err := g2engine.ProcessWithResponse(ctx, request)
@@ -2416,7 +2416,7 @@ func ExampleG2EngineServer_ProcessWithResponseResize() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ProcessWithResponseResizeRequest{
+	request := &g2pb.ProcessWithResponseResizeRequest{
 		Record: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
 	}
 	response, err := g2engine.ProcessWithResponseResize(ctx, request)
@@ -2431,7 +2431,7 @@ func ExampleG2EngineServer_ReevaluateEntity() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ReevaluateEntityRequest{
+	request := &g2pb.ReevaluateEntityRequest{
 		EntityID: getEntityIdForRecord("CUSTOMERS", "1001"),
 		Flags:    0,
 	}
@@ -2447,7 +2447,7 @@ func ExampleG2EngineServer_ReevaluateEntityWithInfo() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ReevaluateEntityWithInfoRequest{
+	request := &g2pb.ReevaluateEntityWithInfoRequest{
 		EntityID: getEntityIdForRecord("CUSTOMERS", "1001"),
 		Flags:    0,
 	}
@@ -2463,7 +2463,7 @@ func ExampleG2EngineServer_ReevaluateRecord() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ReevaluateRecordRequest{
+	request := &g2pb.ReevaluateRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1001",
 		Flags:          0,
@@ -2480,7 +2480,7 @@ func ExampleG2EngineServer_ReevaluateRecordWithInfo() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ReevaluateRecordWithInfoRequest{
+	request := &g2pb.ReevaluateRecordWithInfoRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1001",
 		Flags:          0,
@@ -2497,7 +2497,7 @@ func ExampleG2EngineServer_ReplaceRecord() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ReplaceRecordRequest{
+	request := &g2pb.ReplaceRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1001",
 		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
@@ -2515,7 +2515,7 @@ func ExampleG2EngineServer_ReplaceRecordWithInfo() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.ReplaceRecordWithInfoRequest{
+	request := &g2pb.ReplaceRecordWithInfoRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1001",
 		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
@@ -2534,7 +2534,7 @@ func ExampleG2EngineServer_DeleteRecord() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.DeleteRecordRequest{
+	request := &g2pb.DeleteRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1003",
 		LoadID:         "G2Engine_test",
@@ -2551,7 +2551,7 @@ func ExampleG2EngineServer_DeleteRecordWithInfo() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.DeleteRecordWithInfoRequest{
+	request := &g2pb.DeleteRecordWithInfoRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordID:       "1003",
 		LoadID:         "G2Engine_test",
@@ -2574,7 +2574,7 @@ func ExampleG2EngineServer_Init() {
 		fmt.Println(err)
 
 	}
-	request := &pb.InitRequest{
+	request := &g2pb.InitRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
 		VerboseLogging: 0,
@@ -2596,7 +2596,7 @@ func ExampleG2EngineServer_InitWithConfigID() {
 		fmt.Println(err)
 
 	}
-	request := &pb.InitWithConfigIDRequest{
+	request := &g2pb.InitWithConfigIDRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
 		InitConfigID:   1,
@@ -2616,11 +2616,11 @@ func ExampleG2EngineServer_Reinit() {
 	g2engine := getG2EngineServer(ctx)
 
 	// Get a Senzing configuration ID for testing.
-	requestToGetActiveConfigID := &pb.GetActiveConfigIDRequest{}
+	requestToGetActiveConfigID := &g2pb.GetActiveConfigIDRequest{}
 	responseFromGetActiveConfigID, err := g2engine.GetActiveConfigID(ctx, requestToGetActiveConfigID)
 
 	// Example
-	request := &pb.ReinitRequest{
+	request := &g2pb.ReinitRequest{
 		InitConfigID: responseFromGetActiveConfigID.GetResult(),
 	}
 	response, err := g2engine.Reinit(ctx, request)
@@ -2635,7 +2635,7 @@ func ExampleG2EngineServer_PurgeRepository() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.PurgeRepositoryRequest{}
+	request := &g2pb.PurgeRepositoryRequest{}
 	response, err := g2engine.PurgeRepository(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -2648,7 +2648,7 @@ func ExampleG2EngineServer_Destroy() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	request := &pb.DestroyRequest{}
+	request := &g2pb.DestroyRequest{}
 	response, err := g2engine.Destroy(ctx, request)
 	if err != nil {
 		// This should produce a "senzing-60164001" error.
