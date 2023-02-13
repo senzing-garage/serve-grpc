@@ -94,11 +94,11 @@ servegrpc --help
 1. Build the binaries.
    Example:
 
-     ```console
-     cd ${GIT_REPOSITORY_DIR}
-     make build
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make build
 
-     ```
+    ```
 
 1. The binaries will be found in ${GIT_REPOSITORY_DIR}/target.
    Example:
@@ -111,11 +111,11 @@ servegrpc --help
 1. Clean up.
    Example:
 
-     ```console
-     cd ${GIT_REPOSITORY_DIR}
-     make clean
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean
 
-     ```
+    ```
 
 ### Test
 
@@ -147,20 +147,20 @@ servegrpc --help
 1. Create a test database.
    Example:
 
-     ```console
-     mkdir /tmp/sqlite
-     cp ${GIT_REPOSITORY_DIR}/testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
+    ```console
+    mkdir /tmp/sqlite
+    cp ${GIT_REPOSITORY_DIR}/testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
 
-     ```
+    ```
 
 1. Start the test server.
    Example:
 
-     ```console
-     cd ${GIT_REPOSITORY_DIR}
-     make test-servegrpc
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make run-servegrpc
 
-     ```
+    ```
 
 1. In a separate terminal, start the gRPC test client.
    Example:

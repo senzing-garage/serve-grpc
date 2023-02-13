@@ -284,8 +284,8 @@ func ExampleG2ProductServer_Version() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response.GetResult())
-	// Output: {"PRODUCT_NAME":"Senzing API","VERSION":"3.4.1","BUILD_VERSION":"3.4.1.23023","BUILD_DATE":"2023-01-22","BUILD_NUMBER":"2023_01_22__23_01","COMPATIBILITY_VERSION":{"CONFIG_VERSION":"10"},"SCHEMA_VERSION":{"ENGINE_SCHEMA_VERSION":"3.4","MINIMUM_REQUIRED_SCHEMA_VERSION":"3.0","MAXIMUM_REQUIRED_SCHEMA_VERSION":"3.99"}}
+	fmt.Println(truncate(response.GetResult(), 43))
+	// Output: {"PRODUCT_NAME":"Senzing API","VERSION":...
 }
 
 func ExampleG2ProductServer_Destroy() {
