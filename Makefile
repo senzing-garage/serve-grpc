@@ -143,7 +143,7 @@ run-servegrpc: build
 
 .PHONY: run-servegrpc-trace
 run-servegrpc-trace: build
-	@target/linux/servegrpc --log-level TRACE
+	@target/linux/servegrpc --log-level TRACE --engine-log-level 1
 
 # -----------------------------------------------------------------------------
 # Utility targets
