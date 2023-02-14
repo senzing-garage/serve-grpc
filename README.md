@@ -27,10 +27,10 @@ Other implementations of the
 [g2-sdk-go](https://github.com/Senzing/g2-sdk-go)
 interface include:
 
-- [g2-sdk-go-mock](https://github.com/Senzing/g2-sdk-go-mock) - for
-  unit testing calls to the Senzing Go SDK
 - [g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base) - for
   calling Senzing SDK APIs natively
+- [g2-sdk-go-mock](https://github.com/Senzing/g2-sdk-go-mock) - for
+  unit testing calls to the Senzing Go SDK
 - [go-sdk-abstract-factory](https://github.com/Senzing/go-sdk-abstract-factory) - An
   [abstract factory pattern](https://en.wikipedia.org/wiki/Abstract_factory_pattern)
   for switching among implementations
@@ -52,20 +52,11 @@ servegrpc --help
 
 ## Docker
 
-1. Build `senzing/servegrpc` Docker image.
-   Example:
-
-    ```console
-    make docker-build
-
-    ```
-
-1. Identify the database URL.
+1. :thinking: Identify the database URL.
    Example:
 
     ```console
     export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-
     export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
 
     ```
