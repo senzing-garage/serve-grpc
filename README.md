@@ -9,8 +9,8 @@ the recommendation is not to use it yet.
 ## Synopsis
 
 The Senzing servegrpc is an application on top of
-[senzing/g2-sdk-go](https://github.com/Senzing/g2-sdk-go)
-which create a server that supports requests to the Senzing Go SDK via network access using
+[senzing/g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base)
+which create a server that supports requests to the Senzing SDK via network access using
 [gRPC](https://grpc.io/).
 ...
 
@@ -22,7 +22,7 @@ which create a server that supports requests to the Senzing Go SDK via network a
 `servegrpc` supports the [Senzing Protocol Buffer definitions](https://github.com/Senzing/g2-sdk-proto).
 
 Under the covers, the gRPC request is translated into a Senzing Go SDK API call using
-[senzing/g2-sdk-go](https://github.com/Senzing/g2-sdk-go).
+[senzing/g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base).
 The response from the Senzing Go SDK API is returned to the gRPC client.
 
 ## Use
@@ -144,21 +144,12 @@ servegrpc --help
 
     ```
 
-1. Create a test database.
-   Example:
-
-    ```console
-    mkdir /tmp/sqlite
-    cp ${GIT_REPOSITORY_DIR}/testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
-
-    ```
-
 1. Start the test server.
    Example:
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
-    make run-servegrpc
+    make clean run-servegrpc
 
     ```
 

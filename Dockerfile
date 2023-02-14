@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 ARG IMAGE_GO_BUILDER=golang:1.20.0
-ARG IMAGE_FINAL=senzing/senzingapi-runtime:3.4.1
+ARG IMAGE_FINAL=senzing/senzingapi-runtime:3.4.2
 
 # -----------------------------------------------------------------------------
 # Stage: go_builder
@@ -22,9 +22,13 @@ ARG BUILD_VERSION=0.0.0
 ARG BUILD_ITERATION=0
 ARG GO_PACKAGE_NAME="unknown"
 
+# Copy remote files from DockerHub.
+
+COPY --from=senzing/senzingapi-runtime:3.4.2  "/opt/senzing/g2/lib/"   "/opt/senzing/g2/lib/"
+COPY --from=senzing/senzingapi-runtime:3.4.2  "/opt/senzing/g2/sdk/c/" "/opt/senzing/g2/sdk/c/"
+
 # Copy local files from the Git repository.
 
-COPY ./rootfs /
 COPY . ${GOPATH}/src/${GO_PACKAGE_NAME}
 
 # Build go program.
