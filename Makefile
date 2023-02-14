@@ -24,8 +24,7 @@ CC = gcc
 # Can be overridden with "export"
 # Example: "export LD_LIBRARY_PATH=/path/to/my/senzing/g2/lib"
 
-LD_LIBRARY_PATH ?= ${SENZING_G2_DIR}/lib
-SENZING_G2_DIR ?= /opt/senzing/g2
+LD_LIBRARY_PATH ?= /opt/senzing/g2/lib
 SENZING_TOOLS_DATABASE_URL ?= sqlite3://na:na@/tmp/sqlite/G2C.db
 
 # Export environment variables.
