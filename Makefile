@@ -21,9 +21,11 @@ GO_PACKAGE_NAME := $(shell echo $(GIT_REMOTE_URL) | sed -e 's|^git@github.com:|g
 CC = gcc
 
 # Conditional assignment. ('?=')
+# Can be overridden with "export"
+# Example: "export LD_LIBRARY_PATH=/path/to/my/senzing/g2/lib"
 
-SENZING_G2_DIR ?= /opt/senzing/g2
 LD_LIBRARY_PATH ?= ${SENZING_G2_DIR}/lib
+SENZING_G2_DIR ?= /opt/senzing/g2
 SENZING_TOOLS_DATABASE_URL ?= sqlite3://na:na@/tmp/sqlite/G2C.db
 
 # Export environment variables.
@@ -55,11 +57,11 @@ build-linux:
 	@GOOS=linux \
 	GOARCH=amd64 \
 	go build \
-	  -ldflags \
-	    "-X 'github.com/senzing/servegrpc/cmd.buildVersion=${BUILD_VERSION}' \
-	     -X 'github.com/senzing/servegrpc/cmd.buildIteration=${BUILD_ITERATION}' \
-	    " \
-	  -o $(GO_PACKAGE_NAME)
+		-ldflags \
+			"-X 'github.com/senzing/servegrpc/cmd.buildVersion=${BUILD_VERSION}' \
+			-X 'github.com/senzing/servegrpc/cmd.buildIteration=${BUILD_ITERATION}' \
+			" \
+		-o $(GO_PACKAGE_NAME)
 	@mkdir -p $(TARGET_DIRECTORY)/linux || true
 	@mv $(GO_PACKAGE_NAME) $(TARGET_DIRECTORY)/linux
 
@@ -131,10 +133,10 @@ run:
 .PHONY: docker-run
 docker-run:
 	@docker run \
-	    --interactive \
-	    --tty \
-	    --name $(DOCKER_CONTAINER_NAME) \
-	    $(DOCKER_IMAGE_NAME)
+		--interactive \
+		--tty \
+		--name $(DOCKER_CONTAINER_NAME) \
+		$(DOCKER_IMAGE_NAME)
 
 
 .PHONY: run-servegrpc
@@ -152,7 +154,7 @@ run-servegrpc-trace: build
 .PHONY: update-pkg-cache
 update-pkg-cache:
 	@GOPROXY=https://proxy.golang.org GO111MODULE=on \
-	go get $(GO_PACKAGE_NAME)@$(BUILD_TAG)
+		go get $(GO_PACKAGE_NAME)@$(BUILD_TAG)
 
 
 .PHONY: clean
