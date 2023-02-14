@@ -10,8 +10,9 @@ the recommendation is not to use it yet.
 
 `servegrpc` is an application using
 [senzing/g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base)
-to create a server that supports requests to the Senzing SDK via network access using
-[gRPC](https://grpc.io/).
+to create a
+[gRPC](https://grpc.io/)
+server that supports requests to the Senzing SDK via network access.
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/senzing/servegrpc.svg)](https://pkg.go.dev/github.com/senzing/servegrpc)
 [![Go Report Card](https://goreportcard.com/badge/github.com/senzing/servegrpc)](https://goreportcard.com/report/github.com/senzing/servegrpc)
