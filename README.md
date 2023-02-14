@@ -8,7 +8,7 @@ the recommendation is not to use it yet.
 
 ## Synopsis
 
-`servegrpc` is a
+The Senzing `servegrpc` is a
 [gRPC](https://grpc.io/)
 server application that supports requests to the Senzing SDK via network access.
 
