@@ -53,6 +53,7 @@ servegrpc --help
 ## Docker
 
 1. :thinking: Identify the database URL.
+   The example may not work in all cases.
    Example:
 
     ```console
@@ -117,7 +118,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     ```
 
-1. The binaries will be found in ${GIT_REPOSITORY_DIR}/target.
+1. The binaries will be found in the `${GIT_REPOSITORY_DIR}/target` directory.
    Example:
 
     ```console
@@ -214,12 +215,11 @@ in testing the `g2-sdk-go-base` packages.
 
     ```
 
-1. Run `servegrpc`.
-   Example:
+1. Run tests.
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
-    make clean run-servegrpc
+    make clean test
 
     ```
 
