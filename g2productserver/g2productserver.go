@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	g2productSingleton g2api.G2productInterface
+	g2productSingleton g2api.G2product
 	g2productSyncOnce  sync.Once
 )
 
@@ -24,14 +24,14 @@ var (
 
 // Singleton pattern for g2product.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getG2product() g2api.G2productInterface {
+func getG2product() g2api.G2product {
 	g2productSyncOnce.Do(func() {
 		g2productSingleton = &g2sdk.G2product{}
 	})
 	return g2productSingleton
 }
 
-func GetSdkG2product() g2api.G2productInterface {
+func GetSdkG2product() g2api.G2product {
 	return getG2product()
 }
 

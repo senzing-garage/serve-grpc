@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	g2configSingleton g2api.G2configInterface
+	g2configSingleton g2api.G2config
 	g2configSyncOnce  sync.Once
 )
 
@@ -24,14 +24,14 @@ var (
 
 // Singleton pattern for g2config.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getG2config() g2api.G2configInterface {
+func getG2config() g2api.G2config {
 	g2configSyncOnce.Do(func() {
 		g2configSingleton = &g2sdk.G2config{}
 	})
 	return g2configSingleton
 }
 
-func GetSdkG2config() g2api.G2configInterface {
+func GetSdkG2config() g2api.G2config {
 	return getG2config()
 }
 

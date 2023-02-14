@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	g2diagnosticSingleton g2api.G2diagnosticInterface
+	g2diagnosticSingleton g2api.G2diagnostic
 	g2diagnosticSyncOnce  sync.Once
 )
 
@@ -34,14 +34,14 @@ var (
 
 // Singleton pattern for g2diagnostic.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getG2diagnostic() g2api.G2diagnosticInterface {
+func getG2diagnostic() g2api.G2diagnostic {
 	g2diagnosticSyncOnce.Do(func() {
 		g2diagnosticSingleton = &g2sdk.G2diagnostic{}
 	})
 	return g2diagnosticSingleton
 }
 
-func GetSdkG2diagnostic() g2api.G2diagnosticInterface {
+func GetSdkG2diagnostic() g2api.G2diagnostic {
 	return getG2diagnostic()
 }
 

@@ -8,22 +8,32 @@ the recommendation is not to use it yet.
 
 ## Synopsis
 
-The Senzing servegrpc is an application on top of
+`servegrpc` is an application using
 [senzing/g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base)
-which create a server that supports requests to the Senzing SDK via network access using
+to create a server that supports requests to the Senzing SDK via network access using
 [gRPC](https://grpc.io/).
-...
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/senzing/servegrpc.svg)](https://pkg.go.dev/github.com/senzing/servegrpc)
 [![Go Report Card](https://goreportcard.com/badge/github.com/senzing/servegrpc)](https://goreportcard.com/report/github.com/senzing/servegrpc)
 
 ## Overview
 
-`servegrpc` supports the [Senzing Protocol Buffer definitions](https://github.com/Senzing/g2-sdk-proto).
-
+The Senzing `servegrpc` supports the [Senzing Protocol Buffer definitions](https://github.com/Senzing/g2-sdk-proto).
 Under the covers, the gRPC request is translated into a Senzing Go SDK API call using
 [senzing/g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base).
 The response from the Senzing Go SDK API is returned to the gRPC client.
+
+Other implementations of the
+[g2-sdk-go](https://github.com/Senzing/g2-sdk-go)
+interface include:
+
+- [g2-sdk-go-mock](https://github.com/Senzing/g2-sdk-go-mock) - for
+  unit testing calls to the Senzing Go SDK
+- [g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base) - for
+  calling Senzing SDK APIs natively
+- [go-sdk-abstract-factory](https://github.com/Senzing/go-sdk-abstract-factory) - An
+  [abstract factory pattern](https://en.wikipedia.org/wiki/Abstract_factory_pattern)
+  for switching among implementations
 
 ## Use
 
@@ -74,14 +84,25 @@ servegrpc --help
 
 ## Development
 
-### Build
+### Install Go
 
-1. Verify Senzing C SDK header files and shared objects are installed.
+1. See Go's [Download and install](https://go.dev/doc/install)
+
+### Install Senzing C library
+
+Since the Senzing library is a prerequisite, it must be installed first.
+
+1. Verify Senzing C shared objects, configuration, and SDK header files are installed.
     1. `/opt/senzing/g2/lib`
     1. `/opt/senzing/g2/sdk/c`
+    1. `/etc/opt/senzing`
 
-1. Identify repository.
-   Example:
+1. If not installed, see
+   [How to Install Senzing for Go Development](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-senzing-for-go-development.md).
+
+### Install Git repository
+
+1. Identify git repository.
 
     ```console
     export GIT_ACCOUNT=senzing
@@ -90,6 +111,11 @@ servegrpc --help
     export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
 
     ```
+
+1. Using the environment variables values just set, follow steps in
+   [clone-repository](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/clone-repository.md) to install the Git repository.
+
+### Build
 
 1. Build the binaries.
    Example:
@@ -117,7 +143,111 @@ servegrpc --help
 
     ```
 
-### Test
+### Test using SQLite database
+
+1. Run tests.
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean test
+
+    ```
+
+1. **Optional:** View the SQLite database.
+   Example:
+
+    ```console
+    docker run \
+        --env SQLITE_DATABASE=G2C.db \
+        --interactive \
+        --publish 9174:8080 \
+        --rm \
+        --tty \
+        --volume /tmp/sqlite:/data \
+        coleifer/sqlite-web
+
+    ```
+
+   Visit [localhost:9174](http://localhost:9174).
+
+### Test using Docker-compose stack with PostgreSql database
+
+The following instructions show how to bring up a test stack to be used
+in testing the `g2-sdk-go-base` packages.
+
+1. Identify a directory to place docker-compose artifacts.
+   The directory specified will be deleted and re-created.
+   Example:
+
+    ```console
+    export SENZING_DEMO_DIR=~/my-senzing-demo
+
+    ```
+
+1. Bring up the docker-compose stack.
+   Example:
+
+    ```console
+    export PGADMIN_DIR=${SENZING_DEMO_DIR}/pgadmin
+    export POSTGRES_DIR=${SENZING_DEMO_DIR}/postgres
+    export RABBITMQ_DIR=${SENZING_DEMO_DIR}/rabbitmq
+    export SENZING_VAR_DIR=${SENZING_DEMO_DIR}/var
+    export SENZING_UID=$(id -u)
+    export SENZING_GID=$(id -g)
+
+    rm -rf ${SENZING_DEMO_DIR:-/tmp/nowhere/for/safety}
+    mkdir ${SENZING_DEMO_DIR}
+    mkdir -p ${PGADMIN_DIR} ${POSTGRES_DIR} ${RABBITMQ_DIR} ${SENZING_VAR_DIR}
+    chmod -R 777 ${SENZING_DEMO_DIR}
+
+    curl -X GET \
+        --output ${SENZING_DEMO_DIR}/docker-versions-stable.sh \
+        https://raw.githubusercontent.com/Senzing/knowledge-base/main/lists/docker-versions-stable.sh
+    source ${SENZING_DEMO_DIR}/docker-versions-stable.sh
+    curl -X GET \
+        --output ${SENZING_DEMO_DIR}/docker-compose.yaml \
+        "https://raw.githubusercontent.com/Senzing/docker-compose-demo/main/resources/postgresql/docker-compose-postgresql.yaml"
+
+    cd ${SENZING_DEMO_DIR}
+    sudo --preserve-env docker-compose up
+
+    ```
+
+1. In a separate terminal window, set environment variables.
+   Identify Database URL of database in docker-compose stack.
+   Example:
+
+    ```console
+    export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
+    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
+
+    ```
+
+1. Run `servegrpc`.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean run-servegrpc
+
+    ```
+
+1. **Optional:** View the PostgreSQL database.
+
+   Visit [localhost:9171](http://localhost:9171).
+   For the initial login, review the instructions at the top of the web page.
+   For server password information, see the `POSTGRESQL_POSTGRES_PASSWORD` value in `${SENZING_DEMO_DIR}/docker-compose.yaml`.
+   Usually, it's "postgres".
+
+1. Cleanup.
+
+    ```console
+    cd ${SENZING_DEMO_DIR}
+    sudo --preserve-env docker-compose down
+
+    ```
+
+### Test using bloomrpc
 
 1. Install the  [bloomrpc](https://github.com/bloomrpc/bloomrpc) gRPC test client.
    1. Example for Ubuntu.
@@ -313,60 +443,19 @@ Make documents visible at
 
     ```
 
-## Alternatives
+## Error prefixes
 
-### Postgres database
+Error identifiers are in the format `senzing-PPPPnnnn` where:
 
-The following steps will bring up a docker-compose stack with a PostgreSQL database.
+`P` is a prefix used to identify the package.
+`n` is a location within the package.
 
-1. Identify a directory to place docker-compose artifacts.
-   The directory specified will be deleted and re-created.
-   Example:
+Prefixes:
 
-    ```console
-    export SENZING_DEMO_DIR=~/my-senzing-demo
-
-    ```
-
-1. Bring up the docker-compose stack.
-   Example:
-
-    ```console
-    export PGADMIN_DIR=${SENZING_DEMO_DIR}/pgadmin
-    export POSTGRES_DIR=${SENZING_DEMO_DIR}/postgres
-    export RABBITMQ_DIR=${SENZING_DEMO_DIR}/rabbitmq
-    export SENZING_VAR_DIR=${SENZING_DEMO_DIR}/var
-    export SENZING_UID=$(id -u)
-    export SENZING_GID=$(id -g)
-
-    rm -rf ${SENZING_DEMO_DIR:-/tmp/nowhere/for/safety}
-    mkdir ${SENZING_DEMO_DIR}
-    mkdir -p ${PGADMIN_DIR} ${POSTGRES_DIR} ${RABBITMQ_DIR} ${SENZING_VAR_DIR}
-    chmod -R 777 ${SENZING_DEMO_DIR}
-
-    curl -X GET \
-        --output ${SENZING_DEMO_DIR}/docker-versions-stable.sh \
-        <https://raw.githubusercontent.com/Senzing/knowledge-base/main/lists/docker-versions-stable.sh>
-    source ${SENZING_DEMO_DIR}/docker-versions-stable.sh
-    curl -X GET \
-        --output ${SENZING_DEMO_DIR}/docker-compose.yaml \
-        "https://raw.githubusercontent.com/Senzing/docker-compose-demo/main/resources/postgresql/docker-compose-postgresql.yaml"
-
-    cd ${SENZING_DEMO_DIR}
-    sudo --preserve-env docker-compose up
-
-    ```
-
-1. In a separate terminal window, run `servegrpc`.
-   Example:
-
-    ```console
-    export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
-
-    cd ${GIT_REPOSITORY_DIR}
-    clear; make clean run-servegrpc
-
-    ```
-
-1. PgAdmin is available at [localhost:9171](http://localhost:9171)
+1. `6011` - g2config
+1. `6012` - g2configmgr
+1. `6013` - g2diagnostic
+1. `6014` - g2engine
+1. `6015` - g2hasher
+1. `6016` - g2product
+1. `6017` - g2ssadm
