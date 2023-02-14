@@ -18,7 +18,8 @@ to create a server that supports requests to the Senzing SDK via network access 
 
 ## Overview
 
-The Senzing `servegrpc` supports the [Senzing Protocol Buffer definitions](https://github.com/Senzing/g2-sdk-proto).
+The Senzing `servegrpc` supports the
+[Senzing Protocol Buffer definitions](https://github.com/Senzing/g2-sdk-proto).
 Under the covers, the gRPC request is translated into a Senzing Go SDK API call using
 [senzing/g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base).
 The response from the Senzing Go SDK API is returned to the gRPC client.
