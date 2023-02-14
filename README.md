@@ -240,6 +240,10 @@ in testing the `g2-sdk-go-base` packages.
 
 ### Test using bloomrpc
 
+Using a (deprecated) BloomRPC client, test the Senzing gRPC Server.
+For other gRPC tools, visit
+[Awesome gRPC](https://github.com/grpc-ecosystem/awesome-grpc#tools).
+
 1. Install the  [bloomrpc](https://github.com/bloomrpc/bloomrpc) gRPC test client.
    1. Example for Ubuntu.
 
@@ -253,17 +257,6 @@ in testing the `g2-sdk-go-base` packages.
            sudo apt install ./bloomrpc_1.5.3_amd64.deb
 
            ```
-
-1. Identify repository.
-   Example:
-
-    ```console
-    export GIT_ACCOUNT=senzing
-    export GIT_REPOSITORY=servegrpc
-    export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
-    export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
-
-    ```
 
 1. Start the test server.
    Example:
