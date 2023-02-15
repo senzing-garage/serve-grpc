@@ -349,13 +349,22 @@ For other gRPC tools, visit
 
     ```
 
-1. Run command.
+1. :pencil2: Identify database.
+   One option is to bring up PostgreSql as see in
+   [Test using Docker-compose stack with PostgreSql database](#test-using-docker-compose-stack-with-postgresql-database).
+   Example:
+
+    ```console
+    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
+
+    ```
+
+1. :pencil2: Run command.
    Example:
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
     servegrpc
-
     ```
 
 1. Remove `servegrpc` from system.
