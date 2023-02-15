@@ -46,6 +46,72 @@ type GrpcServerImpl struct {
 // Variables
 // ----------------------------------------------------------------------------
 
+// Add G2Config service to gRPC server.
+func (grpcServer *GrpcServerImpl) enableG2config(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+	g2configserver.GetSdkG2config().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	server := &g2configserver.G2ConfigServer{}
+	server.SetLogLevel(ctx, grpcServer.LogLevel)
+	if grpcServer.Observers != nil {
+		for _, observer := range grpcServer.Observers {
+			server.RegisterObserver(ctx, observer)
+		}
+	}
+	g2config.RegisterG2ConfigServer(serviceRegistrar, server)
+}
+
+// Add G2Configmgr service to gRPC server.
+func (grpcServer *GrpcServerImpl) enableG2configmgr(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+	g2configmgrserver.GetSdkG2configmgr().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	server := &g2configmgrserver.G2ConfigmgrServer{}
+	server.SetLogLevel(ctx, grpcServer.LogLevel)
+	if grpcServer.Observers != nil {
+		for _, observer := range grpcServer.Observers {
+			server.RegisterObserver(ctx, observer)
+		}
+	}
+	g2configmgr.RegisterG2ConfigMgrServer(serviceRegistrar, server)
+}
+
+// Add G2Diagnostic service to gRPC server.
+func (grpcServer *GrpcServerImpl) enableG2diagnostic(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+	g2diagnosticserver.GetSdkG2diagnostic().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	server := &g2diagnosticserver.G2DiagnosticServer{}
+	server.SetLogLevel(ctx, grpcServer.LogLevel)
+	if grpcServer.Observers != nil {
+		for _, observer := range grpcServer.Observers {
+			server.RegisterObserver(ctx, observer)
+		}
+	}
+	g2diagnostic.RegisterG2DiagnosticServer(serviceRegistrar, server)
+}
+
+// Add G2Engine service to gRPC server.
+func (grpcServer *GrpcServerImpl) enableG2engine(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+	sdkG2engine := g2engineserver.GetSdkG2engine()
+	sdkG2engine.Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	server := &g2engineserver.G2EngineServer{}
+	server.SetLogLevel(ctx, grpcServer.LogLevel)
+	if grpcServer.Observers != nil {
+		for _, observer := range grpcServer.Observers {
+			server.RegisterObserver(ctx, observer)
+		}
+	}
+	g2engine.RegisterG2EngineServer(serviceRegistrar, server)
+}
+
+// Add G2Product service to gRPC server.
+func (grpcServer *GrpcServerImpl) enableG2product(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+	g2productserver.GetSdkG2product().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	server := &g2productserver.G2ProductServer{}
+	server.SetLogLevel(ctx, grpcServer.LogLevel)
+	if grpcServer.Observers != nil {
+		for _, observer := range grpcServer.Observers {
+			server.RegisterObserver(ctx, observer)
+		}
+	}
+	g2product.RegisterG2ProductServer(serviceRegistrar, server)
+}
+
 // ----------------------------------------------------------------------------
 // Main
 // ----------------------------------------------------------------------------
@@ -80,68 +146,25 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 
 	aGrpcServer := grpc.NewServer()
 
-	// Configure server.
+	// Register services with gRPC server.
 
 	if grpcServer.EnableG2config {
-		g2configserver.GetSdkG2config().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
-		server := &g2configserver.G2ConfigServer{}
-		server.SetLogLevel(ctx, grpcServer.LogLevel)
-		if grpcServer.Observers != nil {
-			for _, observer := range grpcServer.Observers {
-				server.RegisterObserver(ctx, observer)
-			}
-		}
-		g2config.RegisterG2ConfigServer(aGrpcServer, server)
+		grpcServer.enableG2config(ctx, aGrpcServer)
 	}
-
 	if grpcServer.EnableG2configmgr {
-		g2configmgrserver.GetSdkG2configmgr().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
-		server := &g2configmgrserver.G2ConfigmgrServer{}
-		server.SetLogLevel(ctx, grpcServer.LogLevel)
-		if grpcServer.Observers != nil {
-			for _, observer := range grpcServer.Observers {
-				server.RegisterObserver(ctx, observer)
-			}
-		}
-		g2configmgr.RegisterG2ConfigMgrServer(aGrpcServer, server)
+		grpcServer.enableG2configmgr(ctx, aGrpcServer)
 	}
-
 	if grpcServer.EnableG2diagnostic {
-		g2diagnosticserver.GetSdkG2diagnostic().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
-		server := &g2diagnosticserver.G2DiagnosticServer{}
-		server.SetLogLevel(ctx, grpcServer.LogLevel)
-		if grpcServer.Observers != nil {
-			for _, observer := range grpcServer.Observers {
-				server.RegisterObserver(ctx, observer)
-			}
-		}
-		g2diagnostic.RegisterG2DiagnosticServer(aGrpcServer, server)
+		grpcServer.enableG2diagnostic(ctx, aGrpcServer)
 	}
-
 	if grpcServer.EnableG2engine {
-		sdkG2engine := g2engineserver.GetSdkG2engine()
-		sdkG2engine.Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
-		server := &g2engineserver.G2EngineServer{}
-		server.SetLogLevel(ctx, grpcServer.LogLevel)
-		if grpcServer.Observers != nil {
-			for _, observer := range grpcServer.Observers {
-				server.RegisterObserver(ctx, observer)
-			}
-		}
-		g2engine.RegisterG2EngineServer(aGrpcServer, server)
+		grpcServer.enableG2engine(ctx, aGrpcServer)
+	}
+	if grpcServer.EnableG2product {
+		grpcServer.enableG2product(ctx, aGrpcServer)
 	}
 
-	if grpcServer.EnableG2product {
-		g2productserver.GetSdkG2product().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
-		server := &g2productserver.G2ProductServer{}
-		server.SetLogLevel(ctx, grpcServer.LogLevel)
-		if grpcServer.Observers != nil {
-			for _, observer := range grpcServer.Observers {
-				server.RegisterObserver(ctx, observer)
-			}
-		}
-		g2product.RegisterG2ProductServer(aGrpcServer, server)
-	}
+	// Enable reflection.
 
 	reflection.Register(aGrpcServer)
 
