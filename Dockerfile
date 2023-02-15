@@ -10,10 +10,10 @@ ARG IMAGE_FINAL=senzing/senzingapi-runtime:3.4.2
 # -----------------------------------------------------------------------------
 
 FROM ${IMAGE_GO_BUILDER} as go_builder
-ENV REFRESHED_AT 2022-12-22
+ENV REFRESHED_AT 2023-02-15
 LABEL Name="senzing/servegrpc-builder" \
       Maintainer="support@senzing.com" \
-      Version="0.0.5"
+      Version="0.3.2"
 
 # Build arguments.
 
@@ -54,18 +54,23 @@ RUN mkdir -p /output \
 # -----------------------------------------------------------------------------
 
 FROM ${IMAGE_FINAL} as final
-ENV REFRESHED_AT 2022-12-22
+ENV REFRESHED_AT 2023-02-15
 LABEL Name="senzing/servegrpc" \
       Maintainer="support@senzing.com" \
-      Version="0.0.5"
+      Version="0.3.2"
 
 # Copy files from prior step.
 
 COPY --from=go_builder "/output/linux/servegrpc" "/app/servegrpc"
 
+# Copy local files from the Git repository.
+
+COPY ./testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
+
 # Runtime environment variables.
 
 ENV LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+ENV SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
 
 # Runtime execution.
 
