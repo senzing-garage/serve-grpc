@@ -300,19 +300,6 @@ For other gRPC tools, visit
 
 #### Package RPM and DEB files
 
-1. :warning: **FIXME:**
-   This won't work automatically until
-   `/opt/senzing/g2/sdk/c/*.h` and `/opt/senzing/g2/lib/`
-   files can be copied from an existing Docker image.
-1. :thinking: *Work-around:*
-   Copy files from `/opt/senzing/g2/lib` into the repository.
-   Example:
-
-    ```console
-    cp /opt/senzing/g2/lib/* ${GIT_REPOSITORY_DIR}/rootfs/opt/senzing/g2/lib/
-
-    ```
-
 1. Use make target to run a docker images that builds RPM and DEB files.
    Example:
 
@@ -365,6 +352,7 @@ For other gRPC tools, visit
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
     servegrpc
+
     ```
 
 1. Remove `servegrpc` from system.
@@ -391,6 +379,16 @@ For other gRPC tools, visit
     ```console
     cd ${GIT_REPOSITORY_DIR}/target
     sudo yum install ./servegrpc-0.0.0.rpm
+
+    ```
+
+1. :pencil2: Identify database.
+   One option is to bring up PostgreSql as see in
+   [Test using Docker-compose stack with PostgreSql database](#test-using-docker-compose-stack-with-postgresql-database).
+   Example:
+
+    ```console
+    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
 
     ```
 
