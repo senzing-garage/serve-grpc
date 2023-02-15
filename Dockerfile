@@ -65,7 +65,8 @@ COPY --from=go_builder "/output/linux/servegrpc" "/app/servegrpc"
 
 # Copy local files from the Git repository.
 
-COPY ./testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
+COPY ./testdata/senzing-license/g2.lic /etc/opt/senzing/g2.lic
+COPY ./testdata/sqlite/G2C.db          /tmp/sqlite/G2C.db
 
 # Runtime environment variables.
 
