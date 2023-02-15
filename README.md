@@ -328,6 +328,7 @@ For other gRPC tools, visit
     ```
 
 1. :pencil2: Install `servegrpc`.
+   The `servegrpc-...` filename will need modification.
    Example:
 
     ```console
@@ -374,6 +375,7 @@ For other gRPC tools, visit
     ```
 
 1. :pencil2: Install `servegrpc`.
+   The `servegrpc-...` filename will need modification.
    Example:
 
     ```console
