@@ -1,13 +1,13 @@
 module github.com/senzing/servegrpc
 
-go 1.19
+go 1.20
 
 require (
 	github.com/aquilax/truncate v1.0.0
 	github.com/senzing/g2-sdk-go v0.4.0
+	github.com/senzing/g2-sdk-go-base v0.1.0
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20230126140313-273e96bc7dbd
-	github.com/senzing/go-common v0.0.0-20230126153452-241288b3f6e1
-	github.com/senzing/go-helpers v0.1.0
+	github.com/senzing/go-common v0.1.1
 	github.com/senzing/go-logging v1.1.3
 	github.com/senzing/go-observing v0.1.1
 	github.com/spf13/cobra v1.6.1
@@ -33,10 +33,10 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
-	golang.org/x/net v0.5.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
-	google.golang.org/genproto v0.0.0-20230127162408-596548ed4efa // indirect
+	golang.org/x/net v0.7.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
+	google.golang.org/genproto v0.0.0-20230209215440-0dfe4f8abfcc // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

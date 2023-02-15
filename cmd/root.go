@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/senzing/go-helpers/g2engineconfigurationjson"
+	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/servegrpc/grpcserver"
 	"github.com/spf13/cobra"
@@ -55,7 +55,7 @@ var RootCmd = &cobra.Command{
 			LogLevel:                       logLevel,
 			SenzingEngineConfigurationJson: viper.GetString("engine-configuration-json"),
 			SenzingModuleName:              viper.GetString("module-name"),
-			SenzingVerboseLogging:          0,
+			SenzingVerboseLogging:          viper.GetInt("engine-log-level"),
 		}
 		grpcserver.Serve(ctx)
 		return err
@@ -87,6 +87,7 @@ func init() {
 	RootCmd.Flags().BoolP("enable-g2diagnostic", "", false, "enable G2Diagnostic service [SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]")
 	RootCmd.Flags().BoolP("enable-g2engine", "", false, "enable G2Config service [SENZING_TOOLS_ENABLE_G2ENGINE]")
 	RootCmd.Flags().BoolP("enable-g2product", "", false, "enable G2Config service [SENZING_TOOLS_ENABLE_G2PRODUCT]")
+	RootCmd.Flags().Int("engine-log-level", 0, "log level for Senzing Engine [SENZING_TOOLS_ENGINE_LOG_LEVEL]")
 	RootCmd.Flags().Int("grpc-port", 8258, "port used to serve gRPC [SENZING_TOOLS_GRPC_PORT]")
 	RootCmd.Flags().String("engine-configuration-json", engineConfigurationJson, "JSON string sent to Senzing's init() function [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON]")
 	RootCmd.Flags().String("log-level", "INFO", "log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [SENZING_TOOLS_LOG_LEVEL]")
@@ -114,6 +115,9 @@ func init() {
 
 	viper.SetDefault("enable-g2product", false)
 	viper.BindPFlag("enable-g2product", RootCmd.Flags().Lookup("enable-g2product"))
+
+	viper.SetDefault("engine-log-level", 0)
+	viper.BindPFlag("engine-log-level", RootCmd.Flags().Lookup("engine-log-level"))
 
 	viper.SetDefault("grpc-port", 8258)
 	viper.BindPFlag("grpc-port", RootCmd.Flags().Lookup("grpc-port"))

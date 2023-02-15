@@ -7,11 +7,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/senzing/g2-sdk-go/g2config"
-	"github.com/senzing/g2-sdk-go/g2configmgr"
-	"github.com/senzing/g2-sdk-go/g2engine"
+	"github.com/senzing/g2-sdk-go-base/g2config"
+	"github.com/senzing/g2-sdk-go-base/g2configmgr"
+	"github.com/senzing/g2-sdk-go-base/g2engine"
+	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/senzing/go-common/truthset"
-	"github.com/senzing/go-helpers/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/messagelogger"
 )
 
@@ -40,7 +40,7 @@ func TestMain(m *testing.M) {
 func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
 	now := time.Now()
 
-	aG2config := &g2config.G2configImpl{}
+	aG2config := &g2config.G2config{}
 	err := aG2config.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return localLogger.Error(5906, err)
@@ -77,7 +77,7 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 
 	// Persist the Senzing configuration to the Senzing repository.
 
-	aG2configmgr := &g2configmgr.G2configmgrImpl{}
+	aG2configmgr := &g2configmgr.G2configmgr{}
 	err = aG2configmgr.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return localLogger.Error(5912, err)
@@ -102,7 +102,7 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 }
 
 func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
-	aG2engine := &g2engine.G2engineImpl{}
+	aG2engine := &g2engine.G2engine{}
 	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return localLogger.Error(5903, err)

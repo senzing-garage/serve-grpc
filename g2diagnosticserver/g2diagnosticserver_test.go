@@ -9,13 +9,13 @@ import (
 	"time"
 
 	truncator "github.com/aquilax/truncate"
-	"github.com/senzing/g2-sdk-go/g2config"
-	"github.com/senzing/g2-sdk-go/g2configmgr"
-	"github.com/senzing/g2-sdk-go/g2engine"
-	pbg2configmgr "github.com/senzing/g2-sdk-proto/go/g2configmgr"
-	pb "github.com/senzing/g2-sdk-proto/go/g2diagnostic"
+	"github.com/senzing/g2-sdk-go-base/g2config"
+	"github.com/senzing/g2-sdk-go-base/g2configmgr"
+	"github.com/senzing/g2-sdk-go-base/g2engine"
+	g2configmgrpb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
+	g2pb "github.com/senzing/g2-sdk-proto/go/g2diagnostic"
+	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/senzing/go-common/truthset"
-	"github.com/senzing/go-helpers/g2engineconfigurationjson"
 	"github.com/senzing/go-logging/messagelogger"
 	"github.com/senzing/servegrpc/g2configmgrserver"
 	"github.com/stretchr/testify/assert"
@@ -148,7 +148,7 @@ func TestMain(m *testing.M) {
 func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
 	now := time.Now()
 
-	aG2config := &g2config.G2configImpl{}
+	aG2config := &g2config.G2config{}
 	err := aG2config.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return localLogger.Error(5906, err)
@@ -185,7 +185,7 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 
 	// Persist the Senzing configuration to the Senzing repository.
 
-	aG2configmgr := &g2configmgr.G2configmgrImpl{}
+	aG2configmgr := &g2configmgr.G2configmgr{}
 	err = aG2configmgr.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return localLogger.Error(5912, err)
@@ -211,7 +211,7 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 
 func setupAddRecords(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
 
-	aG2engine := &g2engine.G2engineImpl{}
+	aG2engine := &g2engine.G2engine{}
 	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return localLogger.Error(5916, err)
@@ -234,7 +234,7 @@ func setupAddRecords(ctx context.Context, moduleName string, iniParams string, v
 }
 
 func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
-	aG2engine := &g2engine.G2engineImpl{}
+	aG2engine := &g2engine.G2engine{}
 	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return localLogger.Error(5903, err)
@@ -312,7 +312,7 @@ func TestBuildSimpleSystemConfigurationJson(test *testing.T) {
 func TestG2diagnosticserver_CheckDBPerf(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.CheckDBPerfRequest{
+	request := &g2pb.CheckDBPerfRequest{
 		SecondsToRun: int32(1),
 	}
 	response, err := g2diagnostic.CheckDBPerf(ctx, request)
@@ -325,7 +325,7 @@ func TestG2diagnosticserver_EntityListBySize(test *testing.T) {
 	g2diagnostic := getTestObject(ctx, test)
 
 	// GetEntityListBySize()
-	requestForGetEntityListBySizeRequest := &pb.GetEntityListBySizeRequest{
+	requestForGetEntityListBySizeRequest := &g2pb.GetEntityListBySizeRequest{
 		EntitySize: int32(10),
 	}
 	responseFromGetEntityListBySize, err := g2diagnostic.GetEntityListBySize(ctx, requestForGetEntityListBySizeRequest)
@@ -333,7 +333,7 @@ func TestG2diagnosticserver_EntityListBySize(test *testing.T) {
 	printActual(test, responseFromGetEntityListBySize)
 
 	// FetchNextEntityBySize()
-	requestFetchNextEntityBySize := &pb.FetchNextEntityBySizeRequest{
+	requestFetchNextEntityBySize := &g2pb.FetchNextEntityBySizeRequest{
 		EntityListBySizeHandle: responseFromGetEntityListBySize.GetResult(),
 	}
 	responseFromFetchNextEntityBySize, err2 := g2diagnostic.FetchNextEntityBySize(ctx, requestFetchNextEntityBySize)
@@ -341,7 +341,7 @@ func TestG2diagnosticserver_EntityListBySize(test *testing.T) {
 	printActual(test, responseFromFetchNextEntityBySize)
 
 	// CloseEntityListBySize()
-	requestCloseEntityListBySize := &pb.CloseEntityListBySizeRequest{
+	requestCloseEntityListBySize := &g2pb.CloseEntityListBySizeRequest{
 		EntityListBySizeHandle: responseFromGetEntityListBySize.GetResult(),
 	}
 	responseFromCloseEntityListBySize, err3 := g2diagnostic.CloseEntityListBySize(ctx, requestCloseEntityListBySize)
@@ -353,7 +353,7 @@ func TestG2diagnosticserver_EntityListBySize(test *testing.T) {
 func TestG2diagnosticserver_FindEntitiesByFeatureIDs(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.FindEntitiesByFeatureIDsRequest{
+	request := &g2pb.FindEntitiesByFeatureIDsRequest{
 		Features: "{\"ENTITY_ID\":1,\"LIB_FEAT_IDS\":[1,3,4]}",
 	}
 	response, err := g2diagnostic.FindEntitiesByFeatureIDs(ctx, request)
@@ -364,7 +364,7 @@ func TestG2diagnosticserver_FindEntitiesByFeatureIDs(test *testing.T) {
 func TestG2diagnosticserver_GetAvailableMemory(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetAvailableMemoryRequest{}
+	request := &g2pb.GetAvailableMemoryRequest{}
 	response, err := g2diagnostic.GetAvailableMemory(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
 	printActual(test, response)
@@ -373,7 +373,7 @@ func TestG2diagnosticserver_GetAvailableMemory(test *testing.T) {
 func TestG2diagnosticserver_GetDataSourceCounts(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetDataSourceCountsRequest{}
+	request := &g2pb.GetDataSourceCountsRequest{}
 	response, err := g2diagnostic.GetDataSourceCounts(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
 	printActual(test, response)
@@ -382,7 +382,7 @@ func TestG2diagnosticserver_GetDataSourceCounts(test *testing.T) {
 func TestG2diagnosticserver_GetDBInfo(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetDBInfoRequest{}
+	request := &g2pb.GetDBInfoRequest{}
 	response, err := g2diagnostic.GetDBInfo(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
 	printActual(test, response)
@@ -391,7 +391,7 @@ func TestG2diagnosticserver_GetDBInfo(test *testing.T) {
 func TestG2diagnosticserver_GetEntityDetails(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetEntityDetailsRequest{
+	request := &g2pb.GetEntityDetailsRequest{
 		EntityID:                int64(1),
 		IncludeInternalFeatures: 1,
 	}
@@ -403,7 +403,7 @@ func TestG2diagnosticserver_GetEntityDetails(test *testing.T) {
 func TestG2diagnosticserver_GetEntityResume(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetEntityResumeRequest{
+	request := &g2pb.GetEntityResumeRequest{
 		EntityID: int64(1),
 	}
 	response, err := g2diagnostic.GetEntityResume(ctx, request)
@@ -414,7 +414,7 @@ func TestG2diagnosticserver_GetEntityResume(test *testing.T) {
 func TestG2diagnosticserver_GetEntitySizeBreakdown(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetEntitySizeBreakdownRequest{
+	request := &g2pb.GetEntitySizeBreakdownRequest{
 		MinimumEntitySize:       int32(1),
 		IncludeInternalFeatures: int32(1),
 	}
@@ -426,7 +426,7 @@ func TestG2diagnosticserver_GetEntitySizeBreakdown(test *testing.T) {
 func TestG2diagnosticserver_GetFeature(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetFeatureRequest{
+	request := &g2pb.GetFeatureRequest{
 		LibFeatID: int64(1),
 	}
 	response, err := g2diagnostic.GetFeature(ctx, request)
@@ -437,7 +437,7 @@ func TestG2diagnosticserver_GetFeature(test *testing.T) {
 func TestG2diagnosticserver_GetGenericFeatures(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetGenericFeaturesRequest{
+	request := &g2pb.GetGenericFeaturesRequest{
 		FeatureType:           "PHONE",
 		MaximumEstimatedCount: 10,
 	}
@@ -449,7 +449,7 @@ func TestG2diagnosticserver_GetGenericFeatures(test *testing.T) {
 func TestG2diagnosticserver_GetLogicalCores(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetLogicalCoresRequest{}
+	request := &g2pb.GetLogicalCoresRequest{}
 	response, err := g2diagnostic.GetLogicalCores(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
 	printActual(test, response)
@@ -458,7 +458,7 @@ func TestG2diagnosticserver_GetLogicalCores(test *testing.T) {
 func TestG2diagnosticserver_GetMappingStatistics(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetMappingStatisticsRequest{
+	request := &g2pb.GetMappingStatisticsRequest{
 		IncludeInternalFeatures: 1,
 	}
 	response, err := g2diagnostic.GetMappingStatistics(ctx, request)
@@ -469,7 +469,7 @@ func TestG2diagnosticserver_GetMappingStatistics(test *testing.T) {
 func TestG2diagnosticserver_GetPhysicalCores(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetPhysicalCoresRequest{}
+	request := &g2pb.GetPhysicalCoresRequest{}
 	response, err := g2diagnostic.GetPhysicalCores(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
 	printActual(test, response)
@@ -478,7 +478,7 @@ func TestG2diagnosticserver_GetPhysicalCores(test *testing.T) {
 func TestG2diagnosticserver_GetRelationshipDetails(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetRelationshipDetailsRequest{
+	request := &g2pb.GetRelationshipDetailsRequest{
 		RelationshipID:          int64(1),
 		IncludeInternalFeatures: 1,
 	}
@@ -490,7 +490,7 @@ func TestG2diagnosticserver_GetRelationshipDetails(test *testing.T) {
 func TestG2diagnosticserver_GetResolutionStatistics(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetResolutionStatisticsRequest{}
+	request := &g2pb.GetResolutionStatisticsRequest{}
 	response, err := g2diagnostic.GetResolutionStatistics(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
 	printActual(test, response)
@@ -499,7 +499,7 @@ func TestG2diagnosticserver_GetResolutionStatistics(test *testing.T) {
 func TestG2diagnosticserver_GetTotalSystemMemory(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.GetTotalSystemMemoryRequest{}
+	request := &g2pb.GetTotalSystemMemoryRequest{}
 	response, err := g2diagnostic.GetTotalSystemMemory(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
 	printActual(test, response)
@@ -512,7 +512,7 @@ func TestG2diagnosticserver_Init(test *testing.T) {
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}
-	request := &pb.InitRequest{
+	request := &g2pb.InitRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
 		VerboseLogging: int32(0),
@@ -529,7 +529,7 @@ func TestG2diagnosticserver_InitWithConfigID(test *testing.T) {
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}
-	request := &pb.InitWithConfigIDRequest{
+	request := &g2pb.InitWithConfigIDRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
 		InitConfigID:   int64(1),
@@ -544,10 +544,10 @@ func TestG2diagnosticserver_Reinit(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
 	g2configmgr := getG2ConfigmgrServer(ctx)
-	getDefaultConfigIDRequest := &pbg2configmgr.GetDefaultConfigIDRequest{}
+	getDefaultConfigIDRequest := &g2configmgrpb.GetDefaultConfigIDRequest{}
 	getDefaultConfigIDResponse, err := g2configmgr.GetDefaultConfigID(ctx, getDefaultConfigIDRequest)
 	testError(test, ctx, g2diagnostic, err)
-	request := &pb.ReinitRequest{
+	request := &g2pb.ReinitRequest{
 		InitConfigID: getDefaultConfigIDResponse.ConfigID,
 	}
 	response, err := g2diagnostic.Reinit(ctx, request)
@@ -558,7 +558,7 @@ func TestG2diagnosticserver_Reinit(test *testing.T) {
 func TestG2diagnosticserver_Destroy(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
-	request := &pb.DestroyRequest{}
+	request := &g2pb.DestroyRequest{}
 	response, err := g2diagnostic.Destroy(ctx, request)
 	expectError(test, ctx, g2diagnostic, err, "senzing-60134001")
 	printActual(test, response)
@@ -572,7 +572,7 @@ func ExampleG2DiagnosticServer_CheckDBPerf() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.CheckDBPerfRequest{
+	request := &g2pb.CheckDBPerfRequest{
 		SecondsToRun: int32(1),
 	}
 	response, err := g2diagnostic.CheckDBPerf(ctx, request)
@@ -591,7 +591,7 @@ func ExampleG2DiagnosticServer_FindEntitiesByFeatureIDs() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.FindEntitiesByFeatureIDsRequest{
+	request := &g2pb.FindEntitiesByFeatureIDsRequest{
 		Features: "{\"ENTITY_ID\":1,\"LIB_FEAT_IDS\":[1,3,4]}",
 	}
 	response, err := g2diagnostic.FindEntitiesByFeatureIDs(ctx, request)
@@ -606,7 +606,7 @@ func ExampleG2DiagnosticServer_GetAvailableMemory() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetAvailableMemoryRequest{}
+	request := &g2pb.GetAvailableMemoryRequest{}
 	response, err := g2diagnostic.GetAvailableMemory(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -619,7 +619,7 @@ func ExampleG2DiagnosticServer_GetDataSourceCounts() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetDataSourceCountsRequest{}
+	request := &g2pb.GetDataSourceCountsRequest{}
 	response, err := g2diagnostic.GetDataSourceCounts(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -632,7 +632,7 @@ func ExampleG2DiagnosticServer_GetDBInfo() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetDBInfoRequest{}
+	request := &g2pb.GetDBInfoRequest{}
 	response, err := g2diagnostic.GetDBInfo(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -645,7 +645,7 @@ func ExampleG2DiagnosticServer_GetEntityDetails() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetEntityDetailsRequest{
+	request := &g2pb.GetEntityDetailsRequest{
 		EntityID:                int64(1),
 		IncludeInternalFeatures: 1,
 	}
@@ -663,7 +663,7 @@ func ExampleG2DiagnosticServer_GetEntityResume() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetEntityResumeRequest{
+	request := &g2pb.GetEntityResumeRequest{
 		EntityID: int64(1),
 	}
 	response, err := g2diagnostic.GetEntityResume(ctx, request)
@@ -678,7 +678,7 @@ func ExampleG2DiagnosticServer_GetEntitySizeBreakdown() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetEntitySizeBreakdownRequest{
+	request := &g2pb.GetEntitySizeBreakdownRequest{
 		MinimumEntitySize:       int32(1),
 		IncludeInternalFeatures: int32(1),
 	}
@@ -694,7 +694,7 @@ func ExampleG2DiagnosticServer_GetFeature() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetFeatureRequest{
+	request := &g2pb.GetFeatureRequest{
 		LibFeatID: int64(1),
 	}
 	response, err := g2diagnostic.GetFeature(ctx, request)
@@ -709,7 +709,7 @@ func ExampleG2DiagnosticServer_GetGenericFeatures() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetGenericFeaturesRequest{
+	request := &g2pb.GetGenericFeaturesRequest{
 		FeatureType:           "PHONE",
 		MaximumEstimatedCount: 10,
 	}
@@ -725,7 +725,7 @@ func ExampleG2DiagnosticServer_GetLogicalCores() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetLogicalCoresRequest{}
+	request := &g2pb.GetLogicalCoresRequest{}
 	response, err := g2diagnostic.GetLogicalCores(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -738,7 +738,7 @@ func ExampleG2DiagnosticServer_GetMappingStatistics() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetMappingStatisticsRequest{
+	request := &g2pb.GetMappingStatisticsRequest{
 		IncludeInternalFeatures: 1,
 	}
 	response, err := g2diagnostic.GetMappingStatistics(ctx, request)
@@ -753,7 +753,7 @@ func ExampleG2DiagnosticServer_GetPhysicalCores() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetPhysicalCoresRequest{}
+	request := &g2pb.GetPhysicalCoresRequest{}
 	response, err := g2diagnostic.GetPhysicalCores(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -766,7 +766,7 @@ func ExampleG2DiagnosticServer_GetRelationshipDetails() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetRelationshipDetailsRequest{
+	request := &g2pb.GetRelationshipDetailsRequest{
 		RelationshipID:          int64(1),
 		IncludeInternalFeatures: 1,
 	}
@@ -782,7 +782,7 @@ func ExampleG2DiagnosticServer_GetResolutionStatistics() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetResolutionStatisticsRequest{}
+	request := &g2pb.GetResolutionStatisticsRequest{}
 	response, err := g2diagnostic.GetResolutionStatistics(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -795,7 +795,7 @@ func ExampleG2DiagnosticServer_GetTotalSystemMemory() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.GetTotalSystemMemoryRequest{}
+	request := &g2pb.GetTotalSystemMemoryRequest{}
 	response, err := g2diagnostic.GetTotalSystemMemory(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -812,7 +812,7 @@ func ExampleG2DiagnosticServer_Init() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	request := &pb.InitRequest{
+	request := &g2pb.InitRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
 		VerboseLogging: int32(0),
@@ -833,7 +833,7 @@ func ExampleG2DiagnosticServer_InitWithConfigID() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	request := &pb.InitWithConfigIDRequest{
+	request := &g2pb.InitWithConfigIDRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
 		InitConfigID:   int64(1),
@@ -852,12 +852,12 @@ func ExampleG2DiagnosticServer_Reinit() {
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	g2configmgr := getG2ConfigmgrServer(ctx)
-	getDefaultConfigIDRequest := &pbg2configmgr.GetDefaultConfigIDRequest{}
+	getDefaultConfigIDRequest := &g2configmgrpb.GetDefaultConfigIDRequest{}
 	getDefaultConfigIDResponse, err := g2configmgr.GetDefaultConfigID(ctx, getDefaultConfigIDRequest)
 	if err != nil {
 		fmt.Println(err)
 	}
-	request := &pb.ReinitRequest{
+	request := &g2pb.ReinitRequest{
 		InitConfigID: getDefaultConfigIDResponse.ConfigID,
 	}
 	_, err = g2diagnostic.Reinit(ctx, request)
@@ -871,7 +871,7 @@ func ExampleG2DiagnosticServer_Destroy() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &pb.DestroyRequest{}
+	request := &g2pb.DestroyRequest{}
 	response, err := g2diagnostic.Destroy(ctx, request)
 	if err != nil {
 		// This should produce a "senzing-60134001" error.

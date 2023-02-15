@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.3.0] - 2023-02-15
+
+### Added to 0.3.0
+
+- Using refactored g2-sdk-go
+- Removed need for rootfs
+
 ## [0.2.0] - 2023-02-07
 
 ### Added to 0.2.0

@@ -8,8 +8,8 @@ import (
 	"testing"
 
 	truncator "github.com/aquilax/truncate"
-	pb "github.com/senzing/g2-sdk-proto/go/g2config"
-	"github.com/senzing/go-helpers/g2engineconfigurationjson"
+	g2pb "github.com/senzing/g2-sdk-proto/go/g2config"
+	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -146,13 +146,13 @@ func TestG2configserver_AddDataSource(test *testing.T) {
 	g2config := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	testError(test, ctx, g2config, err)
 	printActual(test, responseFromCreate.GetResult())
 
 	// AddDataSource.
-	requestToAddDataSource := &pb.AddDataSourceRequest{
+	requestToAddDataSource := &g2pb.AddDataSourceRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 		InputJson:    `{"DSRC_CODE": "GO_TEST"}`,
 	}
@@ -161,7 +161,7 @@ func TestG2configserver_AddDataSource(test *testing.T) {
 	printActual(test, responseFromAddDataSource.GetResult())
 
 	// Close.
-	requestToClose := &pb.CloseRequest{
+	requestToClose := &g2pb.CloseRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	_, err = g2config.Close(ctx, requestToClose)
@@ -173,13 +173,13 @@ func TestG2configserver_Close(test *testing.T) {
 	g2config := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	testError(test, ctx, g2config, err)
 	printActual(test, responseFromCreate.GetResult())
 
 	// Close.
-	requestToClose := &pb.CloseRequest{
+	requestToClose := &g2pb.CloseRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	_, err = g2config.Close(ctx, requestToClose)
@@ -189,7 +189,7 @@ func TestG2configserver_Close(test *testing.T) {
 func TestG2configserver_Create(test *testing.T) {
 	ctx := context.TODO()
 	g2config := getTestObject(ctx, test)
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	response, err := g2config.Create(ctx, requestToCreate)
 	testError(test, ctx, g2config, err)
 	printActual(test, response.GetResult())
@@ -200,13 +200,13 @@ func TestG2configserver_DeleteDataSource(test *testing.T) {
 	g2config := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	testError(test, ctx, g2config, err)
 	printActual(test, responseFromCreate.GetResult())
 
 	// ListDataSources #1.
-	requestToListDataSources := &pb.ListDataSourcesRequest{
+	requestToListDataSources := &g2pb.ListDataSourcesRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	responseFromListDataSources, err := g2config.ListDataSources(ctx, requestToListDataSources)
@@ -215,7 +215,7 @@ func TestG2configserver_DeleteDataSource(test *testing.T) {
 	printActual(test, listBefore)
 
 	// AddDataSource.
-	requestToAddDataSource := &pb.AddDataSourceRequest{
+	requestToAddDataSource := &g2pb.AddDataSourceRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 		InputJson:    `{"DSRC_CODE": "GO_TEST"}`,
 	}
@@ -229,7 +229,7 @@ func TestG2configserver_DeleteDataSource(test *testing.T) {
 	printActual(test, responseFromListDataSources2.GetResult())
 
 	// DeleteDataSource.
-	requestToDeleteDataSource := &pb.DeleteDataSourceRequest{
+	requestToDeleteDataSource := &g2pb.DeleteDataSourceRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 		InputJson:    `{"DSRC_CODE": "GO_TEST"}`,
 	}
@@ -242,7 +242,7 @@ func TestG2configserver_DeleteDataSource(test *testing.T) {
 	printActual(test, responseFromListDataSources3.GetResult())
 
 	// Close.
-	requestToClose := &pb.CloseRequest{
+	requestToClose := &g2pb.CloseRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	_, err = g2config.Close(ctx, requestToClose)
@@ -256,13 +256,13 @@ func TestG2configserver_ListDataSources(test *testing.T) {
 	g2config := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	testError(test, ctx, g2config, err)
 	printActual(test, responseFromCreate.GetResult())
 
 	// ListDataSources.
-	requestToList := &pb.ListDataSourcesRequest{
+	requestToList := &g2pb.ListDataSourcesRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	responseFromListDataSources, err := g2config.ListDataSources(ctx, requestToList)
@@ -270,7 +270,7 @@ func TestG2configserver_ListDataSources(test *testing.T) {
 	printActual(test, responseFromListDataSources.GetResult())
 
 	// Close.
-	requestToClose := &pb.CloseRequest{
+	requestToClose := &g2pb.CloseRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	_, err = g2config.Close(ctx, requestToClose)
@@ -282,13 +282,13 @@ func TestG2configserver_Load(test *testing.T) {
 	g2config := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	testError(test, ctx, g2config, err)
 	printActual(test, responseFromCreate.GetResult())
 
 	// Save.
-	requestToSave := &pb.SaveRequest{
+	requestToSave := &g2pb.SaveRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	responseFromSave, err := g2config.Save(ctx, requestToSave)
@@ -296,7 +296,7 @@ func TestG2configserver_Load(test *testing.T) {
 	printActual(test, responseFromSave.GetResult())
 
 	// Load.
-	requestToLoad := &pb.LoadRequest{
+	requestToLoad := &g2pb.LoadRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 		JsonConfig:   responseFromSave.GetResult(),
 	}
@@ -304,7 +304,7 @@ func TestG2configserver_Load(test *testing.T) {
 	testError(test, ctx, g2config, err)
 
 	// Close.
-	requestToClose := &pb.CloseRequest{
+	requestToClose := &g2pb.CloseRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	_, err = g2config.Close(ctx, requestToClose)
@@ -316,13 +316,13 @@ func TestG2configserver_Save(test *testing.T) {
 	g2config := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	testError(test, ctx, g2config, err)
 	printActual(test, responseFromCreate.GetResult())
 
 	// Save.
-	requestToSave := &pb.SaveRequest{
+	requestToSave := &g2pb.SaveRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	responseFromSave, err := g2config.Save(ctx, requestToSave)
@@ -330,7 +330,7 @@ func TestG2configserver_Save(test *testing.T) {
 	printActual(test, responseFromSave.GetResult())
 
 	// Close.
-	requestToClose := &pb.CloseRequest{
+	requestToClose := &g2pb.CloseRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	_, err = g2config.Close(ctx, requestToClose)
@@ -344,7 +344,7 @@ func TestG2configserver_Init(test *testing.T) {
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}
-	request := &pb.InitRequest{
+	request := &g2pb.InitRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
 		VerboseLogging: int32(0),
@@ -357,7 +357,7 @@ func TestG2configserver_Init(test *testing.T) {
 func TestG2configserver_Destroy(test *testing.T) {
 	ctx := context.TODO()
 	g2config := getTestObject(ctx, test)
-	request := &pb.DestroyRequest{}
+	request := &g2pb.DestroyRequest{}
 	response, err := g2config.Destroy(ctx, request)
 	expectError(test, ctx, g2config, err, "senzing-60114001")
 	printActual(test, response)
@@ -373,14 +373,14 @@ func ExampleG2ConfigServer_AddDataSource() {
 	g2config := getG2ConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
-	request := &pb.AddDataSourceRequest{
+	request := &g2pb.AddDataSourceRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 		InputJson:    `{"DSRC_CODE": "GO_TEST"}`,
 	}
@@ -398,14 +398,14 @@ func ExampleG2ConfigServer_Close() {
 	g2config := getG2ConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
-	request := &pb.CloseRequest{
+	request := &g2pb.CloseRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	_, err = g2config.Close(ctx, request)
@@ -419,7 +419,7 @@ func ExampleG2ConfigServer_Create() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2config/g2config_test.go
 	ctx := context.TODO()
 	g2config := getG2ConfigServer(ctx)
-	request := &pb.CreateRequest{}
+	request := &g2pb.CreateRequest{}
 	response, err := g2config.Create(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -434,14 +434,14 @@ func ExampleG2ConfigServer_DeleteDataSource() {
 	g2config := getG2ConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
-	request := &pb.DeleteDataSourceRequest{
+	request := &g2pb.DeleteDataSourceRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 		InputJson:    `{"DSRC_CODE": "TEST"}`,
 	}
@@ -458,14 +458,14 @@ func ExampleG2ConfigServer_ListDataSources() {
 	g2config := getG2ConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
-	request := &pb.ListDataSourcesRequest{
+	request := &g2pb.ListDataSourcesRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	response, err := g2config.ListDataSources(ctx, request)
@@ -482,14 +482,14 @@ func ExampleG2ConfigServer_Load() {
 	g2config := getG2ConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Save() to create a JSON string.
-	requestToSave := &pb.SaveRequest{
+	requestToSave := &g2pb.SaveRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	responseFromSave, err := g2config.Save(ctx, requestToSave)
@@ -498,7 +498,7 @@ func ExampleG2ConfigServer_Load() {
 	}
 
 	// Example
-	request := &pb.LoadRequest{
+	request := &g2pb.LoadRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 		JsonConfig:   responseFromSave.GetResult(),
 	}
@@ -516,14 +516,14 @@ func ExampleG2ConfigServer_Save() {
 	g2config := getG2ConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
-	requestToCreate := &pb.CreateRequest{}
+	requestToCreate := &g2pb.CreateRequest{}
 	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
-	request := &pb.SaveRequest{
+	request := &g2pb.SaveRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	response, err := g2config.Save(ctx, request)
@@ -542,7 +542,7 @@ func ExampleG2ConfigServer_Init() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	request := &pb.InitRequest{
+	request := &g2pb.InitRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
 		VerboseLogging: int32(0),
@@ -559,7 +559,7 @@ func ExampleG2ConfigServer_Destroy() {
 	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2config/g2config_test.go
 	ctx := context.TODO()
 	g2config := getG2ConfigServer(ctx)
-	request := &pb.DestroyRequest{}
+	request := &g2pb.DestroyRequest{}
 	response, err := g2config.Destroy(ctx, request)
 	if err != nil {
 		// This should produce a "senzing-60114001" error.
