@@ -51,7 +51,6 @@ type GrpcServerImpl struct {
 // ----------------------------------------------------------------------------
 
 func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
-	var err error = nil
 	logger, _ := messagelogger.NewSenzingApiLogger(ProductId, IdMessages, IdStatuses, grpcServer.LogLevel)
 
 	// Log entry parameters.

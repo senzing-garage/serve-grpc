@@ -1493,7 +1493,9 @@ func ExampleG2EngineServer_CloseExport() {
 		Flags: 0,
 	}
 	responseFromExportJSONEntityReport, err := g2engine.ExportJSONEntityReport(ctx, requestToExportJSONEntityReport)
-
+	if err != nil {
+		fmt.Println(err)
+	}
 	// Example
 	request := &g2pb.CloseExportRequest{
 		ResponseHandle: responseFromExportJSONEntityReport.GetResult(),
@@ -1586,7 +1588,9 @@ func ExampleG2EngineServer_FetchNext() {
 		Flags: 0,
 	}
 	responseFromExportJSONEntityReport, err := g2engine.ExportJSONEntityReport(ctx, requestToExportJSONEntityReport)
-
+	if err != nil {
+		fmt.Println(err)
+	}
 	// Example
 	request := &g2pb.FetchNextRequest{
 		ResponseHandle: responseFromExportJSONEntityReport.GetResult(),
@@ -2618,7 +2622,9 @@ func ExampleG2EngineServer_Reinit() {
 	// Get a Senzing configuration ID for testing.
 	requestToGetActiveConfigID := &g2pb.GetActiveConfigIDRequest{}
 	responseFromGetActiveConfigID, err := g2engine.GetActiveConfigID(ctx, requestToGetActiveConfigID)
-
+	if err != nil {
+		fmt.Println(err)
+	}
 	// Example
 	request := &g2pb.ReinitRequest{
 		InitConfigID: responseFromGetActiveConfigID.GetResult(),
