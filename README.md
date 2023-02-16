@@ -50,7 +50,27 @@ export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
 servegrpc --help
 ```
 
-## Docker
+## Docker with internal database
+
+This version uses a SQLite database that is baked into the Docker container.
+The data in the database is lost when the container is terminated.
+
+1. Run `senzing/servegrpc`.
+   Example:
+
+    ```console
+    docker run \
+        --interactive \
+        --publish 8258:8258 \
+        --rm \
+        --tty \
+        senzing/servegrpc
+
+    ```
+
+## Docker with external database
+
+This version accepts a URL of an external database.
 
 1. :thinking: Identify the database URL.
    The example may not work in all cases.
@@ -73,6 +93,8 @@ servegrpc --help
         --rm \
         --tty \
         senzing/servegrpc
+
+    ```
 
 ## Development
 
