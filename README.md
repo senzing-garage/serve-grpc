@@ -258,6 +258,9 @@ in testing the `g2-sdk-go-base` packages.
     cd ${SENZING_DEMO_DIR}
     sudo --preserve-env docker-compose down
 
+    cd ${GIT_REPOSITORY_DIR}
+    make clean
+
     ```
 
 ### Test using bloomrpc
