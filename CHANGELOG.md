@@ -10,11 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.3.3] - 2023-02-16
+
+### Added in 0.3.3
+
+- Add a default Senzing configuration to the SQLite database, `/tmp/sqlite/G2C.db`
+
 ## [0.3.2] - 2023-02-16
 
 ### Added in 0.3.2
 
-- A test SQLite database, `/tmp/sqlite/G2C.db`
+- A test SQLite database to the Docker image, `/tmp/sqlite/G2C.db`
 
 ## [0.3.1] - 2023-02-16
 
