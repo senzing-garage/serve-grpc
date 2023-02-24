@@ -9,7 +9,7 @@ require (
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20230126140313-273e96bc7dbd
 	github.com/senzing/go-common v0.1.1
 	github.com/senzing/go-logging v1.1.3
-	github.com/senzing/go-observing v0.1.1
+	github.com/senzing/go-observing v0.1.2
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.15.0
 	github.com/stretchr/testify v1.8.1
