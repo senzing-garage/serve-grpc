@@ -167,8 +167,8 @@ github.com/senzing/go-common v0.1.2 h1:d4E4cyKAqBvHvexLvj51WwoU78jTbLlBXmE67o41C
 github.com/senzing/go-common v0.1.2/go.mod h1:rDosNB5AHPIQvtwxvKvWKlF+dkzI+2WjeOfPWE7Bh2I=
 github.com/senzing/go-logging v1.1.3 h1:eTWuEgI+4bwyS0gSpYKNbz8gL8ATAqByA3q1sbRJCu4=
 github.com/senzing/go-logging v1.1.3/go.mod h1:FarStyY/kYd7+ymtawOXvOk48j/6fHRZ8unSwpi4FzI=
-github.com/senzing/go-observing v0.1.2 h1:C7p7pwhbi3k/VKF4WN1lpIeceWZq8cb5Ks2hIBe798g=
-github.com/senzing/go-observing v0.1.2/go.mod h1:S7ejdiEwbWj7sVsheJR9G4cTfSqr2goenR/6tyQt5OI=
+github.com/senzing/go-observing v0.1.3 h1:CUjYL5DIXPyzAKbFIeFZ2Au/MZSsnR4uSE6qJ28kxjY=
+github.com/senzing/go-observing v0.1.3/go.mod h1:vFbkhdlD4KLIO8s8kx6vwycdKutLnXls23+z2doiNa0=
 github.com/spf13/afero v1.9.3 h1:41FoI0fD7OR7mGcKE/aOiLkGreyf8ifIOQmJANWogMk=
 github.com/spf13/afero v1.9.3/go.mod h1:iUV7ddyEEZPO5gA3zD4fJt6iStLlL+Lg4m2cihcDf8Y=
 github.com/spf13/cast v1.5.0 h1:rj3WzYc11XZaIZMPKmwP96zkFEnnAmV8s6XbB2aY32w=
