@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.3.4] - 2023-03-03
+
+### Added in 0.3.4
+
+- Normalized input parameters
+
 ## [0.3.3] - 2023-02-16
 
 ### Added in 0.3.3
