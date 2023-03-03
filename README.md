@@ -50,12 +50,34 @@ export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
 servegrpc --help
 ```
 
-## Docker with internal database
+### Using command line options
 
-This version uses a SQLite database that is baked into the Docker container.
-The data in the database is lost when the container is terminated.
+1. :pencil2: Specifying database.
+   Example:
 
-1. Run `senzing/servegrpc`.
+    ```console
+    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    servegrpc --database-url postgresql://username:password@postgres.example.com:5432/G2
+    ```
+
+### Using environment variables
+
+1. :pencil2: Specifying database.
+   Example:
+
+    ```console
+    export SENZING_TOOLS_DATABASE_URL=postgresql://username:password@postgres.example.com:5432/G2
+    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    servegrpc
+    ```
+
+### Using Docker
+
+This usage shows how to initialze a database with a Docker container.
+
+1. This usage has an SQLite database that is baked into the Docker container.
+   The data in the database is lost when the container is terminated.
+   Run `senzing/servegrpc`.
    Example:
 
     ```console
@@ -68,33 +90,45 @@ The data in the database is lost when the container is terminated.
 
     ```
 
-## Docker with external database
+1. This usage accepts a URL of an external database.
 
-This version accepts a URL of an external database.
+    1. :thinking: Identify the database URL.
+       The example may not work in all cases.
+       Example:
 
-1. :thinking: Identify the database URL.
-   The example may not work in all cases.
-   Example:
+        ```console
+        export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
+        export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
 
-    ```console
-    export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
+        ```
 
-    ```
+    1. Run `senzing/servegrpc`.
+       Example:
 
-1. Run `senzing/servegrpc`.
-   Example:
+        ```console
+        docker run \
+            --env SENZING_TOOLS_DATABASE_URL \
+            --interactive \
+            --publish 8258:8258 \
+            --rm \
+            --tty \
+            senzing/servegrpc
 
-    ```console
-    docker run \
-        --env SENZING_TOOLS_DATABASE_URL \
-        --interactive \
-        --publish 8258:8258 \
-        --rm \
-        --tty \
-        senzing/servegrpc
+        ```
 
-    ```
+### Parameters
+
+- **[SENZING_TOOLS_DATABASE_URL](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_database_url)**
+- **[SENZING_TOOLS_ENABLE_G2CONFIG](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2config)**
+- **[SENZING_TOOLS_ENABLE_G2CONFIGMGR](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2configmgr)**
+- **[SENZING_TOOLS_ENABLE_G2DIAGNOSTIC](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2diagnostic)**
+- **[SENZING_TOOLS_ENABLE_G2ENGINE](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2engine)**
+- **[SENZING_TOOLS_ENABLE_G2PRODUCT](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2product)**
+- **[SENZING_TOOLS_ENGINE_CONFIGURATION_JSON](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_configuration_json)**
+- **[SENZING_TOOLS_ENGINE_LOG_LEVEL](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_log_level)**
+- **[SENZING_TOOLS_ENGINE_MODULE_NAME](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_module_name)**
+- **[SENZING_TOOLS_GRPC_PORT](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_grpc_port)**
+- **[SENZING_TOOLS_LOG_LEVEL](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_log_level)**
 
 ## Development
 
@@ -233,7 +267,7 @@ in testing the `g2-sdk-go-base` packages.
 
     ```console
     export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
+    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
 
     ```
 
