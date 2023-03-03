@@ -5,7 +5,6 @@ package cmd
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -22,7 +21,7 @@ var docsCmd = &cobra.Command{
 			return err
 		}
 		if dir == "" {
-			if dir, err = ioutil.TempDir("", "servegrpc"); err != nil {
+			if dir, err = os.MkdirTemp("", "servegrpc"); err != nil {
 				return err
 			}
 		}

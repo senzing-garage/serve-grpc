@@ -10,10 +10,10 @@ ARG IMAGE_FINAL=senzing/senzingapi-runtime:3.4.2
 # -----------------------------------------------------------------------------
 
 FROM ${IMAGE_GO_BUILDER} as go_builder
-ENV REFRESHED_AT 2023-02-15
+ENV REFRESHED_AT 2023-03-03
 LABEL Name="senzing/servegrpc-builder" \
       Maintainer="support@senzing.com" \
-      Version="0.3.2"
+      Version="0.3.4"
 
 # Build arguments.
 
@@ -54,19 +54,19 @@ RUN mkdir -p /output \
 # -----------------------------------------------------------------------------
 
 FROM ${IMAGE_FINAL} as final
-ENV REFRESHED_AT 2023-02-15
+ENV REFRESHED_AT 2023-03-03
 LABEL Name="senzing/servegrpc" \
       Maintainer="support@senzing.com" \
-      Version="0.3.2"
+      Version="0.3.4"
+
+# Copy files from repository.
+
+COPY ./testdata/senzing-license/g2.lic /etc/opt/senzing/g2.lic
+COPY ./testdata/sqlite/G2C.db          /tmp/sqlite/G2C.db
 
 # Copy files from prior step.
 
 COPY --from=go_builder "/output/linux/servegrpc" "/app/servegrpc"
-
-# Copy local files from the Git repository.
-
-COPY ./testdata/senzing-license/g2.lic /etc/opt/senzing/g2.lic
-COPY ./testdata/sqlite/G2C.db          /tmp/sqlite/G2C.db
 
 # Runtime environment variables.
 

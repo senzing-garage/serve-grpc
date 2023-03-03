@@ -3,8 +3,6 @@
 *.exe~
 *.dll
 *.so
-*.so.*
-*.jar
 *.dylib
 
 # Test binary, built with `go test -c`
@@ -17,4 +15,5 @@
 # vendor/
 
 .history
-target/
+target
+
