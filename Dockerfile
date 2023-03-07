@@ -13,7 +13,7 @@ FROM ${IMAGE_GO_BUILDER} as go_builder
 ENV REFRESHED_AT 2023-03-03
 LABEL Name="senzing/servegrpc-builder" \
       Maintainer="support@senzing.com" \
-      Version="0.3.4"
+      Version="0.3.5"
 
 # Build arguments.
 
@@ -57,7 +57,7 @@ FROM ${IMAGE_FINAL} as final
 ENV REFRESHED_AT 2023-03-03
 LABEL Name="senzing/servegrpc" \
       Maintainer="support@senzing.com" \
-      Version="0.3.4"
+      Version="0.3.5"
 
 # Copy files from repository.
 
