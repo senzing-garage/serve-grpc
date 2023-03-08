@@ -17,9 +17,15 @@ import (
 )
 
 var (
-	configurationFile string
-	buildVersion      string = "0.0.0"
-	buildIteration    string = "0"
+	buildIteration                 string = "0"
+	buildVersion                   string = "0.3.6"
+	configurationFile              string
+	defaultDatabaseUrl             string = ""
+	defaultEngineConfigurationJson string = ""
+	defaultEngineLogLevel          int    = 0
+	defaultEngineModuleName        string = fmt.Sprintf("initdatabase-%d", time.Now().Unix())
+	defaultGrpcPort                int    = 8258
+	defaultLogLevel                string = "INFO"
 )
 
 func makeVersion(version string, iteration string) string {
@@ -36,32 +42,11 @@ func makeVersion(version string, iteration string) string {
 var RootCmd = &cobra.Command{
 	Use:   "servegrpc",
 	Short: "Start a gRPC server for the Senzing SDK API",
-	Long:  `For more information, visit https://github.com/Senzing/servegrpc`,
+	Long: `
+Start a gRPC server for the Senzing SDK API.
+For more information, visit https://github.com/Senzing/servegrpc
+	`,
 	PreRun: func(cobraCommand *cobra.Command, args []string) {
-
-		now := time.Now()
-		// Define default values for input parameters.
-
-		defaultDatabaseUrl := ""
-		defaultEngineConfigurationJson := ""
-		defaultEngineLogLevel := 0
-		defaultEngineModuleName := fmt.Sprintf("initdatabase-%s", now.UTC())
-		defaultGrpcPort := 8258
-		defaultLogLevel := "INFO"
-
-		// Define flags for command.
-
-		cobraCommand.Flags().BoolP("enable-g2config", "", false, "enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]")
-		cobraCommand.Flags().BoolP("enable-g2configmgr", "", false, "enable G2ConfigMgr service [SENZING_TOOLS_ENABLE_G2CONFIGMGR]")
-		cobraCommand.Flags().BoolP("enable-g2diagnostic", "", false, "enable G2Diagnostic service [SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]")
-		cobraCommand.Flags().BoolP("enable-g2engine", "", false, "enable G2Config service [SENZING_TOOLS_ENABLE_G2ENGINE]")
-		cobraCommand.Flags().BoolP("enable-g2product", "", false, "enable G2Config service [SENZING_TOOLS_ENABLE_G2PRODUCT]")
-		cobraCommand.Flags().Int("engine-log-level", defaultEngineLogLevel, "log level for Senzing Engine [SENZING_TOOLS_ENGINE_LOG_LEVEL]")
-		cobraCommand.Flags().Int("grpc-port", defaultGrpcPort, "port used to serve gRPC [SENZING_TOOLS_GRPC_PORT]")
-		cobraCommand.Flags().String("database-url", defaultDatabaseUrl, "URL of database to initialize [SENZING_TOOLS_DATABASE_URL]")
-		cobraCommand.Flags().String("engine-configuration-json", defaultEngineConfigurationJson, "JSON string sent to Senzing's init() function [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON]")
-		cobraCommand.Flags().String("engine-module-name", defaultEngineModuleName, "the identifier given to the Senzing engine [SENZING_TOOLS_ENGINE_MODULE_NAME]")
-		cobraCommand.Flags().String("log-level", defaultLogLevel, "log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [SENZING_TOOLS_LOG_LEVEL]")
 
 		// Integrate with Viper.
 
@@ -155,6 +140,20 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
+
+	// Define flags for Cobra command.
+
+	RootCmd.Flags().BoolP("enable-g2config", "", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]")
+	RootCmd.Flags().BoolP("enable-g2configmgr", "", false, "Enable G2ConfigMgr service [SENZING_TOOLS_ENABLE_G2CONFIGMGR]")
+	RootCmd.Flags().BoolP("enable-g2diagnostic", "", false, "Enable G2Diagnostic service [SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]")
+	RootCmd.Flags().BoolP("enable-g2engine", "", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2ENGINE]")
+	RootCmd.Flags().BoolP("enable-g2product", "", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2PRODUCT]")
+	RootCmd.Flags().Int("engine-log-level", defaultEngineLogLevel, "Log level for Senzing Engine [SENZING_TOOLS_ENGINE_LOG_LEVEL]")
+	RootCmd.Flags().Int("grpc-port", defaultGrpcPort, "Port used to serve gRPC [SENZING_TOOLS_GRPC_PORT]")
+	RootCmd.Flags().String("database-url", defaultDatabaseUrl, "URL of database to initialize [SENZING_TOOLS_DATABASE_URL]")
+	RootCmd.Flags().String("engine-configuration-json", defaultEngineConfigurationJson, "JSON string sent to Senzing's init() function [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON]")
+	RootCmd.Flags().String("engine-module-name", defaultEngineModuleName, "Identifier given to the Senzing engine [SENZING_TOOLS_ENGINE_MODULE_NAME]")
+	RootCmd.Flags().String("log-level", defaultLogLevel, "Log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [SENZING_TOOLS_LOG_LEVEL]")
 }
 
 // initConfig reads in config file and ENV variables if set.

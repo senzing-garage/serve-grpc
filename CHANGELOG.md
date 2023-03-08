@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.3.6] - 2023-03-08
+
+### Changed in 0.3.6
+
+- Fixed issue with Cobra, Viper, and subcommand parameters, again.
+
 ## [0.3.5] - 2023-03-07
 
 ### Changed in 0.3.5
