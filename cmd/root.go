@@ -17,10 +17,9 @@ import (
 )
 
 var (
-	configurationFile string
-	buildVersion      string = "0.0.0"
-	buildIteration    string = "0"
-
+	buildIteration                 string = "0"
+	buildVersion                   string = "0.0.0"
+	configurationFile              string
 	defaultDatabaseUrl             string = ""
 	defaultEngineConfigurationJson string = ""
 	defaultEngineLogLevel          int    = 0
@@ -45,8 +44,6 @@ var RootCmd = &cobra.Command{
 	Short: "Start a gRPC server for the Senzing SDK API",
 	Long:  `For more information, visit https://github.com/Senzing/servegrpc`,
 	PreRun: func(cobraCommand *cobra.Command, args []string) {
-
-		fmt.Printf(">>>>> servegrpc.cmd.RootCmd.PreRun\n")
 
 		// Integrate with Viper.
 
@@ -141,7 +138,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	// Define flags for command.
+	// Define flags for Cobra command.
 
 	RootCmd.Flags().BoolP("enable-g2config", "", false, "enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]")
 	RootCmd.Flags().BoolP("enable-g2configmgr", "", false, "enable G2ConfigMgr service [SENZING_TOOLS_ENABLE_G2CONFIGMGR]")
