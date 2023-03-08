@@ -23,7 +23,7 @@ var (
 	defaultDatabaseUrl             string = ""
 	defaultEngineConfigurationJson string = ""
 	defaultEngineLogLevel          int    = 0
-	defaultEngineModuleName        string = fmt.Sprintf("initdatabase-%s", time.Now().UTC())
+	defaultEngineModuleName        string = fmt.Sprintf("initdatabase-%d", time.Now().Unix())
 	defaultGrpcPort                int    = 8258
 	defaultLogLevel                string = "INFO"
 )
@@ -42,7 +42,8 @@ func makeVersion(version string, iteration string) string {
 var RootCmd = &cobra.Command{
 	Use:   "servegrpc",
 	Short: "Start a gRPC server for the Senzing SDK API",
-	Long:  `For more information, visit https://github.com/Senzing/servegrpc`,
+	Long: `Start a gRPC server for the Senzing SDK API.
+			For more information, visit https://github.com/Senzing/servegrpc`,
 	PreRun: func(cobraCommand *cobra.Command, args []string) {
 
 		// Integrate with Viper.
