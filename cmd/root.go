@@ -18,7 +18,7 @@ import (
 
 var (
 	buildIteration                 string = "0"
-	buildVersion                   string = "0.0.0"
+	buildVersion                   string = "0.3.6"
 	configurationFile              string
 	defaultDatabaseUrl             string = ""
 	defaultEngineConfigurationJson string = ""
