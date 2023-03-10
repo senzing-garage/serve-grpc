@@ -8,10 +8,10 @@ the recommendation is not to use it yet.
 
 ## Synopsis
 
-`servegrpc` is a subcommand of the
+`servegrpc` is a command of the
 [senzing-tools](https://github.com/Senzing/senzing-tools)
 suite of tools.
-This subcommand is a
+This command is a
 [gRPC](https://grpc.io/)
 server application that supports requests to the Senzing SDK via network access.
 
@@ -33,7 +33,7 @@ Senzing SDKs for accessing the gRPC server:
 
 ## Install
 
-1. It is installed with the
+1. The `servegrpc` command is installed with the
    [senzing-tools](https://github.com/Senzing/senzing-tools)
    suite of tools.
    See senzing-tools [install](https://github.com/Senzing/senzing-tools#install).
