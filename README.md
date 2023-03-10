@@ -22,7 +22,7 @@ server application that supports requests to the Senzing SDK via network access.
 
 `servegrpc` supports the
 [Senzing Protocol Buffer definitions](https://github.com/Senzing/g2-sdk-proto).
-Under the covers, the gRPC request is translated into a Senzing Go SDK API call using
+Under the covers, the gRPC request is translated by the gRPC server into a Senzing Go SDK API call using
 [senzing/g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base).
 The response from the Senzing Go SDK API is returned to the gRPC client.
 
@@ -85,7 +85,6 @@ This usage shows how to initialze a database with a Docker container.
 
 1. This usage has an SQLite database that is baked into the Docker container.
    The data in the database is lost when the container is terminated.
-   Run `senzing/senzing-tools` container.
    Example:
 
     ```console
