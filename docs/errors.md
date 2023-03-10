@@ -16,3 +16,17 @@ Prefixes:
 1. `6015` - g2hasher
 1. `6016` - g2product
 1. `6017` - g2ssadm## Errors
+
+## Common errors
+
+### Postgresql
+
+1. "Error: pq: SSL is not enabled on the server"
+    1. The database URL needs the `sslmode` parameter.
+       Example:
+
+        ```console
+        postgresql://username:password@postgres.example.com:5432/G2/?sslmode=disable
+        ```
+
+    1. [Connection String Parameters](https://pkg.go.dev/github.com/lib/pq#hdr-Connection_String_Parameters)
