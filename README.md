@@ -100,6 +100,8 @@ This usage shows how to initialze a database with a Docker container.
 
     ```
 
+   :warning: Only use SQLite for simple tests.
+
 1. This usage specifies a URL of an external database.
    Example:
 
