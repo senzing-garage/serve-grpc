@@ -14,13 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed in 0.3.6
 
-- Fixed issue with Cobra, Viper, and subcommand parameters, again.
+- Fixed issue with Cobra, Viper, and command parameters, again.
 
 ## [0.3.5] - 2023-03-07
 
 ### Changed in 0.3.5
 
-- Fixed issue with Cobra, Viper, and subcommand parameters
+- Fixed issue with Cobra, Viper, and command parameters
 
 ## [0.3.4] - 2023-03-03
 
