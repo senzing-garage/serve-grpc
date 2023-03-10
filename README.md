@@ -95,7 +95,7 @@ This usage shows how to initialze a database with a Docker container.
         --publish 8258:8258 \
         --rm \
         --tty \
-    senzing/senzing-tools servegrpc
+        senzing/senzing-tools servegrpc
 
     ```
 
