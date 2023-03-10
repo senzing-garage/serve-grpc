@@ -46,7 +46,7 @@ senzing-tools servegrpc [flags]
 ```
 
 1. For options and flags:
-    1. [Online documentation](https://hub.senzing.com/senzing-tools/senzing-tools_initdatabase.html)
+    1. [Online documentation](https://hub.senzing.com/senzing-tools/senzing-tools_servegrpc.html)
     1. Runtime documentation:
 
         ```console

@@ -2,7 +2,7 @@
 
 ## Commands
 
-1. [senzing-tools servegrpc](https://hub.senzing.com/senzing-tools/senzing-tools_servegrpc.html) - Start a gRPC server for the Senzing SDK API
+1. [senzing-tools servegrpc](https://hub.senzing.com/senzing-tools/senzing-tools_servegrpc.html)
 
 ## Examples
 
