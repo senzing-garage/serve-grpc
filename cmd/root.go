@@ -123,7 +123,7 @@ For more information, visit https://github.com/Senzing/servegrpc
 			SenzingModuleName:              viper.GetString("engine-module-name"),
 			SenzingVerboseLogging:          viper.GetInt("engine-log-level"),
 		}
-		grpcserver.Serve(ctx)
+		err = grpcserver.Serve(ctx)
 		return err
 	},
 	Version: makeVersion(buildVersion, buildIteration),
