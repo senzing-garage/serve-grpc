@@ -20,7 +20,7 @@ server application that supports requests to the Senzing SDK via network access.
 
 ## Overview
 
-The Senzing `servegrpc` supports the
+`servegrpc` supports the
 [Senzing Protocol Buffer definitions](https://github.com/Senzing/g2-sdk-proto).
 Under the covers, the gRPC request is translated into a Senzing Go SDK API call using
 [senzing/g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base).
@@ -43,7 +43,7 @@ interface include:
 1. It is installed with the
    [senzing-tools](https://github.com/Senzing/senzing-tools)
    suite of tools.
-   See senzing-tools [install](https://github.com/Senzing/senzing-tools#install)
+   See senzing-tools [install](https://github.com/Senzing/senzing-tools#install).
 
 ## Use
 
@@ -52,17 +52,19 @@ export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
 senzing-tools servegrpc [flags]
 ```
 
-For options and flags, see
-[hub.senzing.com/senzing-tools/senzing-tools_initdatabase.html](https://hub.senzing.com/senzing-tools/senzing-tools_initdatabase.html) or run:
+1. For options and flags:
+    1. Visit
+       [hub.senzing.com/senzing-tools/senzing-tools_initdatabase.html](https://hub.senzing.com/senzing-tools/senzing-tools_initdatabase.html)
+    1. Run:
 
-```console
-export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-senzing-tools servegrpc --help
-```
+        ```console
+        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+        senzing-tools servegrpc --help
+        ```
 
 ### Using command line options
 
-1. :pencil2: Specifying database.
+1. :pencil2: Specify database using command line option.
    Example:
 
     ```console
@@ -70,9 +72,11 @@ senzing-tools servegrpc --help
     senzing-tools servegrpc --database-url postgresql://username:password@postgres.example.com:5432/G2
     ```
 
+1. See [Parameters](#parameters) for additional parameters.
+
 ### Using environment variables
 
-1. :pencil2: Specifying database.
+1. :pencil2: Specify database using environment variable.
    Example:
 
     ```console
@@ -80,6 +84,8 @@ senzing-tools servegrpc --help
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
     senzing-tools servegrpc
     ```
+
+1. See [Parameters](#parameters) for additional parameters.
 
 ### Using Docker
 
@@ -126,6 +132,8 @@ This usage shows how to initialze a database with a Docker container.
 
         ```
 
+1. See [Parameters](#parameters) for additional parameters.
+
 ### Parameters
 
 - **[SENZING_TOOLS_DATABASE_URL](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_database_url)**
@@ -140,25 +148,9 @@ This usage shows how to initialze a database with a Docker container.
 - **[SENZING_TOOLS_GRPC_PORT](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_grpc_port)**
 - **[SENZING_TOOLS_LOG_LEVEL](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_log_level)**
 
-## Error prefixes
-
-Error identifiers are in the format `senzing-PPPPnnnn` where:
-
-`P` is a prefix used to identify the package.
-`n` is a location within the package.
-
-Prefixes:
-
-1. `6011` - g2config
-1. `6012` - g2configmgr
-1. `6013` - g2diagnostic
-1. `6014` - g2engine
-1. `6015` - g2hasher
-1. `6016` - g2product
-1. `6017` - g2ssadm
-
 ## References
 
 - [Command reference](https://hub.senzing.com/senzing-tools/senzing-tools_servegrpc.html)
+- [Errors](docs/errors.md)
 - [Examples](docs/examples.md)
 - [Development](docs/development.md)
