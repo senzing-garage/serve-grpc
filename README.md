@@ -29,6 +29,7 @@ The response from the Senzing Go SDK API is returned to the gRPC client.
 Senzing SDKs for accessing the gRPC server:
 
 1. Go: [g2-sdk-go-grpc](https://github.com/Senzing/g2-sdk-go-grpc)
+1. Python: [g2-sdk-python-grpc](https://github.com/Senzing/g2-sdk-python-grpc)
 
 ## Install
 
