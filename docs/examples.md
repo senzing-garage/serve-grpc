@@ -50,3 +50,23 @@ If using multiple databases or non-system locations of Senzing binaries,
    [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_configuration_json)
 
 ## Docker examples
+
+### Docker example - Using SQLite database
+
+1. This usage has an SQLite database that is baked into the Docker container.
+   The container is mutable and the data in the database is lost when the container is terminated.
+   Only use this technique for simple tests.
+   Example:
+
+    ```console
+    docker run \
+        --env SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db \
+        --interactive \
+        --publish 8258:8258 \
+        --rm \
+        --tty \
+        senzing/senzing-tools servegrpc
+
+    ```
+
+   :warning: Only use SQLite for simple tests.

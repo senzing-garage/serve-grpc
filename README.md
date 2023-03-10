@@ -85,23 +85,6 @@ senzing-tools servegrpc [flags]
 
 This usage shows how to initialze a database with a Docker container.
 
-1. This usage has an SQLite database that is baked into the Docker container.
-   The container is mutable and the data in the database is lost when the container is terminated.
-   Example:
-
-    ```console
-    docker run \
-        --env SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db \
-        --interactive \
-        --publish 8258:8258 \
-        --rm \
-        --tty \
-        senzing/senzing-tools servegrpc
-
-    ```
-
-   :warning: Only use SQLite for simple tests.
-
 1. This usage specifies a URL of an external database.
    Example:
 
