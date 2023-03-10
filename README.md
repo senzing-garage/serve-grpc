@@ -97,31 +97,19 @@ This usage shows how to initialze a database with a Docker container.
 
     ```
 
-1. This usage accepts a URL of an external database.
+1. This usage specifies a URL of an external database.
+   Example:
 
-    1. :thinking: Identify the database URL.
-       The example may not work in all cases.
-       Example:
+    ```console
+    docker run \
+        --env SENZING_TOOLS_DATABASE_URL=postgresql://username:password@postgres.example.com:5432/G2 \
+        --interactive \
+        --publish 8258:8258 \
+        --rm \
+        --tty \
+    senzing/senzing-tools servegrpc
 
-        ```console
-        export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-        export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
-
-        ```
-
-    1. Run `senzing/servegrpc`.
-       Example:
-
-        ```console
-        docker run \
-            --env SENZING_TOOLS_DATABASE_URL \
-            --interactive \
-            --publish 8258:8258 \
-            --rm \
-            --tty \
-        senzing/senzing-tools servegrpc
-
-        ```
+    ```
 
 1. See [Parameters](#parameters) for additional parameters.
 
