@@ -45,9 +45,9 @@ senzing-tools servegrpc [flags]
 ```
 
 1. For options and flags:
-    1. Visit
+    1. Online documentation, visit
        [hub.senzing.com/senzing-tools/senzing-tools_initdatabase.html](https://hub.senzing.com/senzing-tools/senzing-tools_initdatabase.html)
-    1. Run:
+    1. Runtime documentation, run:
 
         ```console
         export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
