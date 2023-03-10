@@ -26,17 +26,9 @@ Under the covers, the gRPC request is translated into a Senzing Go SDK API call 
 [senzing/g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base).
 The response from the Senzing Go SDK API is returned to the gRPC client.
 
-Other implementations of the
-[g2-sdk-go](https://github.com/Senzing/g2-sdk-go)
-interface include:
+Senzing SDKs for accessing the gRPC server:
 
-- [g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base) - for
-  calling Senzing SDK APIs natively
-- [g2-sdk-go-mock](https://github.com/Senzing/g2-sdk-go-mock) - for
-  unit testing calls to the Senzing Go SDK
-- [go-sdk-abstract-factory](https://github.com/Senzing/go-sdk-abstract-factory) - An
-  [abstract factory pattern](https://en.wikipedia.org/wiki/Abstract_factory_pattern)
-  for switching among implementations
+1. Go: [g2-sdk-go-grpc](https://github.com/Senzing/g2-sdk-go-grpc)
 
 ## Install
 
