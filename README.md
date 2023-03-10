@@ -8,7 +8,7 @@ the recommendation is not to use it yet.
 
 ## Synopsis
 
-`servegrpc` is a command of the
+`servegrpc` is a command in the
 [senzing-tools](https://github.com/Senzing/senzing-tools)
 suite of tools.
 This command is a
@@ -46,9 +46,8 @@ senzing-tools servegrpc [flags]
 ```
 
 1. For options and flags:
-    1. Online documentation, visit
-       [hub.senzing.com/senzing-tools/senzing-tools_initdatabase.html](https://hub.senzing.com/senzing-tools/senzing-tools_initdatabase.html)
-    1. Runtime documentation, run:
+    1. [Online documentation](https://hub.senzing.com/senzing-tools/senzing-tools_initdatabase.html)
+    1. Runtime documentation:
 
         ```console
         export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
