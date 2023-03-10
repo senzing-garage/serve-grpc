@@ -142,6 +142,6 @@ This usage shows how to initialze a database with a Docker container.
 ## References
 
 - [Command reference](https://hub.senzing.com/senzing-tools/senzing-tools_servegrpc.html)
+- [Development](docs/development.md)
 - [Errors](docs/errors.md)
 - [Examples](docs/examples.md)
-- [Development](docs/development.md)
