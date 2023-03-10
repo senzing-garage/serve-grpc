@@ -225,7 +225,7 @@ For other gRPC tools, visit
 
 ### Package
 
-**Note:** This only packages the `servegrpc` subcommand.
+**Note:** This only packages the `servegrpc` command.
 It is only to be used in development and test.
 The actual packaging is done in the [senzing-tools](https://github.com/Senzing/senzing-tools) repository.
 
