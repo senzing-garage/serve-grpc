@@ -20,6 +20,7 @@ var (
 	buildIteration                 string = "0"
 	buildVersion                   string = "0.3.7"
 	configurationFile              string
+	defaultConfigurationFile       string = ""
 	defaultDatabaseUrl             string = ""
 	defaultEngineConfigurationJson string = ""
 	defaultEngineLogLevel          int    = 0
@@ -47,6 +48,49 @@ Start a gRPC server for the Senzing SDK API.
 For more information, visit https://github.com/Senzing/servegrpc
 	`,
 	PreRun: func(cobraCommand *cobra.Command, args []string) {
+
+		fmt.Println(">>>>> PreRun:")
+
+		// initConfig()
+
+		// >>>>>>  start
+
+		viper.AutomaticEnv()
+
+		viper.SetDefault("configuration", defaultDatabaseUrl)
+		viper.BindPFlag("configuration", cobraCommand.Flags().Lookup("configuration"))
+
+		if viper.GetString("configuration") != "" {
+			fmt.Println(">>>>> configuration")
+
+			// Use config file from the flag.
+			viper.SetConfigFile(viper.GetString("configuration"))
+		} else {
+
+			// Determine home directory.
+
+			home, err := os.UserHomeDir()
+			cobra.CheckErr(err)
+
+			// Configuration file:  servegrpc.yaml
+
+			viper.SetConfigName("servegrpc")
+			viper.SetConfigType("yaml")
+
+			// Search path order.
+
+			viper.AddConfigPath(home + "/.senzing-tools")
+			viper.AddConfigPath(home)
+			viper.AddConfigPath("/etc/senzing-tools")
+		}
+
+		// If a config file is found, read it in.
+
+		if err := viper.ReadInConfig(); err == nil {
+			fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		}
+
+		// <<<<<< End
 
 		// Integrate with Viper.
 
@@ -93,6 +137,7 @@ For more information, visit https://github.com/Senzing/servegrpc
 
 		versionTemplate := `{{printf "%s: %s - version %s\n" .Name .Short .Version}}`
 		cobraCommand.SetVersionTemplate(versionTemplate)
+
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error = nil
@@ -139,7 +184,12 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+
+	fmt.Println(">>>>> init()")
+
+	// cobra.OnInitialize(initConfig)
+
+	RootCmd.PersistentFlags().String("configuration", defaultConfigurationFile, "Path to configuration file [SENZING_TOOLS_CONFIGURATION]")
 
 	// Define flags for Cobra command.
 
@@ -157,33 +207,44 @@ func init() {
 }
 
 // initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if configurationFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(configurationFile)
-	} else {
+// func initConfig() {
 
-		// Find home directory.
+// 	fmt.Println(">>>>> initConfig()")
 
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
+// 	// Read in environment variables that match "SENZING_TOOLS_*" pattern.
 
-		// Search config in home directory with name ".senzing-tools" (without extension).
+// 	viper.AutomaticEnv()
 
-		viper.AddConfigPath(home + "/.senzing-tools")
-		viper.AddConfigPath(home)
-		viper.AddConfigPath("/etc/senzing-tools")
-		viper.SetConfigType("yaml")
-		viper.SetConfigName("servegrpc")
-	}
+// 	viper.SetDefault("configuration", defaultDatabaseUrl)
+// 	viper.BindPFlag("configuration", RootCmd.Flags().Lookup("configuration"))
 
-	// Read in environment variables that match "SENZING_TOOLS_*" pattern.
+// 	if viper.GetString("configuration") != "" {
+// 		fmt.Println(">>>>> configuration")
 
-	viper.AutomaticEnv()
+// 		// Use config file from the flag.
+// 		viper.SetConfigFile(viper.GetString("configuration"))
+// 	} else {
 
-	// If a config file is found, read it in.
+// 		// Determine home directory.
 
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-	}
-}
+// 		home, err := os.UserHomeDir()
+// 		cobra.CheckErr(err)
+
+// 		// Configuration file:  servegrpc.yaml
+
+// 		viper.SetConfigName("servegrpc")
+// 		viper.SetConfigType("yaml")
+
+// 		// Search path order.
+
+// 		viper.AddConfigPath(home + "/.senzing-tools")
+// 		viper.AddConfigPath(home)
+// 		viper.AddConfigPath("/etc/senzing-tools")
+// 	}
+
+// 	// If a config file is found, read it in.
+
+// 	if err := viper.ReadInConfig(); err == nil {
+// 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+// 	}
+// }
