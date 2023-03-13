@@ -19,7 +19,6 @@ import (
 var (
 	buildIteration                 string = "0"
 	buildVersion                   string = "0.3.7"
-	configurationFile              string
 	defaultConfigurationFile       string = ""
 	defaultDatabaseUrl             string = ""
 	defaultEngineConfigurationJson string = ""
@@ -48,21 +47,12 @@ Start a gRPC server for the Senzing SDK API.
 For more information, visit https://github.com/Senzing/servegrpc
 	`,
 	PreRun: func(cobraCommand *cobra.Command, args []string) {
-
-		fmt.Println(">>>>> PreRun:")
-
-		// initConfig()
-
-		// >>>>>>  start
-
+		fmt.Println(">>>>> servegrpc.PreRun")
 		viper.AutomaticEnv()
-
 		viper.SetDefault("configuration", defaultDatabaseUrl)
 		viper.BindPFlag("configuration", cobraCommand.Flags().Lookup("configuration"))
 
 		if viper.GetString("configuration") != "" {
-			fmt.Println(">>>>> configuration")
-
 			// Use config file from the flag.
 			viper.SetConfigFile(viper.GetString("configuration"))
 		} else {
@@ -72,7 +62,7 @@ For more information, visit https://github.com/Senzing/servegrpc
 			home, err := os.UserHomeDir()
 			cobra.CheckErr(err)
 
-			// Configuration file:  servegrpc.yaml
+			// Configuration file: servegrpc.yaml
 
 			viper.SetConfigName("servegrpc")
 			viper.SetConfigType("yaml")
@@ -89,8 +79,6 @@ For more information, visit https://github.com/Senzing/servegrpc
 		if err := viper.ReadInConfig(); err == nil {
 			fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 		}
-
-		// <<<<<< End
 
 		// Integrate with Viper.
 
@@ -137,7 +125,6 @@ For more information, visit https://github.com/Senzing/servegrpc
 
 		versionTemplate := `{{printf "%s: %s - version %s\n" .Name .Short .Version}}`
 		cobraCommand.SetVersionTemplate(versionTemplate)
-
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error = nil
@@ -184,15 +171,7 @@ func Execute() {
 }
 
 func init() {
-
-	fmt.Println(">>>>> init()")
-
-	// cobra.OnInitialize(initConfig)
-
-	RootCmd.PersistentFlags().String("configuration", defaultConfigurationFile, "Path to configuration file [SENZING_TOOLS_CONFIGURATION]")
-
-	// Define flags for Cobra command.
-
+	fmt.Println(">>>>> servegrpc.init()")
 	RootCmd.Flags().Bool("enable-g2config", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]")
 	RootCmd.Flags().Bool("enable-g2configmgr", false, "Enable G2ConfigMgr service [SENZING_TOOLS_ENABLE_G2CONFIGMGR]")
 	RootCmd.Flags().Bool("enable-g2diagnostic", false, "Enable G2Diagnostic service [SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]")
@@ -200,51 +179,9 @@ func init() {
 	RootCmd.Flags().Bool("enable-g2product", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2PRODUCT]")
 	RootCmd.Flags().Int("engine-log-level", defaultEngineLogLevel, "Log level for Senzing Engine [SENZING_TOOLS_ENGINE_LOG_LEVEL]")
 	RootCmd.Flags().Int("grpc-port", defaultGrpcPort, "Port used to serve gRPC [SENZING_TOOLS_GRPC_PORT]")
+	RootCmd.Flags().String("configuration", defaultConfigurationFile, "Path to configuration file [SENZING_TOOLS_CONFIGURATION]")
 	RootCmd.Flags().String("database-url", defaultDatabaseUrl, "URL of database to initialize [SENZING_TOOLS_DATABASE_URL]")
 	RootCmd.Flags().String("engine-configuration-json", defaultEngineConfigurationJson, "JSON string sent to Senzing's init() function [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON]")
 	RootCmd.Flags().String("engine-module-name", defaultEngineModuleName, "Identifier given to the Senzing engine [SENZING_TOOLS_ENGINE_MODULE_NAME]")
 	RootCmd.Flags().String("log-level", defaultLogLevel, "Log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [SENZING_TOOLS_LOG_LEVEL]")
 }
-
-// initConfig reads in config file and ENV variables if set.
-// func initConfig() {
-
-// 	fmt.Println(">>>>> initConfig()")
-
-// 	// Read in environment variables that match "SENZING_TOOLS_*" pattern.
-
-// 	viper.AutomaticEnv()
-
-// 	viper.SetDefault("configuration", defaultDatabaseUrl)
-// 	viper.BindPFlag("configuration", RootCmd.Flags().Lookup("configuration"))
-
-// 	if viper.GetString("configuration") != "" {
-// 		fmt.Println(">>>>> configuration")
-
-// 		// Use config file from the flag.
-// 		viper.SetConfigFile(viper.GetString("configuration"))
-// 	} else {
-
-// 		// Determine home directory.
-
-// 		home, err := os.UserHomeDir()
-// 		cobra.CheckErr(err)
-
-// 		// Configuration file:  servegrpc.yaml
-
-// 		viper.SetConfigName("servegrpc")
-// 		viper.SetConfigType("yaml")
-
-// 		// Search path order.
-
-// 		viper.AddConfigPath(home + "/.senzing-tools")
-// 		viper.AddConfigPath(home)
-// 		viper.AddConfigPath("/etc/senzing-tools")
-// 	}
-
-// 	// If a config file is found, read it in.
-
-// 	if err := viper.ReadInConfig(); err == nil {
-// 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-// 	}
-// }
