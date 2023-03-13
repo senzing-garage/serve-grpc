@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.3.7] - 2023-03-13
+
+### Changed in 0.3.7
+
+- Improved documentation
+
+### Fixed in 0.3.7
+
+- Fixed issue silent error when connecting to database.
+
 ## [0.3.6] - 2023-03-08
 
 ### Changed in 0.3.6
