@@ -18,7 +18,7 @@ import (
 
 var (
 	buildIteration                 string = "0"
-	buildVersion                   string = "0.3.6"
+	buildVersion                   string = "0.3.7"
 	configurationFile              string
 	defaultDatabaseUrl             string = ""
 	defaultEngineConfigurationJson string = ""
@@ -143,11 +143,11 @@ func init() {
 
 	// Define flags for Cobra command.
 
-	RootCmd.Flags().BoolP("enable-g2config", "", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]")
-	RootCmd.Flags().BoolP("enable-g2configmgr", "", false, "Enable G2ConfigMgr service [SENZING_TOOLS_ENABLE_G2CONFIGMGR]")
-	RootCmd.Flags().BoolP("enable-g2diagnostic", "", false, "Enable G2Diagnostic service [SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]")
-	RootCmd.Flags().BoolP("enable-g2engine", "", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2ENGINE]")
-	RootCmd.Flags().BoolP("enable-g2product", "", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2PRODUCT]")
+	RootCmd.Flags().Bool("enable-g2config", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]")
+	RootCmd.Flags().Bool("enable-g2configmgr", false, "Enable G2ConfigMgr service [SENZING_TOOLS_ENABLE_G2CONFIGMGR]")
+	RootCmd.Flags().Bool("enable-g2diagnostic", false, "Enable G2Diagnostic service [SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]")
+	RootCmd.Flags().Bool("enable-g2engine", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2ENGINE]")
+	RootCmd.Flags().Bool("enable-g2product", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2PRODUCT]")
 	RootCmd.Flags().Int("engine-log-level", defaultEngineLogLevel, "Log level for Senzing Engine [SENZING_TOOLS_ENGINE_LOG_LEVEL]")
 	RootCmd.Flags().Int("grpc-port", defaultGrpcPort, "Port used to serve gRPC [SENZING_TOOLS_GRPC_PORT]")
 	RootCmd.Flags().String("database-url", defaultDatabaseUrl, "URL of database to initialize [SENZING_TOOLS_DATABASE_URL]")
