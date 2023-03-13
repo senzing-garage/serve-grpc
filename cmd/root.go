@@ -109,7 +109,7 @@ For more information, visit https://github.com/Senzing/servegrpc
 		viper.SetDefault("grpc-port", defaultGrpcPort)
 		viper.BindPFlag("grpc-port", cobraCommand.Flags().Lookup("grpc-port"))
 
-		viper.SetDefault("database-url", defaultDatabaseUrl)
+		viper.SetDefault(c.databaseUrl, defaultDatabaseUrl)
 		viper.BindPFlag("database-url", cobraCommand.Flags().Lookup("database-url"))
 
 		viper.SetDefault("engine-configuration-json", defaultEngineConfigurationJson)
