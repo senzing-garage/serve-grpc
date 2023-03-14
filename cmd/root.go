@@ -16,16 +16,24 @@ import (
 	"github.com/spf13/viper"
 )
 
-var (
-	buildIteration                 string = "0"
-	buildVersion                   string = "0.3.7"
-	defaultConfigurationFile       string = ""
+const (
+	defaultConfiguration           string = ""
 	defaultDatabaseUrl             string = ""
+	defaultEnableG2config          bool   = false
+	defaultEnableG2configmgr       bool   = false
+	defaultEnableG2diagnostic      bool   = false
+	defaultEnableG2engine          bool   = false
+	defaultEnableG2product         bool   = false
 	defaultEngineConfigurationJson string = ""
 	defaultEngineLogLevel          int    = 0
-	defaultEngineModuleName        string = fmt.Sprintf("initdatabase-%d", time.Now().Unix())
 	defaultGrpcPort                int    = 8258
 	defaultLogLevel                string = "INFO"
+)
+
+var (
+	buildIteration          string = "0"
+	buildVersion            string = "0.3.7"
+	defaultEngineModuleName string = fmt.Sprintf("initdatabase-%d", time.Now().Unix())
 )
 
 func makeVersion(version string, iteration string) string {
@@ -38,6 +46,83 @@ func makeVersion(version string, iteration string) string {
 	return result
 }
 
+func loadConfigurationFile(cobraCommand *cobra.Command) {
+	configuration := cobraCommand.Flags().Lookup("configuration").Value.String()
+
+	if configuration != "" { // Use configuration file specified as a command line option.
+
+		viper.SetConfigFile(configuration)
+	} else { // Search for a configuration file.
+
+		// Determine home directory.
+
+		home, err := os.UserHomeDir()
+		cobra.CheckErr(err)
+
+		// Specify configuration file name.
+
+		viper.SetConfigName("servegrpc")
+		viper.SetConfigType("yaml")
+
+		// Define search path order.
+
+		viper.AddConfigPath(home + "/.senzing-tools")
+		viper.AddConfigPath(home)
+		viper.AddConfigPath("/etc/senzing-tools")
+	}
+
+	// If a config file is found, read it in.
+
+	if err := viper.ReadInConfig(); err == nil {
+		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+	}
+}
+
+func loadOptions(cobraCommand *cobra.Command) {
+
+	// Integrate with Viper.
+
+	viper.AutomaticEnv()
+	replacer := strings.NewReplacer("-", "_")
+	viper.SetEnvKeyReplacer(replacer)
+	viper.SetEnvPrefix("SENZING_TOOLS")
+
+	// Define flags in Viper.
+
+	viper.SetDefault("database-url", defaultDatabaseUrl)
+	viper.BindPFlag("database-url", cobraCommand.Flags().Lookup("database-url"))
+
+	viper.SetDefault("enable-g2config", defaultEnableG2config)
+	viper.BindPFlag("enable-g2config", cobraCommand.Flags().Lookup("enable-g2config"))
+
+	viper.SetDefault("enable-g2configmgr", defaultEnableG2configmgr)
+	viper.BindPFlag("enable-g2configmgr", cobraCommand.Flags().Lookup("enable-g2configmgr"))
+
+	viper.SetDefault("enable-g2diagnostic", defaultEnableG2diagnostic)
+	viper.BindPFlag("enable-g2diagnostic", cobraCommand.Flags().Lookup("enable-g2diagnostic"))
+
+	viper.SetDefault("enable-g2engine", defaultEnableG2engine)
+	viper.BindPFlag("enable-g2engine", cobraCommand.Flags().Lookup("enable-g2engine"))
+
+	viper.SetDefault("enable-g2product", defaultEnableG2product)
+	viper.BindPFlag("enable-g2product", cobraCommand.Flags().Lookup("enable-g2product"))
+
+	viper.SetDefault("engine-configuration-json", defaultEngineConfigurationJson)
+	viper.BindPFlag("engine-configuration-json", cobraCommand.Flags().Lookup("engine-configuration-json"))
+
+	viper.SetDefault("engine-log-level", defaultEngineLogLevel)
+	viper.BindPFlag("engine-log-level", cobraCommand.Flags().Lookup("engine-log-level"))
+
+	viper.SetDefault("engine-module-name", defaultEngineModuleName)
+	viper.BindPFlag("engine-module-name", cobraCommand.Flags().Lookup("engine-module-name"))
+
+	viper.SetDefault("grpc-port", defaultGrpcPort)
+	viper.BindPFlag("grpc-port", cobraCommand.Flags().Lookup("grpc-port"))
+
+	viper.SetDefault("log-level", defaultLogLevel)
+	viper.BindPFlag("log-level", cobraCommand.Flags().Lookup("log-level"))
+}
+
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "servegrpc",
@@ -48,79 +133,8 @@ For more information, visit https://github.com/Senzing/servegrpc
 	`,
 	PreRun: func(cobraCommand *cobra.Command, args []string) {
 		fmt.Println(">>>>> servegrpc.PreRun")
-		viper.AutomaticEnv()
-		viper.SetDefault("configuration", defaultDatabaseUrl)
-		viper.BindPFlag("configuration", cobraCommand.Flags().Lookup("configuration"))
-
-		if viper.GetString("configuration") != "" {
-			// Use config file from the flag.
-			viper.SetConfigFile(viper.GetString("configuration"))
-		} else {
-
-			// Determine home directory.
-
-			home, err := os.UserHomeDir()
-			cobra.CheckErr(err)
-
-			// Configuration file: servegrpc.yaml
-
-			viper.SetConfigName("servegrpc")
-			viper.SetConfigType("yaml")
-
-			// Search path order.
-
-			viper.AddConfigPath(home + "/.senzing-tools")
-			viper.AddConfigPath(home)
-			viper.AddConfigPath("/etc/senzing-tools")
-		}
-
-		// If a config file is found, read it in.
-
-		if err := viper.ReadInConfig(); err == nil {
-			fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-		}
-
-		// Integrate with Viper.
-
-		replacer := strings.NewReplacer("-", "_")
-		viper.SetEnvKeyReplacer(replacer)
-		viper.SetEnvPrefix("SENZING_TOOLS")
-
-		// Define flags in Viper.
-
-		viper.SetDefault("enable-g2config", false)
-		viper.BindPFlag("enable-g2config", cobraCommand.Flags().Lookup("enable-g2config"))
-
-		viper.SetDefault("enable-g2configmgr", false)
-		viper.BindPFlag("enable-g2configmgr", cobraCommand.Flags().Lookup("enable-g2configmgr"))
-
-		viper.SetDefault("enable-g2diagnostic", false)
-		viper.BindPFlag("enable-g2diagnostic", cobraCommand.Flags().Lookup("enable-g2diagnostic"))
-
-		viper.SetDefault("enable-g2engine", false)
-		viper.BindPFlag("enable-g2engine", cobraCommand.Flags().Lookup("enable-g2engine"))
-
-		viper.SetDefault("enable-g2product", false)
-		viper.BindPFlag("enable-g2product", cobraCommand.Flags().Lookup("enable-g2product"))
-
-		viper.SetDefault("engine-log-level", defaultEngineLogLevel)
-		viper.BindPFlag("engine-log-level", cobraCommand.Flags().Lookup("engine-log-level"))
-
-		viper.SetDefault("grpc-port", defaultGrpcPort)
-		viper.BindPFlag("grpc-port", cobraCommand.Flags().Lookup("grpc-port"))
-
-		viper.SetDefault(c.databaseUrl, defaultDatabaseUrl)
-		viper.BindPFlag("database-url", cobraCommand.Flags().Lookup("database-url"))
-
-		viper.SetDefault("engine-configuration-json", defaultEngineConfigurationJson)
-		viper.BindPFlag("engine-configuration-json", cobraCommand.Flags().Lookup("engine-configuration-json"))
-
-		viper.SetDefault("engine-module-name", defaultEngineModuleName)
-		viper.BindPFlag("engine-module-name", cobraCommand.Flags().Lookup("engine-module-name"))
-
-		viper.SetDefault("log-level", defaultLogLevel)
-		viper.BindPFlag("log-level", cobraCommand.Flags().Lookup("log-level"))
-
+		loadConfigurationFile(cobraCommand)
+		loadOptions(cobraCommand)
 		// Set version template.
 
 		versionTemplate := `{{printf "%s: %s - version %s\n" .Name .Short .Version}}`
@@ -172,14 +186,14 @@ func Execute() {
 
 func init() {
 	fmt.Println(">>>>> servegrpc.init()")
-	RootCmd.Flags().Bool("enable-g2config", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]")
-	RootCmd.Flags().Bool("enable-g2configmgr", false, "Enable G2ConfigMgr service [SENZING_TOOLS_ENABLE_G2CONFIGMGR]")
-	RootCmd.Flags().Bool("enable-g2diagnostic", false, "Enable G2Diagnostic service [SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]")
-	RootCmd.Flags().Bool("enable-g2engine", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2ENGINE]")
-	RootCmd.Flags().Bool("enable-g2product", false, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2PRODUCT]")
+	RootCmd.Flags().Bool("enable-g2config", defaultEnableG2config, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2CONFIG]")
+	RootCmd.Flags().Bool("enable-g2configmgr", defaultEnableG2configmgr, "Enable G2ConfigMgr service [SENZING_TOOLS_ENABLE_G2CONFIGMGR]")
+	RootCmd.Flags().Bool("enable-g2diagnostic", defaultEnableG2diagnostic, "Enable G2Diagnostic service [SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]")
+	RootCmd.Flags().Bool("enable-g2engine", defaultEnableG2engine, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2ENGINE]")
+	RootCmd.Flags().Bool("enable-g2product", defaultEnableG2product, "Enable G2Config service [SENZING_TOOLS_ENABLE_G2PRODUCT]")
 	RootCmd.Flags().Int("engine-log-level", defaultEngineLogLevel, "Log level for Senzing Engine [SENZING_TOOLS_ENGINE_LOG_LEVEL]")
 	RootCmd.Flags().Int("grpc-port", defaultGrpcPort, "Port used to serve gRPC [SENZING_TOOLS_GRPC_PORT]")
-	RootCmd.Flags().String("configuration", defaultConfigurationFile, "Path to configuration file [SENZING_TOOLS_CONFIGURATION]")
+	RootCmd.Flags().String("configuration", defaultConfiguration, "Path to configuration file [SENZING_TOOLS_CONFIGURATION]")
 	RootCmd.Flags().String("database-url", defaultDatabaseUrl, "URL of database to initialize [SENZING_TOOLS_DATABASE_URL]")
 	RootCmd.Flags().String("engine-configuration-json", defaultEngineConfigurationJson, "JSON string sent to Senzing's init() function [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON]")
 	RootCmd.Flags().String("engine-module-name", defaultEngineModuleName, "Identifier given to the Senzing engine [SENZING_TOOLS_ENGINE_MODULE_NAME]")
