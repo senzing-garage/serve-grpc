@@ -13,6 +13,7 @@ import (
 	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/senzing-tools/constant"
 	"github.com/senzing/senzing-tools/envar"
+	"github.com/senzing/senzing-tools/helper"
 	"github.com/senzing/servegrpc/grpcserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -38,19 +39,9 @@ var (
 	defaultEngineModuleName string = fmt.Sprintf("initdatabase-%d", time.Now().Unix())
 )
 
-func makeVersion(version string, iteration string) string {
-	result := ""
-	if buildIteration == "0" {
-		result = version
-	} else {
-		result = fmt.Sprintf("%s-%s", buildVersion, buildIteration)
-	}
-	return result
-}
-
+// If a configuration file is present, load it.
 func loadConfigurationFile(cobraCommand *cobra.Command) {
 	configuration := cobraCommand.Flags().Lookup(constant.Configuration).Value.String()
-
 	if configuration != "" { // Use configuration file specified as a command line option.
 		viper.SetConfigFile(configuration)
 	} else { // Search for a configuration file.
@@ -79,16 +70,13 @@ func loadConfigurationFile(cobraCommand *cobra.Command) {
 	}
 }
 
+// Configure Viper with user-specified options.
 func loadOptions(cobraCommand *cobra.Command) {
-
-	// Integrate with Viper.
 
 	viper.AutomaticEnv()
 	replacer := strings.NewReplacer("-", "_")
 	viper.SetEnvKeyReplacer(replacer)
 	viper.SetEnvPrefix(constant.SetEnvPrefix)
-
-	// Define flags in Viper.
 
 	viper.SetDefault(constant.DatabaseUrl, defaultDatabaseUrl)
 	viper.BindPFlag(constant.DatabaseUrl, cobraCommand.Flags().Lookup(constant.DatabaseUrl))
@@ -124,7 +112,7 @@ func loadOptions(cobraCommand *cobra.Command) {
 	viper.BindPFlag(constant.LogLevel, cobraCommand.Flags().Lookup(constant.LogLevel))
 }
 
-// RootCmd represents the base command when called without any subcommands
+// RootCmd represents the command.
 var RootCmd = &cobra.Command{
 	Use:   "servegrpc",
 	Short: "Start a gRPC server for the Senzing SDK API",
@@ -136,9 +124,6 @@ For more information, visit https://github.com/Senzing/servegrpc
 		fmt.Println(">>>>> servegrpc.PreRun")
 		loadConfigurationFile(cobraCommand)
 		loadOptions(cobraCommand)
-		// Set version template.
-
-		// versionTemplate := `{{printf "%s: %s - version %s\n" .Name .Short .Version}}`
 		cobraCommand.SetVersionTemplate(constant.VersionTemplate)
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -173,11 +158,11 @@ For more information, visit https://github.com/Senzing/servegrpc
 		err = grpcserver.Serve(ctx)
 		return err
 	},
-	Version: makeVersion(buildVersion, buildIteration),
+	Version: helper.MakeVersion(buildVersion, buildIteration),
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+// This is called by main.main(). It only needs to happen once to the RootCmd.
 func Execute() {
 	err := RootCmd.Execute()
 	if err != nil {
@@ -185,6 +170,7 @@ func Execute() {
 	}
 }
 
+// Since init() is always invoked, define command line parameters.
 func init() {
 	fmt.Println(">>>>> servegrpc.init()")
 	RootCmd.Flags().Bool(constant.EnableG2config, defaultEnableG2config, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2config))
