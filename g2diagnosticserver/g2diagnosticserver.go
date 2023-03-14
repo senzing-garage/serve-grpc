@@ -471,7 +471,7 @@ func (server *G2DiagnosticServer) UnregisterObserver(ctx context.Context, observ
 
 func (server *G2DiagnosticServer) StreamEntityListBySize(request *g2pb.StreamEntityListBySizeRequest, stream g2pb.G2Diagnostic_StreamEntityListBySizeServer) error {
 	if server.isTrace {
-		server.traceEntry(55, request)
+		server.traceEntry(163, request)
 	}
      //ctx := context.TODO()
      ctx := stream.Context()
@@ -501,6 +501,7 @@ func (server *G2DiagnosticServer) StreamEntityListBySize(request *g2pb.StreamEnt
 		if err := stream.Send(&response); err != nil {
 			return err
 		}
+		server.traceEntry(164, request, fetchResult)
      }
 
 	err = g2diagnostic.CloseEntityListBySize(ctx, queryHandle)
@@ -509,7 +510,7 @@ func (server *G2DiagnosticServer) StreamEntityListBySize(request *g2pb.StreamEnt
 	}
 
 	if server.isTrace {
-		defer server.traceExit(56, request, entitiesFetched, err, time.Since(entryTime))
+		defer server.traceExit(165, request, entitiesFetched, err, time.Since(entryTime))
 	}
 	return nil
  }

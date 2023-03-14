@@ -1121,6 +1121,97 @@ func (server *G2EngineServer) Stats(ctx context.Context, request *g2pb.StatsRequ
 	return &response, err
 }
 
+
+func (server *G2EngineServer) StreamExportCSVEntityReport(request *g2pb.StreamExportCSVEntityReportRequest, stream g2pb.G2Engine_StreamExportCSVEntityReportServer) error {
+	if server.isTrace {
+		server.traceEntry(157, request)
+	}
+    ctx := stream.Context()
+	entryTime := time.Now()
+	g2engine := getG2engine()
+
+	rowsFetched := 0
+
+	//get the query handle
+	queryHandle, err := g2engine.ExportCSVEntityReport(ctx, request.GetCsvColumnList(), request.GetFlags())
+	if err != nil {
+	    return err
+	}
+
+    for {
+	    fetchResult, err := g2engine.FetchNext(ctx, queryHandle)
+		if err != nil {
+			return err
+		}
+		if len(fetchResult) == 0 {
+			break
+		}
+		response := g2pb.StreamExportCSVEntityReportResponse{
+			Result: fetchResult,
+		}
+		if err = stream.Send(&response); err != nil {
+			return err
+		}
+		server.traceEntry(158, request, fetchResult)
+		rowsFetched += 1
+     }
+
+	err = g2engine.CloseExport(ctx, queryHandle)
+	if err != nil {
+		return err
+	}
+
+	if server.isTrace {
+		defer server.traceExit(159, request, rowsFetched, err, time.Since(entryTime))
+	}
+	return nil
+}
+
+func (server *G2EngineServer) StreamExportJSONEntityReport(request *g2pb.StreamExportJSONEntityReportRequest, stream g2pb.G2Engine_StreamExportJSONEntityReportServer) error {
+	if server.isTrace {
+		server.traceEntry(160, request)
+	}
+    ctx := stream.Context()
+	entryTime := time.Now()
+	g2engine := getG2engine()
+
+	rowsFetched := 0
+
+	//get the query handle
+	queryHandle, err := g2engine.ExportJSONEntityReport(ctx, request.GetFlags())
+	if err != nil {
+	    return err
+	}
+
+    for {
+	    fetchResult, err := g2engine.FetchNext(ctx, queryHandle)
+		if err != nil {
+			return err
+		}
+		if len(fetchResult) == 0 {
+			break
+		}
+		response := g2pb.StreamExportJSONEntityReportResponse{
+			Result: fetchResult,
+		}
+		if err = stream.Send(&response); err != nil {
+			return err
+		}
+		server.traceEntry(161, request, fetchResult)
+		rowsFetched += 1
+     }
+
+	err = g2engine.CloseExport(ctx, queryHandle)
+	if err != nil {
+		return err
+	}
+
+	if server.isTrace {
+		defer server.traceExit(162, request, rowsFetched, err, time.Since(entryTime))
+	}
+	return nil
+}
+
 func (server *G2EngineServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
 	g2engine := getG2engine()
 	return g2engine.UnregisterObserver(ctx, observer)
