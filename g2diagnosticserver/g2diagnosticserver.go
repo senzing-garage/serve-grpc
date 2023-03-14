@@ -469,25 +469,34 @@ func (server *G2DiagnosticServer) UnregisterObserver(ctx context.Context, observ
 	return g2diagnostic.UnregisterObserver(ctx, observer)
 }
 
-func (server *G2DiagnosticServer) StreamEntityListBySize(request *g2pb.StreamEntityListBySizeRequest, stream g2pb.G2Diagnostic_StreamEntityListBySizeServer) error {
+func (server *G2DiagnosticServer) StreamEntityListBySize(request *g2pb.StreamEntityListBySizeRequest, stream g2pb.G2Diagnostic_StreamEntityListBySizeServer) (err error) {
 	if server.isTrace {
 		server.traceEntry(163, request)
 	}
-     //ctx := context.TODO()
-     ctx := stream.Context()
+	ctx := stream.Context()
 	entryTime := time.Now()
 	g2diagnostic := getG2diagnostic()
 
 	entitiesFetched := 0
 
 	//get the query handle
-	queryHandle, err := g2diagnostic.GetEntityListBySize(ctx, int(request.GetEntitySize()))
+	var queryHandle uintptr
+	queryHandle, err = g2diagnostic.GetEntityListBySize(ctx, int(request.GetEntitySize()))
 	if err != nil {
-	    return err
+		return err
 	}
 
-     for {
-	fetchResult, err := g2diagnostic.FetchNextEntityBySize(ctx, queryHandle)
+	defer func() {
+		err = g2diagnostic.CloseEntityListBySize(ctx, queryHandle)
+		if server.isTrace {
+			server.traceExit(165, request, entitiesFetched, err, time.Since(entryTime))
+		}
+		return
+	}()
+
+	for {
+		var fetchResult string
+		fetchResult, err = g2diagnostic.FetchNextEntityBySize(ctx, queryHandle)
 		if err != nil {
 			return err
 		}
@@ -498,20 +507,12 @@ func (server *G2DiagnosticServer) StreamEntityListBySize(request *g2pb.StreamEnt
 			Result: fetchResult,
 		}
 		entitiesFetched += 1
-		if err := stream.Send(&response); err != nil {
+		if err = stream.Send(&response); err != nil {
 			return err
 		}
 		server.traceEntry(164, request, fetchResult)
-     }
-
-	err = g2diagnostic.CloseEntityListBySize(ctx, queryHandle)
-	if err != nil {
-		return err
 	}
 
-	if server.isTrace {
-		defer server.traceExit(165, request, entitiesFetched, err, time.Since(entryTime))
-	}
-	return nil
- }
-
+	err = nil
+	return
+}

@@ -1121,25 +1121,36 @@ func (server *G2EngineServer) Stats(ctx context.Context, request *g2pb.StatsRequ
 	return &response, err
 }
 
-
-func (server *G2EngineServer) StreamExportCSVEntityReport(request *g2pb.StreamExportCSVEntityReportRequest, stream g2pb.G2Engine_StreamExportCSVEntityReportServer) error {
+func (server *G2EngineServer) StreamExportCSVEntityReport(request *g2pb.StreamExportCSVEntityReportRequest, stream g2pb.G2Engine_StreamExportCSVEntityReportServer) (err error) {
 	if server.isTrace {
 		server.traceEntry(157, request)
 	}
-    ctx := stream.Context()
+	ctx := stream.Context()
 	entryTime := time.Now()
 	g2engine := getG2engine()
 
 	rowsFetched := 0
 
 	//get the query handle
-	queryHandle, err := g2engine.ExportCSVEntityReport(ctx, request.GetCsvColumnList(), request.GetFlags())
+	var queryHandle uintptr
+	queryHandle, err = g2engine.ExportCSVEntityReport(ctx, request.GetCsvColumnList(), request.GetFlags())
 	if err != nil {
-	    return err
+		return err
 	}
 
-    for {
-	    fetchResult, err := g2engine.FetchNext(ctx, queryHandle)
+	//defer the CloseExport in case we exit early for any reason
+	defer func() {
+		err = g2engine.CloseExport(ctx, queryHandle)
+		if server.isTrace {
+			server.traceExit(159, request, rowsFetched, err, time.Since(entryTime))
+		}
+		return
+	}()
+
+	//stream the results
+	for {
+		var fetchResult string
+		fetchResult, err = g2engine.FetchNext(ctx, queryHandle)
 		if err != nil {
 			return err
 		}
@@ -1154,37 +1165,42 @@ func (server *G2EngineServer) StreamExportCSVEntityReport(request *g2pb.StreamEx
 		}
 		server.traceEntry(158, request, fetchResult)
 		rowsFetched += 1
-     }
-
-	err = g2engine.CloseExport(ctx, queryHandle)
-	if err != nil {
-		return err
 	}
 
-	if server.isTrace {
-		defer server.traceExit(159, request, rowsFetched, err, time.Since(entryTime))
-	}
-	return nil
+	err = nil
+	return
 }
 
-func (server *G2EngineServer) StreamExportJSONEntityReport(request *g2pb.StreamExportJSONEntityReportRequest, stream g2pb.G2Engine_StreamExportJSONEntityReportServer) error {
+func (server *G2EngineServer) StreamExportJSONEntityReport(request *g2pb.StreamExportJSONEntityReportRequest, stream g2pb.G2Engine_StreamExportJSONEntityReportServer) (err error) {
 	if server.isTrace {
 		server.traceEntry(160, request)
 	}
-    ctx := stream.Context()
+	ctx := stream.Context()
 	entryTime := time.Now()
 	g2engine := getG2engine()
 
 	rowsFetched := 0
 
 	//get the query handle
-	queryHandle, err := g2engine.ExportJSONEntityReport(ctx, request.GetFlags())
+	var queryHandle uintptr
+	queryHandle, err = g2engine.ExportJSONEntityReport(ctx, request.GetFlags())
 	if err != nil {
-	    return err
+		return err
 	}
 
-    for {
-	    fetchResult, err := g2engine.FetchNext(ctx, queryHandle)
+	//defer the CloseExport in case we exit early for any reason
+	defer func() {
+		err = g2engine.CloseExport(ctx, queryHandle)
+		if server.isTrace {
+			server.traceExit(162, request, rowsFetched, err, time.Since(entryTime))
+		}
+		return
+	}()
+
+	//stream the results
+	for {
+		var fetchResult string
+		fetchResult, err = g2engine.FetchNext(ctx, queryHandle)
 		if err != nil {
 			return err
 		}
@@ -1199,17 +1215,10 @@ func (server *G2EngineServer) StreamExportJSONEntityReport(request *g2pb.StreamE
 		}
 		server.traceEntry(161, request, fetchResult)
 		rowsFetched += 1
-     }
-
-	err = g2engine.CloseExport(ctx, queryHandle)
-	if err != nil {
-		return err
 	}
 
-	if server.isTrace {
-		defer server.traceExit(162, request, rowsFetched, err, time.Since(entryTime))
-	}
-	return nil
+	err = nil
+	return
 }
 
 func (server *G2EngineServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
