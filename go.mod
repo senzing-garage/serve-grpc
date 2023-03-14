@@ -10,7 +10,7 @@ require (
 	github.com/senzing/go-common v0.1.2
 	github.com/senzing/go-logging v1.1.3
 	github.com/senzing/go-observing v0.2.0
-	github.com/senzing/senzing-tools v0.1.3
+	github.com/senzing/senzing-tools v0.1.4
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.15.0
 	github.com/stretchr/testify v1.8.2
@@ -42,5 +42,3 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace github.com/senzing/senzing-tools v0.1.3 => /home/senzing/senzing.git/senzing-tools
