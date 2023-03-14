@@ -67,7 +67,7 @@ func loadConfigurationFile(cobraCommand *cobra.Command) {
 	// If a config file is found, read it in.
 
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		fmt.Fprintln(os.Stderr, "Applying configuration file:", viper.ConfigFileUsed())
 	}
 }
 
@@ -127,7 +127,6 @@ Start a gRPC server for the Senzing SDK API.
 For more information, visit https://github.com/Senzing/servegrpc
 	`,
 	PreRun: func(cobraCommand *cobra.Command, args []string) {
-		fmt.Println(">>>>> servegrpc.PreRun")
 		loadConfigurationFile(cobraCommand)
 		loadOptions(cobraCommand)
 		cobraCommand.SetVersionTemplate(constant.VersionTemplate)
@@ -178,7 +177,6 @@ func Execute() {
 
 // Since init() is always invoked, define command line parameters.
 func init() {
-	fmt.Println(">>>>> servegrpc.init()")
 	RootCmd.Flags().Bool(option.EnableG2config, defaultEnableG2config, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2config))
 	RootCmd.Flags().Bool(option.EnableG2configmgr, defaultEnableG2configmgr, fmt.Sprintf("Enable G2ConfigMgr service [%s]", envar.EnableG2configmgr))
 	RootCmd.Flags().Bool(option.EnableG2diagnostic, defaultEnableG2diagnostic, fmt.Sprintf("Enable G2Diagnostic service [%s]", envar.EnableG2diagnostic))
