@@ -14,6 +14,7 @@ import (
 	"github.com/senzing/senzing-tools/constant"
 	"github.com/senzing/senzing-tools/envar"
 	"github.com/senzing/senzing-tools/helper"
+	"github.com/senzing/senzing-tools/option"
 	"github.com/senzing/servegrpc/grpcserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -41,7 +42,7 @@ var (
 
 // If a configuration file is present, load it.
 func loadConfigurationFile(cobraCommand *cobra.Command) {
-	configuration := cobraCommand.Flags().Lookup(constant.Configuration).Value.String()
+	configuration := cobraCommand.Flags().Lookup(option.Configuration).Value.String()
 	if configuration != "" { // Use configuration file specified as a command line option.
 		viper.SetConfigFile(configuration)
 	} else { // Search for a configuration file.
@@ -72,44 +73,49 @@ func loadConfigurationFile(cobraCommand *cobra.Command) {
 
 // Configure Viper with user-specified options.
 func loadOptions(cobraCommand *cobra.Command) {
-
 	viper.AutomaticEnv()
 	replacer := strings.NewReplacer("-", "_")
 	viper.SetEnvKeyReplacer(replacer)
 	viper.SetEnvPrefix(constant.SetEnvPrefix)
 
-	viper.SetDefault(constant.DatabaseUrl, defaultDatabaseUrl)
-	viper.BindPFlag(constant.DatabaseUrl, cobraCommand.Flags().Lookup(constant.DatabaseUrl))
+	// Bools
 
-	viper.SetDefault(constant.EnableG2config, defaultEnableG2config)
-	viper.BindPFlag(constant.EnableG2config, cobraCommand.Flags().Lookup(constant.EnableG2config))
+	boolOptions := map[string]bool{
+		option.EnableG2config:     defaultEnableG2config,
+		option.EnableG2configmgr:  defaultEnableG2configmgr,
+		option.EnableG2diagnostic: defaultEnableG2diagnostic,
+		option.EnableG2engine:     defaultEnableG2engine,
+		option.EnableG2product:    defaultEnableG2product,
+	}
+	for optionKey, optionValue := range boolOptions {
+		viper.SetDefault(optionKey, optionValue)
+		viper.BindPFlag(optionKey, cobraCommand.Flags().Lookup(optionKey))
+	}
 
-	viper.SetDefault(constant.EnableG2configmgr, defaultEnableG2configmgr)
-	viper.BindPFlag(constant.EnableG2configmgr, cobraCommand.Flags().Lookup(constant.EnableG2configmgr))
+	// Ints
 
-	viper.SetDefault(constant.EnableG2diagnostic, defaultEnableG2diagnostic)
-	viper.BindPFlag(constant.EnableG2diagnostic, cobraCommand.Flags().Lookup(constant.EnableG2diagnostic))
+	intOptions := map[string]int{
+		option.EngineLogLevel: defaultEngineLogLevel,
+		option.GrpcPort:       defaultGrpcPort,
+	}
+	for optionKey, optionValue := range intOptions {
+		viper.SetDefault(optionKey, optionValue)
+		viper.BindPFlag(optionKey, cobraCommand.Flags().Lookup(optionKey))
+	}
 
-	viper.SetDefault(constant.EnableG2engine, defaultEnableG2engine)
-	viper.BindPFlag(constant.EnableG2engine, cobraCommand.Flags().Lookup(constant.EnableG2engine))
+	// Strings
 
-	viper.SetDefault(constant.EnableG2product, defaultEnableG2product)
-	viper.BindPFlag(constant.EnableG2product, cobraCommand.Flags().Lookup(constant.EnableG2product))
-
-	viper.SetDefault(constant.EngineConfigurationJson, defaultEngineConfigurationJson)
-	viper.BindPFlag(constant.EngineConfigurationJson, cobraCommand.Flags().Lookup(constant.EngineConfigurationJson))
-
-	viper.SetDefault(constant.EngineLogLevel, defaultEngineLogLevel)
-	viper.BindPFlag(constant.EngineLogLevel, cobraCommand.Flags().Lookup(constant.EngineLogLevel))
-
-	viper.SetDefault(constant.EngineModuleName, defaultEngineModuleName)
-	viper.BindPFlag(constant.EngineModuleName, cobraCommand.Flags().Lookup(constant.EngineModuleName))
-
-	viper.SetDefault(constant.GrpcPort, defaultGrpcPort)
-	viper.BindPFlag(constant.GrpcPort, cobraCommand.Flags().Lookup(constant.GrpcPort))
-
-	viper.SetDefault(constant.LogLevel, defaultLogLevel)
-	viper.BindPFlag(constant.LogLevel, cobraCommand.Flags().Lookup(constant.LogLevel))
+	stringOptions := map[string]string{
+		option.Configuration:           defaultConfiguration,
+		option.DatabaseUrl:             defaultDatabaseUrl,
+		option.EngineConfigurationJson: defaultEngineConfigurationJson,
+		option.EngineModuleName:        defaultEngineModuleName,
+		option.LogLevel:                defaultLogLevel,
+	}
+	for optionKey, optionValue := range stringOptions {
+		viper.SetDefault(optionKey, optionValue)
+		viper.BindPFlag(optionKey, cobraCommand.Flags().Lookup(optionKey))
+	}
 }
 
 // RootCmd represents the command.
@@ -130,30 +136,30 @@ For more information, visit https://github.com/Senzing/servegrpc
 		var err error = nil
 		ctx := context.TODO()
 
-		logLevel, ok := logger.TextToLevelMap[viper.GetString(constant.LogLevel)]
+		logLevel, ok := logger.TextToLevelMap[viper.GetString(option.LogLevel)]
 		if !ok {
 			logLevel = logger.LevelInfo
 		}
 
-		senzingEngineConfigurationJson := viper.GetString(constant.EngineConfigurationJson)
+		senzingEngineConfigurationJson := viper.GetString(option.EngineConfigurationJson)
 		if len(senzingEngineConfigurationJson) == 0 {
-			senzingEngineConfigurationJson, err = g2engineconfigurationjson.BuildSimpleSystemConfigurationJson(viper.GetString(constant.DatabaseUrl))
+			senzingEngineConfigurationJson, err = g2engineconfigurationjson.BuildSimpleSystemConfigurationJson(viper.GetString(option.DatabaseUrl))
 			if err != nil {
 				return err
 			}
 		}
 
 		grpcserver := &grpcserver.GrpcServerImpl{
-			EnableG2config:                 viper.GetBool(constant.EnableG2config),
-			EnableG2configmgr:              viper.GetBool(constant.EnableG2configmgr),
-			EnableG2diagnostic:             viper.GetBool(constant.EnableG2diagnostic),
-			EnableG2engine:                 viper.GetBool(constant.EnableG2engine),
-			EnableG2product:                viper.GetBool(constant.EnableG2product),
-			Port:                           viper.GetInt(constant.GrpcPort),
+			EnableG2config:                 viper.GetBool(option.EnableG2config),
+			EnableG2configmgr:              viper.GetBool(option.EnableG2configmgr),
+			EnableG2diagnostic:             viper.GetBool(option.EnableG2diagnostic),
+			EnableG2engine:                 viper.GetBool(option.EnableG2engine),
+			EnableG2product:                viper.GetBool(option.EnableG2product),
+			Port:                           viper.GetInt(option.GrpcPort),
 			LogLevel:                       logLevel,
 			SenzingEngineConfigurationJson: senzingEngineConfigurationJson,
-			SenzingModuleName:              viper.GetString(constant.EngineModuleName),
-			SenzingVerboseLogging:          viper.GetInt(constant.EngineLogLevel),
+			SenzingModuleName:              viper.GetString(option.EngineModuleName),
+			SenzingVerboseLogging:          viper.GetInt(option.EngineLogLevel),
 		}
 		err = grpcserver.Serve(ctx)
 		return err
@@ -173,16 +179,16 @@ func Execute() {
 // Since init() is always invoked, define command line parameters.
 func init() {
 	fmt.Println(">>>>> servegrpc.init()")
-	RootCmd.Flags().Bool(constant.EnableG2config, defaultEnableG2config, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2config))
-	RootCmd.Flags().Bool(constant.EnableG2configmgr, defaultEnableG2configmgr, fmt.Sprintf("Enable G2ConfigMgr service [%s]", envar.EnableG2configmgr))
-	RootCmd.Flags().Bool(constant.EnableG2diagnostic, defaultEnableG2diagnostic, fmt.Sprintf("Enable G2Diagnostic service [%s]", envar.EnableG2diagnostic))
-	RootCmd.Flags().Bool(constant.EnableG2engine, defaultEnableG2engine, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2engine))
-	RootCmd.Flags().Bool(constant.EnableG2product, defaultEnableG2product, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2product))
-	RootCmd.Flags().Int(constant.EngineLogLevel, defaultEngineLogLevel, fmt.Sprintf("Log level for Senzing Engine [%s]", envar.EngineLogLevel))
-	RootCmd.Flags().Int(constant.GrpcPort, defaultGrpcPort, fmt.Sprintf("Port used to serve gRPC [%s]", envar.GrpcPort))
-	RootCmd.Flags().String(constant.Configuration, defaultConfiguration, fmt.Sprintf("Path to configuration file [%s]", envar.Configuration))
-	RootCmd.Flags().String(constant.DatabaseUrl, defaultDatabaseUrl, fmt.Sprintf("URL of database to initialize [%s]", envar.DatabaseUrl))
-	RootCmd.Flags().String(constant.EngineConfigurationJson, defaultEngineConfigurationJson, fmt.Sprintf("JSON string sent to Senzing's init() function [%s]", envar.EngineConfigurationJson))
-	RootCmd.Flags().String(constant.EngineModuleName, defaultEngineModuleName, fmt.Sprintf("Identifier given to the Senzing engine [%s]", envar.EngineModuleName))
-	RootCmd.Flags().String(constant.LogLevel, defaultLogLevel, fmt.Sprintf("Log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [%s]", envar.LogLevel))
+	RootCmd.Flags().Bool(option.EnableG2config, defaultEnableG2config, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2config))
+	RootCmd.Flags().Bool(option.EnableG2configmgr, defaultEnableG2configmgr, fmt.Sprintf("Enable G2ConfigMgr service [%s]", envar.EnableG2configmgr))
+	RootCmd.Flags().Bool(option.EnableG2diagnostic, defaultEnableG2diagnostic, fmt.Sprintf("Enable G2Diagnostic service [%s]", envar.EnableG2diagnostic))
+	RootCmd.Flags().Bool(option.EnableG2engine, defaultEnableG2engine, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2engine))
+	RootCmd.Flags().Bool(option.EnableG2product, defaultEnableG2product, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2product))
+	RootCmd.Flags().Int(option.EngineLogLevel, defaultEngineLogLevel, fmt.Sprintf("Log level for Senzing Engine [%s]", envar.EngineLogLevel))
+	RootCmd.Flags().Int(option.GrpcPort, defaultGrpcPort, fmt.Sprintf("Port used to serve gRPC [%s]", envar.GrpcPort))
+	RootCmd.Flags().String(option.Configuration, defaultConfiguration, fmt.Sprintf("Path to configuration file [%s]", envar.Configuration))
+	RootCmd.Flags().String(option.DatabaseUrl, defaultDatabaseUrl, fmt.Sprintf("URL of database to initialize [%s]", envar.DatabaseUrl))
+	RootCmd.Flags().String(option.EngineConfigurationJson, defaultEngineConfigurationJson, fmt.Sprintf("JSON string sent to Senzing's init() function [%s]", envar.EngineConfigurationJson))
+	RootCmd.Flags().String(option.EngineModuleName, defaultEngineModuleName, fmt.Sprintf("Identifier given to the Senzing engine [%s]", envar.EngineModuleName))
+	RootCmd.Flags().String(option.LogLevel, defaultLogLevel, fmt.Sprintf("Log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [%s]", envar.LogLevel))
 }
