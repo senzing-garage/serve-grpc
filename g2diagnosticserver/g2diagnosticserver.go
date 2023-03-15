@@ -468,3 +468,51 @@ func (server *G2DiagnosticServer) UnregisterObserver(ctx context.Context, observ
 	g2diagnostic := getG2diagnostic()
 	return g2diagnostic.UnregisterObserver(ctx, observer)
 }
+
+func (server *G2DiagnosticServer) StreamEntityListBySize(request *g2pb.StreamEntityListBySizeRequest, stream g2pb.G2Diagnostic_StreamEntityListBySizeServer) (err error) {
+	if server.isTrace {
+		server.traceEntry(163, request)
+	}
+	ctx := stream.Context()
+	entryTime := time.Now()
+	g2diagnostic := getG2diagnostic()
+
+	entitiesFetched := 0
+
+	//get the query handle
+	var queryHandle uintptr
+	queryHandle, err = g2diagnostic.GetEntityListBySize(ctx, int(request.GetEntitySize()))
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		err = g2diagnostic.CloseEntityListBySize(ctx, queryHandle)
+		if server.isTrace {
+			server.traceExit(165, request, entitiesFetched, err, time.Since(entryTime))
+		}
+		return
+	}()
+
+	for {
+		var fetchResult string
+		fetchResult, err = g2diagnostic.FetchNextEntityBySize(ctx, queryHandle)
+		if err != nil {
+			return err
+		}
+		if len(fetchResult) == 0 {
+			break
+		}
+		response := g2pb.StreamEntityListBySizeResponse{
+			Result: fetchResult,
+		}
+		entitiesFetched += 1
+		if err = stream.Send(&response); err != nil {
+			return err
+		}
+		server.traceEntry(164, request, fetchResult)
+	}
+
+	err = nil
+	return
+}
