@@ -66,14 +66,11 @@ the binary built can be run.
 
 1. Identify the database by setting the `SENZING_TOOLS_DATABASE_URL` environment variable.
 
-    1. From scratch, create and initialize a Sqlite database.
+    1. :pencil2: Create a new Sqlite database.
        Examples:
 
         ```console
-        export DATABASE_DIRECTORY=/tmp/sqlite
-        mkdir -p ${DATABASE_DIRECTORY}
-        touch ${DATABASE_DIRECTORY}/G2C.db
-        export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@${DATABASE_DIRECTORY}/G2C.db
+        export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
         export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
         senzing-tools initdatabase
         ```
