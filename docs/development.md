@@ -59,6 +59,18 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     ```
 
+## Run
+
+1. After building, run:
+
+    ```console
+    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    ${GIT_REPOSITORY_DIR}/target/linux/servegrpc
+
+    ```
+
+## Test
+
 ### Test using SQLite database
 
 1. Run tests.
