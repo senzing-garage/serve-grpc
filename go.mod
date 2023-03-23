@@ -4,8 +4,8 @@ go 1.20
 
 require (
 	github.com/aquilax/truncate v1.0.0
-	github.com/senzing/g2-sdk-go v0.4.1
-	github.com/senzing/g2-sdk-go-base v0.1.2
+	github.com/senzing/g2-sdk-go v0.5.0
+	github.com/senzing/g2-sdk-go-base v0.1.3
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20230310202231-e2f8d3edf4b8
 	github.com/senzing/go-common v0.1.2
 	github.com/senzing/go-logging v1.1.3
