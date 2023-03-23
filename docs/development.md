@@ -64,18 +64,27 @@ Since the Senzing library is a prerequisite, it must be installed first.
 After running `make build`,
 the binary built can be run.
 
-1. :pencil2: Identify the database by setting the `SENZING_TOOLS_DATABASE_URL` environment variable.
-   Examples:
+1. Identify the database by setting the `SENZING_TOOLS_DATABASE_URL` environment variable.
 
-    ```console
-    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
+    1. From scratch, create and initialize a Sqlite database.
+       Examples:
 
-    ````
+        ```console
+        export DATABASE_DIRECTORY=/tmp/sqlite
+        mkdir -p ${DATABASE_DIRECTORY}
+        touch ${DATABASE_DIRECTORY}/G2C.db
+        export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@${DATABASE_DIRECTORY}/G2C.db
+        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+        senzing-tools initdatabase
+        ```
 
-    ```console
-    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
+    1. :pencil2: Identify an existing PostgreSQL database.
+       Example:
 
-    ```
+        ```console
+        export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
+
+        ```
 
 1. Set `LD_LIBRARY_PATH` and run the command.
    Example:
