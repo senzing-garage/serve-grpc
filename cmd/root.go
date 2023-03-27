@@ -37,7 +37,7 @@ const (
 var (
 	buildIteration          string = "0"
 	buildVersion            string = "0.3.7"
-	defaultEngineModuleName string = fmt.Sprintf("initdatabase-%d", time.Now().Unix())
+	defaultEngineModuleName string = fmt.Sprintf("servegrpc-%d", time.Now().Unix())
 )
 
 // If a configuration file is present, load it.
