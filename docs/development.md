@@ -64,6 +64,7 @@ the binary built can be run.
         export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
         export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
         senzing-tools initdatabase
+
         ```
 
     1. :pencil2: Identify an existing PostgreSQL database.
@@ -91,7 +92,7 @@ the binary built can be run.
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
-    make clean test
+    make clean new-sqlite test
 
     ```
 
