@@ -50,15 +50,6 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     ```
 
-1. Clean up.
-   Example:
-
-    ```console
-    cd ${GIT_REPOSITORY_DIR}
-    make clean
-
-    ```
-
 ## Run
 
 After running `make build`,
@@ -377,4 +368,13 @@ The actual packaging is done in the [senzing-tools](https://github.com/Senzing/s
 
     ```
 
-### FIXME: remove
+### Cleanup
+
+1. Clean up.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean
+
+    ```
