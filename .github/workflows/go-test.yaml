@@ -24,11 +24,26 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
       - run: pwd
+      - run: wget -qO /tmp/senzingrepo_1.0.1-1_amd64.deb https://senzing-production-apt.s3.amazonaws.com/senzingrepo_1.0.1-1_amd64.deb
+      - run: sudo apt-get -y install /tmp/senzingrepo_1.0.1-1_amd64.deb
+      - run: sudo apt-get update
+      - run: sudo --preserve-env apt-get -y install senzingapi
+      - run: sudo mv /opt/senzing/data/3.0.0/* /opt/senzing/data/
+      - run: sudo mkdir /etc/opt/senzing
+      - run: sudo cp /opt/senzing/g2/resources/templates/cfgVariant.json     /etc/opt/senzing
+      - run: sudo cp /opt/senzing/g2/resources/templates/customGn.txt        /etc/opt/senzing
+      - run: sudo cp /opt/senzing/g2/resources/templates/customOn.txt        /etc/opt/senzing
+      - run: sudo cp /opt/senzing/g2/resources/templates/customSn.txt        /etc/opt/senzing
+      - run: sudo cp /opt/senzing/g2/resources/templates/defaultGNRCP.config /etc/opt/senzing
+      - run: sudo cp /opt/senzing/g2/resources/templates/stb.config          /etc/opt/senzing
+      - run: sudo cp testdata/senzing-license/g2.lic                         /etc/opt/senzing
+      - run: mkdir /tmp/sqlite
+      - run: cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
       - run: go test -v -p 1 ./...
       # - run: go test -v ./.
-      # - run: go test -v ./g2config
-      # - run: go test -v ./g2configmgr
-      # - run: go test -v ./g2diagnostic
-      # - run: go test -v ./g2engine
-      # - run: go test -v ./g2product
-      # - run: go test -v ./helper
+      # - run: go test -v ./g2configserver
+      # - run: go test -v ./g2configmgrserver
+      # - run: go test -v ./g2diagnosticserver
+      # - run: go test -v ./g2engineserver
+      # - run: go test -v ./g2productserver
+      # - run: go test -v ./grpcserver
