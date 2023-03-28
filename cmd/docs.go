@@ -21,7 +21,7 @@ var docsCmd = &cobra.Command{
 			return err
 		}
 		if dir == "" {
-			if dir, err = os.MkdirTemp("", "servegrpc"); err != nil {
+			if dir, err = os.MkdirTemp("", "serve-grpc"); err != nil {
 				return err
 			}
 		}

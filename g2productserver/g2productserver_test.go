@@ -212,7 +212,7 @@ func TestG2productServer_Destroy(test *testing.T) {
 // ----------------------------------------------------------------------------
 
 func ExampleG2ProductServer_Init() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2productserver/g2productserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
@@ -233,7 +233,7 @@ func ExampleG2ProductServer_Init() {
 }
 
 func ExampleG2ProductServer_License() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2productserver/g2productserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &g2pb.LicenseRequest{}
@@ -246,7 +246,7 @@ func ExampleG2ProductServer_License() {
 }
 
 func ExampleG2ProductServer_ValidateLicenseFile() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2productserver/g2productserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &g2pb.ValidateLicenseFileRequest{
@@ -261,7 +261,7 @@ func ExampleG2ProductServer_ValidateLicenseFile() {
 }
 
 func ExampleG2ProductServer_ValidateLicenseStringBase64() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2productserver/g2productserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &g2pb.ValidateLicenseStringBase64Request{
@@ -276,7 +276,7 @@ func ExampleG2ProductServer_ValidateLicenseStringBase64() {
 }
 
 func ExampleG2ProductServer_Version() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2productserver/g2productserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &g2pb.VersionRequest{}
@@ -289,7 +289,7 @@ func ExampleG2ProductServer_Version() {
 }
 
 func ExampleG2ProductServer_Destroy() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2productserver/g2productserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &g2pb.DestroyRequest{}

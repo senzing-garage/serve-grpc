@@ -14,10 +14,10 @@ var completionCmd = &cobra.Command{
 	Use:   "completion",
 	Short: "Generate bash completion for the command",
 	Long: `To load completions, run:
-source < (servegrpc completion)
+source < (serve-grpc completion)
 
 To load completions automaticallon on login, add this line to your .bashrc file:
-source < (servegrpc completion)
+source < (serve-grpc completion)
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return completionAction(os.Stdout)

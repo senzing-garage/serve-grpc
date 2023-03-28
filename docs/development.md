@@ -1,4 +1,4 @@
-# servegrpc development
+# serve-grpc development
 
 ## Install Go
 
@@ -22,7 +22,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     ```console
     export GIT_ACCOUNT=senzing
-    export GIT_REPOSITORY=servegrpc
+    export GIT_REPOSITORY=serve-grpc
     export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
     export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
 
@@ -81,7 +81,7 @@ the binary built can be run.
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-    ${GIT_REPOSITORY_DIR}/target/linux/servegrpc
+    ${GIT_REPOSITORY_DIR}/target/linux/serve-grpc
 
     ```
 
@@ -218,7 +218,7 @@ For other gRPC tools, visit
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
-    make clean run-servegrpc
+    make clean run-serve-grpc
 
     ```
 
@@ -253,7 +253,7 @@ For other gRPC tools, visit
 
 ### Package
 
-**Note:** This only packages the `servegrpc` command.
+**Note:** This only packages the `serve-grpc` command.
 It is only to be used in development and test.
 The actual packaging is done in the [senzing-tools](https://github.com/Senzing/senzing-tools) repository.
 
@@ -278,21 +278,21 @@ The actual packaging is done in the [senzing-tools](https://github.com/Senzing/s
 
 ### Test DEB package on Ubuntu
 
-1. Determine if `servegrpc` is installed.
+1. Determine if `serve-grpc` is installed.
    Example:
 
     ```console
-    apt list --installed | grep servegrpc
+    apt list --installed | grep serve-grpc
 
     ```
 
-1. :pencil2: Install `servegrpc`.
-   The `servegrpc-...` filename will need modification.
+1. :pencil2: Install `serve-grpc`.
+   The `serve-grpc-...` filename will need modification.
    Example:
 
     ```console
     cd ${GIT_REPOSITORY_DIR}/target
-    sudo apt install ./servegrpc-0.0.0.deb
+    sudo apt install ./serve-grpc-0.0.0.deb
 
     ```
 
@@ -311,35 +311,35 @@ The actual packaging is done in the [senzing-tools](https://github.com/Senzing/s
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-    servegrpc
+    serve-grpc
 
     ```
 
-1. Remove `servegrpc` from system.
+1. Remove `serve-grpc` from system.
    Example:
 
     ```console
-    sudo apt-get remove servegrpc
+    sudo apt-get remove serve-grpc
 
     ```
 
 #### Test RPM package on Centos
 
-1. Determine if `servegrpc` is installed.
+1. Determine if `serve-grpc` is installed.
    Example:
 
     ```console
-    yum list installed | grep servegrpc
+    yum list installed | grep serve-grpc
 
     ```
 
-1. :pencil2: Install `servegrpc`.
-   The `servegrpc-...` filename will need modification.
+1. :pencil2: Install `serve-grpc`.
+   The `serve-grpc-...` filename will need modification.
    Example:
 
     ```console
     cd ${GIT_REPOSITORY_DIR}/target
-    sudo yum install ./servegrpc-0.0.0.rpm
+    sudo yum install ./serve-grpc-0.0.0.rpm
 
     ```
 
@@ -358,15 +358,15 @@ The actual packaging is done in the [senzing-tools](https://github.com/Senzing/s
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-    servegrpc
+    serve-grpc
 
     ```
 
-1. Remove `servegrpc` from system.
+1. Remove `serve-grpc` from system.
    Example:
 
     ```console
-    sudo yum remove servegrpc
+    sudo yum remove serve-grpc
 
     ```
 

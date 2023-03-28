@@ -1,4 +1,4 @@
-# Makefile that builds servegrpc, a "go" program.
+# Makefile that builds serve-grpc, a "go" program.
 
 # "Simple expanded" variables (':=')
 
@@ -57,8 +57,8 @@ build-linux:
 	GOARCH=amd64 \
 	go build \
 		-ldflags \
-			"-X 'github.com/senzing/servegrpc/cmd.buildVersion=${BUILD_VERSION}' \
-			-X 'github.com/senzing/servegrpc/cmd.buildIteration=${BUILD_ITERATION}' \
+			"-X 'github.com/senzing/serve-grpc/cmd.buildVersion=${BUILD_VERSION}' \
+			-X 'github.com/senzing/serve-grpc/cmd.buildIteration=${BUILD_ITERATION}' \
 			" \
 		-o $(GO_PACKAGE_NAME)
 	@mkdir -p $(TARGET_DIRECTORY)/linux || true
@@ -138,13 +138,13 @@ docker-run:
 		$(DOCKER_IMAGE_NAME)
 
 
-.PHONY: run-servegrpc
-run-servegrpc: build
-	@target/linux/servegrpc
+.PHONY: run-serve-grpc
+run-serve-grpc: build
+	@target/linux/serve-grpc
 
-.PHONY: run-servegrpc-trace
-run-servegrpc-trace: build
-	@target/linux/servegrpc --log-level TRACE --engine-log-level 1
+.PHONY: run-serve-grpc-trace
+run-serve-grpc-trace: build
+	@target/linux/serve-grpc --log-level TRACE --engine-log-level 1
 
 # -----------------------------------------------------------------------------
 # Utility targets

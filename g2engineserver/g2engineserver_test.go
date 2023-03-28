@@ -1393,7 +1393,7 @@ func TestG2engineServer_Destroy(test *testing.T) {
 // ----------------------------------------------------------------------------
 
 func ExampleG2EngineServer_AddRecord() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.AddRecordRequest{
@@ -1411,7 +1411,7 @@ func ExampleG2EngineServer_AddRecord() {
 }
 
 func ExampleG2EngineServer_AddRecord_secondRecord() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.AddRecordRequest{
@@ -1429,7 +1429,7 @@ func ExampleG2EngineServer_AddRecord_secondRecord() {
 }
 
 func ExampleG2EngineServer_AddRecordWithInfo() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.AddRecordWithInfoRequest{
@@ -1447,7 +1447,7 @@ func ExampleG2EngineServer_AddRecordWithInfo() {
 }
 
 func ExampleG2EngineServer_AddRecordWithInfoWithReturnedRecordID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.AddRecordWithInfoWithReturnedRecordIDRequest{
@@ -1465,7 +1465,7 @@ func ExampleG2EngineServer_AddRecordWithInfoWithReturnedRecordID() {
 }
 
 func ExampleG2EngineServer_AddRecordWithReturnedRecordID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.AddRecordWithReturnedRecordIDRequest{
@@ -1482,7 +1482,7 @@ func ExampleG2EngineServer_AddRecordWithReturnedRecordID() {
 }
 
 func ExampleG2EngineServer_CheckRecord() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.CheckRecordRequest{
@@ -1498,7 +1498,7 @@ func ExampleG2EngineServer_CheckRecord() {
 }
 
 func ExampleG2EngineServer_CloseExport() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 
@@ -1523,7 +1523,7 @@ func ExampleG2EngineServer_CloseExport() {
 }
 
 func ExampleG2EngineServer_CountRedoRecords() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.CountRedoRecordsRequest{}
@@ -1536,7 +1536,7 @@ func ExampleG2EngineServer_CountRedoRecords() {
 }
 
 func ExampleG2EngineServer_ExportCSVEntityReport() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ExportCSVEntityReportRequest{
@@ -1552,7 +1552,7 @@ func ExampleG2EngineServer_ExportCSVEntityReport() {
 }
 
 func ExampleG2EngineServer_ExportConfig() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ExportConfigRequest{}
@@ -1565,7 +1565,7 @@ func ExampleG2EngineServer_ExportConfig() {
 }
 
 func ExampleG2EngineServer_ExportConfigAndConfigID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ExportConfigAndConfigIDRequest{}
@@ -1578,7 +1578,7 @@ func ExampleG2EngineServer_ExportConfigAndConfigID() {
 }
 
 func ExampleG2EngineServer_ExportJSONEntityReport() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ExportJSONEntityReportRequest{
@@ -1593,7 +1593,7 @@ func ExampleG2EngineServer_ExportJSONEntityReport() {
 }
 
 func ExampleG2EngineServer_FetchNext() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 
@@ -1618,7 +1618,7 @@ func ExampleG2EngineServer_FetchNext() {
 }
 
 func ExampleG2EngineServer_FindInterestingEntitiesByEntityID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.FindInterestingEntitiesByEntityIDRequest{
@@ -1634,7 +1634,7 @@ func ExampleG2EngineServer_FindInterestingEntitiesByEntityID() {
 }
 
 func ExampleG2EngineServer_FindInterestingEntitiesByRecordID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.FindInterestingEntitiesByRecordIDRequest{
@@ -1651,7 +1651,7 @@ func ExampleG2EngineServer_FindInterestingEntitiesByRecordID() {
 }
 
 func ExampleG2EngineServer_FindNetworkByEntityID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	entityList := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1001") + `}, {"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1002") + `}]}`
@@ -1670,7 +1670,7 @@ func ExampleG2EngineServer_FindNetworkByEntityID() {
 }
 
 func ExampleG2EngineServer_FindNetworkByEntityID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	entityList := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1001") + `}, {"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1002") + `}]}`
@@ -1690,7 +1690,7 @@ func ExampleG2EngineServer_FindNetworkByEntityID_V2() {
 }
 
 func ExampleG2EngineServer_FindNetworkByRecordID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.FindNetworkByRecordIDRequest{
@@ -1708,7 +1708,7 @@ func ExampleG2EngineServer_FindNetworkByRecordID() {
 }
 
 func ExampleG2EngineServer_FindNetworkByRecordID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.FindNetworkByRecordID_V2Request{
@@ -1727,7 +1727,7 @@ func ExampleG2EngineServer_FindNetworkByRecordID_V2() {
 }
 
 func ExampleG2EngineServer_FindPathByEntityID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.FindPathByEntityIDRequest{
@@ -1744,7 +1744,7 @@ func ExampleG2EngineServer_FindPathByEntityID() {
 }
 
 func ExampleG2EngineServer_FindPathByEntityID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.FindPathByEntityID_V2Request{
@@ -1762,7 +1762,7 @@ func ExampleG2EngineServer_FindPathByEntityID_V2() {
 }
 
 func ExampleG2EngineServer_FindPathByRecordID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.FindPathByRecordIDRequest{
@@ -1781,7 +1781,7 @@ func ExampleG2EngineServer_FindPathByRecordID() {
 }
 
 func ExampleG2EngineServer_FindPathByRecordID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.FindPathByRecordID_V2Request{
@@ -1801,7 +1801,7 @@ func ExampleG2EngineServer_FindPathByRecordID_V2() {
 }
 
 func ExampleG2EngineServer_FindPathExcludingByEntityID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
@@ -1820,7 +1820,7 @@ func ExampleG2EngineServer_FindPathExcludingByEntityID() {
 }
 
 func ExampleG2EngineServer_FindPathExcludingByEntityID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
@@ -1840,7 +1840,7 @@ func ExampleG2EngineServer_FindPathExcludingByEntityID_V2() {
 }
 
 func ExampleG2EngineServer_FindPathExcludingByRecordID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.FindPathExcludingByRecordIDRequest{
@@ -1860,7 +1860,7 @@ func ExampleG2EngineServer_FindPathExcludingByRecordID() {
 }
 
 func ExampleG2EngineServer_FindPathExcludingByRecordID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.FindPathExcludingByRecordID_V2Request{
@@ -1881,7 +1881,7 @@ func ExampleG2EngineServer_FindPathExcludingByRecordID_V2() {
 }
 
 func ExampleG2EngineServer_FindPathIncludingSourceByEntityID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
@@ -1901,7 +1901,7 @@ func ExampleG2EngineServer_FindPathIncludingSourceByEntityID() {
 }
 
 func ExampleG2EngineServer_FindPathIncludingSourceByEntityID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
@@ -1922,7 +1922,7 @@ func ExampleG2EngineServer_FindPathIncludingSourceByEntityID_V2() {
 }
 
 func ExampleG2EngineServer_FindPathIncludingSourceByRecordID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.FindPathIncludingSourceByRecordIDRequest{
@@ -1943,7 +1943,7 @@ func ExampleG2EngineServer_FindPathIncludingSourceByRecordID() {
 }
 
 func ExampleG2EngineServer_FindPathIncludingSourceByRecordID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.FindPathIncludingSourceByRecordID_V2Request{
@@ -1965,7 +1965,7 @@ func ExampleG2EngineServer_FindPathIncludingSourceByRecordID_V2() {
 }
 
 func ExampleG2EngineServer_GetActiveConfigID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.GetActiveConfigIDRequest{}
@@ -1978,7 +1978,7 @@ func ExampleG2EngineServer_GetActiveConfigID() {
 }
 
 func ExampleG2EngineServer_GetEntityByEntityID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.GetEntityByEntityIDRequest{
@@ -1993,7 +1993,7 @@ func ExampleG2EngineServer_GetEntityByEntityID() {
 }
 
 func ExampleG2EngineServer_GetEntityByEntityID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.GetEntityByEntityID_V2Request{
@@ -2009,7 +2009,7 @@ func ExampleG2EngineServer_GetEntityByEntityID_V2() {
 }
 
 func ExampleG2EngineServer_GetEntityByRecordID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.GetEntityByRecordIDRequest{
@@ -2025,7 +2025,7 @@ func ExampleG2EngineServer_GetEntityByRecordID() {
 }
 
 func ExampleG2EngineServer_GetEntityByRecordID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.GetEntityByRecordID_V2Request{
@@ -2042,7 +2042,7 @@ func ExampleG2EngineServer_GetEntityByRecordID_V2() {
 }
 
 func ExampleG2EngineServer_GetRecord() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.GetRecordRequest{
@@ -2058,7 +2058,7 @@ func ExampleG2EngineServer_GetRecord() {
 }
 
 func ExampleG2EngineServer_GetRecord_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.GetRecord_V2Request{
@@ -2075,7 +2075,7 @@ func ExampleG2EngineServer_GetRecord_V2() {
 }
 
 func ExampleG2EngineServer_GetRedoRecord() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.GetRedoRecordRequest{}
@@ -2088,7 +2088,7 @@ func ExampleG2EngineServer_GetRedoRecord() {
 }
 
 func ExampleG2EngineServer_GetRepositoryLastModifiedTime() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.GetRepositoryLastModifiedTimeRequest{}
@@ -2101,7 +2101,7 @@ func ExampleG2EngineServer_GetRepositoryLastModifiedTime() {
 }
 
 func ExampleG2EngineServer_GetVirtualEntityByRecordID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.GetVirtualEntityByRecordIDRequest{
@@ -2116,7 +2116,7 @@ func ExampleG2EngineServer_GetVirtualEntityByRecordID() {
 }
 
 func ExampleG2EngineServer_GetVirtualEntityByRecordID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.GetVirtualEntityByRecordID_V2Request{
@@ -2132,7 +2132,7 @@ func ExampleG2EngineServer_GetVirtualEntityByRecordID_V2() {
 }
 
 func ExampleG2EngineServer_HowEntityByEntityID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.HowEntityByEntityIDRequest{
@@ -2147,7 +2147,7 @@ func ExampleG2EngineServer_HowEntityByEntityID() {
 }
 
 func ExampleG2EngineServer_HowEntityByEntityID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.HowEntityByEntityID_V2Request{
@@ -2163,7 +2163,7 @@ func ExampleG2EngineServer_HowEntityByEntityID_V2() {
 }
 
 func ExampleG2EngineServer_PrimeEngine() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.PrimeEngineRequest{}
@@ -2176,7 +2176,7 @@ func ExampleG2EngineServer_PrimeEngine() {
 }
 
 func ExampleG2EngineServer_SearchByAttributes() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.SearchByAttributesRequest{
@@ -2191,7 +2191,7 @@ func ExampleG2EngineServer_SearchByAttributes() {
 }
 
 func ExampleG2EngineServer_SearchByAttributes_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.SearchByAttributes_V2Request{
@@ -2210,7 +2210,7 @@ func ExampleG2EngineServer_SearchByAttributes_V2() {
 // }
 
 func ExampleG2EngineServer_Stats() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.StatsRequest{}
@@ -2223,7 +2223,7 @@ func ExampleG2EngineServer_Stats() {
 }
 
 func ExampleG2EngineServer_WhyEntities() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.WhyEntitiesRequest{
@@ -2239,7 +2239,7 @@ func ExampleG2EngineServer_WhyEntities() {
 }
 
 func ExampleG2EngineServer_WhyEntities_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.WhyEntities_V2Request{
@@ -2256,7 +2256,7 @@ func ExampleG2EngineServer_WhyEntities_V2() {
 }
 
 func ExampleG2EngineServer_WhyEntityByEntityID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.WhyEntityByEntityIDRequest{
@@ -2271,7 +2271,7 @@ func ExampleG2EngineServer_WhyEntityByEntityID() {
 }
 
 func ExampleG2EngineServer_WhyEntityByEntityID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.WhyEntityByEntityID_V2Request{
@@ -2287,7 +2287,7 @@ func ExampleG2EngineServer_WhyEntityByEntityID_V2() {
 }
 
 func ExampleG2EngineServer_WhyEntityByRecordID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.WhyEntityByRecordIDRequest{
@@ -2303,7 +2303,7 @@ func ExampleG2EngineServer_WhyEntityByRecordID() {
 }
 
 func ExampleG2EngineServer_WhyEntityByRecordID_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.WhyEntityByRecordID_V2Request{
@@ -2320,7 +2320,7 @@ func ExampleG2EngineServer_WhyEntityByRecordID_V2() {
 }
 
 func ExampleG2EngineServer_WhyRecords() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.WhyRecordsRequest{
@@ -2338,7 +2338,7 @@ func ExampleG2EngineServer_WhyRecords() {
 }
 
 func ExampleG2EngineServer_WhyRecords_V2() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.WhyRecords_V2Request{
@@ -2357,7 +2357,7 @@ func ExampleG2EngineServer_WhyRecords_V2() {
 }
 
 func ExampleG2EngineServer_Process() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ProcessRequest{
@@ -2372,7 +2372,7 @@ func ExampleG2EngineServer_Process() {
 }
 
 func ExampleG2EngineServer_ProcessRedoRecord() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ProcessRedoRecordRequest{}
@@ -2385,7 +2385,7 @@ func ExampleG2EngineServer_ProcessRedoRecord() {
 }
 
 func ExampleG2EngineServer_ProcessRedoRecordWithInfo() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ProcessRedoRecordWithInfoRequest{
@@ -2400,7 +2400,7 @@ func ExampleG2EngineServer_ProcessRedoRecordWithInfo() {
 }
 
 func ExampleG2EngineServer_ProcessWithInfo() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ProcessWithInfoRequest{
@@ -2416,7 +2416,7 @@ func ExampleG2EngineServer_ProcessWithInfo() {
 }
 
 func ExampleG2EngineServer_ProcessWithResponse() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ProcessWithResponseRequest{
@@ -2431,7 +2431,7 @@ func ExampleG2EngineServer_ProcessWithResponse() {
 }
 
 func ExampleG2EngineServer_ProcessWithResponseResize() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ProcessWithResponseResizeRequest{
@@ -2446,7 +2446,7 @@ func ExampleG2EngineServer_ProcessWithResponseResize() {
 }
 
 func ExampleG2EngineServer_ReevaluateEntity() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ReevaluateEntityRequest{
@@ -2462,7 +2462,7 @@ func ExampleG2EngineServer_ReevaluateEntity() {
 }
 
 func ExampleG2EngineServer_ReevaluateEntityWithInfo() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ReevaluateEntityWithInfoRequest{
@@ -2478,7 +2478,7 @@ func ExampleG2EngineServer_ReevaluateEntityWithInfo() {
 }
 
 func ExampleG2EngineServer_ReevaluateRecord() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ReevaluateRecordRequest{
@@ -2495,7 +2495,7 @@ func ExampleG2EngineServer_ReevaluateRecord() {
 }
 
 func ExampleG2EngineServer_ReevaluateRecordWithInfo() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ReevaluateRecordWithInfoRequest{
@@ -2512,7 +2512,7 @@ func ExampleG2EngineServer_ReevaluateRecordWithInfo() {
 }
 
 func ExampleG2EngineServer_ReplaceRecord() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ReplaceRecordRequest{
@@ -2530,7 +2530,7 @@ func ExampleG2EngineServer_ReplaceRecord() {
 }
 
 func ExampleG2EngineServer_ReplaceRecordWithInfo() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.ReplaceRecordWithInfoRequest{
@@ -2549,7 +2549,7 @@ func ExampleG2EngineServer_ReplaceRecordWithInfo() {
 }
 
 func ExampleG2EngineServer_DeleteRecord() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.DeleteRecordRequest{
@@ -2566,7 +2566,7 @@ func ExampleG2EngineServer_DeleteRecord() {
 }
 
 func ExampleG2EngineServer_DeleteRecordWithInfo() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.DeleteRecordWithInfoRequest{
@@ -2584,7 +2584,7 @@ func ExampleG2EngineServer_DeleteRecordWithInfo() {
 }
 
 func ExampleG2EngineServer_Init() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
@@ -2606,7 +2606,7 @@ func ExampleG2EngineServer_Init() {
 }
 
 func ExampleG2EngineServer_InitWithConfigID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
@@ -2629,7 +2629,7 @@ func ExampleG2EngineServer_InitWithConfigID() {
 }
 
 func ExampleG2EngineServer_Reinit() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 
@@ -2652,7 +2652,7 @@ func ExampleG2EngineServer_Reinit() {
 }
 
 func ExampleG2EngineServer_PurgeRepository() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.PurgeRepositoryRequest{}
@@ -2665,7 +2665,7 @@ func ExampleG2EngineServer_PurgeRepository() {
 }
 
 func ExampleG2EngineServer_Destroy() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
 	request := &g2pb.DestroyRequest{}

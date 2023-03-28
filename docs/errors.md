@@ -1,4 +1,4 @@
-# servegrpc errors
+# serve-grpc errors
 
 ## Error prefixes
 
