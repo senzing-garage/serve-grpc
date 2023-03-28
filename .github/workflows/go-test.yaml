@@ -1,0 +1,34 @@
+# Based on
+# -https://github.com/marketplace/actions/setup-go-environment
+
+name: go-test.yaml
+
+on: [push]
+
+env:
+  LD_LIBRARY_PATH: /opt/senzing/g2/lib
+  SENZING_ACCEPT_EULA: I_ACCEPT_THE_SENZING_EULA
+  SENZING_TOOLS_DATABASE_URL: "sqlite3://na:na@/tmp/sqlite/G2C.db"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: ["1.20"]
+    name: Go ${{ matrix.go }} sample
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go }}
+      - run: pwd
+      - run: go test -v -p 1 ./...
+      # - run: go test -v ./.
+      # - run: go test -v ./g2config
+      # - run: go test -v ./g2configmgr
+      # - run: go test -v ./g2diagnostic
+      # - run: go test -v ./g2engine
+      # - run: go test -v ./g2product
+      # - run: go test -v ./helper
