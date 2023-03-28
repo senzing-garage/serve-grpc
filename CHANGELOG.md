@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added in 0.3.9
 
+- Added Stream methods
+  - g2diagnosticserver.StreamEntityListBySize()
+  - g2engineserver.StreamExportCSVEntityReport()
+  - g2engineserver.StreamExportJSONEntityReport()
 - Update dependencies
 
 ## [0.3.8] - 2023-03-14
