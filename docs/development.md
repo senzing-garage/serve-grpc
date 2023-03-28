@@ -76,6 +76,15 @@ the binary built can be run.
 
         ```
 
+       If needed, initialize PostgreSQL database.
+       Example:
+
+        ```console
+        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+        senzing-tools init-database
+
+        ```
+
 1. Set `LD_LIBRARY_PATH` and run the command.
    Example:
 
