@@ -12,6 +12,7 @@ import (
 	"github.com/senzing/g2-sdk-go-base/g2config"
 	"github.com/senzing/g2-sdk-go-base/g2configmgr"
 	"github.com/senzing/g2-sdk-go-base/g2engine"
+	"github.com/senzing/g2-sdk-go/g2error"
 	g2configpb "github.com/senzing/g2-sdk-proto/go/g2config"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
 	"github.com/senzing/go-common/g2engineconfigurationjson"
@@ -34,6 +35,10 @@ var (
 // ----------------------------------------------------------------------------
 // Internal functions
 // ----------------------------------------------------------------------------
+
+func createError(errorId int, err error) error {
+	return g2error.Cast(localLogger.Error(errorId, err), err)
+}
 
 func getTestObject(ctx context.Context, test *testing.T) G2ConfigmgrServer {
 	if g2configmgrServerSingleton == nil {
@@ -131,6 +136,15 @@ func testErrorNoFail(test *testing.T, ctx context.Context, g2configmgr G2Configm
 func TestMain(m *testing.M) {
 	err := setup()
 	if err != nil {
+		if g2error.Is(err, g2error.G2Unrecoverable) {
+			fmt.Printf("\nUnrecoverable error detected. \n\n")
+		}
+		if g2error.Is(err, g2error.G2Retryable) {
+			fmt.Printf("\nRetryable error detected. \n\n")
+		}
+		if g2error.Is(err, g2error.G2BadUserInput) {
+			fmt.Printf("\nBad user input error detected. \n\n")
+		}
 		fmt.Print(err)
 		os.Exit(1)
 	}
@@ -148,12 +162,12 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 	aG2config := &g2config.G2config{}
 	err := aG2config.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
-		return localLogger.Error(5906, err)
+		return createError(5906, err)
 	}
 
 	configHandle, err := aG2config.Create(ctx)
 	if err != nil {
-		return localLogger.Error(5907, err)
+		return createError(5907, err)
 	}
 
 	datasourceNames := []string{"CUSTOMERS", "REFERENCE", "WATCHLIST"}
@@ -161,23 +175,23 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 		datasource := truthset.TruthsetDataSources[datasourceName]
 		_, err := aG2config.AddDataSource(ctx, configHandle, datasource.Json)
 		if err != nil {
-			return localLogger.Error(5908, err)
+			return createError(5908, err)
 		}
 	}
 
 	configStr, err := aG2config.Save(ctx, configHandle)
 	if err != nil {
-		return localLogger.Error(5909, err)
+		return createError(5909, err)
 	}
 
 	err = aG2config.Close(ctx, configHandle)
 	if err != nil {
-		return localLogger.Error(5910, err)
+		return createError(5910, err)
 	}
 
 	err = aG2config.Destroy(ctx)
 	if err != nil {
-		return localLogger.Error(5911, err)
+		return createError(5911, err)
 	}
 
 	// Persist the Senzing configuration to the Senzing repository.
@@ -185,23 +199,23 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 	aG2configmgr := &g2configmgr.G2configmgr{}
 	err = aG2configmgr.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
-		return localLogger.Error(5912, err)
+		return createError(5912, err)
 	}
 
 	configComments := fmt.Sprintf("Created by g2diagnostic_test at %s", now.UTC())
 	configID, err := aG2configmgr.AddConfig(ctx, configStr, configComments)
 	if err != nil {
-		return localLogger.Error(5913, err)
+		return createError(5913, err)
 	}
 
 	err = aG2configmgr.SetDefaultConfigID(ctx, configID)
 	if err != nil {
-		return localLogger.Error(5914, err)
+		return createError(5914, err)
 	}
 
 	err = aG2configmgr.Destroy(ctx)
 	if err != nil {
-		return localLogger.Error(5915, err)
+		return createError(5915, err)
 	}
 	return err
 }
@@ -210,49 +224,49 @@ func setupPurgeRepository(ctx context.Context, moduleName string, iniParams stri
 	aG2engine := &g2engine.G2engine{}
 	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
-		return localLogger.Error(5903, err)
+		return createError(5903, err)
 	}
 
 	err = aG2engine.PurgeRepository(ctx)
 	if err != nil {
-		return localLogger.Error(5904, err)
+		return createError(5904, err)
 	}
 
 	err = aG2engine.Destroy(ctx)
 	if err != nil {
-		return localLogger.Error(5905, err)
+		return createError(5905, err)
 	}
 	return err
 }
 
 func setup() error {
+	var err error = nil
 	ctx := context.TODO()
 	moduleName := "Test module name"
 	verboseLogging := 0
-	localLogger, err := messagelogger.NewSenzingApiLogger(ProductId, IdMessages, IdStatuses, messagelogger.LevelInfo)
+	localLogger, err = messagelogger.NewSenzingApiLogger(ProductId, IdMessages, IdStatuses, messagelogger.LevelInfo)
 	if err != nil {
-		return localLogger.Error(5901, err)
+		return createError(5901, err)
 	}
 
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
 	if err != nil {
-		return localLogger.Error(5902, err)
+		return createError(5902, err)
 	}
 
 	// Add Data Sources to Senzing configuration.
 
 	err = setupSenzingConfig(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
-		return localLogger.Error(5920, err)
+		return createError(5920, err)
 	}
 
 	// Purge repository.
 
 	err = setupPurgeRepository(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
-		return localLogger.Error(5921, err)
+		return createError(5921, err)
 	}
-
 	return err
 }
 

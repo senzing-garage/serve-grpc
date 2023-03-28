@@ -50,14 +50,42 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     ```
 
-1. Clean up.
+## Run
+
+After running `make build`,
+the binary built can be run.
+
+1. Identify the database by setting the `SENZING_TOOLS_DATABASE_URL` environment variable.
+
+    1. :pencil2: Create a new Sqlite database.
+       Examples:
+
+        ```console
+        export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
+        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+        senzing-tools initdatabase
+
+        ```
+
+    1. :pencil2: Identify an existing PostgreSQL database.
+       Example:
+
+        ```console
+        export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
+        export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
+
+        ```
+
+1. Set `LD_LIBRARY_PATH` and run the command.
    Example:
 
     ```console
-    cd ${GIT_REPOSITORY_DIR}
-    make clean
+    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    ${GIT_REPOSITORY_DIR}/target/linux/servegrpc
 
     ```
+
+## Test
 
 ### Test using SQLite database
 
@@ -65,7 +93,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
-    make clean test
+    make clean new-sqlite test
 
     ```
 
@@ -342,4 +370,13 @@ The actual packaging is done in the [senzing-tools](https://github.com/Senzing/s
 
     ```
 
-### FIXME: remove
+### Cleanup
+
+1. Clean up.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean
+
+    ```
