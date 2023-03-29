@@ -11,7 +11,7 @@ ARG IMAGE_FINAL=senzing/senzingapi-runtime:3.4.2
 
 FROM ${IMAGE_GO_BUILDER} as go_builder
 ENV REFRESHED_AT 2023-03-08
-LABEL Name="senzing/servegrpc-builder" \
+LABEL Name="senzing/serve-grpc-builder" \
       Maintainer="support@senzing.com" \
       Version="0.3.6"
 
@@ -55,7 +55,7 @@ RUN mkdir -p /output \
 
 FROM ${IMAGE_FINAL} as final
 ENV REFRESHED_AT 2023-03-08
-LABEL Name="senzing/servegrpc" \
+LABEL Name="senzing/serve-grpc" \
       Maintainer="support@senzing.com" \
       Version="0.3.6"
 
@@ -66,7 +66,7 @@ COPY ./testdata/sqlite/G2C.db          /tmp/sqlite/G2C.db
 
 # Copy files from prior step.
 
-COPY --from=go_builder "/output/linux/servegrpc" "/app/servegrpc"
+COPY --from=go_builder "/output/linux/serve-grpc" "/app/serve-grpc"
 
 # Runtime environment variables.
 
@@ -76,4 +76,4 @@ ENV SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
 # Runtime execution.
 
 WORKDIR /app
-ENTRYPOINT ["/app/servegrpc"]
+ENTRYPOINT ["/app/serve-grpc"]

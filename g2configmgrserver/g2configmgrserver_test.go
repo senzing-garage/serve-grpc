@@ -18,7 +18,7 @@ import (
 	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/senzing/go-common/truthset"
 	"github.com/senzing/go-logging/messagelogger"
-	"github.com/senzing/servegrpc/g2configserver"
+	"github.com/senzing/serve-grpc/g2configserver"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -425,7 +425,7 @@ func TestG2configmgrserverImpl_Destroy(test *testing.T) {
 // ----------------------------------------------------------------------------
 
 func ExampleG2ConfigmgrServer_AddConfig() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
 	ctx := context.TODO()
 	now := time.Now()
 	g2config := getG2ConfigServer(ctx)
@@ -462,7 +462,7 @@ func ExampleG2ConfigmgrServer_AddConfig() {
 }
 
 func ExampleG2ConfigmgrServer_GetConfig() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 
@@ -486,7 +486,7 @@ func ExampleG2ConfigmgrServer_GetConfig() {
 }
 
 func ExampleG2ConfigmgrServer_GetConfigList() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &g2pb.GetConfigListRequest{}
@@ -499,7 +499,7 @@ func ExampleG2ConfigmgrServer_GetConfigList() {
 }
 
 func ExampleG2ConfigmgrServer_GetDefaultConfigID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &g2pb.GetDefaultConfigIDRequest{}
@@ -512,7 +512,7 @@ func ExampleG2ConfigmgrServer_GetDefaultConfigID() {
 }
 
 func ExampleG2ConfigmgrServer_ReplaceDefaultConfigID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
 	ctx := context.TODO()
 	now := time.Now()
 	g2config := getG2ConfigServer(ctx)
@@ -565,7 +565,7 @@ func ExampleG2ConfigmgrServer_ReplaceDefaultConfigID() {
 }
 
 func ExampleG2ConfigmgrServer_SetDefaultConfigID() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 
@@ -589,7 +589,7 @@ func ExampleG2ConfigmgrServer_SetDefaultConfigID() {
 }
 
 func ExampleG2ConfigmgrServer_Init() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
 	ctx := context.TODO()
 	g2config := getG2ConfigmgrServer(ctx)
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
@@ -610,7 +610,7 @@ func ExampleG2ConfigmgrServer_Init() {
 }
 
 func ExampleG2ConfigmgrServer_Destroy() {
-	// For more information, visit https://github.com/Senzing/servegrpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
+	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &g2pb.DestroyRequest{}

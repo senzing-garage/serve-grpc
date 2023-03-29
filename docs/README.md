@@ -1,8 +1,8 @@
-# servegrpc
+# serve-grpc
 
 ## Commands
 
-1. [senzing-tools servegrpc](https://hub.senzing.com/senzing-tools/senzing-tools_servegrpc.html)
+1. [senzing-tools serve-grpc](https://hub.senzing.com/senzing-tools/senzing-tools_serve-grpc.html)
 
 ## Examples
 

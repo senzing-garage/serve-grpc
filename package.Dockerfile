@@ -12,7 +12,7 @@ ARG IMAGE_FINAL=alpine
 
 FROM ${IMAGE_GO_BUILDER} as go_builder
 ENV REFRESHED_AT 2023-03-08
-LABEL Name="senzing/servegrpc-builder" \
+LABEL Name="senzing/serve-grpc-builder" \
       Maintainer="support@senzing.com" \
       Version="0.3.6"
 
@@ -58,7 +58,7 @@ RUN mkdir -p /output \
 
 FROM ${IMAGE_FPM_BUILDER} as fpm_builder
 ENV REFRESHED_AT 2023-03-08
-LABEL Name="senzing/servegrpc-fpm-builder" \
+LABEL Name="senzing/serve-grpc-fpm-builder" \
       Maintainer="support@senzing.com" \
       Version="0.3.6"
 
@@ -102,7 +102,7 @@ RUN fpm \
 
 FROM ${IMAGE_FINAL} as final
 ENV REFRESHED_AT 2023-03-08
-LABEL Name="senzing/servegrpc" \
+LABEL Name="senzing/serve-grpc" \
       Maintainer="support@senzing.com" \
       Version="0.3.6"
 
@@ -113,6 +113,6 @@ ARG PROGRAM_NAME
 # Copy files from prior step.
 
 COPY --from=fpm_builder "/output/linux/${PROGRAM_NAME}" "/output/linux/${PROGRAM_NAME}"
-COPY --from=fpm_builder "/output/servegrpc-*"           "/output/"
+COPY --from=fpm_builder "/output/serve-grpc-*"           "/output/"
 
 CMD ["/bin/bash"]

@@ -1,6 +1,6 @@
-# servegrpc
+# serve-grpc
 
-## :warning: WARNING: servegrpc is still in development :warning: _
+## :warning: WARNING: serve-grpc is still in development :warning: _
 
 At the moment, this is "work-in-progress" with Semantic Versions of `0.n.x`.
 Although it can be reviewed and commented on,
@@ -8,19 +8,20 @@ the recommendation is not to use it yet.
 
 ## Synopsis
 
-`servegrpc` is a command in the
+`serve-grpc` is a command in the
 [senzing-tools](https://github.com/Senzing/senzing-tools)
 suite of tools.
 This command is a
 [gRPC](https://grpc.io/)
 server application that supports requests to the Senzing SDK via network access.
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/senzing/servegrpc.svg)](https://pkg.go.dev/github.com/senzing/servegrpc)
-[![Go Report Card](https://goreportcard.com/badge/github.com/senzing/servegrpc)](https://goreportcard.com/report/github.com/senzing/servegrpc)
+[![Go Reference](https://pkg.go.dev/badge/github.com/senzing/serve-grpc.svg)](https://pkg.go.dev/github.com/senzing/serve-grpc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/senzing/serve-grpc)](https://goreportcard.com/report/github.com/senzing/serve-grpc)
+[![go-test.yaml](https://github.com/Senzing/serve-grpc/actions/workflows/go-test.yaml/badge.svg)](https://github.com/Senzing/serve-grpc/actions/workflows/go-test.yaml)
 
 ## Overview
 
-`servegrpc` supports the
+`serve-grpc` supports the
 [Senzing Protocol Buffer definitions](https://github.com/Senzing/g2-sdk-proto).
 Under the covers, the gRPC request is translated by the gRPC server into a Senzing Go SDK API call using
 [senzing/g2-sdk-go-base](https://github.com/Senzing/g2-sdk-go-base).
@@ -33,7 +34,7 @@ Senzing SDKs for accessing the gRPC server:
 
 ## Install
 
-1. The `servegrpc` command is installed with the
+1. The `serve-grpc` command is installed with the
    [senzing-tools](https://github.com/Senzing/senzing-tools)
    suite of tools.
    See senzing-tools [install](https://github.com/Senzing/senzing-tools#install).
@@ -42,16 +43,16 @@ Senzing SDKs for accessing the gRPC server:
 
 ```console
 export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-senzing-tools servegrpc [flags]
+senzing-tools serve-grpc [flags]
 ```
 
 1. For options and flags:
-    1. [Online documentation](https://hub.senzing.com/senzing-tools/senzing-tools_servegrpc.html)
+    1. [Online documentation](https://hub.senzing.com/senzing-tools/senzing-tools_serve-grpc.html)
     1. Runtime documentation:
 
         ```console
         export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-        senzing-tools servegrpc --help
+        senzing-tools serve-grpc --help
         ```
 
 1. In addition to the following simple usage examples, there are additional [Examples](docs/examples.md).
@@ -63,7 +64,7 @@ senzing-tools servegrpc [flags]
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-    senzing-tools servegrpc --database-url postgresql://username:password@postgres.example.com:5432/G2
+    senzing-tools serve-grpc --database-url postgresql://username:password@postgres.example.com:5432/G2
     ```
 
 1. See [Parameters](#parameters) for additional parameters.
@@ -76,7 +77,7 @@ senzing-tools servegrpc [flags]
     ```console
     export SENZING_TOOLS_DATABASE_URL=postgresql://username:password@postgres.example.com:5432/G2
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-    senzing-tools servegrpc
+    senzing-tools serve-grpc
     ```
 
 1. See [Parameters](#parameters) for additional parameters.
@@ -95,7 +96,7 @@ This usage shows how to initialze a database with a Docker container.
         --publish 8258:8258 \
         --rm \
         --tty \
-        senzing/senzing-tools servegrpc
+        senzing/senzing-tools serve-grpc
 
     ```
 
@@ -117,7 +118,7 @@ This usage shows how to initialze a database with a Docker container.
 
 ## References
 
-- [Command reference](https://hub.senzing.com/senzing-tools/senzing-tools_servegrpc.html)
+- [Command reference](https://hub.senzing.com/senzing-tools/senzing-tools_serve-grpc.html)
 - [Development](docs/development.md)
 - [Errors](docs/errors.md)
 - [Examples](docs/examples.md)

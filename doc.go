@@ -7,7 +7,7 @@ One or two paragraph overview of this module...
 
 (This page describes the nature of the entire Go module or the top-level command, not an individual package.)
 
-More information at https://github.com/senzing/servegrpc
+More information at https://github.com/senzing/serve-grpc
 
 # Example Package
 
@@ -16,7 +16,7 @@ documentation, tests, and examples should be done.  This paragraph (or two)
 should provide a brief overview while linking the reader to the documentation
 included in the package itself.
 
-More information can be found in the [pkg/github.com/senzing/servegrpc/examplepackage] documentation.
+More information can be found in the [pkg/github.com/senzing/serve-grpc/examplepackage] documentation.
 
 # Another Header: Package or other module features...
 
@@ -33,8 +33,8 @@ Examples of use can be seen in the main_test.go files.
 	import (
 	    fmt
 
-	    "github.com/senzing/servegrpc/examplepackage"
-	    "github.com/senzing/servegrpc/anotherpackage"
+	    "github.com/senzing/serve-grpc/examplepackage"
+	    "github.com/senzing/serve-grpc/anotherpackage"
 	)
 
 	func main() {

@@ -1,4 +1,4 @@
-# servegrpc examples
+# serve-grpc examples
 
 ## Command line examples
 
@@ -12,7 +12,7 @@ In this example, only the G2Engine gRPC is started.
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-    senzing-tools servegrpc \
+    senzing-tools serve-grpc \
         --database-url postgresql://username:password@postgres.example.com:5432/G2 \
         --enable-g2engine
     ```
@@ -43,7 +43,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-    senzing-tools servegrpc
+    senzing-tools serve-grpc
     ```
 
 1. For more information, visit
@@ -65,7 +65,7 @@ If using multiple databases or non-system locations of Senzing binaries,
         --publish 8258:8258 \
         --rm \
         --tty \
-        senzing/senzing-tools servegrpc
+        senzing/senzing-tools serve-grpc
 
     ```
 

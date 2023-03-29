@@ -15,7 +15,7 @@ import (
 	"github.com/senzing/senzing-tools/envar"
 	"github.com/senzing/senzing-tools/helper"
 	"github.com/senzing/senzing-tools/option"
-	"github.com/senzing/servegrpc/grpcserver"
+	"github.com/senzing/serve-grpc/grpcserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -37,7 +37,7 @@ const (
 var (
 	buildIteration          string = "0"
 	buildVersion            string = "0.3.7"
-	defaultEngineModuleName string = fmt.Sprintf("servegrpc-%d", time.Now().Unix())
+	defaultEngineModuleName string = fmt.Sprintf("serve-grpc-%d", time.Now().Unix())
 )
 
 // If a configuration file is present, load it.
@@ -54,7 +54,7 @@ func loadConfigurationFile(cobraCommand *cobra.Command) {
 
 		// Specify configuration file name.
 
-		viper.SetConfigName("servegrpc")
+		viper.SetConfigName("serve-grpc")
 		viper.SetConfigType("yaml")
 
 		// Define search path order.
@@ -120,11 +120,11 @@ func loadOptions(cobraCommand *cobra.Command) {
 
 // RootCmd represents the command.
 var RootCmd = &cobra.Command{
-	Use:   "servegrpc",
+	Use:   "serve-grpc",
 	Short: "Start a gRPC server for the Senzing SDK API",
 	Long: `
 Start a gRPC server for the Senzing SDK API.
-For more information, visit https://github.com/Senzing/servegrpc
+For more information, visit https://github.com/Senzing/serve-grpc
 	`,
 	PreRun: func(cobraCommand *cobra.Command, args []string) {
 		loadConfigurationFile(cobraCommand)
