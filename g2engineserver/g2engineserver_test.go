@@ -2219,7 +2219,7 @@ func ExampleG2EngineServer_Stats() {
 		fmt.Println(err)
 	}
 	fmt.Println(truncate(response.GetResult(), 138))
-	// Output: { "workload": { "loadedRecords": 5,  "addedRecords": 5,  "deletedRecords": 1,  "reevaluations": 0,  "repairedEntities": 0,  "duration":...
+	// Output: { "workload": { "apiVersion": "3.5.0.23084",  "loadedRecords": 5,  "addedRecords": 5,  "deletedRecords": 1,  "reevaluations": 0,  "repa...
 }
 
 func ExampleG2EngineServer_WhyEntities() {
