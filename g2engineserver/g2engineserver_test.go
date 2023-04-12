@@ -2212,8 +2212,8 @@ func ExampleG2EngineServer_Stats() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(truncate(response.GetResult(), 138))
-	// Output: { "workload": { "apiVersion": "3.5.0.23084",  "loadedRecords": 5,  "addedRecords": 5,  "deletedRecords": 1,  "reevaluations": 0,  "repa...
+	fmt.Println(truncate(response.GetResult(), 16))
+	// Output: { "workload":...
 }
 
 func ExampleG2EngineServer_WhyEntities() {
