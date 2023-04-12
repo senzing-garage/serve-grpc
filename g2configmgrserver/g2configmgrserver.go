@@ -2,14 +2,14 @@ package g2configmgrserver
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
 	g2sdk "github.com/senzing/g2-sdk-go-base/g2configmgr"
 	"github.com/senzing/g2-sdk-go/g2api"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
-	"github.com/senzing/go-logging/logger"
-	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-logging/logging"
 	"github.com/senzing/go-observing/observer"
 )
 
@@ -22,6 +22,40 @@ var (
 // Internal methods
 // ----------------------------------------------------------------------------
 
+// --- Logging ----------------------------------------------------------------
+
+// Get the Logger singleton.
+func (server *G2ConfigmgrServer) getLogger() logging.LoggingInterface {
+	var err error = nil
+	if server.logger == nil {
+		options := []interface{}{
+			&logging.OptionCallerSkip{Value: 3},
+		}
+		server.logger, err = logging.NewSenzingToolsLogger(ProductId, IdMessages, options...)
+		if err != nil {
+			panic(err)
+		}
+	}
+	return server.logger
+}
+
+// Log message.
+func (server *G2ConfigmgrServer) log(messageNumber int, details ...interface{}) {
+	server.getLogger().Log(messageNumber, details...)
+}
+
+// Trace method entry.
+func (server *G2ConfigmgrServer) traceEntry(errorNumber int, details ...interface{}) {
+	server.log(errorNumber, details...)
+}
+
+// Trace method exit.
+func (server *G2ConfigmgrServer) traceExit(errorNumber int, details ...interface{}) {
+	server.log(errorNumber, details...)
+}
+
+// --- Services ---------------------------------------------------------------
+
 // Singleton pattern for g2configmgr.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
 func getG2configmgr() g2api.G2configmgr {
@@ -33,24 +67,6 @@ func getG2configmgr() g2api.G2configmgr {
 
 func GetSdkG2configmgr() g2api.G2configmgr {
 	return getG2configmgr()
-}
-
-// Get the Logger singleton.
-func (server *G2ConfigmgrServer) getLogger() messagelogger.MessageLoggerInterface {
-	if server.logger == nil {
-		server.logger, _ = messagelogger.NewSenzingApiLogger(ProductId, IdMessages, IdStatuses, messagelogger.LevelInfo)
-	}
-	return server.logger
-}
-
-// Trace method entry.
-func (server *G2ConfigmgrServer) traceEntry(errorNumber int, details ...interface{}) {
-	server.getLogger().Log(errorNumber, details...)
-}
-
-// Trace method exit.
-func (server *G2ConfigmgrServer) traceExit(errorNumber int, details ...interface{}) {
-	server.getLogger().Log(errorNumber, details...)
 }
 
 // ----------------------------------------------------------------------------
@@ -184,25 +200,26 @@ func (server *G2ConfigmgrServer) SetDefaultConfigID(ctx context.Context, request
 	return &response, err
 }
 
-/*
-The SetLogLevel method sets the level of logging.
-
-Input
-  - ctx: A context to control lifecycle.
-  - logLevel: The desired log level. TRACE, DEBUG, INFO, WARN, ERROR, FATAL or PANIC.
-*/
-func (server *G2ConfigmgrServer) SetLogLevel(ctx context.Context, logLevel logger.Level) error {
+func (server *G2ConfigmgrServer) SetLogLevel(ctx context.Context, logLevelName string) error {
 	if server.isTrace {
-		server.traceEntry(23, logLevel)
+		server.traceEntry(23, logLevelName)
 	}
 	entryTime := time.Now()
 	var err error = nil
-	g2configmgr := getG2configmgr()
-	g2configmgr.SetLogLevel(ctx, logLevel)
-	server.getLogger().SetLogLevel(messagelogger.Level(logLevel))
-	server.isTrace = (server.getLogger().GetLogLevel() == messagelogger.LevelTrace)
+	if logging.IsValidLogLevelName(logLevelName) {
+		g2configmgr := getG2configmgr()
+
+		// TODO: Remove once g2configmgr.SetLogLevel(context.Context, string)
+		logLevel := logging.TextToLoggerLevelMap[logLevelName]
+
+		g2configmgr.SetLogLevel(ctx, logLevel)
+		server.getLogger().SetLogLevel(logLevelName)
+		server.isTrace = (logLevelName == logging.LevelTraceName)
+	} else {
+		err = fmt.Errorf("invalid error level: %s", logLevelName)
+	}
 	if server.isTrace {
-		defer server.traceExit(24, logLevel, err, time.Since(entryTime))
+		defer server.traceExit(24, logLevelName, err, time.Since(entryTime))
 	}
 	return err
 }

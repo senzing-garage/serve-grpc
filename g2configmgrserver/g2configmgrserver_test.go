@@ -123,12 +123,6 @@ func expectError(test *testing.T, ctx context.Context, g2configmgr G2ConfigmgrSe
 	}
 }
 
-func testErrorNoFail(test *testing.T, ctx context.Context, g2configmgr G2ConfigmgrServer, err error) {
-	if err != nil {
-		test.Log("Error:", err.Error())
-	}
-}
-
 // ----------------------------------------------------------------------------
 // Test harness
 // ----------------------------------------------------------------------------

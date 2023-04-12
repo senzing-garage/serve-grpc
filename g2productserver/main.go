@@ -2,7 +2,7 @@ package g2productserver
 
 import (
 	pb "github.com/senzing/g2-sdk-proto/go/g2product"
-	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-logging/logging"
 )
 
 // ----------------------------------------------------------------------------
@@ -13,7 +13,7 @@ import (
 type G2ProductServer struct {
 	pb.UnimplementedG2ProductServer
 	isTrace bool
-	logger  messagelogger.MessageLoggerInterface
+	logger  logging.LoggingInterface
 }
 
 // ----------------------------------------------------------------------------

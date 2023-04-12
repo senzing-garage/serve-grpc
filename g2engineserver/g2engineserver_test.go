@@ -150,12 +150,6 @@ func expectError(test *testing.T, ctx context.Context, g2engine G2EngineServer, 
 	}
 }
 
-func testErrorNoFail(test *testing.T, ctx context.Context, g2engine G2EngineServer, err error) {
-	if err != nil {
-		test.Log("Error:", err.Error())
-	}
-}
-
 // ----------------------------------------------------------------------------
 // Test harness
 // ----------------------------------------------------------------------------

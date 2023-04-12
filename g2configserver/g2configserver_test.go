@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	truncator "github.com/aquilax/truncate"
+	"github.com/senzing/g2-sdk-go/g2error"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2config"
 	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/stretchr/testify/assert"
@@ -94,12 +95,6 @@ func expectError(test *testing.T, ctx context.Context, g2config G2ConfigServer, 
 	}
 }
 
-func testErrorNoFail(test *testing.T, ctx context.Context, g2config G2ConfigServer, err error) {
-	if err != nil {
-		test.Log("Error:", err.Error())
-	}
-}
-
 // ----------------------------------------------------------------------------
 // Test harness
 // ----------------------------------------------------------------------------
@@ -107,6 +102,15 @@ func testErrorNoFail(test *testing.T, ctx context.Context, g2config G2ConfigServ
 func TestMain(m *testing.M) {
 	err := setup()
 	if err != nil {
+		if g2error.Is(err, g2error.G2Unrecoverable) {
+			fmt.Printf("\nUnrecoverable error detected. \n\n")
+		}
+		if g2error.Is(err, g2error.G2Retryable) {
+			fmt.Printf("\nRetryable error detected. \n\n")
+		}
+		if g2error.Is(err, g2error.G2BadUserInput) {
+			fmt.Printf("\nBad user input error detected. \n\n")
+		}
 		fmt.Print(err)
 		os.Exit(1)
 	}

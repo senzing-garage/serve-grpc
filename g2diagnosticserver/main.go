@@ -2,7 +2,7 @@ package g2diagnosticserver
 
 import (
 	pb "github.com/senzing/g2-sdk-proto/go/g2diagnostic"
-	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-logging/logging"
 )
 
 // ----------------------------------------------------------------------------
@@ -13,7 +13,7 @@ import (
 type G2DiagnosticServer struct {
 	pb.UnimplementedG2DiagnosticServer
 	isTrace bool
-	logger  messagelogger.MessageLoggerInterface
+	logger  logging.LoggingInterface
 }
 
 // ----------------------------------------------------------------------------

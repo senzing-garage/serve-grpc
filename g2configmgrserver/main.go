@@ -2,7 +2,7 @@ package g2configmgrserver
 
 import (
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
-	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-logging/logging"
 )
 
 // ----------------------------------------------------------------------------
@@ -13,7 +13,7 @@ import (
 type G2ConfigmgrServer struct {
 	g2pb.UnimplementedG2ConfigMgrServer
 	isTrace bool
-	logger  messagelogger.MessageLoggerInterface
+	logger  logging.LoggingInterface
 }
 
 // ----------------------------------------------------------------------------
