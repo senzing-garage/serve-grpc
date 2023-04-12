@@ -17,7 +17,7 @@ import (
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
 	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/senzing/go-common/truthset"
-	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-logging/logging"
 	"github.com/senzing/serve-grpc/g2configserver"
 	"github.com/stretchr/testify/assert"
 )
@@ -29,7 +29,7 @@ const (
 
 var (
 	g2configmgrServerSingleton *G2ConfigmgrServer
-	localLogger                messagelogger.MessageLoggerInterface
+	localLogger                logging.LoggingInterface
 )
 
 // ----------------------------------------------------------------------------
@@ -238,9 +238,10 @@ func setup() error {
 	ctx := context.TODO()
 	moduleName := "Test module name"
 	verboseLogging := 0
-	localLogger, err = messagelogger.NewSenzingApiLogger(ProductId, IdMessages, IdStatuses, messagelogger.LevelInfo)
+
+	localLogger, err = logging.NewSenzingToolsLogger(ProductId, IdMessages)
 	if err != nil {
-		return createError(5901, err)
+		panic(err)
 	}
 
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")

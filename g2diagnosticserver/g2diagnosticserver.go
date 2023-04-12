@@ -55,6 +55,13 @@ func (server *G2DiagnosticServer) traceExit(errorNumber int, details ...interfac
 	server.log(errorNumber, details...)
 }
 
+// --- Errors -----------------------------------------------------------------
+
+// Create error.
+func (server *G2DiagnosticServer) error(messageNumber int, details ...interface{}) error {
+	return server.getLogger().Error(messageNumber, details...)
+}
+
 // --- Services ---------------------------------------------------------------
 
 // Singleton pattern for g2diagnostic.
@@ -114,7 +121,7 @@ func (server *G2DiagnosticServer) Destroy(ctx context.Context, request *g2pb.Des
 	entryTime := time.Now()
 	// g2diagnostic := getG2diagnostic()
 	// err := g2diagnostic.Destroy(ctx)
-	err := server.getLogger().Error(4001)
+	err := server.error(4001)
 	response := g2pb.DestroyResponse{}
 	if server.isTrace {
 		defer server.traceExit(8, request, err, time.Since(entryTime))
@@ -406,7 +413,7 @@ func (server *G2DiagnosticServer) Init(ctx context.Context, request *g2pb.InitRe
 	entryTime := time.Now()
 	// g2diagnostic := getG2diagnostic()
 	// err := g2diagnostic.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
-	err := server.getLogger().Error(4002)
+	err := server.error(4002)
 	response := g2pb.InitResponse{}
 	if server.isTrace {
 		defer server.traceExit(48, request, err, time.Since(entryTime))
@@ -421,7 +428,7 @@ func (server *G2DiagnosticServer) InitWithConfigID(ctx context.Context, request 
 	entryTime := time.Now()
 	// g2diagnostic := getG2diagnostic()
 	// err := g2diagnostic.InitWithConfigID(ctx, request.GetModuleName(), request.GetIniParams(), int64(request.GetInitConfigID()), int(request.GetVerboseLogging()))
-	err := server.getLogger().Error(4003)
+	err := server.error(4003)
 	response := g2pb.InitWithConfigIDResponse{}
 	if server.isTrace {
 		defer server.traceExit(50, request, err, time.Since(entryTime))

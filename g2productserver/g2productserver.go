@@ -54,6 +54,13 @@ func (server *G2ProductServer) traceExit(errorNumber int, details ...interface{}
 	server.log(errorNumber, details...)
 }
 
+// --- Errors -----------------------------------------------------------------
+
+// Create error.
+func (server *G2ProductServer) error(messageNumber int, details ...interface{}) error {
+	return server.getLogger().Error(messageNumber, details...)
+}
+
 // --- Services ---------------------------------------------------------------
 
 // Singleton pattern for g2product.
@@ -80,7 +87,7 @@ func (server *G2ProductServer) Destroy(ctx context.Context, request *g2pb.Destro
 	entryTime := time.Now()
 	// g2product := getG2product()
 	// err := g2product.Destroy(ctx)
-	err := server.getLogger().Error(4001)
+	err := server.error(4001)
 	response := g2pb.DestroyResponse{}
 	if server.isTrace {
 		defer server.traceExit(4, request, err, time.Since(entryTime))
@@ -95,7 +102,7 @@ func (server *G2ProductServer) Init(ctx context.Context, request *g2pb.InitReque
 	entryTime := time.Now()
 	// g2product := getG2product()
 	// err := g2product.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
-	err := server.getLogger().Error(4002)
+	err := server.error(4002)
 	response := g2pb.InitResponse{}
 	if server.isTrace {
 		defer server.traceExit(10, request, err, time.Since(entryTime))

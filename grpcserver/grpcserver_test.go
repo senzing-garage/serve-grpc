@@ -12,11 +12,11 @@ import (
 	"github.com/senzing/g2-sdk-go-base/g2engine"
 	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/senzing/go-common/truthset"
-	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-logging/logging"
 )
 
 var (
-	localLogger messagelogger.MessageLoggerInterface
+	localLogger logging.LoggingInterface
 )
 
 // ----------------------------------------------------------------------------
@@ -121,12 +121,14 @@ func setupPurgeRepository(ctx context.Context, moduleName string, iniParams stri
 }
 
 func setup() error {
+	var err error = nil
 	ctx := context.TODO()
 	moduleName := "Test module name"
 	verboseLogging := 0
-	localLogger, err := messagelogger.NewSenzingApiLogger(ProductId, IdMessages, IdStatuses, messagelogger.LevelInfo)
+
+	localLogger, err = logging.NewSenzingToolsLogger(ProductId, IdMessages)
 	if err != nil {
-		return localLogger.Error(5901, err)
+		panic(err)
 	}
 
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")

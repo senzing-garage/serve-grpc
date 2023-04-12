@@ -18,7 +18,7 @@ import (
 	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/senzing/go-common/record"
 	"github.com/senzing/go-common/truthset"
-	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-logging/logging"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -36,7 +36,7 @@ type GetEntityByRecordIDResponse struct {
 
 var (
 	g2engineTestSingleton *G2EngineServer
-	localLogger           messagelogger.MessageLoggerInterface
+	localLogger           logging.LoggingInterface
 )
 
 // ----------------------------------------------------------------------------
@@ -265,9 +265,9 @@ func setup() error {
 	ctx := context.TODO()
 	moduleName := "Test module name"
 	verboseLogging := 0
-	localLogger, err = messagelogger.NewSenzingApiLogger(ProductId, IdMessages, IdStatuses, messagelogger.LevelInfo)
+	localLogger, err = logging.NewSenzingToolsLogger(ProductId, IdMessages)
 	if err != nil {
-		return createError(5901, err)
+		panic(err)
 	}
 
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")

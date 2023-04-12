@@ -54,6 +54,13 @@ func (server *G2EngineServer) traceExit(errorNumber int, details ...interface{})
 	server.log(errorNumber, details...)
 }
 
+// --- Errors -----------------------------------------------------------------
+
+// Create error.
+func (server *G2EngineServer) error(messageNumber int, details ...interface{}) error {
+	return server.getLogger().Error(messageNumber, details...)
+}
+
 // --- Services ---------------------------------------------------------------
 
 // Singleton pattern for g2config.
@@ -219,7 +226,7 @@ func (server *G2EngineServer) Destroy(ctx context.Context, request *g2pb.Destroy
 	entryTime := time.Now()
 	// g2engine := getG2engine()
 	// err := g2engine.Destroy(ctx)
-	err := server.getLogger().Error(4001)
+	err := server.error(4001)
 	response := g2pb.DestroyResponse{}
 	if server.isTrace {
 		defer server.traceExit(22, request, err, time.Since(entryTime))
@@ -811,7 +818,7 @@ func (server *G2EngineServer) Init(ctx context.Context, request *g2pb.InitReques
 	entryTime := time.Now()
 	// g2engine := getG2engine()
 	// err := g2engine.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
-	err := server.getLogger().Error(4002)
+	err := server.error(4002)
 	response := g2pb.InitResponse{}
 	if server.isTrace {
 		defer server.traceExit(100, request, err, time.Since(entryTime))
@@ -826,7 +833,7 @@ func (server *G2EngineServer) InitWithConfigID(ctx context.Context, request *g2p
 	entryTime := time.Now()
 	// g2engine := getG2engine()
 	// err := g2engine.InitWithConfigID(ctx, request.GetModuleName(), request.GetIniParams(), request.GetInitConfigID(), int(request.GetVerboseLogging()))
-	err := server.getLogger().Error(4003)
+	err := server.error(4003)
 	response := g2pb.InitWithConfigIDResponse{}
 	if server.isTrace {
 		defer server.traceExit(102, request, err, time.Since(entryTime))
