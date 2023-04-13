@@ -45,13 +45,13 @@ func (server *G2ConfigServer) log(messageNumber int, details ...interface{}) {
 }
 
 // Trace method entry.
-func (server *G2ConfigServer) traceEntry(errorNumber int, details ...interface{}) {
-	server.log(errorNumber, details...)
+func (server *G2ConfigServer) traceEntry(messageNumber int, details ...interface{}) {
+	server.getLogger().Log(messageNumber, details...)
 }
 
 // Trace method exit.
-func (server *G2ConfigServer) traceExit(errorNumber int, details ...interface{}) {
-	server.log(errorNumber, details...)
+func (server *G2ConfigServer) traceExit(messageNumber int, details ...interface{}) {
+	server.getLogger().Log(messageNumber, details...)
 }
 
 // --- Errors -----------------------------------------------------------------
