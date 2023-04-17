@@ -39,11 +39,6 @@ func (server *G2ConfigServer) getLogger() logging.LoggingInterface {
 	return server.logger
 }
 
-// Log message.
-func (server *G2ConfigServer) log(messageNumber int, details ...interface{}) {
-	server.getLogger().Log(messageNumber, details...)
-}
-
 // Trace method entry.
 func (server *G2ConfigServer) traceEntry(messageNumber int, details ...interface{}) {
 	server.getLogger().Log(messageNumber, details...)

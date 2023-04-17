@@ -23,29 +23,32 @@ type G2ProductServer struct {
 // Identfier of the g2productserver package found messages having the format "senzing-6999xxxx".
 const ProductId = 6016
 
+// Log message prefix.
+const Prefix = "serve-grpc.g2productserver."
+
 // ----------------------------------------------------------------------------
 // Variables
 // ----------------------------------------------------------------------------
 
 // Message templates for the g2productserver package.
 var IdMessages = map[int]string{
-	3:    "Enter Destroy(%+v).",
-	4:    "Exit  Destroy(%+v) returned (%v).",
-	9:    "Enter Init(%+v).",
-	10:   "Exit  Init(%+v) returned (%v).",
-	11:   "Enter License(%+v).",
-	12:   "Exit  License(%+v) returned (%s, %v).",
-	13:   "Enter SetLogLevel(%s).",
-	14:   "Exit  SetLogLevel(%s) returned (%v).",
-	15:   "Enter ValidateLicenseFile(%+v).",
-	16:   "Exit  ValidateLicenseFile(%+v) returned (%s, %v).",
-	17:   "Enter ValidateLicenseStringBase64(%+v).",
-	18:   "Exit  ValidateLicenseStringBase64(%+v) returned (%s, %v).",
-	19:   "Enter Version(%+v).",
-	20:   "Exit  Version(%+v) returned (%s, %v).",
-	4001: "Destroy() not supported in gRPC",
-	4002: "Init() not supported in gRPC",
-	4003: "InitWithConfigID() not supported in gRPC",
+	3:    "Enter " + Prefix + "Destroy(%+v).",
+	4:    "Exit  " + Prefix + "Destroy(%+v) returned (%v).",
+	9:    "Enter " + Prefix + "Init(%+v).",
+	10:   "Exit  " + Prefix + "Init(%+v) returned (%v).",
+	11:   "Enter " + Prefix + "License(%+v).",
+	12:   "Exit  " + Prefix + "License(%+v) returned (%s, %v).",
+	13:   "Enter " + Prefix + "SetLogLevel(%s).",
+	14:   "Exit  " + Prefix + "SetLogLevel(%s) returned (%v).",
+	15:   "Enter " + Prefix + "ValidateLicenseFile(%+v).",
+	16:   "Exit  " + Prefix + "ValidateLicenseFile(%+v) returned (%s, %v).",
+	17:   "Enter " + Prefix + "ValidateLicenseStringBase64(%+v).",
+	18:   "Exit  " + Prefix + "ValidateLicenseStringBase64(%+v) returned (%s, %v).",
+	19:   "Enter " + Prefix + "Version(%+v).",
+	20:   "Exit  " + Prefix + "Version(%+v) returned (%s, %v).",
+	4001: Prefix + "Destroy() not supported in gRPC",
+	4002: Prefix + "Init() not supported in gRPC",
+	4003: Prefix + "InitWithConfigID() not supported in gRPC",
 	5901: "During setup, call to messagelogger.NewSenzingApiLogger() failed.",
 	5902: "During setup, call to g2eg2engineconfigurationjson.BuildSimpleSystemConfigurationJson() failed.",
 	5903: "During setup, call to g2engine.Init() failed.",

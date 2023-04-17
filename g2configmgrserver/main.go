@@ -23,33 +23,36 @@ type G2ConfigmgrServer struct {
 // Identfier of the g2configmgr package found messages having the format "senzing-6999xxxx".
 const ProductId = 6012
 
+// Log message prefix.
+const Prefix = "serve-grpc.g2configmgrserver."
+
 // ----------------------------------------------------------------------------
 // Variables
 // ----------------------------------------------------------------------------
 
 // Message templates for the g2configmgr package.
 var IdMessages = map[int]string{
-	1:    "Enter AddConfig(%+v).",
-	2:    "Exit  AddConfig(%+v) returned (%d, %v).",
-	5:    "Enter Destroy(%+v).",
-	6:    "Exit  Destroy(%+v) returned (%v).",
-	7:    "Enter GetConfig(%+v).",
-	8:    "Exit  GetConfig(%+v) returned (%s, %v).",
-	9:    "Enter GetConfigList(%+v).",
-	10:   "Exit  GetConfigList(%+v) returned (%s, %v).",
-	11:   "Enter GetDefaultConfigID(%+v).",
-	12:   "Exit  GetDefaultConfigID(%+v) returned (%d, %v).",
-	17:   "Enter Init(%+v).",
-	18:   "Exit  Init(%+v) returned (%v).",
-	19:   "Enter ReplaceDefaultConfigID(%+v).",
-	20:   "Exit  ReplaceDefaultConfigID(%+v) returned (%v).",
-	21:   "Enter SetDefaultConfigID(%+v).",
-	22:   "Exit  SetDefaultConfigID(%+v) returned (%v).",
-	23:   "Enter SetLogLevel(%s).",
-	24:   "Exit  SetLogLevel(%s) returned (%v).",
-	4001: "Destroy() not supported in gRPC",
-	4002: "Init() not supported in gRPC",
-	4003: "InitWithConfigID() not supported in gRPC",
+	1:    "Enter " + Prefix + "AddConfig(%+v).",
+	2:    "Exit  " + Prefix + "AddConfig(%+v) returned (%d, %v).",
+	5:    "Enter " + Prefix + "Destroy(%+v).",
+	6:    "Exit  " + Prefix + "Destroy(%+v) returned (%v).",
+	7:    "Enter " + Prefix + "GetConfig(%+v).",
+	8:    "Exit  " + Prefix + "GetConfig(%+v) returned (%s, %v).",
+	9:    "Enter " + Prefix + "GetConfigList(%+v).",
+	10:   "Exit  " + Prefix + "GetConfigList(%+v) returned (%s, %v).",
+	11:   "Enter " + Prefix + "GetDefaultConfigID(%+v).",
+	12:   "Exit  " + Prefix + "GetDefaultConfigID(%+v) returned (%d, %v).",
+	17:   "Enter " + Prefix + "Init(%+v).",
+	18:   "Exit  " + Prefix + "Init(%+v) returned (%v).",
+	19:   "Enter " + Prefix + "ReplaceDefaultConfigID(%+v).",
+	20:   "Exit  " + Prefix + "ReplaceDefaultConfigID(%+v) returned (%v).",
+	21:   "Enter " + Prefix + "SetDefaultConfigID(%+v).",
+	22:   "Exit  " + Prefix + "SetDefaultConfigID(%+v) returned (%v).",
+	23:   "Enter " + Prefix + "SetLogLevel(%s).",
+	24:   "Exit  " + Prefix + "SetLogLevel(%s) returned (%v).",
+	4001: Prefix + "Destroy() not supported in gRPC",
+	4002: Prefix + "Init() not supported in gRPC",
+	4003: Prefix + "InitWithConfigID() not supported in gRPC",
 	5901: "During setup, call to messagelogger.NewSenzingApiLogger() failed.",
 	5902: "During setup, call to g2eg2engineconfigurationjson.BuildSimpleSystemConfigurationJson() failed.",
 	5903: "During setup, call to g2engine.Init() failed.",
