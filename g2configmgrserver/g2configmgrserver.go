@@ -39,11 +39,6 @@ func (server *G2ConfigmgrServer) getLogger() logging.LoggingInterface {
 	return server.logger
 }
 
-// Log message.
-func (server *G2ConfigmgrServer) log(messageNumber int, details ...interface{}) {
-	server.getLogger().Log(messageNumber, details...)
-}
-
 // Trace method entry.
 func (server *G2ConfigmgrServer) traceEntry(messageNumber int, details ...interface{}) {
 	server.getLogger().Log(messageNumber, details...)
@@ -81,96 +76,96 @@ func GetSdkG2configmgr() g2api.G2configmgr {
 // ----------------------------------------------------------------------------
 
 func (server *G2ConfigmgrServer) AddConfig(ctx context.Context, request *g2pb.AddConfigRequest) (*g2pb.AddConfigResponse, error) {
+	var err error = nil
+	var result int64
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(1, request)
+		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
 	g2configmgr := getG2configmgr()
-	result, err := g2configmgr.AddConfig(ctx, request.GetConfigStr(), request.GetConfigComments())
+	result, err = g2configmgr.AddConfig(ctx, request.GetConfigStr(), request.GetConfigComments())
 	response := g2pb.AddConfigResponse{
 		Result: result,
-	}
-	if server.isTrace {
-		defer server.traceExit(2, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) Destroy(ctx context.Context, request *g2pb.DestroyRequest) (*g2pb.DestroyResponse, error) {
+	var err error = nil
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(5, request)
+		defer func() { server.traceExit(6, request, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
+	// Not allowed by gRPC server
 	// g2configmgr := getG2configmgr()
 	// err := g2configmgr.Destroy(ctx)
-	err := server.error(4001)
+	err = server.error(4001)
 	response := g2pb.DestroyResponse{}
-	if server.isTrace {
-		defer server.traceExit(6, request, err, time.Since(entryTime))
-	}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) GetConfig(ctx context.Context, request *g2pb.GetConfigRequest) (*g2pb.GetConfigResponse, error) {
+	var err error = nil
+	var result string
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(7, request)
+		defer func() { server.traceExit(8, request, result, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
 	g2configmgr := getG2configmgr()
-	result, err := g2configmgr.GetConfig(ctx, request.GetConfigID())
+	result, err = g2configmgr.GetConfig(ctx, request.GetConfigID())
 	response := g2pb.GetConfigResponse{
 		Result: result,
-	}
-	if server.isTrace {
-		defer server.traceExit(8, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) GetConfigList(ctx context.Context, request *g2pb.GetConfigListRequest) (*g2pb.GetConfigListResponse, error) {
+	var err error = nil
+	var result string
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(9, request)
+		defer func() { server.traceExit(10, request, result, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
 	g2configmgr := getG2configmgr()
-	result, err := g2configmgr.GetConfigList(ctx)
+	result, err = g2configmgr.GetConfigList(ctx)
 	response := g2pb.GetConfigListResponse{
 		Result: result,
-	}
-	if server.isTrace {
-		defer server.traceExit(10, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) GetDefaultConfigID(ctx context.Context, request *g2pb.GetDefaultConfigIDRequest) (*g2pb.GetDefaultConfigIDResponse, error) {
+	var err error = nil
+	var result int64
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(11, request)
+		defer func() { server.traceExit(12, request, result, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
 	g2configmgr := getG2configmgr()
-	result, err := g2configmgr.GetDefaultConfigID(ctx)
+	result, err = g2configmgr.GetDefaultConfigID(ctx)
 	response := g2pb.GetDefaultConfigIDResponse{
 		ConfigID: result,
-	}
-	if server.isTrace {
-		defer server.traceExit(12, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
+	var err error = nil
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(17, request)
+		defer func() { server.traceExit(18, request, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
+	// Not allowed by gRPC server
 	// g2configmgr := getG2configmgr()
 	// err := g2configmgr.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
-	err := server.error(4002)
+	err = server.error(4002)
 	response := g2pb.InitResponse{}
-	if server.isTrace {
-		defer server.traceExit(18, request, err, time.Since(entryTime))
-	}
 	return &response, err
 }
 
@@ -180,39 +175,38 @@ func (server *G2ConfigmgrServer) RegisterObserver(ctx context.Context, observer 
 }
 
 func (server *G2ConfigmgrServer) ReplaceDefaultConfigID(ctx context.Context, request *g2pb.ReplaceDefaultConfigIDRequest) (*g2pb.ReplaceDefaultConfigIDResponse, error) {
+	var err error = nil
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(19, request)
+		defer func() { server.traceExit(20, request, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
 	g2configmgr := getG2configmgr()
-	err := g2configmgr.ReplaceDefaultConfigID(ctx, request.GetOldConfigID(), request.GetNewConfigID())
+	err = g2configmgr.ReplaceDefaultConfigID(ctx, request.GetOldConfigID(), request.GetNewConfigID())
 	response := g2pb.ReplaceDefaultConfigIDResponse{}
-	if server.isTrace {
-		defer server.traceExit(20, request, err, time.Since(entryTime))
-	}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) SetDefaultConfigID(ctx context.Context, request *g2pb.SetDefaultConfigIDRequest) (*g2pb.SetDefaultConfigIDResponse, error) {
+	var err error = nil
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(21, request)
+		defer func() { server.traceExit(22, request, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
 	g2configmgr := getG2configmgr()
-	err := g2configmgr.SetDefaultConfigID(ctx, request.GetConfigID())
+	err = g2configmgr.SetDefaultConfigID(ctx, request.GetConfigID())
 	response := g2pb.SetDefaultConfigIDResponse{}
-	if server.isTrace {
-		defer server.traceExit(22, request, err, time.Since(entryTime))
-	}
 	return &response, err
 }
 
 func (server *G2ConfigmgrServer) SetLogLevel(ctx context.Context, logLevelName string) error {
-	if server.isTrace {
-		server.traceEntry(23, logLevelName)
-	}
-	entryTime := time.Now()
 	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(23, logLevelName)
+		defer func() { server.traceExit(24, logLevelName, err, time.Since(entryTime)) }()
+	}
 	if logging.IsValidLogLevelName(logLevelName) {
 		g2configmgr := getG2configmgr()
 
@@ -224,9 +218,6 @@ func (server *G2ConfigmgrServer) SetLogLevel(ctx context.Context, logLevelName s
 		server.isTrace = (logLevelName == logging.LevelTraceName)
 	} else {
 		err = fmt.Errorf("invalid error level: %s", logLevelName)
-	}
-	if server.isTrace {
-		defer server.traceExit(24, logLevelName, err, time.Since(entryTime))
 	}
 	return err
 }
