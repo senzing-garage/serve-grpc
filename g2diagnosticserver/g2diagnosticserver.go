@@ -113,9 +113,7 @@ func (server *G2DiagnosticServer) Destroy(ctx context.Context, request *g2pb.Des
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(7, request)
-		if server.isTrace {
-			defer func() { server.traceExit(8, request, err, time.Since(entryTime)) }()
-		}
+		defer func() { server.traceExit(8, request, err, time.Since(entryTime)) }()
 	}
 	// Not allowed by gRPC server
 	// g2diagnostic := getG2diagnostic()
@@ -137,7 +135,6 @@ func (server *G2DiagnosticServer) FetchNextEntityBySize(ctx context.Context, req
 	entityListBySizeHandleInt, err := strconv.ParseUint(request.GetEntityListBySizeHandle(), 10, 64)
 	if err == nil {
 		result, err = g2diagnostic.FetchNextEntityBySize(ctx, uintptr(entityListBySizeHandleInt))
-
 	}
 	response := g2pb.FetchNextEntityBySizeResponse{
 		Result: result,
