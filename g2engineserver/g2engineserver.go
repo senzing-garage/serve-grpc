@@ -224,6 +224,7 @@ func (server *G2EngineServer) Destroy(ctx context.Context, request *g2pb.Destroy
 		server.traceEntry(21, request)
 	}
 	entryTime := time.Now()
+	// Not allowed by gRPC server
 	// g2engine := getG2engine()
 	// err := g2engine.Destroy(ctx)
 	err := server.error(4001)
@@ -816,6 +817,7 @@ func (server *G2EngineServer) Init(ctx context.Context, request *g2pb.InitReques
 		server.traceEntry(99, request)
 	}
 	entryTime := time.Now()
+	// Not allowed by gRPC server
 	// g2engine := getG2engine()
 	// err := g2engine.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
 	err := server.error(4002)
@@ -831,6 +833,7 @@ func (server *G2EngineServer) InitWithConfigID(ctx context.Context, request *g2p
 		server.traceEntry(101, request)
 	}
 	entryTime := time.Now()
+	// Not allowed by gRPC server
 	// g2engine := getG2engine()
 	// err := g2engine.InitWithConfigID(ctx, request.GetModuleName(), request.GetIniParams(), request.GetInitConfigID(), int(request.GetVerboseLogging()))
 	err := server.error(4003)

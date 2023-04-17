@@ -140,6 +140,7 @@ func (server *G2ConfigServer) Destroy(ctx context.Context, request *g2pb.Destroy
 		server.traceEntry(11, request)
 		defer func() { server.traceExit(12, request, err, time.Since(entryTime)) }()
 	}
+	// Not allowed by gRPC server
 	// g2config := getG2config()
 	// err := g2config.Destroy(ctx)
 	err = server.error(4001)
@@ -154,6 +155,7 @@ func (server *G2ConfigServer) Init(ctx context.Context, request *g2pb.InitReques
 		server.traceEntry(17, request)
 		defer func() { server.traceExit(18, request, err, time.Since(entryTime)) }()
 	}
+	// Not allowed by gRPC server
 	// g2config := getG2config()
 	// err := g2config.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
 	err = server.error(4002)

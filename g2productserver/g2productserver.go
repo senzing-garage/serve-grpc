@@ -85,6 +85,7 @@ func (server *G2ProductServer) Destroy(ctx context.Context, request *g2pb.Destro
 		server.traceEntry(3, request)
 	}
 	entryTime := time.Now()
+	// Not allowed by gRPC server
 	// g2product := getG2product()
 	// err := g2product.Destroy(ctx)
 	err := server.error(4001)
@@ -100,6 +101,7 @@ func (server *G2ProductServer) Init(ctx context.Context, request *g2pb.InitReque
 		server.traceEntry(9, request)
 	}
 	entryTime := time.Now()
+	// Not allowed by gRPC server
 	// g2product := getG2product()
 	// err := g2product.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
 	err := server.error(4002)
