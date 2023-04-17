@@ -456,18 +456,17 @@ func (server *G2DiagnosticServer) SetLogLevel(ctx context.Context, logLevelName 
 		server.traceEntry(53, logLevelName)
 		defer func() { server.traceExit(54, logLevelName, err, time.Since(entryTime)) }()
 	}
-	if logging.IsValidLogLevelName(logLevelName) {
-		g2diagnostic := getG2diagnostic()
-
-		// TODO: Remove once g2configmgr.SetLogLevel(context.Context, string)
-		logLevel := logging.TextToLoggerLevelMap[logLevelName]
-
-		g2diagnostic.SetLogLevel(ctx, logLevel)
-		server.getLogger().SetLogLevel(logLevelName)
-		server.isTrace = (logLevelName == logging.LevelTraceName)
-	} else {
-		err = fmt.Errorf("invalid error level: %s", logLevelName)
+	if !logging.IsValidLogLevelName(logLevelName) {
+		return fmt.Errorf("invalid error level: %s", logLevelName)
 	}
+	g2diagnostic := getG2diagnostic()
+
+	// TODO: Remove once g2configmgr.SetLogLevel(context.Context, string)
+	logLevel := logging.TextToLoggerLevelMap[logLevelName]
+
+	g2diagnostic.SetLogLevel(ctx, logLevel)
+	server.getLogger().SetLogLevel(logLevelName)
+	server.isTrace = (logLevelName == logging.LevelTraceName)
 	return err
 }
 

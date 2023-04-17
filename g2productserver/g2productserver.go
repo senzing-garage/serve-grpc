@@ -133,18 +133,17 @@ func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevelName str
 		server.traceEntry(13, logLevelName)
 		defer func() { server.traceExit(14, logLevelName, err, time.Since(entryTime)) }()
 	}
-	if logging.IsValidLogLevelName(logLevelName) {
-		g2product := getG2product()
-
-		// TODO: Remove once g2configmgr.SetLogLevel(context.Context, string)
-		logLevel := logging.TextToLoggerLevelMap[logLevelName]
-
-		g2product.SetLogLevel(ctx, logLevel)
-		server.getLogger().SetLogLevel(logLevelName)
-		server.isTrace = (logLevelName == logging.LevelTraceName)
-	} else {
-		err = fmt.Errorf("invalid error level: %s", logLevelName)
+	if !logging.IsValidLogLevelName(logLevelName) {
+		return fmt.Errorf("invalid error level: %s", logLevelName)
 	}
+	g2product := getG2product()
+
+	// TODO: Remove once g2configmgr.SetLogLevel(context.Context, string)
+	logLevel := logging.TextToLoggerLevelMap[logLevelName]
+
+	g2product.SetLogLevel(ctx, logLevel)
+	server.getLogger().SetLogLevel(logLevelName)
+	server.isTrace = (logLevelName == logging.LevelTraceName)
 	return err
 }
 

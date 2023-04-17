@@ -220,18 +220,17 @@ func (server *G2ConfigServer) SetLogLevel(ctx context.Context, logLevelName stri
 		server.traceEntry(25, logLevelName)
 		defer func() { server.traceExit(26, logLevelName, err, time.Since(entryTime)) }()
 	}
-	if logging.IsValidLogLevelName(logLevelName) {
-		g2config := getG2config()
-
-		// TODO: Remove once g2configmgr.SetLogLevel(context.Context, string)
-		logLevel := logging.TextToLoggerLevelMap[logLevelName]
-
-		g2config.SetLogLevel(ctx, logLevel)
-		server.getLogger().SetLogLevel(logLevelName)
-		server.isTrace = (logLevelName == logging.LevelTraceName)
-	} else {
-		err = fmt.Errorf("invalid error level: %s", logLevelName)
+	if !logging.IsValidLogLevelName(logLevelName) {
+		return fmt.Errorf("invalid error level: %s", logLevelName)
 	}
+	g2config := getG2config()
+
+	// TODO: Remove once g2configmgr.SetLogLevel(context.Context, string)
+	logLevel := logging.TextToLoggerLevelMap[logLevelName]
+
+	g2config.SetLogLevel(ctx, logLevel)
+	server.getLogger().SetLogLevel(logLevelName)
+	server.isTrace = (logLevelName == logging.LevelTraceName)
 	return err
 }
 
