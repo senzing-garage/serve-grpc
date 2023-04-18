@@ -57,8 +57,8 @@ build-linux:
 	GOARCH=amd64 \
 	go build \
 		-ldflags \
-			"-X 'github.com/senzing/serve-grpc/cmd.buildVersion=${BUILD_VERSION}' \
-			-X 'github.com/senzing/serve-grpc/cmd.buildIteration=${BUILD_ITERATION}' \
+			"-X 'github.com/senzing/init-database/cmd.githubVersion=${BUILD_VERSION}' \
+			-X 'github.com/senzing/init-database/cmd.githubIteration=${BUILD_ITERATION}' \
 			" \
 		-o $(GO_PACKAGE_NAME)
 	@mkdir -p $(TARGET_DIRECTORY)/linux || true
