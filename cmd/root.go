@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/senzing/go-common/g2engineconfigurationjson"
-	"github.com/senzing/go-logging/logger"
 	"github.com/senzing/senzing-tools/constant"
 	"github.com/senzing/senzing-tools/envar"
 	"github.com/senzing/senzing-tools/helper"
@@ -32,17 +31,45 @@ const (
 	defaultEngineLogLevel          int    = 0
 	defaultGrpcPort                int    = 8258
 	defaultLogLevel                string = "INFO"
+	Short                          string = "Start a gRPC server for the Senzing SDK API"
+	Use                            string = "serve-grpc"
+	Long                           string = `
+Start a gRPC server for the Senzing SDK API.
+For more information, visit https://github.com/Senzing/serve-grpc
+		`
 )
 
 var (
-	buildIteration          string = "0"
-	buildVersion            string = "0.3.7"
 	defaultEngineModuleName string = fmt.Sprintf("serve-grpc-%d", time.Now().Unix())
 )
 
+// ----------------------------------------------------------------------------
+// Private functions
+// ----------------------------------------------------------------------------
+
+// Since init() is always invoked, define command line parameters.
+func init() {
+	RootCmd.Flags().Bool(option.EnableG2config, defaultEnableG2config, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2config))
+	RootCmd.Flags().Bool(option.EnableG2configmgr, defaultEnableG2configmgr, fmt.Sprintf("Enable G2ConfigMgr service [%s]", envar.EnableG2configmgr))
+	RootCmd.Flags().Bool(option.EnableG2diagnostic, defaultEnableG2diagnostic, fmt.Sprintf("Enable G2Diagnostic service [%s]", envar.EnableG2diagnostic))
+	RootCmd.Flags().Bool(option.EnableG2engine, defaultEnableG2engine, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2engine))
+	RootCmd.Flags().Bool(option.EnableG2product, defaultEnableG2product, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2product))
+	RootCmd.Flags().Int(option.EngineLogLevel, defaultEngineLogLevel, fmt.Sprintf("Log level for Senzing Engine [%s]", envar.EngineLogLevel))
+	RootCmd.Flags().Int(option.GrpcPort, defaultGrpcPort, fmt.Sprintf("Port used to serve gRPC [%s]", envar.GrpcPort))
+	RootCmd.Flags().String(option.Configuration, defaultConfiguration, fmt.Sprintf("Path to configuration file [%s]", envar.Configuration))
+	RootCmd.Flags().String(option.DatabaseUrl, defaultDatabaseUrl, fmt.Sprintf("URL of database to initialize [%s]", envar.DatabaseUrl))
+	RootCmd.Flags().String(option.EngineConfigurationJson, defaultEngineConfigurationJson, fmt.Sprintf("JSON string sent to Senzing's init() function [%s]", envar.EngineConfigurationJson))
+	RootCmd.Flags().String(option.EngineModuleName, defaultEngineModuleName, fmt.Sprintf("Identifier given to the Senzing engine [%s]", envar.EngineModuleName))
+	RootCmd.Flags().String(option.LogLevel, defaultLogLevel, fmt.Sprintf("Log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [%s]", envar.LogLevel))
+}
+
 // If a configuration file is present, load it.
 func loadConfigurationFile(cobraCommand *cobra.Command) {
-	configuration := cobraCommand.Flags().Lookup(option.Configuration).Value.String()
+	configuration := ""
+	configFlag := cobraCommand.Flags().Lookup(option.Configuration)
+	if configFlag != nil {
+		configuration = configFlag.Value.String()
+	}
 	if configuration != "" { // Use configuration file specified as a command line option.
 		viper.SetConfigFile(configuration)
 	} else { // Search for a configuration file.
@@ -118,53 +145,9 @@ func loadOptions(cobraCommand *cobra.Command) {
 	}
 }
 
-// RootCmd represents the command.
-var RootCmd = &cobra.Command{
-	Use:   "serve-grpc",
-	Short: "Start a gRPC server for the Senzing SDK API",
-	Long: `
-Start a gRPC server for the Senzing SDK API.
-For more information, visit https://github.com/Senzing/serve-grpc
-	`,
-	PreRun: func(cobraCommand *cobra.Command, args []string) {
-		loadConfigurationFile(cobraCommand)
-		loadOptions(cobraCommand)
-		cobraCommand.SetVersionTemplate(constant.VersionTemplate)
-	},
-	RunE: func(cmd *cobra.Command, args []string) error {
-		var err error = nil
-		ctx := context.TODO()
-
-		logLevel, ok := logger.TextToLevelMap[viper.GetString(option.LogLevel)]
-		if !ok {
-			logLevel = logger.LevelInfo
-		}
-
-		senzingEngineConfigurationJson := viper.GetString(option.EngineConfigurationJson)
-		if len(senzingEngineConfigurationJson) == 0 {
-			senzingEngineConfigurationJson, err = g2engineconfigurationjson.BuildSimpleSystemConfigurationJson(viper.GetString(option.DatabaseUrl))
-			if err != nil {
-				return err
-			}
-		}
-
-		grpcserver := &grpcserver.GrpcServerImpl{
-			EnableG2config:                 viper.GetBool(option.EnableG2config),
-			EnableG2configmgr:              viper.GetBool(option.EnableG2configmgr),
-			EnableG2diagnostic:             viper.GetBool(option.EnableG2diagnostic),
-			EnableG2engine:                 viper.GetBool(option.EnableG2engine),
-			EnableG2product:                viper.GetBool(option.EnableG2product),
-			Port:                           viper.GetInt(option.GrpcPort),
-			LogLevel:                       logLevel,
-			SenzingEngineConfigurationJson: senzingEngineConfigurationJson,
-			SenzingModuleName:              viper.GetString(option.EngineModuleName),
-			SenzingVerboseLogging:          viper.GetInt(option.EngineLogLevel),
-		}
-		err = grpcserver.Serve(ctx)
-		return err
-	},
-	Version: helper.MakeVersion(buildVersion, buildIteration),
-}
+// ----------------------------------------------------------------------------
+// Public functions
+// ----------------------------------------------------------------------------
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the RootCmd.
@@ -175,18 +158,59 @@ func Execute() {
 	}
 }
 
-// Since init() is always invoked, define command line parameters.
-func init() {
-	RootCmd.Flags().Bool(option.EnableG2config, defaultEnableG2config, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2config))
-	RootCmd.Flags().Bool(option.EnableG2configmgr, defaultEnableG2configmgr, fmt.Sprintf("Enable G2ConfigMgr service [%s]", envar.EnableG2configmgr))
-	RootCmd.Flags().Bool(option.EnableG2diagnostic, defaultEnableG2diagnostic, fmt.Sprintf("Enable G2Diagnostic service [%s]", envar.EnableG2diagnostic))
-	RootCmd.Flags().Bool(option.EnableG2engine, defaultEnableG2engine, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2engine))
-	RootCmd.Flags().Bool(option.EnableG2product, defaultEnableG2product, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2product))
-	RootCmd.Flags().Int(option.EngineLogLevel, defaultEngineLogLevel, fmt.Sprintf("Log level for Senzing Engine [%s]", envar.EngineLogLevel))
-	RootCmd.Flags().Int(option.GrpcPort, defaultGrpcPort, fmt.Sprintf("Port used to serve gRPC [%s]", envar.GrpcPort))
-	RootCmd.Flags().String(option.Configuration, defaultConfiguration, fmt.Sprintf("Path to configuration file [%s]", envar.Configuration))
-	RootCmd.Flags().String(option.DatabaseUrl, defaultDatabaseUrl, fmt.Sprintf("URL of database to initialize [%s]", envar.DatabaseUrl))
-	RootCmd.Flags().String(option.EngineConfigurationJson, defaultEngineConfigurationJson, fmt.Sprintf("JSON string sent to Senzing's init() function [%s]", envar.EngineConfigurationJson))
-	RootCmd.Flags().String(option.EngineModuleName, defaultEngineModuleName, fmt.Sprintf("Identifier given to the Senzing engine [%s]", envar.EngineModuleName))
-	RootCmd.Flags().String(option.LogLevel, defaultLogLevel, fmt.Sprintf("Log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [%s]", envar.LogLevel))
+// Used in construction of cobra.Command
+func PreRun(cobraCommand *cobra.Command, args []string) {
+	loadConfigurationFile(cobraCommand)
+	loadOptions(cobraCommand)
+	cobraCommand.SetVersionTemplate(constant.VersionTemplate)
+}
+
+// Used in construction of cobra.Command
+func RunE(_ *cobra.Command, _ []string) error {
+	var err error = nil
+	ctx := context.TODO()
+
+	logLevelName := viper.GetString(option.LogLevel)
+
+	senzingEngineConfigurationJson := viper.GetString(option.EngineConfigurationJson)
+	if len(senzingEngineConfigurationJson) == 0 {
+		senzingEngineConfigurationJson, err = g2engineconfigurationjson.BuildSimpleSystemConfigurationJson(viper.GetString(option.DatabaseUrl))
+		if err != nil {
+			return err
+		}
+	}
+
+	grpcserver := &grpcserver.GrpcServerImpl{
+		EnableG2config:                 viper.GetBool(option.EnableG2config),
+		EnableG2configmgr:              viper.GetBool(option.EnableG2configmgr),
+		EnableG2diagnostic:             viper.GetBool(option.EnableG2diagnostic),
+		EnableG2engine:                 viper.GetBool(option.EnableG2engine),
+		EnableG2product:                viper.GetBool(option.EnableG2product),
+		Port:                           viper.GetInt(option.GrpcPort),
+		LogLevelName:                   logLevelName,
+		SenzingEngineConfigurationJson: senzingEngineConfigurationJson,
+		SenzingModuleName:              viper.GetString(option.EngineModuleName),
+		SenzingVerboseLogging:          viper.GetInt(option.EngineLogLevel),
+	}
+	err = grpcserver.Serve(ctx)
+	return err
+}
+
+// Used in construction of cobra.Command
+func Version() string {
+	return helper.MakeVersion(githubVersion, githubIteration)
+}
+
+// ----------------------------------------------------------------------------
+// Command
+// ----------------------------------------------------------------------------
+
+// RootCmd represents the command.
+var RootCmd = &cobra.Command{
+	Use:     Use,
+	Short:   Short,
+	Long:    Long,
+	PreRun:  PreRun,
+	RunE:    RunE,
+	Version: Version(),
 }

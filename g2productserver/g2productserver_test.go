@@ -94,12 +94,6 @@ func expectError(test *testing.T, ctx context.Context, g2product G2ProductServer
 	}
 }
 
-func testErrorNoFail(test *testing.T, ctx context.Context, g2product G2ProductServer, err error) {
-	if err != nil {
-		test.Log("Error:", err.Error())
-	}
-}
-
 // ----------------------------------------------------------------------------
 // Test harness
 // ----------------------------------------------------------------------------

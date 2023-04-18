@@ -2,14 +2,14 @@ package g2productserver
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
 	g2sdk "github.com/senzing/g2-sdk-go-base/g2product"
 	"github.com/senzing/g2-sdk-go/g2api"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2product"
-	"github.com/senzing/go-logging/logger"
-	"github.com/senzing/go-logging/messagelogger"
+	"github.com/senzing/go-logging/logging"
 	"github.com/senzing/go-observing/observer"
 )
 
@@ -21,6 +21,42 @@ var (
 // ----------------------------------------------------------------------------
 // Internal methods
 // ----------------------------------------------------------------------------
+
+// --- Logging ----------------------------------------------------------------
+
+// Get the Logger singleton.
+func (server *G2ProductServer) getLogger() logging.LoggingInterface {
+	var err error = nil
+	if server.logger == nil {
+		options := []interface{}{
+			&logging.OptionCallerSkip{Value: 3},
+		}
+		server.logger, err = logging.NewSenzingToolsLogger(ProductId, IdMessages, options...)
+		if err != nil {
+			panic(err)
+		}
+	}
+	return server.logger
+}
+
+// Trace method entry.
+func (server *G2ProductServer) traceEntry(messageNumber int, details ...interface{}) {
+	server.getLogger().Log(messageNumber, details...)
+}
+
+// Trace method exit.
+func (server *G2ProductServer) traceExit(messageNumber int, details ...interface{}) {
+	server.getLogger().Log(messageNumber, details...)
+}
+
+// --- Errors -----------------------------------------------------------------
+
+// Create error.
+func (server *G2ProductServer) error(messageNumber int, details ...interface{}) error {
+	return server.getLogger().Error(messageNumber, details...)
+}
+
+// --- Services ---------------------------------------------------------------
 
 // Singleton pattern for g2product.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
@@ -35,151 +71,143 @@ func GetSdkG2product() g2api.G2product {
 	return getG2product()
 }
 
-// Get the Logger singleton.
-func (server *G2ProductServer) getLogger() messagelogger.MessageLoggerInterface {
-	if server.logger == nil {
-		server.logger, _ = messagelogger.NewSenzingApiLogger(ProductId, IdMessages, IdStatuses, messagelogger.LevelInfo)
-	}
-	return server.logger
-}
-
-// Trace method entry.
-func (server *G2ProductServer) traceEntry(errorNumber int, details ...interface{}) {
-	server.getLogger().Log(errorNumber, details...)
-}
-
-// Trace method exit.
-func (server *G2ProductServer) traceExit(errorNumber int, details ...interface{}) {
-	server.getLogger().Log(errorNumber, details...)
-}
-
 // ----------------------------------------------------------------------------
 // Interface methods for github.com/senzing/g2-sdk-go/g2product.G2product
 // ----------------------------------------------------------------------------
 
 func (server *G2ProductServer) Destroy(ctx context.Context, request *g2pb.DestroyRequest) (*g2pb.DestroyResponse, error) {
+	var err error = nil
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(3, request)
+		defer func() { server.traceExit(4, request, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
+	// Not allowed by gRPC server
 	// g2product := getG2product()
 	// err := g2product.Destroy(ctx)
-	err := server.getLogger().Error(4001)
+	err = server.error(4001)
 	response := g2pb.DestroyResponse{}
-	if server.isTrace {
-		defer server.traceExit(4, request, err, time.Since(entryTime))
-	}
 	return &response, err
 }
 
 func (server *G2ProductServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
+	var err error = nil
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(9, request)
+		defer func() { server.traceExit(10, request, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
+	// Not allowed by gRPC server
 	// g2product := getG2product()
 	// err := g2product.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
-	err := server.getLogger().Error(4002)
+	err = server.error(4002)
 	response := g2pb.InitResponse{}
-	if server.isTrace {
-		defer server.traceExit(10, request, err, time.Since(entryTime))
-	}
 	return &response, err
 }
 
 func (server *G2ProductServer) License(ctx context.Context, request *g2pb.LicenseRequest) (*g2pb.LicenseResponse, error) {
+	var err error = nil
+	var result string
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(11, request)
+		defer func() { server.traceExit(12, request, result, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
 	g2product := getG2product()
-	result, err := g2product.License(ctx)
+	result, err = g2product.License(ctx)
 	response := g2pb.LicenseResponse{
 		Result: result,
-	}
-	if server.isTrace {
-		defer server.traceExit(12, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ProductServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(1, observer.GetObserverId(ctx))
+		defer func() { server.traceExit(2, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	}
 	g2product := getG2product()
 	return g2product.RegisterObserver(ctx, observer)
 }
 
-/*
-The SetLogLevel method sets the level of logging.
-
-Input
-  - ctx: A context to control lifecycle.
-  - logLevel: The desired log level. TRACE, DEBUG, INFO, WARN, ERROR, FATAL or PANIC.
-*/
-func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevel logger.Level) error {
-	if server.isTrace {
-		server.traceEntry(13, logLevel)
-	}
-	entryTime := time.Now()
+func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevelName string) error {
 	var err error = nil
-	g2product := getG2product()
-	g2product.SetLogLevel(ctx, logLevel)
-	server.getLogger().SetLogLevel(messagelogger.Level(logLevel))
-	server.isTrace = (server.getLogger().GetLogLevel() == messagelogger.LevelTrace)
 	if server.isTrace {
-		defer server.traceExit(14, logLevel, err, time.Since(entryTime))
+		entryTime := time.Now()
+		server.traceEntry(13, logLevelName)
+		defer func() { server.traceExit(14, logLevelName, err, time.Since(entryTime)) }()
 	}
+	if !logging.IsValidLogLevelName(logLevelName) {
+		return fmt.Errorf("invalid error level: %s", logLevelName)
+	}
+	g2product := getG2product()
+
+	// TODO: Remove once g2configmgr.SetLogLevel(context.Context, string)
+	logLevel := logging.TextToLoggerLevelMap[logLevelName]
+
+	g2product.SetLogLevel(ctx, logLevel)
+	server.getLogger().SetLogLevel(logLevelName)
+	server.isTrace = (logLevelName == logging.LevelTraceName)
 	return err
 }
 
 func (server *G2ProductServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(5, observer.GetObserverId(ctx))
+		defer func() { server.traceExit(6, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	}
 	g2product := getG2product()
 	return g2product.UnregisterObserver(ctx, observer)
 }
 
 func (server *G2ProductServer) ValidateLicenseFile(ctx context.Context, request *g2pb.ValidateLicenseFileRequest) (*g2pb.ValidateLicenseFileResponse, error) {
+	var err error = nil
+	var result string
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(14, request)
+		defer func() { server.traceExit(16, request, result, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
 	g2product := getG2product()
-	result, err := g2product.ValidateLicenseFile(ctx, request.GetLicenseFilePath())
+	result, err = g2product.ValidateLicenseFile(ctx, request.GetLicenseFilePath())
 	response := g2pb.ValidateLicenseFileResponse{
 		Result: result,
-	}
-	if server.isTrace {
-		defer server.traceExit(16, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ProductServer) ValidateLicenseStringBase64(ctx context.Context, request *g2pb.ValidateLicenseStringBase64Request) (*g2pb.ValidateLicenseStringBase64Response, error) {
+	var err error = nil
+	var result string
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(17, request)
+		defer func() { server.traceExit(18, request, result, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
 	g2product := getG2product()
-	result, err := g2product.ValidateLicenseStringBase64(ctx, request.GetLicenseString())
+	result, err = g2product.ValidateLicenseStringBase64(ctx, request.GetLicenseString())
 	response := g2pb.ValidateLicenseStringBase64Response{
 		Result: result,
-	}
-	if server.isTrace {
-		defer server.traceExit(18, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }
 
 func (server *G2ProductServer) Version(ctx context.Context, request *g2pb.VersionRequest) (*g2pb.VersionResponse, error) {
+	var err error = nil
+	var result string
 	if server.isTrace {
+		entryTime := time.Now()
 		server.traceEntry(19, request)
+		defer func() { server.traceExit(20, request, result, err, time.Since(entryTime)) }()
 	}
-	entryTime := time.Now()
 	g2product := getG2product()
-	result, err := g2product.Version(ctx)
+	result, err = g2product.Version(ctx)
 	response := g2pb.VersionResponse{
 		Result: result,
-	}
-	if server.isTrace {
-		defer server.traceExit(20, request, result, err, time.Since(entryTime))
 	}
 	return &response, err
 }

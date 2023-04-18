@@ -17,6 +17,9 @@ type GrpcServer interface {
 // Identfier of the  package found messages having the format "senzing-6204xxxx".
 const ProductId = 6204
 
+// Log message prefix.
+const Prefix = "serve-grpc.grpcserver."
+
 // ----------------------------------------------------------------------------
 // Variables
 // ----------------------------------------------------------------------------
