@@ -122,6 +122,12 @@ func (server *G2ProductServer) License(ctx context.Context, request *g2pb.Licens
 }
 
 func (server *G2ProductServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(1, observer.GetObserverId(ctx))
+		defer func() { server.traceExit(2, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	}
 	g2product := getG2product()
 	return g2product.RegisterObserver(ctx, observer)
 }
@@ -148,6 +154,12 @@ func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevelName str
 }
 
 func (server *G2ProductServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(5, observer.GetObserverId(ctx))
+		defer func() { server.traceExit(6, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	}
 	g2product := getG2product()
 	return g2product.UnregisterObserver(ctx, observer)
 }

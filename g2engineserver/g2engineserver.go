@@ -1015,6 +1015,12 @@ func (server *G2EngineServer) ReevaluateRecordWithInfo(ctx context.Context, requ
 }
 
 func (server *G2EngineServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(11, observer.GetObserverId(ctx))
+		defer func() { server.traceExit(12, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	}
 	g2engine := getG2engine()
 	return g2engine.RegisterObserver(ctx, observer)
 }
@@ -1233,6 +1239,12 @@ func (server *G2EngineServer) StreamExportJSONEntityReport(request *g2pb.StreamE
 }
 
 func (server *G2EngineServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(79, observer.GetObserverId(ctx))
+		defer func() { server.traceExit(80, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	}
 	g2engine := getG2engine()
 	return g2engine.UnregisterObserver(ctx, observer)
 }

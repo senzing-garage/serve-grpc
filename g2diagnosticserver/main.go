@@ -34,6 +34,8 @@ const Prefix = "serve-grpc.g2diagnosticserver."
 var IdMessages = map[int]string{
 	1:    "Enter " + Prefix + "CheckDBPerf(%+v).",
 	2:    "Exit  " + Prefix + "CheckDBPerf(%+v) returned (%s, %v).",
+	3:    "Enter " + Prefix + "RegisterObserver(%s).",
+	4:    "Exit  " + Prefix + "RegisterObserver(%s) returned (%s, %v).",
 	5:    "Enter " + Prefix + "CloseEntityListBySize(%+v).",
 	6:    "Exit  " + Prefix + "CloseEntityListBySize(%+v) returned (%v).",
 	7:    "Enter " + Prefix + "Destroy(%+v).",
@@ -60,6 +62,8 @@ var IdMessages = map[int]string{
 	28:   "Exit  " + Prefix + "GetFeature(%+v) returned (%s, %v).",
 	29:   "Enter " + Prefix + "GetGenericFeatures(%+v).",
 	30:   "Exit  " + Prefix + "GetGenericFeatures(%+v) returned (%s, %v).",
+	31:   "Enter " + Prefix + "UnregisterObserver(%s).",
+	32:   "Exit  " + Prefix + "UnregisterObserver(%s) returned (%s, %v).",
 	35:   "Enter " + Prefix + "GetLogicalCores(%+v).",
 	36:   "Exit  " + Prefix + "GetLogicalCores(%+v) returned (%d, %v).",
 	37:   "Enter " + Prefix + "GetMappingStatistics(%+v).",

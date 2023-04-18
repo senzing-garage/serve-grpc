@@ -34,6 +34,8 @@ const Prefix = "serve-grpc.g2configmgrserver."
 var IdMessages = map[int]string{
 	1:    "Enter " + Prefix + "AddConfig(%+v).",
 	2:    "Exit  " + Prefix + "AddConfig(%+v) returned (%d, %v).",
+	3:    "Enter " + Prefix + "RegisterObserver(%s).",
+	4:    "Exit  " + Prefix + "RegisterObserver(%s) returned (%v).",
 	5:    "Enter " + Prefix + "Destroy(%+v).",
 	6:    "Exit  " + Prefix + "Destroy(%+v) returned (%v).",
 	7:    "Enter " + Prefix + "GetConfig(%+v).",
@@ -42,6 +44,8 @@ var IdMessages = map[int]string{
 	10:   "Exit  " + Prefix + "GetConfigList(%+v) returned (%s, %v).",
 	11:   "Enter " + Prefix + "GetDefaultConfigID(%+v).",
 	12:   "Exit  " + Prefix + "GetDefaultConfigID(%+v) returned (%d, %v).",
+	13:   "Enter " + Prefix + "UnregisterObserver(%s).",
+	14:   "Exit  " + Prefix + "UnregisterObserver(%s) returned (%v).",
 	17:   "Enter " + Prefix + "Init(%+v).",
 	18:   "Exit  " + Prefix + "Init(%+v) returned (%v).",
 	19:   "Enter " + Prefix + "ReplaceDefaultConfigID(%+v).",

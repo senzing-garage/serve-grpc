@@ -32,8 +32,12 @@ const Prefix = "serve-grpc.g2productserver."
 
 // Message templates for the g2productserver package.
 var IdMessages = map[int]string{
+	1:    "Enter " + Prefix + "RegisterObserver(%s).",
+	2:    "Exit  " + Prefix + "RegisterObserver(%s) returned (%v).",
 	3:    "Enter " + Prefix + "Destroy(%+v).",
 	4:    "Exit  " + Prefix + "Destroy(%+v) returned (%v).",
+	5:    "Enter " + Prefix + "UnregisterObserver(%s).",
+	6:    "Exit  " + Prefix + "UnregisterObserver(%s) returned (%v).",
 	9:    "Enter " + Prefix + "Init(%+v).",
 	10:   "Exit  " + Prefix + "Init(%+v) returned (%v).",
 	11:   "Enter " + Prefix + "License(%+v).",

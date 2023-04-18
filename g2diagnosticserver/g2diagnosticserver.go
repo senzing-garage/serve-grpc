@@ -429,6 +429,12 @@ func (server *G2DiagnosticServer) InitWithConfigID(ctx context.Context, request 
 }
 
 func (server G2DiagnosticServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(3, observer.GetObserverId(ctx))
+		defer func() { server.traceExit(4, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	}
 	g2diagnostic := getG2diagnostic()
 	return g2diagnostic.RegisterObserver(ctx, observer)
 }
@@ -515,6 +521,12 @@ func (server *G2DiagnosticServer) StreamEntityListBySize(request *g2pb.StreamEnt
 }
 
 func (server *G2DiagnosticServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(31, observer.GetObserverId(ctx))
+		defer func() { server.traceExit(32, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	}
 	g2diagnostic := getG2diagnostic()
 	return g2diagnostic.UnregisterObserver(ctx, observer)
 }

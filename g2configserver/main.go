@@ -34,6 +34,8 @@ const Prefix = "serve-grpc.g2configserver."
 var IdMessages = map[int]string{
 	1:    "Enter " + Prefix + "AddDataSource(%+v).",
 	2:    "Exit  " + Prefix + "AddDataSource(%+v) returned (%s, %v).",
+	3:    "Enter " + Prefix + "RegisterObserver(%s).",
+	4:    "Exit  " + Prefix + "RegisterObserver(%s) returned (%v).",
 	5:    "Enter " + Prefix + "Close(%+v).",
 	6:    "Exit  " + Prefix + "Close(%+v) returned (%v).",
 	7:    "Enter " + Prefix + "Create(%+v).",
@@ -42,6 +44,8 @@ var IdMessages = map[int]string{
 	10:   "Exit  " + Prefix + "DeleteDataSource(%+v) returned (%v).",
 	11:   "Enter " + Prefix + "Destroy(%+v).",
 	12:   "Exit  " + Prefix + "Destroy(%+v) returned (%v).",
+	13:   "Enter " + Prefix + "UnregisterObserver(%s).",
+	14:   "Exit  " + Prefix + "UnregisterObserver(%s) returned (%v).",
 	17:   "Enter " + Prefix + "Init(%+v).",
 	18:   "Exit  " + Prefix + "Init(%+v) returned (%v).",
 	19:   "Enter " + Prefix + "ListDataSources(%+v).",

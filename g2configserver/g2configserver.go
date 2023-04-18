@@ -193,6 +193,12 @@ func (server *G2ConfigServer) Load(ctx context.Context, request *g2pb.LoadReques
 }
 
 func (server *G2ConfigServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(3, observer.GetObserverId(ctx))
+		defer func() { server.traceExit(4, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	}
 	g2config := getG2config()
 	return g2config.RegisterObserver(ctx, observer)
 }
@@ -235,6 +241,12 @@ func (server *G2ConfigServer) SetLogLevel(ctx context.Context, logLevelName stri
 }
 
 func (server *G2ConfigServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(13, observer.GetObserverId(ctx))
+		defer func() { server.traceExit(14, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	}
 	g2config := getG2config()
 	return g2config.UnregisterObserver(ctx, observer)
 }

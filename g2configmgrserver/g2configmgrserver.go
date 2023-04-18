@@ -170,6 +170,12 @@ func (server *G2ConfigmgrServer) Init(ctx context.Context, request *g2pb.InitReq
 }
 
 func (server *G2ConfigmgrServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(3, observer.GetObserverId(ctx))
+		defer func() { server.traceExit(4, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	}
 	g2configmgr := getG2configmgr()
 	return g2configmgr.RegisterObserver(ctx, observer)
 }
@@ -222,6 +228,12 @@ func (server *G2ConfigmgrServer) SetLogLevel(ctx context.Context, logLevelName s
 }
 
 func (server *G2ConfigmgrServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(13, observer.GetObserverId(ctx))
+		defer func() { server.traceExit(14, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	}
 	g2configmgr := getG2configmgr()
 	return g2configmgr.UnregisterObserver(ctx, observer)
 }
