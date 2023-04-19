@@ -158,8 +158,8 @@ github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/senzing/g2-sdk-go v0.5.1 h1:d3stZ0NE9EXjN4PREBzKbI8Y5JxZlOPqHEzO2FPHXps=
 github.com/senzing/g2-sdk-go v0.5.1/go.mod h1:SpYcLeU8slSpl76FDivuc8C7mD7Hw2uUkTgb6ANovlY=
-github.com/senzing/g2-sdk-go-base v0.1.5 h1:vyINK8mGTMGveOzoBYEEtaGjkhicoFzU5Esyk4K5ueU=
-github.com/senzing/g2-sdk-go-base v0.1.5/go.mod h1:eD4We2nbHyl+R4It2WgrlIFIvn0EtqwCZEzyKLQP6go=
+github.com/senzing/g2-sdk-go-base v0.1.6 h1:T0oNFFBlZtceQ923ylBx7Vpgnb72/cyW+wowWn0zR8M=
+github.com/senzing/g2-sdk-go-base v0.1.6/go.mod h1:eD4We2nbHyl+R4It2WgrlIFIvn0EtqwCZEzyKLQP6go=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230315125947-e4aea8f381eb h1:ig302ScN/Z1u0Qv0ZAYxXrzGaZCpvCdfE/wwZuCIykM=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230315125947-e4aea8f381eb/go.mod h1:RZR2aUAtCQsllrxNhYAs3WlHJOdHWcBDwylqg16HvI4=
 github.com/senzing/go-common v0.1.2 h1:d4E4cyKAqBvHvexLvj51WwoU78jTbLlBXmE67o41CM8=
@@ -170,8 +170,8 @@ github.com/senzing/go-messaging v0.1.0 h1:f7qlt8SMZ1g7qtVmnaH4rQQDKG/ioFGE+q0eE6
 github.com/senzing/go-messaging v0.1.0/go.mod h1:KJ5nBtX95kgWGTGCKn558oCmYy9kTf7Ra4+HsFzIYxA=
 github.com/senzing/go-observing v0.2.0 h1:QTFFTaZJ/1S2u96N17w2aCh/AHGHSOZCwX+VNU5v6tc=
 github.com/senzing/go-observing v0.2.0/go.mod h1:M5zrUXIYC4dL1fevBezB+aXIaU6uut/wynlQ93OcZhg=
-github.com/senzing/senzing-tools v0.2.1 h1:5cDHtSFyCjVi7G/wrnDXjP8ikk9zA5mf43rZMgwaAu4=
-github.com/senzing/senzing-tools v0.2.1/go.mod h1:EQJ6YiXTIUPBg+89z+oGE1YZLZSeisKt38vGnCtz2xY=
+github.com/senzing/senzing-tools v0.2.2 h1:nm6jnbgwqtjAavTDqsO38eJmaF6f5B9Z3PeffdsRWSg=
+github.com/senzing/senzing-tools v0.2.2/go.mod h1:0lAS/rNGTtTEwJkvcV/a6B7r5FebEwbz4eI/2IL1xmc=
 github.com/spf13/afero v1.9.5 h1:stMpOSZFs//0Lv29HduCmli3GUfpFoF3Y1Q/aXj/wVM=
 github.com/spf13/afero v1.9.5/go.mod h1:UBogFpq8E9Hx+xc5CNTTEpTnuHVmXDwZcZcE1eb/UhQ=
 github.com/spf13/cast v1.5.0 h1:rj3WzYc11XZaIZMPKmwP96zkFEnnAmV8s6XbB2aY32w=
@@ -225,8 +225,8 @@ golang.org/x/exp v0.0.0-20191227195350-da58074b4299/go.mod h1:2RIsYlXP63K8oxa1u0
 golang.org/x/exp v0.0.0-20200119233911-0405dc783f0a/go.mod h1:2RIsYlXP63K8oxa1u096TMicItID8zy7Y6sNkU49FU4=
 golang.org/x/exp v0.0.0-20200207192155-f17229e696bd/go.mod h1:J/WKrq2StrnmMY6+EHIKF9dgMWnmCNThgcyBT1FY9mM=
 golang.org/x/exp v0.0.0-20200224162631-6cc2880d07d6/go.mod h1:3jZMyOhIsHpP37uCMkUooju7aAi5cS1Q23tOzKc+0MU=
-golang.org/x/exp v0.0.0-20230321023759-10a507213a29 h1:ooxPy7fPvB4kwsA2h+iBNHkAbp/4JxTSwCmvdjEYmug=
-golang.org/x/exp v0.0.0-20230321023759-10a507213a29/go.mod h1:CxIveKay+FTh1D0yPZemJVgC/95VzuuOLq5Qi4xnoYc=
+golang.org/x/exp v0.0.0-20230418202329-0354be287a23 h1:4NKENAGIctmZYLK9W+X1kDK8ObBFqOSCJM6WE7CvkJY=
+golang.org/x/exp v0.0.0-20230418202329-0354be287a23/go.mod h1:CxIveKay+FTh1D0yPZemJVgC/95VzuuOLq5Qi4xnoYc=
 golang.org/x/image v0.0.0-20190227222117-0694c2d4d067/go.mod h1:kZ7UVZpmo3dzQBMxlp+ypCbDeSB+sBbTgSJuh5dn5js=
 golang.org/x/image v0.0.0-20190802002840-cff245a6509b/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
 golang.org/x/lint v0.0.0-20181026193005-c67002cb31c3/go.mod h1:UVdnD1Gm6xHRNCYTkRU2/jEulfH38KcIWyp/GAMgvoE=
