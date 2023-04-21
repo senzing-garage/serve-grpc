@@ -217,11 +217,7 @@ func (server *G2ConfigmgrServer) SetLogLevel(ctx context.Context, logLevelName s
 		return fmt.Errorf("invalid error level: %s", logLevelName)
 	}
 	g2configmgr := getG2configmgr()
-
-	// TODO: Remove once g2configmgr.SetLogLevel(context.Context, string)
-	logLevel := logging.TextToLoggerLevelMap[logLevelName]
-
-	g2configmgr.SetLogLevel(ctx, logLevel)
+	g2configmgr.SetLogLevel(ctx, logLevelName)
 	server.getLogger().SetLogLevel(logLevelName)
 	server.isTrace = (logLevelName == logging.LevelTraceName)
 	return err
