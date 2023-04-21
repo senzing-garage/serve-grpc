@@ -164,10 +164,10 @@ github.com/senzing/g2-sdk-proto/go v0.0.0-20230315125947-e4aea8f381eb h1:ig302Sc
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230315125947-e4aea8f381eb/go.mod h1:RZR2aUAtCQsllrxNhYAs3WlHJOdHWcBDwylqg16HvI4=
 github.com/senzing/go-common v0.1.2 h1:d4E4cyKAqBvHvexLvj51WwoU78jTbLlBXmE67o41CM8=
 github.com/senzing/go-common v0.1.2/go.mod h1:rDosNB5AHPIQvtwxvKvWKlF+dkzI+2WjeOfPWE7Bh2I=
-github.com/senzing/go-logging v1.2.0 h1:ROjVCeymsNuNuq+TKjy0X8tMRrTEmXohQJxjBosAzGY=
-github.com/senzing/go-logging v1.2.0/go.mod h1:or9iLmeJUZJRJ240cICaFUzrUDgyaVt3Tb8CV0WhZ2k=
-github.com/senzing/go-messaging v0.1.0 h1:f7qlt8SMZ1g7qtVmnaH4rQQDKG/ioFGE+q0eE6UeYz4=
-github.com/senzing/go-messaging v0.1.0/go.mod h1:KJ5nBtX95kgWGTGCKn558oCmYy9kTf7Ra4+HsFzIYxA=
+github.com/senzing/go-logging v1.2.1 h1:LAW9DgBr6w/xbtrOH7860RJ7RRLQ7eCtwatbn2DnFSM=
+github.com/senzing/go-logging v1.2.1/go.mod h1:tvI7GUcg9KEMHfMUEZu9abjfNKsptIBxhvVKHs420iI=
+github.com/senzing/go-messaging v0.1.1 h1:0bYgIa4EL+XtmqIxQGl4IeCHlbym8AlSWJvqwZU1s2o=
+github.com/senzing/go-messaging v0.1.1/go.mod h1:KJ5nBtX95kgWGTGCKn558oCmYy9kTf7Ra4+HsFzIYxA=
 github.com/senzing/go-observing v0.2.1 h1:LQsG1WlkULqfraEvfvsGiTY8wnmVYsGrPwm/py5MsiI=
 github.com/senzing/go-observing v0.2.1/go.mod h1:M5zrUXIYC4dL1fevBezB+aXIaU6uut/wynlQ93OcZhg=
 github.com/senzing/senzing-tools v0.2.2 h1:nm6jnbgwqtjAavTDqsO38eJmaF6f5B9Z3PeffdsRWSg=
@@ -225,8 +225,8 @@ golang.org/x/exp v0.0.0-20191227195350-da58074b4299/go.mod h1:2RIsYlXP63K8oxa1u0
 golang.org/x/exp v0.0.0-20200119233911-0405dc783f0a/go.mod h1:2RIsYlXP63K8oxa1u096TMicItID8zy7Y6sNkU49FU4=
 golang.org/x/exp v0.0.0-20200207192155-f17229e696bd/go.mod h1:J/WKrq2StrnmMY6+EHIKF9dgMWnmCNThgcyBT1FY9mM=
 golang.org/x/exp v0.0.0-20200224162631-6cc2880d07d6/go.mod h1:3jZMyOhIsHpP37uCMkUooju7aAi5cS1Q23tOzKc+0MU=
-golang.org/x/exp v0.0.0-20230418202329-0354be287a23 h1:4NKENAGIctmZYLK9W+X1kDK8ObBFqOSCJM6WE7CvkJY=
-golang.org/x/exp v0.0.0-20230418202329-0354be287a23/go.mod h1:CxIveKay+FTh1D0yPZemJVgC/95VzuuOLq5Qi4xnoYc=
+golang.org/x/exp v0.0.0-20230419192730-864b3d6c5c2c h1:HDdYQYKOkvJT/Plb5HwJJywTVyUnIctjQm6XSnZ/0CY=
+golang.org/x/exp v0.0.0-20230419192730-864b3d6c5c2c/go.mod h1:CxIveKay+FTh1D0yPZemJVgC/95VzuuOLq5Qi4xnoYc=
 golang.org/x/image v0.0.0-20190227222117-0694c2d4d067/go.mod h1:kZ7UVZpmo3dzQBMxlp+ypCbDeSB+sBbTgSJuh5dn5js=
 golang.org/x/image v0.0.0-20190802002840-cff245a6509b/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
 golang.org/x/lint v0.0.0-20181026193005-c67002cb31c3/go.mod h1:UVdnD1Gm6xHRNCYTkRU2/jEulfH38KcIWyp/GAMgvoE=
