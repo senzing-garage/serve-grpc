@@ -31,7 +31,7 @@ func (server *G2ConfigServer) getLogger() logging.LoggingInterface {
 		options := []interface{}{
 			&logging.OptionCallerSkip{Value: 3},
 		}
-		server.logger, err = logging.NewSenzingToolsLogger(ProductId, IdMessages, options...)
+		server.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
 		if err != nil {
 			panic(err)
 		}
