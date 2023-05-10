@@ -265,7 +265,7 @@ func setup() error {
 	ctx := context.TODO()
 	moduleName := "Test module name"
 	verboseLogging := 0
-	localLogger, err = logging.NewSenzingToolsLogger(ProductId, IdMessages)
+	localLogger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages)
 	if err != nil {
 		panic(err)
 	}

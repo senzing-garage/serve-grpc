@@ -54,7 +54,7 @@ func (grpcServer *GrpcServerImpl) getLogger() logging.LoggingInterface {
 		options := []interface{}{
 			&logging.OptionCallerSkip{Value: 3},
 		}
-		grpcServer.logger, err = logging.NewSenzingToolsLogger(ProductId, IdMessages, options...)
+		grpcServer.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
 		if err != nil {
 			panic(err)
 		}

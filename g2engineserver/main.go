@@ -21,7 +21,7 @@ type G2EngineServer struct {
 // ----------------------------------------------------------------------------
 
 // Identfier of the g2engineserver package found messages having the format "senzing-6999xxxx".
-const ProductId = 6014
+const ComponentId = 6014
 
 // Log message prefix.
 const Prefix = "serve-grpc.g2engineserver."

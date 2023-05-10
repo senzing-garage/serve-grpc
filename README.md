@@ -33,6 +33,16 @@ Senzing SDKs for accessing the gRPC server:
 1. Go: [g2-sdk-go-grpc](https://github.com/Senzing/g2-sdk-go-grpc)
 1. Python: [g2-sdk-python-grpc](https://github.com/Senzing/g2-sdk-python-grpc)
 
+A simple demonstration using `senzing-tools` and a SQLite database.
+
+```console
+export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
+senzing-tools init-database
+senzing-tools serve-grpc
+
+```
+
 ## Install
 
 1. The `serve-grpc` command is installed with the
@@ -119,7 +129,7 @@ This usage shows how to initialze a database with a Docker container.
 
 ## References
 
-- [Command reference](https://hub.senzing.com/senzing-tools/senzing-tools_serve-grpc.html)
-- [Development](docs/development.md)
-- [Errors](docs/errors.md)
-- [Examples](docs/examples.md)
+1. [Command reference](https://hub.senzing.com/senzing-tools/senzing-tools_serve-grpc.html)
+1. [Development](docs/development.md)
+1. [Errors](docs/errors.md)
+1. [Examples](docs/examples.md)

@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.4.3] - 2023-05-10
+
+### Changed in 0.4.3
+
+- Update dependencies
+  - github.com/senzing/g2-sdk-go v0.6.2
+  - github.com/senzing/g2-sdk-go-base v0.1.9
+  - github.com/senzing/go-observing v0.2.2
+
 ## [0.4.2] - 2023-04-21
 
 ### Changed in 0.4.2
