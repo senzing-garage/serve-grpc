@@ -33,7 +33,7 @@ Senzing SDKs for accessing the gRPC server:
 1. Go: [g2-sdk-go-grpc](https://github.com/Senzing/g2-sdk-go-grpc)
 1. Python: [g2-sdk-python-grpc](https://github.com/Senzing/g2-sdk-python-grpc)
 
-A simple demonstration using a SQLite database.
+A simple demonstration using `senzing-tools` and a SQLite database.
 
 ```console
 export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
