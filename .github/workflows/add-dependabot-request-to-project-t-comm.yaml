@@ -15,10 +15,10 @@ jobs:
     name: Add dependabot pull request to Senzing Community project
     runs-on: ubuntu-latest
     steps:
-    - name: Assign pull request to project
-      env:
+      - name: Assign pull request to project
+        env:
           BOOL: ${{ contains( env.CREATOR, 'dependabot' ) }}
-      uses: Senzing/github-action-add-issue-to-project@main
-      if: ${{ env.BOOL == 'true' }}
-      with:
-        project: 'https://github.com/orgs/Senzing/projects/2'
+        uses: Senzing/github-action-add-issue-to-project@main
+        if: ${{ env.BOOL == 'true' }}
+        with:
+          project: "https://github.com/orgs/Senzing/projects/2"

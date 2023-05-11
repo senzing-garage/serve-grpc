@@ -14,8 +14,8 @@ jobs:
     name: Add issue to Senzing Community project
     runs-on: ubuntu-latest
     steps:
-    - name: Assign issue to project
-      uses: Senzing/github-action-add-issue-to-project@main
-      with:
-        project: 'https://github.com/orgs/Senzing/projects/2'
-        column_name: 'Backlog'
+      - name: Assign issue to project
+        uses: Senzing/github-action-add-issue-to-project@main
+        with:
+          project: "https://github.com/orgs/Senzing/projects/2"
+          column_name: "Backlog"
