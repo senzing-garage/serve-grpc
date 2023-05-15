@@ -168,8 +168,8 @@ github.com/senzing/go-logging v1.2.3 h1:NqxCXq7gwToS+k4Y/ANlzmPeaNhW4xhbNFyL/KnN
 github.com/senzing/go-logging v1.2.3/go.mod h1:xkTs3/qlLwcWhEJAwvTVJYger4y3G3R9ebY9xPbaA1c=
 github.com/senzing/go-messaging v0.2.1 h1:sH4/Fn7aYiBPIP/pyjaqgGX4VcQNl6RSUW0KatI0J10=
 github.com/senzing/go-messaging v0.2.1/go.mod h1:rAdbka1k6dUuLN3lh+eih9MPCb3kui8FvA9cf19oOt4=
-github.com/senzing/go-observing v0.2.2 h1:/4iw8e/TBREbKAfu1PqYCijMH+cPR/3ZHH7KaDLRGrQ=
-github.com/senzing/go-observing v0.2.2/go.mod h1:sLweF5OysRAD65NLNm63o1IpOqN6VyXfgRDozc+pQy8=
+github.com/senzing/go-observing v0.2.3 h1:7a5jBujIT4E15Ix28KLQ2sL/qForHuPJBgmxqNDztW8=
+github.com/senzing/go-observing v0.2.3/go.mod h1:sLweF5OysRAD65NLNm63o1IpOqN6VyXfgRDozc+pQy8=
 github.com/senzing/senzing-tools v0.2.4 h1:UJI2u/HUZKH445YArdvN4PctS7ZBP3O8T7EFaw/LKa4=
 github.com/senzing/senzing-tools v0.2.4/go.mod h1:wE/k97Ie2+CeqA4sECcUmK/ddtP3340PYSNC3r6q6ig=
 github.com/spf13/afero v1.9.5 h1:stMpOSZFs//0Lv29HduCmli3GUfpFoF3Y1Q/aXj/wVM=
