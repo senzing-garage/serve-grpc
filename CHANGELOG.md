@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.4.5] - 2023-05-17
+
+### Added in 0.4.5
+
+- Support for gRPC Observer aggregator
+
 ## [0.4.4] - 2023-05-11
 
 ### Changed in 0.4.4

@@ -474,8 +474,14 @@ func (server *G2DiagnosticServer) SetLogLevel(ctx context.Context, logLevelName 
 		return fmt.Errorf("invalid error level: %s", logLevelName)
 	}
 	g2diagnostic := getG2diagnostic()
-	g2diagnostic.SetLogLevel(ctx, logLevelName)
-	server.getLogger().SetLogLevel(logLevelName)
+	err = g2diagnostic.SetLogLevel(ctx, logLevelName)
+	if err != nil {
+		return err
+	}
+	err = server.getLogger().SetLogLevel(logLevelName)
+	if err != nil {
+		return err
+	}
 	server.isTrace = (logLevelName == logging.LevelTraceName)
 	return err
 }

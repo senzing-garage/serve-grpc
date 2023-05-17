@@ -241,8 +241,14 @@ func (server *G2ConfigServer) SetLogLevel(ctx context.Context, logLevelName stri
 		return fmt.Errorf("invalid error level: %s", logLevelName)
 	}
 	g2config := getG2config()
-	g2config.SetLogLevel(ctx, logLevelName)
-	server.getLogger().SetLogLevel(logLevelName)
+	err = g2config.SetLogLevel(ctx, logLevelName)
+	if err != nil {
+		return err
+	}
+	err = server.getLogger().SetLogLevel(logLevelName)
+	if err != nil {
+		return err
+	}
 	server.isTrace = (logLevelName == logging.LevelTraceName)
 	return err
 }

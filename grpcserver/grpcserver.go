@@ -103,11 +103,20 @@ func (grpcServer *GrpcServerImpl) createGrpcObserver(ctx context.Context, parsed
 // Add G2Config service to gRPC server.
 func (grpcServer *GrpcServerImpl) enableG2config(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &g2configserver.G2ConfigServer{}
-	server.SetLogLevel(ctx, grpcServer.LogLevelName)
-	g2configserver.GetSdkG2config().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
+	if err != nil {
+		panic(err)
+	}
+	err = g2configserver.GetSdkG2config().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	if err != nil {
+		panic(err)
+	}
 	if grpcServer.Observers != nil {
 		for _, observer := range grpcServer.Observers {
-			server.RegisterObserver(ctx, observer)
+			err = server.RegisterObserver(ctx, observer)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 	if len(grpcServer.ObserverOrigin) > 0 {
@@ -119,11 +128,20 @@ func (grpcServer *GrpcServerImpl) enableG2config(ctx context.Context, serviceReg
 // Add G2Configmgr service to gRPC server.
 func (grpcServer *GrpcServerImpl) enableG2configmgr(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &g2configmgrserver.G2ConfigmgrServer{}
-	server.SetLogLevel(ctx, grpcServer.LogLevelName)
-	g2configmgrserver.GetSdkG2configmgr().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
+	if err != nil {
+		panic(err)
+	}
+	err = g2configmgrserver.GetSdkG2configmgr().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	if err != nil {
+		panic(err)
+	}
 	if grpcServer.Observers != nil {
 		for _, observer := range grpcServer.Observers {
-			server.RegisterObserver(ctx, observer)
+			err = server.RegisterObserver(ctx, observer)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 	if len(grpcServer.ObserverOrigin) > 0 {
@@ -135,11 +153,20 @@ func (grpcServer *GrpcServerImpl) enableG2configmgr(ctx context.Context, service
 // Add G2Diagnostic service to gRPC server.
 func (grpcServer *GrpcServerImpl) enableG2diagnostic(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &g2diagnosticserver.G2DiagnosticServer{}
-	server.SetLogLevel(ctx, grpcServer.LogLevelName)
-	g2diagnosticserver.GetSdkG2diagnostic().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
+	if err != nil {
+		panic(err)
+	}
+	err = g2diagnosticserver.GetSdkG2diagnostic().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	if err != nil {
+		panic(err)
+	}
 	if grpcServer.Observers != nil {
 		for _, observer := range grpcServer.Observers {
-			server.RegisterObserver(ctx, observer)
+			err = server.RegisterObserver(ctx, observer)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 	if len(grpcServer.ObserverOrigin) > 0 {
@@ -151,11 +178,20 @@ func (grpcServer *GrpcServerImpl) enableG2diagnostic(ctx context.Context, servic
 // Add G2Engine service to gRPC server.
 func (grpcServer *GrpcServerImpl) enableG2engine(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &g2engineserver.G2EngineServer{}
-	server.SetLogLevel(ctx, grpcServer.LogLevelName)
-	g2engineserver.GetSdkG2engine().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
+	if err != nil {
+		panic(err)
+	}
+	err = g2engineserver.GetSdkG2engine().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	if err != nil {
+		panic(err)
+	}
 	if grpcServer.Observers != nil {
 		for _, observer := range grpcServer.Observers {
-			server.RegisterObserver(ctx, observer)
+			err = server.RegisterObserver(ctx, observer)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 	if len(grpcServer.ObserverOrigin) > 0 {
@@ -167,11 +203,20 @@ func (grpcServer *GrpcServerImpl) enableG2engine(ctx context.Context, serviceReg
 // Add G2Product service to gRPC server.
 func (grpcServer *GrpcServerImpl) enableG2product(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &g2productserver.G2ProductServer{}
-	server.SetLogLevel(ctx, grpcServer.LogLevelName)
-	g2productserver.GetSdkG2product().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
+	if err != nil {
+		panic(err)
+	}
+	err = g2productserver.GetSdkG2product().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	if err != nil {
+		panic(err)
+	}
 	if grpcServer.Observers != nil {
 		for _, observer := range grpcServer.Observers {
-			server.RegisterObserver(ctx, observer)
+			err = server.RegisterObserver(ctx, observer)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 	if len(grpcServer.ObserverOrigin) > 0 {

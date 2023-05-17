@@ -154,8 +154,14 @@ func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevelName str
 		return fmt.Errorf("invalid error level: %s", logLevelName)
 	}
 	g2product := getG2product()
-	g2product.SetLogLevel(ctx, logLevelName)
-	server.getLogger().SetLogLevel(logLevelName)
+	err = g2product.SetLogLevel(ctx, logLevelName)
+	if err != nil {
+		return err
+	}
+	err = server.getLogger().SetLogLevel(logLevelName)
+	if err != nil {
+		return err
+	}
 	server.isTrace = (logLevelName == logging.LevelTraceName)
 	return err
 }
