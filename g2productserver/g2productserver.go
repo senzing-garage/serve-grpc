@@ -90,6 +90,17 @@ func (server *G2ProductServer) Destroy(ctx context.Context, request *g2pb.Destro
 	return &response, err
 }
 
+func (server *G2ProductServer) GetObserverOrigin(ctx context.Context) string {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(21)
+		defer func() { server.traceExit(22, err, time.Since(entryTime)) }()
+	}
+	g2product := getG2product()
+	return g2product.GetObserverOrigin(ctx)
+}
+
 func (server *G2ProductServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
 	var err error = nil
 	if server.isTrace {
@@ -143,10 +154,27 @@ func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevelName str
 		return fmt.Errorf("invalid error level: %s", logLevelName)
 	}
 	g2product := getG2product()
-	g2product.SetLogLevel(ctx, logLevelName)
-	server.getLogger().SetLogLevel(logLevelName)
+	err = g2product.SetLogLevel(ctx, logLevelName)
+	if err != nil {
+		return err
+	}
+	err = server.getLogger().SetLogLevel(logLevelName)
+	if err != nil {
+		return err
+	}
 	server.isTrace = (logLevelName == logging.LevelTraceName)
 	return err
+}
+
+func (server *G2ProductServer) SetObserverOrigin(ctx context.Context, origin string) {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(23, origin)
+		defer func() { server.traceExit(24, origin, err, time.Since(entryTime)) }()
+	}
+	g2product := getG2product()
+	g2product.SetObserverOrigin(ctx, origin)
 }
 
 func (server *G2ProductServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {

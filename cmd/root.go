@@ -31,6 +31,8 @@ const (
 	defaultEngineLogLevel          int    = 0
 	defaultGrpcPort                int    = 8258
 	defaultLogLevel                string = "INFO"
+	defaultObserverOrigin          string = ""
+	defaultObserverUrl             string = ""
 	Short                          string = "Start a gRPC server for the Senzing SDK API"
 	Use                            string = "serve-grpc"
 	Long                           string = `
@@ -61,6 +63,8 @@ func init() {
 	RootCmd.Flags().String(option.EngineConfigurationJson, defaultEngineConfigurationJson, fmt.Sprintf("JSON string sent to Senzing's init() function [%s]", envar.EngineConfigurationJson))
 	RootCmd.Flags().String(option.EngineModuleName, defaultEngineModuleName, fmt.Sprintf("Identifier given to the Senzing engine [%s]", envar.EngineModuleName))
 	RootCmd.Flags().String(option.LogLevel, defaultLogLevel, fmt.Sprintf("Log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [%s]", envar.LogLevel))
+	RootCmd.Flags().String("observer-url", defaultObserverUrl, fmt.Sprintf("URL of Observer [%s]", "SENZING_TOOLS_OBSERVER_URL"))                                 // FIXME: use "option." and "envar." when available.
+	RootCmd.Flags().String("observer-origin", defaultObserverOrigin, fmt.Sprintf("Identify this instance to the Observer [%s]", "SENZING_TOOLS_OBSERVER_ORIGIN")) // FIXME: use "option." and "envar." when available.
 }
 
 // If a configuration file is present, load it.
@@ -100,6 +104,7 @@ func loadConfigurationFile(cobraCommand *cobra.Command) {
 
 // Configure Viper with user-specified options.
 func loadOptions(cobraCommand *cobra.Command) {
+	var err error = nil
 	viper.AutomaticEnv()
 	replacer := strings.NewReplacer("-", "_")
 	viper.SetEnvKeyReplacer(replacer)
@@ -116,7 +121,10 @@ func loadOptions(cobraCommand *cobra.Command) {
 	}
 	for optionKey, optionValue := range boolOptions {
 		viper.SetDefault(optionKey, optionValue)
-		viper.BindPFlag(optionKey, cobraCommand.Flags().Lookup(optionKey))
+		err = viper.BindPFlag(optionKey, cobraCommand.Flags().Lookup(optionKey))
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	// Ints
@@ -127,7 +135,10 @@ func loadOptions(cobraCommand *cobra.Command) {
 	}
 	for optionKey, optionValue := range intOptions {
 		viper.SetDefault(optionKey, optionValue)
-		viper.BindPFlag(optionKey, cobraCommand.Flags().Lookup(optionKey))
+		err = viper.BindPFlag(optionKey, cobraCommand.Flags().Lookup(optionKey))
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	// Strings
@@ -138,10 +149,15 @@ func loadOptions(cobraCommand *cobra.Command) {
 		option.EngineConfigurationJson: defaultEngineConfigurationJson,
 		option.EngineModuleName:        defaultEngineModuleName,
 		option.LogLevel:                defaultLogLevel,
+		"observer-url":                 defaultObserverUrl,
+		"observer-origin":              defaultObserverOrigin,
 	}
 	for optionKey, optionValue := range stringOptions {
 		viper.SetDefault(optionKey, optionValue)
-		viper.BindPFlag(optionKey, cobraCommand.Flags().Lookup(optionKey))
+		err = viper.BindPFlag(optionKey, cobraCommand.Flags().Lookup(optionKey))
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -186,6 +202,8 @@ func RunE(_ *cobra.Command, _ []string) error {
 		EnableG2diagnostic:             viper.GetBool(option.EnableG2diagnostic),
 		EnableG2engine:                 viper.GetBool(option.EnableG2engine),
 		EnableG2product:                viper.GetBool(option.EnableG2product),
+		ObserverOrigin:                 viper.GetString("observer-origin"),
+		ObserverUrl:                    viper.GetString("observer-url"),
 		Port:                           viper.GetInt(option.GrpcPort),
 		LogLevelName:                   logLevelName,
 		SenzingEngineConfigurationJson: senzingEngineConfigurationJson,

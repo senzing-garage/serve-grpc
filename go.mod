@@ -9,7 +9,7 @@ require (
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20230315125947-e4aea8f381eb
 	github.com/senzing/go-common v0.1.3
 	github.com/senzing/go-logging v1.2.3
-	github.com/senzing/go-observing v0.2.3
+	github.com/senzing/go-observing v0.2.5
 	github.com/senzing/senzing-tools v0.2.4
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.15.0
@@ -31,11 +31,11 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/senzing/go-messaging v0.2.1 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
-	github.com/spf13/cast v1.5.0 // indirect
+	github.com/spf13/cast v1.5.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
-	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea // indirect
+	golang.org/x/exp v0.0.0-20230515195305-f3d0a9c9a5cc // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
@@ -44,3 +44,5 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/senzing/go-observing v0.2.3 => /home/senzing/senzing.git/go-observing
