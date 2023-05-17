@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"net/url"
 
 	"github.com/senzing/g2-sdk-proto/go/g2config"
 	"github.com/senzing/g2-sdk-proto/go/g2configmgr"
@@ -12,12 +13,14 @@ import (
 	"github.com/senzing/g2-sdk-proto/go/g2product"
 	"github.com/senzing/go-logging/logging"
 	"github.com/senzing/go-observing/observer"
+	"github.com/senzing/go-observing/observerpb"
 	"github.com/senzing/serve-grpc/g2configmgrserver"
 	"github.com/senzing/serve-grpc/g2configserver"
 	"github.com/senzing/serve-grpc/g2diagnosticserver"
 	"github.com/senzing/serve-grpc/g2engineserver"
 	"github.com/senzing/serve-grpc/g2productserver"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 )
 
@@ -34,7 +37,9 @@ type GrpcServerImpl struct {
 	EnableG2product                bool
 	logger                         logging.LoggingInterface
 	LogLevelName                   string
+	ObserverOrigin                 string
 	Observers                      []observer.Observer
+	ObserverUrl                    string
 	Port                           int
 	SenzingEngineConfigurationJson string
 	SenzingModuleName              string
@@ -65,6 +70,32 @@ func (grpcServer *GrpcServerImpl) getLogger() logging.LoggingInterface {
 // Log message.
 func (grpcServer *GrpcServerImpl) log(messageNumber int, details ...interface{}) {
 	grpcServer.getLogger().Log(messageNumber, details...)
+}
+
+// --- Observing --------------------------------------------------------------
+
+func (grpcServer *GrpcServerImpl) createGrpcObserver(ctx context.Context, parsedUrl url.URL) (observer.Observer, error) {
+	var err error
+	var result observer.Observer
+
+	port := DefaultGrpcObserverPort
+	if len(parsedUrl.Port()) > 0 {
+		port = parsedUrl.Port()
+	}
+	target := fmt.Sprintf("%s:%s", parsedUrl.Hostname(), port)
+
+	// TODO: Allow specification of options from ObserverUrl/parsedUrl
+	grpcOptions := grpc.WithTransportCredentials(insecure.NewCredentials())
+
+	grpcConnection, err := grpc.Dial(target, grpcOptions)
+	if err != nil {
+		return result, err
+	}
+	result = &observer.ObserverGrpc{
+		GrpcClient: observerpb.NewObserverClient(grpcConnection),
+		Id:         "serve-grpc",
+	}
+	return result, err
 }
 
 // --- Enabling services ---------------------------------------------------------------
@@ -143,6 +174,26 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 	// Log entry parameters.
 
 	grpcServer.log(2000, grpcServer)
+
+	// Initialize observing.
+
+	var anObserver observer.Observer
+	if len(grpcServer.ObserverUrl) > 0 {
+		parsedUrl, err := url.Parse(grpcServer.ObserverUrl)
+		if err != nil {
+			return err
+		}
+		switch parsedUrl.Scheme {
+		case "grpc":
+			anObserver, err = grpcServer.createGrpcObserver(ctx, *parsedUrl)
+			if err != nil {
+				return err
+			}
+		}
+		if anObserver != nil {
+			grpcServer.Observers = append(grpcServer.Observers, anObserver)
+		}
+	}
 
 	// Determine which services to start. If no services are explicitly set, then all services are started.
 

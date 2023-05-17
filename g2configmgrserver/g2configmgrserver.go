@@ -154,6 +154,17 @@ func (server *G2ConfigmgrServer) GetDefaultConfigID(ctx context.Context, request
 	return &response, err
 }
 
+func (server *G2ConfigmgrServer) GetObserverOrigin(ctx context.Context) string {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(25)
+		defer func() { server.traceExit(26, err, time.Since(entryTime)) }()
+	}
+	g2configmgr := getG2configmgr()
+	return g2configmgr.GetObserverOrigin(ctx)
+}
+
 func (server *G2ConfigmgrServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
 	var err error = nil
 	if server.isTrace {
@@ -221,6 +232,17 @@ func (server *G2ConfigmgrServer) SetLogLevel(ctx context.Context, logLevelName s
 	server.getLogger().SetLogLevel(logLevelName)
 	server.isTrace = (logLevelName == logging.LevelTraceName)
 	return err
+}
+
+func (server *G2ConfigmgrServer) SetObserverOrigin(ctx context.Context, origin string) {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(27, origin)
+		defer func() { server.traceExit(28, origin, err, time.Since(entryTime)) }()
+	}
+	g2configmgr := getG2configmgr()
+	g2configmgr.SetObserverOrigin(ctx, origin)
 }
 
 func (server *G2ConfigmgrServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {

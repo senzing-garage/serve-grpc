@@ -334,6 +334,17 @@ func (server *G2DiagnosticServer) GetMappingStatistics(ctx context.Context, requ
 	return &response, err
 }
 
+func (server *G2DiagnosticServer) GetObserverOrigin(ctx context.Context) string {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(55)
+		defer func() { server.traceExit(56, err, time.Since(entryTime)) }()
+	}
+	g2diagnostic := getG2diagnostic()
+	return g2diagnostic.GetObserverOrigin(ctx)
+}
+
 func (server *G2DiagnosticServer) GetPhysicalCores(ctx context.Context, request *g2pb.GetPhysicalCoresRequest) (*g2pb.GetPhysicalCoresResponse, error) {
 	var err error = nil
 	var result int
@@ -467,6 +478,17 @@ func (server *G2DiagnosticServer) SetLogLevel(ctx context.Context, logLevelName 
 	server.getLogger().SetLogLevel(logLevelName)
 	server.isTrace = (logLevelName == logging.LevelTraceName)
 	return err
+}
+
+func (server *G2DiagnosticServer) SetObserverOrigin(ctx context.Context, origin string) {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(57, origin)
+		defer func() { server.traceExit(58, origin, err, time.Since(entryTime)) }()
+	}
+	g2diagnostic := getG2diagnostic()
+	g2diagnostic.SetObserverOrigin(ctx, origin)
 }
 
 func (server *G2DiagnosticServer) StreamEntityListBySize(request *g2pb.StreamEntityListBySizeRequest, stream g2pb.G2Diagnostic_StreamEntityListBySizeServer) (err error) {

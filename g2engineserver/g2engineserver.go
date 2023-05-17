@@ -677,6 +677,17 @@ func (server *G2EngineServer) GetEntityByRecordID_V2(ctx context.Context, reques
 	return &response, err
 }
 
+func (server *G2EngineServer) GetObserverOrigin(ctx context.Context) string {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(161)
+		defer func() { server.traceExit(162, err, time.Since(entryTime)) }()
+	}
+	g2engine := getG2engine()
+	return g2engine.GetObserverOrigin(ctx)
+}
+
 func (server *G2EngineServer) GetRecord(ctx context.Context, request *g2pb.GetRecordRequest) (*g2pb.GetRecordResponse, error) {
 	var err error = nil
 	var result string
@@ -1116,6 +1127,17 @@ func (server *G2EngineServer) SetLogLevel(ctx context.Context, logLevelName stri
 	return err
 }
 
+func (server *G2EngineServer) SetObserverOrigin(ctx context.Context, origin string) {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(163, origin)
+		defer func() { server.traceExit(164, origin, err, time.Since(entryTime)) }()
+	}
+	g2engine := getG2engine()
+	g2engine.SetObserverOrigin(ctx, origin)
+}
+
 func (server *G2EngineServer) Stats(ctx context.Context, request *g2pb.StatsRequest) (*g2pb.StatsResponse, error) {
 	var err error = nil
 	var result string
@@ -1154,7 +1176,7 @@ func (server *G2EngineServer) StreamExportCSVEntityReport(request *g2pb.StreamEx
 	defer func() {
 		err = g2engine.CloseExport(ctx, queryHandle)
 		if server.isTrace {
-			server.traceExit(159, request, rowsFetched, err, time.Since(entryTime))
+			server.traceExit(158, request, rowsFetched, err, time.Since(entryTime))
 		}
 	}()
 
@@ -1175,7 +1197,7 @@ func (server *G2EngineServer) StreamExportCSVEntityReport(request *g2pb.StreamEx
 		if err = stream.Send(&response); err != nil {
 			return err
 		}
-		server.traceEntry(158, request, fetchResult)
+		server.traceEntry(601, request, fetchResult)
 		rowsFetched += 1
 	}
 
@@ -1185,7 +1207,7 @@ func (server *G2EngineServer) StreamExportCSVEntityReport(request *g2pb.StreamEx
 
 func (server *G2EngineServer) StreamExportJSONEntityReport(request *g2pb.StreamExportJSONEntityReportRequest, stream g2pb.G2Engine_StreamExportJSONEntityReportServer) (err error) {
 	if server.isTrace {
-		server.traceEntry(160, request)
+		server.traceEntry(159, request)
 	}
 	ctx := stream.Context()
 	entryTime := time.Now()
@@ -1205,7 +1227,7 @@ func (server *G2EngineServer) StreamExportJSONEntityReport(request *g2pb.StreamE
 	defer func() {
 		err = g2engine.CloseExport(ctx, queryHandle)
 		if server.isTrace {
-			server.traceExit(162, request, rowsFetched, err, time.Since(entryTime))
+			server.traceExit(160, request, rowsFetched, err, time.Since(entryTime))
 		}
 	}()
 
@@ -1226,7 +1248,7 @@ func (server *G2EngineServer) StreamExportJSONEntityReport(request *g2pb.StreamE
 		if err = stream.Send(&response); err != nil {
 			return err
 		}
-		server.traceEntry(161, request, fetchResult)
+		server.traceEntry(602, request, fetchResult)
 		rowsFetched += 1
 	}
 
