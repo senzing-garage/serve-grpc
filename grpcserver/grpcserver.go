@@ -110,6 +110,9 @@ func (grpcServer *GrpcServerImpl) enableG2config(ctx context.Context, serviceReg
 			server.RegisterObserver(ctx, observer)
 		}
 	}
+	if len(grpcServer.ObserverOrigin) > 0 {
+		server.SetObserverOrigin(ctx, grpcServer.ObserverOrigin)
+	}
 	g2config.RegisterG2ConfigServer(serviceRegistrar, server)
 }
 
@@ -122,6 +125,9 @@ func (grpcServer *GrpcServerImpl) enableG2configmgr(ctx context.Context, service
 		for _, observer := range grpcServer.Observers {
 			server.RegisterObserver(ctx, observer)
 		}
+	}
+	if len(grpcServer.ObserverOrigin) > 0 {
+		server.SetObserverOrigin(ctx, grpcServer.ObserverOrigin)
 	}
 	g2configmgr.RegisterG2ConfigMgrServer(serviceRegistrar, server)
 }
@@ -136,6 +142,9 @@ func (grpcServer *GrpcServerImpl) enableG2diagnostic(ctx context.Context, servic
 			server.RegisterObserver(ctx, observer)
 		}
 	}
+	if len(grpcServer.ObserverOrigin) > 0 {
+		server.SetObserverOrigin(ctx, grpcServer.ObserverOrigin)
+	}
 	g2diagnostic.RegisterG2DiagnosticServer(serviceRegistrar, server)
 }
 
@@ -149,6 +158,9 @@ func (grpcServer *GrpcServerImpl) enableG2engine(ctx context.Context, serviceReg
 			server.RegisterObserver(ctx, observer)
 		}
 	}
+	if len(grpcServer.ObserverOrigin) > 0 {
+		server.SetObserverOrigin(ctx, grpcServer.ObserverOrigin)
+	}
 	g2engine.RegisterG2EngineServer(serviceRegistrar, server)
 }
 
@@ -161,6 +173,9 @@ func (grpcServer *GrpcServerImpl) enableG2product(ctx context.Context, serviceRe
 		for _, observer := range grpcServer.Observers {
 			server.RegisterObserver(ctx, observer)
 		}
+	}
+	if len(grpcServer.ObserverOrigin) > 0 {
+		server.SetObserverOrigin(ctx, grpcServer.ObserverOrigin)
 	}
 	g2product.RegisterG2ProductServer(serviceRegistrar, server)
 }
