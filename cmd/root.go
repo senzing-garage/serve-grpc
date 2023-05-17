@@ -63,8 +63,8 @@ func init() {
 	RootCmd.Flags().String(option.EngineConfigurationJson, defaultEngineConfigurationJson, fmt.Sprintf("JSON string sent to Senzing's init() function [%s]", envar.EngineConfigurationJson))
 	RootCmd.Flags().String(option.EngineModuleName, defaultEngineModuleName, fmt.Sprintf("Identifier given to the Senzing engine [%s]", envar.EngineModuleName))
 	RootCmd.Flags().String(option.LogLevel, defaultLogLevel, fmt.Sprintf("Log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [%s]", envar.LogLevel))
-	RootCmd.Flags().String("observer-url", defaultObserverUrl, fmt.Sprintf("URL of Observer [%s]", "SENZING_TOOLS_OBSERVER_URL"))                                 // FIXME: use "option." and "envar." when available.
-	RootCmd.Flags().String("observer-origin", defaultObserverOrigin, fmt.Sprintf("Identify this instance to the Observer [%s]", "SENZING_TOOLS_OBSERVER_ORIGIN")) // FIXME: use "option." and "envar." when available.
+	RootCmd.Flags().String(option.ObserverOrigin, defaultObserverOrigin, fmt.Sprintf("Identify this instance to the Observer [%s]", envar.ObserverOrigin))
+	RootCmd.Flags().String(option.ObserverUrl, defaultObserverUrl, fmt.Sprintf("URL of Observer [%s]", envar.ObserverUrl))
 }
 
 // If a configuration file is present, load it.
@@ -149,8 +149,8 @@ func loadOptions(cobraCommand *cobra.Command) {
 		option.EngineConfigurationJson: defaultEngineConfigurationJson,
 		option.EngineModuleName:        defaultEngineModuleName,
 		option.LogLevel:                defaultLogLevel,
-		"observer-url":                 defaultObserverUrl,
-		"observer-origin":              defaultObserverOrigin,
+		option.ObserverUrl:             defaultObserverUrl,
+		option.ObserverOrigin:          defaultObserverOrigin,
 	}
 	for optionKey, optionValue := range stringOptions {
 		viper.SetDefault(optionKey, optionValue)
@@ -202,8 +202,8 @@ func RunE(_ *cobra.Command, _ []string) error {
 		EnableG2diagnostic:             viper.GetBool(option.EnableG2diagnostic),
 		EnableG2engine:                 viper.GetBool(option.EnableG2engine),
 		EnableG2product:                viper.GetBool(option.EnableG2product),
-		ObserverOrigin:                 viper.GetString("observer-origin"),
-		ObserverUrl:                    viper.GetString("observer-url"),
+		ObserverOrigin:                 viper.GetString(option.ObserverOrigin),
+		ObserverUrl:                    viper.GetString(option.ObserverUrl),
 		Port:                           viper.GetInt(option.GrpcPort),
 		LogLevelName:                   logLevelName,
 		SenzingEngineConfigurationJson: senzingEngineConfigurationJson,
