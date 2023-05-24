@@ -54,7 +54,7 @@ func (server *G2DiagnosticServer) traceExit(messageNumber int, details ...interf
 
 // Create error.
 func (server *G2DiagnosticServer) error(messageNumber int, details ...interface{}) error {
-	return server.getLogger().Error(messageNumber, details...)
+	return server.getLogger().NewError(messageNumber, details...)
 }
 
 // --- Services ---------------------------------------------------------------

@@ -53,7 +53,7 @@ func (server *G2ConfigServer) traceExit(messageNumber int, details ...interface{
 
 // Create error.
 func (server *G2ConfigServer) error(messageNumber int, details ...interface{}) error {
-	return server.getLogger().Error(messageNumber, details...)
+	return server.getLogger().NewError(messageNumber, details...)
 }
 
 // --- Services ---------------------------------------------------------------
