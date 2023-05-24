@@ -37,7 +37,7 @@ var (
 // ----------------------------------------------------------------------------
 
 func createError(errorId int, err error) error {
-	return g2error.Cast(localLogger.Error(errorId, err), err)
+	return g2error.Cast(localLogger.NewError(errorId, err), err)
 }
 
 func getTestObject(ctx context.Context, test *testing.T) G2ConfigmgrServer {
