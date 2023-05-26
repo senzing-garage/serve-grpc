@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.4.7] - 2023-05-26
+
+### Changed in 0.4.7
+
+- Modified Load() to match `g2-sdk-proto/go`
+- Update dependencies
+  - github.com/senzing/g2-sdk-go v0.6.4
+  - github.com/senzing/g2-sdk-go-base v0.2.0
+  - github.com/senzing/g2-sdk-proto/go v0.0.0-20230526140633-b44eb0f20e1b
+
 ## [0.4.6] - 2023-05-19
 
 ### Changed in 0.4.6
