@@ -299,17 +299,24 @@ func TestG2configserver_Load(test *testing.T) {
 	testError(test, ctx, g2config, err)
 	printActual(test, responseFromSave.GetResult())
 
-	// Load.
-	requestToLoad := &g2pb.LoadRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
-		JsonConfig:   responseFromSave.GetResult(),
-	}
-	_, err = g2config.Load(ctx, requestToLoad)
-	testError(test, ctx, g2config, err)
-
 	// Close.
 	requestToClose := &g2pb.CloseRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
+	}
+	_, err = g2config.Close(ctx, requestToClose)
+	testError(test, ctx, g2config, err)
+
+	// Load.
+	requestToLoad := &g2pb.LoadRequest{
+		JsonConfig: responseFromSave.GetResult(),
+	}
+	responseFromLoad, err := g2config.Load(ctx, requestToLoad)
+	testError(test, ctx, g2config, err)
+	printActual(test, responseFromLoad.GetResult())
+
+	// Close.
+	requestToClose = &g2pb.CloseRequest{
+		ConfigHandle: responseFromLoad.GetResult(),
 	}
 	_, err = g2config.Close(ctx, requestToClose)
 	testError(test, ctx, g2config, err)
@@ -503,15 +510,14 @@ func ExampleG2ConfigServer_Load() {
 
 	// Example
 	request := &g2pb.LoadRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
-		JsonConfig:   responseFromSave.GetResult(),
+		JsonConfig: responseFromSave.GetResult(),
 	}
-	response, err := g2config.Load(ctx, request)
+	responseFromLoad, err := g2config.Load(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response)
-	// Output:
+	fmt.Println(responseFromLoad.GetResult() > 0)
+	// Output: true
 }
 
 func ExampleG2ConfigServer_Save() {
