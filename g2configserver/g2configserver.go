@@ -198,8 +198,10 @@ func (server *G2ConfigServer) Load(ctx context.Context, request *g2pb.LoadReques
 		defer func() { server.traceExit(22, request, err, time.Since(entryTime)) }()
 	}
 	g2config := getG2config()
-	err = g2config.Load(ctx, uintptr(request.GetConfigHandle()), (request.GetJsonConfig()))
-	response := g2pb.LoadResponse{}
+	result, err := g2config.Load(ctx, request.GetJsonConfig())
+	response := g2pb.LoadResponse{
+		Result: int64(result),
+	}
 	return &response, err
 }
 
