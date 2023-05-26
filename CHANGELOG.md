@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed in 0.4.7
 
 - Modified Load() to match `g2-sdk-proto/go`
+- In Dockerfile, update Senzing binaries to 3.5.2
 - Update dependencies
   - github.com/senzing/g2-sdk-go v0.6.4
   - github.com/senzing/g2-sdk-go-base v0.2.0

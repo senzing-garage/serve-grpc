@@ -10,10 +10,10 @@ ARG IMAGE_FINAL=senzing/senzingapi-runtime:3.5.2
 # -----------------------------------------------------------------------------
 
 FROM ${IMAGE_GO_BUILDER} as go_builder
-ENV REFRESHED_AT=2023-05-09
+ENV REFRESHED_AT=2023-05-26
 LABEL Name="senzing/serve-grpc-builder" \
       Maintainer="support@senzing.com" \
-      Version="0.3.6"
+      Version="0.4.6"
 
 # Build arguments.
 
@@ -54,10 +54,10 @@ RUN mkdir -p /output \
 # -----------------------------------------------------------------------------
 
 FROM ${IMAGE_FINAL} as final
-ENV REFRESHED_AT=2023-05-09
+ENV REFRESHED_AT=2023-05-26
 LABEL Name="senzing/serve-grpc" \
       Maintainer="support@senzing.com" \
-      Version="0.3.6"
+      Version="0.4.6"
 
 # Copy files from repository.
 
