@@ -12,6 +12,7 @@ import (
 	"github.com/senzing/go-common/g2engineconfigurationjson"
 	"github.com/senzing/senzing-tools/constant"
 	"github.com/senzing/senzing-tools/envar"
+	"github.com/senzing/senzing-tools/help"
 	"github.com/senzing/senzing-tools/helper"
 	"github.com/senzing/senzing-tools/option"
 	"github.com/senzing/serve-grpc/grpcserver"
@@ -20,30 +21,132 @@ import (
 )
 
 const (
-	defaultConfiguration           string = ""
-	defaultDatabaseUrl             string = ""
-	defaultEnableG2config          bool   = false
-	defaultEnableG2configmgr       bool   = false
-	defaultEnableG2diagnostic      bool   = false
-	defaultEnableG2engine          bool   = false
-	defaultEnableG2product         bool   = false
-	defaultEngineConfigurationJson string = ""
-	defaultEngineLogLevel          int    = 0
-	defaultGrpcPort                int    = 8258
-	defaultLogLevel                string = "INFO"
-	defaultObserverOrigin          string = ""
-	defaultObserverUrl             string = ""
-	Short                          string = "Start a gRPC server for the Senzing SDK API"
-	Use                            string = "serve-grpc"
-	Long                           string = `
+	Short string = "Start a gRPC server for the Senzing SDK API"
+	Use   string = "serve-grpc"
+	Long  string = `
 Start a gRPC server for the Senzing SDK API.
 For more information, visit https://github.com/Senzing/serve-grpc
-		`
+    `
 )
 
-var (
-	defaultEngineModuleName string = fmt.Sprintf("serve-grpc-%d", time.Now().Unix())
-)
+// ----------------------------------------------------------------------------
+// Context variables
+// ----------------------------------------------------------------------------
+
+var ContextBools = []struct {
+	Default bool
+	Envar   string
+	Help    string
+	Option  string
+}{
+	{
+		Default: false,
+		Envar:   envar.EnableG2config,
+		Help:    help.EnableG2config,
+		Option:  option.EnableG2config,
+	},
+	{
+		Default: false,
+		Envar:   envar.EnableG2configmgr,
+		Help:    help.EnableG2configmgr,
+		Option:  option.EnableG2configmgr,
+	},
+	{
+		Default: false,
+		Envar:   envar.EnableG2diagnostic,
+		Help:    help.EnableG2diagnostic,
+		Option:  option.EnableG2diagnostic,
+	},
+	{
+		Default: false,
+		Envar:   envar.EnableG2engine,
+		Help:    help.EnableG2engine,
+		Option:  option.EnableG2engine,
+	},
+	{
+		Default: false,
+		Envar:   envar.EnableG2product,
+		Help:    help.EnableG2product,
+		Option:  option.EnableG2product,
+	},
+}
+
+var ContextInts = []struct {
+	Default int
+	Envar   string
+	Help    string
+	Option  string
+}{
+	{
+		Default: 0,
+		Envar:   envar.EngineLogLevel,
+		Help:    help.EngineLogLevel,
+		Option:  option.EngineLogLevel,
+	},
+	{
+		Default: 8258,
+		Envar:   envar.GrpcPort,
+		Help:    help.GrpcPort,
+		Option:  option.GrpcPort,
+	},
+}
+
+var ContextStrings = []struct {
+	Default string
+	Envar   string
+	Help    string
+	Option  string
+}{
+	{
+		Default: "",
+		Envar:   envar.Configuration,
+		Help:    help.Configuration,
+		Option:  option.Configuration,
+	},
+	{
+		Default: "",
+		Envar:   envar.DatabaseUrl,
+		Help:    help.DatabaseUrl,
+		Option:  option.DatabaseUrl,
+	},
+	{
+		Default: "",
+		Envar:   envar.EngineConfigurationJson,
+		Help:    help.EngineConfigurationJson,
+		Option:  option.EngineConfigurationJson,
+	},
+	{
+		Default: fmt.Sprintf("serve-grpc-%d", time.Now().Unix()),
+		Envar:   envar.EngineModuleName,
+		Help:    help.EngineModuleName,
+		Option:  option.EngineModuleName,
+	},
+	{
+		Default: "INFO",
+		Envar:   envar.LogLevel,
+		Help:    help.LogLevel,
+		Option:  option.LogLevel,
+	},
+	{
+		Default: "",
+		Envar:   envar.ObserverOrigin,
+		Help:    help.ObserverOrigin,
+		Option:  option.ObserverOrigin,
+	},
+	{
+		Default: "",
+		Envar:   envar.ObserverUrl,
+		Help:    help.ObserverUrl,
+		Option:  option.ObserverUrl,
+	},
+}
+
+var ContextStringSlices = []struct {
+	Default []string
+	Envar   string
+	Help    string
+	Option  string
+}{}
 
 // ----------------------------------------------------------------------------
 // Private functions
@@ -51,20 +154,18 @@ var (
 
 // Since init() is always invoked, define command line parameters.
 func init() {
-	RootCmd.Flags().Bool(option.EnableG2config, defaultEnableG2config, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2config))
-	RootCmd.Flags().Bool(option.EnableG2configmgr, defaultEnableG2configmgr, fmt.Sprintf("Enable G2ConfigMgr service [%s]", envar.EnableG2configmgr))
-	RootCmd.Flags().Bool(option.EnableG2diagnostic, defaultEnableG2diagnostic, fmt.Sprintf("Enable G2Diagnostic service [%s]", envar.EnableG2diagnostic))
-	RootCmd.Flags().Bool(option.EnableG2engine, defaultEnableG2engine, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2engine))
-	RootCmd.Flags().Bool(option.EnableG2product, defaultEnableG2product, fmt.Sprintf("Enable G2Config service [%s]", envar.EnableG2product))
-	RootCmd.Flags().Int(option.EngineLogLevel, defaultEngineLogLevel, fmt.Sprintf("Log level for Senzing Engine [%s]", envar.EngineLogLevel))
-	RootCmd.Flags().Int(option.GrpcPort, defaultGrpcPort, fmt.Sprintf("Port used to serve gRPC [%s]", envar.GrpcPort))
-	RootCmd.Flags().String(option.Configuration, defaultConfiguration, fmt.Sprintf("Path to configuration file [%s]", envar.Configuration))
-	RootCmd.Flags().String(option.DatabaseUrl, defaultDatabaseUrl, fmt.Sprintf("URL of database to initialize [%s]", envar.DatabaseUrl))
-	RootCmd.Flags().String(option.EngineConfigurationJson, defaultEngineConfigurationJson, fmt.Sprintf("JSON string sent to Senzing's init() function [%s]", envar.EngineConfigurationJson))
-	RootCmd.Flags().String(option.EngineModuleName, defaultEngineModuleName, fmt.Sprintf("Identifier given to the Senzing engine [%s]", envar.EngineModuleName))
-	RootCmd.Flags().String(option.LogLevel, defaultLogLevel, fmt.Sprintf("Log level of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or PANIC [%s]", envar.LogLevel))
-	RootCmd.Flags().String(option.ObserverOrigin, defaultObserverOrigin, fmt.Sprintf("Identify this instance to the Observer [%s]", envar.ObserverOrigin))
-	RootCmd.Flags().String(option.ObserverUrl, defaultObserverUrl, fmt.Sprintf("URL of Observer [%s]", envar.ObserverUrl))
+	for _, contextBool := range ContextBools {
+		RootCmd.Flags().Bool(contextBool.Option, contextBool.Default, fmt.Sprintf(contextBool.Help, contextBool.Envar))
+	}
+	for _, contextInt := range ContextInts {
+		RootCmd.Flags().Int(contextInt.Option, contextInt.Default, fmt.Sprintf(contextInt.Help, contextInt.Envar))
+	}
+	for _, contextString := range ContextStrings {
+		RootCmd.Flags().String(contextString.Option, contextString.Default, fmt.Sprintf(contextString.Help, contextString.Envar))
+	}
+	for _, contextStringSlice := range ContextStringSlices {
+		RootCmd.Flags().StringSlice(contextStringSlice.Option, contextStringSlice.Default, fmt.Sprintf(contextStringSlice.Help, contextStringSlice.Envar))
+	}
 }
 
 // If a configuration file is present, load it.
@@ -112,16 +213,9 @@ func loadOptions(cobraCommand *cobra.Command) {
 
 	// Bools
 
-	boolOptions := map[string]bool{
-		option.EnableG2config:     defaultEnableG2config,
-		option.EnableG2configmgr:  defaultEnableG2configmgr,
-		option.EnableG2diagnostic: defaultEnableG2diagnostic,
-		option.EnableG2engine:     defaultEnableG2engine,
-		option.EnableG2product:    defaultEnableG2product,
-	}
-	for optionKey, optionValue := range boolOptions {
-		viper.SetDefault(optionKey, optionValue)
-		err = viper.BindPFlag(optionKey, cobraCommand.Flags().Lookup(optionKey))
+	for _, contextVar := range ContextBools {
+		viper.SetDefault(contextVar.Option, contextVar.Default)
+		err = viper.BindPFlag(contextVar.Option, cobraCommand.Flags().Lookup(contextVar.Option))
 		if err != nil {
 			panic(err)
 		}
@@ -129,13 +223,9 @@ func loadOptions(cobraCommand *cobra.Command) {
 
 	// Ints
 
-	intOptions := map[string]int{
-		option.EngineLogLevel: defaultEngineLogLevel,
-		option.GrpcPort:       defaultGrpcPort,
-	}
-	for optionKey, optionValue := range intOptions {
-		viper.SetDefault(optionKey, optionValue)
-		err = viper.BindPFlag(optionKey, cobraCommand.Flags().Lookup(optionKey))
+	for _, contextVar := range ContextInts {
+		viper.SetDefault(contextVar.Option, contextVar.Default)
+		err = viper.BindPFlag(contextVar.Option, cobraCommand.Flags().Lookup(contextVar.Option))
 		if err != nil {
 			panic(err)
 		}
@@ -143,18 +233,19 @@ func loadOptions(cobraCommand *cobra.Command) {
 
 	// Strings
 
-	stringOptions := map[string]string{
-		option.Configuration:           defaultConfiguration,
-		option.DatabaseUrl:             defaultDatabaseUrl,
-		option.EngineConfigurationJson: defaultEngineConfigurationJson,
-		option.EngineModuleName:        defaultEngineModuleName,
-		option.LogLevel:                defaultLogLevel,
-		option.ObserverUrl:             defaultObserverUrl,
-		option.ObserverOrigin:          defaultObserverOrigin,
+	for _, contextVar := range ContextStrings {
+		viper.SetDefault(contextVar.Option, contextVar.Default)
+		err = viper.BindPFlag(contextVar.Option, cobraCommand.Flags().Lookup(contextVar.Option))
+		if err != nil {
+			panic(err)
+		}
 	}
-	for optionKey, optionValue := range stringOptions {
-		viper.SetDefault(optionKey, optionValue)
-		err = viper.BindPFlag(optionKey, cobraCommand.Flags().Lookup(optionKey))
+
+	// StringSlice
+
+	for _, contextVar := range ContextStringSlices {
+		viper.SetDefault(contextVar.Option, contextVar.Default)
+		err = viper.BindPFlag(contextVar.Option, cobraCommand.Flags().Lookup(contextVar.Option))
 		if err != nil {
 			panic(err)
 		}
