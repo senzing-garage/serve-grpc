@@ -2,7 +2,7 @@
 # Stages
 # -----------------------------------------------------------------------------
 
-# ARG IMAGE_GO_BUILDER=golang:1.20.5@sha256:6b3fa4b908676231b50acbbc00e84d8cee9c6ce072b1175c0ff352c57d8a612f
+# ARG IMAGE_GO_BUILDER=golang:1.20.5@sha256:6b3fa4b908676231b50acbbc00e84d8cee9c6ce072b1175c0ff352c57d8a612f - Bad
 ARG IMAGE_GO_BUILDER=golang:1.20.4@sha256:31a8f92b17829b3ccddf0add184f18203acfd79ccc1bcb5c43803ab1c4836cca
 ARG IMAGE_FINAL=senzing/senzingapi-runtime:3.5.3
 
