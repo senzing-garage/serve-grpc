@@ -76,8 +76,9 @@ senzing-tools serve-grpc [flags]
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
     senzing-tools serve-grpc \
-        --enable-all \
-        --database-url postgresql://username:password@postgres.example.com:5432/G2
+        --database-url postgresql://username:password@postgres.example.com:5432/G2 \
+        --enable-all
+
     ```
 
 1. Run `senzing-tools serve-grpc --help` or see [Parameters](#parameters) for additional parameters.
