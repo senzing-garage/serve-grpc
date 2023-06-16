@@ -17,7 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for `--enable-all`
 - In `Dockerfile`, updated to `senzing/senzingapi-runtime:3.5.3`
 - Update dependencies
+  - github.com/senzing/g2-sdk-go v0.6.5
+  - github.com/senzing/g2-sdk-go-base v0.2.1
   - github.com/senzing/g2-sdk-proto/go v0.0.0-20230608182106-25c8cdc02e3c
+  - github.com/senzing/go-common v0.1.4
+  - github.com/senzing/go-logging v1.2.6
+  - github.com/senzing/go-observing v0.2.6
   - github.com/senzing/senzing-tools v0.2.9-0.20230613173043-18f1bd4cafdb
   - github.com/spf13/viper v1.16.0
   - github.com/stretchr/testify v1.8.4
