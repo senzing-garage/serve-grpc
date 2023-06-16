@@ -193,8 +193,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 		SenzingModuleName:              viper.GetString(option.EngineModuleName),
 		SenzingVerboseLogging:          viper.GetInt(option.EngineLogLevel),
 	}
-	err = grpcserver.Serve(ctx)
-	return err
+	return grpcserver.Serve(ctx)
 }
 
 // Used in construction of cobra.Command
