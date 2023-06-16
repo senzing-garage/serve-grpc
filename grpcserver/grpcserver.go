@@ -30,6 +30,7 @@ import (
 
 // GrpcServerImpl is the default implementation of the GrpcServer interface.
 type GrpcServerImpl struct {
+	EnableAll                      bool
 	EnableG2config                 bool
 	EnableG2configmgr              bool
 	EnableG2diagnostic             bool
@@ -255,17 +256,6 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 		}
 	}
 
-	// Determine which services to start. If no services are explicitly set, then all services are started.
-
-	if !grpcServer.EnableG2config && !grpcServer.EnableG2configmgr && !grpcServer.EnableG2diagnostic && !grpcServer.EnableG2engine && !grpcServer.EnableG2product {
-		grpcServer.log(2002)
-		grpcServer.EnableG2config = true
-		grpcServer.EnableG2configmgr = true
-		grpcServer.EnableG2diagnostic = true
-		grpcServer.EnableG2engine = true
-		grpcServer.EnableG2product = true
-	}
-
 	// Set up socket listener.
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcServer.Port))
@@ -280,19 +270,19 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 
 	// Register services with gRPC server.
 
-	if grpcServer.EnableG2config {
+	if grpcServer.EnableAll || grpcServer.EnableG2config {
 		grpcServer.enableG2config(ctx, aGrpcServer)
 	}
-	if grpcServer.EnableG2configmgr {
+	if grpcServer.EnableAll || grpcServer.EnableG2configmgr {
 		grpcServer.enableG2configmgr(ctx, aGrpcServer)
 	}
-	if grpcServer.EnableG2diagnostic {
+	if grpcServer.EnableAll || grpcServer.EnableG2diagnostic {
 		grpcServer.enableG2diagnostic(ctx, aGrpcServer)
 	}
-	if grpcServer.EnableG2engine {
+	if grpcServer.EnableAll || grpcServer.EnableG2engine {
 		grpcServer.enableG2engine(ctx, aGrpcServer)
 	}
-	if grpcServer.EnableG2product {
+	if grpcServer.EnableAll || grpcServer.EnableG2product {
 		grpcServer.enableG2product(ctx, aGrpcServer)
 	}
 
