@@ -33,6 +33,12 @@ For more information, visit https://github.com/Senzing/serve-grpc
 
 var ContextBools = []cmdhelper.ContextBool{
 	{
+		Default: cmdhelper.OsLookupEnvBool(envar.EnableAll, false),
+		Envar:   envar.EnableAll,
+		Help:    help.EnableAll,
+		Option:  option.EnableAll,
+	},
+	{
 		Default: cmdhelper.OsLookupEnvBool(envar.EnableG2config, false),
 		Envar:   envar.EnableG2config,
 		Help:    help.EnableG2config,
@@ -173,6 +179,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 	}
 
 	grpcserver := &grpcserver.GrpcServerImpl{
+		EnableAll:                      viper.GetBool(option.EnableAll),
 		EnableG2config:                 viper.GetBool(option.EnableG2config),
 		EnableG2configmgr:              viper.GetBool(option.EnableG2configmgr),
 		EnableG2diagnostic:             viper.GetBool(option.EnableG2diagnostic),
@@ -186,8 +193,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 		SenzingModuleName:              viper.GetString(option.EngineModuleName),
 		SenzingVerboseLogging:          viper.GetInt(option.EngineLogLevel),
 	}
-	err = grpcserver.Serve(ctx)
-	return err
+	return grpcserver.Serve(ctx)
 }
 
 // Used in construction of cobra.Command

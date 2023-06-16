@@ -39,7 +39,7 @@ A simple demonstration using `senzing-tools` and a SQLite database.
 export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
 export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
 senzing-tools init-database
-senzing-tools serve-grpc
+senzing-tools serve-grpc --enable-all
 
 ```
 
@@ -75,10 +75,13 @@ senzing-tools serve-grpc [flags]
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-    senzing-tools serve-grpc --database-url postgresql://username:password@postgres.example.com:5432/G2
+    senzing-tools serve-grpc \
+        --database-url postgresql://username:password@postgres.example.com:5432/G2 \
+        --enable-all
+
     ```
 
-1. See [Parameters](#parameters) for additional parameters.
+1. Run `senzing-tools serve-grpc --help` or see [Parameters](#parameters) for additional parameters.
 
 ### Using environment variables
 
@@ -86,12 +89,13 @@ senzing-tools serve-grpc [flags]
    Example:
 
     ```console
-    export SENZING_TOOLS_DATABASE_URL=postgresql://username:password@postgres.example.com:5432/G2
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    export SENZING_TOOLS_DATABASE_URL=postgresql://username:password@postgres.example.com:5432/G2
+    export SENZING_TOOLS_ENABLE_ALL=true
     senzing-tools serve-grpc
     ```
 
-1. See [Parameters](#parameters) for additional parameters.
+1. Run `senzing-tools serve-grpc --help` or see [Parameters](#parameters) for additional parameters.
 
 ### Using Docker
 
@@ -103,6 +107,7 @@ This usage shows how to initialze a database with a Docker container.
     ```console
     docker run \
         --env SENZING_TOOLS_DATABASE_URL=postgresql://username:password@postgres.example.com:5432/G2 \
+        --env SENZING_TOOLS_ENABLE_ALL=true \
         --interactive \
         --publish 8258:8258 \
         --rm \
@@ -116,6 +121,7 @@ This usage shows how to initialze a database with a Docker container.
 ### Parameters
 
 - **[SENZING_TOOLS_DATABASE_URL](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_database_url)**
+- **[SENZING_TOOLS_ENABLE_ALL](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_all)**
 - **[SENZING_TOOLS_ENABLE_G2CONFIG](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2config)**
 - **[SENZING_TOOLS_ENABLE_G2CONFIGMGR](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2configmgr)**
 - **[SENZING_TOOLS_ENABLE_G2DIAGNOSTIC](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2diagnostic)**
