@@ -89,9 +89,9 @@ senzing-tools serve-grpc [flags]
    Example:
 
     ```console
-    export SENZING_TOOLS_ENABLE_ALL=true
-    export SENZING_TOOLS_DATABASE_URL=postgresql://username:password@postgres.example.com:5432/G2
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    export SENZING_TOOLS_DATABASE_URL=postgresql://username:password@postgres.example.com:5432/G2
+    export SENZING_TOOLS_ENABLE_ALL=true
     senzing-tools serve-grpc
     ```
 
@@ -106,8 +106,8 @@ This usage shows how to initialze a database with a Docker container.
 
     ```console
     docker run \
-        --env SENZING_TOOLS_ENABLE_ALL=true \
         --env SENZING_TOOLS_DATABASE_URL=postgresql://username:password@postgres.example.com:5432/G2 \
+        --env SENZING_TOOLS_ENABLE_ALL=true \
         --interactive \
         --publish 8258:8258 \
         --rm \
