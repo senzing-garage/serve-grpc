@@ -10,7 +10,7 @@ require (
 	github.com/senzing/go-common v0.1.4
 	github.com/senzing/go-logging v1.2.6
 	github.com/senzing/go-observing v0.2.6
-	github.com/senzing/senzing-tools v0.2.9-0.20230613173043-18f1bd4cafdb
+	github.com/senzing/senzing-tools v0.3.0
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
@@ -41,6 +41,7 @@ require (
 	golang.org/x/text v0.10.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230530153820-e85fd2cbaebc // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
