@@ -8,7 +8,7 @@ require (
 	github.com/senzing/g2-sdk-go-base v0.2.1
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20230608182106-25c8cdc02e3c
 	github.com/senzing/go-common v0.1.4
-	github.com/senzing/go-logging v1.2.6
+	github.com/senzing/go-logging v1.3.0
 	github.com/senzing/go-observing v0.2.6
 	github.com/senzing/senzing-tools v0.3.0
 	github.com/spf13/cobra v1.7.0
@@ -35,7 +35,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
-	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1 // indirect
+	golang.org/x/exp v0.0.0-20230626212559-97b1e661b5df // indirect
 	golang.org/x/net v0.11.0 // indirect
 	golang.org/x/sys v0.9.0 // indirect
 	golang.org/x/text v0.10.0 // indirect
