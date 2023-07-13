@@ -131,9 +131,9 @@ var ContextStrings = []cmdhelper.ContextString{
 }
 
 var ContextVariables = &cmdhelper.ContextVariables{
-	Bools:   ContextBools,
-	Ints:    ContextInts,
-	Strings: ContextStrings,
+	Bools:   append(ContextBools, ContextBoolsForOsArch...),
+	Ints:    append(ContextInts, ContextIntsForForOsArch...),
+	Strings: append(ContextStrings, ContextStringsForOsArch...),
 }
 
 // ----------------------------------------------------------------------------

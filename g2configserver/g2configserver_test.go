@@ -32,7 +32,7 @@ func getTestObject(ctx context.Context, test *testing.T) G2ConfigServer {
 		g2configTestSingleton = &G2ConfigServer{}
 		moduleName := "Test module name"
 		verboseLogging := 0
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
@@ -49,7 +49,7 @@ func getG2ConfigServer(ctx context.Context) G2ConfigServer {
 		g2configTestSingleton = &G2ConfigServer{}
 		moduleName := "Test module name"
 		verboseLogging := 0
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -132,8 +132,8 @@ func teardown() error {
 	return err
 }
 
-func TestBuildSimpleSystemConfigurationJson(test *testing.T) {
-	actual, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
+	actual, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)
@@ -351,7 +351,7 @@ func TestG2configserver_Save(test *testing.T) {
 func TestG2configserver_Init(test *testing.T) {
 	ctx := context.TODO()
 	g2config := getTestObject(ctx, test)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}
@@ -548,7 +548,7 @@ func ExampleG2ConfigServer_Init() {
 	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configserver/g2configserver_test.go
 	ctx := context.TODO()
 	g2config := getG2ConfigServer(ctx)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		fmt.Println(err)
 	}
