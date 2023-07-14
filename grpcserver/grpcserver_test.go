@@ -131,7 +131,7 @@ func setup() error {
 		panic(err)
 	}
 
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		return localLogger.NewError(5902, err)
 	}
@@ -169,7 +169,7 @@ func TestGrpcServerImpl_Serve(test *testing.T) {
 	// 	Id: "Observer 1",
 	// }
 
-	// senzingEngineConfigurationJson, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	// senzingEngineConfigurationJson, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	// if err != nil {
 	// 	fmt.Print(err)
 	// }

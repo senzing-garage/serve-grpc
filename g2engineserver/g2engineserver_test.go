@@ -52,7 +52,7 @@ func getTestObject(ctx context.Context, test *testing.T) G2EngineServer {
 		g2engineTestSingleton = &G2EngineServer{}
 		moduleName := "Test module name"
 		verboseLogging := 0
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
@@ -69,7 +69,7 @@ func getG2EngineServer(ctx context.Context) G2EngineServer {
 		g2engineTestSingleton = &G2EngineServer{}
 		moduleName := "Test module name"
 		verboseLogging := 0
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -270,7 +270,7 @@ func setup() error {
 		panic(err)
 	}
 
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		return createError(5902, err)
 	}
@@ -296,8 +296,8 @@ func teardown() error {
 	return err
 }
 
-func TestBuildSimpleSystemConfigurationJson(test *testing.T) {
-	actual, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
+	actual, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)
@@ -1291,7 +1291,7 @@ func TestG2engineServer_Init(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	moduleName := "Test module name"
 	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}
@@ -1311,7 +1311,7 @@ func TestG2engineServer_InitWithConfigID(test *testing.T) {
 	moduleName := "Test module name"
 	var initConfigID int64 = 1
 	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}
@@ -2581,7 +2581,7 @@ func ExampleG2EngineServer_Init() {
 	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		fmt.Println(err)
 
@@ -2603,7 +2603,7 @@ func ExampleG2EngineServer_InitWithConfigID() {
 	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJson("")
+	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		fmt.Println(err)
 
