@@ -11,10 +11,10 @@ ARG IMAGE_FINAL=senzing/senzingapi-runtime:3.6.0
 # -----------------------------------------------------------------------------
 
 FROM ${IMAGE_GO_BUILDER} as go_builder
-ENV REFRESHED_AT=2023-06-29
+ENV REFRESHED_AT=2023-07-17
 LABEL Name="senzing/serve-grpc-builder" \
       Maintainer="support@senzing.com" \
-      Version="0.4.6"
+      Version="0.4.9"
 
 # Build arguments.
 
@@ -25,8 +25,8 @@ ARG GO_PACKAGE_NAME="unknown"
 
 # Copy remote files from DockerHub.
 
-COPY --from=senzing/senzingapi-runtime:3.5.3  "/opt/senzing/g2/lib/"   "/opt/senzing/g2/lib/"
-COPY --from=senzing/senzingapi-runtime:3.5.3  "/opt/senzing/g2/sdk/c/" "/opt/senzing/g2/sdk/c/"
+COPY --from=senzing/senzingapi-runtime:3.6.0  "/opt/senzing/g2/lib/"   "/opt/senzing/g2/lib/"
+COPY --from=senzing/senzingapi-runtime:3.6.0  "/opt/senzing/g2/sdk/c/" "/opt/senzing/g2/sdk/c/"
 
 # Copy local files from the Git repository.
 
@@ -55,10 +55,10 @@ RUN mkdir -p /output \
 # -----------------------------------------------------------------------------
 
 FROM ${IMAGE_FINAL} as final
-ENV REFRESHED_AT=2023-06-29
+ENV REFRESHED_AT=2023-07-17
 LABEL Name="senzing/serve-grpc" \
       Maintainer="support@senzing.com" \
-      Version="0.4.6"
+      Version="0.4.9"
 
 # Copy files from repository.
 
