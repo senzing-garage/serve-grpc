@@ -2,12 +2,6 @@
 
 package cmd
 
-import (
-	"github.com/senzing/senzing-tools/cmdhelper"
-)
+import "github.com/senzing/go-cmdhelping/option"
 
-var ContextBoolsForOsArch = []cmdhelper.ContextBool{}
-
-var ContextIntsForForOsArch = []cmdhelper.ContextInt{}
-
-var ContextStringsForOsArch = []cmdhelper.ContextString{}
+var ContextVariablesForOsArch = []option.ContextVariable{}
