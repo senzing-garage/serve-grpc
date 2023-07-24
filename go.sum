@@ -137,7 +137,6 @@ github.com/jstemmer/go-junit-report v0.9.1/go.mod h1:Brl9GWCQeLvo8nXZwPNNblvFj/X
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/fs v0.1.0/go.mod h1:FFnZGqtBN9Gxj7eW1uZ42v5BccTP0vu6NEaFoC2HwRg=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
-github.com/kr/pretty v0.2.1/go.mod h1:ipq/a2n7PKx3OHsz4KJII5eveXtPO4qwEXGdVfWzfnI=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
@@ -163,16 +162,16 @@ github.com/senzing/g2-sdk-go-base v0.2.2 h1:zPrD5d5GNXhegbKMqwSFAB75tKyZVYVPT6cM
 github.com/senzing/g2-sdk-go-base v0.2.2/go.mod h1:2JRq3lI5QTzmugBiMYxiffoJBRHFEktzw2hW2785HN0=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230608182106-25c8cdc02e3c h1:jNOwfVczSPsD42TLj/+/Tn5CxzsPfoSpRYm+XB2iKH0=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230608182106-25c8cdc02e3c/go.mod h1:xAllYm5U1m8CBnK7pkn3CZ87kd3nXxEfGt2Wims4+Ic=
-github.com/senzing/go-common v0.2.4 h1:aWMZrdfzql8KzjsB/pbRLTbu7RgLx9jXWkfJfKlsg2k=
-github.com/senzing/go-common v0.2.4/go.mod h1:6qV7VjigHkBnx/kNicAbfavg/Lt4ssPYiILsaeRHk5c=
+github.com/senzing/go-cmdhelping v0.1.1 h1:T/17q+7lpFXAfELcQlEX2alJhcNssADTbg/jq4oOkoE=
+github.com/senzing/go-cmdhelping v0.1.1/go.mod h1:5dBQZtOQqH3AEAyoKjKG8h6ByCUxKmKE1DfH9U3bYlA=
+github.com/senzing/go-common v0.2.5 h1:v+am/15fu365FohG58E71ZaxvuqgW6Y7yuIzyosBnHw=
+github.com/senzing/go-common v0.2.5/go.mod h1:6qV7VjigHkBnx/kNicAbfavg/Lt4ssPYiILsaeRHk5c=
 github.com/senzing/go-logging v1.3.1 h1:/isKaa+e2XQ/Mvp7z9cXxN36GvEF4sUwMQNuSBpwbTQ=
 github.com/senzing/go-logging v1.3.1/go.mod h1:IXMQciWC0pbFE41dSK5Eald/8BSTZTB0AFF/aThbqek=
 github.com/senzing/go-messaging v1.3.1 h1:mTzpX3gKdxvk2e+nOvtRxGQuZdUfsMBf2aTpaGjDfTM=
 github.com/senzing/go-messaging v1.3.1/go.mod h1:yGfaDeXGPNuCEfqdmEjUcN5kHVgTDnBdq6rTHpFOpVk=
 github.com/senzing/go-observing v0.2.6 h1:7qY/W7wMvvMApIJEsmsNbbgduvNsz+UjNc00UlhyqiA=
 github.com/senzing/go-observing v0.2.6/go.mod h1:JnoKy/J/OPcn2ea5kChWpHysnEUD+IqHHwoAVdpzvXU=
-github.com/senzing/senzing-tools v0.3.1-0.20230713235126-9b84c4e632b4 h1:72VCPdnmggI0Rhh3PnB0lZhzUcC2DQo/3yFwZ/cE0Rc=
-github.com/senzing/senzing-tools v0.3.1-0.20230713235126-9b84c4e632b4/go.mod h1:iYZ4cM4XKktH1mcr3D6UXsb0hZJ6FSq7gYAYUxRMYeA=
 github.com/spf13/afero v1.9.5 h1:stMpOSZFs//0Lv29HduCmli3GUfpFoF3Y1Q/aXj/wVM=
 github.com/spf13/afero v1.9.5/go.mod h1:UBogFpq8E9Hx+xc5CNTTEpTnuHVmXDwZcZcE1eb/UhQ=
 github.com/spf13/cast v1.5.1 h1:R+kOtfhWQE6TVQzY+4D7wJLBgkdVasCEFxSUBYBYIlA=
@@ -468,8 +467,8 @@ google.golang.org/genproto v0.0.0-20201210142538-e3217bee35cc/go.mod h1:FWY/as6D
 google.golang.org/genproto v0.0.0-20201214200347-8c77b98c765d/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
 google.golang.org/genproto v0.0.0-20210108203827-ffc7fda8c3d7/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
 google.golang.org/genproto v0.0.0-20210226172003-ab064af71705/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
-google.golang.org/genproto/googleapis/rpc v0.0.0-20230711160842-782d3b101e98 h1:bVf09lpb+OJbByTj913DRJioFFAjf/ZGxEz7MajTp2U=
-google.golang.org/genproto/googleapis/rpc v0.0.0-20230711160842-782d3b101e98/go.mod h1:TUfxEVdsvPg18p6AslUXFoLdpED4oBnGwyqk3dV1XzM=
+google.golang.org/genproto/googleapis/rpc v0.0.0-20230720185612-659f7aaaa771 h1:Z8qdAF9GFsmcUuWQ5KVYIpP3PCKydn/YKORnghIalu4=
+google.golang.org/genproto/googleapis/rpc v0.0.0-20230720185612-659f7aaaa771/go.mod h1:TUfxEVdsvPg18p6AslUXFoLdpED4oBnGwyqk3dV1XzM=
 google.golang.org/grpc v1.19.0/go.mod h1:mqu4LbDTu4XGKhr4mRzUsmM4RtVoemTSY81AxZiDr8c=
 google.golang.org/grpc v1.20.1/go.mod h1:10oTOabMzJvdu6/UiuZezV6QK5dSlG84ov/aaiqXj38=
 google.golang.org/grpc v1.21.1/go.mod h1:oYelfM1adQP15Ek0mdvEgi9Df8B9CZIaU1084ijfRaM=
@@ -505,7 +504,6 @@ google.golang.org/protobuf v1.31.0/go.mod h1:HV8QOd/L58Z+nl8r43ehVNZIU/HEI6OcFqw
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c h1:Hei/4ADfdWqJk1ZMxUNpqntNwaWcugrBjAiHlqqRiVk=
-gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c/go.mod h1:JHkPIbrfpd72SG/EVd6muEfDQjcINNoR0C8j2r3qZ4Q=
 gopkg.in/errgo.v2 v2.1.0/go.mod h1:hNsd1EY+bozCKY1Ytp96fpM3vjJbqLJn88ws8XvfDNI=
 gopkg.in/ini.v1 v1.67.0 h1:Dgnx+6+nfE+IfzjUEISNeydPJh9AXNNsWbGP9KzCsOA=
 gopkg.in/ini.v1 v1.67.0/go.mod h1:pNLf8WUiyNEtQjuu5G5vTm06TEv9tsIgeAvK8hOrP4k=
