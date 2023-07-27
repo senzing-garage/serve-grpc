@@ -62,6 +62,7 @@ LABEL Name="senzing/serve-grpc" \
 
 # Copy files from repository.
 
+COPY ./rootfs /
 COPY ./testdata/senzing-license/g2.lic /etc/opt/senzing/g2.lic
 COPY ./testdata/sqlite/G2C.db          /tmp/sqlite/G2C.db
 
@@ -75,6 +76,8 @@ ENV LD_LIBRARY_PATH=/opt/senzing/g2/lib/
 ENV SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
 
 # Runtime execution.
+
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "/app/healthcheck.sh" ]
 
 WORKDIR /app
 ENTRYPOINT ["/app/serve-grpc"]

@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.4.11] - 2023-07-25
+
+### Changed in 0.4.11
+
+- In `Dockerfile`, added `HEALTHCHECK`
+- Switch default port to 8261
+
 ## [0.4.10] - 2023-07-25
 
 ### Changed in 0.4.10
