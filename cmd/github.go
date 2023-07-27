@@ -1,11 +1,13 @@
-// 0.4.9
-// Created by make-go-github-file.yaml on Fri Jun 16 20:31:38 UTC 2023
+// 0.4.12
+// Created by make-go-github-file.yaml on Thu Jul 27 15:11:40 UTC 2023
 package cmd
 
-var githubDate string = "2023-07-25"
-var githubIteration string = "0"
-var githubRef string = "refs/tags/0.4.10"
-var githubRefName string = "0.4.10"
-var githubRepository string = "Senzing/serve-grpc"
-var githubRepositoryName string = "serve-grpc"
-var githubVersion string = "0.4.10"
+var (
+	githubDate           string = "2023-07-27"
+	githubIteration      string = "0"
+	githubRef            string = "refs/tags/0.4.12"
+	githubRefName        string = "0.4.12"
+	githubRepository     string = "Senzing/serve-grpc"
+	githubRepositoryName string = "serve-grpc"
+	githubVersion        string = "0.4.12"
+)
