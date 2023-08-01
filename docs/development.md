@@ -87,13 +87,30 @@ the binary built can be run.
             ```
 
 1. Set `LD_LIBRARY_PATH` and run the command.
-   Example:
+   Examples:
+    1. Linux
 
-    ```console
-    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-    ${GIT_REPOSITORY_DIR}/target/linux/serve-grpc
+        ```console
+        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+        ${GIT_REPOSITORY_DIR}/target/linux-amd64/serve-grpc
 
-    ```
+        ```
+
+    1. macOs
+
+        ```console
+        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+        ${GIT_REPOSITORY_DIR}/target/darwin-amd64/serve-grpc
+
+        ```
+
+    1. Windows
+
+        ```console
+        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+        ${GIT_REPOSITORY_DIR}/target/windows-amd64/serve-grpc
+
+        ```
 
 ## Test
 
