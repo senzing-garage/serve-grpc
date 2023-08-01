@@ -38,11 +38,11 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
-    make clean build
+    make build
 
     ```
 
-1. The binaries will be found in the `${GIT_REPOSITORY_DIR}/target` directory.
+1. The binaries will be found in ${GIT_REPOSITORY_DIR}/target.
    Example:
 
     ```console
@@ -260,13 +260,13 @@ For other gRPC tools, visit
         1. Near the center, click the green "play" button.
     1. The Senzing object is initialized and other messages can be tried.
 
-### Package
+## Package
 
 **Note:** This only packages the `serve-grpc` command.
 It is only to be used in development and test.
 The actual packaging is done in the [senzing-tools](https://github.com/Senzing/senzing-tools) repository.
 
-#### Package RPM and DEB files
+### Package RPM and DEB files
 
 1. Use make target to run a docker images that builds RPM and DEB files.
    Example:
@@ -332,7 +332,7 @@ The actual packaging is done in the [senzing-tools](https://github.com/Senzing/s
 
     ```
 
-#### Test RPM package on Centos
+### Test RPM package on Centos
 
 1. Determine if `serve-grpc` is installed.
    Example:
@@ -379,7 +379,7 @@ The actual packaging is done in the [senzing-tools](https://github.com/Senzing/s
 
     ```
 
-### Cleanup
+## Cleanup
 
 1. Clean up.
    Example:
