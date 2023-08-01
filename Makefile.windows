@@ -17,6 +17,10 @@ build: windows/amd64
 hello-world:
 	@echo "Hello World, from windows."
 
+.PHONY: package
+package:
+	@echo "The 'package' target is not implemented for darwin"
+
 # -----------------------------------------------------------------------------
 # Makefile targets supported only by this platform.
 # -----------------------------------------------------------------------------
