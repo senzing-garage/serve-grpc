@@ -146,13 +146,7 @@ docker-run:
 		$(DOCKER_IMAGE_NAME)
 
 
-.PHONY: run-serve-grpc
-run-serve-grpc: build
-	@target/linux/serve-grpc
 
-.PHONY: run-serve-grpc-trace
-run-serve-grpc-trace: build
-	@target/linux/serve-grpc --log-level TRACE --engine-log-level 1
 
 # -----------------------------------------------------------------------------
 # Utility targets

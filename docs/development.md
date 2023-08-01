@@ -56,34 +56,37 @@ After running `make build`,
 the binary built can be run.
 
 1. Identify the database by setting the `SENZING_TOOLS_DATABASE_URL` environment variable.
+    1. Sqlite
 
-    1. :pencil2: Create a new Sqlite database.
-       Examples:
+        1. :pencil2: Create a new Sqlite database.
+        Examples:
 
-        ```console
-        export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
-        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-        senzing-tools init-database
+            ```console
+            export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
+            export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+            senzing-tools init-database
 
-        ```
+            ```
 
-    1. :pencil2: Identify an existing PostgreSQL database.
-       Example:
+    1. PostgreSQL
 
-        ```console
-        export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-        export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
+        1. :pencil2: Identify an existing PostgreSQL database.
+           Example:
 
-        ```
+            ```console
+            export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
+            export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
 
-       If needed, initialize PostgreSQL database.
-       Example:
+            ```
 
-        ```console
-        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-        senzing-tools init-database
+        1. If needed, initialize PostgreSQL database.
+           Example:
 
-        ```
+            ```console
+            export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+            senzing-tools init-database
+
+            ```
 
 1. Set `LD_LIBRARY_PATH` and run the command.
    Example:

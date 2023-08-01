@@ -16,6 +16,16 @@ build: linux/amd64
 hello-world:
 	@echo "Hello World, from linux."
 
+
+.PHONY: run-serve-grpc
+run-serve-grpc: build
+	@target/linux-amd64/serve-grpc
+
+
+.PHONY: run-serve-grpc-trace
+run-serve-grpc-trace: build
+	@target/linux-amd64/serve-grpc --log-level TRACE --engine-log-level 1
+
 # -----------------------------------------------------------------------------
 # Makefile targets supported only by this platform.
 # -----------------------------------------------------------------------------
