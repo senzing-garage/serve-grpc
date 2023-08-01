@@ -56,8 +56,7 @@ After running `make build`,
 the binary built can be run.
 
 1. Identify the database by setting the `SENZING_TOOLS_DATABASE_URL` environment variable.
-    1. Sqlite
-
+    1. If using Sqlite database
         1. :pencil2: Create a new Sqlite database.
         Examples:
 
@@ -68,8 +67,7 @@ the binary built can be run.
 
             ```
 
-    1. PostgreSQL
-
+    1. If using PostgreSQL database
         1. :pencil2: Identify an existing PostgreSQL database.
            Example:
 
