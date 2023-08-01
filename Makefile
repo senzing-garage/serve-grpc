@@ -4,6 +4,10 @@
 
 include Makefile.osdetect
 
+# -----------------------------------------------------------------------------
+# Variables
+# -----------------------------------------------------------------------------
+
 # "Simple expanded" variables (':=')
 
 # PROGRAM_NAME is the name of the GIT repository.
@@ -22,11 +26,6 @@ GO_PACKAGE_NAME := $(shell echo $(GIT_REMOTE_URL) | sed -e 's|^git@github.com:|g
 GO_OSARCH = $(subst /, ,$@)
 GO_OS = $(word 1, $(GO_OSARCH))
 GO_ARCH = $(word 2, $(GO_OSARCH))
-
-# Optionally include platform-specific settings
-
--include Makefile.$(OSTYPE)
--include Makefile.$(OSTYPE)_$(OSARCH)
 
 # Recursive assignment ('=')
 
@@ -52,6 +51,7 @@ default: help
 
 # -----------------------------------------------------------------------------
 # Build
+#  - The "build" target is implemented in Makefile.OS.ARCH files.
 # -----------------------------------------------------------------------------
 
 .PHONY: dependencies
@@ -65,19 +65,11 @@ PLATFORMS := darwin/amd64 linux/amd64 windows/amd64
 $(PLATFORMS):
 	@echo Building $(TARGET_DIRECTORY)/$(GO_OS)-$(GO_ARCH)/$(PROGRAM_NAME)
 	@mkdir -p $(TARGET_DIRECTORY)/$(GO_OS)-$(GO_ARCH) || true
-	@GOOS=$(GO_OS) \
-	GOARCH=$(GO_ARCH) \
-	go build \
-		-ldflags \
-			"-X 'main.buildIteration=${BUILD_ITERATION}' \
-			-X 'main.buildVersion=${BUILD_VERSION}' \
-			-X 'main.programName=${PROGRAM_NAME}' \
-			" \
-		-o $(TARGET_DIRECTORY)/$(GO_OS)-$(GO_ARCH)/$(PROGRAM_NAME)
+	@GOOS=$(GO_OS) GOARCH=$(GO_ARCH) go build -o $(TARGET_DIRECTORY)/$(GO_OS)-$(GO_ARCH)/$(PROGRAM_NAME)
 
 
-.PHONY: build $(PLATFORMS)
-build: $(PLATFORMS)
+.PHONY: build-all $(PLATFORMS)
+build-all: $(PLATFORMS)
 	@mv $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME) $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME).exe
 
 # -----------------------------------------------------------------------------
@@ -201,5 +193,13 @@ print-make-variables:
 .PHONY: help
 help:
 	@echo "Build $(PROGRAM_NAME) version $(BUILD_VERSION)-$(BUILD_ITERATION)".
-	@echo "All targets:"
+	@echo "Makefile targets:"
 	@$(MAKE) -pRrq -f $(firstword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$' | xargs
+
+# -----------------------------------------------------------------------------
+# Optionally include platform-specific settings and targets.
+#  - Note: This is last because the "last one wins" when over-writing targets.
+# -----------------------------------------------------------------------------
+
+-include Makefile.$(OSTYPE)
+-include Makefile.$(OSTYPE)_$(OSARCH)

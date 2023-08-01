@@ -1,29 +1,26 @@
-# Makefile extensions for darwin.
+# Makefile extensions for windows.
 
 # -----------------------------------------------------------------------------
 # Variables
 # -----------------------------------------------------------------------------
-
-SENZING_DIR ?= /Applications/Senzing.app/Contents/Resources/app/g2
-SENZING_TOOLS_SENZING_DIRECTORY ?= $(SENZING_DIR)
-
-DYLD_LIBRARY_PATH := $(SENZING_TOOLS_SENZING_DIRECTORY)/lib:$(SENZING_TOOLS_SENZING_DIRECTORY)/lib/macos
 
 # -----------------------------------------------------------------------------
 # Makefile targets supported by all platforms.
 # -----------------------------------------------------------------------------
 
 .PHONY: build
-build: darwin/amd64
+build: windows/amd64
+	@mv $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME) $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME).exe
+
 
 .PHONY: hello-world
 hello-world:
-	@echo "Hello World, from darwin."
+	@echo "Hello World, from windows."
 
 # -----------------------------------------------------------------------------
 # Makefile targets supported only by this platform.
 # -----------------------------------------------------------------------------
 
-.PHONY: only-darwin
-only-darwin:
-	@echo "Only darwin has this Makefile target."
+.PHONY: only-windows
+only-windows:
+	@echo "Only windows has this Makefile target."

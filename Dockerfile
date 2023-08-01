@@ -2,14 +2,15 @@
 # Stages
 # -----------------------------------------------------------------------------
 
+ARG IMAGE_SENZINGAPI_RUNTIME=senzing/senzingapi-runtime:3.6.0
 ARG IMAGE_GO_BUILDER=golang:1.20.4
 ARG IMAGE_FINAL=senzing/senzingapi-runtime:3.6.0
 
 # -----------------------------------------------------------------------------
-# Stage: senzing_runtime
+# Stage: senzingapi_runtime
 # -----------------------------------------------------------------------------
 
-FROM ${IMAGE_FINAL} as senzing_runtime
+FROM ${IMAGE_SENZINGAPI_RUNTIME} as senzingapi_runtime
 
 # -----------------------------------------------------------------------------
 # Stage: go_builder
@@ -35,8 +36,12 @@ COPY . ${GOPATH}/src/${GO_PACKAGE_NAME}
 
 # Copy files from prior stage.
 
-COPY --from=senzing_runtime  "/opt/senzing/g2/lib/"   "/opt/senzing/g2/lib/"
-COPY --from=senzing_runtime  "/opt/senzing/g2/sdk/c/" "/opt/senzing/g2/sdk/c/"
+COPY --from=senzingapi_runtime  "/opt/senzing/g2/lib/"   "/opt/senzing/g2/lib/"
+COPY --from=senzingapi_runtime  "/opt/senzing/g2/sdk/c/" "/opt/senzing/g2/sdk/c/"
+
+# Set path to Senzing libs.
+
+ENV LD_LIBRARY_PATH=/opt/senzing/g2/lib/
 
 # Build go program.
 
@@ -66,7 +71,7 @@ COPY ./testdata/sqlite/G2C.db          /tmp/sqlite/G2C.db
 
 # Copy files from prior stage.
 
-COPY --from=go_builder "/output/linux/serve-grpc" "/app/serve-grpc"
+COPY --from=go_builder "/output/linux-amd64/serve-grpc" "/app/serve-grpc"
 
 # Runtime environment variables.
 
