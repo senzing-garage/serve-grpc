@@ -10,23 +10,20 @@ SENZING_TOOLS_SENZING_DIRECTORY ?= $(SENZING_DIR)
 LD_LIBRARY_PATH := $(SENZING_TOOLS_SENZING_DIRECTORY)/lib:$(SENZING_TOOLS_SENZING_DIRECTORY)/lib/macos
 DYLD_LIBRARY_PATH := $(LD_LIBRARY_PATH)
 
-
-
-
 # -----------------------------------------------------------------------------
 # Makefile targets supported by all platforms.
 # -----------------------------------------------------------------------------
-
-.PHONY: build
-build: darwin/amd64
 
 .PHONY: hello-world
 hello-world:
 	@echo "Hello World, from darwin."
 
-.PHONY: package
-package:
-	@echo "The 'package' target is not implemented for darwin"
+# -----------------------------------------------------------------------------
+# Build
+# -----------------------------------------------------------------------------
+
+.PHONY: build
+build: darwin/amd64
 
 # -----------------------------------------------------------------------------
 # Test
@@ -34,7 +31,15 @@ package:
 
 .PHONY: test
 test:
-	go test -exec macos_exec_dyld.sh -v -p 1 ./...	
+	go test -exec macos_exec_dyld.sh -v -p 1 ./...
+
+# -----------------------------------------------------------------------------
+# Package
+# ----------------------------------------------------------------------------
+
+.PHONY: package
+package:
+	@echo "The 'package' target is not implemented for darwin"
 
 # -----------------------------------------------------------------------------
 # Makefile targets supported only by this platform.
