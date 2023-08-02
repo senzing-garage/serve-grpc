@@ -16,6 +16,22 @@ build: linux/amd64
 hello-world:
 	@echo "Hello World, from linux."
 
+# -----------------------------------------------------------------------------
+# Test
+# -----------------------------------------------------------------------------
+
+.PHONY: test
+test:
+	@go test -v -p 1 ./...
+#	@go test -v ./.
+#	@go test -v ./g2configserver
+#	@go test -v ./g2configmgrserver
+#	@go test -v ./g2diagnosticserver
+#	@go test -v ./g2engineserver
+#	@go test -v ./g2productserver
+#	@go test -v ./grpcserver
+
+
 .PHONY: package
 package: docker-build-package
 	@mkdir -p $(TARGET_DIRECTORY) || true

@@ -74,18 +74,8 @@ build-all: $(PLATFORMS)
 
 # -----------------------------------------------------------------------------
 # Test
+#  - The "test" target is implemented in Makefile.OS.ARCH files.
 # -----------------------------------------------------------------------------
-
-.PHONY: test
-test:
-	@go test -v -p 1 ./...
-#	@go test -v ./.
-#	@go test -v ./g2configserver
-#	@go test -v ./g2configmgrserver
-#	@go test -v ./g2diagnosticserver
-#	@go test -v ./g2engineserver
-#	@go test -v ./g2productserver
-#	@go test -v ./grpcserver
 
 # -----------------------------------------------------------------------------
 # docker-build
