@@ -38,59 +38,15 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
-    make clean build
+    make build
 
     ```
 
-1. The binaries will be found in the `${GIT_REPOSITORY_DIR}/target` directory.
+1. The binaries will be found in ${GIT_REPOSITORY_DIR}/target.
    Example:
 
     ```console
     tree ${GIT_REPOSITORY_DIR}/target
-
-    ```
-
-## Run
-
-After running `make build`,
-the binary built can be run.
-
-1. Identify the database by setting the `SENZING_TOOLS_DATABASE_URL` environment variable.
-
-    1. :pencil2: Create a new Sqlite database.
-       Examples:
-
-        ```console
-        export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
-        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-        senzing-tools init-database
-
-        ```
-
-    1. :pencil2: Identify an existing PostgreSQL database.
-       Example:
-
-        ```console
-        export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-        export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
-
-        ```
-
-       If needed, initialize PostgreSQL database.
-       Example:
-
-        ```console
-        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-        senzing-tools init-database
-
-        ```
-
-1. Set `LD_LIBRARY_PATH` and run the command.
-   Example:
-
-    ```console
-    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-    ${GIT_REPOSITORY_DIR}/target/linux/serve-grpc
 
     ```
 
@@ -260,13 +216,75 @@ For other gRPC tools, visit
         1. Near the center, click the green "play" button.
     1. The Senzing object is initialized and other messages can be tried.
 
-### Package
+## Run
+
+After running `make build`,
+the binary built can be run.
+
+1. Identify the database by setting the `SENZING_TOOLS_DATABASE_URL` environment variable.
+    1. If using Sqlite database
+        1. :pencil2: Create a new Sqlite database.
+        Examples:
+
+            ```console
+            export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
+            export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+            senzing-tools init-database
+
+            ```
+
+    1. If using PostgreSQL database
+        1. :pencil2: Identify an existing PostgreSQL database.
+           Example:
+
+            ```console
+            export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
+            export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
+
+            ```
+
+        1. If needed, initialize PostgreSQL database.
+           Example:
+
+            ```console
+            export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+            senzing-tools init-database
+
+            ```
+
+1. Set `LD_LIBRARY_PATH` and run the command.
+   Examples:
+    1. Linux
+
+        ```console
+        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+        ${GIT_REPOSITORY_DIR}/target/linux-amd64/serve-grpc
+
+        ```
+
+    1. macOs
+
+        ```console
+        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+        ${GIT_REPOSITORY_DIR}/target/darwin-amd64/serve-grpc
+
+        ```
+
+    1. Windows
+
+        ```console
+        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+        ${GIT_REPOSITORY_DIR}/target/windows-amd64/serve-grpc
+
+        ```
+
+## Package
 
 **Note:** This only packages the `serve-grpc` command.
 It is only to be used in development and test.
 The actual packaging is done in the [senzing-tools](https://github.com/Senzing/senzing-tools) repository.
 
-#### Package RPM and DEB files
+### Package RPM and DEB files
 
 1. Use make target to run a docker images that builds RPM and DEB files.
    Example:
@@ -332,7 +350,7 @@ The actual packaging is done in the [senzing-tools](https://github.com/Senzing/s
 
     ```
 
-#### Test RPM package on Centos
+### Test RPM package on Centos
 
 1. Determine if `serve-grpc` is installed.
    Example:
@@ -379,7 +397,7 @@ The actual packaging is done in the [senzing-tools](https://github.com/Senzing/s
 
     ```
 
-### Cleanup
+## Cleanup
 
 1. Clean up.
    Example:

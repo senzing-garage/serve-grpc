@@ -1,0 +1,66 @@
+# Makefile extensions for linux.
+
+# -----------------------------------------------------------------------------
+# Variables
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# Makefile targets supported by all platforms.
+# -----------------------------------------------------------------------------
+
+.PHONY: hello-world
+hello-world:
+	@echo "Hello World, from linux."
+
+# -----------------------------------------------------------------------------
+# Build
+# -----------------------------------------------------------------------------
+
+.PHONY: build
+build: linux/amd64
+
+# -----------------------------------------------------------------------------
+# Test
+# -----------------------------------------------------------------------------
+
+.PHONY: test
+test:
+	@go test -v -p 1 ./...
+#	@go test -v ./.
+#	@go test -v ./g2configserver
+#	@go test -v ./g2configmgrserver
+#	@go test -v ./g2diagnosticserver
+#	@go test -v ./g2engineserver
+#	@go test -v ./g2productserver
+#	@go test -v ./grpcserver
+
+# -----------------------------------------------------------------------------
+# Run
+# -----------------------------------------------------------------------------
+
+.PHONY: run-serve-grpc
+run-serve-grpc: build
+	@target/linux-amd64/serve-grpc
+
+
+.PHONY: run-serve-grpc-trace
+run-serve-grpc-trace: build
+	@target/linux-amd64/serve-grpc --log-level TRACE --engine-log-level 1
+# -----------------------------------------------------------------------------
+# Package
+# -----------------------------------------------------------------------------
+
+.PHONY: package
+package: docker-build-package
+	@mkdir -p $(TARGET_DIRECTORY) || true
+	@CONTAINER_ID=$$(docker create $(DOCKER_BUILD_IMAGE_NAME)); \
+	docker cp $$CONTAINER_ID:/output/. $(TARGET_DIRECTORY)/; \
+	docker rm -v $$CONTAINER_ID
+
+# -----------------------------------------------------------------------------
+# Makefile targets supported only by this platform.
+# -----------------------------------------------------------------------------
+
+.PHONY: only-linux
+only-linux:
+	@echo "Only linux has this Makefile target."

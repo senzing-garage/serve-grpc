@@ -9,7 +9,7 @@ on:
       - reopened
       - opened
 jobs:
-  automate-issues-labels:
+  add-triage-label:
     name: Add triage label to issue
     runs-on: ubuntu-latest
     steps:

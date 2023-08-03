@@ -1,8 +1,7 @@
 ---
+name: dependabot-approve-and-merge.yaml
 
-name: 'dependabot automation'
-
-on: 
+on:
   pull_request:
     branches: [main]
 

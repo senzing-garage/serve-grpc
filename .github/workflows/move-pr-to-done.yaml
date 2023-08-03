@@ -1,6 +1,5 @@
 ---
-
-name: 'pr closed automation'
+name: move-pr-to-done.yaml
 
 on:
   pull_request:

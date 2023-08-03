@@ -1,5 +1,5 @@
 # Based on
-# -https://github.com/marketplace/actions/setup-go-environment
+# - https://github.com/marketplace/actions/setup-go-environment
 
 name: go-test.yaml
 
@@ -40,10 +40,3 @@ jobs:
       - run: mkdir /tmp/sqlite
       - run: cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
       - run: go test -v -p 1 ./...
-      # - run: go test -v ./.
-      # - run: go test -v ./g2configserver
-      # - run: go test -v ./g2configmgrserver
-      # - run: go test -v ./g2diagnosticserver
-      # - run: go test -v ./g2engineserver
-      # - run: go test -v ./g2productserver
-      # - run: go test -v ./grpcserver

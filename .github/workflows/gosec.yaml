@@ -1,7 +1,7 @@
 # Based on
 # - https://github.com/securego/gosec
 
-name: go-security.yaml
+name: gosec.yaml
 on:
   push:
     branches:
@@ -10,7 +10,7 @@ on:
     branches:
       - main
 jobs:
-  tests:
+  gosec:
     runs-on: ubuntu-latest
     env:
       GO111MODULE: on
