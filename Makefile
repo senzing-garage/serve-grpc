@@ -43,6 +43,9 @@ SENZING_TOOLS_DATABASE_URL ?= sqlite3://na:na@/tmp/sqlite/G2C.db
 
 .EXPORT_ALL_VARIABLES:
 
+-include Makefile.$(OSTYPE)
+-include Makefile.$(OSTYPE)_$(OSARCH)
+
 # -----------------------------------------------------------------------------
 # The first "make" target runs as default.
 # -----------------------------------------------------------------------------
@@ -177,5 +180,5 @@ help:
 #  - Note: This is last because the "last one wins" when over-writing targets.
 # -----------------------------------------------------------------------------
 
--include Makefile.$(OSTYPE)
--include Makefile.$(OSTYPE)_$(OSARCH)
+# -include Makefile.$(OSTYPE)
+# -include Makefile.$(OSTYPE)_$(OSARCH)
