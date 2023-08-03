@@ -5,8 +5,7 @@ on:
       - main
   workflow_dispatch:
 jobs:
-  buildDockerContainer:
-    name: Build Docker container
+  build-docker-container:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

@@ -8,7 +8,7 @@ env:
   MEMBER_LIST: ${{ secrets.SENZING_MEMBERS }}
   CREATOR: ${{ github.actor }}
 jobs:
-  automate-issues-labels:
+  identify-customer:
     name: Add customer-submission label
     runs-on: ubuntu-latest
     steps:

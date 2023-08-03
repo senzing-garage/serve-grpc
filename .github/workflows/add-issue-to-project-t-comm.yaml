@@ -10,7 +10,7 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.SENZING_GITHUB_ACCESS_TOKEN }}
 jobs:
-  assign_one_project:
+  add-issue-to-project:
     name: Add issue to Senzing Community project
     runs-on: ubuntu-latest
     steps:

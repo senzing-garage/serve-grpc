@@ -1,6 +1,10 @@
 # Makefile extensions for linux.
 
 # -----------------------------------------------------------------------------
+# Variables
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
 # Makefile targets supported by all platforms.
 # -----------------------------------------------------------------------------
 
@@ -31,17 +35,6 @@ test:
 #	@go test -v ./grpcserver
 
 # -----------------------------------------------------------------------------
-# Package
-# -----------------------------------------------------------------------------
-
-.PHONY: package
-package: docker-build-package
-	@mkdir -p $(TARGET_DIRECTORY) || true
-	@CONTAINER_ID=$$(docker create $(DOCKER_BUILD_IMAGE_NAME)); \
-	docker cp $$CONTAINER_ID:/output/. $(TARGET_DIRECTORY)/; \
-	docker rm -v $$CONTAINER_ID
-
-# -----------------------------------------------------------------------------
 # Run
 # -----------------------------------------------------------------------------
 
@@ -53,6 +46,16 @@ run-serve-grpc: build
 .PHONY: run-serve-grpc-trace
 run-serve-grpc-trace: build
 	@target/linux-amd64/serve-grpc --log-level TRACE --engine-log-level 1
+# -----------------------------------------------------------------------------
+# Package
+# -----------------------------------------------------------------------------
+
+.PHONY: package
+package: docker-build-package
+	@mkdir -p $(TARGET_DIRECTORY) || true
+	@CONTAINER_ID=$$(docker create $(DOCKER_BUILD_IMAGE_NAME)); \
+	docker cp $$CONTAINER_ID:/output/. $(TARGET_DIRECTORY)/; \
+	docker rm -v $$CONTAINER_ID
 
 # -----------------------------------------------------------------------------
 # Makefile targets supported only by this platform.

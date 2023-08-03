@@ -8,18 +8,37 @@
 # Makefile targets supported by all platforms.
 # -----------------------------------------------------------------------------
 
-.PHONY: build
-build: windows/amd64
-	@mv $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME) $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME).exe
-
-
 .PHONY: hello-world
 hello-world:
 	@echo "Hello World, from windows."
 
+# -----------------------------------------------------------------------------
+# Build
+# -----------------------------------------------------------------------------
+
+.PHONY: build
+build: windows/amd64
+	@mv $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME) $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME).exe
+
+# -----------------------------------------------------------------------------
+# Test
+# -----------------------------------------------------------------------------
+
+.PHONY: test
+test:
+	@go test -v -p 1 ./...
+
+# -----------------------------------------------------------------------------
+# Run
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# Package
+# -----------------------------------------------------------------------------
+
 .PHONY: package
 package:
-	@echo "The 'package' target is not implemented for darwin"
+	@echo "The 'package' target is not implemented for windows"
 
 # -----------------------------------------------------------------------------
 # Makefile targets supported only by this platform.

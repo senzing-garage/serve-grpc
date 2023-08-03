@@ -137,10 +137,6 @@ docker-run:
 # Utility targets
 # -----------------------------------------------------------------------------
 
-.PHONY: hello-world
-hello-world:
-	@echo "Hello World, from main."
-
 .PHONY: new-sqlite
 new-sqlite:
 	@rm -rf /tmp/sqlite

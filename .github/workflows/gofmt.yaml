@@ -1,0 +1,10 @@
+---
+name: gofmt.yaml
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  gofmt:
+    uses: Senzing/build-resources/.github/workflows/gofmt.yaml@main
