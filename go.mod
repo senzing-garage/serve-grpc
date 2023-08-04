@@ -8,7 +8,7 @@ require (
 	github.com/senzing/g2-sdk-go-base v0.2.2
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20230608182106-25c8cdc02e3c
 	github.com/senzing/go-cmdhelping v0.1.4
-	github.com/senzing/go-common v0.2.8
+	github.com/senzing/go-common v0.2.10
 	github.com/senzing/go-logging v1.3.1
 	github.com/senzing/go-observing v0.2.6
 	github.com/spf13/cobra v1.7.0
