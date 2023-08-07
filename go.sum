@@ -166,10 +166,10 @@ github.com/senzing/go-cmdhelping v0.1.5 h1:U07/+3vIeomn2qES2IAQI3Tg95Wqr4q9Pd2n7
 github.com/senzing/go-cmdhelping v0.1.5/go.mod h1:nOoJc3KtgaMp9Qodf9dws09tWML76BP46TB1EPgKqV8=
 github.com/senzing/go-common v0.2.11 h1:egrHPWfw+P6EaGSRFpcDfRN/fSRJqtNpjIFT1MGIFm0=
 github.com/senzing/go-common v0.2.11/go.mod h1:UInzpkEUxtEZQ2P2L33pEnY54/jHcEu4qNSZFq6ooDM=
-github.com/senzing/go-logging v1.3.1 h1:/isKaa+e2XQ/Mvp7z9cXxN36GvEF4sUwMQNuSBpwbTQ=
-github.com/senzing/go-logging v1.3.1/go.mod h1:IXMQciWC0pbFE41dSK5Eald/8BSTZTB0AFF/aThbqek=
-github.com/senzing/go-messaging v1.3.1 h1:mTzpX3gKdxvk2e+nOvtRxGQuZdUfsMBf2aTpaGjDfTM=
-github.com/senzing/go-messaging v1.3.1/go.mod h1:yGfaDeXGPNuCEfqdmEjUcN5kHVgTDnBdq6rTHpFOpVk=
+github.com/senzing/go-logging v1.3.2 h1:V7512RMXi6yiHAzQeCXyQhkEHTtlUNvMuIyaQicDIDE=
+github.com/senzing/go-logging v1.3.2/go.mod h1:7vM4AELb1jjUaGUJFv+CPTp694jcZaCbJVShghOiUa8=
+github.com/senzing/go-messaging v1.3.2 h1:emr1mt4iv/E4t2gXi6PYz1h/j1r9nTG7GpQ77ZdoOh8=
+github.com/senzing/go-messaging v1.3.2/go.mod h1:IShYrqV+3lfuQ+Y0jL/z5v7G9QkWIA8UOquVso4cgPE=
 github.com/senzing/go-observing v0.2.6 h1:7qY/W7wMvvMApIJEsmsNbbgduvNsz+UjNc00UlhyqiA=
 github.com/senzing/go-observing v0.2.6/go.mod h1:JnoKy/J/OPcn2ea5kChWpHysnEUD+IqHHwoAVdpzvXU=
 github.com/spf13/afero v1.9.5 h1:stMpOSZFs//0Lv29HduCmli3GUfpFoF3Y1Q/aXj/wVM=
