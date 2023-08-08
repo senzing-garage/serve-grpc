@@ -41,8 +41,14 @@ jobs:
       - name: Copy SenzingApi files
         run: sudo mkdir -p /opt/senzing/ && sudo cp -R /Volumes/SenzingAPI/senzing/g2 /opt/senzing
       - name: Copy /etc files
-        run: sudo mkdir -p /etc/opt/senzing && sudo cp testdata/senzing-license/g2.lic /etc/opt/senzing
+        run: sudo cp testdata/senzing-license/g2.lic /opt/senzing/g2/etc/g2.lic
       - name: Copy test database fies
         run: mkdir /tmp/sqlite && cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
-      - name: Run go test
-        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./...
+      # - name: Run go test
+      #   run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./...
+      - name: Run go test - main
+        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./.
+      - name: Run go test - main
+        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./g2config
+      - name: Run go test - main
+        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./g2configmgr
