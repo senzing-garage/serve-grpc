@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Refactor to `template-go`
 - Update dependencies
+  - github.com/senzing/g2-sdk-go v0.6.8
+  - github.com/senzing/g2-sdk-go-base v0.2.3
+  - github.com/senzing/go-cmdhelping v0.1.5
+  - github.com/senzing/go-common v0.2.11
+  - github.com/senzing/go-logging v1.3.2
+  - github.com/senzing/go-observing v0.2.7
 
 ## [0.4.12] - 2023-08-03
 
