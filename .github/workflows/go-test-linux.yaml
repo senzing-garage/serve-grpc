@@ -1,7 +1,7 @@
 # Based on
 # - https://github.com/marketplace/actions/setup-go-environment
 
-name: go-test.yaml
+name: go-test-linux.yaml
 
 on: [push]
 
@@ -16,16 +16,18 @@ jobs:
     strategy:
       matrix:
         go: ["1.20"]
-    name: Go ${{ matrix.go }}
+    name: Go ${{ matrix.go }} - linux
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Setup go
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go }}
-      - run: pwd
-      - run: wget -qO /tmp/senzingrepo_1.0.1-1_amd64.deb https://senzing-production-apt.s3.amazonaws.com/senzingrepo_1.0.1-1_amd64.deb
-      - run: sudo apt-get -y install /tmp/senzingrepo_1.0.1-1_amd64.deb
+      - run: wget -qO /tmp/senzingstagingrepo_1.0.1-1_amd64.deb https://senzing-staging-apt.s3.amazonaws.com/senzingstagingrepo_1.0.1-1_amd64.deb
+      - run: sudo apt-get -y install /tmp/senzingstagingrepo_1.0.1-1_amd64.deb      
       - run: sudo apt-get update
       - run: sudo --preserve-env apt-get -y install senzingapi
       - run: sudo mv /opt/senzing/data/4.0.0/* /opt/senzing/data/
@@ -39,4 +41,5 @@ jobs:
       - run: sudo cp testdata/senzing-license/g2.lic                         /etc/opt/senzing
       - run: mkdir /tmp/sqlite
       - run: cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
-      - run: go test -v -p 1 ./...
+      - name: Run go test
+        run: go test -v -p 1 ./...
