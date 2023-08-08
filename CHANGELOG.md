@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.4.13] - 2023-08-08
+
+### Changed in 0.4.13
+
+- Refactor to `template-go`
+- Update dependencies
+
 ## [0.4.12] - 2023-08-03
 
 ### Changed in 0.4.12
