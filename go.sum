@@ -158,8 +158,8 @@ github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/senzing/g2-sdk-go v0.6.8 h1:wUus50kwp1jTon8D5WyfOPci0zl+CJ9AtZKBViEVaaY=
 github.com/senzing/g2-sdk-go v0.6.8/go.mod h1:jXg6BfhcDqqtG0zTAk/KmH5mBQefAqd/ZV1/3NYFeAs=
-github.com/senzing/g2-sdk-go-base v0.2.3 h1:26d7vRLI4g/KWiAEtbVAt1bvmBgc5gQ6xVxFiXLcNB0=
-github.com/senzing/g2-sdk-go-base v0.2.3/go.mod h1:JPFyWtQywu/C8lCq0CaPGgt2ZV5pjOcMENXKK5cHoL0=
+github.com/senzing/g2-sdk-go-base v0.2.4 h1:iAEtm28+KTMuf/0Axhef/vXoDQ3O1GiKqOP+uCb26uQ=
+github.com/senzing/g2-sdk-go-base v0.2.4/go.mod h1:JPFyWtQywu/C8lCq0CaPGgt2ZV5pjOcMENXKK5cHoL0=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230608182106-25c8cdc02e3c h1:jNOwfVczSPsD42TLj/+/Tn5CxzsPfoSpRYm+XB2iKH0=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230608182106-25c8cdc02e3c/go.mod h1:xAllYm5U1m8CBnK7pkn3CZ87kd3nXxEfGt2Wims4+Ic=
 github.com/senzing/go-cmdhelping v0.1.5 h1:U07/+3vIeomn2qES2IAQI3Tg95Wqr4q9Pd2n7RUiJIo=
