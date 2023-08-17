@@ -7,7 +7,7 @@ require (
 	github.com/senzing/g2-sdk-go v0.6.8
 	github.com/senzing/g2-sdk-go-base v0.2.4
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20230608182106-25c8cdc02e3c
-	github.com/senzing/go-cmdhelping v0.1.5
+	github.com/senzing/go-cmdhelping v0.1.6
 	github.com/senzing/go-common v0.2.13
 	github.com/senzing/go-logging v1.3.2
 	github.com/senzing/go-observing v0.2.7
@@ -34,7 +34,7 @@ require (
 	github.com/spf13/cast v1.5.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/subosito/gotenv v1.4.2 // indirect
+	github.com/subosito/gotenv v1.6.0 // indirect
 	golang.org/x/exp v0.0.0-20230807204917-050eac23e9de // indirect
 	golang.org/x/net v0.14.0 // indirect
 	golang.org/x/sys v0.11.0 // indirect

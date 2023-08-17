@@ -162,8 +162,8 @@ github.com/senzing/g2-sdk-go-base v0.2.4 h1:iAEtm28+KTMuf/0Axhef/vXoDQ3O1GiKqOP+
 github.com/senzing/g2-sdk-go-base v0.2.4/go.mod h1:JPFyWtQywu/C8lCq0CaPGgt2ZV5pjOcMENXKK5cHoL0=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230608182106-25c8cdc02e3c h1:jNOwfVczSPsD42TLj/+/Tn5CxzsPfoSpRYm+XB2iKH0=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230608182106-25c8cdc02e3c/go.mod h1:xAllYm5U1m8CBnK7pkn3CZ87kd3nXxEfGt2Wims4+Ic=
-github.com/senzing/go-cmdhelping v0.1.5 h1:U07/+3vIeomn2qES2IAQI3Tg95Wqr4q9Pd2n7RUiJIo=
-github.com/senzing/go-cmdhelping v0.1.5/go.mod h1:nOoJc3KtgaMp9Qodf9dws09tWML76BP46TB1EPgKqV8=
+github.com/senzing/go-cmdhelping v0.1.6 h1:/ITQwip7Pec5ZMKhSkIEvk5E+7UryMIQ+d1E/KplGj4=
+github.com/senzing/go-cmdhelping v0.1.6/go.mod h1:xF4aN1TiBGlQIJ98nfa7O/0RMu7TEAP9OnPf9MAlJLU=
 github.com/senzing/go-common v0.2.13 h1:dvKmO2by+wA8kK9gcpQRp/9r6zyAyT0idcm6OOf08iU=
 github.com/senzing/go-common v0.2.13/go.mod h1:Dqvq3hZc8KNT7SJKkjJhJ5ZZYbsmZEDIMFT6eFZ+Kt0=
 github.com/senzing/go-logging v1.3.2 h1:V7512RMXi6yiHAzQeCXyQhkEHTtlUNvMuIyaQicDIDE=
@@ -195,8 +195,8 @@ github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
-github.com/subosito/gotenv v1.4.2 h1:X1TuBLAMDFbaTAChgCBLu3DU3UPyELpnF2jjJ2cz/S8=
-github.com/subosito/gotenv v1.4.2/go.mod h1:ayKnFf/c6rvx/2iiLrJUk1e6plDbT3edrFNGqEflhK0=
+github.com/subosito/gotenv v1.6.0 h1:9NlTDc1FTs4qu0DDq7AEtTPNw6SVm7uBMsUCUjABIf8=
+github.com/subosito/gotenv v1.6.0/go.mod h1:Dk4QP5c2W3ibzajGcXpNraDfq2IrhjMIvMSWPKKo0FU=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
