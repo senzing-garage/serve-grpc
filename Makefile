@@ -1,6 +1,6 @@
-# Makefile that builds serve-grpc, a "go" program.
+# Makefile for serve-grpc.
 
-# Detect the operating system and architecture
+# Detect the operating system and architecture.
 
 include Makefile.osdetect
 
@@ -24,13 +24,13 @@ BUILD_ITERATION := $(shell git log $(BUILD_TAG)..HEAD --oneline | wc -l | sed 's
 GIT_REMOTE_URL := $(shell git config --get remote.origin.url)
 GO_PACKAGE_NAME := $(shell echo $(GIT_REMOTE_URL) | sed -e 's|^git@github.com:|github.com/|' -e 's|\.git$$||' -e 's|Senzing|senzing|')
 PATH := $(MAKEFILE_DIRECTORY)/bin:$(PATH)
-GO_OSARCH = $(subst /, ,$@)
-GO_OS = $(word 1, $(GO_OSARCH))
-GO_ARCH = $(word 2, $(GO_OSARCH))
 
 # Recursive assignment ('=')
 
 CC = gcc
+GO_OSARCH = $(subst /, ,$@)
+GO_OS = $(word 1, $(GO_OSARCH))
+GO_ARCH = $(word 2, $(GO_OSARCH))
 
 # Conditional assignment. ('?=')
 # Can be overridden with "export"
@@ -43,9 +43,6 @@ SENZING_TOOLS_DATABASE_URL ?= sqlite3://na:na@/tmp/sqlite/G2C.db
 
 .EXPORT_ALL_VARIABLES:
 
--include Makefile.$(OSTYPE)
--include Makefile.$(OSTYPE)_$(OSARCH)
-
 # -----------------------------------------------------------------------------
 # The first "make" target runs as default.
 # -----------------------------------------------------------------------------
@@ -54,8 +51,14 @@ SENZING_TOOLS_DATABASE_URL ?= sqlite3://na:na@/tmp/sqlite/G2C.db
 default: help
 
 # -----------------------------------------------------------------------------
-# Build
-#  - The "build" target is implemented in Makefile.OS.ARCH files.
+# Operating System / Architecture targets
+# -----------------------------------------------------------------------------
+
+-include Makefile.$(OSTYPE)
+-include Makefile.$(OSTYPE)_$(OSARCH)
+
+# -----------------------------------------------------------------------------
+# Dependency management
 # -----------------------------------------------------------------------------
 
 .PHONY: dependencies
@@ -64,6 +67,11 @@ dependencies:
 	@go get -t -u ./...
 	@go mod tidy
 
+# -----------------------------------------------------------------------------
+# Build
+#  - The "build" target is implemented in Makefile.OS.ARCH files.
+#  - docker-build: https://docs.docker.com/engine/reference/commandline/build/
+# -----------------------------------------------------------------------------
 
 PLATFORMS := darwin/amd64 linux/amd64 windows/amd64
 $(PLATFORMS):
@@ -71,20 +79,6 @@ $(PLATFORMS):
 	@mkdir -p $(TARGET_DIRECTORY)/$(GO_OS)-$(GO_ARCH) || true
 	@GOOS=$(GO_OS) GOARCH=$(GO_ARCH) go build -o $(TARGET_DIRECTORY)/$(GO_OS)-$(GO_ARCH)/$(PROGRAM_NAME)
 
-
-.PHONY: build-all $(PLATFORMS)
-build-all: $(PLATFORMS)
-	@mv $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME) $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME).exe
-
-# -----------------------------------------------------------------------------
-# Test
-#  - The "test" target is implemented in Makefile.OS.ARCH files.
-# -----------------------------------------------------------------------------
-
-# -----------------------------------------------------------------------------
-# docker-build
-#  - https://docs.docker.com/engine/reference/commandline/build/
-# -----------------------------------------------------------------------------
 
 .PHONY: docker-build
 docker-build:
@@ -98,6 +92,33 @@ docker-build:
 		--tag $(DOCKER_IMAGE_NAME):$(BUILD_VERSION) \
 		.
 
+# -----------------------------------------------------------------------------
+# Test
+#  - The "test" target is implemented in Makefile.OS.ARCH files.
+# -----------------------------------------------------------------------------
+
+
+# -----------------------------------------------------------------------------
+# Run
+# -----------------------------------------------------------------------------
+
+.PHONY: docker-run
+docker-run:
+	@docker run \
+		--interactive \
+		--tty \
+		--name $(DOCKER_CONTAINER_NAME) \
+		$(DOCKER_IMAGE_NAME)
+
+
+.PHONY: run
+run:
+	@go run main.go
+
+# -----------------------------------------------------------------------------
+# Package
+#  - The "package" target is implemented in Makefile.OS.ARCH files.
+# -----------------------------------------------------------------------------
 
 .PHONY: docker-build-package
 docker-build-package:
@@ -112,42 +133,8 @@ docker-build-package:
 		.
 
 # -----------------------------------------------------------------------------
-# Package
-#  - The "package" target is implemented in Makefile.OS.ARCH files.
-# -----------------------------------------------------------------------------
-
-# -----------------------------------------------------------------------------
-# Run
-# -----------------------------------------------------------------------------
-
-.PHONY: run
-run:
-	@go run main.go
-
-
-.PHONY: docker-run
-docker-run:
-	@docker run \
-		--interactive \
-		--tty \
-		--name $(DOCKER_CONTAINER_NAME) \
-		$(DOCKER_IMAGE_NAME)
-
-# -----------------------------------------------------------------------------
 # Utility targets
 # -----------------------------------------------------------------------------
-
-.PHONY: new-sqlite
-new-sqlite:
-	@rm -rf /tmp/sqlite
-	@mkdir  /tmp/sqlite
-	@cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
-
-.PHONY: update-pkg-cache
-update-pkg-cache:
-	@GOPROXY=https://proxy.golang.org GO111MODULE=on \
-		go get $(GO_PACKAGE_NAME)@$(BUILD_TAG)
-
 
 .PHONY: clean
 clean:
@@ -159,26 +146,28 @@ clean:
 	@rm -f $(GOPATH)/bin/$(PROGRAM_NAME) || true
 
 
-.PHONY: print-make-variables
-print-make-variables:
-	@$(foreach V,$(sort $(.VARIABLES)), \
-		$(if $(filter-out environment% default automatic, \
-		$(origin $V)),$(warning $V=$($V) ($(value $V)))))
-
-# -----------------------------------------------------------------------------
-# Help
-# -----------------------------------------------------------------------------
-
 .PHONY: help
 help:
 	@echo "Build $(PROGRAM_NAME) version $(BUILD_VERSION)-$(BUILD_ITERATION)".
 	@echo "Makefile targets:"
 	@$(MAKE) -pRrq -f $(firstword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$' | xargs
 
-# -----------------------------------------------------------------------------
-# Optionally include platform-specific settings and targets.
-#  - Note: This is last because the "last one wins" when over-writing targets.
-# -----------------------------------------------------------------------------
 
-# -include Makefile.$(OSTYPE)
-# -include Makefile.$(OSTYPE)_$(OSARCH)
+.PHONY: print-make-variables
+print-make-variables:
+	@$(foreach V,$(sort $(.VARIABLES)), \
+		$(if $(filter-out environment% default automatic, \
+		$(origin $V)),$(warning $V=$($V) ($(value $V)))))
+
+
+.PHONY: setup
+setup:
+	@rm -rf /tmp/sqlite
+	@mkdir  /tmp/sqlite
+	@cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
+
+
+.PHONY: update-pkg-cache
+update-pkg-cache:
+	@GOPROXY=https://proxy.golang.org GO111MODULE=on \
+		go get $(GO_PACKAGE_NAME)@$(BUILD_TAG)
