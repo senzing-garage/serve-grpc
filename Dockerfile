@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 ARG IMAGE_SENZINGAPI_RUNTIME=senzing/senzingapi-runtime:3.6.0
-ARG IMAGE_GO_BUILDER=golang:1.20.4
+ARG IMAGE_GO_BUILDER=golang:1.21.0-bullseye
 ARG IMAGE_FINAL=senzing/senzingapi-runtime:3.6.0
 
 # -----------------------------------------------------------------------------

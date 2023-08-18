@@ -7,12 +7,8 @@ on:
 
 jobs:
   make-go-github-file:
-    name: Update cmd/version.go
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: "0"
-      - name: Make github.go file
-        uses: Senzing/github-action-make-go-github-file@main
+    uses: Senzing/build-resources/.github/workflows/make-go-github-file.yaml@main
+    secrets:
+      SENZING_GITHUB_GPG_PRIVATE_KEY: ${{ secrets.SENZING_GITHUB_GPG_PRIVATE_KEY }}
+      SENZING_GITHUB_GPG_PASSPHRASE: ${{ secrets.SENZING_GITHUB_GPG_PASSPHRASE }}
+      SENZING_GITHUB_ACTOR: ${{ secrets.SENZING_GITHUB_ACTOR }}

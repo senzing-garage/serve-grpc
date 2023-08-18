@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.4.14] - 2023-08-17
+
+### Changed in 0.4.14
+
+- In `go.mod` update to `go 1.21`
+- In `Dockerfile` update to `golang:1.21.0-bullseye`
+- Update dependencies
+  - github.com/senzing/g2-sdk-go-base v0.2.4
+  - github.com/senzing/go-cmdhelping v0.1.7
+  - github.com/senzing/go-common v0.2.13
+
 ## [0.4.13] - 2023-08-08
 
 ### Changed in 0.4.13
