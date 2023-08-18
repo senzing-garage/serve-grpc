@@ -100,6 +100,7 @@ docker-build:
 
 # -----------------------------------------------------------------------------
 # Run
+#  - The "run" target is implemented in Makefile.OS.ARCH files.
 # -----------------------------------------------------------------------------
 
 .PHONY: docker-run
@@ -109,11 +110,6 @@ docker-run:
 		--tty \
 		--name $(DOCKER_CONTAINER_NAME) \
 		$(DOCKER_IMAGE_NAME)
-
-
-.PHONY: run
-run:
-	@go run main.go
 
 # -----------------------------------------------------------------------------
 # Package
