@@ -39,7 +39,7 @@ test:
 
 .PHONY: run
 run:
-    @go run -exec macos_exec_dyld.sh main.go
+	@go run -exec macos_exec_dyld.sh main.go
 
 # -----------------------------------------------------------------------------
 # Makefile targets supported only by this platform.
