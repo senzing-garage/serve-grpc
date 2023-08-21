@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: ["1.20", "1.21"]
+        go: ["1.21"]
     name: Go ${{ matrix.go }} - linux
     steps:
       - name: Checkout repository
@@ -27,7 +27,7 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
       - run: wget -qO /tmp/senzingstagingrepo_1.0.1-1_amd64.deb https://senzing-staging-apt.s3.amazonaws.com/senzingstagingrepo_1.0.1-1_amd64.deb
-      - run: sudo apt-get -y install /tmp/senzingstagingrepo_1.0.1-1_amd64.deb      
+      - run: sudo apt-get -y install /tmp/senzingstagingrepo_1.0.1-1_amd64.deb
       - run: sudo apt-get update
       - run: sudo --preserve-env apt-get -y install senzingapi
       - run: sudo mv /opt/senzing/data/4.0.0/* /opt/senzing/data/
