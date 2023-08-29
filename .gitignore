@@ -25,6 +25,7 @@ go.work
 
 # Visual Studio code
 .vscode
+*.code-workspace
 .history
 
 # Makefile

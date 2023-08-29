@@ -1,3 +1,5 @@
+---
+
 name: make-go-github-file.yaml
 
 on:
