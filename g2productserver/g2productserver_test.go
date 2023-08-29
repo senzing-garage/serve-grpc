@@ -165,7 +165,7 @@ func TestG2productServer_ValidateLicenseFile(test *testing.T) {
 	ctx := context.TODO()
 	g2product := getTestObject(ctx, test)
 	request := &g2pb.ValidateLicenseFileRequest{
-		LicenseFilePath: "/etc/opt/senzing/g2.lic",
+		LicenseFilePath: licenseFilePath,
 	}
 	actual, err := g2product.ValidateLicenseFile(ctx, request)
 	testError(test, ctx, g2product, err)
@@ -244,7 +244,7 @@ func ExampleG2ProductServer_ValidateLicenseFile() {
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &g2pb.ValidateLicenseFileRequest{
-		LicenseFilePath: "/etc/opt/senzing/g2.lic",
+		LicenseFilePath: licenseFilePath,
 	}
 	response, err := g2product.ValidateLicenseFile(ctx, request)
 	if err != nil {
