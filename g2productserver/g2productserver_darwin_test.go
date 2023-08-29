@@ -2,4 +2,4 @@
 
 package g2productserver
 
-var licenseFilePath = "/etc/opt/senzing/g2.lic"
+var licenseFilePath = "/opt/senzing/g2/etc/g2.lic"
