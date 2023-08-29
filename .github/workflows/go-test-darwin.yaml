@@ -15,7 +15,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        go: ["1.20", "1.21"]
+        go: ["1.21"]
     name: Go ${{ matrix.go }} - darwin
     steps:
       - name: Checkout repository
@@ -26,21 +26,19 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go }}
-      - name: Download SenzingApi
-        run: curl --output /tmp/senzingapi.dmg https://public-read-access.s3.amazonaws.com/staging/senzingapi.dmg
-      - name: Attach .dmg
-        run: hdiutil attach /tmp/senzingapi.dmg
-      - name: Copy SenzingApi files
-        run: sudo mkdir -p /opt/senzing/ && sudo cp -R /Volumes/SenzingAPI/senzing/g2 /opt/senzing
+      - name: Install Senzing API
+        uses: Senzing/github-action-install-senzing-api@latest
       - name: Copy /etc files
         run: sudo cp testdata/senzing-license/g2.lic /opt/senzing/g2/etc/g2.lic
-      - name: Copy test database fies
+      - name: Copy test database files
         run: mkdir /tmp/sqlite && cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
       # - name: Run go test
       #   run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./...
       - name: Run go test - main
         run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./.
-      - name: Run go test - main
+      - name: Run go test - g2configserver
         run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./g2configserver
-      - name: Run go test - main
+      - name: Run go test - g2configmgrserver
         run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./g2configmgrserver
+      - name: Run go test - g2productserver
+        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./g2productserver

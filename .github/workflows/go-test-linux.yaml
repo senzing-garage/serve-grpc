@@ -7,7 +7,6 @@ on: [push]
 
 env:
   LD_LIBRARY_PATH: /opt/senzing/g2/lib
-  SENZING_ACCEPT_EULA: I_ACCEPT_THE_SENZING_EULA
   SENZING_TOOLS_DATABASE_URL: "sqlite3://na:na@/tmp/sqlite/G2C.db"
 
 jobs:
@@ -15,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: ["1.20", "1.21"]
+        go: ["1.21"]
     name: Go ${{ matrix.go }} - linux
     steps:
       - name: Checkout repository
@@ -26,20 +25,11 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go }}
-      - run: wget -qO /tmp/senzingstagingrepo_1.0.1-1_amd64.deb https://senzing-staging-apt.s3.amazonaws.com/senzingstagingrepo_1.0.1-1_amd64.deb
-      - run: sudo apt-get -y install /tmp/senzingstagingrepo_1.0.1-1_amd64.deb      
-      - run: sudo apt-get update
-      - run: sudo --preserve-env apt-get -y install senzingapi
-      - run: sudo mv /opt/senzing/data/4.0.0/* /opt/senzing/data/
-      - run: sudo mkdir /etc/opt/senzing
-      - run: sudo cp /opt/senzing/g2/resources/templates/cfgVariant.json     /etc/opt/senzing
-      - run: sudo cp /opt/senzing/g2/resources/templates/customGn.txt        /etc/opt/senzing
-      - run: sudo cp /opt/senzing/g2/resources/templates/customOn.txt        /etc/opt/senzing
-      - run: sudo cp /opt/senzing/g2/resources/templates/customSn.txt        /etc/opt/senzing
-      - run: sudo cp /opt/senzing/g2/resources/templates/defaultGNRCP.config /etc/opt/senzing
-      - run: sudo cp /opt/senzing/g2/resources/templates/stb.config          /etc/opt/senzing
-      - run: sudo cp testdata/senzing-license/g2.lic                         /etc/opt/senzing
-      - run: mkdir /tmp/sqlite
-      - run: cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
+      - name: Install Senzing API
+        uses: Senzing/github-action-install-senzing-api@latest
+      - name: Copy /etc files
+        run: sudo cp testdata/senzing-license/g2.lic /etc/opt/senzing
+      - name: Copy test database files
+        run: mkdir /tmp/sqlite && cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
       - name: Run go test
         run: go test -v -p 1 ./...
