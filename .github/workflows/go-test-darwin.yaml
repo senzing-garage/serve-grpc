@@ -37,8 +37,8 @@ jobs:
       - name: Run go test
         run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./.
       - name: Run go test
-        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./configserver
+        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./g2configserver
       - name: Run go test
-        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./configmgrserver
+        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./g2configmgrserver
       - name: Run go test
-        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./productserver
+        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./g2productserver
