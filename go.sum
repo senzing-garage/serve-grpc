@@ -161,8 +161,8 @@ github.com/rogpeppe/go-internal v1.10.0 h1:TMyTOH3F/DB16zRVcYyreMH6GnZZrwQVAoYjR
 github.com/rogpeppe/go-internal v1.10.0/go.mod h1:UQnix2H7Ngw/k4C5ijL5+65zddjncjaFoBhdsK/akog=
 github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf35Ld67mk=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
-github.com/senzing/g2-sdk-go v0.6.9 h1:m74nX5nE+77aqIZ8u+5IfFqlKSuZJE6qpA+m0Eid9EA=
-github.com/senzing/g2-sdk-go v0.6.9/go.mod h1://3s8vmv1cwIRypWTGj3CbBLj+dN/scTOu1DsA5fY4o=
+github.com/senzing/g2-sdk-go v0.7.0 h1:sHAFnfllLIYHY5vPCYAl/yivC+ff7/OxKUkonSksQlI=
+github.com/senzing/g2-sdk-go v0.7.0/go.mod h1://3s8vmv1cwIRypWTGj3CbBLj+dN/scTOu1DsA5fY4o=
 github.com/senzing/g2-sdk-go-base v0.2.7 h1:8fntOwtLxu5JS4UFS10Zl51n0TSVCrqf39lKmN9U25Y=
 github.com/senzing/g2-sdk-go-base v0.2.7/go.mod h1:bEaqGYks86dSh4FArHhG1NyAfkXmYh7nncLKArQow48=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230608182106-25c8cdc02e3c h1:jNOwfVczSPsD42TLj/+/Tn5CxzsPfoSpRYm+XB2iKH0=
