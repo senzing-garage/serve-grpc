@@ -334,61 +334,11 @@ func TestG2diagnosticserver_CheckDBPerf(test *testing.T) {
 	printActual(test, response)
 }
 
-func TestG2diagnosticserver_EntityListBySize(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-
-	// GetEntityListBySize()
-	requestForGetEntityListBySizeRequest := &g2pb.GetEntityListBySizeRequest{
-		EntitySize: int32(10),
-	}
-	responseFromGetEntityListBySize, err := g2diagnostic.GetEntityListBySize(ctx, requestForGetEntityListBySizeRequest)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, responseFromGetEntityListBySize)
-
-	// FetchNextEntityBySize()
-	requestFetchNextEntityBySize := &g2pb.FetchNextEntityBySizeRequest{
-		EntityListBySizeHandle: responseFromGetEntityListBySize.GetResult(),
-	}
-	responseFromFetchNextEntityBySize, err2 := g2diagnostic.FetchNextEntityBySize(ctx, requestFetchNextEntityBySize)
-	testError(test, ctx, g2diagnostic, err2)
-	printActual(test, responseFromFetchNextEntityBySize)
-
-	// CloseEntityListBySize()
-	requestCloseEntityListBySize := &g2pb.CloseEntityListBySizeRequest{
-		EntityListBySizeHandle: responseFromGetEntityListBySize.GetResult(),
-	}
-	responseFromCloseEntityListBySize, err3 := g2diagnostic.CloseEntityListBySize(ctx, requestCloseEntityListBySize)
-	testError(test, ctx, g2diagnostic, err3)
-	printActual(test, responseFromCloseEntityListBySize)
-
-}
-
-func TestG2diagnosticserver_FindEntitiesByFeatureIDs(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.FindEntitiesByFeatureIDsRequest{
-		Features: "{\"ENTITY_ID\":1,\"LIB_FEAT_IDS\":[1,3,4]}",
-	}
-	response, err := g2diagnostic.FindEntitiesByFeatureIDs(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
 func TestG2diagnosticserver_GetAvailableMemory(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
 	request := &g2pb.GetAvailableMemoryRequest{}
 	response, err := g2diagnostic.GetAvailableMemory(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetDataSourceCounts(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetDataSourceCountsRequest{}
-	response, err := g2diagnostic.GetDataSourceCounts(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
 	printActual(test, response)
 }
@@ -402,64 +352,6 @@ func TestG2diagnosticserver_GetDBInfo(test *testing.T) {
 	printActual(test, response)
 }
 
-func TestG2diagnosticserver_GetEntityDetails(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetEntityDetailsRequest{
-		EntityID:                int64(1),
-		IncludeInternalFeatures: 1,
-	}
-	response, err := g2diagnostic.GetEntityDetails(ctx, request)
-	testErrorNoFail(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetEntityResume(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetEntityResumeRequest{
-		EntityID: int64(1),
-	}
-	response, err := g2diagnostic.GetEntityResume(ctx, request)
-	testErrorNoFail(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetEntitySizeBreakdown(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetEntitySizeBreakdownRequest{
-		MinimumEntitySize:       int32(1),
-		IncludeInternalFeatures: int32(1),
-	}
-	response, err := g2diagnostic.GetEntitySizeBreakdown(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetFeature(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetFeatureRequest{
-		LibFeatID: int64(1),
-	}
-	response, err := g2diagnostic.GetFeature(ctx, request)
-	testErrorNoFail(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetGenericFeatures(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetGenericFeaturesRequest{
-		FeatureType:           "PHONE",
-		MaximumEstimatedCount: 10,
-	}
-	response, err := g2diagnostic.GetGenericFeatures(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
 func TestG2diagnosticserver_GetLogicalCores(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
@@ -469,43 +361,11 @@ func TestG2diagnosticserver_GetLogicalCores(test *testing.T) {
 	printActual(test, response)
 }
 
-func TestG2diagnosticserver_GetMappingStatistics(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetMappingStatisticsRequest{
-		IncludeInternalFeatures: 1,
-	}
-	response, err := g2diagnostic.GetMappingStatistics(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
 func TestG2diagnosticserver_GetPhysicalCores(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnostic := getTestObject(ctx, test)
 	request := &g2pb.GetPhysicalCoresRequest{}
 	response, err := g2diagnostic.GetPhysicalCores(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetRelationshipDetails(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetRelationshipDetailsRequest{
-		RelationshipID:          int64(1),
-		IncludeInternalFeatures: 1,
-	}
-	response, err := g2diagnostic.GetRelationshipDetails(ctx, request)
-	testErrorNoFail(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetResolutionStatistics(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetResolutionStatisticsRequest{}
-	response, err := g2diagnostic.GetResolutionStatistics(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
 	printActual(test, response)
 }
@@ -599,23 +459,6 @@ func ExampleG2DiagnosticServer_CheckDBPerf() {
 
 // func ExampleG2diagnosticImpl_CloseEntityListBySize() {
 
-// func ExampleG2diagnosticImpl_FetchNextEntityBySize() {
-
-func ExampleG2DiagnosticServer_FindEntitiesByFeatureIDs() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.FindEntitiesByFeatureIDsRequest{
-		Features: "{\"ENTITY_ID\":1,\"LIB_FEAT_IDS\":[1,3,4]}",
-	}
-	response, err := g2diagnostic.FindEntitiesByFeatureIDs(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: []
-}
-
 func ExampleG2DiagnosticServer_GetAvailableMemory() {
 	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
@@ -627,19 +470,6 @@ func ExampleG2DiagnosticServer_GetAvailableMemory() {
 	}
 	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
-}
-
-func ExampleG2DiagnosticServer_GetDataSourceCounts() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetDataSourceCountsRequest{}
-	response, err := g2diagnostic.GetDataSourceCounts(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: [{"DSRC_ID":1001,"DSRC_CODE":"CUSTOMERS","ETYPE_ID":3,"ETYPE_CODE":"GENERIC","OBS_ENT_COUNT":7,"DSRC_RECORD_COUNT":7}]
 }
 
 func ExampleG2DiagnosticServer_GetDBInfo() {
@@ -655,86 +485,6 @@ func ExampleG2DiagnosticServer_GetDBInfo() {
 	// Output: {"Hybrid Mode":false,"Database Details":[{"Name":...
 }
 
-func ExampleG2DiagnosticServer_GetEntityDetails() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetEntityDetailsRequest{
-		EntityID:                int64(1),
-		IncludeInternalFeatures: 1,
-	}
-	response, err := g2diagnostic.GetEntityDetails(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: [{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"No","FTYPE_CODE":"NAME","USAGE_TYPE":"PRIMARY","FEAT_DESC":"Robert Smith"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"No","FTYPE_CODE":"DOB","USAGE_TYPE":"","FEAT_DESC":"12/11/1978"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"No","FTYPE_CODE":"ADDRESS","USAGE_TYPE":"MAILING","FEAT_DESC":"123 Main Street, Las Vegas NV 89132"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"No","FTYPE_CODE":"PHONE","USAGE_TYPE":"HOME","FEAT_DESC":"702-919-1300"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"No","FTYPE_CODE":"EMAIL","USAGE_TYPE":"","FEAT_DESC":"bsmith@work.com"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|DOB.MMYY_HASH=1278"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|ADDRESS.CITY_STD=LS FKS"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|POST=89132"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|PHONE.PHONE_LAST_5=91300"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|DOB.MMDD_HASH=1211"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|DOB=71211"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"Yes","FTYPE_CODE":"ADDR_KEY","USAGE_TYPE":"","FEAT_DESC":"123|MN||LS FKS"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"Yes","FTYPE_CODE":"ADDR_KEY","USAGE_TYPE":"","FEAT_DESC":"123|MN||89132"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"Yes","FTYPE_CODE":"PHONE_KEY","USAGE_TYPE":"","FEAT_DESC":"7029191300"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"No","FTYPE_CODE":"RECORD_TYPE","USAGE_TYPE":"","FEAT_DESC":"PERSON"},{"RES_ENT_ID":1,"OBS_ENT_ID":1,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","DERIVED":"Yes","FTYPE_CODE":"EMAIL_KEY","USAGE_TYPE":"","FEAT_DESC":"bsmith@WORK.COM"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"No","FTYPE_CODE":"NAME","USAGE_TYPE":"PRIMARY","FEAT_DESC":"Bob Smith"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"No","FTYPE_CODE":"DOB","USAGE_TYPE":"","FEAT_DESC":"11/12/1978"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"No","FTYPE_CODE":"ADDRESS","USAGE_TYPE":"HOME","FEAT_DESC":"1515 Adela Lane Las Vegas NV 89111"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"No","FTYPE_CODE":"PHONE","USAGE_TYPE":"MOBILE","FEAT_DESC":"702-919-1300"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|ADDRESS.CITY_STD=LS FKS"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|PHONE.PHONE_LAST_5=91300"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|DOB.MMDD_HASH=1211"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|DOB=71211"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|SM0|DOB=71211"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|SM0"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|DOB.MMYY_HASH=1178"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|SM0|DOB.MMDD_HASH=1211"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|SM0|POST=89111"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|SM0|ADDRESS.CITY_STD=LS FKS"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|POST=89111"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|SM0|DOB.MMYY_HASH=1178"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|SM0|PHONE.PHONE_LAST_5=91300"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"ADDR_KEY","USAGE_TYPE":"","FEAT_DESC":"1515|ATL||89111"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"ADDR_KEY","USAGE_TYPE":"","FEAT_DESC":"1515|ATL||LS FKS"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"Yes","FTYPE_CODE":"PHONE_KEY","USAGE_TYPE":"","FEAT_DESC":"7029191300"},{"RES_ENT_ID":1,"OBS_ENT_ID":2,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","DERIVED":"No","FTYPE_CODE":"RECORD_TYPE","USAGE_TYPE":"","FEAT_DESC":"PERSON"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"No","FTYPE_CODE":"NAME","USAGE_TYPE":"PRIMARY","FEAT_DESC":"Bob J Smith"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"No","FTYPE_CODE":"DOB","USAGE_TYPE":"","FEAT_DESC":"12/11/1978"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"No","FTYPE_CODE":"EMAIL","USAGE_TYPE":"","FEAT_DESC":"bsmith@work.com"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|DOB.MMYY_HASH=1278"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|DOB.MMDD_HASH=1211"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|DOB=71211"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|SM0|DOB=71211"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|SM0"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|SM0|DOB.MMDD_HASH=1211"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|J|SM0|DOB.MMDD_HASH=1211"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|J|SM0|DOB=71211"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|J|SM0|DOB.MMYY_HASH=1278"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|SM0|DOB.MMYY_HASH=1278"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"BB|J|SM0"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"No","FTYPE_CODE":"RECORD_TYPE","USAGE_TYPE":"","FEAT_DESC":"PERSON"},{"RES_ENT_ID":1,"OBS_ENT_ID":3,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","DERIVED":"Yes","FTYPE_CODE":"EMAIL_KEY","USAGE_TYPE":"","FEAT_DESC":"bsmith@WORK.COM"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"No","FTYPE_CODE":"NAME","USAGE_TYPE":"PRIMARY","FEAT_DESC":"B Smith"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"No","FTYPE_CODE":"DOB","USAGE_TYPE":"","FEAT_DESC":"11/12/1979"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"No","FTYPE_CODE":"ADDRESS","USAGE_TYPE":"HOME","FEAT_DESC":"1515 Adela Ln Las Vegas NV 89132"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"No","FTYPE_CODE":"EMAIL","USAGE_TYPE":"","FEAT_DESC":"bsmith@work.com"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"B|SM0"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"B|SM0|DOB=71211"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"B|SM0|DOB.MMYY_HASH=1179"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"B|SM0|ADDRESS.CITY_STD=LS FKS"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"B|SM0|POST=89132"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"B|SM0|DOB.MMDD_HASH=1211"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"Yes","FTYPE_CODE":"ADDR_KEY","USAGE_TYPE":"","FEAT_DESC":"1515|ATL||LS FKS"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"Yes","FTYPE_CODE":"ADDR_KEY","USAGE_TYPE":"","FEAT_DESC":"1515|ATL||89132"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"No","FTYPE_CODE":"RECORD_TYPE","USAGE_TYPE":"","FEAT_DESC":"PERSON"},{"RES_ENT_ID":1,"OBS_ENT_ID":4,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","DERIVED":"Yes","FTYPE_CODE":"EMAIL_KEY","USAGE_TYPE":"","FEAT_DESC":"bsmith@WORK.COM"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"No","FTYPE_CODE":"NAME","USAGE_TYPE":"PRIMARY","FEAT_DESC":"Robbie Smith"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"No","FTYPE_CODE":"ADDRESS","USAGE_TYPE":"MAILING","FEAT_DESC":"123 E Main St Henderson NV 89132"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"No","FTYPE_CODE":"DRLIC","USAGE_TYPE":"","FEAT_DESC":"112233 NV"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|POST=89132"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RBRT|SM0|ADDRESS.CITY_STD=HNTRSN"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RB|SM0|POST=89132"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RB|SM0"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","FEAT_DESC":"RB|SM0|ADDRESS.CITY_STD=HNTRSN"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"Yes","FTYPE_CODE":"ADDR_KEY","USAGE_TYPE":"","FEAT_DESC":"123|MN||89132"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"Yes","FTYPE_CODE":"ADDR_KEY","USAGE_TYPE":"","FEAT_DESC":"123|MN||HNTRSN"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"Yes","FTYPE_CODE":"ID_KEY","USAGE_TYPE":"","FEAT_DESC":"DRLIC=112233"},{"RES_ENT_ID":1,"OBS_ENT_ID":5,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","DERIVED":"No","FTYPE_CODE":"RECORD_TYPE","USAGE_TYPE":"","FEAT_DESC":"PERSON"}]
-}
-
-// func ExampleG2diagnosticImpl_GetEntityListBySize() {
-
-func ExampleG2DiagnosticServer_GetEntityResume() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetEntityResumeRequest{
-		EntityID: int64(1),
-	}
-	response, err := g2diagnostic.GetEntityResume(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: [{"RES_ENT_ID":1,"REL_ENT_ID":0,"ERRULE_CODE":"","MATCH_KEY":"","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1001","ENT_SRC_DESC":"Robert Smith","JSON_DATA":"{\"RECORD_TYPE\":\"PERSON\",\"PRIMARY_NAME_LAST\":\"Smith\",\"PRIMARY_NAME_FIRST\":\"Robert\",\"DATE_OF_BIRTH\":\"12/11/1978\",\"ADDR_TYPE\":\"MAILING\",\"ADDR_LINE1\":\"123 Main Street, Las Vegas NV 89132\",\"PHONE_TYPE\":\"HOME\",\"PHONE_NUMBER\":\"702-919-1300\",\"EMAIL_ADDRESS\":\"bsmith@work.com\",\"DATE\":\"1/2/18\",\"STATUS\":\"Active\",\"AMOUNT\":\"100\",\"DATA_SOURCE\":\"CUSTOMERS\",\"ENTITY_TYPE\":\"GENERIC\",\"DSRC_ACTION\":\"A\",\"RECORD_ID\":\"1001\"}"},{"RES_ENT_ID":1,"REL_ENT_ID":0,"ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_KEY":"+NAME+DOB+PHONE","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1002","ENT_SRC_DESC":"Bob Smith","JSON_DATA":"{\"RECORD_TYPE\":\"PERSON\",\"PRIMARY_NAME_LAST\":\"Smith\",\"PRIMARY_NAME_FIRST\":\"Bob\",\"DATE_OF_BIRTH\":\"11/12/1978\",\"ADDR_TYPE\":\"HOME\",\"ADDR_LINE1\":\"1515 Adela Lane\",\"ADDR_CITY\":\"Las Vegas\",\"ADDR_STATE\":\"NV\",\"ADDR_POSTAL_CODE\":\"89111\",\"PHONE_TYPE\":\"MOBILE\",\"PHONE_NUMBER\":\"702-919-1300\",\"DATE\":\"3/10/17\",\"STATUS\":\"Inactive\",\"AMOUNT\":\"200\",\"DATA_SOURCE\":\"CUSTOMERS\",\"ENTITY_TYPE\":\"GENERIC\",\"DSRC_ACTION\":\"A\",\"RECORD_ID\":\"1002\"}"},{"RES_ENT_ID":1,"REL_ENT_ID":0,"ERRULE_CODE":"SF1_PNAME_CSTAB","MATCH_KEY":"+NAME+DOB+EMAIL","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1003","ENT_SRC_DESC":"Bob J Smith","JSON_DATA":"{\"RECORD_TYPE\":\"PERSON\",\"PRIMARY_NAME_LAST\":\"Smith\",\"PRIMARY_NAME_FIRST\":\"Bob\",\"PRIMARY_NAME_MIDDLE\":\"J\",\"DATE_OF_BIRTH\":\"12/11/1978\",\"EMAIL_ADDRESS\":\"bsmith@work.com\",\"DATE\":\"4/9/16\",\"STATUS\":\"Inactive\",\"AMOUNT\":\"300\",\"DATA_SOURCE\":\"CUSTOMERS\",\"ENTITY_TYPE\":\"GENERIC\",\"DSRC_ACTION\":\"A\",\"RECORD_ID\":\"1003\"}"},{"RES_ENT_ID":1,"REL_ENT_ID":0,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1004","ENT_SRC_DESC":"B Smith","JSON_DATA":"{\"RECORD_TYPE\":\"PERSON\",\"PRIMARY_NAME_LAST\":\"Smith\",\"PRIMARY_NAME_FIRST\":\"B\",\"DATE_OF_BIRTH\":\"11/12/1979\",\"ADDR_TYPE\":\"HOME\",\"ADDR_LINE1\":\"1515 Adela Ln\",\"ADDR_CITY\":\"Las Vegas\",\"ADDR_STATE\":\"NV\",\"ADDR_POSTAL_CODE\":\"89132\",\"EMAIL_ADDRESS\":\"bsmith@work.com\",\"DATE\":\"1/5/15\",\"STATUS\":\"Inactive\",\"AMOUNT\":\"400\",\"DATA_SOURCE\":\"CUSTOMERS\",\"ENTITY_TYPE\":\"GENERIC\",\"DSRC_ACTION\":\"A\",\"RECORD_ID\":\"1004\"}"},{"RES_ENT_ID":1,"REL_ENT_ID":0,"ERRULE_CODE":"CNAME_CFF","MATCH_KEY":"+NAME+ADDRESS","DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","RECORD_ID":"1005","ENT_SRC_DESC":"Robbie Smith","JSON_DATA":"{\"RECORD_TYPE\":\"PERSON\",\"PRIMARY_NAME_LAST\":\"Smith\",\"PRIMARY_NAME_FIRST\":\"Robbie\",\"DRIVERS_LICENSE_NUMBER\":\"112233\",\"DRIVERS_LICENSE_STATE\":\"NV\",\"ADDR_TYPE\":\"MAILING\",\"ADDR_LINE1\":\"123 E Main St\",\"ADDR_CITY\":\"Henderson\",\"ADDR_STATE\":\"NV\",\"ADDR_POSTAL_CODE\":\"89132\",\"DATE\":\"7/16/19\",\"STATUS\":\"Active\",\"AMOUNT\":\"500\",\"DATA_SOURCE\":\"CUSTOMERS\",\"ENTITY_TYPE\":\"GENERIC\",\"DSRC_ACTION\":\"A\",\"RECORD_ID\":\"1005\"}"}]
-}
-
-func ExampleG2DiagnosticServer_GetEntitySizeBreakdown() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetEntitySizeBreakdownRequest{
-		MinimumEntitySize:       int32(1),
-		IncludeInternalFeatures: int32(1),
-	}
-	response, err := g2diagnostic.GetEntitySizeBreakdown(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: [{"ENTITY_SIZE": 5,"ENTITY_COUNT": 1,"NAME": 5.00,"DOB": 3.00,"ADDRESS": 4.00,"PHONE": 2.00,"DRLIC": 1.00,"EMAIL": 1.00,"NAME_KEY": 31.00,"ADDR_KEY": 6.00,"ID_KEY": 1.00,"PHONE_KEY": 1.00,"RECORD_TYPE": 1.00,"EMAIL_KEY": 1.00,"MIN_RES_ENT_ID": 1,"MAX_RES_ENT_ID": 1},{"ENTITY_SIZE": 1,"ENTITY_COUNT": 2,"NAME": 1.00,"DOB": 1.00,"GENDER": 0.50,"ADDRESS": 1.00,"NAME_KEY": 6.00,"ADDR_KEY": 2.00,"RECORD_TYPE": 1.00,"MIN_RES_ENT_ID": 6,"MAX_RES_ENT_ID": 7}]
-}
-
-func ExampleG2DiagnosticServer_GetFeature() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetFeatureRequest{
-		LibFeatID: int64(1),
-	}
-	response, err := g2diagnostic.GetFeature(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: {"LIB_FEAT_ID":1,"FTYPE_CODE":"NAME","ELEMENTS":[{"FELEM_CODE":"TOKENIZED_NM","FELEM_VALUE":"ROBERT|SMITH"},{"FELEM_CODE":"CATEGORY","FELEM_VALUE":"PERSON"},{"FELEM_CODE":"CULTURE","FELEM_VALUE":"ANGLO"},{"FELEM_CODE":"GIVEN_NAME","FELEM_VALUE":"Robert"},{"FELEM_CODE":"SUR_NAME","FELEM_VALUE":"Smith"},{"FELEM_CODE":"FULL_NAME","FELEM_VALUE":"Robert Smith"}]}
-}
-
-func ExampleG2DiagnosticServer_GetGenericFeatures() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetGenericFeaturesRequest{
-		FeatureType:           "PHONE",
-		MaximumEstimatedCount: 10,
-	}
-	response, err := g2diagnostic.GetGenericFeatures(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: []
-}
-
 func ExampleG2DiagnosticServer_GetLogicalCores() {
 	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
@@ -748,21 +498,6 @@ func ExampleG2DiagnosticServer_GetLogicalCores() {
 	// Output: true
 }
 
-func ExampleG2DiagnosticServer_GetMappingStatistics() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetMappingStatisticsRequest{
-		IncludeInternalFeatures: 1,
-	}
-	response, err := g2diagnostic.GetMappingStatistics(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: [{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"NAME","USAGE_TYPE":"PRIMARY","REC_COUNT":7,"REC_PCT":1.0,"UNIQ_COUNT":6,"UNIQ_PCT":0.8571428571428571,"MIN_FEAT_DESC":"B Smith","MAX_FEAT_DESC":"Robert Smith"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"DOB","USAGE_TYPE":"","REC_COUNT":6,"REC_PCT":0.8571428571428571,"UNIQ_COUNT":5,"UNIQ_PCT":0.8333333333333334,"MIN_FEAT_DESC":"10/10/70","MAX_FEAT_DESC":"3/15/90"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"GENDER","USAGE_TYPE":"","REC_COUNT":1,"REC_PCT":0.14285714285714285,"UNIQ_COUNT":1,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"M","MAX_FEAT_DESC":"M"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"ADDRESS","USAGE_TYPE":"HOME","REC_COUNT":4,"REC_PCT":0.5714285714285714,"UNIQ_COUNT":3,"UNIQ_PCT":0.75,"MIN_FEAT_DESC":"1515 Adela Lane Las Vegas NV 89111","MAX_FEAT_DESC":"3212 W. 32nd St Palm Harbor, FL 60527"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"ADDRESS","USAGE_TYPE":"MAILING","REC_COUNT":2,"REC_PCT":0.2857142857142857,"UNIQ_COUNT":2,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"123 E Main St Henderson NV 89132","MAX_FEAT_DESC":"123 Main Street, Las Vegas NV 89132"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"PHONE","USAGE_TYPE":"HOME","REC_COUNT":1,"REC_PCT":0.14285714285714285,"UNIQ_COUNT":1,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"702-919-1300","MAX_FEAT_DESC":"702-919-1300"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"PHONE","USAGE_TYPE":"MOBILE","REC_COUNT":1,"REC_PCT":0.14285714285714285,"UNIQ_COUNT":1,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"702-919-1300","MAX_FEAT_DESC":"702-919-1300"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"DRLIC","USAGE_TYPE":"","REC_COUNT":1,"REC_PCT":0.14285714285714285,"UNIQ_COUNT":1,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"112233 NV","MAX_FEAT_DESC":"112233 NV"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"EMAIL","USAGE_TYPE":"","REC_COUNT":3,"REC_PCT":0.42857142857142855,"UNIQ_COUNT":1,"UNIQ_PCT":0.3333333333333333,"MIN_FEAT_DESC":"bsmith@work.com","MAX_FEAT_DESC":"bsmith@work.com"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"Yes","FTYPE_CODE":"NAME_KEY","USAGE_TYPE":"","REC_COUNT":57,"REC_PCT":8.142857142857142,"UNIQ_COUNT":40,"UNIQ_PCT":0.7017543859649122,"MIN_FEAT_DESC":"BB|J|SM0","MAX_FEAT_DESC":"RB|SM0|POST=89132"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"Yes","FTYPE_CODE":"ADDR_KEY","USAGE_TYPE":"","REC_COUNT":12,"REC_PCT":1.7142857142857142,"UNIQ_COUNT":8,"UNIQ_PCT":0.6666666666666666,"MIN_FEAT_DESC":"123|MN||89132","MAX_FEAT_DESC":"3212|NT||PLM HRBR"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"Yes","FTYPE_CODE":"ID_KEY","USAGE_TYPE":"","REC_COUNT":1,"REC_PCT":0.14285714285714285,"UNIQ_COUNT":1,"UNIQ_PCT":1.0,"MIN_FEAT_DESC":"DRLIC=112233","MAX_FEAT_DESC":"DRLIC=112233"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"Yes","FTYPE_CODE":"PHONE_KEY","USAGE_TYPE":"","REC_COUNT":2,"REC_PCT":0.2857142857142857,"UNIQ_COUNT":1,"UNIQ_PCT":0.5,"MIN_FEAT_DESC":"7029191300","MAX_FEAT_DESC":"7029191300"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"No","FTYPE_CODE":"RECORD_TYPE","USAGE_TYPE":"","REC_COUNT":7,"REC_PCT":1.0,"UNIQ_COUNT":1,"UNIQ_PCT":0.14285714285714285,"MIN_FEAT_DESC":"PERSON","MAX_FEAT_DESC":"PERSON"},{"DSRC_CODE":"CUSTOMERS","ETYPE_CODE":"GENERIC","DERIVED":"Yes","FTYPE_CODE":"EMAIL_KEY","USAGE_TYPE":"","REC_COUNT":3,"REC_PCT":0.42857142857142855,"UNIQ_COUNT":1,"UNIQ_PCT":0.3333333333333333,"MIN_FEAT_DESC":"bsmith@WORK.COM","MAX_FEAT_DESC":"bsmith@WORK.COM"}]
-}
-
 func ExampleG2DiagnosticServer_GetPhysicalCores() {
 	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
 	ctx := context.TODO()
@@ -774,35 +509,6 @@ func ExampleG2DiagnosticServer_GetPhysicalCores() {
 	}
 	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
-}
-
-func ExampleG2DiagnosticServer_GetRelationshipDetails() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetRelationshipDetailsRequest{
-		RelationshipID:          int64(1),
-		IncludeInternalFeatures: 1,
-	}
-	response, err := g2diagnostic.GetRelationshipDetails(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: [{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME","FEAT_DESC":"John Smith"},{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"DOB","FEAT_DESC":"10/10/70"},{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"GENDER","FEAT_DESC":"M"},{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"ADDRESS","FEAT_DESC":"3212 W. 32nd St Palm Harbor, FL 60527"},{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JN|SM0|ADDRESS.CITY_STD=PLM HRBR"},{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JN|SM0|DOB.MMDD_HASH=1010"},{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JN|SM0|DOB=71010"},{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JN|SM0|POST=60527"},{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JN|SM0|DOB.MMYY_HASH=1070"},{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JN|SM0"},{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"ADDR_KEY","FEAT_DESC":"3212|NT||60527"},{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"ADDR_KEY","FEAT_DESC":"3212|NT||PLM HRBR"},{"RES_ENT_ID":6,"ERRULE_CODE":"","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"RECORD_TYPE","FEAT_DESC":"PERSON"},{"RES_ENT_ID":7,"ERRULE_CODE":"CNAME_CFF_DEXCL","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME","FEAT_DESC":"John Smith"},{"RES_ENT_ID":7,"ERRULE_CODE":"CNAME_CFF_DEXCL","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"DOB","FEAT_DESC":"3/15/90"},{"RES_ENT_ID":7,"ERRULE_CODE":"CNAME_CFF_DEXCL","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"ADDRESS","FEAT_DESC":"3212 W. 32nd St Palm Harbor, FL 60527"},{"RES_ENT_ID":7,"ERRULE_CODE":"CNAME_CFF_DEXCL","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JN|SM0|ADDRESS.CITY_STD=PLM HRBR"},{"RES_ENT_ID":7,"ERRULE_CODE":"CNAME_CFF_DEXCL","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JN|SM0|POST=60527"},{"RES_ENT_ID":7,"ERRULE_CODE":"CNAME_CFF_DEXCL","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JN|SM0"},{"RES_ENT_ID":7,"ERRULE_CODE":"CNAME_CFF_DEXCL","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JN|SM0|DOB.MMYY_HASH=0390"},{"RES_ENT_ID":7,"ERRULE_CODE":"CNAME_CFF_DEXCL","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JN|SM0|DOB.MMDD_HASH=1503"},{"RES_ENT_ID":7,"ERRULE_CODE":"CNAME_CFF_DEXCL","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"NAME_KEY","FEAT_DESC":"JN|SM0|DOB=91503"},{"RES_ENT_ID":7,"ERRULE_CODE":"CNAME_CFF_DEXCL","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"ADDR_KEY","FEAT_DESC":"3212|NT||60527"},{"RES_ENT_ID":7,"ERRULE_CODE":"CNAME_CFF_DEXCL","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"ADDR_KEY","FEAT_DESC":"3212|NT||PLM HRBR"},{"RES_ENT_ID":7,"ERRULE_CODE":"CNAME_CFF_DEXCL","MATCH_KEY":"+NAME+ADDRESS-DOB","FTYPE_CODE":"RECORD_TYPE","FEAT_DESC":"PERSON"}]
-}
-
-func ExampleG2DiagnosticServer_GetResolutionStatistics() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetResolutionStatisticsRequest{}
-	response, err := g2diagnostic.GetResolutionStatistics(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: [{"MATCH_LEVEL":1,"MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME","RAW_MATCH_KEYS":[{"MATCH_KEY":"+DOB+ADDRESS+EMAIL+PNAME"}],"ERRULE_ID":110,"ERRULE_CODE":"SF1_PNAME_CFF_CSTAB","IS_AMBIGUOUS":"No","RECORD_COUNT":1,"MIN_RES_ENT_ID":1,"MAX_RES_ENT_ID":1,"MIN_RES_REL_ID":0,"MAX_RES_REL_ID":0},{"MATCH_LEVEL":1,"MATCH_KEY":"+NAME+DOB+EMAIL","RAW_MATCH_KEYS":[{"MATCH_KEY":"+NAME+DOB+EMAIL"}],"ERRULE_ID":120,"ERRULE_CODE":"SF1_PNAME_CSTAB","IS_AMBIGUOUS":"No","RECORD_COUNT":1,"MIN_RES_ENT_ID":1,"MAX_RES_ENT_ID":1,"MIN_RES_REL_ID":0,"MAX_RES_REL_ID":0},{"MATCH_LEVEL":1,"MATCH_KEY":"+NAME+DOB+PHONE","RAW_MATCH_KEYS":[{"MATCH_KEY":"+NAME+DOB+PHONE"}],"ERRULE_ID":160,"ERRULE_CODE":"CNAME_CFF_CEXCL","IS_AMBIGUOUS":"No","RECORD_COUNT":1,"MIN_RES_ENT_ID":1,"MAX_RES_ENT_ID":1,"MIN_RES_REL_ID":0,"MAX_RES_REL_ID":0},{"MATCH_LEVEL":1,"MATCH_KEY":"+NAME+ADDRESS","RAW_MATCH_KEYS":[{"MATCH_KEY":"+NAME+ADDRESS"}],"ERRULE_ID":162,"ERRULE_CODE":"CNAME_CFF","IS_AMBIGUOUS":"No","RECORD_COUNT":1,"MIN_RES_ENT_ID":1,"MAX_RES_ENT_ID":1,"MIN_RES_REL_ID":0,"MAX_RES_REL_ID":0},{"MATCH_LEVEL":2,"MATCH_KEY":"+NAME+ADDRESS-DOB","RAW_MATCH_KEYS":[{"MATCH_KEY":"+NAME+ADDRESS-DOB"}],"ERRULE_ID":164,"ERRULE_CODE":"CNAME_CFF_DEXCL","IS_AMBIGUOUS":"No","RECORD_COUNT":1,"MIN_RES_ENT_ID":6,"MAX_RES_ENT_ID":7,"MIN_RES_REL_ID":1,"MAX_RES_REL_ID":1}]
 }
 
 func ExampleG2DiagnosticServer_GetTotalSystemMemory() {

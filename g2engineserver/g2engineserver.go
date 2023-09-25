@@ -104,56 +104,6 @@ func (server *G2EngineServer) AddRecordWithInfo(ctx context.Context, request *g2
 	return &response, err
 }
 
-func (server *G2EngineServer) AddRecordWithInfoWithReturnedRecordID(ctx context.Context, request *g2pb.AddRecordWithInfoWithReturnedRecordIDRequest) (*g2pb.AddRecordWithInfoWithReturnedRecordIDResponse, error) {
-	var err error = nil
-	var result string
-	var recordId string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(5, request)
-		defer func() { server.traceExit(6, request, result, recordId, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	result, recordId, err = g2engine.AddRecordWithInfoWithReturnedRecordID(ctx, request.GetDataSourceCode(), request.GetJsonData(), request.GetLoadID(), request.GetFlags())
-	response := g2pb.AddRecordWithInfoWithReturnedRecordIDResponse{
-		RecordID: recordId,
-		WithInfo: result,
-	}
-	return &response, err
-}
-
-func (server *G2EngineServer) AddRecordWithReturnedRecordID(ctx context.Context, request *g2pb.AddRecordWithReturnedRecordIDRequest) (*g2pb.AddRecordWithReturnedRecordIDResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(7, request)
-		defer func() { server.traceExit(8, request, result, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	result, err = g2engine.AddRecordWithReturnedRecordID(ctx, request.GetDataSourceCode(), request.GetJsonData(), request.GetLoadID())
-	response := g2pb.AddRecordWithReturnedRecordIDResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *G2EngineServer) CheckRecord(ctx context.Context, request *g2pb.CheckRecordRequest) (*g2pb.CheckRecordResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(9, request)
-		defer func() { server.traceExit(10, request, result, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	result, err = g2engine.CheckRecord(ctx, request.GetRecord(), request.GetRecordQueryList())
-	response := g2pb.CheckRecordResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
 func (server *G2EngineServer) CloseExport(ctx context.Context, request *g2pb.CloseExportRequest) (*g2pb.CloseExportResponse, error) {
 	var err error = nil
 	if server.isTrace {
@@ -872,40 +822,6 @@ func (server *G2EngineServer) Process(ctx context.Context, request *g2pb.Process
 	return &response, err
 }
 
-func (server *G2EngineServer) ProcessRedoRecord(ctx context.Context, request *g2pb.ProcessRedoRecordRequest) (*g2pb.ProcessRedoRecordResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(107, request)
-		defer func() { server.traceExit(108, request, result, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	result, err = g2engine.ProcessRedoRecord(ctx)
-	response := g2pb.ProcessRedoRecordResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *G2EngineServer) ProcessRedoRecordWithInfo(ctx context.Context, request *g2pb.ProcessRedoRecordWithInfoRequest) (*g2pb.ProcessRedoRecordWithInfoResponse, error) {
-	var err error = nil
-	var result string
-	var withInfo string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(109, request)
-		defer func() { server.traceExit(110, request, result, withInfo, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	result, withInfo, err = g2engine.ProcessRedoRecordWithInfo(ctx, request.GetFlags())
-	response := g2pb.ProcessRedoRecordWithInfoResponse{
-		Result:   result,
-		WithInfo: withInfo,
-	}
-	return &response, err
-}
-
 func (server *G2EngineServer) ProcessWithInfo(ctx context.Context, request *g2pb.ProcessWithInfoRequest) (*g2pb.ProcessWithInfoResponse, error) {
 	var err error = nil
 	var result string
@@ -917,38 +833,6 @@ func (server *G2EngineServer) ProcessWithInfo(ctx context.Context, request *g2pb
 	g2engine := getG2engine()
 	result, err = g2engine.ProcessWithInfo(ctx, request.GetRecord(), request.GetFlags())
 	response := g2pb.ProcessWithInfoResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *G2EngineServer) ProcessWithResponse(ctx context.Context, request *g2pb.ProcessWithResponseRequest) (*g2pb.ProcessWithResponseResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(113, request)
-		defer func() { server.traceExit(114, request, result, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	result, err = g2engine.ProcessWithResponse(ctx, request.GetRecord())
-	response := g2pb.ProcessWithResponseResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *G2EngineServer) ProcessWithResponseResize(ctx context.Context, request *g2pb.ProcessWithResponseResizeRequest) (*g2pb.ProcessWithResponseResizeResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(115, request)
-		defer func() { server.traceExit(116, request, result, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	result, err = g2engine.ProcessWithResponseResize(ctx, request.GetRecord())
-	response := g2pb.ProcessWithResponseResizeResponse{
 		Result: result,
 	}
 	return &response, err
