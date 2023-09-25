@@ -1,11 +1,15 @@
-// 0.4.9
-// Created by make-go-github-file.yaml on Fri Jun 16 20:31:38 UTC 2023
+// 0.5.1
+// Created by make-go-github-file.yaml on Mon Sep 25 21:52:28 UTC 2023
+//
+//lint:file-ignore U1000 Ignore all unused code, it's generated
 package cmd
 
-var githubDate string = "2023-07-25"
-var githubIteration string = "0"
-var githubRef string = "refs/tags/0.4.10"
-var githubRefName string = "0.4.10"
-var githubRepository string = "Senzing/serve-grpc"
-var githubRepositoryName string = "serve-grpc"
-var githubVersion string = "0.4.10"
+var (
+	githubDate           string = "2023-09-25"
+	githubIteration      string = "0"
+	githubRef            string = "refs/tags/0.5.1"
+	githubRefName        string = "0.5.1"
+	githubRepository     string = "Senzing/serve-grpc"
+	githubRepositoryName string = "serve-grpc"
+	githubVersion        string = "0.5.1"
+)
