@@ -349,48 +349,6 @@ func TestG2engineServer_AddRecordWithInfo(test *testing.T) {
 	printResponse(test, response)
 }
 
-func TestG2engineServer_AddRecordWithInfoWithReturnedRecordID(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.TestRecordsWithoutRecordId[0]
-	request := &g2pb.AddRecordWithInfoWithReturnedRecordIDRequest{
-		DataSourceCode: record.DataSource,
-		JsonData:       record.Json,
-		LoadID:         loadId,
-	}
-	response, err := g2engine.AddRecordWithInfoWithReturnedRecordID(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_AddRecordWithReturnedRecordID(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.TestRecordsWithoutRecordId[1]
-	request := &g2pb.AddRecordWithReturnedRecordIDRequest{
-		DataSourceCode: record.DataSource,
-		JsonData:       record.Json,
-		LoadID:         loadId,
-	}
-	response, err := g2engine.AddRecordWithReturnedRecordID(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_CheckRecord(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.CustomerRecords["1001"]
-	recordQueryList := `{"RECORDS": [{"DATA_SOURCE": "` + record.DataSource + `","RECORD_ID": "` + record.Id + `"},{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "123456789"}]}`
-	request := &g2pb.CheckRecordRequest{
-		Record:          record.Json,
-		RecordQueryList: recordQueryList,
-	}
-	response, err := g2engine.CheckRecord(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
 func TestG2engineServer_CountRedoRecords(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
@@ -985,27 +943,6 @@ func TestG2engineServer_Process(test *testing.T) {
 	printResponse(test, response)
 }
 
-func TestG2engineServer_ProcessRedoRecord(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &g2pb.ProcessRedoRecordRequest{}
-	response, err := g2engine.ProcessRedoRecord(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_ProcessRedoRecordWithInfo(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	var flags int64 = 0
-	request := &g2pb.ProcessRedoRecordWithInfoRequest{
-		Flags: flags,
-	}
-	response, err := g2engine.ProcessRedoRecordWithInfo(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
 func TestG2engineServer_ProcessWithInfo(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
@@ -1016,30 +953,6 @@ func TestG2engineServer_ProcessWithInfo(test *testing.T) {
 		Flags:  flags,
 	}
 	response, err := g2engine.ProcessWithInfo(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_ProcessWithResponse(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.CustomerRecords["1001"]
-	request := &g2pb.ProcessWithResponseRequest{
-		Record: record.Json,
-	}
-	response, err := g2engine.ProcessWithResponse(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_ProcessWithResponseResize(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.CustomerRecords["1001"]
-	request := &g2pb.ProcessWithResponseResizeRequest{
-		Record: record.Json,
-	}
-	response, err := g2engine.ProcessWithResponseResize(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
 }
@@ -1438,57 +1351,6 @@ func ExampleG2EngineServer_AddRecordWithInfo() {
 	}
 	fmt.Println(response.GetResult())
 	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1003","AFFECTED_ENTITIES":[{"ENTITY_ID":1}],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
-}
-
-func ExampleG2EngineServer_AddRecordWithInfoWithReturnedRecordID() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.AddRecordWithInfoWithReturnedRecordIDRequest{
-		DataSourceCode: "CUSTOMERS",
-		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Kellar", "PRIMARY_NAME_FIRST": "Candace", "ADDR_LINE1": "1824 AspenOak Way", "ADDR_CITY": "Elmwood Park", "ADDR_STATE": "CA", "ADDR_POSTAL_CODE": "95865", "EMAIL_ADDRESS": "info@ca-state.gov"}`,
-		LoadID:         "G2Engine_test",
-		Flags:          0,
-	}
-	response, err := g2engine.AddRecordWithInfoWithReturnedRecordID(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(truncate(response.GetWithInfo(), 42))
-	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":...
-}
-
-func ExampleG2EngineServer_AddRecordWithReturnedRecordID() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.AddRecordWithReturnedRecordIDRequest{
-		DataSourceCode: "CUSTOMERS",
-		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Sanders", "PRIMARY_NAME_FIRST": "Sandy", "ADDR_LINE1": "1376 BlueBell Rd", "ADDR_CITY": "Sacramento", "ADDR_STATE": "CA", "ADDR_POSTAL_CODE": "95823", "EMAIL_ADDRESS": "info@ca-state.gov"}`,
-		LoadID:         "G2Engine_test",
-	}
-	response, err := g2engine.AddRecordWithReturnedRecordID(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Printf("Length of record identifier is %d hexadecimal characters.\n", len(response.GetResult()))
-	// Output: Length of record identifier is 40 hexadecimal characters.
-}
-
-func ExampleG2EngineServer_CheckRecord() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.CheckRecordRequest{
-		Record:          `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
-		RecordQueryList: `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1001"},{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "123456789"}]}`,
-	}
-	response, err := g2engine.CheckRecord(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: {"CHECK_RECORD_RESPONSE":[{"DSRC_CODE":"CUSTOMERS","RECORD_ID":"1001","MATCH_LEVEL":0,"MATCH_LEVEL_CODE":"","MATCH_KEY":"","ERRULE_CODE":"","ERRULE_ID":0,"CANDIDATE_MATCH":"N","NON_GENERIC_CANDIDATE_MATCH":"N"}]}
 }
 
 func ExampleG2EngineServer_CloseExport() {
@@ -2048,7 +1910,7 @@ func ExampleG2EngineServer_GetRecord() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","JSON_DATA":{"RECORD_TYPE":"PERSON","PRIMARY_NAME_LAST":"Smith","PRIMARY_NAME_FIRST":"Robert","DATE_OF_BIRTH":"12/11/1978","ADDR_TYPE":"MAILING","ADDR_LINE1":"123 Main Street, Las Vegas NV 89132","PHONE_TYPE":"HOME","PHONE_NUMBER":"702-919-1300","EMAIL_ADDRESS":"bsmith@work.com","DATE":"1/2/18","STATUS":"Active","AMOUNT":"100","DATA_SOURCE":"CUSTOMERS","ENTITY_TYPE":"GENERIC","DSRC_ACTION":"A","RECORD_ID":"1001"}}
+	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","JSON_DATA":{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","RECORD_TYPE":"PERSON","PRIMARY_NAME_LAST":"Smith","PRIMARY_NAME_FIRST":"Robert","DATE_OF_BIRTH":"12/11/1978","ADDR_TYPE":"MAILING","ADDR_LINE1":"123 Main Street, Las Vegas NV 89132","PHONE_TYPE":"HOME","PHONE_NUMBER":"702-919-1300","EMAIL_ADDRESS":"bsmith@work.com","DATE":"1/2/18","STATUS":"Active","AMOUNT":"100"}}
 }
 
 func ExampleG2EngineServer_GetRecord_V2() {
@@ -2365,34 +2227,6 @@ func ExampleG2EngineServer_Process() {
 	// Output:
 }
 
-func ExampleG2EngineServer_ProcessRedoRecord() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.ProcessRedoRecordRequest{}
-	response, err := g2engine.ProcessRedoRecord(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response)
-	// Output:
-}
-
-func ExampleG2EngineServer_ProcessRedoRecordWithInfo() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.ProcessRedoRecordWithInfoRequest{
-		Flags: 0,
-	}
-	response, err := g2engine.ProcessRedoRecordWithInfo(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response)
-	// Output:
-}
-
 func ExampleG2EngineServer_ProcessWithInfo() {
 	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
@@ -2407,36 +2241,6 @@ func ExampleG2EngineServer_ProcessWithInfo() {
 	}
 	fmt.Println(response.GetResult())
 	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","AFFECTED_ENTITIES":[],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
-}
-
-func ExampleG2EngineServer_ProcessWithResponse() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.ProcessWithResponseRequest{
-		Record: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
-	}
-	response, err := g2engine.ProcessWithResponse(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: {"MESSAGE": "ER SKIPPED - DUPLICATE RECORD IN G2"}
-}
-
-func ExampleG2EngineServer_ProcessWithResponseResize() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.ProcessWithResponseResizeRequest{
-		Record: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
-	}
-	response, err := g2engine.ProcessWithResponseResize(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: {"MESSAGE": "ER SKIPPED - DUPLICATE RECORD IN G2"}
 }
 
 func ExampleG2EngineServer_ReevaluateEntity() {
