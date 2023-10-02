@@ -163,8 +163,8 @@ github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/senzing/g2-sdk-go v0.7.0 h1:sHAFnfllLIYHY5vPCYAl/yivC+ff7/OxKUkonSksQlI=
 github.com/senzing/g2-sdk-go v0.7.0/go.mod h1://3s8vmv1cwIRypWTGj3CbBLj+dN/scTOu1DsA5fY4o=
-github.com/senzing/g2-sdk-go-base v0.2.7 h1:8fntOwtLxu5JS4UFS10Zl51n0TSVCrqf39lKmN9U25Y=
-github.com/senzing/g2-sdk-go-base v0.2.7/go.mod h1:bEaqGYks86dSh4FArHhG1NyAfkXmYh7nncLKArQow48=
+github.com/senzing/g2-sdk-go-base v0.3.0 h1:qd9QsEJLuvYo3ypPkFlPojqncR/0SoUj9UyfLKU4Cxw=
+github.com/senzing/g2-sdk-go-base v0.3.0/go.mod h1:CPE/lzl7opicS/KP+UsN+3eX0d9yhrlSb4gMa0mhT78=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230925212041-8259762ae97e h1:NwstP3Ulj3CC3Ua/Mcmx/bdJEUiHulurkd7t1kTSSCQ=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20230925212041-8259762ae97e/go.mod h1:xfWmP0w1uAzezuXlpZ7CAZfPx/RcG+nh8J+Hlq3Y3cM=
 github.com/senzing/go-cmdhelping v0.1.8 h1:3E1qjrr9JxwY71rmVbuuFIwHENYMX9sCkb0sLRUzBuo=
@@ -472,8 +472,8 @@ google.golang.org/genproto v0.0.0-20201210142538-e3217bee35cc/go.mod h1:FWY/as6D
 google.golang.org/genproto v0.0.0-20201214200347-8c77b98c765d/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
 google.golang.org/genproto v0.0.0-20210108203827-ffc7fda8c3d7/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
 google.golang.org/genproto v0.0.0-20210226172003-ab064af71705/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
-google.golang.org/genproto/googleapis/rpc v0.0.0-20230920204549-e6e6cdab5c13 h1:N3bU/SQDCDyD6R528GJ/PwW9KjYcJA3dgyH+MovAkIM=
-google.golang.org/genproto/googleapis/rpc v0.0.0-20230920204549-e6e6cdab5c13/go.mod h1:KSqppvjFjtoCI+KGd4PELB0qLNxdJHRGqRI09mB6pQA=
+google.golang.org/genproto/googleapis/rpc v0.0.0-20231002182017-d307bd883b97 h1:6GQBEOdGkX6MMTLT9V+TjtIRZCw9VPD5Z+yHY9wMgS0=
+google.golang.org/genproto/googleapis/rpc v0.0.0-20231002182017-d307bd883b97/go.mod h1:v7nGkzlmW8P3n/bKmWBn2WpBjpOEx8Q6gMueudAmKfY=
 google.golang.org/grpc v1.19.0/go.mod h1:mqu4LbDTu4XGKhr4mRzUsmM4RtVoemTSY81AxZiDr8c=
 google.golang.org/grpc v1.20.1/go.mod h1:10oTOabMzJvdu6/UiuZezV6QK5dSlG84ov/aaiqXj38=
 google.golang.org/grpc v1.21.1/go.mod h1:oYelfM1adQP15Ek0mdvEgi9Df8B9CZIaU1084ijfRaM=
