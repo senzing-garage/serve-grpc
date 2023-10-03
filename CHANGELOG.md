@@ -16,7 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - In `Dockerfile` update to:
   - `golang:1.21.0-bullseye@sha256:02f350d8452d3f9693a450586659ecdc6e40e9be8f8dfc6d402300d87223fdfa`
-  - `senzing/senzingapi-runtime:3.7.1`
+  - `senzing/senzingapi-runtime:staging` - until a release of Senzing with Go support
+- Update dependencies
+  - github.com/senzing/g2-sdk-go-base v0.3.0
 
 ## [0.5.0] - 2023-09-25
 
