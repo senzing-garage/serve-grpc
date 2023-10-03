@@ -2,13 +2,16 @@
 # - https://github.com/srggrs/assign-one-project-github-action
 
 name: add-issue-to-project-t-comm.yaml
+
 on:
   issues:
     types:
       - reopened
       - opened
+
 env:
   GITHUB_TOKEN: ${{ secrets.SENZING_GITHUB_ACCESS_TOKEN }}
+
 jobs:
   add-issue-to-project:
     name: Add issue to Senzing Community project

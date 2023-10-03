@@ -3,11 +3,13 @@
 # - https://github.com/andymckay/labeler
 
 name: add-triage-label.yaml
+
 on:
   issues:
     types:
       - reopened
       - opened
+
 jobs:
   add-triage-label:
     name: Add triage label to issue
