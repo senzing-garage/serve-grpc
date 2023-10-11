@@ -163,7 +163,7 @@ func TestMain(m *testing.M) {
 		if g2error.Is(err, g2error.G2Retryable) {
 			fmt.Printf("\nRetryable error detected. \n\n")
 		}
-		if g2error.Is(err, g2error.G2BadUserInput) {
+		if g2error.Is(err, g2error.G2BadInput) {
 			fmt.Printf("\nBad user input error detected. \n\n")
 		}
 		fmt.Print(err)
