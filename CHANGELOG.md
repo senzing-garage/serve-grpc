@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed from `int` to `int64` where required by the SenzingAPI
 - Update dependencies
   - github.com/senzing/g2-sdk-go v0.7.3
+  - github.com/senzing/g2-sdk-go-base v0.3.1
+  - github.com/senzing/g2-sdk-proto/go v0.0.0-20231013142630-30a869751ff0
   - google.golang.org/grpc v1.58.3
 
 ### Deleted in 0.5.2
