@@ -300,7 +300,7 @@ func (server *G2EngineServer) FindNetworkByEntityID(ctx context.Context, request
 		defer func() { server.traceExit(38, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindNetworkByEntityID(ctx, request.GetEntityList(), int(request.GetMaxDegree()), int(request.GetBuildOutDegree()), int(request.GetMaxEntities()))
+	result, err = g2engine.FindNetworkByEntityID(ctx, request.GetEntityList(), request.GetMaxDegree(), request.GetBuildOutDegree(), request.GetMaxEntities())
 	response := g2pb.FindNetworkByEntityIDResponse{
 		Result: result,
 	}
@@ -316,7 +316,7 @@ func (server *G2EngineServer) FindNetworkByEntityID_V2(ctx context.Context, requ
 		defer func() { server.traceExit(40, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindNetworkByEntityID_V2(ctx, request.GetEntityList(), int(request.GetMaxDegree()), int(request.GetBuildOutDegree()), int(request.GetMaxEntities()), request.GetFlags())
+	result, err = g2engine.FindNetworkByEntityID_V2(ctx, request.GetEntityList(), request.GetMaxDegree(), request.GetBuildOutDegree(), request.GetMaxEntities(), request.GetFlags())
 	response := g2pb.FindNetworkByEntityID_V2Response{
 		Result: result,
 	}
@@ -332,7 +332,7 @@ func (server *G2EngineServer) FindNetworkByRecordID(ctx context.Context, request
 		defer func() { server.traceExit(42, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindNetworkByRecordID(ctx, request.GetRecordList(), int(request.GetMaxDegree()), int(request.GetBuildOutDegree()), int(request.GetMaxEntities()))
+	result, err = g2engine.FindNetworkByRecordID(ctx, request.GetRecordList(), request.GetMaxDegree(), request.GetBuildOutDegree(), request.GetMaxEntities())
 	response := g2pb.FindNetworkByRecordIDResponse{
 		Result: result,
 	}
@@ -348,7 +348,7 @@ func (server *G2EngineServer) FindNetworkByRecordID_V2(ctx context.Context, requ
 		defer func() { server.traceExit(44, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindNetworkByRecordID_V2(ctx, request.GetRecordList(), int(request.GetMaxDegree()), int(request.GetBuildOutDegree()), int(request.GetMaxEntities()), request.GetFlags())
+	result, err = g2engine.FindNetworkByRecordID_V2(ctx, request.GetRecordList(), request.GetMaxDegree(), request.GetBuildOutDegree(), request.GetMaxEntities(), request.GetFlags())
 	response := g2pb.FindNetworkByRecordID_V2Response{
 		Result: result,
 	}
@@ -364,7 +364,7 @@ func (server *G2EngineServer) FindPathByEntityID(ctx context.Context, request *g
 		defer func() { server.traceExit(46, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindPathByEntityID(ctx, request.GetEntityID1(), request.GetEntityID2(), int(request.GetMaxDegree()))
+	result, err = g2engine.FindPathByEntityID(ctx, request.GetEntityID1(), request.GetEntityID2(), request.GetMaxDegree())
 	response := g2pb.FindPathByEntityIDResponse{
 		Result: result,
 	}
@@ -380,7 +380,7 @@ func (server *G2EngineServer) FindPathByEntityID_V2(ctx context.Context, request
 		defer func() { server.traceExit(48, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindPathByEntityID_V2(ctx, request.GetEntityID1(), request.GetEntityID2(), int(request.GetMaxDegree()), request.GetFlags())
+	result, err = g2engine.FindPathByEntityID_V2(ctx, request.GetEntityID1(), request.GetEntityID2(), request.GetMaxDegree(), request.GetFlags())
 	response := g2pb.FindPathByEntityID_V2Response{
 		Result: result,
 	}
@@ -396,7 +396,7 @@ func (server *G2EngineServer) FindPathByRecordID(ctx context.Context, request *g
 		defer func() { server.traceExit(50, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindPathByRecordID(ctx, request.GetDataSourceCode1(), request.GetRecordID1(), request.GetDataSourceCode2(), request.GetRecordID2(), int(request.GetMaxDegree()))
+	result, err = g2engine.FindPathByRecordID(ctx, request.GetDataSourceCode1(), request.GetRecordID1(), request.GetDataSourceCode2(), request.GetRecordID2(), request.GetMaxDegree())
 	response := g2pb.FindPathByRecordIDResponse{
 		Result: result,
 	}
@@ -412,7 +412,7 @@ func (server *G2EngineServer) FindPathByRecordID_V2(ctx context.Context, request
 		defer func() { server.traceExit(52, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindPathByRecordID_V2(ctx, request.GetDataSourceCode1(), request.GetRecordID1(), request.GetDataSourceCode2(), request.GetRecordID2(), int(request.GetMaxDegree()), request.GetFlags())
+	result, err = g2engine.FindPathByRecordID_V2(ctx, request.GetDataSourceCode1(), request.GetRecordID1(), request.GetDataSourceCode2(), request.GetRecordID2(), request.GetMaxDegree(), request.GetFlags())
 	response := g2pb.FindPathByRecordID_V2Response{
 		Result: result,
 	}
@@ -428,7 +428,7 @@ func (server *G2EngineServer) FindPathExcludingByEntityID(ctx context.Context, r
 		defer func() { server.traceExit(54, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindPathExcludingByEntityID(ctx, request.GetEntityID1(), request.GetEntityID2(), int(request.GetMaxDegree()), request.GetExcludedEntities())
+	result, err = g2engine.FindPathExcludingByEntityID(ctx, request.GetEntityID1(), request.GetEntityID2(), request.GetMaxDegree(), request.GetExcludedEntities())
 	response := g2pb.FindPathExcludingByEntityIDResponse{
 		Result: result,
 	}
@@ -444,7 +444,7 @@ func (server *G2EngineServer) FindPathExcludingByEntityID_V2(ctx context.Context
 		defer func() { server.traceExit(56, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindPathExcludingByEntityID_V2(ctx, request.GetEntityID1(), request.GetEntityID2(), int(request.GetMaxDegree()), request.GetExcludedEntities(), request.GetFlags())
+	result, err = g2engine.FindPathExcludingByEntityID_V2(ctx, request.GetEntityID1(), request.GetEntityID2(), request.GetMaxDegree(), request.GetExcludedEntities(), request.GetFlags())
 	response := g2pb.FindPathExcludingByEntityID_V2Response{
 		Result: result,
 	}
@@ -460,7 +460,7 @@ func (server *G2EngineServer) FindPathExcludingByRecordID(ctx context.Context, r
 		defer func() { server.traceExit(58, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindPathExcludingByRecordID(ctx, request.GetDataSourceCode1(), request.GetRecordID1(), request.GetDataSourceCode2(), request.GetRecordID2(), int(request.GetMaxDegree()), request.GetExcludedRecords())
+	result, err = g2engine.FindPathExcludingByRecordID(ctx, request.GetDataSourceCode1(), request.GetRecordID1(), request.GetDataSourceCode2(), request.GetRecordID2(), request.GetMaxDegree(), request.GetExcludedRecords())
 	response := g2pb.FindPathExcludingByRecordIDResponse{
 		Result: result,
 	}
@@ -476,7 +476,7 @@ func (server *G2EngineServer) FindPathExcludingByRecordID_V2(ctx context.Context
 		defer func() { server.traceExit(60, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindPathExcludingByRecordID_V2(ctx, request.GetDataSourceCode1(), request.GetRecordID1(), request.GetDataSourceCode2(), request.GetRecordID2(), int(request.GetMaxDegree()), request.GetExcludedRecords(), request.GetFlags())
+	result, err = g2engine.FindPathExcludingByRecordID_V2(ctx, request.GetDataSourceCode1(), request.GetRecordID1(), request.GetDataSourceCode2(), request.GetRecordID2(), request.GetMaxDegree(), request.GetExcludedRecords(), request.GetFlags())
 	response := g2pb.FindPathExcludingByRecordID_V2Response{
 		Result: result,
 	}
@@ -492,7 +492,7 @@ func (server *G2EngineServer) FindPathIncludingSourceByEntityID(ctx context.Cont
 		defer func() { server.traceExit(62, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindPathIncludingSourceByEntityID(ctx, request.GetEntityID1(), request.GetEntityID2(), int(request.GetMaxDegree()), request.GetExcludedEntities(), request.GetRequiredDsrcs())
+	result, err = g2engine.FindPathIncludingSourceByEntityID(ctx, request.GetEntityID1(), request.GetEntityID2(), request.GetMaxDegree(), request.GetExcludedEntities(), request.GetRequiredDsrcs())
 	response := g2pb.FindPathIncludingSourceByEntityIDResponse{
 		Result: result,
 	}
@@ -508,7 +508,7 @@ func (server *G2EngineServer) FindPathIncludingSourceByEntityID_V2(ctx context.C
 		defer func() { server.traceExit(64, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindPathIncludingSourceByEntityID_V2(ctx, request.GetEntityID1(), request.GetEntityID2(), int(request.GetMaxDegree()), request.GetExcludedEntities(), request.GetRequiredDsrcs(), request.GetFlags())
+	result, err = g2engine.FindPathIncludingSourceByEntityID_V2(ctx, request.GetEntityID1(), request.GetEntityID2(), request.GetMaxDegree(), request.GetExcludedEntities(), request.GetRequiredDsrcs(), request.GetFlags())
 	response := g2pb.FindPathIncludingSourceByEntityID_V2Response{
 		Result: result,
 	}
@@ -524,7 +524,7 @@ func (server *G2EngineServer) FindPathIncludingSourceByRecordID(ctx context.Cont
 		defer func() { server.traceExit(66, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindPathIncludingSourceByRecordID(ctx, request.GetDataSourceCode1(), request.GetRecordID1(), request.GetDataSourceCode2(), request.GetRecordID2(), int(request.GetMaxDegree()), request.GetExcludedRecords(), request.GetRequiredDsrcs())
+	result, err = g2engine.FindPathIncludingSourceByRecordID(ctx, request.GetDataSourceCode1(), request.GetRecordID1(), request.GetDataSourceCode2(), request.GetRecordID2(), request.GetMaxDegree(), request.GetExcludedRecords(), request.GetRequiredDsrcs())
 	response := g2pb.FindPathIncludingSourceByRecordIDResponse{
 		Result: result,
 	}
@@ -540,7 +540,7 @@ func (server *G2EngineServer) FindPathIncludingSourceByRecordID_V2(ctx context.C
 		defer func() { server.traceExit(68, request, result, err, time.Since(entryTime)) }()
 	}
 	g2engine := getG2engine()
-	result, err = g2engine.FindPathIncludingSourceByRecordID_V2(ctx, request.GetDataSourceCode1(), request.GetRecordID1(), request.GetDataSourceCode2(), request.GetRecordID2(), int(request.GetMaxDegree()), request.GetExcludedRecords(), request.GetRequiredDsrcs(), request.GetFlags())
+	result, err = g2engine.FindPathIncludingSourceByRecordID_V2(ctx, request.GetDataSourceCode1(), request.GetRecordID1(), request.GetDataSourceCode2(), request.GetRecordID2(), request.GetMaxDegree(), request.GetExcludedRecords(), request.GetRequiredDsrcs(), request.GetFlags())
 	response := g2pb.FindPathIncludingSourceByRecordID_V2Response{
 		Result: result,
 	}

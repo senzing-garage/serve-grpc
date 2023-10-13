@@ -99,7 +99,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 		Port:                           viper.GetInt(option.GrpcPort.Arg),
 		SenzingEngineConfigurationJson: senzingEngineConfigurationJson,
 		SenzingModuleName:              viper.GetString(option.EngineModuleName.Arg),
-		SenzingVerboseLogging:          viper.GetInt(option.EngineLogLevel.Arg),
+		SenzingVerboseLogging:          viper.GetInt64(option.EngineLogLevel.Arg),
 	}
 	return grpcserver.Serve(ctx)
 }

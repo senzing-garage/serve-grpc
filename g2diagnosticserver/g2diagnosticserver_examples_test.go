@@ -108,7 +108,7 @@ func ExampleG2DiagnosticServer_Init() {
 	request := &g2pb.InitRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
-		VerboseLogging: int32(0),
+		VerboseLogging: int64(0),
 	}
 	response, err := g2diagnostic.Init(ctx, request)
 	if err != nil {
@@ -130,7 +130,7 @@ func ExampleG2DiagnosticServer_InitWithConfigID() {
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
 		InitConfigID:   int64(1),
-		VerboseLogging: int32(0),
+		VerboseLogging: int64(0),
 	}
 	response, err := g2diagnostic.InitWithConfigID(ctx, request)
 	if err != nil {

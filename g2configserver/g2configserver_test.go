@@ -31,7 +31,7 @@ func getTestObject(ctx context.Context, test *testing.T) G2ConfigServer {
 	if g2configTestSingleton == nil {
 		g2configTestSingleton = &G2ConfigServer{}
 		moduleName := "Test module name"
-		verboseLogging := 0
+		verboseLogging := int64(0)
 		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
@@ -48,7 +48,7 @@ func getG2ConfigServer(ctx context.Context) G2ConfigServer {
 	if g2configTestSingleton == nil {
 		g2configTestSingleton = &G2ConfigServer{}
 		moduleName := "Test module name"
-		verboseLogging := 0
+		verboseLogging := int64(0)
 		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
@@ -358,7 +358,7 @@ func TestG2configserver_Init(test *testing.T) {
 	request := &g2pb.InitRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
-		VerboseLogging: int32(0),
+		VerboseLogging: int64(0),
 	}
 	response, err := g2config.Init(ctx, request)
 	expectError(test, ctx, g2config, err, "senzing-60114002")

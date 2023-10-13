@@ -12,12 +12,13 @@ env:
 
 jobs:
   go-test-darwin:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        senzingapi-version: ["staging"]
         go: ["1.21"]
-    name: Go ${{ matrix.go }} using Senzing API ${{ matrix.senzingapi-version }} on darwin
+        os: [macos-latest]
+        senzingapi-version: [staging]
+    name: "go test with Senzing: ${{ matrix.senzingapi-version }}; OS: ${{ matrix.os }}; Go: ${{ matrix.go }}"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,11 +38,3 @@ jobs:
         run: mkdir /tmp/sqlite && cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
       - name: Run go test
         run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./...
-      # - name: Run go test - main
-      #   run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./.
-      # - name: Run go test - g2configserver
-      #   run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./g2configserver
-      # - name: Run go test - g2configmgrserver
-      #   run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./g2configmgrserver
-      # - name: Run go test - g2productserver
-      #   run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./g2productserver

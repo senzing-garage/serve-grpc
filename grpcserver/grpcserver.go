@@ -44,7 +44,7 @@ type GrpcServerImpl struct {
 	Port                           int
 	SenzingEngineConfigurationJson string
 	SenzingModuleName              string
-	SenzingVerboseLogging          int
+	SenzingVerboseLogging          int64
 }
 
 // ----------------------------------------------------------------------------

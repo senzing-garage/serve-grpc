@@ -191,7 +191,7 @@ func ExampleG2ConfigmgrServer_Init() {
 	request := &g2pb.InitRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
-		VerboseLogging: int32(0),
+		VerboseLogging: int64(0),
 	}
 	response, err := g2config.Init(ctx, request)
 	if err != nil {

@@ -188,38 +188,6 @@ func (server *G2ProductServer) UnregisterObserver(ctx context.Context, observer 
 	return g2product.UnregisterObserver(ctx, observer)
 }
 
-func (server *G2ProductServer) ValidateLicenseFile(ctx context.Context, request *g2pb.ValidateLicenseFileRequest) (*g2pb.ValidateLicenseFileResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(14, request)
-		defer func() { server.traceExit(16, request, result, err, time.Since(entryTime)) }()
-	}
-	g2product := getG2product()
-	result, err = g2product.ValidateLicenseFile(ctx, request.GetLicenseFilePath())
-	response := g2pb.ValidateLicenseFileResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *G2ProductServer) ValidateLicenseStringBase64(ctx context.Context, request *g2pb.ValidateLicenseStringBase64Request) (*g2pb.ValidateLicenseStringBase64Response, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(17, request)
-		defer func() { server.traceExit(18, request, result, err, time.Since(entryTime)) }()
-	}
-	g2product := getG2product()
-	result, err = g2product.ValidateLicenseStringBase64(ctx, request.GetLicenseString())
-	response := g2pb.ValidateLicenseStringBase64Response{
-		Result: result,
-	}
-	return &response, err
-}
-
 func (server *G2ProductServer) Version(ctx context.Context, request *g2pb.VersionRequest) (*g2pb.VersionResponse, error) {
 	var err error = nil
 	var result string
