@@ -45,7 +45,7 @@ func getTestObject(ctx context.Context, test *testing.T) G2DiagnosticServer {
 	if g2diagnosticTestSingleton == nil {
 		g2diagnosticTestSingleton = &G2DiagnosticServer{}
 		moduleName := "Test module name"
-		verboseLogging := 0
+		verboseLogging := int64(0)
 		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
@@ -62,7 +62,7 @@ func getG2DiagnosticServer(ctx context.Context) G2DiagnosticServer {
 	if g2diagnosticTestSingleton == nil {
 		g2diagnosticTestSingleton = &G2DiagnosticServer{}
 		moduleName := "Test module name"
-		verboseLogging := 0
+		verboseLogging := int64(0)
 		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
@@ -79,7 +79,7 @@ func getG2ConfigmgrServer(ctx context.Context) g2configmgrserver.G2ConfigmgrServ
 	if g2configmgrServerSingleton == nil {
 		g2configmgrServerSingleton = &g2configmgrserver.G2ConfigmgrServer{}
 		moduleName := "Test module name"
-		verboseLogging := 0
+		verboseLogging := int64(0)
 		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
@@ -159,7 +159,7 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
+func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
 	now := time.Now()
 
 	aG2config := &g2config.G2config{}
@@ -223,7 +223,7 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 	return err
 }
 
-func setupAddRecords(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
+func setupAddRecords(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
 
 	aG2engine := &g2engine.G2engine{}
 	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
@@ -247,7 +247,7 @@ func setupAddRecords(ctx context.Context, moduleName string, iniParams string, v
 	return err
 }
 
-func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
+func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
 	aG2engine := &g2engine.G2engine{}
 	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
@@ -270,7 +270,7 @@ func setup() error {
 	var err error = nil
 	ctx := context.TODO()
 	moduleName := "Test module name"
-	verboseLogging := 0
+	verboseLogging := int64(0)
 	localLogger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages)
 	if err != nil {
 		panic(err)
@@ -389,7 +389,7 @@ func TestG2diagnosticserver_Init(test *testing.T) {
 	request := &g2pb.InitRequest{
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
-		VerboseLogging: int32(0),
+		VerboseLogging: int64(0),
 	}
 	response, err := g2diagnostic.Init(ctx, request)
 	expectError(test, ctx, g2diagnostic, err, "senzing-60134002")
@@ -407,7 +407,7 @@ func TestG2diagnosticserver_InitWithConfigID(test *testing.T) {
 		ModuleName:     "Test module name",
 		IniParams:      iniParams,
 		InitConfigID:   int64(1),
-		VerboseLogging: int32(0),
+		VerboseLogging: int64(0),
 	}
 	response, err := g2diagnostic.InitWithConfigID(ctx, request)
 	expectError(test, ctx, g2diagnostic, err, "senzing-60134003")
