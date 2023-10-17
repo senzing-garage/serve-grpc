@@ -168,8 +168,8 @@ github.com/sagikazarmark/locafero v0.3.0 h1:zT7VEGWC2DTflmccN/5T1etyKvxSxpHsjb9c
 github.com/sagikazarmark/locafero v0.3.0/go.mod h1:w+v7UsPNFwzF1cHuOajOOzoq4U7v/ig1mpRjqV+Bu1U=
 github.com/sagikazarmark/slog-shim v0.1.0 h1:diDBnUNK9N/354PgrxMywXnAwEr1QZcOr6gto+ugjYE=
 github.com/sagikazarmark/slog-shim v0.1.0/go.mod h1:SrcSrq8aKtyuqEI1uvTDTK1arOWRIczQRv+GVI1AkeQ=
-github.com/senzing/g2-sdk-go v0.7.3 h1:24ONeVwsbW/UzGshBn7KtazzQNbwV6B+3C4OvNEAotM=
-github.com/senzing/g2-sdk-go v0.7.3/go.mod h1:U5FLOmtceh2pXvxQINGw7pFAnduB8uGuVADxetbNEPc=
+github.com/senzing/g2-sdk-go v0.7.4 h1:mHqebLxh6/tTQ4tC3ETHra2iX1IbmqOyX54wJcgsZtw=
+github.com/senzing/g2-sdk-go v0.7.4/go.mod h1:WgI/sfSWZOU0ZDalrAPOlhlOKfN957VwohX+bvUA6pc=
 github.com/senzing/g2-sdk-go-base v0.3.1 h1:o1IwuZ5pjKmyu+SqBeTMoAzL48/kE3K//u449MBn1Gk=
 github.com/senzing/g2-sdk-go-base v0.3.1/go.mod h1:vZF7JnCZsv6tDsM65rVCFchnjWJW1SmtTpqB3RHyFPU=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20231013142630-30a869751ff0 h1:WyDmXNal77Dm50j9XpnirNj6isP2nOgbuw8N+o6L8oY=
