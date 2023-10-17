@@ -9,7 +9,7 @@ require (
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20231013142630-30a869751ff0
 	github.com/senzing/go-cmdhelping v0.1.8
 	github.com/senzing/go-common v0.3.0
-	github.com/senzing/go-logging v1.3.2
+	github.com/senzing/go-logging v1.3.3
 	github.com/senzing/go-observing v0.2.7
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.17.0
@@ -31,7 +31,7 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.3.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
-	github.com/senzing/go-messaging v1.3.2 // indirect
+	github.com/senzing/go-messaging v1.3.3 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.10.0 // indirect
 	github.com/spf13/cast v1.5.1 // indirect
