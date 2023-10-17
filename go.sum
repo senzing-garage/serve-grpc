@@ -168,8 +168,8 @@ github.com/sagikazarmark/locafero v0.3.0 h1:zT7VEGWC2DTflmccN/5T1etyKvxSxpHsjb9c
 github.com/sagikazarmark/locafero v0.3.0/go.mod h1:w+v7UsPNFwzF1cHuOajOOzoq4U7v/ig1mpRjqV+Bu1U=
 github.com/sagikazarmark/slog-shim v0.1.0 h1:diDBnUNK9N/354PgrxMywXnAwEr1QZcOr6gto+ugjYE=
 github.com/sagikazarmark/slog-shim v0.1.0/go.mod h1:SrcSrq8aKtyuqEI1uvTDTK1arOWRIczQRv+GVI1AkeQ=
-github.com/senzing/g2-sdk-go v0.7.3 h1:24ONeVwsbW/UzGshBn7KtazzQNbwV6B+3C4OvNEAotM=
-github.com/senzing/g2-sdk-go v0.7.3/go.mod h1:U5FLOmtceh2pXvxQINGw7pFAnduB8uGuVADxetbNEPc=
+github.com/senzing/g2-sdk-go v0.7.4 h1:mHqebLxh6/tTQ4tC3ETHra2iX1IbmqOyX54wJcgsZtw=
+github.com/senzing/g2-sdk-go v0.7.4/go.mod h1:WgI/sfSWZOU0ZDalrAPOlhlOKfN957VwohX+bvUA6pc=
 github.com/senzing/g2-sdk-go-base v0.3.1 h1:o1IwuZ5pjKmyu+SqBeTMoAzL48/kE3K//u449MBn1Gk=
 github.com/senzing/g2-sdk-go-base v0.3.1/go.mod h1:vZF7JnCZsv6tDsM65rVCFchnjWJW1SmtTpqB3RHyFPU=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20231013142630-30a869751ff0 h1:WyDmXNal77Dm50j9XpnirNj6isP2nOgbuw8N+o6L8oY=
@@ -182,8 +182,8 @@ github.com/senzing/go-logging v1.3.3 h1:K5UjkOuLhDr6xMW5J6v8aHig1tRFGtzecNzaVmln
 github.com/senzing/go-logging v1.3.3/go.mod h1:Sx1KFxNyMpDDh8AhsTuwPO8kM/VtIoe9NCG+qLtDRtU=
 github.com/senzing/go-messaging v1.3.3 h1:v3Rff25+ABabP1fXAkiT1rSeFDkhqGOj01ZQrxIEdQo=
 github.com/senzing/go-messaging v1.3.3/go.mod h1:61zH2SStja2P9o8mEKpgaUJYerGjWumzIoFQIAZdIag=
-github.com/senzing/go-observing v0.2.7 h1:0HuGGUNWfAKm+a+WoBPHHfz+dcL8SzLqMjWd+U85pkY=
-github.com/senzing/go-observing v0.2.7/go.mod h1:EPBjqFdyXUjTPoC9C6WQBjUj1sFTp261pL3wlN80jD4=
+github.com/senzing/go-observing v0.2.8 h1:TYm6e4IMqH4Oi0jeGu/1rUB8/8C2ZUgIfi6s8Eg+B6k=
+github.com/senzing/go-observing v0.2.8/go.mod h1:gURhD/uI3RMPZK7TBE96OYBAVwGxGx5zRfh+TEKePk0=
 github.com/sourcegraph/conc v0.3.0 h1:OQTbbt6P72L20UqAkXXuLOj79LfEanQ+YQFNpLA9ySo=
 github.com/sourcegraph/conc v0.3.0/go.mod h1:Sdozi7LEKbFPqYX2/J+iBAM6HpqSLTASQIKqDmF7Mt0=
 github.com/spf13/afero v1.10.0 h1:EaGW2JJh15aKOejeuJ+wpFSHnbd7GE6Wvp3TsNhb6LY=

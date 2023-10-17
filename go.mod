@@ -4,13 +4,13 @@ go 1.21
 
 require (
 	github.com/aquilax/truncate v1.0.0
-	github.com/senzing/g2-sdk-go v0.7.3
+	github.com/senzing/g2-sdk-go v0.7.4
 	github.com/senzing/g2-sdk-go-base v0.3.1
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20231013142630-30a869751ff0
 	github.com/senzing/go-cmdhelping v0.1.8
 	github.com/senzing/go-common v0.3.0
 	github.com/senzing/go-logging v1.3.3
-	github.com/senzing/go-observing v0.2.7
+	github.com/senzing/go-observing v0.2.8
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
