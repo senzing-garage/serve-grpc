@@ -170,8 +170,8 @@ github.com/sagikazarmark/slog-shim v0.1.0 h1:diDBnUNK9N/354PgrxMywXnAwEr1QZcOr6g
 github.com/sagikazarmark/slog-shim v0.1.0/go.mod h1:SrcSrq8aKtyuqEI1uvTDTK1arOWRIczQRv+GVI1AkeQ=
 github.com/senzing/g2-sdk-go v0.7.4 h1:mHqebLxh6/tTQ4tC3ETHra2iX1IbmqOyX54wJcgsZtw=
 github.com/senzing/g2-sdk-go v0.7.4/go.mod h1:WgI/sfSWZOU0ZDalrAPOlhlOKfN957VwohX+bvUA6pc=
-github.com/senzing/g2-sdk-go-base v0.3.1 h1:o1IwuZ5pjKmyu+SqBeTMoAzL48/kE3K//u449MBn1Gk=
-github.com/senzing/g2-sdk-go-base v0.3.1/go.mod h1:vZF7JnCZsv6tDsM65rVCFchnjWJW1SmtTpqB3RHyFPU=
+github.com/senzing/g2-sdk-go-base v0.3.2 h1:8RDYz1XEv9kpGfXokXHCHa2IENzUn1gYv0cnaRLBdPI=
+github.com/senzing/g2-sdk-go-base v0.3.2/go.mod h1:yNQnj6MJn5ebASKGJQXCRhQoD6QmWwlSN2cS+wJWQvg=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20231013142630-30a869751ff0 h1:WyDmXNal77Dm50j9XpnirNj6isP2nOgbuw8N+o6L8oY=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20231013142630-30a869751ff0/go.mod h1:Ux8LjqUsKd/Xie4i+2PHMulY2vlSubmmVatjQta3JqA=
 github.com/senzing/go-cmdhelping v0.1.9 h1:hUU7YH7BPeh8BmrH1WlrS/EfXmTeX3RY2zEv7rUM/6M=
@@ -480,8 +480,8 @@ google.golang.org/genproto v0.0.0-20201210142538-e3217bee35cc/go.mod h1:FWY/as6D
 google.golang.org/genproto v0.0.0-20201214200347-8c77b98c765d/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
 google.golang.org/genproto v0.0.0-20210108203827-ffc7fda8c3d7/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
 google.golang.org/genproto v0.0.0-20210226172003-ab064af71705/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
-google.golang.org/genproto/googleapis/rpc v0.0.0-20231012201019-e917dd12ba7a h1:a2MQQVoTo96JC9PMGtGBymLp7+/RzpFc2yX/9WfFg1c=
-google.golang.org/genproto/googleapis/rpc v0.0.0-20231012201019-e917dd12ba7a/go.mod h1:4cYg8o5yUbm77w8ZX00LhMVNl/YVBFJRYWDc0uYWMs0=
+google.golang.org/genproto/googleapis/rpc v0.0.0-20231016165738-49dd2c1f3d0b h1:ZlWIi1wSK56/8hn4QcBp/j9M7Gt3U/3hZw3mC7vDICo=
+google.golang.org/genproto/googleapis/rpc v0.0.0-20231016165738-49dd2c1f3d0b/go.mod h1:swOH3j0KzcDDgGUWr+SNpyTen5YrXjS3eyPzFYKc6lc=
 google.golang.org/grpc v1.19.0/go.mod h1:mqu4LbDTu4XGKhr4mRzUsmM4RtVoemTSY81AxZiDr8c=
 google.golang.org/grpc v1.20.1/go.mod h1:10oTOabMzJvdu6/UiuZezV6QK5dSlG84ov/aaiqXj38=
 google.golang.org/grpc v1.21.1/go.mod h1:oYelfM1adQP15Ek0mdvEgi9Df8B9CZIaU1084ijfRaM=

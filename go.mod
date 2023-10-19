@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/aquilax/truncate v1.0.0
 	github.com/senzing/g2-sdk-go v0.7.4
-	github.com/senzing/g2-sdk-go-base v0.3.1
+	github.com/senzing/g2-sdk-go-base v0.3.2
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20231013142630-30a869751ff0
 	github.com/senzing/go-cmdhelping v0.1.9
 	github.com/senzing/go-common v0.3.1
@@ -42,7 +42,7 @@ require (
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231012201019-e917dd12ba7a // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20231016165738-49dd2c1f3d0b // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
