@@ -4,42 +4,45 @@
 # Variables
 # -----------------------------------------------------------------------------
 
-# -----------------------------------------------------------------------------
-# Makefile targets supported by all platforms.
-# -----------------------------------------------------------------------------
-
-.PHONY: hello-world
-hello-world:
-	@echo "Hello World, from windows."
 
 # -----------------------------------------------------------------------------
-# Build
+# OS-ARCH specific targets
 # -----------------------------------------------------------------------------
 
-.PHONY: build
-build: windows/amd64
+.PHONY: build-osarch-specific
+build-osarch-specific: windows/amd64
 	@mv $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME) $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME).exe
 
-# -----------------------------------------------------------------------------
-# Test
-# -----------------------------------------------------------------------------
 
-.PHONY: test
-test:
-	@go test -v -p 1 ./...
+.PHONY: clean-osarch-specific
+clean-osarch-specific:
+	del /F /S /Q $(TARGET_DIRECTORY)
+	del /F /S /Q $(GOPATH)/bin/$(PROGRAM_NAME)
 
-# -----------------------------------------------------------------------------
-# Run
-# -----------------------------------------------------------------------------
 
-.PHONY: run
-run:
+.PHONY: hello-world-osarch-specific
+hello-world-osarch-specific:
+	@echo "Hello World, from windows."
+
+
+.PHONY: package-osarch-specific
+package-osarch-specific:
+	@echo No packaging for windows.
+
+
+.PHONY: run-osarch-specific
+run-osarch-specific:
 	@go run main.go
 
-# -----------------------------------------------------------------------------
-# Package
-# -----------------------------------------------------------------------------
 
+.PHONY: setup-osarch-specific
+setup-osarch-specific:
+	@echo "No setup required."
+
+
+.PHONY: test-osarch-specific
+test-osarch-specific:
+	@go test -v -p 1 ./...
 
 # -----------------------------------------------------------------------------
 # Makefile targets supported only by this platform.
