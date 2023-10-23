@@ -6,7 +6,7 @@ require (
 	github.com/aquilax/truncate v1.0.0
 	github.com/senzing/g2-sdk-go v0.7.4
 	github.com/senzing/g2-sdk-go-base v0.3.2
-	github.com/senzing/g2-sdk-proto/go v0.0.0-20231013142630-30a869751ff0
+	github.com/senzing/g2-sdk-proto/go v0.0.0-20231016131354-0d0fba649357
 	github.com/senzing/go-cmdhelping v0.1.9
 	github.com/senzing/go-common v0.3.1
 	github.com/senzing/go-logging v1.3.3
@@ -20,7 +20,7 @@ require (
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.3 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
-	github.com/fsnotify/fsnotify v1.6.0 // indirect
+	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
