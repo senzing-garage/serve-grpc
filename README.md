@@ -17,8 +17,12 @@ server application that supports requests to the Senzing SDK via network access.
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/senzing/serve-grpc.svg)](https://pkg.go.dev/github.com/senzing/serve-grpc)
 [![Go Report Card](https://goreportcard.com/badge/github.com/senzing/serve-grpc)](https://goreportcard.com/report/github.com/senzing/serve-grpc)
-[![go-test.yaml](https://github.com/Senzing/serve-grpc/actions/workflows/go-test.yaml/badge.svg)](https://github.com/Senzing/serve-grpc/actions/workflows/go-test.yaml)
 [![License](https://img.shields.io/badge/License-Apache2-brightgreen.svg)](https://github.com/Senzing/serve-grpc/blob/main/LICENSE)
+
+[![gosec.yaml](https://github.com/Senzing/serve-grpc/actions/workflows/gosec.yaml/badge.svg)](https://github.com/Senzing/serve-grpc/actions/workflows/gosec.yaml)
+[![go-test-linux.yaml](https://github.com/Senzing/serve-grpc/actions/workflows/go-test-linux.yaml/badge.svg)](https://github.com/Senzing/serve-grpc/actions/workflows/go-test-linux.yaml)
+[![go-test-darwin.yaml](https://github.com/Senzing/serve-grpc/actions/workflows/go-test-darwin.yaml/badge.svg)](https://github.com/Senzing/serve-grpc/actions/workflows/go-test-darwin.yaml)
+[![go-test-windows.yaml](https://github.com/Senzing/serve-grpc/actions/workflows/go-test-windows.yaml/badge.svg)](https://github.com/Senzing/serve-grpc/actions/workflows/go-test-windows.yaml)
 
 ## Overview
 

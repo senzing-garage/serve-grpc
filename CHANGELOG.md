@@ -10,6 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.5.5] - 2023-12-08
+
+### Changed in 0.5.5
+
+- In `Dockerfile` update to:
+  - `golang:1.21.40-bullseye`
+  - `senzing/senzingapi-runtime:3.8.0`
+- Updated `testdata/senzing-license/g2.lic`
+- Update dependencies
+  - github.com/spf13/cobra v1.8.0
+  - github.com/spf13/viper v1.18.1
+
 ## [0.5.4] - 2023-11-01
 
 ### Changed in 0.5.4

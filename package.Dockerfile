@@ -2,8 +2,8 @@
 # Stages
 # -----------------------------------------------------------------------------
 
-ARG IMAGE_SENZINGAPI_RUNTIME=senzing/senzingapi-runtime:3.6.0
-ARG IMAGE_GO_BUILDER=golang:1.21.0-bullseye
+ARG IMAGE_SENZINGAPI_RUNTIME=senzing/senzingapi-runtime:3.8.0
+ARG IMAGE_GO_BUILDER=golang:1.21.4-bullseye
 ARG IMAGE_FPM_BUILDER=dockter/fpm:latest
 ARG IMAGE_FINAL=alpine
 
@@ -21,7 +21,7 @@ FROM ${IMAGE_GO_BUILDER} as go_builder
 ENV REFRESHED_AT=2023-08-01
 LABEL Name="senzing/serve-grpc-builder" \
       Maintainer="support@senzing.com" \
-      Version="0.3.6"
+      Version="0.5.5"
 
 # Build arguments.
 
@@ -60,7 +60,7 @@ FROM ${IMAGE_FPM_BUILDER} as fpm_builder
 ENV REFRESHED_AT=2023-08-01
 LABEL Name="senzing/serve-grpc-fpm-builder" \
       Maintainer="support@senzing.com" \
-      Version="0.3.6"
+      Version="0.5.5"
 
 # Use arguments from prior stage.
 
@@ -104,7 +104,7 @@ FROM ${IMAGE_FINAL} as final
 ENV REFRESHED_AT=2023-08-01
 LABEL Name="senzing/serve-grpc" \
       Maintainer="support@senzing.com" \
-      Version="0.3.6"
+      Version="0.5.5"
 
 # Use arguments from prior stage.
 
