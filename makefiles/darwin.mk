@@ -1,17 +1,19 @@
-# Makefile extensions for linux.
+# Makefile extensions for darwin.
 
 # -----------------------------------------------------------------------------
 # Variables
 # -----------------------------------------------------------------------------
 
+SENZING_DIR ?= /opt/senzing/g2
+SENZING_TOOLS_SENZING_DIRECTORY ?= $(SENZING_DIR)
+
+LD_LIBRARY_PATH := $(SENZING_TOOLS_SENZING_DIRECTORY)/lib:$(SENZING_TOOLS_SENZING_DIRECTORY)/lib/macos
+DYLD_LIBRARY_PATH := $(LD_LIBRARY_PATH)
+SENZING_TOOLS_DATABASE_URL ?= sqlite3://na:na@/tmp/sqlite/G2C.db
 
 # -----------------------------------------------------------------------------
-# OS-ARCH specific targets
+# OS specific targets
 # -----------------------------------------------------------------------------
-
-.PHONY: build-osarch-specific
-build-osarch-specific: linux/amd64
-
 
 .PHONY: clean-osarch-specific
 clean-osarch-specific:
@@ -19,49 +21,39 @@ clean-osarch-specific:
 	@docker rmi --force $(DOCKER_IMAGE_NAME) $(DOCKER_BUILD_IMAGE_NAME) 2> /dev/null || true
 	@rm -rf $(TARGET_DIRECTORY) || true
 	@rm -f $(GOPATH)/bin/$(PROGRAM_NAME) || true
+	@rm -rf /tmp/sqlite || true
 
 
 .PHONY: hello-world-osarch-specific
 hello-world-osarch-specific:
-	@echo "Hello World, from linux."
+	@echo "Hello World, from darwin."
 
 
 .PHONY: package-osarch-specific
-package-osarch-specific: docker-build-package
-	@mkdir -p $(TARGET_DIRECTORY) || true
-	@CONTAINER_ID=$$(docker create $(DOCKER_BUILD_IMAGE_NAME)); \
-	docker cp $$CONTAINER_ID:/output/. $(TARGET_DIRECTORY)/; \
-	docker rm -v $$CONTAINER_ID
+package-osarch-specific:
+	@echo No packaging for darwin.
 
 
 .PHONY: run-osarch-specific
 run-osarch-specific:
-	@go run main.go
+	@go run -exec macos_exec_dyld.sh main.go
 
 
 .PHONY: setup-osarch-specific
 setup-osarch-specific:
-	@echo "No setup required."
+	@rm -rf /tmp/sqlite
+	@mkdir  /tmp/sqlite
+	@touch  /tmp/sqlite/G2C.db
 
 
 .PHONY: test-osarch-specific
 test-osarch-specific:
-	@go test -v -p 1 ./...
+	@go test -exec macos_exec_dyld.sh -v -p 1 ./...
 
 # -----------------------------------------------------------------------------
 # Makefile targets supported only by this platform.
 # -----------------------------------------------------------------------------
 
-.PHONY: only-linux
-only-linux:
-	@echo "Only linux has this Makefile target."
-
-	.PHONY: run-serve-grpc
-run-serve-grpc: build
-	@target/linux-amd64/serve-grpc
-
-
-.PHONY: run-serve-grpc-trace
-run-serve-grpc-trace: build
-	@target/linux-amd64/serve-grpc --log-level TRACE --engine-log-level 1
-	
+.PHONY: only-darwin
+only-darwin:
+	@echo "Only darwin has this Makefile target."

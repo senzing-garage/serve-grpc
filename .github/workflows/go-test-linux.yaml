@@ -31,8 +31,6 @@ jobs:
         uses: Senzing/github-action-install-senzing-api@latest
         with:
           senzingapi-version: ${{ matrix.senzingapi-version }}
-      - name: Copy /etc files
-        run: sudo cp testdata/senzing-license/g2.lic /etc/opt/senzing/g2.lic
       - name: Copy test database files
         run: mkdir /tmp/sqlite && cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
       - name: Run go test

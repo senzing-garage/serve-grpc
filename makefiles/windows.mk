@@ -4,20 +4,17 @@
 # Variables
 # -----------------------------------------------------------------------------
 
+SENZING_TOOLS_DATABASE_URL ?= sqlite3://na:na@nowhere/C:\Temp\sqlite\G2C.db
 
 # -----------------------------------------------------------------------------
-# OS-ARCH specific targets
+# OS specific targets
 # -----------------------------------------------------------------------------
-
-.PHONY: build-osarch-specific
-build-osarch-specific: windows/amd64
-	@mv $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME) $(TARGET_DIRECTORY)/windows-amd64/$(PROGRAM_NAME).exe
-
 
 .PHONY: clean-osarch-specific
 clean-osarch-specific:
 	del /F /S /Q $(TARGET_DIRECTORY)
 	del /F /S /Q $(GOPATH)/bin/$(PROGRAM_NAME)
+	del /F /S /Q C:\Temp\sqlite
 
 
 .PHONY: hello-world-osarch-specific
@@ -37,8 +34,9 @@ run-osarch-specific:
 
 .PHONY: setup-osarch-specific
 setup-osarch-specific:
-	@echo "No setup required."
-
+	@rmdir /S /Q C:\Temp\sqlite || echo ...but it is not an error.
+	@mkdir C:\Temp\sqlite
+	@type nul > C:\Temp\sqlite\G2C.db
 
 .PHONY: test-osarch-specific
 test-osarch-specific:
