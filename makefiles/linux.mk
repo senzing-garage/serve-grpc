@@ -65,4 +65,3 @@ run-serve-grpc: build
 .PHONY: run-serve-grpc-trace
 run-serve-grpc-trace: build
 	@target/linux-amd64/serve-grpc --log-level TRACE --engine-log-level 1
-	
