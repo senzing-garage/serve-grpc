@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/aquilax/truncate v1.0.0
-	github.com/senzing/g2-sdk-go v0.7.4
+	github.com/senzing/g2-sdk-go v0.7.5
 	github.com/senzing/g2-sdk-go-base v0.3.3
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20231016131354-0d0fba649357
 	github.com/senzing/go-cmdhelping v0.1.9
