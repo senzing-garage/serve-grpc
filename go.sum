@@ -43,8 +43,8 @@ github.com/sagikazarmark/slog-shim v0.1.0 h1:diDBnUNK9N/354PgrxMywXnAwEr1QZcOr6g
 github.com/sagikazarmark/slog-shim v0.1.0/go.mod h1:SrcSrq8aKtyuqEI1uvTDTK1arOWRIczQRv+GVI1AkeQ=
 github.com/senzing/g2-sdk-go v0.7.6 h1:EmtC39nj4D7tfOu7tI5gGUEVfjzF3CaI+6Rr0HF1Fpo=
 github.com/senzing/g2-sdk-go v0.7.6/go.mod h1:1ZhftJZI8DUlzEdkLvZZEryAgCI9ocl1YHHeLwQXG18=
-github.com/senzing/g2-sdk-go-base v0.3.3 h1:/Bty7D1x07vnStv7ASw6mUxvCxB8kAK+Ip6BfTI5r8k=
-github.com/senzing/g2-sdk-go-base v0.3.3/go.mod h1:WHzGYn7wB5cGqLzXsB6AFe7k7egGw3xKhI4Yeg7agYM=
+github.com/senzing/g2-sdk-go-base v0.3.4 h1:nqys0hHKu27OwQWFSAsXe3dTDqljGBrEI7Mg61WT1Qo=
+github.com/senzing/g2-sdk-go-base v0.3.4/go.mod h1:lbrOahxW3Y4dbIeIAAPmme/t0J9c2PrLL1jfnxAMI7o=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20231016131354-0d0fba649357 h1:RndQ+ieTIjXZPizfOLM8l66ulVVbOKJMVH15U2cmHEw=
 github.com/senzing/g2-sdk-proto/go v0.0.0-20231016131354-0d0fba649357/go.mod h1:Ux8LjqUsKd/Xie4i+2PHMulY2vlSubmmVatjQta3JqA=
 github.com/senzing/go-cmdhelping v0.1.9 h1:hUU7YH7BPeh8BmrH1WlrS/EfXmTeX3RY2zEv7rUM/6M=
