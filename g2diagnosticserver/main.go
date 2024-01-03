@@ -2,7 +2,7 @@ package g2diagnosticserver
 
 import (
 	pb "github.com/senzing/g2-sdk-proto/go/g2diagnostic"
-	"github.com/senzing/go-logging/logging"
+	"github.com/senzing-garage/go-logging/logging"
 )
 
 // ----------------------------------------------------------------------------

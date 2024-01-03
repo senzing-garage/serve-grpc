@@ -14,7 +14,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
     1. `/etc/opt/senzing`
 
 1. If not installed, see
-   [How to Install Senzing for Go Development](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/install-senzing-for-go-development.md).
+   [How to Install Senzing for Go Development](https://github.com/senzing-garage/knowledge-base/blob/main/HOWTO/install-senzing-for-go-development.md).
 
 ## Install Git repository
 
@@ -29,7 +29,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
     ```
 
 1. Using the environment variables values just set, follow steps in
-   [clone-repository](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/clone-repository.md) to install the Git repository.
+   [clone-repository](https://github.com/senzing-garage/knowledge-base/blob/main/HOWTO/clone-repository.md) to install the Git repository.
 
 ## Build
 
@@ -282,7 +282,7 @@ the binary built can be run.
 
 **Note:** This only packages the `serve-grpc` command.
 It is only to be used in development and test.
-The actual packaging is done in the [senzing-tools](https://github.com/Senzing/senzing-tools) repository.
+The actual packaging is done in the [senzing-tools](https://github.com/senzing-garage/senzing-tools) repository.
 
 ### Package RPM and DEB files
 

@@ -9,8 +9,8 @@ import (
 	g2sdk "github.com/senzing/g2-sdk-go-base/g2product"
 	"github.com/senzing/g2-sdk-go/g2api"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2product"
-	"github.com/senzing/go-logging/logging"
-	"github.com/senzing/go-observing/observer"
+	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/go-observing/observer"
 )
 
 var (

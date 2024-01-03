@@ -1,16 +1,16 @@
-module github.com/senzing/serve-grpc
+module github.com/senzing-garage/serve-grpc
 
 go 1.21
 
 require (
 	github.com/aquilax/truncate v1.0.0
-	github.com/senzing/g2-sdk-go v0.7.6
-	github.com/senzing/g2-sdk-go-base v0.3.4
+	github.com/senzing-garage/go-cmdhelping v0.2.0
+	github.com/senzing-garage/go-common v0.4.0
+	github.com/senzing-garage/go-logging v1.4.0
+	github.com/senzing-garage/go-observing v0.3.0
+	github.com/senzing/g2-sdk-go v0.8.0
+	github.com/senzing/g2-sdk-go-base v0.4.0
 	github.com/senzing/g2-sdk-proto/go v0.0.0-20231016131354-0d0fba649357
-	github.com/senzing/go-cmdhelping v0.1.9
-	github.com/senzing/go-common v0.3.2-0.20231018174900-c1895fb44c30
-	github.com/senzing/go-logging v1.3.3
-	github.com/senzing/go-observing v0.2.8
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.18.2
 	github.com/stretchr/testify v1.8.4
@@ -31,19 +31,19 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
-	github.com/senzing/go-messaging v1.3.3 // indirect
+	github.com/senzing-garage/go-messaging v1.4.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/exp v0.0.0-20231206192017-f3f8817b8deb // indirect
+	golang.org/x/exp v0.0.0-20231226003508-02704c960a9b // indirect
 	golang.org/x/net v0.19.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231212172506-995d672761c0 // indirect
-	google.golang.org/protobuf v1.31.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240102182953-50ed04b92917 // indirect
+	google.golang.org/protobuf v1.32.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

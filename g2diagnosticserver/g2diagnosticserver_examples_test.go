@@ -8,7 +8,7 @@ import (
 
 	g2configmgrpb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2diagnostic"
-	"github.com/senzing/go-common/g2engineconfigurationjson"
+	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
 )
 
 // ----------------------------------------------------------------------------
@@ -16,7 +16,7 @@ import (
 // ----------------------------------------------------------------------------
 
 func ExampleG2DiagnosticServer_CheckDBPerf() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &g2pb.CheckDBPerfRequest{
@@ -33,7 +33,7 @@ func ExampleG2DiagnosticServer_CheckDBPerf() {
 // func ExampleG2diagnosticImpl_CloseEntityListBySize() {
 
 func ExampleG2DiagnosticServer_GetAvailableMemory() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &g2pb.GetAvailableMemoryRequest{}
@@ -46,7 +46,7 @@ func ExampleG2DiagnosticServer_GetAvailableMemory() {
 }
 
 func ExampleG2DiagnosticServer_GetDBInfo() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &g2pb.GetDBInfoRequest{}
@@ -59,7 +59,7 @@ func ExampleG2DiagnosticServer_GetDBInfo() {
 }
 
 func ExampleG2DiagnosticServer_GetLogicalCores() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &g2pb.GetLogicalCoresRequest{}
@@ -72,7 +72,7 @@ func ExampleG2DiagnosticServer_GetLogicalCores() {
 }
 
 func ExampleG2DiagnosticServer_GetPhysicalCores() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &g2pb.GetPhysicalCoresRequest{}
@@ -85,7 +85,7 @@ func ExampleG2DiagnosticServer_GetPhysicalCores() {
 }
 
 func ExampleG2DiagnosticServer_GetTotalSystemMemory() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &g2pb.GetTotalSystemMemoryRequest{}
@@ -98,7 +98,7 @@ func ExampleG2DiagnosticServer_GetTotalSystemMemory() {
 }
 
 func ExampleG2DiagnosticServer_Init() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
 	ctx := context.TODO()
 	g2diagnostic := &G2DiagnosticServer{}
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
@@ -119,7 +119,7 @@ func ExampleG2DiagnosticServer_Init() {
 }
 
 func ExampleG2DiagnosticServer_InitWithConfigID() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
 	ctx := context.TODO()
 	g2diagnostic := &G2DiagnosticServer{}
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
@@ -141,7 +141,7 @@ func ExampleG2DiagnosticServer_InitWithConfigID() {
 }
 
 func ExampleG2DiagnosticServer_Reinit() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	g2configmgr := getG2ConfigmgrServer(ctx)
@@ -161,7 +161,7 @@ func ExampleG2DiagnosticServer_Reinit() {
 }
 
 func ExampleG2DiagnosticServer_Destroy() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
 	ctx := context.TODO()
 	g2diagnostic := getG2DiagnosticServer(ctx)
 	request := &g2pb.DestroyRequest{}

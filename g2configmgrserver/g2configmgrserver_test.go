@@ -15,10 +15,10 @@ import (
 	"github.com/senzing/g2-sdk-go/g2error"
 	g2configpb "github.com/senzing/g2-sdk-proto/go/g2config"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
-	"github.com/senzing/go-common/g2engineconfigurationjson"
-	"github.com/senzing/go-common/truthset"
-	"github.com/senzing/go-logging/logging"
-	"github.com/senzing/serve-grpc/g2configserver"
+	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
+	"github.com/senzing-garage/go-common/truthset"
+	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/serve-grpc/g2configserver"
 	"github.com/stretchr/testify/assert"
 )
 
