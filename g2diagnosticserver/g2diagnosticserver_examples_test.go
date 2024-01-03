@@ -6,9 +6,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
 	g2configmgrpb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2diagnostic"
-	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
 )
 
 // ----------------------------------------------------------------------------

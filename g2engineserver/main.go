@@ -1,8 +1,8 @@
 package g2engineserver
 
 import (
-	g2pb "github.com/senzing/g2-sdk-proto/go/g2engine"
 	"github.com/senzing-garage/go-logging/logging"
+	g2pb "github.com/senzing/g2-sdk-proto/go/g2engine"
 )
 
 // ----------------------------------------------------------------------------

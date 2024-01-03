@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
 	g2configpb "github.com/senzing/g2-sdk-proto/go/g2config"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
-	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
 )
 
 // ----------------------------------------------------------------------------
