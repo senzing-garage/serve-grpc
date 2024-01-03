@@ -6,8 +6,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2product"
-	"github.com/senzing/go-common/g2engineconfigurationjson"
 )
 
 // ----------------------------------------------------------------------------
@@ -15,7 +15,7 @@ import (
 // ----------------------------------------------------------------------------
 
 func ExampleG2ProductServer_Init() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2productserver/g2productserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
@@ -36,7 +36,7 @@ func ExampleG2ProductServer_Init() {
 }
 
 func ExampleG2ProductServer_License() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2productserver/g2productserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &g2pb.LicenseRequest{}
@@ -49,7 +49,7 @@ func ExampleG2ProductServer_License() {
 }
 
 func ExampleG2ProductServer_Version() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2productserver/g2productserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &g2pb.VersionRequest{}
@@ -62,7 +62,7 @@ func ExampleG2ProductServer_Version() {
 }
 
 func ExampleG2ProductServer_Destroy() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2productserver/g2productserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
 	request := &g2pb.DestroyRequest{}

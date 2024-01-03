@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
+	"github.com/senzing-garage/go-common/truthset"
+	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing/g2-sdk-go-base/g2config"
 	"github.com/senzing/g2-sdk-go-base/g2configmgr"
 	"github.com/senzing/g2-sdk-go-base/g2engine"
-	"github.com/senzing/go-common/g2engineconfigurationjson"
-	"github.com/senzing/go-common/truthset"
-	"github.com/senzing/go-logging/logging"
 )
 
 var (

@@ -47,7 +47,7 @@ If using multiple databases or non-system locations of Senzing binaries,
     ```
 
 1. For more information, visit
-   [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON](https://github.com/Senzing/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_configuration_json)
+   [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON](https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_configuration_json)
 
 ## Docker examples
 

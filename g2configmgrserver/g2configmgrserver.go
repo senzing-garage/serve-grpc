@@ -6,11 +6,11 @@ import (
 	"sync"
 	"time"
 
+	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/go-observing/observer"
 	g2sdk "github.com/senzing/g2-sdk-go-base/g2configmgr"
 	"github.com/senzing/g2-sdk-go/g2api"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
-	"github.com/senzing/go-logging/logging"
-	"github.com/senzing/go-observing/observer"
 )
 
 var (

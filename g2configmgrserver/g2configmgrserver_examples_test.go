@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
 	g2configpb "github.com/senzing/g2-sdk-proto/go/g2config"
 	g2pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
-	"github.com/senzing/go-common/g2engineconfigurationjson"
 )
 
 // ----------------------------------------------------------------------------
@@ -17,7 +17,7 @@ import (
 // ----------------------------------------------------------------------------
 
 func ExampleG2ConfigmgrServer_AddConfig() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
 	ctx := context.TODO()
 	now := time.Now()
 	g2config := getG2ConfigServer(ctx)
@@ -54,7 +54,7 @@ func ExampleG2ConfigmgrServer_AddConfig() {
 }
 
 func ExampleG2ConfigmgrServer_GetConfig() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 
@@ -78,7 +78,7 @@ func ExampleG2ConfigmgrServer_GetConfig() {
 }
 
 func ExampleG2ConfigmgrServer_GetConfigList() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &g2pb.GetConfigListRequest{}
@@ -91,7 +91,7 @@ func ExampleG2ConfigmgrServer_GetConfigList() {
 }
 
 func ExampleG2ConfigmgrServer_GetDefaultConfigID() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &g2pb.GetDefaultConfigIDRequest{}
@@ -104,7 +104,7 @@ func ExampleG2ConfigmgrServer_GetDefaultConfigID() {
 }
 
 func ExampleG2ConfigmgrServer_ReplaceDefaultConfigID() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
 	ctx := context.TODO()
 	now := time.Now()
 	g2config := getG2ConfigServer(ctx)
@@ -157,7 +157,7 @@ func ExampleG2ConfigmgrServer_ReplaceDefaultConfigID() {
 }
 
 func ExampleG2ConfigmgrServer_SetDefaultConfigID() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 
@@ -181,7 +181,7 @@ func ExampleG2ConfigmgrServer_SetDefaultConfigID() {
 }
 
 func ExampleG2ConfigmgrServer_Init() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
 	ctx := context.TODO()
 	g2config := getG2ConfigmgrServer(ctx)
 	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
@@ -202,7 +202,7 @@ func ExampleG2ConfigmgrServer_Init() {
 }
 
 func ExampleG2ConfigmgrServer_Destroy() {
-	// For more information, visit https://github.com/Senzing/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configmgrserver/g2configmgrserver_examples_test.go
 	ctx := context.TODO()
 	g2configmgr := getG2ConfigmgrServer(ctx)
 	request := &g2pb.DestroyRequest{}

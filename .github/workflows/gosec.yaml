@@ -2,7 +2,6 @@
 # - https://github.com/securego/gosec
 
 name: gosec.yaml
-
 on:
   push:
     branches:
@@ -10,7 +9,6 @@ on:
   pull_request:
     branches:
       - main
-
 jobs:
   gosec:
     runs-on: ubuntu-latest

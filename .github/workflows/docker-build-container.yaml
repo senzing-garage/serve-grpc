@@ -1,17 +1,15 @@
 name: docker-build-container.yaml
-
 on:
   pull_request:
     branches:
       - main
   workflow_dispatch:
-
 jobs:
   docker-build-container:
     runs-on: ubuntu-latest
     steps:
       - name: Build docker image
-        uses: Senzing/github-action-docker-buildx-build@latest
+        uses: senzing-factory/github-action-docker-buildx-build@latest
         with:
           image-repository: senzing/serve-grpc
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}

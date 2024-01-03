@@ -6,10 +6,10 @@ import (
 	"context"
 	"os"
 
-	"github.com/senzing/go-cmdhelping/cmdhelper"
-	"github.com/senzing/go-cmdhelping/engineconfiguration"
-	"github.com/senzing/go-cmdhelping/option"
-	"github.com/senzing/serve-grpc/grpcserver"
+	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
+	"github.com/senzing-garage/go-cmdhelping/engineconfiguration"
+	"github.com/senzing-garage/go-cmdhelping/option"
+	"github.com/senzing-garage/serve-grpc/grpcserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -19,7 +19,7 @@ const (
 	Use   string = "serve-grpc"
 	Long  string = `
 Start a gRPC server for the Senzing SDK API.
-For more information, visit https://github.com/Senzing/serve-grpc
+For more information, visit https://github.com/senzing-garage/serve-grpc
     `
 )
 
