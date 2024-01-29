@@ -9,16 +9,16 @@ import (
 	"time"
 
 	truncator "github.com/aquilax/truncate"
+	"github.com/senzing-garage/g2-sdk-go-base/g2config"
+	"github.com/senzing-garage/g2-sdk-go-base/g2configmgr"
+	"github.com/senzing-garage/g2-sdk-go-base/g2engine"
+	"github.com/senzing-garage/g2-sdk-go/g2error"
+	g2configpb "github.com/senzing-garage/g2-sdk-proto/go/g2config"
+	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2configmgr"
 	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
 	"github.com/senzing-garage/go-common/truthset"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/serve-grpc/g2configserver"
-	"github.com/senzing/g2-sdk-go-base/g2config"
-	"github.com/senzing/g2-sdk-go-base/g2configmgr"
-	"github.com/senzing/g2-sdk-go-base/g2engine"
-	"github.com/senzing/g2-sdk-go/g2error"
-	g2configpb "github.com/senzing/g2-sdk-proto/go/g2config"
-	g2pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
 	"github.com/stretchr/testify/assert"
 )
 

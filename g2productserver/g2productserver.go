@@ -6,11 +6,11 @@ import (
 	"sync"
 	"time"
 
+	g2sdk "github.com/senzing-garage/g2-sdk-go-base/g2product"
+	"github.com/senzing-garage/g2-sdk-go/g2api"
+	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2product"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
-	g2sdk "github.com/senzing/g2-sdk-go-base/g2product"
-	"github.com/senzing/g2-sdk-go/g2api"
-	g2pb "github.com/senzing/g2-sdk-proto/go/g2product"
 )
 
 var (
@@ -72,7 +72,7 @@ func GetSdkG2product() g2api.G2product {
 }
 
 // ----------------------------------------------------------------------------
-// Interface methods for github.com/senzing/g2-sdk-go/g2product.G2product
+// Interface methods for github.com/senzing-garage/g2-sdk-go/g2product.G2product
 // ----------------------------------------------------------------------------
 
 func (server *G2ProductServer) Destroy(ctx context.Context, request *g2pb.DestroyRequest) (*g2pb.DestroyResponse, error) {

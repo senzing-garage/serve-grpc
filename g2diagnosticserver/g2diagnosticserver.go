@@ -6,11 +6,11 @@ import (
 	"sync"
 	"time"
 
+	g2sdk "github.com/senzing-garage/g2-sdk-go-base/g2diagnostic"
+	"github.com/senzing-garage/g2-sdk-go/g2api"
+	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2diagnostic"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
-	g2sdk "github.com/senzing/g2-sdk-go-base/g2diagnostic"
-	"github.com/senzing/g2-sdk-go/g2api"
-	g2pb "github.com/senzing/g2-sdk-proto/go/g2diagnostic"
 )
 
 var (
@@ -72,7 +72,7 @@ func GetSdkG2diagnostic() g2api.G2diagnostic {
 }
 
 // ----------------------------------------------------------------------------
-// Interface methods for github.com/senzing/g2-sdk-go/g2diagnostic.G2diagnostic
+// Interface methods for github.com/senzing-garage/g2-sdk-go/g2diagnostic.G2diagnostic
 // ----------------------------------------------------------------------------
 
 func (server *G2DiagnosticServer) CheckDBPerf(ctx context.Context, request *g2pb.CheckDBPerfRequest) (*g2pb.CheckDBPerfResponse, error) {

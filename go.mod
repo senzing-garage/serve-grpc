@@ -4,13 +4,13 @@ go 1.21
 
 require (
 	github.com/aquilax/truncate v1.0.0
+	github.com/senzing-garage/g2-sdk-go v0.9.0
+	github.com/senzing-garage/g2-sdk-go-base v0.5.0
+	github.com/senzing-garage/g2-sdk-proto/go v0.0.0-20240126210601-d02d3beb81d4
 	github.com/senzing-garage/go-cmdhelping v0.2.0
 	github.com/senzing-garage/go-common v0.4.0
 	github.com/senzing-garage/go-logging v1.4.0
 	github.com/senzing-garage/go-observing v0.3.0
-	github.com/senzing/g2-sdk-go v0.9.0
-	github.com/senzing/g2-sdk-go-base v0.4.0
-	github.com/senzing/g2-sdk-proto/go v0.0.0-20231016131354-0d0fba649357
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.18.2
 	github.com/stretchr/testify v1.8.4
@@ -38,7 +38,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/exp v0.0.0-20231226003508-02704c960a9b // indirect
+	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a // indirect
 	golang.org/x/net v0.20.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
