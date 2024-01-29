@@ -6,11 +6,11 @@ import (
 	"sync"
 	"time"
 
+	g2sdk "github.com/senzing-garage/g2-sdk-go-base/g2engine"
+	"github.com/senzing-garage/g2-sdk-go/g2api"
+	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2engine"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
-	g2sdk "github.com/senzing/g2-sdk-go-base/g2engine"
-	"github.com/senzing/g2-sdk-go/g2api"
-	g2pb "github.com/senzing/g2-sdk-proto/go/g2engine"
 )
 
 var (
@@ -72,7 +72,7 @@ func GetSdkG2engine() g2api.G2engine {
 }
 
 // ----------------------------------------------------------------------------
-// Interface methods for github.com/senzing/g2-sdk-go/g2engine.G2engine
+// Interface methods for github.com/senzing-garage/g2-sdk-go/g2engine.G2engine
 // ----------------------------------------------------------------------------
 
 func (server *G2EngineServer) AddRecord(ctx context.Context, request *g2pb.AddRecordRequest) (*g2pb.AddRecordResponse, error) {

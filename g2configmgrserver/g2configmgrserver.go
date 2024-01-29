@@ -6,11 +6,11 @@ import (
 	"sync"
 	"time"
 
+	g2sdk "github.com/senzing-garage/g2-sdk-go-base/g2configmgr"
+	"github.com/senzing-garage/g2-sdk-go/g2api"
+	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2configmgr"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
-	g2sdk "github.com/senzing/g2-sdk-go-base/g2configmgr"
-	"github.com/senzing/g2-sdk-go/g2api"
-	g2pb "github.com/senzing/g2-sdk-proto/go/g2configmgr"
 )
 
 var (
@@ -72,7 +72,7 @@ func GetSdkG2configmgr() g2api.G2configmgr {
 }
 
 // ----------------------------------------------------------------------------
-// Interface methods for github.com/senzing/g2-sdk-go/g2configmgr.G2configmgr
+// Interface methods for github.com/senzing-garage/g2-sdk-go/g2configmgr.G2configmgr
 // ----------------------------------------------------------------------------
 
 func (server *G2ConfigmgrServer) AddConfig(ctx context.Context, request *g2pb.AddConfigRequest) (*g2pb.AddConfigResponse, error) {
