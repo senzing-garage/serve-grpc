@@ -1,7 +1,4 @@
-# Based on
-# - https://github.com/securego/gosec
-
-name: gosec.yaml
+name: gosec
 
 on:
   push:
@@ -19,10 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GO111MODULE: on
+
     steps:
-      - name: Checkout Source
+      - name: checkout repository
         uses: actions/checkout@v4
-      - name: Run Gosec Security Scanner
+
+      - name: run Gosec Security Scanner
         uses: securego/gosec@master
         with:
           args: ./...
