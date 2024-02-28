@@ -11,7 +11,6 @@ import (
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/g2-sdk-go-base/g2config"
 	"github.com/senzing-garage/g2-sdk-go-base/g2configmgr"
-	"github.com/senzing-garage/g2-sdk-go-base/g2engine"
 	"github.com/senzing-garage/g2-sdk-go/g2error"
 	g2configpb "github.com/senzing-garage/g2-sdk-proto/go/g2config"
 	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2configmgr"
@@ -214,25 +213,6 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 	return err
 }
 
-func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
-	aG2engine := &g2engine.G2engine{}
-	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
-	if err != nil {
-		return createError(5903, err)
-	}
-
-	err = aG2engine.PurgeRepository(ctx)
-	if err != nil {
-		return createError(5904, err)
-	}
-
-	err = aG2engine.Destroy(ctx)
-	if err != nil {
-		return createError(5905, err)
-	}
-	return err
-}
-
 func setup() error {
 	var err error = nil
 	ctx := context.TODO()
@@ -256,13 +236,8 @@ func setup() error {
 		return createError(5920, err)
 	}
 
-	// Purge repository.
-
-	err = setupPurgeRepository(ctx, moduleName, iniParams, verboseLogging)
-	if err != nil {
-		return createError(5921, err)
-	}
 	return err
+
 }
 
 func teardown() error {

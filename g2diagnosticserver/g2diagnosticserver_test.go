@@ -247,25 +247,6 @@ func setupAddRecords(ctx context.Context, moduleName string, iniParams string, v
 	return err
 }
 
-func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
-	aG2engine := &g2engine.G2engine{}
-	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
-	if err != nil {
-		return createError(5903, err)
-	}
-
-	err = aG2engine.PurgeRepository(ctx)
-	if err != nil {
-		return createError(5904, err)
-	}
-
-	err = aG2engine.Destroy(ctx)
-	if err != nil {
-		return createError(5905, err)
-	}
-	return err
-}
-
 func setup() error {
 	var err error = nil
 	ctx := context.TODO()
@@ -286,13 +267,6 @@ func setup() error {
 	err = setupSenzingConfig(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return createError(5920, err)
-	}
-
-	// Purge repository.
-
-	err = setupPurgeRepository(ctx, moduleName, iniParams, verboseLogging)
-	if err != nil {
-		return createError(5921, err)
 	}
 
 	// Add records.
@@ -330,51 +304,6 @@ func TestG2diagnosticserver_CheckDBPerf(test *testing.T) {
 		SecondsToRun: int32(1),
 	}
 	response, err := g2diagnostic.CheckDBPerf(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetAvailableMemory(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetAvailableMemoryRequest{}
-	response, err := g2diagnostic.GetAvailableMemory(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetDBInfo(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetDBInfoRequest{}
-	response, err := g2diagnostic.GetDBInfo(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetLogicalCores(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetLogicalCoresRequest{}
-	response, err := g2diagnostic.GetLogicalCores(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetPhysicalCores(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetPhysicalCoresRequest{}
-	response, err := g2diagnostic.GetPhysicalCores(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetTotalSystemMemory(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetTotalSystemMemoryRequest{}
-	response, err := g2diagnostic.GetTotalSystemMemory(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
 	printActual(test, response)
 }

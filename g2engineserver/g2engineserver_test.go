@@ -12,7 +12,6 @@ import (
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/g2-sdk-go-base/g2config"
 	"github.com/senzing-garage/g2-sdk-go-base/g2configmgr"
-	"github.com/senzing-garage/g2-sdk-go-base/g2engine"
 	"github.com/senzing-garage/g2-sdk-go/g2error"
 	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2engine"
 	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
@@ -241,25 +240,6 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 	return err
 }
 
-func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
-	aG2engine := &g2engine.G2engine{}
-	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
-	if err != nil {
-		return createError(5903, err)
-	}
-
-	err = aG2engine.PurgeRepository(ctx)
-	if err != nil {
-		return createError(5904, err)
-	}
-
-	err = aG2engine.Destroy(ctx)
-	if err != nil {
-		return createError(5905, err)
-	}
-	return err
-}
-
 func setup() error {
 	var err error = nil
 	ctx := context.TODO()
@@ -282,12 +262,6 @@ func setup() error {
 		return createError(5920, err)
 	}
 
-	// Purge repository.
-
-	err = setupPurgeRepository(ctx, moduleName, iniParams, verboseLogging)
-	if err != nil {
-		return createError(5921, err)
-	}
 	return err
 }
 
@@ -931,32 +905,6 @@ func TestG2engineServer_PrimeEngine(test *testing.T) {
 	printResponse(test, response)
 }
 
-func TestG2engineServer_Process(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.CustomerRecords["1001"]
-	request := &g2pb.ProcessRequest{
-		Record: record.Json,
-	}
-	response, err := g2engine.Process(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_ProcessWithInfo(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.CustomerRecords["1001"]
-	flags := int64(0)
-	request := &g2pb.ProcessWithInfoRequest{
-		Record: record.Json,
-		Flags:  flags,
-	}
-	response, err := g2engine.ProcessWithInfo(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
 func TestG2engineServer_ReevaluateEntity(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
@@ -1107,60 +1055,6 @@ func TestG2engineServer_WhyEntities_V2(test *testing.T) {
 		Flags:     flags,
 	}
 	response, err := g2engine.WhyEntities_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_WhyEntityByEntityID(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	entityID := getEntityId(truthset.CustomerRecords["1001"])
-	request := &g2pb.WhyEntityByEntityIDRequest{
-		EntityID: entityID,
-	}
-	response, err := g2engine.WhyEntityByEntityID(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_WhyEntityByEntityID_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	entityID := getEntityId(truthset.CustomerRecords["1001"])
-	flags := int64(0)
-	request := &g2pb.WhyEntityByEntityID_V2Request{
-		EntityID: entityID,
-		Flags:    flags,
-	}
-	response, err := g2engine.WhyEntityByEntityID_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_WhyEntityByRecordID(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.CustomerRecords["1001"]
-	request := &g2pb.WhyEntityByRecordIDRequest{
-		DataSourceCode: record.DataSource,
-		RecordID:       record.Id,
-	}
-	response, err := g2engine.WhyEntityByRecordID(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_WhyEntityByRecordID_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.CustomerRecords["1001"]
-	flags := int64(0)
-	request := &g2pb.WhyEntityByRecordID_V2Request{
-		DataSourceCode: record.DataSource,
-		RecordID:       record.Id,
-		Flags:          flags,
-	}
-	response, err := g2engine.WhyEntityByRecordID_V2(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
 }

@@ -34,7 +34,6 @@ var IdMessages = map[int]string{
 	2002: "Enabling all services",
 	2003: "Server listening at %v",
 	4001: "Call to net.Listen(tcp, %s) failed.",
-	4002: "Call to G2engine.PurgeRepository() failed.",
 	4003: "Call to G2engine.Destroy() failed.",
 	5001: "Failed to serve.",
 }
