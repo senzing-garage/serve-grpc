@@ -9,6 +9,7 @@ import (
 
 	"github.com/senzing-garage/g2-sdk-go-base/g2config"
 	"github.com/senzing-garage/g2-sdk-go-base/g2configmgr"
+	"github.com/senzing-garage/g2-sdk-go-base/g2diagnostic"
 	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
 	"github.com/senzing-garage/go-common/truthset"
 	"github.com/senzing-garage/go-logging/logging"
@@ -100,6 +101,25 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 	return err
 }
 
+func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
+	aG2diagnostic := &g2diagnostic.G2diagnostic{}
+	err := aG2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
+	if err != nil {
+		return localLogger.NewError(5903, err)
+	}
+
+	err = aG2diagnostic.PurgeRepository(ctx)
+	if err != nil {
+		return localLogger.NewError(5904, err)
+	}
+
+	err = aG2diagnostic.Destroy(ctx)
+	if err != nil {
+		return localLogger.NewError(5905, err)
+	}
+	return err
+}
+
 func setup() error {
 	var err error = nil
 	ctx := context.TODO()
@@ -121,6 +141,13 @@ func setup() error {
 	err = setupSenzingConfig(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return localLogger.NewError(5920, err)
+	}
+
+	// Purge repository.
+
+	err = setupPurgeRepository(ctx, moduleName, iniParams, verboseLogging)
+	if err != nil {
+		return localLogger.NewError(5921, err)
 	}
 
 	return err

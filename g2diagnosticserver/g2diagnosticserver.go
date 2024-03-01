@@ -147,6 +147,19 @@ func (server *G2DiagnosticServer) InitWithConfigID(ctx context.Context, request 
 	return &response, err
 }
 
+func (server *G2DiagnosticServer) PurgeRepository(ctx context.Context, request *g2pb.PurgeRepositoryRequest) (*g2pb.PurgeRepositoryResponse, error) {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(117, request)
+		defer func() { server.traceExit(118, request, err, time.Since(entryTime)) }()
+	}
+	g2diagnostic := getG2diagnostic()
+	err = g2diagnostic.PurgeRepository(ctx)
+	response := g2pb.PurgeRepositoryResponse{}
+	return &response, err
+}
+
 func (server G2DiagnosticServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error = nil
 	if server.isTrace {

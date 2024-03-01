@@ -12,6 +12,7 @@ import (
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/g2-sdk-go-base/g2config"
 	"github.com/senzing-garage/g2-sdk-go-base/g2configmgr"
+	"github.com/senzing-garage/g2-sdk-go-base/g2diagnostic"
 	"github.com/senzing-garage/g2-sdk-go/g2error"
 	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2engine"
 	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
@@ -130,6 +131,8 @@ func printResponse(test *testing.T, response interface{}) {
 }
 
 func testError(test *testing.T, ctx context.Context, g2engine G2EngineServer, err error) {
+	_ = ctx
+	_ = g2engine
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
@@ -137,6 +140,8 @@ func testError(test *testing.T, ctx context.Context, g2engine G2EngineServer, er
 }
 
 func expectError(test *testing.T, ctx context.Context, g2engine G2EngineServer, err error, messageId string) {
+	_ = ctx
+	_ = g2engine
 	if err != nil {
 		var dictionary map[string]interface{}
 		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
@@ -240,6 +245,25 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 	return err
 }
 
+func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
+	aG2diagnostic := &g2diagnostic.G2diagnostic{}
+	err := aG2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
+	if err != nil {
+		return createError(5903, err)
+	}
+
+	err = aG2diagnostic.PurgeRepository(ctx)
+	if err != nil {
+		return createError(5904, err)
+	}
+
+	err = aG2diagnostic.Destroy(ctx)
+	if err != nil {
+		return createError(5905, err)
+	}
+	return err
+}
+
 func setup() error {
 	var err error = nil
 	ctx := context.TODO()
@@ -262,6 +286,12 @@ func setup() error {
 		return createError(5920, err)
 	}
 
+	// Purge repository.
+
+	err = setupPurgeRepository(ctx, moduleName, iniParams, verboseLogging)
+	if err != nil {
+		return createError(5921, err)
+	}
 	return err
 }
 

@@ -66,6 +66,7 @@ var IdMessages = map[int]string{
 	5901: "During test setup, call to messagelogger.NewSenzingApiLogger() failed.",
 	5902: "During test setup, call to g2eg2engineconfigurationjson.BuildSimpleSystemConfigurationJson() failed.",
 	5903: "During test setup, call to g2engine.Init() failed.",
+	5904: "During test setup, call to g2diagnostic.PurgeRepository() failed.",
 	5905: "During test setup, call to g2engine.Destroy() failed.",
 	5906: "During test setup, call to g2config.Init() failed.",
 	5907: "During test setup, call to g2config.Create() failed.",
@@ -81,8 +82,10 @@ var IdMessages = map[int]string{
 	5917: "During test setup, call to g2engine.AddRecord() failed.",
 	5918: "During test setup, call to g2engine.Destroy() failed.",
 	5920: "During test setup, call to setupSenzingConfig() failed.",
+	5921: "During test setup, call to setupPurgeRepository() failed.",
 	5922: "During test setup, call to setupAddRecords() failed.",
 	5931: "During test setup, call to g2engine.Init() failed.",
+	5932: "During test setup, call to g2diagnostic.PurgeRepository() failed.",
 	5933: "During test setup, call to g2engine.Destroy() failed.",
 }
 

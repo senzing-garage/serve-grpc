@@ -73,6 +73,19 @@ func ExampleG2DiagnosticServer_InitWithConfigID() {
 	// Output:
 }
 
+func ExampleG2DiagnosticServer_PurgeRepository() {
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	ctx := context.TODO()
+	g2diagnostic := getG2DiagnosticServer(ctx)
+	request := &g2pb.PurgeRepositoryRequest{}
+	response, err := g2diagnostic.PurgeRepository(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(response)
+	// Output:
+}
+
 func ExampleG2DiagnosticServer_Reinit() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
 	ctx := context.TODO()
