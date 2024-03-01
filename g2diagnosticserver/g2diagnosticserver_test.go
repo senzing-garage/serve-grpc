@@ -11,6 +11,7 @@ import (
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/g2-sdk-go-base/g2config"
 	"github.com/senzing-garage/g2-sdk-go-base/g2configmgr"
+	"github.com/senzing-garage/g2-sdk-go-base/g2diagnostic"
 	"github.com/senzing-garage/g2-sdk-go-base/g2engine"
 	"github.com/senzing-garage/g2-sdk-go/g2error"
 	g2configmgrpb "github.com/senzing-garage/g2-sdk-proto/go/g2configmgr"
@@ -107,6 +108,8 @@ func printActual(test *testing.T, actual interface{}) {
 }
 
 func testError(test *testing.T, ctx context.Context, g2diagnostic G2DiagnosticServer, err error) {
+	_ = ctx
+	_ = g2diagnostic
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
@@ -114,6 +117,8 @@ func testError(test *testing.T, ctx context.Context, g2diagnostic G2DiagnosticSe
 }
 
 func expectError(test *testing.T, ctx context.Context, g2diagnostic G2DiagnosticServer, err error, messageId string) {
+	_ = ctx
+	_ = g2diagnostic
 	if err != nil {
 		var dictionary map[string]interface{}
 		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
@@ -127,6 +132,8 @@ func expectError(test *testing.T, ctx context.Context, g2diagnostic G2Diagnostic
 }
 
 func testErrorNoFail(test *testing.T, ctx context.Context, g2diagnostic G2DiagnosticServer, err error) {
+	_ = ctx
+	_ = g2diagnostic
 	if err != nil {
 		test.Log("Error:", err.Error())
 	}
@@ -248,18 +255,18 @@ func setupAddRecords(ctx context.Context, moduleName string, iniParams string, v
 }
 
 func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
-	aG2engine := &g2engine.G2engine{}
-	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
+	aG2diagnostic := &g2diagnostic.G2diagnostic{}
+	err := aG2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return createError(5903, err)
 	}
 
-	err = aG2engine.PurgeRepository(ctx)
+	err = aG2diagnostic.PurgeRepository(ctx)
 	if err != nil {
 		return createError(5904, err)
 	}
 
-	err = aG2engine.Destroy(ctx)
+	err = aG2diagnostic.Destroy(ctx)
 	if err != nil {
 		return createError(5905, err)
 	}
@@ -330,51 +337,6 @@ func TestG2diagnosticserver_CheckDBPerf(test *testing.T) {
 		SecondsToRun: int32(1),
 	}
 	response, err := g2diagnostic.CheckDBPerf(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetAvailableMemory(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetAvailableMemoryRequest{}
-	response, err := g2diagnostic.GetAvailableMemory(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetDBInfo(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetDBInfoRequest{}
-	response, err := g2diagnostic.GetDBInfo(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetLogicalCores(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetLogicalCoresRequest{}
-	response, err := g2diagnostic.GetLogicalCores(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetPhysicalCores(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetPhysicalCoresRequest{}
-	response, err := g2diagnostic.GetPhysicalCores(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
-	printActual(test, response)
-}
-
-func TestG2diagnosticserver_GetTotalSystemMemory(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	request := &g2pb.GetTotalSystemMemoryRequest{}
-	response, err := g2diagnostic.GetTotalSystemMemory(ctx, request)
 	testError(test, ctx, g2diagnostic, err)
 	printActual(test, response)
 }

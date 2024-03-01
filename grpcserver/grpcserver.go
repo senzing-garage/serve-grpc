@@ -76,6 +76,7 @@ func (grpcServer *GrpcServerImpl) log(messageNumber int, details ...interface{})
 // --- Observing --------------------------------------------------------------
 
 func (grpcServer *GrpcServerImpl) createGrpcObserver(ctx context.Context, parsedUrl url.URL) (observer.Observer, error) {
+	_ = ctx
 	var err error
 	var result observer.Observer
 

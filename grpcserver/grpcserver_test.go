@@ -9,7 +9,7 @@ import (
 
 	"github.com/senzing-garage/g2-sdk-go-base/g2config"
 	"github.com/senzing-garage/g2-sdk-go-base/g2configmgr"
-	"github.com/senzing-garage/g2-sdk-go-base/g2engine"
+	"github.com/senzing-garage/g2-sdk-go-base/g2diagnostic"
 	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
 	"github.com/senzing-garage/go-common/truthset"
 	"github.com/senzing-garage/go-logging/logging"
@@ -102,18 +102,18 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 }
 
 func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
-	aG2engine := &g2engine.G2engine{}
-	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
+	aG2diagnostic := &g2diagnostic.G2diagnostic{}
+	err := aG2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return localLogger.NewError(5903, err)
 	}
 
-	err = aG2engine.PurgeRepository(ctx)
+	err = aG2diagnostic.PurgeRepository(ctx)
 	if err != nil {
 		return localLogger.NewError(5904, err)
 	}
 
-	err = aG2engine.Destroy(ctx)
+	err = aG2diagnostic.Destroy(ctx)
 	if err != nil {
 		return localLogger.NewError(5905, err)
 	}

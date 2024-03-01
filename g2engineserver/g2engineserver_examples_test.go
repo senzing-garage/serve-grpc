@@ -826,70 +826,6 @@ func ExampleG2EngineServer_WhyEntities_V2() {
 	// Output: {"WHY_RESULTS":[{"ENTITY_ID":1,"ENTITY_ID_2":1,"MATCH_INFO":{"WHY_KEY":"+NAME+DOB+ADDRESS+PHONE+EMAIL","WHY_ERRULE_CODE":"SF1_SNAME_CFF_CSTAB","MATCH_LEVEL_CODE":"RESOLVED"}}],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":1}}]}
 }
 
-func ExampleG2EngineServer_WhyEntityByEntityID() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.WhyEntityByEntityIDRequest{
-		EntityID: getEntityIdForRecord("CUSTOMERS", "1001"),
-	}
-	response, err := g2engine.WhyEntityByEntityID(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(truncate(response.GetResult(), 106))
-	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":1,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":...
-}
-
-func ExampleG2EngineServer_WhyEntityByEntityID_V2() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.WhyEntityByEntityID_V2Request{
-		EntityID: getEntityIdForRecord("CUSTOMERS", "1001"),
-		Flags:    0,
-	}
-	response, err := g2engine.WhyEntityByEntityID_V2(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(truncate(response.GetResult(), 106))
-	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":1,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":...
-}
-
-func ExampleG2EngineServer_WhyEntityByRecordID() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.WhyEntityByRecordIDRequest{
-		DataSourceCode: "CUSTOMERS",
-		RecordID:       "1001",
-	}
-	response, err := g2engine.WhyEntityByRecordID(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(truncate(response.GetResult(), 106))
-	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":1,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":...
-}
-
-func ExampleG2EngineServer_WhyEntityByRecordID_V2() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.WhyEntityByRecordID_V2Request{
-		DataSourceCode: "CUSTOMERS",
-		RecordID:       "1001",
-		Flags:          0,
-	}
-	response, err := g2engine.WhyEntityByRecordID_V2(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(truncate(response.GetResult(), 106))
-	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":1,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":...
-}
-
 func ExampleG2EngineServer_WhyRecords() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
@@ -925,37 +861,6 @@ func ExampleG2EngineServer_WhyRecords_V2() {
 	}
 	fmt.Println(response.GetResult())
 	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":1,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001"}],"INTERNAL_ID_2":2,"ENTITY_ID_2":1,"FOCUS_RECORDS_2":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1002"}],"MATCH_INFO":{"WHY_KEY":"+NAME+DOB+PHONE","WHY_ERRULE_CODE":"CNAME_CFF_CEXCL","MATCH_LEVEL_CODE":"RESOLVED"}}],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":1}}]}
-}
-
-func ExampleG2EngineServer_Process() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.ProcessRequest{
-		Record: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
-	}
-	response, err := g2engine.Process(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response)
-	// Output:
-}
-
-func ExampleG2EngineServer_ProcessWithInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.ProcessWithInfoRequest{
-		Record: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
-		Flags:  0,
-	}
-	response, err := g2engine.ProcessWithInfo(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","AFFECTED_ENTITIES":[],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
 
 func ExampleG2EngineServer_ReevaluateEntity() {
@@ -1157,19 +1062,6 @@ func ExampleG2EngineServer_Reinit() {
 		InitConfigID: responseFromGetActiveConfigID.GetResult(),
 	}
 	response, err := g2engine.Reinit(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response)
-	// Output:
-}
-
-func ExampleG2EngineServer_PurgeRepository() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
-	ctx := context.TODO()
-	g2engine := getG2EngineServer(ctx)
-	request := &g2pb.PurgeRepositoryRequest{}
-	response, err := g2engine.PurgeRepository(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
