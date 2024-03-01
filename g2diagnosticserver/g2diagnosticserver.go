@@ -106,54 +106,6 @@ func (server *G2DiagnosticServer) Destroy(ctx context.Context, request *g2pb.Des
 	return &response, err
 }
 
-func (server *G2DiagnosticServer) GetAvailableMemory(ctx context.Context, request *g2pb.GetAvailableMemoryRequest) (*g2pb.GetAvailableMemoryResponse, error) {
-	var err error = nil
-	var result int64
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(13, request)
-		defer func() { server.traceExit(14, request, result, err, time.Since(entryTime)) }()
-	}
-	g2diagnostic := getG2diagnostic()
-	result, err = g2diagnostic.GetAvailableMemory(ctx)
-	response := g2pb.GetAvailableMemoryResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *G2DiagnosticServer) GetDBInfo(ctx context.Context, request *g2pb.GetDBInfoRequest) (*g2pb.GetDBInfoResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(17, request)
-		defer func() { server.traceExit(18, request, result, err, time.Since(entryTime)) }()
-	}
-	g2diagnostic := getG2diagnostic()
-	result, err = g2diagnostic.GetDBInfo(ctx)
-	response := g2pb.GetDBInfoResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *G2DiagnosticServer) GetLogicalCores(ctx context.Context, request *g2pb.GetLogicalCoresRequest) (*g2pb.GetLogicalCoresResponse, error) {
-	var err error = nil
-	var result int
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(35, request)
-		defer func() { server.traceExit(36, request, result, err, time.Since(entryTime)) }()
-	}
-	g2diagnostic := getG2diagnostic()
-	result, err = g2diagnostic.GetLogicalCores(ctx)
-	response := g2pb.GetLogicalCoresResponse{
-		Result: int32(result),
-	}
-	return &response, err
-}
-
 func (server *G2DiagnosticServer) GetObserverOrigin(ctx context.Context) string {
 	var err error = nil
 	if server.isTrace {
@@ -163,38 +115,6 @@ func (server *G2DiagnosticServer) GetObserverOrigin(ctx context.Context) string 
 	}
 	g2diagnostic := getG2diagnostic()
 	return g2diagnostic.GetObserverOrigin(ctx)
-}
-
-func (server *G2DiagnosticServer) GetPhysicalCores(ctx context.Context, request *g2pb.GetPhysicalCoresRequest) (*g2pb.GetPhysicalCoresResponse, error) {
-	var err error = nil
-	var result int
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(39, request)
-		defer func() { server.traceExit(40, request, result, err, time.Since(entryTime)) }()
-	}
-	g2diagnostic := getG2diagnostic()
-	result, err = g2diagnostic.GetPhysicalCores(ctx)
-	response := g2pb.GetPhysicalCoresResponse{
-		Result: int32(result),
-	}
-	return &response, err
-}
-
-func (server *G2DiagnosticServer) GetTotalSystemMemory(ctx context.Context, request *g2pb.GetTotalSystemMemoryRequest) (*g2pb.GetTotalSystemMemoryResponse, error) {
-	var err error = nil
-	var result int64
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(45, request)
-		defer func() { server.traceExit(46, request, result, err, time.Since(entryTime)) }()
-	}
-	g2diagnostic := getG2diagnostic()
-	result, err = g2diagnostic.GetTotalSystemMemory(ctx)
-	response := g2pb.GetTotalSystemMemoryResponse{
-		Result: int64(result),
-	}
-	return &response, err
 }
 
 func (server *G2DiagnosticServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
@@ -224,6 +144,19 @@ func (server *G2DiagnosticServer) InitWithConfigID(ctx context.Context, request 
 	// err := g2diagnostic.InitWithConfigID(ctx, request.GetModuleName(), request.GetIniParams(), int64(request.GetInitConfigID()), int(request.GetVerboseLogging()))
 	err = server.error(4003)
 	response := g2pb.InitWithConfigIDResponse{}
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) PurgeRepository(ctx context.Context, request *g2pb.PurgeRepositoryRequest) (*g2pb.PurgeRepositoryResponse, error) {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(117, request)
+		defer func() { server.traceExit(118, request, err, time.Since(entryTime)) }()
+	}
+	g2diagnostic := getG2diagnostic()
+	err = g2diagnostic.PurgeRepository(ctx)
+	response := g2pb.PurgeRepositoryResponse{}
 	return &response, err
 }
 

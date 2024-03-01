@@ -30,73 +30,6 @@ func ExampleG2DiagnosticServer_CheckDBPerf() {
 	// Output: {"numRecordsInserted":...
 }
 
-// func ExampleG2diagnosticImpl_CloseEntityListBySize() {
-
-func ExampleG2DiagnosticServer_GetAvailableMemory() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetAvailableMemoryRequest{}
-	response, err := g2diagnostic.GetAvailableMemory(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult() > 0) // Dummy output.
-	// Output: true
-}
-
-func ExampleG2DiagnosticServer_GetDBInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetDBInfoRequest{}
-	response, err := g2diagnostic.GetDBInfo(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(truncate(response.GetResult(), 52))
-	// Output: {"Hybrid Mode":false,"Database Details":[{"Name":...
-}
-
-func ExampleG2DiagnosticServer_GetLogicalCores() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetLogicalCoresRequest{}
-	response, err := g2diagnostic.GetLogicalCores(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult() > 0) // Dummy output.
-	// Output: true
-}
-
-func ExampleG2DiagnosticServer_GetPhysicalCores() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetPhysicalCoresRequest{}
-	response, err := g2diagnostic.GetPhysicalCores(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult() > 0) // Dummy output.
-	// Output: true
-}
-
-func ExampleG2DiagnosticServer_GetTotalSystemMemory() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
-	ctx := context.TODO()
-	g2diagnostic := getG2DiagnosticServer(ctx)
-	request := &g2pb.GetTotalSystemMemoryRequest{}
-	response, err := g2diagnostic.GetTotalSystemMemory(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult() > 0) // Dummy output.
-	// Output: true
-}
-
 func ExampleG2DiagnosticServer_Init() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2diagnosticserver/g2diagnosticserver_examples_test.go
 	ctx := context.TODO()
@@ -135,6 +68,19 @@ func ExampleG2DiagnosticServer_InitWithConfigID() {
 	response, err := g2diagnostic.InitWithConfigID(ctx, request)
 	if err != nil {
 		// This should produce a "senzing-60134003" error.
+	}
+	fmt.Println(response)
+	// Output:
+}
+
+func ExampleG2DiagnosticServer_PurgeRepository() {
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	ctx := context.TODO()
+	g2diagnostic := getG2DiagnosticServer(ctx)
+	request := &g2pb.PurgeRepositoryRequest{}
+	response, err := g2diagnostic.PurgeRepository(ctx, request)
+	if err != nil {
+		fmt.Println(err)
 	}
 	fmt.Println(response)
 	// Output:

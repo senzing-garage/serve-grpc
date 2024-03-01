@@ -809,48 +809,6 @@ func (server *G2EngineServer) PrimeEngine(ctx context.Context, request *g2pb.Pri
 	return &response, err
 }
 
-func (server *G2EngineServer) Process(ctx context.Context, request *g2pb.ProcessRequest) (*g2pb.ProcessResponse, error) {
-	var err error = nil
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(105, request)
-		defer func() { server.traceExit(106, request, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	err = g2engine.Process(ctx, request.GetRecord())
-	response := g2pb.ProcessResponse{}
-	return &response, err
-}
-
-func (server *G2EngineServer) ProcessWithInfo(ctx context.Context, request *g2pb.ProcessWithInfoRequest) (*g2pb.ProcessWithInfoResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(111, request)
-		defer func() { server.traceExit(112, request, result, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	result, err = g2engine.ProcessWithInfo(ctx, request.GetRecord(), request.GetFlags())
-	response := g2pb.ProcessWithInfoResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *G2EngineServer) PurgeRepository(ctx context.Context, request *g2pb.PurgeRepositoryRequest) (*g2pb.PurgeRepositoryResponse, error) {
-	var err error = nil
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(117, request)
-		defer func() { server.traceExit(118, request, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	err = g2engine.PurgeRepository(ctx)
-	response := g2pb.PurgeRepositoryResponse{}
-	return &response, err
-}
-
 func (server *G2EngineServer) ReevaluateEntity(ctx context.Context, request *g2pb.ReevaluateEntityRequest) (*g2pb.ReevaluateEntityResponse, error) {
 	var err error = nil
 	if server.isTrace {
@@ -1184,70 +1142,6 @@ func (server *G2EngineServer) WhyEntities_V2(ctx context.Context, request *g2pb.
 	g2engine := getG2engine()
 	result, err = g2engine.WhyEntities_V2(ctx, request.GetEntityID1(), request.GetEntityID2(), request.GetFlags())
 	response := g2pb.WhyEntities_V2Response{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *G2EngineServer) WhyEntityByEntityID(ctx context.Context, request *g2pb.WhyEntityByEntityIDRequest) (*g2pb.WhyEntityByEntityIDResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(145, request)
-		defer func() { server.traceExit(146, request, result, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	result, err = g2engine.WhyEntityByEntityID(ctx, request.GetEntityID())
-	response := g2pb.WhyEntityByEntityIDResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *G2EngineServer) WhyEntityByEntityID_V2(ctx context.Context, request *g2pb.WhyEntityByEntityID_V2Request) (*g2pb.WhyEntityByEntityID_V2Response, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(147, request)
-		defer func() { server.traceExit(148, request, result, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	result, err = g2engine.WhyEntityByEntityID_V2(ctx, request.GetEntityID(), request.GetFlags())
-	response := g2pb.WhyEntityByEntityID_V2Response{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *G2EngineServer) WhyEntityByRecordID(ctx context.Context, request *g2pb.WhyEntityByRecordIDRequest) (*g2pb.WhyEntityByRecordIDResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(149, request)
-		defer func() { server.traceExit(150, request, result, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	result, err = g2engine.WhyEntityByRecordID(ctx, request.GetDataSourceCode(), request.GetRecordID())
-	response := g2pb.WhyEntityByRecordIDResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *G2EngineServer) WhyEntityByRecordID_V2(ctx context.Context, request *g2pb.WhyEntityByRecordID_V2Request) (*g2pb.WhyEntityByRecordID_V2Response, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(151, request)
-		defer func() { server.traceExit(152, request, result, err, time.Since(entryTime)) }()
-	}
-	g2engine := getG2engine()
-	result, err = g2engine.WhyEntityByRecordID_V2(ctx, request.GetDataSourceCode(), request.GetRecordID(), request.GetFlags())
-	response := g2pb.WhyEntityByRecordID_V2Response{
 		Result: result,
 	}
 	return &response, err

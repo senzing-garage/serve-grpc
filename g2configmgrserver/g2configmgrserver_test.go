@@ -11,7 +11,7 @@ import (
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/g2-sdk-go-base/g2config"
 	"github.com/senzing-garage/g2-sdk-go-base/g2configmgr"
-	"github.com/senzing-garage/g2-sdk-go-base/g2engine"
+	"github.com/senzing-garage/g2-sdk-go-base/g2diagnostic"
 	"github.com/senzing-garage/g2-sdk-go/g2error"
 	g2configpb "github.com/senzing-garage/g2-sdk-proto/go/g2config"
 	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2configmgr"
@@ -104,6 +104,8 @@ func printActual(test *testing.T, actual interface{}) {
 }
 
 func testError(test *testing.T, ctx context.Context, g2configmgr G2ConfigmgrServer, err error) {
+	_ = ctx
+	_ = g2configmgr
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
@@ -111,6 +113,8 @@ func testError(test *testing.T, ctx context.Context, g2configmgr G2ConfigmgrServ
 }
 
 func expectError(test *testing.T, ctx context.Context, g2configmgr G2ConfigmgrServer, err error, messageId string) {
+	_ = ctx
+	_ = g2configmgr
 	if err != nil {
 		var dictionary map[string]interface{}
 		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
@@ -215,18 +219,18 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 }
 
 func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
-	aG2engine := &g2engine.G2engine{}
-	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
+	aG2diagnostic := &g2diagnostic.G2diagnostic{}
+	err := aG2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return createError(5903, err)
 	}
 
-	err = aG2engine.PurgeRepository(ctx)
+	err = aG2diagnostic.PurgeRepository(ctx)
 	if err != nil {
 		return createError(5904, err)
 	}
 
-	err = aG2engine.Destroy(ctx)
+	err = aG2diagnostic.Destroy(ctx)
 	if err != nil {
 		return createError(5905, err)
 	}
