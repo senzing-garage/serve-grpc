@@ -1,5 +1,5 @@
 //go:build linux
 
-package g2productserver
+package szproductserver
 
 var licenseFilePath = "/etc/opt/senzing/g2.lic"

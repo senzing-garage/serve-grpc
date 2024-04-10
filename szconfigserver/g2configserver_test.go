@@ -1,4 +1,4 @@
-package g2configserver
+package szconfigserver
 
 import (
 	"context"
@@ -8,9 +8,9 @@ import (
 	"testing"
 
 	truncator "github.com/aquilax/truncate"
-	"github.com/senzing-garage/g2-sdk-go/g2error"
-	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2config"
-	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
+	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
+	"github.com/senzing-garage/sz-sdk-go/szerror"
+	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,19 +20,19 @@ const (
 )
 
 var (
-	g2configTestSingleton *G2ConfigServer
+	g2configTestSingleton *SzConfigServer
 )
 
 // ----------------------------------------------------------------------------
 // Internal functions
 // ----------------------------------------------------------------------------
 
-func getTestObject(ctx context.Context, test *testing.T) G2ConfigServer {
+func getTestObject(ctx context.Context, test *testing.T) SzConfigServer {
 	if g2configTestSingleton == nil {
-		g2configTestSingleton = &G2ConfigServer{}
+		g2configTestSingleton = &SzConfigServer{}
 		moduleName := "Test module name"
 		verboseLogging := int64(0)
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
@@ -44,12 +44,12 @@ func getTestObject(ctx context.Context, test *testing.T) G2ConfigServer {
 	return *g2configTestSingleton
 }
 
-func getG2ConfigServer(ctx context.Context) G2ConfigServer {
+func getSzConfigServer(ctx context.Context) SzConfigServer {
 	if g2configTestSingleton == nil {
-		g2configTestSingleton = &G2ConfigServer{}
+		g2configTestSingleton = &SzConfigServer{}
 		moduleName := "Test module name"
 		verboseLogging := int64(0)
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -75,14 +75,14 @@ func printActual(test *testing.T, actual interface{}) {
 	printResult(test, "Actual", actual)
 }
 
-func testError(test *testing.T, ctx context.Context, g2config G2ConfigServer, err error) {
+func testError(test *testing.T, ctx context.Context, g2config SzConfigServer, err error) {
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
 	}
 }
 
-func expectError(test *testing.T, ctx context.Context, g2config G2ConfigServer, err error, messageId string) {
+func expectError(test *testing.T, ctx context.Context, g2config SzConfigServer, err error, messageId string) {
 	if err != nil {
 		var dictionary map[string]interface{}
 		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
@@ -102,13 +102,13 @@ func expectError(test *testing.T, ctx context.Context, g2config G2ConfigServer, 
 func TestMain(m *testing.M) {
 	err := setup()
 	if err != nil {
-		if g2error.Is(err, g2error.G2Unrecoverable) {
+		if szerror.Is(err, szerror.SzUnrecoverable) {
 			fmt.Printf("\nUnrecoverable error detected. \n\n")
 		}
-		if g2error.Is(err, g2error.G2Retryable) {
+		if szerror.Is(err, szerror.SzRetryable) {
 			fmt.Printf("\nRetryable error detected. \n\n")
 		}
-		if g2error.Is(err, g2error.G2BadInput) {
+		if szerror.Is(err, szerror.SzBadInput) {
 			fmt.Printf("\nBad user input error detected. \n\n")
 		}
 		fmt.Print(err)
@@ -133,7 +133,7 @@ func teardown() error {
 }
 
 func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	actual, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)
@@ -351,7 +351,7 @@ func TestG2configserver_Save(test *testing.T) {
 func TestG2configserver_Init(test *testing.T) {
 	ctx := context.TODO()
 	g2config := getTestObject(ctx, test)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}

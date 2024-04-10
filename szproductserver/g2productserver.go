@@ -1,4 +1,4 @@
-package g2productserver
+package szproductserver
 
 import (
 	"context"
@@ -6,15 +6,15 @@ import (
 	"sync"
 	"time"
 
-	g2sdk "github.com/senzing-garage/g2-sdk-go-base/g2product"
-	"github.com/senzing-garage/g2-sdk-go/g2api"
-	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2product"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
+	g2sdk "github.com/senzing-garage/sz-sdk-go-core/szproduct"
+	"github.com/senzing-garage/sz-sdk-go/sz"
+	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 )
 
 var (
-	g2productSingleton g2api.G2product
+	g2productSingleton sz.G2product
 	g2productSyncOnce  sync.Once
 )
 
@@ -25,7 +25,7 @@ var (
 // --- Logging ----------------------------------------------------------------
 
 // Get the Logger singleton.
-func (server *G2ProductServer) getLogger() logging.LoggingInterface {
+func (server *SzProductServer) getLogger() logging.LoggingInterface {
 	var err error = nil
 	if server.logger == nil {
 		options := []interface{}{
@@ -40,19 +40,19 @@ func (server *G2ProductServer) getLogger() logging.LoggingInterface {
 }
 
 // Trace method entry.
-func (server *G2ProductServer) traceEntry(messageNumber int, details ...interface{}) {
+func (server *SzProductServer) traceEntry(messageNumber int, details ...interface{}) {
 	server.getLogger().Log(messageNumber, details...)
 }
 
 // Trace method exit.
-func (server *G2ProductServer) traceExit(messageNumber int, details ...interface{}) {
+func (server *SzProductServer) traceExit(messageNumber int, details ...interface{}) {
 	server.getLogger().Log(messageNumber, details...)
 }
 
 // --- Errors -----------------------------------------------------------------
 
 // Create error.
-func (server *G2ProductServer) error(messageNumber int, details ...interface{}) error {
+func (server *SzProductServer) error(messageNumber int, details ...interface{}) error {
 	return server.getLogger().NewError(messageNumber, details...)
 }
 
@@ -60,14 +60,14 @@ func (server *G2ProductServer) error(messageNumber int, details ...interface{}) 
 
 // Singleton pattern for g2product.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getG2product() g2api.G2product {
+func getG2product() sz.G2product {
 	g2productSyncOnce.Do(func() {
 		g2productSingleton = &g2sdk.G2product{}
 	})
 	return g2productSingleton
 }
 
-func GetSdkG2product() g2api.G2product {
+func GetSdkG2product() sz.G2product {
 	return getG2product()
 }
 
@@ -75,7 +75,7 @@ func GetSdkG2product() g2api.G2product {
 // Interface methods for github.com/senzing-garage/g2-sdk-go/g2product.G2product
 // ----------------------------------------------------------------------------
 
-func (server *G2ProductServer) Destroy(ctx context.Context, request *g2pb.DestroyRequest) (*g2pb.DestroyResponse, error) {
+func (server *SzProductServer) Destroy(ctx context.Context, request *g2pb.DestroyRequest) (*g2pb.DestroyResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -90,7 +90,7 @@ func (server *G2ProductServer) Destroy(ctx context.Context, request *g2pb.Destro
 	return &response, err
 }
 
-func (server *G2ProductServer) GetObserverOrigin(ctx context.Context) string {
+func (server *SzProductServer) GetObserverOrigin(ctx context.Context) string {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -101,7 +101,7 @@ func (server *G2ProductServer) GetObserverOrigin(ctx context.Context) string {
 	return g2product.GetObserverOrigin(ctx)
 }
 
-func (server *G2ProductServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
+func (server *SzProductServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -116,7 +116,7 @@ func (server *G2ProductServer) Init(ctx context.Context, request *g2pb.InitReque
 	return &response, err
 }
 
-func (server *G2ProductServer) License(ctx context.Context, request *g2pb.LicenseRequest) (*g2pb.LicenseResponse, error) {
+func (server *SzProductServer) License(ctx context.Context, request *g2pb.LicenseRequest) (*g2pb.LicenseResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -132,7 +132,7 @@ func (server *G2ProductServer) License(ctx context.Context, request *g2pb.Licens
 	return &response, err
 }
 
-func (server *G2ProductServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+func (server *SzProductServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -143,7 +143,7 @@ func (server *G2ProductServer) RegisterObserver(ctx context.Context, observer ob
 	return g2product.RegisterObserver(ctx, observer)
 }
 
-func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevelName string) error {
+func (server *SzProductServer) SetLogLevel(ctx context.Context, logLevelName string) error {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -166,7 +166,7 @@ func (server *G2ProductServer) SetLogLevel(ctx context.Context, logLevelName str
 	return err
 }
 
-func (server *G2ProductServer) SetObserverOrigin(ctx context.Context, origin string) {
+func (server *SzProductServer) SetObserverOrigin(ctx context.Context, origin string) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -177,7 +177,7 @@ func (server *G2ProductServer) SetObserverOrigin(ctx context.Context, origin str
 	g2product.SetObserverOrigin(ctx, origin)
 }
 
-func (server *G2ProductServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+func (server *SzProductServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -188,7 +188,7 @@ func (server *G2ProductServer) UnregisterObserver(ctx context.Context, observer 
 	return g2product.UnregisterObserver(ctx, observer)
 }
 
-func (server *G2ProductServer) Version(ctx context.Context, request *g2pb.VersionRequest) (*g2pb.VersionResponse, error) {
+func (server *SzProductServer) Version(ctx context.Context, request *g2pb.VersionRequest) (*g2pb.VersionResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {

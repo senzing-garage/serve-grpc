@@ -1,13 +1,13 @@
 //go:build linux
 
-package g2configserver
+package szconfigserver
 
 import (
 	"context"
 	"fmt"
 
-	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2config"
-	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
+	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
+	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 )
 
 // ----------------------------------------------------------------------------
@@ -17,21 +17,21 @@ import (
 func ExampleG2ConfigServer_AddDataSource() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
-	g2config := getG2ConfigServer(ctx)
+	szConfigServer := getSzConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
-	requestToCreate := &g2pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
+	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	responseFromCreateConfig, err := szConfigServer.Create(ctx, requestToCreateConfig)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
 	request := &g2pb.AddDataSourceRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
-		InputJson:    `{"DSRC_CODE": "GO_TEST"}`,
+		ConfigHandle:   responseFromCreateConfig.GetResult(),
+		DataSourceCode: "GO_TEST",
 	}
-	response, err := g2config.AddDataSource(ctx, request)
+	response, err := szConfigServer.AddDataSource(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -42,7 +42,7 @@ func ExampleG2ConfigServer_AddDataSource() {
 func ExampleG2ConfigServer_Close() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
-	g2config := getG2ConfigServer(ctx)
+	g2config := getSzConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
 	requestToCreate := &g2pb.CreateRequest{}
@@ -65,7 +65,7 @@ func ExampleG2ConfigServer_Close() {
 func ExampleG2ConfigServer_Create() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
-	g2config := getG2ConfigServer(ctx)
+	g2config := getSzConfigServer(ctx)
 	request := &g2pb.CreateRequest{}
 	response, err := g2config.Create(ctx, request)
 	if err != nil {
@@ -78,7 +78,7 @@ func ExampleG2ConfigServer_Create() {
 func ExampleG2ConfigServer_DeleteDataSource() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
-	g2config := getG2ConfigServer(ctx)
+	g2config := getSzConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
 	requestToCreate := &g2pb.CreateRequest{}
@@ -102,7 +102,7 @@ func ExampleG2ConfigServer_DeleteDataSource() {
 func ExampleG2ConfigServer_ListDataSources() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
-	g2config := getG2ConfigServer(ctx)
+	g2config := getSzConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
 	requestToCreate := &g2pb.CreateRequest{}
@@ -126,7 +126,7 @@ func ExampleG2ConfigServer_ListDataSources() {
 func ExampleG2ConfigServer_Load() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
-	g2config := getG2ConfigServer(ctx)
+	g2config := getSzConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
 	requestToCreate := &g2pb.CreateRequest{}
@@ -159,7 +159,7 @@ func ExampleG2ConfigServer_Load() {
 func ExampleG2ConfigServer_Save() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
-	g2config := getG2ConfigServer(ctx)
+	g2config := getSzConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
 	requestToCreate := &g2pb.CreateRequest{}
@@ -183,8 +183,8 @@ func ExampleG2ConfigServer_Save() {
 func ExampleG2ConfigServer_Init() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
-	g2config := getG2ConfigServer(ctx)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	g2config := getSzConfigServer(ctx)
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -204,7 +204,7 @@ func ExampleG2ConfigServer_Init() {
 func ExampleG2ConfigServer_Destroy() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
-	g2config := getG2ConfigServer(ctx)
+	g2config := getSzConfigServer(ctx)
 	request := &g2pb.DestroyRequest{}
 	response, err := g2config.Destroy(ctx, request)
 	if err != nil {

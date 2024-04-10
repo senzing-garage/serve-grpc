@@ -1,4 +1,4 @@
-package g2diagnosticserver
+package szdiagnosticserver
 
 import (
 	"context"
@@ -6,15 +6,15 @@ import (
 	"sync"
 	"time"
 
-	g2sdk "github.com/senzing-garage/g2-sdk-go-base/g2diagnostic"
-	"github.com/senzing-garage/g2-sdk-go/g2api"
-	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2diagnostic"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
+	g2sdk "github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
+	"github.com/senzing-garage/sz-sdk-go/sz"
+	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 )
 
 var (
-	g2diagnosticSingleton g2api.G2diagnostic
+	g2diagnosticSingleton sz.G2diagnostic
 	g2diagnosticSyncOnce  sync.Once
 )
 
@@ -25,7 +25,7 @@ var (
 // --- Logging ----------------------------------------------------------------
 
 // Get the Logger singleton.
-func (server *G2DiagnosticServer) getLogger() logging.LoggingInterface {
+func (server *SzDiagnosticServer) getLogger() logging.LoggingInterface {
 	var err error = nil
 	if server.logger == nil {
 		options := []interface{}{
@@ -40,19 +40,19 @@ func (server *G2DiagnosticServer) getLogger() logging.LoggingInterface {
 }
 
 // Trace method entry.
-func (server *G2DiagnosticServer) traceEntry(messageNumber int, details ...interface{}) {
+func (server *SzDiagnosticServer) traceEntry(messageNumber int, details ...interface{}) {
 	server.getLogger().Log(messageNumber, details...)
 }
 
 // Trace method exit.
-func (server *G2DiagnosticServer) traceExit(messageNumber int, details ...interface{}) {
+func (server *SzDiagnosticServer) traceExit(messageNumber int, details ...interface{}) {
 	server.getLogger().Log(messageNumber, details...)
 }
 
 // --- Errors -----------------------------------------------------------------
 
 // Create error.
-func (server *G2DiagnosticServer) error(messageNumber int, details ...interface{}) error {
+func (server *SzDiagnosticServer) error(messageNumber int, details ...interface{}) error {
 	return server.getLogger().NewError(messageNumber, details...)
 }
 
@@ -60,14 +60,14 @@ func (server *G2DiagnosticServer) error(messageNumber int, details ...interface{
 
 // Singleton pattern for g2diagnostic.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getG2diagnostic() g2api.G2diagnostic {
+func getG2diagnostic() sz.G2diagnostic {
 	g2diagnosticSyncOnce.Do(func() {
 		g2diagnosticSingleton = &g2sdk.G2diagnostic{}
 	})
 	return g2diagnosticSingleton
 }
 
-func GetSdkG2diagnostic() g2api.G2diagnostic {
+func GetSdkSzDiagnostic() sz.G2diagnostic {
 	return getG2diagnostic()
 }
 
@@ -75,7 +75,7 @@ func GetSdkG2diagnostic() g2api.G2diagnostic {
 // Interface methods for github.com/senzing-garage/g2-sdk-go/g2diagnostic.G2diagnostic
 // ----------------------------------------------------------------------------
 
-func (server *G2DiagnosticServer) CheckDBPerf(ctx context.Context, request *g2pb.CheckDBPerfRequest) (*g2pb.CheckDBPerfResponse, error) {
+func (server *SzDiagnosticServer) CheckDBPerf(ctx context.Context, request *g2pb.CheckDBPerfRequest) (*g2pb.CheckDBPerfResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -91,7 +91,7 @@ func (server *G2DiagnosticServer) CheckDBPerf(ctx context.Context, request *g2pb
 	return &response, err
 }
 
-func (server *G2DiagnosticServer) Destroy(ctx context.Context, request *g2pb.DestroyRequest) (*g2pb.DestroyResponse, error) {
+func (server *SzDiagnosticServer) Destroy(ctx context.Context, request *g2pb.DestroyRequest) (*g2pb.DestroyResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -106,7 +106,7 @@ func (server *G2DiagnosticServer) Destroy(ctx context.Context, request *g2pb.Des
 	return &response, err
 }
 
-func (server *G2DiagnosticServer) GetObserverOrigin(ctx context.Context) string {
+func (server *SzDiagnosticServer) GetObserverOrigin(ctx context.Context) string {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -117,7 +117,7 @@ func (server *G2DiagnosticServer) GetObserverOrigin(ctx context.Context) string 
 	return g2diagnostic.GetObserverOrigin(ctx)
 }
 
-func (server *G2DiagnosticServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
+func (server *SzDiagnosticServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -133,7 +133,7 @@ func (server *G2DiagnosticServer) Init(ctx context.Context, request *g2pb.InitRe
 	return &response, err
 }
 
-func (server *G2DiagnosticServer) InitWithConfigID(ctx context.Context, request *g2pb.InitWithConfigIDRequest) (*g2pb.InitWithConfigIDResponse, error) {
+func (server *SzDiagnosticServer) InitWithConfigID(ctx context.Context, request *g2pb.InitWithConfigIDRequest) (*g2pb.InitWithConfigIDResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -147,7 +147,7 @@ func (server *G2DiagnosticServer) InitWithConfigID(ctx context.Context, request 
 	return &response, err
 }
 
-func (server *G2DiagnosticServer) PurgeRepository(ctx context.Context, request *g2pb.PurgeRepositoryRequest) (*g2pb.PurgeRepositoryResponse, error) {
+func (server *SzDiagnosticServer) PurgeRepository(ctx context.Context, request *g2pb.PurgeRepositoryRequest) (*g2pb.PurgeRepositoryResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -160,7 +160,7 @@ func (server *G2DiagnosticServer) PurgeRepository(ctx context.Context, request *
 	return &response, err
 }
 
-func (server G2DiagnosticServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+func (server SzDiagnosticServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -171,7 +171,7 @@ func (server G2DiagnosticServer) RegisterObserver(ctx context.Context, observer 
 	return g2diagnostic.RegisterObserver(ctx, observer)
 }
 
-func (server *G2DiagnosticServer) Reinit(ctx context.Context, request *g2pb.ReinitRequest) (*g2pb.ReinitResponse, error) {
+func (server *SzDiagnosticServer) Reinit(ctx context.Context, request *g2pb.ReinitRequest) (*g2pb.ReinitResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -184,7 +184,7 @@ func (server *G2DiagnosticServer) Reinit(ctx context.Context, request *g2pb.Rein
 	return &response, err
 }
 
-func (server *G2DiagnosticServer) SetLogLevel(ctx context.Context, logLevelName string) error {
+func (server *SzDiagnosticServer) SetLogLevel(ctx context.Context, logLevelName string) error {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -207,7 +207,7 @@ func (server *G2DiagnosticServer) SetLogLevel(ctx context.Context, logLevelName 
 	return err
 }
 
-func (server *G2DiagnosticServer) SetObserverOrigin(ctx context.Context, origin string) {
+func (server *SzDiagnosticServer) SetObserverOrigin(ctx context.Context, origin string) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -218,7 +218,7 @@ func (server *G2DiagnosticServer) SetObserverOrigin(ctx context.Context, origin 
 	g2diagnostic.SetObserverOrigin(ctx, origin)
 }
 
-func (server *G2DiagnosticServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+func (server *SzDiagnosticServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()

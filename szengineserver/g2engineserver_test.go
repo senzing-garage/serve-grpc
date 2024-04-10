@@ -1,4 +1,4 @@
-package g2engineserver
+package szengineserver
 
 import (
 	"context"
@@ -10,15 +10,15 @@ import (
 	"time"
 
 	truncator "github.com/aquilax/truncate"
-	"github.com/senzing-garage/g2-sdk-go-base/g2config"
-	"github.com/senzing-garage/g2-sdk-go-base/g2configmgr"
-	"github.com/senzing-garage/g2-sdk-go-base/g2diagnostic"
-	"github.com/senzing-garage/g2-sdk-go/g2error"
-	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2engine"
-	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
-	"github.com/senzing-garage/go-common/record"
-	"github.com/senzing-garage/go-common/truthset"
+	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
+	"github.com/senzing-garage/go-helpers/record"
+	"github.com/senzing-garage/go-helpers/truthset"
 	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
+	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
+	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
+	"github.com/senzing-garage/sz-sdk-go/szerror"
+	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szengine"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -35,7 +35,7 @@ type GetEntityByRecordIDResponse struct {
 }
 
 var (
-	g2engineTestSingleton *G2EngineServer
+	g2engineTestSingleton *SzEngineServer
 	localLogger           logging.LoggingInterface
 )
 
@@ -44,15 +44,15 @@ var (
 // ----------------------------------------------------------------------------
 
 func createError(errorId int, err error) error {
-	return g2error.Cast(localLogger.NewError(errorId, err), err)
+	return szerror.Cast(localLogger.NewError(errorId, err), err)
 }
 
-func getTestObject(ctx context.Context, test *testing.T) G2EngineServer {
+func getTestObject(ctx context.Context, test *testing.T) SzEngineServer {
 	if g2engineTestSingleton == nil {
-		g2engineTestSingleton = &G2EngineServer{}
+		g2engineTestSingleton = &SzEngineServer{}
 		moduleName := "Test module name"
 		verboseLogging := int64(0)
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
@@ -64,12 +64,12 @@ func getTestObject(ctx context.Context, test *testing.T) G2EngineServer {
 	return *g2engineTestSingleton
 }
 
-func getG2EngineServer(ctx context.Context) G2EngineServer {
+func getG2EngineServer(ctx context.Context) SzEngineServer {
 	if g2engineTestSingleton == nil {
-		g2engineTestSingleton = &G2EngineServer{}
+		g2engineTestSingleton = &SzEngineServer{}
 		moduleName := "Test module name"
 		verboseLogging := int64(0)
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -130,7 +130,7 @@ func printResponse(test *testing.T, response interface{}) {
 	printResult(test, "Response", response)
 }
 
-func testError(test *testing.T, ctx context.Context, g2engine G2EngineServer, err error) {
+func testError(test *testing.T, ctx context.Context, g2engine SzEngineServer, err error) {
 	_ = ctx
 	_ = g2engine
 	if err != nil {
@@ -139,7 +139,7 @@ func testError(test *testing.T, ctx context.Context, g2engine G2EngineServer, er
 	}
 }
 
-func expectError(test *testing.T, ctx context.Context, g2engine G2EngineServer, err error, messageId string) {
+func expectError(test *testing.T, ctx context.Context, g2engine SzEngineServer, err error, messageId string) {
 	_ = ctx
 	_ = g2engine
 	if err != nil {
@@ -161,13 +161,13 @@ func expectError(test *testing.T, ctx context.Context, g2engine G2EngineServer, 
 func TestMain(m *testing.M) {
 	err := setup()
 	if err != nil {
-		if g2error.Is(err, g2error.G2Unrecoverable) {
+		if szerror.Is(err, szerror.SzUnrecoverable) {
 			fmt.Printf("\nUnrecoverable error detected. \n\n")
 		}
-		if g2error.Is(err, g2error.G2Retryable) {
+		if szerror.Is(err, szerror.SzRetryable) {
 			fmt.Printf("\nRetryable error detected. \n\n")
 		}
-		if g2error.Is(err, g2error.G2BadInput) {
+		if szerror.Is(err, szerror.SzBadInput) {
 			fmt.Printf("\nBad user input error detected. \n\n")
 		}
 		fmt.Print(err)
@@ -181,16 +181,16 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
+func setupSenzingConfig(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	now := time.Now()
 
-	aG2config := &g2config.G2config{}
-	err := aG2config.Init(ctx, moduleName, iniParams, verboseLogging)
+	aG2config := &szconfig.Szconfig{}
+	err := aG2config.Initialize(ctx, instanceName, settings, verboseLogging)
 	if err != nil {
 		return createError(5906, err)
 	}
 
-	configHandle, err := aG2config.Create(ctx)
+	configHandle, err := aG2config.CreateConfig(ctx)
 	if err != nil {
 		return createError(5907, err)
 	}
@@ -204,12 +204,12 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 		}
 	}
 
-	configStr, err := aG2config.Save(ctx, configHandle)
+	configStr, err := aG2config.ExportConfig(ctx, configHandle)
 	if err != nil {
 		return createError(5909, err)
 	}
 
-	err = aG2config.Close(ctx, configHandle)
+	err = aG2config.CloseConfig(ctx, configHandle)
 	if err != nil {
 		return createError(5910, err)
 	}
@@ -221,8 +221,8 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 
 	// Persist the Senzing configuration to the Senzing repository.
 
-	aG2configmgr := &g2configmgr.G2configmgr{}
-	err = aG2configmgr.Init(ctx, moduleName, iniParams, verboseLogging)
+	aG2configmgr := &szconfigmanager.Szconfigmanager{}
+	err = aG2configmgr.Initialize(ctx, instanceName, settings, verboseLogging)
 	if err != nil {
 		return createError(5912, err)
 	}
@@ -233,7 +233,7 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 		return createError(5913, err)
 	}
 
-	err = aG2configmgr.SetDefaultConfigID(ctx, configID)
+	err = aG2configmgr.SetDefaultConfigId(ctx, configID)
 	if err != nil {
 		return createError(5914, err)
 	}
@@ -246,7 +246,7 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 }
 
 func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
-	aG2diagnostic := &g2diagnostic.G2diagnostic{}
+	aG2diagnostic := &szdiagnostic.Szdiagnostic{}
 	err := aG2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return createError(5903, err)
@@ -274,7 +274,7 @@ func setup() error {
 		panic(err)
 	}
 
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		return createError(5902, err)
 	}
@@ -301,7 +301,7 @@ func teardown() error {
 }
 
 func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	actual, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)
@@ -1128,7 +1128,7 @@ func TestG2engineServer_Init(test *testing.T) {
 	g2engine := getTestObject(ctx, test)
 	moduleName := "Test module name"
 	verboseLogging := int64(0) // 0 for no Senzing logging; 1 for logging
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}
@@ -1148,7 +1148,7 @@ func TestG2engineServer_InitWithConfigID(test *testing.T) {
 	moduleName := "Test module name"
 	var initConfigID int64 = 1
 	verboseLogging := int64(0) // 0 for no Senzing logging; 1 for logging
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}

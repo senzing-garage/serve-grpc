@@ -1,13 +1,13 @@
 //go:build linux
 
-package g2productserver
+package szproductserver
 
 import (
 	"context"
 	"fmt"
 
-	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2product"
-	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
+	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
+	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 )
 
 // ----------------------------------------------------------------------------
@@ -18,7 +18,7 @@ func ExampleG2ProductServer_Init() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2productserver/g2productserver_test.go
 	ctx := context.TODO()
 	g2product := getG2ProductServer(ctx)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		fmt.Println(err)
 	}

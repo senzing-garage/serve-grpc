@@ -1,8 +1,8 @@
-package g2engineserver
+package szengineserver
 
 import (
-	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2engine"
 	"github.com/senzing-garage/go-logging/logging"
+	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szengine"
 )
 
 // ----------------------------------------------------------------------------
@@ -10,7 +10,7 @@ import (
 // ----------------------------------------------------------------------------
 
 // server is used to implement helloworld.GreeterServer.
-type G2EngineServer struct {
+type SzEngineServer struct {
 	g2pb.UnimplementedG2EngineServer
 	isTrace bool
 	logger  logging.LoggingInterface

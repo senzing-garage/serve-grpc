@@ -1,4 +1,4 @@
-package g2diagnosticserver
+package szdiagnosticserver
 
 import (
 	"context"
@@ -9,17 +9,18 @@ import (
 	"time"
 
 	truncator "github.com/aquilax/truncate"
-	"github.com/senzing-garage/g2-sdk-go-base/g2config"
-	"github.com/senzing-garage/g2-sdk-go-base/g2configmgr"
-	"github.com/senzing-garage/g2-sdk-go-base/g2diagnostic"
-	"github.com/senzing-garage/g2-sdk-go-base/g2engine"
-	"github.com/senzing-garage/g2-sdk-go/g2error"
-	g2configmgrpb "github.com/senzing-garage/g2-sdk-proto/go/g2configmgr"
-	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2diagnostic"
-	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
-	"github.com/senzing-garage/go-common/truthset"
+	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
+	"github.com/senzing-garage/go-helpers/truthset"
 	"github.com/senzing-garage/go-logging/logging"
-	"github.com/senzing-garage/serve-grpc/g2configmgrserver"
+	"github.com/senzing-garage/serve-grpc/szconfigmanagerserver"
+	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
+	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
+	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
+	"github.com/senzing-garage/sz-sdk-go-core/szengine"
+	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/sz-sdk-go/szerror"
+	g2configmgrpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
+	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -29,9 +30,9 @@ const (
 )
 
 var (
-	g2configmgrServerSingleton *g2configmgrserver.G2ConfigmgrServer
-	g2diagnosticTestSingleton  *G2DiagnosticServer
-	localLogger                logging.LoggingInterface
+	szConfigManagerServerSingleton *szconfigmanagerserver.SzConfigManagerServer
+	szDiagnoisticTestSingleton     *SzDiagnosticServer
+	localLogger                    logging.LoggingInterface
 )
 
 // ----------------------------------------------------------------------------
@@ -39,58 +40,58 @@ var (
 // ----------------------------------------------------------------------------
 
 func createError(errorId int, err error) error {
-	return g2error.Cast(localLogger.NewError(errorId, err), err)
+	return szerror.Cast(localLogger.NewError(errorId, err), err)
 }
 
-func getTestObject(ctx context.Context, test *testing.T) G2DiagnosticServer {
-	if g2diagnosticTestSingleton == nil {
-		g2diagnosticTestSingleton = &G2DiagnosticServer{}
-		moduleName := "Test module name"
+func getTestObject(ctx context.Context, test *testing.T) SzDiagnosticServer {
+	if szDiagnoisticTestSingleton == nil {
+		szDiagnoisticTestSingleton = &SzDiagnosticServer{}
+		instanceName := "Test module name"
 		verboseLogging := int64(0)
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
-		err = GetSdkG2diagnostic().Init(ctx, moduleName, iniParams, verboseLogging)
+		err = GetSdkSzDiagnostic().Init(ctx, instanceName, settings, verboseLogging)
 		if err != nil {
 			test.Logf("Cannot Init. Error: %v", err)
 		}
 	}
-	return *g2diagnosticTestSingleton
+	return *szDiagnoisticTestSingleton
 }
 
-func getG2DiagnosticServer(ctx context.Context) G2DiagnosticServer {
-	if g2diagnosticTestSingleton == nil {
-		g2diagnosticTestSingleton = &G2DiagnosticServer{}
+func getSzDiagnosticServer(ctx context.Context) SzDiagnosticServer {
+	if szDiagnoisticTestSingleton == nil {
+		szDiagnoisticTestSingleton = &SzDiagnosticServer{}
 		moduleName := "Test module name"
 		verboseLogging := int64(0)
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
-		err = GetSdkG2diagnostic().Init(ctx, moduleName, iniParams, verboseLogging)
+		err = GetSdkSzDiagnostic().Init(ctx, moduleName, iniParams, verboseLogging)
 		if err != nil {
 			fmt.Println(err)
 		}
 	}
-	return *g2diagnosticTestSingleton
+	return *szDiagnoisticTestSingleton
 }
 
-func getG2ConfigmgrServer(ctx context.Context) g2configmgrserver.G2ConfigmgrServer {
-	if g2configmgrServerSingleton == nil {
-		g2configmgrServerSingleton = &g2configmgrserver.G2ConfigmgrServer{}
-		moduleName := "Test module name"
+func getSzConfigManagerServer(ctx context.Context) szconfigmanagerserver.SzConfigManagerServer {
+	if szConfigManagerServerSingleton == nil {
+		szConfigManagerServerSingleton = &szconfigmanagerserver.SzConfigManagerServer{}
+		instanceName := "Test module name"
 		verboseLogging := int64(0)
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
-		err = g2configmgrserver.GetSdkG2configmgr().Init(ctx, moduleName, iniParams, verboseLogging)
+		err = szconfigmanagerserver.GetSdkSzConfigManager().Init(ctx, instanceName, settings, verboseLogging)
 		if err != nil {
 			fmt.Println(err)
 		}
 	}
-	return *g2configmgrServerSingleton
+	return *szConfigManagerServerSingleton
 }
 
 func truncate(aString string, length int) string {
@@ -107,18 +108,18 @@ func printActual(test *testing.T, actual interface{}) {
 	printResult(test, "Actual", actual)
 }
 
-func testError(test *testing.T, ctx context.Context, g2diagnostic G2DiagnosticServer, err error) {
+func testError(test *testing.T, ctx context.Context, szDiagnosticServer SzDiagnosticServer, err error) {
 	_ = ctx
-	_ = g2diagnostic
+	_ = szDiagnosticServer
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
 	}
 }
 
-func expectError(test *testing.T, ctx context.Context, g2diagnostic G2DiagnosticServer, err error, messageId string) {
+func expectError(test *testing.T, ctx context.Context, szDiagnosticServer SzDiagnosticServer, err error, messageId string) {
 	_ = ctx
-	_ = g2diagnostic
+	_ = szDiagnosticServer
 	if err != nil {
 		var dictionary map[string]interface{}
 		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
@@ -131,9 +132,9 @@ func expectError(test *testing.T, ctx context.Context, g2diagnostic G2Diagnostic
 	}
 }
 
-func testErrorNoFail(test *testing.T, ctx context.Context, g2diagnostic G2DiagnosticServer, err error) {
+func testErrorNoFail(test *testing.T, ctx context.Context, szDiagnosticServer SzDiagnosticServer, err error) {
 	_ = ctx
-	_ = g2diagnostic
+	_ = szDiagnosticServer
 	if err != nil {
 		test.Log("Error:", err.Error())
 	}
@@ -146,13 +147,13 @@ func testErrorNoFail(test *testing.T, ctx context.Context, g2diagnostic G2Diagno
 func TestMain(m *testing.M) {
 	err := setup()
 	if err != nil {
-		if g2error.Is(err, g2error.G2Unrecoverable) {
+		if szerror.Is(err, szerror.SzUnrecoverable) {
 			fmt.Printf("\nUnrecoverable error detected. \n\n")
 		}
-		if g2error.Is(err, g2error.G2Retryable) {
+		if szerror.Is(err, szerror.SzRetryable) {
 			fmt.Printf("\nRetryable error detected. \n\n")
 		}
-		if g2error.Is(err, g2error.G2BadInput) {
+		if szerror.Is(err, szerror.SzBadInput) {
 			fmt.Printf("\nBad user input error detected. \n\n")
 		}
 		fmt.Print(err)
@@ -166,16 +167,16 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
+func setupSenzingConfig(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	now := time.Now()
 
-	aG2config := &g2config.G2config{}
-	err := aG2config.Init(ctx, moduleName, iniParams, verboseLogging)
+	aG2config := &szconfig.Szconfig{}
+	err := aG2config.Initialize(ctx, instanceName, settings, verboseLogging)
 	if err != nil {
 		return createError(5906, err)
 	}
 
-	configHandle, err := aG2config.Create(ctx)
+	configHandle, err := aG2config.CreateConfig(ctx)
 	if err != nil {
 		return createError(5907, err)
 	}
@@ -189,12 +190,12 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 		}
 	}
 
-	configStr, err := aG2config.Save(ctx, configHandle)
+	configStr, err := aG2config.ExportConfig(ctx, configHandle)
 	if err != nil {
 		return createError(5909, err)
 	}
 
-	err = aG2config.Close(ctx, configHandle)
+	err = aG2config.CloseConfig(ctx, configHandle)
 	if err != nil {
 		return createError(5910, err)
 	}
@@ -206,8 +207,8 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 
 	// Persist the Senzing configuration to the Senzing repository.
 
-	aG2configmgr := &g2configmgr.G2configmgr{}
-	err = aG2configmgr.Init(ctx, moduleName, iniParams, verboseLogging)
+	aG2configmgr := &szconfigmanager.Szconfigmanager{}
+	err = aG2configmgr.Initialize(ctx, instanceName, settings, verboseLogging)
 	if err != nil {
 		return createError(5912, err)
 	}
@@ -218,7 +219,7 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 		return createError(5913, err)
 	}
 
-	err = aG2configmgr.SetDefaultConfigID(ctx, configID)
+	err = aG2configmgr.SetDefaultConfigId(ctx, configID)
 	if err != nil {
 		return createError(5914, err)
 	}
@@ -232,8 +233,8 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 
 func setupAddRecords(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
 
-	aG2engine := &g2engine.G2engine{}
-	err := aG2engine.Init(ctx, moduleName, iniParams, verboseLogging)
+	aG2engine := &szengine.Szengine{}
+	err := aG2engine.Initialize(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
 		return createError(5916, err)
 	}
@@ -254,9 +255,9 @@ func setupAddRecords(ctx context.Context, moduleName string, iniParams string, v
 	return err
 }
 
-func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
-	aG2diagnostic := &g2diagnostic.G2diagnostic{}
-	err := aG2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
+func setupPurgeRepository(ctx context.Context, instancename string, settings string, verboseLogging int64) error {
+	aG2diagnostic := &szdiagnostic.Szdiagnostic{}
+	err := aG2diagnostic.Initialize(ctx, instancename, settings, verboseLogging, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION)
 	if err != nil {
 		return createError(5903, err)
 	}
@@ -283,7 +284,7 @@ func setup() error {
 		panic(err)
 	}
 
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		return createError(5902, err)
 	}
@@ -318,7 +319,7 @@ func teardown() error {
 }
 
 func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	actual, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)
@@ -332,19 +333,19 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 
 func TestG2diagnosticserver_CheckDBPerf(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
+	szDiagnostic := getTestObject(ctx, test)
 	request := &g2pb.CheckDBPerfRequest{
 		SecondsToRun: int32(1),
 	}
-	response, err := g2diagnostic.CheckDBPerf(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
+	response, err := szDiagnostic.CheckDBPerf(ctx, request)
+	testError(test, ctx, szDiagnostic, err)
 	printActual(test, response)
 }
 
 func TestG2diagnosticserver_Init(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	szDiagnostic := getTestObject(ctx, test)
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}
@@ -353,15 +354,15 @@ func TestG2diagnosticserver_Init(test *testing.T) {
 		IniParams:      iniParams,
 		VerboseLogging: int64(0),
 	}
-	response, err := g2diagnostic.Init(ctx, request)
-	expectError(test, ctx, g2diagnostic, err, "senzing-60134002")
+	response, err := szDiagnostic.Init(ctx, request)
+	expectError(test, ctx, szDiagnostic, err, "senzing-60134002")
 	printActual(test, response)
 }
 
 func TestG2diagnosticserver_InitWithConfigID(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	szDiagnostic := getTestObject(ctx, test)
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}
@@ -371,31 +372,31 @@ func TestG2diagnosticserver_InitWithConfigID(test *testing.T) {
 		InitConfigID:   int64(1),
 		VerboseLogging: int64(0),
 	}
-	response, err := g2diagnostic.InitWithConfigID(ctx, request)
-	expectError(test, ctx, g2diagnostic, err, "senzing-60134003")
+	response, err := szDiagnostic.InitWithConfigID(ctx, request)
+	expectError(test, ctx, szDiagnostic, err, "senzing-60134003")
 	printActual(test, response)
 }
 
 func TestG2diagnosticserver_Reinit(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
-	g2configmgr := getG2ConfigmgrServer(ctx)
-	getDefaultConfigIDRequest := &g2configmgrpb.GetDefaultConfigIDRequest{}
-	getDefaultConfigIDResponse, err := g2configmgr.GetDefaultConfigID(ctx, getDefaultConfigIDRequest)
-	testError(test, ctx, g2diagnostic, err)
+	szDiagnostic := getTestObject(ctx, test)
+	szConfigManagerServer := getSzConfigManagerServer(ctx)
+	getDefaultConfigIDRequest := &g2configmgrpb.GetDefaultConfigIdRequest{}
+	getDefaultConfigIDResponse, err := szConfigManagerServer.GetDefaultConfigID(ctx, getDefaultConfigIDRequest)
+	testError(test, ctx, szDiagnostic, err)
 	request := &g2pb.ReinitRequest{
 		InitConfigID: getDefaultConfigIDResponse.ConfigID,
 	}
-	response, err := g2diagnostic.Reinit(ctx, request)
-	testError(test, ctx, g2diagnostic, err)
+	response, err := szDiagnostic.Reinit(ctx, request)
+	testError(test, ctx, szDiagnostic, err)
 	printActual(test, response)
 }
 
 func TestG2diagnosticserver_Destroy(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx, test)
+	szDiagnostic := getTestObject(ctx, test)
 	request := &g2pb.DestroyRequest{}
-	response, err := g2diagnostic.Destroy(ctx, request)
-	expectError(test, ctx, g2diagnostic, err, "senzing-60134001")
+	response, err := szDiagnostic.Destroy(ctx, request)
+	expectError(test, ctx, szDiagnostic, err, "senzing-60134001")
 	printActual(test, response)
 }

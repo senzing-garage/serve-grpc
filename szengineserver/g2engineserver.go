@@ -1,4 +1,4 @@
-package g2engineserver
+package szengineserver
 
 import (
 	"context"
@@ -6,15 +6,15 @@ import (
 	"sync"
 	"time"
 
-	g2sdk "github.com/senzing-garage/g2-sdk-go-base/g2engine"
-	"github.com/senzing-garage/g2-sdk-go/g2api"
-	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2engine"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
+	g2sdk "github.com/senzing-garage/sz-sdk-go-core/szengine"
+	"github.com/senzing-garage/sz-sdk-go/sz"
+	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szengine"
 )
 
 var (
-	g2engineSingleton g2api.G2engine
+	g2engineSingleton sz.SzEngine
 	g2engineSyncOnce  sync.Once
 )
 
@@ -25,7 +25,7 @@ var (
 // --- Logging ----------------------------------------------------------------
 
 // Get the Logger singleton.
-func (server *G2EngineServer) getLogger() logging.LoggingInterface {
+func (server *SzEngineServer) getLogger() logging.LoggingInterface {
 	var err error = nil
 	if server.logger == nil {
 		options := []interface{}{
@@ -40,19 +40,19 @@ func (server *G2EngineServer) getLogger() logging.LoggingInterface {
 }
 
 // Trace method entry.
-func (server *G2EngineServer) traceEntry(messageNumber int, details ...interface{}) {
+func (server *SzEngineServer) traceEntry(messageNumber int, details ...interface{}) {
 	server.getLogger().Log(messageNumber, details...)
 }
 
 // Trace method exit.
-func (server *G2EngineServer) traceExit(messageNumber int, details ...interface{}) {
+func (server *SzEngineServer) traceExit(messageNumber int, details ...interface{}) {
 	server.getLogger().Log(messageNumber, details...)
 }
 
 // --- Errors -----------------------------------------------------------------
 
 // Create error.
-func (server *G2EngineServer) error(messageNumber int, details ...interface{}) error {
+func (server *SzEngineServer) error(messageNumber int, details ...interface{}) error {
 	return server.getLogger().NewError(messageNumber, details...)
 }
 
@@ -60,14 +60,14 @@ func (server *G2EngineServer) error(messageNumber int, details ...interface{}) e
 
 // Singleton pattern for g2config.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getG2engine() g2api.G2engine {
+func getG2engine() sz.SzEngine {
 	g2engineSyncOnce.Do(func() {
 		g2engineSingleton = &g2sdk.G2engine{}
 	})
 	return g2engineSingleton
 }
 
-func GetSdkG2engine() g2api.G2engine {
+func GetSdkG2engine() sz.SzEngine {
 	return getG2engine()
 }
 
@@ -75,7 +75,7 @@ func GetSdkG2engine() g2api.G2engine {
 // Interface methods for github.com/senzing-garage/g2-sdk-go/g2engine.G2engine
 // ----------------------------------------------------------------------------
 
-func (server *G2EngineServer) AddRecord(ctx context.Context, request *g2pb.AddRecordRequest) (*g2pb.AddRecordResponse, error) {
+func (server *SzEngineServer) AddRecord(ctx context.Context, request *g2pb.AddRecordRequest) (*g2pb.AddRecordResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -88,7 +88,7 @@ func (server *G2EngineServer) AddRecord(ctx context.Context, request *g2pb.AddRe
 	return &response, err
 }
 
-func (server *G2EngineServer) AddRecordWithInfo(ctx context.Context, request *g2pb.AddRecordWithInfoRequest) (*g2pb.AddRecordWithInfoResponse, error) {
+func (server *SzEngineServer) AddRecordWithInfo(ctx context.Context, request *g2pb.AddRecordWithInfoRequest) (*g2pb.AddRecordWithInfoResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -104,7 +104,7 @@ func (server *G2EngineServer) AddRecordWithInfo(ctx context.Context, request *g2
 	return &response, err
 }
 
-func (server *G2EngineServer) CloseExport(ctx context.Context, request *g2pb.CloseExportRequest) (*g2pb.CloseExportResponse, error) {
+func (server *SzEngineServer) CloseExport(ctx context.Context, request *g2pb.CloseExportRequest) (*g2pb.CloseExportResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -117,7 +117,7 @@ func (server *G2EngineServer) CloseExport(ctx context.Context, request *g2pb.Clo
 	return &response, err
 }
 
-func (server *G2EngineServer) CountRedoRecords(ctx context.Context, request *g2pb.CountRedoRecordsRequest) (*g2pb.CountRedoRecordsResponse, error) {
+func (server *SzEngineServer) CountRedoRecords(ctx context.Context, request *g2pb.CountRedoRecordsRequest) (*g2pb.CountRedoRecordsResponse, error) {
 	var err error = nil
 	var result int64
 	if server.isTrace {
@@ -133,7 +133,7 @@ func (server *G2EngineServer) CountRedoRecords(ctx context.Context, request *g2p
 	return &response, err
 }
 
-func (server *G2EngineServer) DeleteRecord(ctx context.Context, request *g2pb.DeleteRecordRequest) (*g2pb.DeleteRecordResponse, error) {
+func (server *SzEngineServer) DeleteRecord(ctx context.Context, request *g2pb.DeleteRecordRequest) (*g2pb.DeleteRecordResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -146,7 +146,7 @@ func (server *G2EngineServer) DeleteRecord(ctx context.Context, request *g2pb.De
 	return &response, err
 }
 
-func (server *G2EngineServer) DeleteRecordWithInfo(ctx context.Context, request *g2pb.DeleteRecordWithInfoRequest) (*g2pb.DeleteRecordWithInfoResponse, error) {
+func (server *SzEngineServer) DeleteRecordWithInfo(ctx context.Context, request *g2pb.DeleteRecordWithInfoRequest) (*g2pb.DeleteRecordWithInfoResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -162,7 +162,7 @@ func (server *G2EngineServer) DeleteRecordWithInfo(ctx context.Context, request 
 	return &response, err
 }
 
-func (server *G2EngineServer) Destroy(ctx context.Context, request *g2pb.DestroyRequest) (*g2pb.DestroyResponse, error) {
+func (server *SzEngineServer) Destroy(ctx context.Context, request *g2pb.DestroyRequest) (*g2pb.DestroyResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -177,7 +177,7 @@ func (server *G2EngineServer) Destroy(ctx context.Context, request *g2pb.Destroy
 	return &response, err
 }
 
-func (server *G2EngineServer) ExportConfig(ctx context.Context, request *g2pb.ExportConfigRequest) (*g2pb.ExportConfigResponse, error) {
+func (server *SzEngineServer) ExportConfig(ctx context.Context, request *g2pb.ExportConfigRequest) (*g2pb.ExportConfigResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -193,7 +193,7 @@ func (server *G2EngineServer) ExportConfig(ctx context.Context, request *g2pb.Ex
 	return &response, err
 }
 
-func (server *G2EngineServer) ExportConfigAndConfigID(ctx context.Context, request *g2pb.ExportConfigAndConfigIDRequest) (*g2pb.ExportConfigAndConfigIDResponse, error) {
+func (server *SzEngineServer) ExportConfigAndConfigID(ctx context.Context, request *g2pb.ExportConfigAndConfigIDRequest) (*g2pb.ExportConfigAndConfigIDResponse, error) {
 	var err error = nil
 	var result string
 	var configId int64
@@ -211,7 +211,7 @@ func (server *G2EngineServer) ExportConfigAndConfigID(ctx context.Context, reque
 	return &response, err
 }
 
-func (server *G2EngineServer) ExportCSVEntityReport(ctx context.Context, request *g2pb.ExportCSVEntityReportRequest) (*g2pb.ExportCSVEntityReportResponse, error) {
+func (server *SzEngineServer) ExportCSVEntityReport(ctx context.Context, request *g2pb.ExportCSVEntityReportRequest) (*g2pb.ExportCSVEntityReportResponse, error) {
 	var err error = nil
 	var result uintptr
 	if server.isTrace {
@@ -227,7 +227,7 @@ func (server *G2EngineServer) ExportCSVEntityReport(ctx context.Context, request
 	return &response, err
 }
 
-func (server *G2EngineServer) ExportJSONEntityReport(ctx context.Context, request *g2pb.ExportJSONEntityReportRequest) (*g2pb.ExportJSONEntityReportResponse, error) {
+func (server *SzEngineServer) ExportJSONEntityReport(ctx context.Context, request *g2pb.ExportJSONEntityReportRequest) (*g2pb.ExportJSONEntityReportResponse, error) {
 	var err error = nil
 	var result uintptr
 	if server.isTrace {
@@ -243,7 +243,7 @@ func (server *G2EngineServer) ExportJSONEntityReport(ctx context.Context, reques
 	return &response, err
 }
 
-func (server *G2EngineServer) FetchNext(ctx context.Context, request *g2pb.FetchNextRequest) (*g2pb.FetchNextResponse, error) {
+func (server *SzEngineServer) FetchNext(ctx context.Context, request *g2pb.FetchNextRequest) (*g2pb.FetchNextResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -259,7 +259,7 @@ func (server *G2EngineServer) FetchNext(ctx context.Context, request *g2pb.Fetch
 	return &response, err
 }
 
-func (server *G2EngineServer) FindInterestingEntitiesByEntityID(ctx context.Context, request *g2pb.FindInterestingEntitiesByEntityIDRequest) (*g2pb.FindInterestingEntitiesByEntityIDResponse, error) {
+func (server *SzEngineServer) FindInterestingEntitiesByEntityID(ctx context.Context, request *g2pb.FindInterestingEntitiesByEntityIDRequest) (*g2pb.FindInterestingEntitiesByEntityIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -275,7 +275,7 @@ func (server *G2EngineServer) FindInterestingEntitiesByEntityID(ctx context.Cont
 	return &response, err
 }
 
-func (server *G2EngineServer) FindInterestingEntitiesByRecordID(ctx context.Context, request *g2pb.FindInterestingEntitiesByRecordIDRequest) (*g2pb.FindInterestingEntitiesByRecordIDResponse, error) {
+func (server *SzEngineServer) FindInterestingEntitiesByRecordID(ctx context.Context, request *g2pb.FindInterestingEntitiesByRecordIDRequest) (*g2pb.FindInterestingEntitiesByRecordIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -291,7 +291,7 @@ func (server *G2EngineServer) FindInterestingEntitiesByRecordID(ctx context.Cont
 	return &response, err
 }
 
-func (server *G2EngineServer) FindNetworkByEntityID(ctx context.Context, request *g2pb.FindNetworkByEntityIDRequest) (*g2pb.FindNetworkByEntityIDResponse, error) {
+func (server *SzEngineServer) FindNetworkByEntityID(ctx context.Context, request *g2pb.FindNetworkByEntityIDRequest) (*g2pb.FindNetworkByEntityIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -307,7 +307,7 @@ func (server *G2EngineServer) FindNetworkByEntityID(ctx context.Context, request
 	return &response, err
 }
 
-func (server *G2EngineServer) FindNetworkByEntityID_V2(ctx context.Context, request *g2pb.FindNetworkByEntityID_V2Request) (*g2pb.FindNetworkByEntityID_V2Response, error) {
+func (server *SzEngineServer) FindNetworkByEntityID_V2(ctx context.Context, request *g2pb.FindNetworkByEntityID_V2Request) (*g2pb.FindNetworkByEntityID_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -323,7 +323,7 @@ func (server *G2EngineServer) FindNetworkByEntityID_V2(ctx context.Context, requ
 	return &response, err
 }
 
-func (server *G2EngineServer) FindNetworkByRecordID(ctx context.Context, request *g2pb.FindNetworkByRecordIDRequest) (*g2pb.FindNetworkByRecordIDResponse, error) {
+func (server *SzEngineServer) FindNetworkByRecordID(ctx context.Context, request *g2pb.FindNetworkByRecordIDRequest) (*g2pb.FindNetworkByRecordIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -339,7 +339,7 @@ func (server *G2EngineServer) FindNetworkByRecordID(ctx context.Context, request
 	return &response, err
 }
 
-func (server *G2EngineServer) FindNetworkByRecordID_V2(ctx context.Context, request *g2pb.FindNetworkByRecordID_V2Request) (*g2pb.FindNetworkByRecordID_V2Response, error) {
+func (server *SzEngineServer) FindNetworkByRecordID_V2(ctx context.Context, request *g2pb.FindNetworkByRecordID_V2Request) (*g2pb.FindNetworkByRecordID_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -355,7 +355,7 @@ func (server *G2EngineServer) FindNetworkByRecordID_V2(ctx context.Context, requ
 	return &response, err
 }
 
-func (server *G2EngineServer) FindPathByEntityID(ctx context.Context, request *g2pb.FindPathByEntityIDRequest) (*g2pb.FindPathByEntityIDResponse, error) {
+func (server *SzEngineServer) FindPathByEntityID(ctx context.Context, request *g2pb.FindPathByEntityIDRequest) (*g2pb.FindPathByEntityIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -371,7 +371,7 @@ func (server *G2EngineServer) FindPathByEntityID(ctx context.Context, request *g
 	return &response, err
 }
 
-func (server *G2EngineServer) FindPathByEntityID_V2(ctx context.Context, request *g2pb.FindPathByEntityID_V2Request) (*g2pb.FindPathByEntityID_V2Response, error) {
+func (server *SzEngineServer) FindPathByEntityID_V2(ctx context.Context, request *g2pb.FindPathByEntityID_V2Request) (*g2pb.FindPathByEntityID_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -387,7 +387,7 @@ func (server *G2EngineServer) FindPathByEntityID_V2(ctx context.Context, request
 	return &response, err
 }
 
-func (server *G2EngineServer) FindPathByRecordID(ctx context.Context, request *g2pb.FindPathByRecordIDRequest) (*g2pb.FindPathByRecordIDResponse, error) {
+func (server *SzEngineServer) FindPathByRecordID(ctx context.Context, request *g2pb.FindPathByRecordIDRequest) (*g2pb.FindPathByRecordIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -403,7 +403,7 @@ func (server *G2EngineServer) FindPathByRecordID(ctx context.Context, request *g
 	return &response, err
 }
 
-func (server *G2EngineServer) FindPathByRecordID_V2(ctx context.Context, request *g2pb.FindPathByRecordID_V2Request) (*g2pb.FindPathByRecordID_V2Response, error) {
+func (server *SzEngineServer) FindPathByRecordID_V2(ctx context.Context, request *g2pb.FindPathByRecordID_V2Request) (*g2pb.FindPathByRecordID_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -419,7 +419,7 @@ func (server *G2EngineServer) FindPathByRecordID_V2(ctx context.Context, request
 	return &response, err
 }
 
-func (server *G2EngineServer) FindPathExcludingByEntityID(ctx context.Context, request *g2pb.FindPathExcludingByEntityIDRequest) (*g2pb.FindPathExcludingByEntityIDResponse, error) {
+func (server *SzEngineServer) FindPathExcludingByEntityID(ctx context.Context, request *g2pb.FindPathExcludingByEntityIDRequest) (*g2pb.FindPathExcludingByEntityIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -435,7 +435,7 @@ func (server *G2EngineServer) FindPathExcludingByEntityID(ctx context.Context, r
 	return &response, err
 }
 
-func (server *G2EngineServer) FindPathExcludingByEntityID_V2(ctx context.Context, request *g2pb.FindPathExcludingByEntityID_V2Request) (*g2pb.FindPathExcludingByEntityID_V2Response, error) {
+func (server *SzEngineServer) FindPathExcludingByEntityID_V2(ctx context.Context, request *g2pb.FindPathExcludingByEntityID_V2Request) (*g2pb.FindPathExcludingByEntityID_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -451,7 +451,7 @@ func (server *G2EngineServer) FindPathExcludingByEntityID_V2(ctx context.Context
 	return &response, err
 }
 
-func (server *G2EngineServer) FindPathExcludingByRecordID(ctx context.Context, request *g2pb.FindPathExcludingByRecordIDRequest) (*g2pb.FindPathExcludingByRecordIDResponse, error) {
+func (server *SzEngineServer) FindPathExcludingByRecordID(ctx context.Context, request *g2pb.FindPathExcludingByRecordIDRequest) (*g2pb.FindPathExcludingByRecordIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -467,7 +467,7 @@ func (server *G2EngineServer) FindPathExcludingByRecordID(ctx context.Context, r
 	return &response, err
 }
 
-func (server *G2EngineServer) FindPathExcludingByRecordID_V2(ctx context.Context, request *g2pb.FindPathExcludingByRecordID_V2Request) (*g2pb.FindPathExcludingByRecordID_V2Response, error) {
+func (server *SzEngineServer) FindPathExcludingByRecordID_V2(ctx context.Context, request *g2pb.FindPathExcludingByRecordID_V2Request) (*g2pb.FindPathExcludingByRecordID_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -483,7 +483,7 @@ func (server *G2EngineServer) FindPathExcludingByRecordID_V2(ctx context.Context
 	return &response, err
 }
 
-func (server *G2EngineServer) FindPathIncludingSourceByEntityID(ctx context.Context, request *g2pb.FindPathIncludingSourceByEntityIDRequest) (*g2pb.FindPathIncludingSourceByEntityIDResponse, error) {
+func (server *SzEngineServer) FindPathIncludingSourceByEntityID(ctx context.Context, request *g2pb.FindPathIncludingSourceByEntityIDRequest) (*g2pb.FindPathIncludingSourceByEntityIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -499,7 +499,7 @@ func (server *G2EngineServer) FindPathIncludingSourceByEntityID(ctx context.Cont
 	return &response, err
 }
 
-func (server *G2EngineServer) FindPathIncludingSourceByEntityID_V2(ctx context.Context, request *g2pb.FindPathIncludingSourceByEntityID_V2Request) (*g2pb.FindPathIncludingSourceByEntityID_V2Response, error) {
+func (server *SzEngineServer) FindPathIncludingSourceByEntityID_V2(ctx context.Context, request *g2pb.FindPathIncludingSourceByEntityID_V2Request) (*g2pb.FindPathIncludingSourceByEntityID_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -515,7 +515,7 @@ func (server *G2EngineServer) FindPathIncludingSourceByEntityID_V2(ctx context.C
 	return &response, err
 }
 
-func (server *G2EngineServer) FindPathIncludingSourceByRecordID(ctx context.Context, request *g2pb.FindPathIncludingSourceByRecordIDRequest) (*g2pb.FindPathIncludingSourceByRecordIDResponse, error) {
+func (server *SzEngineServer) FindPathIncludingSourceByRecordID(ctx context.Context, request *g2pb.FindPathIncludingSourceByRecordIDRequest) (*g2pb.FindPathIncludingSourceByRecordIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -531,7 +531,7 @@ func (server *G2EngineServer) FindPathIncludingSourceByRecordID(ctx context.Cont
 	return &response, err
 }
 
-func (server *G2EngineServer) FindPathIncludingSourceByRecordID_V2(ctx context.Context, request *g2pb.FindPathIncludingSourceByRecordID_V2Request) (*g2pb.FindPathIncludingSourceByRecordID_V2Response, error) {
+func (server *SzEngineServer) FindPathIncludingSourceByRecordID_V2(ctx context.Context, request *g2pb.FindPathIncludingSourceByRecordID_V2Request) (*g2pb.FindPathIncludingSourceByRecordID_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -547,7 +547,7 @@ func (server *G2EngineServer) FindPathIncludingSourceByRecordID_V2(ctx context.C
 	return &response, err
 }
 
-func (server *G2EngineServer) GetActiveConfigID(ctx context.Context, request *g2pb.GetActiveConfigIDRequest) (*g2pb.GetActiveConfigIDResponse, error) {
+func (server *SzEngineServer) GetActiveConfigID(ctx context.Context, request *g2pb.GetActiveConfigIDRequest) (*g2pb.GetActiveConfigIDResponse, error) {
 	var err error = nil
 	var result int64
 	if server.isTrace {
@@ -563,7 +563,7 @@ func (server *G2EngineServer) GetActiveConfigID(ctx context.Context, request *g2
 	return &response, err
 }
 
-func (server *G2EngineServer) GetEntityByEntityID(ctx context.Context, request *g2pb.GetEntityByEntityIDRequest) (*g2pb.GetEntityByEntityIDResponse, error) {
+func (server *SzEngineServer) GetEntityByEntityID(ctx context.Context, request *g2pb.GetEntityByEntityIDRequest) (*g2pb.GetEntityByEntityIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -579,7 +579,7 @@ func (server *G2EngineServer) GetEntityByEntityID(ctx context.Context, request *
 	return &response, err
 }
 
-func (server *G2EngineServer) GetEntityByEntityID_V2(ctx context.Context, request *g2pb.GetEntityByEntityID_V2Request) (*g2pb.GetEntityByEntityID_V2Response, error) {
+func (server *SzEngineServer) GetEntityByEntityID_V2(ctx context.Context, request *g2pb.GetEntityByEntityID_V2Request) (*g2pb.GetEntityByEntityID_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -595,7 +595,7 @@ func (server *G2EngineServer) GetEntityByEntityID_V2(ctx context.Context, reques
 	return &response, err
 }
 
-func (server *G2EngineServer) GetEntityByRecordID(ctx context.Context, request *g2pb.GetEntityByRecordIDRequest) (*g2pb.GetEntityByRecordIDResponse, error) {
+func (server *SzEngineServer) GetEntityByRecordID(ctx context.Context, request *g2pb.GetEntityByRecordIDRequest) (*g2pb.GetEntityByRecordIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -611,7 +611,7 @@ func (server *G2EngineServer) GetEntityByRecordID(ctx context.Context, request *
 	return &response, err
 }
 
-func (server *G2EngineServer) GetEntityByRecordID_V2(ctx context.Context, request *g2pb.GetEntityByRecordID_V2Request) (*g2pb.GetEntityByRecordID_V2Response, error) {
+func (server *SzEngineServer) GetEntityByRecordID_V2(ctx context.Context, request *g2pb.GetEntityByRecordID_V2Request) (*g2pb.GetEntityByRecordID_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -627,7 +627,7 @@ func (server *G2EngineServer) GetEntityByRecordID_V2(ctx context.Context, reques
 	return &response, err
 }
 
-func (server *G2EngineServer) GetObserverOrigin(ctx context.Context) string {
+func (server *SzEngineServer) GetObserverOrigin(ctx context.Context) string {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -638,7 +638,7 @@ func (server *G2EngineServer) GetObserverOrigin(ctx context.Context) string {
 	return g2engine.GetObserverOrigin(ctx)
 }
 
-func (server *G2EngineServer) GetRecord(ctx context.Context, request *g2pb.GetRecordRequest) (*g2pb.GetRecordResponse, error) {
+func (server *SzEngineServer) GetRecord(ctx context.Context, request *g2pb.GetRecordRequest) (*g2pb.GetRecordResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -654,7 +654,7 @@ func (server *G2EngineServer) GetRecord(ctx context.Context, request *g2pb.GetRe
 	return &response, err
 }
 
-func (server *G2EngineServer) GetRecord_V2(ctx context.Context, request *g2pb.GetRecord_V2Request) (*g2pb.GetRecord_V2Response, error) {
+func (server *SzEngineServer) GetRecord_V2(ctx context.Context, request *g2pb.GetRecord_V2Request) (*g2pb.GetRecord_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -670,7 +670,7 @@ func (server *G2EngineServer) GetRecord_V2(ctx context.Context, request *g2pb.Ge
 	return &response, err
 }
 
-func (server *G2EngineServer) GetRedoRecord(ctx context.Context, request *g2pb.GetRedoRecordRequest) (*g2pb.GetRedoRecordResponse, error) {
+func (server *SzEngineServer) GetRedoRecord(ctx context.Context, request *g2pb.GetRedoRecordRequest) (*g2pb.GetRedoRecordResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -686,7 +686,7 @@ func (server *G2EngineServer) GetRedoRecord(ctx context.Context, request *g2pb.G
 	return &response, err
 }
 
-func (server *G2EngineServer) GetRepositoryLastModifiedTime(ctx context.Context, request *g2pb.GetRepositoryLastModifiedTimeRequest) (*g2pb.GetRepositoryLastModifiedTimeResponse, error) {
+func (server *SzEngineServer) GetRepositoryLastModifiedTime(ctx context.Context, request *g2pb.GetRepositoryLastModifiedTimeRequest) (*g2pb.GetRepositoryLastModifiedTimeResponse, error) {
 	var err error = nil
 	var result int64
 	if server.isTrace {
@@ -702,7 +702,7 @@ func (server *G2EngineServer) GetRepositoryLastModifiedTime(ctx context.Context,
 	return &response, err
 }
 
-func (server *G2EngineServer) GetVirtualEntityByRecordID(ctx context.Context, request *g2pb.GetVirtualEntityByRecordIDRequest) (*g2pb.GetVirtualEntityByRecordIDResponse, error) {
+func (server *SzEngineServer) GetVirtualEntityByRecordID(ctx context.Context, request *g2pb.GetVirtualEntityByRecordIDRequest) (*g2pb.GetVirtualEntityByRecordIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -718,7 +718,7 @@ func (server *G2EngineServer) GetVirtualEntityByRecordID(ctx context.Context, re
 	return &response, err
 }
 
-func (server *G2EngineServer) GetVirtualEntityByRecordID_V2(ctx context.Context, request *g2pb.GetVirtualEntityByRecordID_V2Request) (*g2pb.GetVirtualEntityByRecordID_V2Response, error) {
+func (server *SzEngineServer) GetVirtualEntityByRecordID_V2(ctx context.Context, request *g2pb.GetVirtualEntityByRecordID_V2Request) (*g2pb.GetVirtualEntityByRecordID_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -734,7 +734,7 @@ func (server *G2EngineServer) GetVirtualEntityByRecordID_V2(ctx context.Context,
 	return &response, err
 }
 
-func (server *G2EngineServer) HowEntityByEntityID(ctx context.Context, request *g2pb.HowEntityByEntityIDRequest) (*g2pb.HowEntityByEntityIDResponse, error) {
+func (server *SzEngineServer) HowEntityByEntityID(ctx context.Context, request *g2pb.HowEntityByEntityIDRequest) (*g2pb.HowEntityByEntityIDResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -750,7 +750,7 @@ func (server *G2EngineServer) HowEntityByEntityID(ctx context.Context, request *
 	return &response, err
 }
 
-func (server *G2EngineServer) HowEntityByEntityID_V2(ctx context.Context, request *g2pb.HowEntityByEntityID_V2Request) (*g2pb.HowEntityByEntityID_V2Response, error) {
+func (server *SzEngineServer) HowEntityByEntityID_V2(ctx context.Context, request *g2pb.HowEntityByEntityID_V2Request) (*g2pb.HowEntityByEntityID_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -766,7 +766,7 @@ func (server *G2EngineServer) HowEntityByEntityID_V2(ctx context.Context, reques
 	return &response, err
 }
 
-func (server *G2EngineServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
+func (server *SzEngineServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -781,7 +781,7 @@ func (server *G2EngineServer) Init(ctx context.Context, request *g2pb.InitReques
 	return &response, err
 }
 
-func (server *G2EngineServer) InitWithConfigID(ctx context.Context, request *g2pb.InitWithConfigIDRequest) (*g2pb.InitWithConfigIDResponse, error) {
+func (server *SzEngineServer) InitWithConfigID(ctx context.Context, request *g2pb.InitWithConfigIDRequest) (*g2pb.InitWithConfigIDResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -796,7 +796,7 @@ func (server *G2EngineServer) InitWithConfigID(ctx context.Context, request *g2p
 	return &response, err
 }
 
-func (server *G2EngineServer) PrimeEngine(ctx context.Context, request *g2pb.PrimeEngineRequest) (*g2pb.PrimeEngineResponse, error) {
+func (server *SzEngineServer) PrimeEngine(ctx context.Context, request *g2pb.PrimeEngineRequest) (*g2pb.PrimeEngineResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -809,7 +809,7 @@ func (server *G2EngineServer) PrimeEngine(ctx context.Context, request *g2pb.Pri
 	return &response, err
 }
 
-func (server *G2EngineServer) ReevaluateEntity(ctx context.Context, request *g2pb.ReevaluateEntityRequest) (*g2pb.ReevaluateEntityResponse, error) {
+func (server *SzEngineServer) ReevaluateEntity(ctx context.Context, request *g2pb.ReevaluateEntityRequest) (*g2pb.ReevaluateEntityResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -822,7 +822,7 @@ func (server *G2EngineServer) ReevaluateEntity(ctx context.Context, request *g2p
 	return &response, err
 }
 
-func (server *G2EngineServer) ReevaluateEntityWithInfo(ctx context.Context, request *g2pb.ReevaluateEntityWithInfoRequest) (*g2pb.ReevaluateEntityWithInfoResponse, error) {
+func (server *SzEngineServer) ReevaluateEntityWithInfo(ctx context.Context, request *g2pb.ReevaluateEntityWithInfoRequest) (*g2pb.ReevaluateEntityWithInfoResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -838,7 +838,7 @@ func (server *G2EngineServer) ReevaluateEntityWithInfo(ctx context.Context, requ
 	return &response, err
 }
 
-func (server *G2EngineServer) ReevaluateRecord(ctx context.Context, request *g2pb.ReevaluateRecordRequest) (*g2pb.ReevaluateRecordResponse, error) {
+func (server *SzEngineServer) ReevaluateRecord(ctx context.Context, request *g2pb.ReevaluateRecordRequest) (*g2pb.ReevaluateRecordResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -851,7 +851,7 @@ func (server *G2EngineServer) ReevaluateRecord(ctx context.Context, request *g2p
 	return &response, err
 }
 
-func (server *G2EngineServer) ReevaluateRecordWithInfo(ctx context.Context, request *g2pb.ReevaluateRecordWithInfoRequest) (*g2pb.ReevaluateRecordWithInfoResponse, error) {
+func (server *SzEngineServer) ReevaluateRecordWithInfo(ctx context.Context, request *g2pb.ReevaluateRecordWithInfoRequest) (*g2pb.ReevaluateRecordWithInfoResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -867,7 +867,7 @@ func (server *G2EngineServer) ReevaluateRecordWithInfo(ctx context.Context, requ
 	return &response, err
 }
 
-func (server *G2EngineServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+func (server *SzEngineServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -878,7 +878,7 @@ func (server *G2EngineServer) RegisterObserver(ctx context.Context, observer obs
 	return g2engine.RegisterObserver(ctx, observer)
 }
 
-func (server *G2EngineServer) Reinit(ctx context.Context, request *g2pb.ReinitRequest) (*g2pb.ReinitResponse, error) {
+func (server *SzEngineServer) Reinit(ctx context.Context, request *g2pb.ReinitRequest) (*g2pb.ReinitResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -891,7 +891,7 @@ func (server *G2EngineServer) Reinit(ctx context.Context, request *g2pb.ReinitRe
 	return &response, err
 }
 
-func (server *G2EngineServer) ReplaceRecord(ctx context.Context, request *g2pb.ReplaceRecordRequest) (*g2pb.ReplaceRecordResponse, error) {
+func (server *SzEngineServer) ReplaceRecord(ctx context.Context, request *g2pb.ReplaceRecordRequest) (*g2pb.ReplaceRecordResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -904,7 +904,7 @@ func (server *G2EngineServer) ReplaceRecord(ctx context.Context, request *g2pb.R
 	return &response, err
 }
 
-func (server *G2EngineServer) ReplaceRecordWithInfo(ctx context.Context, request *g2pb.ReplaceRecordWithInfoRequest) (*g2pb.ReplaceRecordWithInfoResponse, error) {
+func (server *SzEngineServer) ReplaceRecordWithInfo(ctx context.Context, request *g2pb.ReplaceRecordWithInfoRequest) (*g2pb.ReplaceRecordWithInfoResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -920,7 +920,7 @@ func (server *G2EngineServer) ReplaceRecordWithInfo(ctx context.Context, request
 	return &response, err
 }
 
-func (server *G2EngineServer) SearchByAttributes(ctx context.Context, request *g2pb.SearchByAttributesRequest) (*g2pb.SearchByAttributesResponse, error) {
+func (server *SzEngineServer) SearchByAttributes(ctx context.Context, request *g2pb.SearchByAttributesRequest) (*g2pb.SearchByAttributesResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -936,7 +936,7 @@ func (server *G2EngineServer) SearchByAttributes(ctx context.Context, request *g
 	return &response, err
 }
 
-func (server *G2EngineServer) SearchByAttributes_V2(ctx context.Context, request *g2pb.SearchByAttributes_V2Request) (*g2pb.SearchByAttributes_V2Response, error) {
+func (server *SzEngineServer) SearchByAttributes_V2(ctx context.Context, request *g2pb.SearchByAttributes_V2Request) (*g2pb.SearchByAttributes_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -952,7 +952,7 @@ func (server *G2EngineServer) SearchByAttributes_V2(ctx context.Context, request
 	return &response, err
 }
 
-func (server *G2EngineServer) SetLogLevel(ctx context.Context, logLevelName string) error {
+func (server *SzEngineServer) SetLogLevel(ctx context.Context, logLevelName string) error {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -975,7 +975,7 @@ func (server *G2EngineServer) SetLogLevel(ctx context.Context, logLevelName stri
 	return err
 }
 
-func (server *G2EngineServer) SetObserverOrigin(ctx context.Context, origin string) {
+func (server *SzEngineServer) SetObserverOrigin(ctx context.Context, origin string) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -986,7 +986,7 @@ func (server *G2EngineServer) SetObserverOrigin(ctx context.Context, origin stri
 	g2engine.SetObserverOrigin(ctx, origin)
 }
 
-func (server *G2EngineServer) Stats(ctx context.Context, request *g2pb.StatsRequest) (*g2pb.StatsResponse, error) {
+func (server *SzEngineServer) Stats(ctx context.Context, request *g2pb.StatsRequest) (*g2pb.StatsResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -1002,7 +1002,7 @@ func (server *G2EngineServer) Stats(ctx context.Context, request *g2pb.StatsRequ
 	return &response, err
 }
 
-func (server *G2EngineServer) StreamExportCSVEntityReport(request *g2pb.StreamExportCSVEntityReportRequest, stream g2pb.G2Engine_StreamExportCSVEntityReportServer) (err error) {
+func (server *SzEngineServer) StreamExportCSVEntityReport(request *g2pb.StreamExportCSVEntityReportRequest, stream g2pb.G2Engine_StreamExportCSVEntityReportServer) (err error) {
 	if server.isTrace {
 		server.traceEntry(157, request)
 	}
@@ -1053,7 +1053,7 @@ func (server *G2EngineServer) StreamExportCSVEntityReport(request *g2pb.StreamEx
 	return
 }
 
-func (server *G2EngineServer) StreamExportJSONEntityReport(request *g2pb.StreamExportJSONEntityReportRequest, stream g2pb.G2Engine_StreamExportJSONEntityReportServer) (err error) {
+func (server *SzEngineServer) StreamExportJSONEntityReport(request *g2pb.StreamExportJSONEntityReportRequest, stream g2pb.G2Engine_StreamExportJSONEntityReportServer) (err error) {
 	if server.isTrace {
 		server.traceEntry(159, request)
 	}
@@ -1104,7 +1104,7 @@ func (server *G2EngineServer) StreamExportJSONEntityReport(request *g2pb.StreamE
 	return
 }
 
-func (server *G2EngineServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+func (server *SzEngineServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -1115,7 +1115,7 @@ func (server *G2EngineServer) UnregisterObserver(ctx context.Context, observer o
 	return g2engine.UnregisterObserver(ctx, observer)
 }
 
-func (server *G2EngineServer) WhyEntities(ctx context.Context, request *g2pb.WhyEntitiesRequest) (*g2pb.WhyEntitiesResponse, error) {
+func (server *SzEngineServer) WhyEntities(ctx context.Context, request *g2pb.WhyEntitiesRequest) (*g2pb.WhyEntitiesResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -1131,7 +1131,7 @@ func (server *G2EngineServer) WhyEntities(ctx context.Context, request *g2pb.Why
 	return &response, err
 }
 
-func (server *G2EngineServer) WhyEntities_V2(ctx context.Context, request *g2pb.WhyEntities_V2Request) (*g2pb.WhyEntities_V2Response, error) {
+func (server *SzEngineServer) WhyEntities_V2(ctx context.Context, request *g2pb.WhyEntities_V2Request) (*g2pb.WhyEntities_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -1147,7 +1147,7 @@ func (server *G2EngineServer) WhyEntities_V2(ctx context.Context, request *g2pb.
 	return &response, err
 }
 
-func (server *G2EngineServer) WhyRecords(ctx context.Context, request *g2pb.WhyRecordsRequest) (*g2pb.WhyRecordsResponse, error) {
+func (server *SzEngineServer) WhyRecords(ctx context.Context, request *g2pb.WhyRecordsRequest) (*g2pb.WhyRecordsResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -1163,7 +1163,7 @@ func (server *G2EngineServer) WhyRecords(ctx context.Context, request *g2pb.WhyR
 	return &response, err
 }
 
-func (server *G2EngineServer) WhyRecords_V2(ctx context.Context, request *g2pb.WhyRecords_V2Request) (*g2pb.WhyRecords_V2Response, error) {
+func (server *SzEngineServer) WhyRecords_V2(ctx context.Context, request *g2pb.WhyRecords_V2Request) (*g2pb.WhyRecords_V2Response, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {

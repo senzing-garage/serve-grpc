@@ -1,8 +1,8 @@
-package g2productserver
+package szdiagnosticserver
 
 import (
-	pb "github.com/senzing-garage/g2-sdk-proto/go/g2product"
 	"github.com/senzing-garage/go-logging/logging"
+	pb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 )
 
 // ----------------------------------------------------------------------------
@@ -10,8 +10,8 @@ import (
 // ----------------------------------------------------------------------------
 
 // server is used to implement helloworld.GreeterServer.
-type G2ProductServer struct {
-	pb.UnimplementedG2ProductServer
+type SzDiagnosticServer struct {
+	pb.UnimplementedG2DiagnosticServer
 	isTrace bool
 	logger  logging.LoggingInterface
 }
@@ -20,45 +20,43 @@ type G2ProductServer struct {
 // Constants
 // ----------------------------------------------------------------------------
 
-// Identfier of the g2productserver package found messages having the format "senzing-6999xxxx".
-const ComponentId = 6016
+// Identfier of the g2diagnostic package found messages having the format "senzing-6999xxxx".
+const ComponentId = 6013
 
 // Log message prefix.
-const Prefix = "serve-grpc.g2productserver."
+const Prefix = "serve-grpc.g2diagnosticserver."
 
 // ----------------------------------------------------------------------------
 // Variables
 // ----------------------------------------------------------------------------
 
-// Message templates for the g2productserver package.
+// Message templates for the g2diagnostic package.
 var IdMessages = map[int]string{
-	1:    "Enter " + Prefix + "RegisterObserver(%s).",
-	2:    "Exit  " + Prefix + "RegisterObserver(%s) returned (%v).",
-	3:    "Enter " + Prefix + "Destroy(%+v).",
-	4:    "Exit  " + Prefix + "Destroy(%+v) returned (%v).",
-	5:    "Enter " + Prefix + "UnregisterObserver(%s).",
-	6:    "Exit  " + Prefix + "UnregisterObserver(%s) returned (%v).",
-	9:    "Enter " + Prefix + "Init(%+v).",
-	10:   "Exit  " + Prefix + "Init(%+v) returned (%v).",
-	11:   "Enter " + Prefix + "License(%+v).",
-	12:   "Exit  " + Prefix + "License(%+v) returned (%s, %v).",
-	13:   "Enter " + Prefix + "SetLogLevel(%s).",
-	14:   "Exit  " + Prefix + "SetLogLevel(%s) returned (%v).",
-	15:   "Enter " + Prefix + "ValidateLicenseFile(%+v).",
-	16:   "Exit  " + Prefix + "ValidateLicenseFile(%+v) returned (%s, %v).",
-	17:   "Enter " + Prefix + "ValidateLicenseStringBase64(%+v).",
-	18:   "Exit  " + Prefix + "ValidateLicenseStringBase64(%+v) returned (%s, %v).",
-	19:   "Enter " + Prefix + "Version(%+v).",
-	20:   "Exit  " + Prefix + "Version(%+v) returned (%s, %v).",
-	21:   "Enter " + Prefix + "GetObserverOrigin().",
-	22:   "Exit  " + Prefix + "GetObserverOrigin() returned (%v).",
-	23:   "Enter " + Prefix + "SetObserverOrigin(%s).",
-	24:   "Exit  " + Prefix + "SetObserverOrigin(%s) returned (%v).",
+	1:    "Enter " + Prefix + "CheckDBPerf(%+v).",
+	2:    "Exit  " + Prefix + "CheckDBPerf(%+v) returned (%s, %v).",
+	3:    "Enter " + Prefix + "RegisterObserver(%s).",
+	4:    "Exit  " + Prefix + "RegisterObserver(%s) returned (%s, %v).",
+	7:    "Enter " + Prefix + "Destroy(%+v).",
+	8:    "Exit  " + Prefix + "Destroy(%+v) returned (%v).",
+	31:   "Enter " + Prefix + "UnregisterObserver(%s).",
+	32:   "Exit  " + Prefix + "UnregisterObserver(%s) returned (%s, %v).",
+	47:   "Enter " + Prefix + "Init(%+v).",
+	48:   "Exit  " + Prefix + "Init(%+v) returned (%v).",
+	49:   "Enter " + Prefix + "InitWithConfigID(%+v).",
+	50:   "Exit  " + Prefix + "InitWithConfigID(%+v) returned (%v).",
+	51:   "Enter " + Prefix + "Reinit(%+v).",
+	52:   "Exit  " + Prefix + "Reinit(%+v) returned (%v).",
+	53:   "Enter " + Prefix + "SetLogLevel(%s).",
+	54:   "Exit  " + Prefix + "SetLogLevel(%s) returned (%v).",
+	55:   "Enter " + Prefix + "GetObserverOrigin().",
+	56:   "Exit  " + Prefix + "GetObserverOrigin() returned (%v).",
+	57:   "Enter " + Prefix + "SetObserverOrigin(%s).",
+	58:   "Exit  " + Prefix + "SetObserverOrigin(%s) returned (%v).",
 	4001: Prefix + "Destroy() not supported in gRPC",
 	4002: Prefix + "Init() not supported in gRPC",
 	4003: Prefix + "InitWithConfigID() not supported in gRPC",
 	5901: "During test setup, call to messagelogger.NewSenzingApiLogger() failed.",
-	5902: "During test setup, call to g2eg2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars() failed.",
+	5902: "During test setup, call to g2eg2engineconfigurationjson.BuildSimpleSystemConfigurationJson() failed.",
 	5903: "During test setup, call to g2engine.Init() failed.",
 	5904: "During test setup, call to g2diagnostic.PurgeRepository() failed.",
 	5905: "During test setup, call to g2engine.Destroy() failed.",
@@ -83,5 +81,5 @@ var IdMessages = map[int]string{
 	5933: "During test setup, call to g2engine.Destroy() failed.",
 }
 
-// Status strings for specific g2productserver messages.
+// Status strings for specific g2diagnostic messages.
 var IdStatuses = map[int]string{}

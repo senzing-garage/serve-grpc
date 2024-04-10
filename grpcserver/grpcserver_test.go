@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/senzing-garage/g2-sdk-go-base/g2config"
-	"github.com/senzing-garage/g2-sdk-go-base/g2configmgr"
-	"github.com/senzing-garage/g2-sdk-go-base/g2diagnostic"
-	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
-	"github.com/senzing-garage/go-common/truthset"
+	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
 	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
+	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
+	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
+	"github.com/senzing-garage/sz-sdk-go/sz"
 )
 
 var (
@@ -37,83 +37,82 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
+func setupSenzingConfig(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	now := time.Now()
 
-	aG2config := &g2config.G2config{}
-	err := aG2config.Init(ctx, moduleName, iniParams, verboseLogging)
+	szConfig := &szconfig.Szconfig{}
+	err := szConfig.Initialize(ctx, instanceName, settings, verboseLogging)
 	if err != nil {
 		return localLogger.NewError(5906, err)
 	}
 
-	configHandle, err := aG2config.Create(ctx)
+	configHandle, err := szConfig.CreateConfig(ctx)
 	if err != nil {
 		return localLogger.NewError(5907, err)
 	}
 
 	datasourceNames := []string{"CUSTOMERS", "REFERENCE", "WATCHLIST"}
-	for _, datasourceName := range datasourceNames {
-		datasource := truthset.TruthsetDataSources[datasourceName]
-		_, err := aG2config.AddDataSource(ctx, configHandle, datasource.Json)
+	for _, dataSourceCode := range datasourceNames {
+		_, err := szConfig.AddDataSource(ctx, configHandle, dataSourceCode)
 		if err != nil {
 			return localLogger.NewError(5908, err)
 		}
 	}
 
-	configStr, err := aG2config.Save(ctx, configHandle)
+	configDefinition, err := szConfig.ExportConfig(ctx, configHandle)
 	if err != nil {
 		return localLogger.NewError(5909, err)
 	}
 
-	err = aG2config.Close(ctx, configHandle)
+	err = szConfig.CloseConfig(ctx, configHandle)
 	if err != nil {
 		return localLogger.NewError(5910, err)
 	}
 
-	err = aG2config.Destroy(ctx)
+	err = szConfig.Destroy(ctx)
 	if err != nil {
 		return localLogger.NewError(5911, err)
 	}
 
 	// Persist the Senzing configuration to the Senzing repository.
 
-	aG2configmgr := &g2configmgr.G2configmgr{}
-	err = aG2configmgr.Init(ctx, moduleName, iniParams, verboseLogging)
+	szConfigManager := &szconfigmanager.Szconfigmanager{}
+	err = szConfigManager.Initialize(ctx, instanceName, settings, verboseLogging)
 	if err != nil {
 		return localLogger.NewError(5912, err)
 	}
 
-	configComments := fmt.Sprintf("Created by g2diagnostic_test at %s", now.UTC())
-	configID, err := aG2configmgr.AddConfig(ctx, configStr, configComments)
+	configComment := fmt.Sprintf("Created by g2diagnostic_test at %s", now.UTC())
+	configID, err := szConfigManager.AddConfig(ctx, configDefinition, configComment)
 	if err != nil {
 		return localLogger.NewError(5913, err)
 	}
 
-	err = aG2configmgr.SetDefaultConfigID(ctx, configID)
+	err = szConfigManager.SetDefaultConfigId(ctx, configID)
 	if err != nil {
 		return localLogger.NewError(5914, err)
 	}
 
-	err = aG2configmgr.Destroy(ctx)
+	err = szConfigManager.Destroy(ctx)
 	if err != nil {
 		return localLogger.NewError(5915, err)
 	}
 	return err
 }
 
-func setupPurgeRepository(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
-	aG2diagnostic := &g2diagnostic.G2diagnostic{}
-	err := aG2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
+func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
+	szDiagnostic := &szdiagnostic.Szdiagnostic{}
+	err := szDiagnostic.Initialize(ctx, instanceName, settings, verboseLogging, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION)
 	if err != nil {
 		return localLogger.NewError(5903, err)
 	}
 
-	err = aG2diagnostic.PurgeRepository(ctx)
+	err = szDiagnostic.PurgeRepository(ctx)
 	if err != nil {
 		return localLogger.NewError(5904, err)
 	}
 
-	err = aG2diagnostic.Destroy(ctx)
+	err = szDiagnostic.Destroy(ctx)
 	if err != nil {
 		return localLogger.NewError(5905, err)
 	}
@@ -131,7 +130,7 @@ func setup() error {
 		panic(err)
 	}
 
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		return localLogger.NewError(5902, err)
 	}

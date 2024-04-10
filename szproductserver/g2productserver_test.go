@@ -1,4 +1,4 @@
-package g2productserver
+package szproductserver
 
 import (
 	"context"
@@ -8,8 +8,8 @@ import (
 	"testing"
 
 	truncator "github.com/aquilax/truncate"
-	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2product"
-	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
+	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
+	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,19 +19,19 @@ const (
 )
 
 var (
-	g2productTestSingleton *G2ProductServer
+	g2productTestSingleton *SzProductServer
 )
 
 // ----------------------------------------------------------------------------
 // Internal functions
 // ----------------------------------------------------------------------------
 
-func getTestObject(ctx context.Context, test *testing.T) G2ProductServer {
+func getTestObject(ctx context.Context, test *testing.T) SzProductServer {
 	if g2productTestSingleton == nil {
-		g2productTestSingleton = &G2ProductServer{}
+		g2productTestSingleton = &SzProductServer{}
 		moduleName := "Test module name"
 		verboseLogging := int64(0)
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
@@ -43,12 +43,12 @@ func getTestObject(ctx context.Context, test *testing.T) G2ProductServer {
 	return *g2productTestSingleton
 }
 
-func getG2ProductServer(ctx context.Context) G2ProductServer {
+func getG2ProductServer(ctx context.Context) SzProductServer {
 	if g2productTestSingleton == nil {
-		g2productTestSingleton = &G2ProductServer{}
+		g2productTestSingleton = &SzProductServer{}
 		moduleName := "Test module name"
 		verboseLogging := int64(0)
-		iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -74,14 +74,14 @@ func printActual(test *testing.T, actual interface{}) {
 	printResult(test, "Actual", actual)
 }
 
-func testError(test *testing.T, ctx context.Context, g2product G2ProductServer, err error) {
+func testError(test *testing.T, ctx context.Context, g2product SzProductServer, err error) {
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
 	}
 }
 
-func expectError(test *testing.T, ctx context.Context, g2product G2ProductServer, err error, messageId string) {
+func expectError(test *testing.T, ctx context.Context, g2product SzProductServer, err error, messageId string) {
 	if err != nil {
 		var dictionary map[string]interface{}
 		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
@@ -123,7 +123,7 @@ func teardown() error {
 }
 
 func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	actual, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)
@@ -138,7 +138,7 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 func TestG2productServer_Init(test *testing.T) {
 	ctx := context.TODO()
 	g2product := getTestObject(ctx, test)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		assert.FailNow(test, err.Error())
 	}

@@ -1,8 +1,8 @@
-package g2diagnosticserver
+package szconfigmanagerserver
 
 import (
-	pb "github.com/senzing-garage/g2-sdk-proto/go/g2diagnostic"
 	"github.com/senzing-garage/go-logging/logging"
+	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 )
 
 // ----------------------------------------------------------------------------
@@ -10,8 +10,8 @@ import (
 // ----------------------------------------------------------------------------
 
 // server is used to implement helloworld.GreeterServer.
-type G2DiagnosticServer struct {
-	pb.UnimplementedG2DiagnosticServer
+type SzConfigManagerServer struct {
+	g2pb.UnimplementedSzConfigManagerServer
 	isTrace bool
 	logger  logging.LoggingInterface
 }
@@ -20,38 +20,44 @@ type G2DiagnosticServer struct {
 // Constants
 // ----------------------------------------------------------------------------
 
-// Identfier of the g2diagnostic package found messages having the format "senzing-6999xxxx".
-const ComponentId = 6013
+// Identfier of the g2configmgr package found messages having the format "senzing-6999xxxx".
+const ComponentId = 6012
 
 // Log message prefix.
-const Prefix = "serve-grpc.g2diagnosticserver."
+const Prefix = "serve-grpc.g2configmgrserver."
 
 // ----------------------------------------------------------------------------
 // Variables
 // ----------------------------------------------------------------------------
 
-// Message templates for the g2diagnostic package.
+// Message templates for the g2configmgr package.
 var IdMessages = map[int]string{
-	1:    "Enter " + Prefix + "CheckDBPerf(%+v).",
-	2:    "Exit  " + Prefix + "CheckDBPerf(%+v) returned (%s, %v).",
+	1:    "Enter " + Prefix + "AddConfig(%+v).",
+	2:    "Exit  " + Prefix + "AddConfig(%+v) returned (%d, %v).",
 	3:    "Enter " + Prefix + "RegisterObserver(%s).",
-	4:    "Exit  " + Prefix + "RegisterObserver(%s) returned (%s, %v).",
-	7:    "Enter " + Prefix + "Destroy(%+v).",
-	8:    "Exit  " + Prefix + "Destroy(%+v) returned (%v).",
-	31:   "Enter " + Prefix + "UnregisterObserver(%s).",
-	32:   "Exit  " + Prefix + "UnregisterObserver(%s) returned (%s, %v).",
-	47:   "Enter " + Prefix + "Init(%+v).",
-	48:   "Exit  " + Prefix + "Init(%+v) returned (%v).",
-	49:   "Enter " + Prefix + "InitWithConfigID(%+v).",
-	50:   "Exit  " + Prefix + "InitWithConfigID(%+v) returned (%v).",
-	51:   "Enter " + Prefix + "Reinit(%+v).",
-	52:   "Exit  " + Prefix + "Reinit(%+v) returned (%v).",
-	53:   "Enter " + Prefix + "SetLogLevel(%s).",
-	54:   "Exit  " + Prefix + "SetLogLevel(%s) returned (%v).",
-	55:   "Enter " + Prefix + "GetObserverOrigin().",
-	56:   "Exit  " + Prefix + "GetObserverOrigin() returned (%v).",
-	57:   "Enter " + Prefix + "SetObserverOrigin(%s).",
-	58:   "Exit  " + Prefix + "SetObserverOrigin(%s) returned (%v).",
+	4:    "Exit  " + Prefix + "RegisterObserver(%s) returned (%v).",
+	5:    "Enter " + Prefix + "Destroy(%+v).",
+	6:    "Exit  " + Prefix + "Destroy(%+v) returned (%v).",
+	7:    "Enter " + Prefix + "GetConfig(%+v).",
+	8:    "Exit  " + Prefix + "GetConfig(%+v) returned (%s, %v).",
+	9:    "Enter " + Prefix + "GetConfigList(%+v).",
+	10:   "Exit  " + Prefix + "GetConfigList(%+v) returned (%s, %v).",
+	11:   "Enter " + Prefix + "GetDefaultConfigID(%+v).",
+	12:   "Exit  " + Prefix + "GetDefaultConfigID(%+v) returned (%d, %v).",
+	13:   "Enter " + Prefix + "UnregisterObserver(%s).",
+	14:   "Exit  " + Prefix + "UnregisterObserver(%s) returned (%v).",
+	17:   "Enter " + Prefix + "Init(%+v).",
+	18:   "Exit  " + Prefix + "Init(%+v) returned (%v).",
+	19:   "Enter " + Prefix + "ReplaceDefaultConfigID(%+v).",
+	20:   "Exit  " + Prefix + "ReplaceDefaultConfigID(%+v) returned (%v).",
+	21:   "Enter " + Prefix + "SetDefaultConfigID(%+v).",
+	22:   "Exit  " + Prefix + "SetDefaultConfigID(%+v) returned (%v).",
+	23:   "Enter " + Prefix + "SetLogLevel(%s).",
+	24:   "Exit  " + Prefix + "SetLogLevel(%s) returned (%v).",
+	25:   "Enter " + Prefix + "GetObserverOrigin().",
+	26:   "Exit  " + Prefix + "GetObserverOrigin() returned (%v).",
+	27:   "Enter " + Prefix + "SetObserverOrigin(%s).",
+	28:   "Exit  " + Prefix + "SetObserverOrigin(%s) returned (%v).",
 	4001: Prefix + "Destroy() not supported in gRPC",
 	4002: Prefix + "Init() not supported in gRPC",
 	4003: Prefix + "InitWithConfigID() not supported in gRPC",
@@ -81,5 +87,5 @@ var IdMessages = map[int]string{
 	5933: "During test setup, call to g2engine.Destroy() failed.",
 }
 
-// Status strings for specific g2diagnostic messages.
+// Status strings for specific g2configmgr messages.
 var IdStatuses = map[int]string{}

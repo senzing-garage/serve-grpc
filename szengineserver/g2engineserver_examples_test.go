@@ -1,13 +1,13 @@
 //go:build linux
 
-package g2engineserver
+package szengineserver
 
 import (
 	"context"
 	"fmt"
 
-	g2pb "github.com/senzing-garage/g2-sdk-proto/go/g2engine"
-	"github.com/senzing-garage/go-common/g2engineconfigurationjson"
+	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
+	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szengine"
 )
 
 // ----------------------------------------------------------------------------
@@ -1005,7 +1005,7 @@ func ExampleG2EngineServer_Init() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		fmt.Println(err)
 
@@ -1027,7 +1027,7 @@ func ExampleG2EngineServer_InitWithConfigID() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
 	ctx := context.TODO()
 	g2engine := getG2EngineServer(ctx)
-	iniParams, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		fmt.Println(err)
 
