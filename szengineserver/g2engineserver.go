@@ -526,6 +526,22 @@ func (server *SzEngineServer) WhyEntities(ctx context.Context, request *szpb.Why
 	return &response, err
 }
 
+func (server *SzEngineServer) WhyRecordInEntity(ctx context.Context, request *szpb.WhyRecordInEntityRequest) (*szpb.WhyRecordInEntityResponse, error) {
+	var err error = nil
+	var result string
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(153, request)
+		defer func() { server.traceExit(154, request, result, err, time.Since(entryTime)) }()
+	}
+	szEngine := getSzEngine()
+	result, err = szEngine.WhyRecordInEntity(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetFlags())
+	response := szpb.WhyRecordInEntityResponse{
+		Result: result,
+	}
+	return &response, err
+}
+
 func (server *SzEngineServer) WhyRecords(ctx context.Context, request *szpb.WhyRecordsRequest) (*szpb.WhyRecordsResponse, error) {
 	var err error = nil
 	var result string
