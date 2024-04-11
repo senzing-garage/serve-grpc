@@ -50,9 +50,9 @@ func (server *SzEngineServer) traceExit(messageNumber int, details ...interface{
 // --- Errors -----------------------------------------------------------------
 
 // Create error.
-func (server *SzEngineServer) error(messageNumber int, details ...interface{}) error {
-	return server.getLogger().NewError(messageNumber, details...)
-}
+// func (server *SzEngineServer) error(messageNumber int, details ...interface{}) error {
+// 	return server.getLogger().NewError(messageNumber, details...)
+// }
 
 // --- Services ---------------------------------------------------------------
 

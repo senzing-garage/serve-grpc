@@ -66,7 +66,7 @@ func getTestObject(ctx context.Context, test *testing.T) SzEngineServer {
 	return *g2engineTestSingleton
 }
 
-func getG2EngineServer(ctx context.Context) SzEngineServer {
+func getSzEngineServer(ctx context.Context) SzEngineServer {
 	if g2engineTestSingleton == nil {
 		g2engineTestSingleton = &SzEngineServer{}
 		instanceName := "Test name"
@@ -87,7 +87,7 @@ func getG2EngineServer(ctx context.Context) SzEngineServer {
 func getEntityIdForRecord(datasource string, id string) int64 {
 	ctx := context.TODO()
 	var result int64 = 0
-	g2engine := getG2EngineServer(ctx)
+	g2engine := getSzEngineServer(ctx)
 	request := &g2pb.GetEntityByRecordIdRequest{
 		DataSourceCode: datasource,
 		RecordId:       id,
@@ -142,20 +142,20 @@ func testError(test *testing.T, ctx context.Context, g2engine SzEngineServer, er
 	}
 }
 
-func expectError(test *testing.T, ctx context.Context, g2engine SzEngineServer, err error, messageId string) {
-	_ = ctx
-	_ = g2engine
-	if err != nil {
-		var dictionary map[string]interface{}
-		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
-		if unmarshalErr != nil {
-			test.Log("Unmarshal Error:", unmarshalErr.Error())
-		}
-		assert.Equal(test, messageId, dictionary["id"].(string))
-	} else {
-		assert.FailNow(test, "Should have failed with", messageId)
-	}
-}
+// func expectError(test *testing.T, ctx context.Context, g2engine SzEngineServer, err error, messageId string) {
+// 	_ = ctx
+// 	_ = g2engine
+// 	if err != nil {
+// 		var dictionary map[string]interface{}
+// 		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
+// 		if unmarshalErr != nil {
+// 			test.Log("Unmarshal Error:", unmarshalErr.Error())
+// 		}
+// 		assert.Equal(test, messageId, dictionary["id"].(string))
+// 	} else {
+// 		assert.FailNow(test, "Should have failed with", messageId)
+// 	}
+// }
 
 // ----------------------------------------------------------------------------
 // Test harness
@@ -317,908 +317,561 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 // Test interface functions
 // ----------------------------------------------------------------------------
 
-func TestG2engineServer_AddRecord(test *testing.T) {
+func TestSzEngineServer_AddRecord(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	record1 := truthset.CustomerRecords["1001"]
 	record2 := truthset.CustomerRecords["1002"]
 	request1 := &g2pb.AddRecordRequest{
-		DataSourceCode: record1.DataSource,
-		RecordId:       record1.Id,
-		JsonData:       record1.Json,
-		LoadId:         loadId,
+		DataSourceCode:   record1.DataSource,
+		Flags:            sz.SZ_WITHOUT_INFO,
+		RecordDefinition: record1.Json,
+		RecordId:         record1.Id,
 	}
-	response1, err := g2engine.AddRecord(ctx, request1)
-	testError(test, ctx, g2engine, err)
+	response1, err := szEngineServer.AddRecord(ctx, request1)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response1)
 	request2 := &g2pb.AddRecordRequest{
-		DataSourceCode: record2.DataSource,
-		RecordId:       record2.Id,
-		JsonData:       record2.Json,
-		LoadId:         loadId,
+		DataSourceCode:   record2.DataSource,
+		Flags:            sz.SZ_WITHOUT_INFO,
+		RecordDefinition: record2.Json,
+		RecordId:         record2.Id,
 	}
-	response2, err := g2engine.AddRecord(ctx, request2)
-	testError(test, ctx, g2engine, err)
+	response2, err := szEngineServer.AddRecord(ctx, request2)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response2)
 }
 
-func TestG2engineServer_AddRecordWithInfo(test *testing.T) {
+func TestSzEngineServer_AddRecord_withInfo(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1003"]
-	request := &g2pb.AddRecordWithInfoRequest{
-		DataSourceCode: record.DataSource,
-		RecordId:       record.Id,
-		JsonData:       record.Json,
-		LoadId:         loadId,
+	request := &g2pb.AddRecordRequest{
+		DataSourceCode:   record.DataSource,
+		Flags:            sz.SZ_WITH_INFO,
+		RecordDefinition: record.Json,
+		RecordId:         record.Id,
 	}
-	response, err := g2engine.AddRecordWithInfo(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.AddRecord(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_CountRedoRecords(test *testing.T) {
+func TestSzEngineServer_CountRedoRecords(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	request := &g2pb.CountRedoRecordsRequest{}
-	response, err := g2engine.CountRedoRecords(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.CountRedoRecords(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_ExportJSONEntityReport(test *testing.T) {
+func TestSzEngineServer_ExportJsonEntityReport(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	flags := int64(0)
-	request := &g2pb.ExportJSONEntityReportRequest{
+	szEngineServer := getTestObject(ctx, test)
+	flags := sz.SZ_NO_FLAGS
+	request := &g2pb.ExportJsonEntityReportRequest{
 		Flags: flags,
 	}
-	response, err := g2engine.ExportJSONEntityReport(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.ExportJsonEntityReport(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_ExportConfigAndConfigId(test *testing.T) {
+func TestSzEngineServer_ExportCsvEntityReport(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &g2pb.ExportConfigAndConfigIdRequest{}
-	response, err := g2engine.ExportConfigAndConfigId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_ExportConfig(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &g2pb.ExportConfigRequest{}
-	response, err := g2engine.ExportConfig(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_ExportCSVEntityReport(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &g2pb.ExportCSVEntityReportRequest{
+	szEngineServer := getTestObject(ctx, test)
+	request := &g2pb.ExportCsvEntityReportRequest{
 		CsvColumnList: "",
-		Flags:         0,
+		Flags:         sz.SZ_NO_FLAGS,
 	}
-	response, err := g2engine.ExportCSVEntityReport(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.ExportCsvEntityReport(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_FindInterestingEntitiesByEntityId(test *testing.T) {
+func TestSzEngineServer_FindNetworkByEntityId(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
+	record1 := truthset.CustomerRecords["1001"]
+	record2 := truthset.CustomerRecords["1002"]
+	entityList := `{"ENTITIES": [{"ENTITY_Id": ` + getEntityIdString(record1) + `}, {"ENTITY_Id": ` + getEntityIdString(record2) + `}]}`
+	maxDegrees := int64(2)
+	buildOutDegree := int64(1)
+	maxEntities := int64(10)
+	flags := sz.SZ_NO_FLAGS
+	request := &g2pb.FindNetworkByEntityIdRequest{
+		BuildOutDegree: buildOutDegree,
+		EntityList:     entityList,
+		Flags:          flags,
+		MaxDegrees:     maxDegrees,
+		MaxEntities:    maxEntities,
+	}
+	response, err := szEngineServer.FindNetworkByEntityId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_FindNetworkByRecordId(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	record1 := truthset.CustomerRecords["1001"]
+	record2 := truthset.CustomerRecords["1002"]
+	record3 := truthset.CustomerRecords["1003"]
+	recordList := `{"RECORDS": [{"DATA_SOURCE": "` + record1.DataSource + `", "RECORD_Id": "` + record1.Id + `"}, {"DATA_SOURCE": "` + record2.DataSource + `", "RECORD_Id": "` + record2.Id + `"}, {"DATA_SOURCE": "` + record3.DataSource + `", "RECORD_Id": "` + record3.Id + `"}]}`
+	maxDegrees := int64(1)
+	buildOutDegree := int64(2)
+	maxEntities := int64(10)
+	flags := sz.SZ_NO_FLAGS
+	request := &g2pb.FindNetworkByRecordIdRequest{
+		BuildOutDegree: buildOutDegree,
+		Flags:          flags,
+		MaxDegrees:     maxDegrees,
+		MaxEntities:    maxEntities,
+		RecordList:     recordList,
+	}
+	response, err := szEngineServer.FindNetworkByRecordId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_FindPathByEntityId(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	startEntityId := getEntityId(truthset.CustomerRecords["1001"])
+	endEntityId := getEntityId(truthset.CustomerRecords["1002"])
+	maxDegrees := int64(1)
+	flags := sz.SZ_NO_FLAGS
+	request := &g2pb.FindPathByEntityIdRequest{
+		EndEntityId:   endEntityId,
+		Flags:         flags,
+		MaxDegrees:    maxDegrees,
+		StartEntityId: startEntityId,
+	}
+	response, err := szEngineServer.FindPathByEntityId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_FindPathByEntityId_exclusions(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	record1 := truthset.CustomerRecords["1001"]
+	startEntityId := getEntityId(record1)
+	endEntityId := getEntityId(truthset.CustomerRecords["1002"])
+	maxDegrees := int64(1)
+	exclusions := `{"ENTITIES": [{"ENTITY_Id": ` + getEntityIdString(record1) + `}]}`
+	flags := sz.SZ_NO_FLAGS
+	request := &g2pb.FindPathByEntityIdRequest{
+		EndEntityId:   endEntityId,
+		Exclusions:    exclusions,
+		Flags:         flags,
+		MaxDegrees:    maxDegrees,
+		StartEntityId: startEntityId,
+	}
+	response, err := szEngineServer.FindPathByEntityId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_FindPathByEntityId_inclusions(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	record1 := truthset.CustomerRecords["1001"]
+	startEntityId := getEntityId(record1)
+	endEntityId := getEntityId(truthset.CustomerRecords["1002"])
+	maxDegrees := int64(1)
+	exclusions := `{"ENTITIES": [{"ENTITY_Id": ` + getEntityIdString(record1) + `}]}`
+	requiredDataSources := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
+	request := &g2pb.FindPathByEntityIdRequest{
+		EndEntityId:         endEntityId,
+		Exclusions:          exclusions,
+		MaxDegrees:          maxDegrees,
+		RequiredDataSources: requiredDataSources,
+		StartEntityId:       startEntityId,
+	}
+	response, err := szEngineServer.FindPathByEntityId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_FindPathByRecordId(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	record1 := truthset.CustomerRecords["1001"]
+	record2 := truthset.CustomerRecords["1002"]
+	maxDegrees := int64(1)
+	flags := sz.SZ_NO_FLAGS
+	request := &g2pb.FindPathByRecordIdRequest{
+		EndDataSourceCode:   record2.DataSource,
+		EndRecordId:         record2.Id,
+		Flags:               flags,
+		MaxDegrees:          maxDegrees,
+		StartDataSourceCode: record1.DataSource,
+		StartRecordId:       record1.Id,
+	}
+	response, err := szEngineServer.FindPathByRecordId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_FindPathByRecordId_exclusions(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	record1 := truthset.CustomerRecords["1001"]
+	record2 := truthset.CustomerRecords["1002"]
+	maxDegrees := int64(1)
+	exclusions := `{"RECORDS": [{ "DATA_SOURCE": "` + record1.DataSource + `", "RECORD_Id": "` + record1.Id + `"}]}`
+	flags := sz.SZ_NO_FLAGS
+	request := &g2pb.FindPathByRecordIdRequest{
+		EndDataSourceCode:   record2.DataSource,
+		EndRecordId:         record2.Id,
+		Exclusions:          exclusions,
+		Flags:               flags,
+		MaxDegrees:          maxDegrees,
+		StartDataSourceCode: record1.DataSource,
+		StartRecordId:       record1.Id,
+	}
+	response, err := szEngineServer.FindPathByRecordId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_FindPathByRecordId_inclusions(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	record1 := truthset.CustomerRecords["1001"]
+	record2 := truthset.CustomerRecords["1002"]
+	maxDegrees := int64(1)
+	exclusions := `{"ENTITIES": [{"ENTITY_Id": ` + getEntityIdString(record1) + `}]}`
+	requiredDataSources := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
+	flags := sz.SZ_NO_FLAGS
+	request := &g2pb.FindPathByRecordIdRequest{
+		EndDataSourceCode:   record2.DataSource,
+		EndRecordId:         record1.Id,
+		Exclusions:          exclusions,
+		Flags:               flags,
+		MaxDegrees:          maxDegrees,
+		RequiredDataSources: requiredDataSources,
+		StartDataSourceCode: record1.DataSource,
+		StartRecordId:       record1.Id,
+	}
+	response, err := szEngineServer.FindPathByRecordId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_GetActiveConfigId(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	request := &g2pb.GetActiveConfigIdRequest{}
+	response, err := szEngineServer.GetActiveConfigId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_GetEntityByEntityId(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
 	entityId := getEntityId(truthset.CustomerRecords["1001"])
-	flags := int64(0)
-	request := &g2pb.FindInterestingEntitiesByEntityIdRequest{
+	flags := sz.SZ_NO_FLAGS
+	request := &g2pb.GetEntityByEntityIdRequest{
 		EntityId: entityId,
 		Flags:    flags,
 	}
-	response, err := g2engine.FindInterestingEntitiesByEntityId(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.GetEntityByEntityId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_FindInterestingEntitiesByRecordId(test *testing.T) {
+func TestSzEngineServer_GetEntityByRecordId(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
-	flags := int64(0)
-	request := &g2pb.FindInterestingEntitiesByRecordIdRequest{
-		DataSourceCode: record.DataSource,
-		RecordId:       record.Id,
-		Flags:          flags,
-	}
-	response, err := g2engine.FindInterestingEntitiesByRecordId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindNetworkByEntityId(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	entityList := `{"ENTITIES": [{"ENTITY_Id": ` + getEntityIdString(record1) + `}, {"ENTITY_Id": ` + getEntityIdString(record2) + `}]}`
-	maxDegree := int64(2)
-	buildOutDegree := int64(1)
-	maxEntities := int64(10)
-	request := &g2pb.FindNetworkByEntityIdRequest{
-		EntityList:     entityList,
-		MaxDegree:      maxDegree,
-		BuildOutDegree: buildOutDegree,
-		MaxEntities:    maxEntities,
-	}
-	response, err := g2engine.FindNetworkByEntityId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindNetworkByEntityId_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	entityList := `{"ENTITIES": [{"ENTITY_Id": ` + getEntityIdString(record1) + `}, {"ENTITY_Id": ` + getEntityIdString(record2) + `}]}`
-	maxDegree := int64(2)
-	buildOutDegree := int64(1)
-	maxEntities := int64(10)
-	flags := int64(0)
-	request := &g2pb.FindNetworkByEntityId_V2Request{
-		EntityList:     entityList,
-		MaxDegree:      maxDegree,
-		BuildOutDegree: buildOutDegree,
-		MaxEntities:    maxEntities,
-		Flags:          flags,
-	}
-	response, err := g2engine.FindNetworkByEntityId_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindNetworkByRecordId(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	record3 := truthset.CustomerRecords["1003"]
-	recordList := `{"RECORDS": [{"DATA_SOURCE": "` + record1.DataSource + `", "RECORD_Id": "` + record1.Id + `"}, {"DATA_SOURCE": "` + record2.DataSource + `", "RECORD_Id": "` + record2.Id + `"}, {"DATA_SOURCE": "` + record3.DataSource + `", "RECORD_Id": "` + record3.Id + `"}]}`
-	maxDegree := int64(1)
-	buildOutDegree := int64(2)
-	maxEntities := int64(10)
-	request := &g2pb.FindNetworkByRecordIdRequest{
-		RecordList:     recordList,
-		MaxDegree:      maxDegree,
-		BuildOutDegree: buildOutDegree,
-		MaxEntities:    maxEntities,
-	}
-	response, err := g2engine.FindNetworkByRecordId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindNetworkByRecordId_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	record3 := truthset.CustomerRecords["1003"]
-	recordList := `{"RECORDS": [{"DATA_SOURCE": "` + record1.DataSource + `", "RECORD_Id": "` + record1.Id + `"}, {"DATA_SOURCE": "` + record2.DataSource + `", "RECORD_Id": "` + record2.Id + `"}, {"DATA_SOURCE": "` + record3.DataSource + `", "RECORD_Id": "` + record3.Id + `"}]}`
-	maxDegree := int64(1)
-	buildOutDegree := int64(2)
-	maxEntities := int64(10)
-	flags := int64(0)
-	request := &g2pb.FindNetworkByRecordId_V2Request{
-		RecordList:     recordList,
-		MaxDegree:      maxDegree,
-		BuildOutDegree: buildOutDegree,
-		MaxEntities:    maxEntities,
-		Flags:          flags,
-	}
-	response, err := g2engine.FindNetworkByRecordId_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindPathByEntityId(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	entityId1 := getEntityId(truthset.CustomerRecords["1001"])
-	entityId2 := getEntityId(truthset.CustomerRecords["1002"])
-	maxDegree := int64(1)
-	request := &g2pb.FindPathByEntityIdRequest{
-		EntityId1: entityId1,
-		EntityId2: entityId2,
-		MaxDegree: maxDegree,
-	}
-	response, err := g2engine.FindPathByEntityId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindPathByEntityId_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	entityId1 := getEntityId(truthset.CustomerRecords["1001"])
-	entityId2 := getEntityId(truthset.CustomerRecords["1002"])
-	maxDegree := int64(1)
-	flags := int64(0)
-	request := &g2pb.FindPathByEntityId_V2Request{
-		EntityId1: entityId1,
-		EntityId2: entityId2,
-		MaxDegree: maxDegree,
-		Flags:     flags,
-	}
-	response, err := g2engine.FindPathByEntityId_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindPathByRecordId(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	maxDegree := int64(1)
-	request := &g2pb.FindPathByRecordIdRequest{
-		DataSourceCode1: record1.DataSource,
-		RecordId1:       record1.Id,
-		DataSourceCode2: record2.DataSource,
-		RecordId2:       record2.Id,
-		MaxDegree:       maxDegree,
-	}
-	response, err := g2engine.FindPathByRecordId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindPathByRecordId_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	maxDegree := int64(1)
-	flags := int64(0)
-	request := &g2pb.FindPathByRecordId_V2Request{
-		DataSourceCode1: record1.DataSource,
-		RecordId1:       record1.Id,
-		DataSourceCode2: record2.DataSource,
-		RecordId2:       record2.Id,
-		MaxDegree:       maxDegree,
-		Flags:           flags,
-	}
-	response, err := g2engine.FindPathByRecordId_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindPathExcludingByEntityId(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	entityId1 := getEntityId(record1)
-	entityId2 := getEntityId(truthset.CustomerRecords["1002"])
-	maxDegree := int64(1)
-	excludedEntities := `{"ENTITIES": [{"ENTITY_Id": ` + getEntityIdString(record1) + `}]}`
-	request := &g2pb.FindPathExcludingByEntityIdRequest{
-		EntityId1:        entityId1,
-		EntityId2:        entityId2,
-		MaxDegree:        maxDegree,
-		ExcludedEntities: excludedEntities,
-	}
-	response, err := g2engine.FindPathExcludingByEntityId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindPathExcludingByEntityId_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	entityId1 := getEntityId(record1)
-	entityId2 := getEntityId(truthset.CustomerRecords["1002"])
-	maxDegree := int64(1)
-	excludedEntities := `{"ENTITIES": [{"ENTITY_Id": ` + getEntityIdString(record1) + `}]}`
-	flags := int64(0)
-	request := &g2pb.FindPathExcludingByEntityId_V2Request{
-		EntityId1:        entityId1,
-		EntityId2:        entityId2,
-		MaxDegree:        maxDegree,
-		ExcludedEntities: excludedEntities,
-		Flags:            flags,
-	}
-	response, err := g2engine.FindPathExcludingByEntityId_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindPathExcludingByRecordId(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	maxDegree := int64(1)
-	excludedRecords := `{"RECORDS": [{ "DATA_SOURCE": "` + record1.DataSource + `", "RECORD_Id": "` + record1.Id + `"}]}`
-	request := &g2pb.FindPathExcludingByRecordIdRequest{
-		DataSourceCode1: record1.DataSource,
-		RecordId1:       record1.Id,
-		DataSourceCode2: record2.DataSource,
-		RecordId2:       record2.Id,
-		MaxDegree:       maxDegree,
-		ExcludedRecords: excludedRecords,
-	}
-	response, err := g2engine.FindPathExcludingByRecordId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindPathExcludingByRecordId_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	maxDegree := int64(1)
-	excludedRecords := `{"RECORDS": [{ "DATA_SOURCE": "` + record1.DataSource + `", "RECORD_Id": "` + record1.Id + `"}]}`
-	flags := int64(0)
-	request := &g2pb.FindPathExcludingByRecordId_V2Request{
-		DataSourceCode1: record1.DataSource,
-		RecordId1:       record1.Id,
-		DataSourceCode2: record2.DataSource,
-		RecordId2:       record2.Id,
-		MaxDegree:       maxDegree,
-		ExcludedRecords: excludedRecords,
-		Flags:           flags,
-	}
-	response, err := g2engine.FindPathExcludingByRecordId_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindPathIncludingSourceByEntityId(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	entityId1 := getEntityId(record1)
-	entityId2 := getEntityId(truthset.CustomerRecords["1002"])
-	maxDegree := int64(1)
-	excludedEntities := `{"ENTITIES": [{"ENTITY_Id": ` + getEntityIdString(record1) + `}]}`
-	requiredDsrcs := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
-	request := &g2pb.FindPathIncludingSourceByEntityIdRequest{
-		EntityId1:        entityId1,
-		EntityId2:        entityId2,
-		MaxDegree:        maxDegree,
-		ExcludedEntities: excludedEntities,
-		RequiredDsrcs:    requiredDsrcs,
-	}
-	response, err := g2engine.FindPathIncludingSourceByEntityId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindPathIncludingSourceByEntityId_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	entityId1 := getEntityId(record1)
-	entityId2 := getEntityId(truthset.CustomerRecords["1002"])
-	maxDegree := int64(1)
-	excludedEntities := `{"ENTITIES": [{"ENTITY_Id": ` + getEntityIdString(record1) + `}]}`
-	requiredDsrcs := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
-	flags := int64(0)
-	request := &g2pb.FindPathIncludingSourceByEntityId_V2Request{
-		EntityId1:        entityId1,
-		EntityId2:        entityId2,
-		MaxDegree:        maxDegree,
-		ExcludedEntities: excludedEntities,
-		RequiredDsrcs:    requiredDsrcs,
-		Flags:            flags,
-	}
-	response, err := g2engine.FindPathIncludingSourceByEntityId_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindPathIncludingSourceByRecordId(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	maxDegree := int64(1)
-	excludedEntities := `{"ENTITIES": [{"ENTITY_Id": ` + getEntityIdString(record1) + `}]}`
-	requiredDsrcs := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
-	request := &g2pb.FindPathIncludingSourceByRecordIdRequest{
-		DataSourceCode1: record1.DataSource,
-		RecordId1:       record1.Id,
-		DataSourceCode2: record2.DataSource,
-		RecordId2:       record1.Id,
-		MaxDegree:       maxDegree,
-		ExcludedRecords: excludedEntities,
-		RequiredDsrcs:   requiredDsrcs,
-	}
-	response, err := g2engine.FindPathIncludingSourceByRecordId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_FindPathIncludingSourceByRecordId_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	maxDegree := int64(1)
-	excludedEntities := `{"ENTITIES": [{"ENTITY_Id": ` + getEntityIdString(record1) + `}]}`
-	requiredDsrcs := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
-	flags := int64(0)
-	request := &g2pb.FindPathIncludingSourceByRecordId_V2Request{
-		DataSourceCode1: record1.DataSource,
-		RecordId1:       record1.Id,
-		DataSourceCode2: record2.DataSource,
-		RecordId2:       record1.Id,
-		MaxDegree:       maxDegree,
-		ExcludedRecords: excludedEntities,
-		RequiredDsrcs:   requiredDsrcs,
-		Flags:           flags,
-	}
-	response, err := g2engine.FindPathIncludingSourceByRecordId_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_GetActiveConfigId(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &g2pb.GetActiveConfigIdRequest{}
-	response, err := g2engine.GetActiveConfigId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_GetEntityByEntityId(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	entityId := getEntityId(truthset.CustomerRecords["1001"])
-	request := &g2pb.GetEntityByEntityIdRequest{
-		EntityId: entityId,
-	}
-	response, err := g2engine.GetEntityByEntityId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_GetEntityByEntityId_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	entityId := getEntityId(truthset.CustomerRecords["1001"])
-	request := &g2pb.GetEntityByEntityId_V2Request{
-		EntityId: entityId,
-		Flags:    0,
-	}
-	response, err := g2engine.GetEntityByEntityId_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_GetEntityByRecordId(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.CustomerRecords["1001"]
+	flags := sz.SZ_NO_FLAGS
 	request := &g2pb.GetEntityByRecordIdRequest{
 		DataSourceCode: record.DataSource,
-		RecordId:       record.Id,
-	}
-	response, err := g2engine.GetEntityByRecordId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_GetEntityByRecordId_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.CustomerRecords["1001"]
-	flags := int64(0)
-	request := &g2pb.GetEntityByRecordId_V2Request{
-		DataSourceCode: record.DataSource,
-		RecordId:       record.Id,
 		Flags:          flags,
+		RecordId:       record.Id,
 	}
-	response, err := g2engine.GetEntityByRecordId_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.GetEntityByRecordId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_GetRecord(test *testing.T) {
+func TestSzEngineServer_GetRecord(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
+	flags := sz.SZ_NO_FLAGS
 	request := &g2pb.GetRecordRequest{
 		DataSourceCode: record.DataSource,
-		RecordId:       record.Id,
-	}
-	response, err := g2engine.GetRecord(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_GetRecord_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.CustomerRecords["1001"]
-	flags := int64(0)
-	request := &g2pb.GetRecord_V2Request{
-		DataSourceCode: record.DataSource,
-		RecordId:       record.Id,
 		Flags:          flags,
+		RecordId:       record.Id,
 	}
-	response, err := g2engine.GetRecord_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.GetRecord(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_GetRedoRecord(test *testing.T) {
+func TestSzEngineServer_GetRedoRecord(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	request := &g2pb.GetRedoRecordRequest{}
-	response, err := g2engine.GetRedoRecord(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.GetRedoRecord(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_GetRepositoryLastModifiedTime(test *testing.T) {
+func TestSzEngineServer_GetRepositoryLastModifiedTime(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	request := &g2pb.GetRepositoryLastModifiedTimeRequest{}
-	response, err := g2engine.GetRepositoryLastModifiedTime(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.GetRepositoryLastModifiedTime(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_GetVirtualEntityByRecordId(test *testing.T) {
+func TestSzEngineServer_GetVirtualEntityByRecordId(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	record1 := truthset.CustomerRecords["1001"]
 	record2 := truthset.CustomerRecords["1002"]
 	recordList := `{"RECORDS": [{"DATA_SOURCE": "` + record1.DataSource + `", "RECORD_Id": "` + record1.Id + `"}, {"DATA_SOURCE": "` + record2.DataSource + `", "RECORD_Id": "` + record2.Id + `"}]}`
+	flags := sz.SZ_NO_FLAGS
 	request := &g2pb.GetVirtualEntityByRecordIdRequest{
-		RecordList: recordList,
-	}
-	response, err := g2engine.GetVirtualEntityByRecordId(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_GetVirtualEntityByRecordId_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	recordList := `{"RECORDS": [{"DATA_SOURCE": "` + record1.DataSource + `", "RECORD_Id": "` + record1.Id + `"}, {"DATA_SOURCE": "` + record2.DataSource + `", "RECORD_Id": "` + record2.Id + `"}]}`
-	flags := int64(0)
-	request := &g2pb.GetVirtualEntityByRecordId_V2Request{
-		RecordList: recordList,
 		Flags:      flags,
+		RecordList: recordList,
 	}
-	response, err := g2engine.GetVirtualEntityByRecordId_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.GetVirtualEntityByRecordId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_HowEntityByEntityId(test *testing.T) {
+func TestSzEngineServer_HowEntityByEntityId(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	entityId := getEntityId(truthset.CustomerRecords["1001"])
+	flags := sz.SZ_NO_FLAGS
 	request := &g2pb.HowEntityByEntityIdRequest{
 		EntityId: entityId,
+		Flags:    flags,
 	}
-	response, err := g2engine.HowEntityByEntityId(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.HowEntityByEntityId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_HowEntityByEntityId_V2(test *testing.T) {
+func TestSzEngineServer_PrimeEngine(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	entityId := getEntityId(truthset.CustomerRecords["1001"])
-	request := &g2pb.HowEntityByEntityId_V2Request{
-		EntityId: entityId,
-		Flags:    0,
-	}
-	response, err := g2engine.HowEntityByEntityId_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_PrimeEngine(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	request := &g2pb.PrimeEngineRequest{}
-	response, err := g2engine.PrimeEngine(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.PrimeEngine(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_ReevaluateEntity(test *testing.T) {
+func TestSzEngineServer_ReevaluateEntity(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	entityId := getEntityId(truthset.CustomerRecords["1001"])
-	flags := int64(0)
+	flags := sz.SZ_WITHOUT_INFO
 	request := &g2pb.ReevaluateEntityRequest{
 		EntityId: entityId,
 		Flags:    flags,
 	}
-	response, err := g2engine.ReevaluateEntity(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.ReevaluateEntity(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_ReevaluateEntityWithInfo(test *testing.T) {
+func TestSzEngineServer_ReevaluateEntity_withInfo(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	entityId := getEntityId(truthset.CustomerRecords["1001"])
-	flags := int64(0)
-	request := &g2pb.ReevaluateEntityWithInfoRequest{
+	flags := sz.SZ_WITH_INFO
+	request := &g2pb.ReevaluateEntityRequest{
 		EntityId: entityId,
 		Flags:    flags,
 	}
-	response, err := g2engine.ReevaluateEntityWithInfo(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.ReevaluateEntity(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_ReevaluateRecord(test *testing.T) {
+func TestSzEngineServer_ReevaluateRecord(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
-	flags := int64(0)
+	flags := sz.SZ_WITHOUT_INFO
 	request := &g2pb.ReevaluateRecordRequest{
 		DataSourceCode: record.DataSource,
-		RecordId:       record.Id,
 		Flags:          flags,
+		RecordId:       record.Id,
 	}
-	response, err := g2engine.ReevaluateRecord(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.ReevaluateRecord(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_ReevaluateRecordWithInfo(test *testing.T) {
+func TestSzEngineServer_ReevaluateRecord_withInfo(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
-	flags := int64(0)
-	request := &g2pb.ReevaluateRecordWithInfoRequest{
+	flags := sz.SZ_WITH_INFO
+	request := &g2pb.ReevaluateRecordRequest{
 		DataSourceCode: record.DataSource,
-		RecordId:       record.Id,
 		Flags:          flags,
+		RecordId:       record.Id,
 	}
-	response, err := g2engine.ReevaluateRecordWithInfo(ctx, request)
+	response, err := szEngineServer.ReevaluateRecord(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_ReplaceRecord(test *testing.T) {
+	ctx := context.TODO()
+	g2engine := getTestObject(ctx, test)
+	request := &g2pb.ReplaceRecordRequest{
+		DataSourceCode:   "CUSTOMERS",
+		Flags:            sz.SZ_WITHOUT_INFO,
+		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_Id": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
+		RecordId:         "1001",
+	}
+	response, err := g2engine.ReplaceRecord(ctx, request)
 	testError(test, ctx, g2engine, err)
 	printResponse(test, response)
 }
 
-// FIXME: Remove after GDEV-3576 is fixed
-// func TestG2engineServer_ReplaceRecord(test *testing.T) {
-// 	ctx := context.TODO()
-// 	g2engine := getTestObject(ctx, test)
-// 	request := &g2pb.ReplaceRecordRequest{
-// 		DataSourceCode: "CUSTOMERS",
-// 		RecordId:       "1001",
-// 		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_Id": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
-// 		LoadId:         "TEST",
-// 	}
-// 	response, err := g2engine.ReplaceRecord(ctx, request)
-// 	testError(test, ctx, g2engine, err)
-// 	printResponse(test, response)
-// }
-
-// FIXME: Remove after GDEV-3576 is fixed
-// func TestG2engineServer_ReplaceRecordWithInfo(test *testing.T) {
-// 	ctx := context.TODO()
-// 	g2engine := getTestObject(ctx, test)
-// 	request := &g2pb.ReplaceRecordWithInfoRequest{
-// 		DataSourceCode: "CUSTOMERS",
-// 		RecordId:       "1001",
-// 		JsonData:       `{"DATA_SOURCE": "CUSTOMERS", "RECORD_Id": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
-// 		LoadId:         "TEST",
-// 		Flags:          0,
-// 	}
-// 	response, err := g2engine.ReplaceRecordWithInfo(ctx, request)
-// 	testError(test, ctx, g2engine, err)
-// 	printResponse(test, response)
-// }
-
-func TestG2engineServer_SearchByAttributes(test *testing.T) {
+func TestSzEngineServer_ReplaceRecord_withInfo(test *testing.T) {
 	ctx := context.TODO()
 	g2engine := getTestObject(ctx, test)
-	jsonData := `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
+	request := &g2pb.ReplaceRecordRequest{
+		DataSourceCode:   "CUSTOMERS",
+		Flags:            sz.SZ_WITH_INFO,
+		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_Id": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
+		RecordId:         "1001",
+	}
+	response, err := g2engine.ReplaceRecord(ctx, request)
+	testError(test, ctx, g2engine, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_SearchByAttributes(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	attributes := `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
+	flags := sz.SZ_NO_FLAGS
 	request := &g2pb.SearchByAttributesRequest{
-		JsonData: jsonData,
+		Attributes: attributes,
+		Flags:      flags,
 	}
-	response, err := g2engine.SearchByAttributes(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.SearchByAttributes(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_SearchByAttributes_V2(test *testing.T) {
+func TestSzEngineServer_SearchByAttributes_searchProfile(test *testing.T) {
+	// TODO:  Use actual searchProfile
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	jsonData := `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
-	flags := int64(0)
-	request := &g2pb.SearchByAttributes_V2Request{
-		JsonData: jsonData,
-		Flags:    flags,
+	szEngineServer := getTestObject(ctx, test)
+	attributes := `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
+	searchProfile := "SEARCH"
+	flags := sz.SZ_NO_FLAGS
+	request := &g2pb.SearchByAttributesRequest{
+		Attributes:    attributes,
+		Flags:         flags,
+		SearchProfile: searchProfile,
 	}
-	response, err := g2engine.SearchByAttributes_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.SearchByAttributes(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_Stats(test *testing.T) {
+func TestSzEngineServer_Stats(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &g2pb.StatsRequest{}
-	response, err := g2engine.Stats(ctx, request)
-	testError(test, ctx, g2engine, err)
+	szEngineServer := getTestObject(ctx, test)
+	request := &g2pb.GetStatsRequest{}
+	response, err := szEngineServer.GetStats(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_WhyEntities(test *testing.T) {
+func TestSzEngineServer_WhyEntities(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	entityId1 := getEntityId(truthset.CustomerRecords["1001"])
 	entityId2 := getEntityId(truthset.CustomerRecords["1002"])
+	flags := sz.SZ_NO_FLAGS
 	request := &g2pb.WhyEntitiesRequest{
-		EntityId1: entityId1,
-		EntityId2: entityId2,
-	}
-	response, err := g2engine.WhyEntities(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_WhyEntities_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	entityId1 := getEntityId(truthset.CustomerRecords["1001"])
-	entityId2 := getEntityId(truthset.CustomerRecords["1002"])
-	flags := int64(0)
-	request := &g2pb.WhyEntities_V2Request{
 		EntityId1: entityId1,
 		EntityId2: entityId2,
 		Flags:     flags,
 	}
-	response, err := g2engine.WhyEntities_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.WhyEntities(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_WhyRecords(test *testing.T) {
+func TestSzEngineServer_WhyRecordInEntity(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
+	record1 := truthset.CustomerRecords["1001"]
+	flags := sz.SZ_NO_FLAGS
+	request := &g2pb.WhyRecordInEntityRequest{
+		DataSourceCode: record1.DataSource,
+		Flags:          flags,
+		RecordId:       record1.Id,
+	}
+	response, err := szEngineServer.WhyRecordInEntity(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_WhyRecords(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
 	record1 := truthset.CustomerRecords["1001"]
 	record2 := truthset.CustomerRecords["1002"]
+	flags := sz.SZ_NO_FLAGS
 	request := &g2pb.WhyRecordsRequest{
 		DataSourceCode1: record1.DataSource,
-		RecordId1:       record1.Id,
 		DataSourceCode2: record2.DataSource,
-		RecordId2:       record2.Id,
-	}
-	response, err := g2engine.WhyRecords(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_WhyRecords_V2(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	flags := int64(0)
-	request := &g2pb.WhyRecords_V2Request{
-		DataSourceCode1: record1.DataSource,
-		RecordId1:       record1.Id,
-		DataSourceCode2: record2.DataSource,
-		RecordId2:       record2.Id,
 		Flags:           flags,
+		RecordId1:       record1.Id,
+		RecordId2:       record2.Id,
 	}
-	response, err := g2engine.WhyRecords_V2(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.WhyRecords(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_Init(test *testing.T) {
+func TestSzEngineServer_DeleteRecord(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	moduleName := "Test module name"
-	verboseLogging := int64(0) // 0 for no Senzing logging; 1 for logging
-	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-	if err != nil {
-		assert.FailNow(test, err.Error())
-	}
-	request := &g2pb.InitRequest{
-		ModuleName:     moduleName,
-		IniParams:      iniParams,
-		VerboseLogging: verboseLogging,
-	}
-	response, err := g2engine.Init(ctx, request)
-	expectError(test, ctx, g2engine, err, "senzing-60144002")
-	printResponse(test, response)
-}
-
-func TestG2engineServer_InitWithConfigId(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	moduleName := "Test module name"
-	var initConfigId int64 = 1
-	verboseLogging := int64(0) // 0 for no Senzing logging; 1 for logging
-	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-	if err != nil {
-		assert.FailNow(test, err.Error())
-	}
-	request := &g2pb.InitWithConfigIdRequest{
-		ModuleName:     moduleName,
-		IniParams:      iniParams,
-		InitConfigId:   initConfigId,
-		VerboseLogging: verboseLogging,
-	}
-	response, err := g2engine.InitWithConfigId(ctx, request)
-	expectError(test, ctx, g2engine, err, "senzing-60144003")
-	printResponse(test, response)
-}
-
-func TestG2engineServer_Reinit(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-
-	requestToGetActiveConfigId := &g2pb.GetActiveConfigIdRequest{}
-	responseFromGetActiveConfigId, err := g2engine.GetActiveConfigId(ctx, requestToGetActiveConfigId)
-	testError(test, ctx, g2engine, err)
-
-	request := &g2pb.ReinitRequest{
-		InitConfigId: responseFromGetActiveConfigId.GetResult(),
-	}
-	response, err := g2engine.Reinit(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_DeleteRecord(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1003"]
+	flags := sz.SZ_WITHOUT_INFO
 	request := &g2pb.DeleteRecordRequest{
 		DataSourceCode: record.DataSource,
-		RecordId:       record.Id,
-		LoadId:         loadId,
-	}
-	response, err := g2engine.DeleteRecord(ctx, request)
-	testError(test, ctx, g2engine, err)
-	printResponse(test, response)
-}
-
-func TestG2engineServer_DeleteRecordWithInfo(test *testing.T) {
-	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	record := truthset.CustomerRecords["1003"]
-	flags := int64(0)
-	request := &g2pb.DeleteRecordWithInfoRequest{
-		DataSourceCode: record.DataSource,
-		RecordId:       record.Id,
-		LoadId:         loadId,
 		Flags:          flags,
+		RecordId:       record.Id,
 	}
-	response, err := g2engine.DeleteRecordWithInfo(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.DeleteRecord(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
-func TestG2engineServer_Destroy(test *testing.T) {
+func TestSzEngineServer_DeleteRecord_withInfo(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &g2pb.DestroyRequest{}
-	response, err := g2engine.Destroy(ctx, request)
-	expectError(test, ctx, g2engine, err, "senzing-60144001")
+	szEngineServer := getTestObject(ctx, test)
+	record := truthset.CustomerRecords["1003"]
+	flags := sz.SZ_WITH_INFO
+	request := &g2pb.DeleteRecordRequest{
+		DataSourceCode: record.DataSource,
+		Flags:          flags,
+		RecordId:       record.Id,
+	}
+	response, err := szEngineServer.DeleteRecord(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
-	g2engineTestSingleton = nil
 }

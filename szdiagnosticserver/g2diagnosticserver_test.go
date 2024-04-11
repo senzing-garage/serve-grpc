@@ -315,20 +315,20 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 
 func TestSzDiagnosticServer_CheckDatabasePerformance(test *testing.T) {
 	ctx := context.TODO()
-	szDiagnostic := getTestObject(ctx, test)
+	szDiagnosticServer := getTestObject(ctx, test)
 	request := &g2pb.CheckDatabasePerformanceRequest{
 		SecondsToRun: int32(1),
 	}
-	response, err := szDiagnostic.CheckDatabasePerformance(ctx, request)
-	testError(test, ctx, szDiagnostic, err)
+	response, err := szDiagnosticServer.CheckDatabasePerformance(ctx, request)
+	testError(test, ctx, szDiagnosticServer, err)
 	printActual(test, response)
 }
 
 func TestSzDiagnosticServer_PurgeRepository(test *testing.T) {
 	ctx := context.TODO()
-	szDiagnostic := getTestObject(ctx, test)
+	szDiagnosticServer := getTestObject(ctx, test)
 	request := &g2pb.PurgeRepositoryRequest{}
-	response, err := szDiagnostic.PurgeRepository(ctx, request)
-	testError(test, ctx, szDiagnostic, err)
+	response, err := szDiagnosticServer.PurgeRepository(ctx, request)
+	testError(test, ctx, szDiagnosticServer, err)
 	printActual(test, response)
 }
