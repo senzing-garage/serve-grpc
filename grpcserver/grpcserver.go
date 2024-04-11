@@ -107,7 +107,7 @@ func (grpcServer *GrpcServerImpl) enableG2config(ctx context.Context, serviceReg
 	if err != nil {
 		panic(err)
 	}
-	err = szconfigserver.GetSdkG2config().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	err = szconfigserver.GetSdkSzConfig().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}

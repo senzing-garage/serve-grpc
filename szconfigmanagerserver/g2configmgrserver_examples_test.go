@@ -22,17 +22,17 @@ func ExampleSzConfigManagerServer_AddConfig() {
 	szConfigServer := getSzConfigServer(ctx)
 
 	// SzConfig CreateConfig() to create a Senzing configuration.
-	requestToCreate := &szconfigpb.CreateConfigRequest{}
-	responseFromCreate, err := szConfigServer.Create(ctx, requestToCreate)
+	requestToCreateConfig := &szconfigpb.CreateConfigRequest{}
+	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// SzConfig ExportConfig() to create a JSON string.
-	requestToSave := &szconfigpb.ExportConfigRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
+	requestToExportConfig := &szconfigpb.ExportConfigRequest{
+		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
-	responseFromSave, err := szConfigServer.Save(ctx, requestToSave)
+	responseFromExportConfig, err := szConfigServer.ExportConfig(ctx, requestToExportConfig)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -40,7 +40,7 @@ func ExampleSzConfigManagerServer_AddConfig() {
 	// Example
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	request := &szpb.AddConfigRequest{
-		ConfigDefinition: responseFromSave.GetResult(),
+		ConfigDefinition: responseFromExportConfig.GetResult(),
 		ConfigComment:    fmt.Sprintf("szconfigmanagerserver_test at %s", now.UTC()),
 	}
 	response, err := szConfigManagerServer.AddConfig(ctx, request)
@@ -117,24 +117,24 @@ func ExampleSzConfigManagerServer_ReplaceDefaultConfigId() {
 	}
 
 	// SzConfig CreateConfig() to create a Senzing configuration.
-	requestToCreate := &szconfigpb.CreateConfigRequest{}
-	responseFromCreate, err := szConfigServer.Create(ctx, requestToCreate)
+	requestToCreateConfig := &szconfigpb.CreateConfigRequest{}
+	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// SzConfig ExportConfig() to create a JSON string.
-	requestToSave := &szconfigpb.ExportConfigRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
+	requestToExportConfig := &szconfigpb.ExportConfigRequest{
+		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
-	responseFromSave, err := szConfigServer.Save(ctx, requestToSave)
+	responseFromExportConfig, err := szConfigServer.ExportConfig(ctx, requestToExportConfig)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// AddConfig() to modify the configuration.
 	requestForAddConfig := &szpb.AddConfigRequest{
-		ConfigDefinition: responseFromSave.GetResult(),
+		ConfigDefinition: responseFromExportConfig.GetResult(),
 		ConfigComment:    fmt.Sprintf("szconfigmanagerserver_test at %s", now.UTC()),
 	}
 	responseFromAddConfig, err := szConfigManagerServer.AddConfig(ctx, requestForAddConfig)

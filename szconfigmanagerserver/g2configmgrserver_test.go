@@ -83,7 +83,7 @@ func getSzConfigServer(ctx context.Context) szconfigserver.SzConfigServer {
 	if err != nil {
 		fmt.Println(err)
 	}
-	err = szconfigserver.GetSdkG2config().Init(ctx, instanceName, settings, verboseLogging)
+	err = szconfigserver.GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -295,7 +295,7 @@ func TestSzConfigManagerServer_AddConfig(test *testing.T) {
 
 	// SzConfig Create() to create a Senzing configuration.
 	requestToCreate := &szconfigpb.CreateConfigRequest{}
-	responseFromCreate, err := szConfigServer.Create(ctx, requestToCreate)
+	responseFromCreate, err := szConfigServer.CreateConfig(ctx, requestToCreate)
 	if err != nil {
 		test.Log(err)
 	}
@@ -304,7 +304,7 @@ func TestSzConfigManagerServer_AddConfig(test *testing.T) {
 	requestToSave := &szconfigpb.ExportConfigRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
-	responseFromSave, err := szConfigServer.Save(ctx, requestToSave)
+	responseFromSave, err := szConfigServer.ExportConfig(ctx, requestToSave)
 	if err != nil {
 		test.Log(err)
 	}

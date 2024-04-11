@@ -11,7 +11,7 @@ import (
 
 // server is used to implement helloworld.GreeterServer.
 type SzDiagnosticServer struct {
-	pb.UnimplementedG2DiagnosticServer
+	pb.UnimplementedSzDiagnosticServer
 	isTrace bool
 	logger  logging.LoggingInterface
 }

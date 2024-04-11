@@ -65,7 +65,7 @@ func getSzConfig() sz.SzConfig {
 	return szConfigSingleton
 }
 
-func GetSdkG2config() sz.SzConfig {
+func GetSdkSzConfig() sz.SzConfig {
 	return getSzConfig()
 }
 
@@ -171,7 +171,7 @@ func (server *SzConfigServer) ImportConfig(ctx context.Context, request *szpb.Im
 		defer func() { server.traceExit(22, request, err, time.Since(entryTime)) }()
 	}
 	szConfig := getSzConfig()
-	result, err := szConfig.ImportConfig(ctx, request.GetJsonConfig())
+	result, err := szConfig.ImportConfig(ctx, request.GetConfigDefinition())
 	response := szpb.ImportConfigResponse{
 		Result: int64(result),
 	}

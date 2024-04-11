@@ -50,9 +50,9 @@ func (server *SzDiagnosticServer) traceExit(messageNumber int, details ...interf
 // --- Errors -----------------------------------------------------------------
 
 // Create error.
-func (server *SzDiagnosticServer) error(messageNumber int, details ...interface{}) error {
-	return server.getLogger().NewError(messageNumber, details...)
-}
+// func (server *SzDiagnosticServer) error(messageNumber int, details ...interface{}) error {
+// 	return server.getLogger().NewError(messageNumber, details...)
+// }
 
 // --- Services ---------------------------------------------------------------
 

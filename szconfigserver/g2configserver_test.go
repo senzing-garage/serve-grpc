@@ -9,6 +9,7 @@ import (
 
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
+	"github.com/senzing-garage/sz-sdk-go/sz"
 	"github.com/senzing-garage/sz-sdk-go/szerror"
 	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	"github.com/stretchr/testify/assert"
@@ -20,7 +21,7 @@ const (
 )
 
 var (
-	g2configTestSingleton *SzConfigServer
+	szConfigTestSingleton *SzConfigServer
 )
 
 // ----------------------------------------------------------------------------
@@ -28,37 +29,37 @@ var (
 // ----------------------------------------------------------------------------
 
 func getTestObject(ctx context.Context, test *testing.T) SzConfigServer {
-	if g2configTestSingleton == nil {
-		g2configTestSingleton = &SzConfigServer{}
-		moduleName := "Test module name"
-		verboseLogging := int64(0)
-		iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	if szConfigTestSingleton == nil {
+		szConfigTestSingleton = &SzConfigServer{}
+		instanceName := "Test name"
+		verboseLogging := sz.SZ_NO_LOGGING
+		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
-		err = GetSdkG2config().Init(ctx, moduleName, iniParams, verboseLogging)
+		err = GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
 		if err != nil {
 			test.Logf("Cannot Init. Error: %v", err)
 		}
 	}
-	return *g2configTestSingleton
+	return *szConfigTestSingleton
 }
 
 func getSzConfigServer(ctx context.Context) SzConfigServer {
-	if g2configTestSingleton == nil {
-		g2configTestSingleton = &SzConfigServer{}
-		moduleName := "Test module name"
-		verboseLogging := int64(0)
-		iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	if szConfigTestSingleton == nil {
+		szConfigTestSingleton = &SzConfigServer{}
+		instanceName := "Test name"
+		verboseLogging := sz.SZ_NO_LOGGING
+		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
-		err = GetSdkG2config().Init(ctx, moduleName, iniParams, verboseLogging)
+		err = GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
 		if err != nil {
 			fmt.Println(err)
 		}
 	}
-	return *g2configTestSingleton
+	return *szConfigTestSingleton
 }
 
 func truncate(aString string, length int) string {
@@ -145,231 +146,205 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 // Test interface functions
 // ----------------------------------------------------------------------------
 
-func TestG2configserver_AddDataSource(test *testing.T) {
+func TestSzConfigServer_AddDataSource(test *testing.T) {
 	ctx := context.TODO()
-	g2config := getTestObject(ctx, test)
+	szConfigServer := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &g2pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
-	testError(test, ctx, g2config, err)
-	printActual(test, responseFromCreate.GetResult())
+	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
+	testError(test, ctx, szConfigServer, err)
+	printActual(test, responseFromCreateConfig.GetResult())
 
 	// AddDataSource.
 	requestToAddDataSource := &g2pb.AddDataSourceRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
-		InputJson:    `{"DSRC_CODE": "GO_TEST"}`,
+		ConfigHandle:   responseFromCreateConfig.GetResult(),
+		DataSourceCode: "GO_TEST",
 	}
-	responseFromAddDataSource, err := g2config.AddDataSource(ctx, requestToAddDataSource)
-	testError(test, ctx, g2config, err)
+	responseFromAddDataSource, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
+	testError(test, ctx, szConfigServer, err)
 	printActual(test, responseFromAddDataSource.GetResult())
 
 	// Close.
-	requestToClose := &g2pb.CloseRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
+	requestToCloseConfig := &g2pb.CloseConfigRequest{
+		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
-	_, err = g2config.Close(ctx, requestToClose)
-	testError(test, ctx, g2config, err)
+	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
+	testError(test, ctx, szConfigServer, err)
 }
 
-func TestG2configserver_Close(test *testing.T) {
+func TestSzConfigServer_CloseConfig(test *testing.T) {
 	ctx := context.TODO()
-	g2config := getTestObject(ctx, test)
+	szConfigServer := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &g2pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
-	testError(test, ctx, g2config, err)
-	printActual(test, responseFromCreate.GetResult())
+	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
+	testError(test, ctx, szConfigServer, err)
+	printActual(test, responseFromCreateConfig.GetResult())
 
 	// Close.
-	requestToClose := &g2pb.CloseRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
+	requestToCloseConfig := &g2pb.CloseConfigRequest{
+		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
-	_, err = g2config.Close(ctx, requestToClose)
-	testError(test, ctx, g2config, err)
+	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
+	testError(test, ctx, szConfigServer, err)
 }
 
-func TestG2configserver_Create(test *testing.T) {
+func TestSzConfigServer_CreateConfig(test *testing.T) {
 	ctx := context.TODO()
-	g2config := getTestObject(ctx, test)
-	requestToCreate := &g2pb.CreateRequest{}
-	response, err := g2config.Create(ctx, requestToCreate)
-	testError(test, ctx, g2config, err)
+	szConfigServer := getTestObject(ctx, test)
+	requestToCreate := &g2pb.CreateConfigRequest{}
+	response, err := szConfigServer.CreateConfig(ctx, requestToCreate)
+	testError(test, ctx, szConfigServer, err)
 	printActual(test, response.GetResult())
 }
 
-func TestG2configserver_DeleteDataSource(test *testing.T) {
+func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 	ctx := context.TODO()
-	g2config := getTestObject(ctx, test)
+	szConfigServer := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &g2pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
-	testError(test, ctx, g2config, err)
-	printActual(test, responseFromCreate.GetResult())
+	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
+	testError(test, ctx, szConfigServer, err)
+	printActual(test, responseFromCreateConfig.GetResult())
 
-	// ListDataSources #1.
-	requestToListDataSources := &g2pb.ListDataSourcesRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
+	// GetDataSources #1.
+	requestToGetDataSources := &g2pb.GetDataSourcesRequest{
+		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
-	responseFromListDataSources, err := g2config.ListDataSources(ctx, requestToListDataSources)
-	testError(test, ctx, g2config, err)
-	listBefore := responseFromListDataSources.GetResult()
-	printActual(test, listBefore)
+	responseFromGetDataSources, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
+	testError(test, ctx, szConfigServer, err)
+	initialDataSources := responseFromGetDataSources.GetResult()
+	printActual(test, initialDataSources)
 
 	// AddDataSource.
 	requestToAddDataSource := &g2pb.AddDataSourceRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
-		InputJson:    `{"DSRC_CODE": "GO_TEST"}`,
+		ConfigHandle:   responseFromCreateConfig.GetResult(),
+		DataSourceCode: "GO_TEST",
 	}
-	responseFromAddDataSource, err := g2config.AddDataSource(ctx, requestToAddDataSource)
-	testError(test, ctx, g2config, err)
+	responseFromAddDataSource, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
+	testError(test, ctx, szConfigServer, err)
 	printActual(test, responseFromAddDataSource.GetResult())
 
-	// ListDataSources #2.
-	responseFromListDataSources2, err := g2config.ListDataSources(ctx, requestToListDataSources)
-	testError(test, ctx, g2config, err)
+	// GetDataSources #2.
+	responseFromListDataSources2, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
+	testError(test, ctx, szConfigServer, err)
 	printActual(test, responseFromListDataSources2.GetResult())
 
 	// DeleteDataSource.
 	requestToDeleteDataSource := &g2pb.DeleteDataSourceRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
-		InputJson:    `{"DSRC_CODE": "GO_TEST"}`,
+		ConfigHandle:   responseFromCreateConfig.GetResult(),
+		DataSourceCode: "GO_TEST",
 	}
-	_, err = g2config.DeleteDataSource(ctx, requestToDeleteDataSource)
-	testError(test, ctx, g2config, err)
+	_, err = szConfigServer.DeleteDataSource(ctx, requestToDeleteDataSource)
+	testError(test, ctx, szConfigServer, err)
 
 	// ListDataSources #3.
-	responseFromListDataSources3, err := g2config.ListDataSources(ctx, requestToListDataSources)
-	testError(test, ctx, g2config, err)
-	printActual(test, responseFromListDataSources3.GetResult())
+	responseFromGetDataSources3, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
+	testError(test, ctx, szConfigServer, err)
+	printActual(test, responseFromGetDataSources3.GetResult())
 
 	// Close.
-	requestToClose := &g2pb.CloseRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
+	requestToCloseConfig := &g2pb.CloseConfigRequest{
+		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
-	_, err = g2config.Close(ctx, requestToClose)
-	testError(test, ctx, g2config, err)
+	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
+	testError(test, ctx, szConfigServer, err)
 
-	assert.Equal(test, listBefore, responseFromListDataSources3.GetResult())
+	assert.Equal(test, initialDataSources, responseFromGetDataSources3.GetResult())
 }
 
-func TestG2configserver_ListDataSources(test *testing.T) {
+func TestSzConfigServer_GetDataSources(test *testing.T) {
 	ctx := context.TODO()
-	g2config := getTestObject(ctx, test)
+	szConfigServer := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &g2pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
-	testError(test, ctx, g2config, err)
-	printActual(test, responseFromCreate.GetResult())
+	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
+	testError(test, ctx, szConfigServer, err)
+	printActual(test, responseFromCreateConfig.GetResult())
 
 	// ListDataSources.
-	requestToList := &g2pb.ListDataSourcesRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
+	requestToGetDataSources := &g2pb.GetDataSourcesRequest{
+		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
-	responseFromListDataSources, err := g2config.ListDataSources(ctx, requestToList)
-	testError(test, ctx, g2config, err)
-	printActual(test, responseFromListDataSources.GetResult())
+	responseFromGetDataSources, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
+	testError(test, ctx, szConfigServer, err)
+	printActual(test, responseFromGetDataSources.GetResult())
 
 	// Close.
-	requestToClose := &g2pb.CloseRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
+	requestToCloseConfig := &g2pb.CloseConfigRequest{
+		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
-	_, err = g2config.Close(ctx, requestToClose)
-	testError(test, ctx, g2config, err)
+	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
+	testError(test, ctx, szConfigServer, err)
 }
 
-func TestG2configserver_Load(test *testing.T) {
+func TestSzConfigServer_ImportConfig(test *testing.T) {
 	ctx := context.TODO()
-	g2config := getTestObject(ctx, test)
+	szConfigServer := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &g2pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
-	testError(test, ctx, g2config, err)
+	requestToCreate := &g2pb.CreateConfigRequest{}
+	responseFromCreate, err := szConfigServer.CreateConfig(ctx, requestToCreate)
+	testError(test, ctx, szConfigServer, err)
 	printActual(test, responseFromCreate.GetResult())
 
-	// Save.
-	requestToSave := &g2pb.SaveRequest{
+	// Export Config to string.
+	requestToExportConfig := &g2pb.ExportConfigRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
-	responseFromSave, err := g2config.Save(ctx, requestToSave)
-	testError(test, ctx, g2config, err)
-	printActual(test, responseFromSave.GetResult())
+	responseFromExportConfig, err := szConfigServer.ExportConfig(ctx, requestToExportConfig)
+	testError(test, ctx, szConfigServer, err)
+	printActual(test, responseFromExportConfig.GetResult())
 
 	// Close.
-	requestToClose := &g2pb.CloseRequest{
+	requestToCloseConfig := &g2pb.CloseConfigRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
-	_, err = g2config.Close(ctx, requestToClose)
-	testError(test, ctx, g2config, err)
+	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
+	testError(test, ctx, szConfigServer, err)
 
 	// Load.
-	requestToLoad := &g2pb.LoadRequest{
-		JsonConfig: responseFromSave.GetResult(),
+	requestToImportConfig := &g2pb.ImportConfigRequest{
+		ConfigDefinition: responseFromExportConfig.GetResult(),
 	}
-	responseFromLoad, err := g2config.Load(ctx, requestToLoad)
-	testError(test, ctx, g2config, err)
+	responseFromLoad, err := szConfigServer.ImportConfig(ctx, requestToImportConfig)
+	testError(test, ctx, szConfigServer, err)
 	printActual(test, responseFromLoad.GetResult())
 
 	// Close.
-	requestToClose = &g2pb.CloseRequest{
+	requestToCloseConfig = &g2pb.CloseConfigRequest{
 		ConfigHandle: responseFromLoad.GetResult(),
 	}
-	_, err = g2config.Close(ctx, requestToClose)
-	testError(test, ctx, g2config, err)
+	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
+	testError(test, ctx, szConfigServer, err)
 }
 
-func TestG2configserver_Save(test *testing.T) {
+func TestSzConfigServer_ExportConfig(test *testing.T) {
 	ctx := context.TODO()
-	g2config := getTestObject(ctx, test)
+	szConfigServer := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &g2pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
-	testError(test, ctx, g2config, err)
-	printActual(test, responseFromCreate.GetResult())
+	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
+	testError(test, ctx, szConfigServer, err)
+	printActual(test, responseFromCreateConfig.GetResult())
 
 	// Save.
-	requestToSave := &g2pb.SaveRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
+	requestToExportConfig := &g2pb.ExportConfigRequest{
+		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
-	responseFromSave, err := g2config.Save(ctx, requestToSave)
-	testError(test, ctx, g2config, err)
-	printActual(test, responseFromSave.GetResult())
+	responseFromExportConfig, err := szConfigServer.ExportConfig(ctx, requestToExportConfig)
+	testError(test, ctx, szConfigServer, err)
+	printActual(test, responseFromExportConfig.GetResult())
 
 	// Close.
-	requestToClose := &g2pb.CloseRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
+	requestToCloseConfig := &g2pb.CloseConfigRequest{
+		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
-	_, err = g2config.Close(ctx, requestToClose)
-	testError(test, ctx, g2config, err)
-}
-
-func TestG2configserver_Init(test *testing.T) {
-	ctx := context.TODO()
-	g2config := getTestObject(ctx, test)
-	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-	if err != nil {
-		assert.FailNow(test, err.Error())
-	}
-	request := &g2pb.InitRequest{
-		ModuleName:     "Test module name",
-		IniParams:      iniParams,
-		VerboseLogging: int64(0),
-	}
-	response, err := g2config.Init(ctx, request)
-	expectError(test, ctx, g2config, err, "senzing-60114002")
-	printActual(test, response)
-}
-
-func TestG2configserver_Destroy(test *testing.T) {
-	ctx := context.TODO()
-	g2config := getTestObject(ctx, test)
-	request := &g2pb.DestroyRequest{}
-	response, err := g2config.Destroy(ctx, request)
-	expectError(test, ctx, g2config, err, "senzing-60114001")
-	printActual(test, response)
+	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
+	testError(test, ctx, szConfigServer, err)
 }

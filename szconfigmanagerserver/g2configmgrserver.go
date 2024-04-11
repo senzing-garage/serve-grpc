@@ -50,9 +50,9 @@ func (server *SzConfigManagerServer) traceExit(messageNumber int, details ...int
 // --- Errors -----------------------------------------------------------------
 
 // Create error.
-func (server *SzConfigManagerServer) error(messageNumber int, details ...interface{}) error {
-	return server.getLogger().NewError(messageNumber, details...)
-}
+// func (server *SzConfigManagerServer) error(messageNumber int, details ...interface{}) error {
+// 	return server.getLogger().NewError(messageNumber, details...)
+// }
 
 // --- Services ---------------------------------------------------------------
 

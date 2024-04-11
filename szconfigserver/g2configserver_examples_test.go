@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
 	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 )
 
@@ -14,14 +13,14 @@ import (
 // Examples for godoc documentation
 // ----------------------------------------------------------------------------
 
-func ExampleG2ConfigServer_AddDataSource() {
+func ExampleSzConfigServer_AddDataSource() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
 	szConfigServer := getSzConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
 	requestToCreateConfig := &g2pb.CreateConfigRequest{}
-	responseFromCreateConfig, err := szConfigServer.Create(ctx, requestToCreateConfig)
+	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -39,35 +38,35 @@ func ExampleG2ConfigServer_AddDataSource() {
 	// Output: {"DSRC_ID":1001}
 }
 
-func ExampleG2ConfigServer_Close() {
+func ExampleSzConfigServer_CloseConfig() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
-	g2config := getSzConfigServer(ctx)
+	szConfigServer := getSzConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
-	requestToCreate := &g2pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
+	requestToCreate := &g2pb.CreateConfigRequest{}
+	responseFromCreate, err := szConfigServer.CreateConfig(ctx, requestToCreate)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
-	request := &g2pb.CloseRequest{
+	request := &g2pb.CloseConfigRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
-	_, err = g2config.Close(ctx, request)
+	_, err = szConfigServer.CloseConfig(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
 	// Output:
 }
 
-func ExampleG2ConfigServer_Create() {
+func ExampleSzConfigServer_CreateConfig() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
-	g2config := getSzConfigServer(ctx)
-	request := &g2pb.CreateRequest{}
-	response, err := g2config.Create(ctx, request)
+	szConfigServer := getSzConfigServer(ctx)
+	request := &g2pb.CreateConfigRequest{}
+	response, err := szConfigServer.CreateConfig(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -75,47 +74,47 @@ func ExampleG2ConfigServer_Create() {
 	// Output: true
 }
 
-func ExampleG2ConfigServer_DeleteDataSource() {
+func ExampleSzConfigServer_DeleteDataSource() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
-	g2config := getSzConfigServer(ctx)
+	szConfigServer := getSzConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
-	requestToCreate := &g2pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
+	requestToCreate := &g2pb.CreateConfigRequest{}
+	responseFromCreate, err := szConfigServer.CreateConfig(ctx, requestToCreate)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
 	request := &g2pb.DeleteDataSourceRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
-		InputJson:    `{"DSRC_CODE": "TEST"}`,
+		ConfigHandle:   responseFromCreate.GetResult(),
+		DataSourceCode: "TEST",
 	}
-	_, err = g2config.DeleteDataSource(ctx, request)
+	_, err = szConfigServer.DeleteDataSource(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
 	// Output:
 }
 
-func ExampleG2ConfigServer_ListDataSources() {
+func ExampleSzConfigServer_GetDataSources() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
 	g2config := getSzConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
-	requestToCreate := &g2pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
+	requestToCreate := &g2pb.CreateConfigRequest{}
+	responseFromCreate, err := g2config.CreateConfig(ctx, requestToCreate)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
-	request := &g2pb.ListDataSourcesRequest{
+	request := &g2pb.GetDataSourcesRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
-	response, err := g2config.ListDataSources(ctx, request)
+	response, err := g2config.GetDataSources(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -123,93 +122,59 @@ func ExampleG2ConfigServer_ListDataSources() {
 	// Output: {"DATA_SOURCES":[{"DSRC_ID":1,"DSRC_CODE":"TEST"},{"DSRC_ID":2,"DSRC_CODE":"SEARCH"}]}
 }
 
-func ExampleG2ConfigServer_Load() {
+func ExampleSzConfigServer_ImportConfig() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
 	g2config := getSzConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
-	requestToCreate := &g2pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
+	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	responseFromCreateConfig, err := g2config.CreateConfig(ctx, requestToCreateConfig)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Save() to create a JSON string.
-	requestToSave := &g2pb.SaveRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
+	requestToExportConfig := &g2pb.ExportConfigRequest{
+		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
-	responseFromSave, err := g2config.Save(ctx, requestToSave)
+	responseFromExportConfig, err := g2config.ExportConfig(ctx, requestToExportConfig)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
-	request := &g2pb.LoadRequest{
-		JsonConfig: responseFromSave.GetResult(),
+	request := &g2pb.ImportConfigRequest{
+		ConfigDefinition: responseFromExportConfig.GetResult(),
 	}
-	responseFromLoad, err := g2config.Load(ctx, request)
+	responseFromImportConfig, err := g2config.ImportConfig(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(responseFromLoad.GetResult() > 0)
+	fmt.Println(responseFromImportConfig.GetResult() > 0)
 	// Output: true
 }
 
-func ExampleG2ConfigServer_Save() {
+func ExampleSzConfigServer_Save() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
 	ctx := context.TODO()
 	g2config := getSzConfigServer(ctx)
 
 	// Create() to create an in-memory Senzing configuration.
-	requestToCreate := &g2pb.CreateRequest{}
-	responseFromCreate, err := g2config.Create(ctx, requestToCreate)
+	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	responseFromCreateConfig, err := g2config.CreateConfig(ctx, requestToCreateConfig)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
-	request := &g2pb.SaveRequest{
-		ConfigHandle: responseFromCreate.GetResult(),
+	request := &g2pb.ExportConfigRequest{
+		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
-	response, err := g2config.Save(ctx, request)
+	response, err := g2config.ExportConfig(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println(truncate(response.GetResult(), 207))
 	// Output: {"G2_CONFIG":{"CFG_ATTR":[{"ATTR_ID":1001,"ATTR_CODE":"DATA_SOURCE","ATTR_CLASS":"OBSERVATION","FTYPE_CODE":null,"FELEM_CODE":null,"FELEM_REQ":"Yes","DEFAULT_VALUE":null,"ADVANCED":"Yes","INTERNAL":"No"},...
-}
-
-func ExampleG2ConfigServer_Init() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
-	ctx := context.TODO()
-	g2config := getSzConfigServer(ctx)
-	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-	if err != nil {
-		fmt.Println(err)
-	}
-	request := &g2pb.InitRequest{
-		ModuleName:     "Test module name",
-		IniParams:      iniParams,
-		VerboseLogging: int64(0),
-	}
-	response, err := g2config.Init(ctx, request)
-	if err != nil {
-		// This should produce a "senzing-60114002" error.
-	}
-	fmt.Println(response)
-	// Output:
-}
-
-func ExampleG2ConfigServer_Destroy() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2configserver/g2configserver_examples_test.go
-	ctx := context.TODO()
-	g2config := getSzConfigServer(ctx)
-	request := &g2pb.DestroyRequest{}
-	response, err := g2config.Destroy(ctx, request)
-	if err != nil {
-		// This should produce a "senzing-60114001" error.
-	}
-	fmt.Println(response)
-	// Output:
 }
