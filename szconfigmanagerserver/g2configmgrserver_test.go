@@ -10,7 +10,6 @@ import (
 
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
-	"github.com/senzing-garage/go-helpers/truthset"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/serve-grpc/szconfigserver"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
@@ -170,9 +169,8 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 	}
 
 	datasourceNames := []string{"CUSTOMERS", "REFERENCE", "WATCHLIST"}
-	for _, datasourceName := range datasourceNames {
-		datasource := truthset.TruthsetDataSources[datasourceName]
-		_, err := szConfig.AddDataSource(ctx, configHandle, datasource.Json)
+	for _, dataSourceCode := range datasourceNames {
+		_, err := szConfig.AddDataSource(ctx, configHandle, dataSourceCode)
 		if err != nil {
 			return createError(5908, err)
 		}

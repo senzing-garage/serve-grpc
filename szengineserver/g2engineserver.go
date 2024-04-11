@@ -2,10 +2,12 @@ package szengineserver
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
 	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/go-observing/observer"
 	szsdk "github.com/senzing-garage/sz-sdk-go-core/szengine"
 	"github.com/senzing-garage/sz-sdk-go/sz"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szengine"
@@ -15,59 +17,6 @@ var (
 	szEngineSingleton sz.SzEngine
 	szEngineSyncOnce  sync.Once
 )
-
-// ----------------------------------------------------------------------------
-// Internal methods
-// ----------------------------------------------------------------------------
-
-// --- Logging ----------------------------------------------------------------
-
-// Get the Logger singleton.
-func (server *SzEngineServer) getLogger() logging.LoggingInterface {
-	var err error = nil
-	if server.logger == nil {
-		options := []interface{}{
-			&logging.OptionCallerSkip{Value: 3},
-		}
-		server.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
-		if err != nil {
-			panic(err)
-		}
-	}
-	return server.logger
-}
-
-// Trace method entry.
-func (server *SzEngineServer) traceEntry(messageNumber int, details ...interface{}) {
-	server.getLogger().Log(messageNumber, details...)
-}
-
-// Trace method exit.
-func (server *SzEngineServer) traceExit(messageNumber int, details ...interface{}) {
-	server.getLogger().Log(messageNumber, details...)
-}
-
-// --- Errors -----------------------------------------------------------------
-
-// Create error.
-// func (server *SzEngineServer) error(messageNumber int, details ...interface{}) error {
-// 	return server.getLogger().NewError(messageNumber, details...)
-// }
-
-// --- Services ---------------------------------------------------------------
-
-// Singleton pattern for g2config.
-// See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getSzEngine() sz.SzEngine {
-	szEngineSyncOnce.Do(func() {
-		szEngineSingleton = &szsdk.Szengine{}
-	})
-	return szEngineSingleton
-}
-
-func GetSdkG2engine() sz.SzEngine {
-	return getSzEngine()
-}
 
 // ----------------------------------------------------------------------------
 // Interface methods for github.com/senzing-garage/g2-sdk-go/g2engine.G2engine
@@ -510,7 +459,7 @@ func (server *SzEngineServer) StreamExportCsvEntityReport(request *szpb.StreamEx
 	return
 }
 
-func (server *SzEngineServer) StreamExportJSONEntityReport(request *szpb.StreamExportJsonEntityReportRequest, stream szpb.SzEngine_StreamExportJsonEntityReportServer) (err error) {
+func (server *SzEngineServer) StreamExportJsonEntityReport(request *szpb.StreamExportJsonEntityReportRequest, stream szpb.SzEngine_StreamExportJsonEntityReportServer) (err error) {
 	if server.isTrace {
 		server.traceEntry(159, request)
 	}
@@ -591,4 +540,129 @@ func (server *SzEngineServer) WhyRecords(ctx context.Context, request *szpb.WhyR
 		Result: result,
 	}
 	return &response, err
+}
+
+// ----------------------------------------------------------------------------
+// Internal methods
+// ----------------------------------------------------------------------------
+
+// --- Logging ----------------------------------------------------------------
+
+// Get the Logger singleton.
+func (server *SzEngineServer) getLogger() logging.LoggingInterface {
+	var err error = nil
+	if server.logger == nil {
+		options := []interface{}{
+			&logging.OptionCallerSkip{Value: 3},
+		}
+		server.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
+		if err != nil {
+			panic(err)
+		}
+	}
+	return server.logger
+}
+
+// Trace method entry.
+func (server *SzEngineServer) traceEntry(messageNumber int, details ...interface{}) {
+	server.getLogger().Log(messageNumber, details...)
+}
+
+// Trace method exit.
+func (server *SzEngineServer) traceExit(messageNumber int, details ...interface{}) {
+	server.getLogger().Log(messageNumber, details...)
+}
+
+func (server *SzEngineServer) SetLogLevel(ctx context.Context, logLevelName string) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(137, logLevelName)
+		defer func() { server.traceExit(138, logLevelName, err, time.Since(entryTime)) }()
+	}
+	if !logging.IsValidLogLevelName(logLevelName) {
+		return fmt.Errorf("invalid error level: %s", logLevelName)
+	}
+	// g2engine := getG2engine()
+	// err = g2engine.SetLogLevel(ctx, logLevelName)
+	// if err != nil {
+	// 	return err
+	// }
+	err = server.getLogger().SetLogLevel(logLevelName)
+	if err != nil {
+		return err
+	}
+	server.isTrace = (logLevelName == logging.LevelTraceName)
+	return err
+}
+
+// --- Errors -----------------------------------------------------------------
+
+// Create error.
+// func (server *SzEngineServer) error(messageNumber int, details ...interface{}) error {
+// 	return server.getLogger().NewError(messageNumber, details...)
+// }
+
+// --- Services ---------------------------------------------------------------
+
+// Singleton pattern for g2config.
+// See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
+func getSzEngine() sz.SzEngine {
+	szEngineSyncOnce.Do(func() {
+		szEngineSingleton = &szsdk.Szengine{}
+	})
+	return szEngineSingleton
+}
+
+func GetSdkG2engine() sz.SzEngine {
+	return getSzEngine()
+}
+
+// --- Observer ---------------------------------------------------------------
+
+func (server *SzEngineServer) GetObserverOrigin(ctx context.Context) string {
+	// var err error = nil
+	// if server.isTrace {
+	// 	entryTime := time.Now()
+	// 	server.traceEntry(161)
+	// 	defer func() { server.traceExit(162, err, time.Since(entryTime)) }()
+	// }
+	// g2engine := getSzEngine()
+	// return g2engine.GetObserverOrigin(ctx)
+	return ""
+}
+
+func (server *SzEngineServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	// var err error = nil
+	// if server.isTrace {
+	// 	entryTime := time.Now()
+	// 	server.traceEntry(11, observer.GetObserverId(ctx))
+	// 	defer func() { server.traceExit(12, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	// }
+	// szEngine := getSzEngine()
+	// return szEngine.RegisterObserver(ctx, observer)
+	return nil
+}
+
+func (server *SzEngineServer) SetObserverOrigin(ctx context.Context, origin string) {
+	// var err error = nil
+	// if server.isTrace {
+	// 	entryTime := time.Now()
+	// 	server.traceEntry(163, origin)
+	// 	defer func() { server.traceExit(164, origin, err, time.Since(entryTime)) }()
+	// }
+	// g2engine := getG2engine()
+	// g2engine.SetObserverOrigin(ctx, origin)
+}
+
+func (server *SzEngineServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	// var err error = nil
+	// if server.isTrace {
+	// 	entryTime := time.Now()
+	// 	server.traceEntry(79, observer.GetObserverId(ctx))
+	// 	defer func() { server.traceExit(80, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	// }
+	// g2engine := getG2engine()
+	// return g2engine.UnregisterObserver(ctx, observer)
+	return nil
 }

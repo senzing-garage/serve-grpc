@@ -2,10 +2,12 @@ package szconfigserver
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
 	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/go-observing/observer"
 	szsdk "github.com/senzing-garage/sz-sdk-go-core/szconfig"
 	"github.com/senzing-garage/sz-sdk-go/sz"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
@@ -15,59 +17,6 @@ var (
 	szConfigSingleton sz.SzConfig
 	szConfigSyncOnce  sync.Once
 )
-
-// ----------------------------------------------------------------------------
-// Internal methods
-// ----------------------------------------------------------------------------
-
-// --- Logging ----------------------------------------------------------------
-
-// Get the Logger singleton.
-func (server *SzConfigServer) getLogger() logging.LoggingInterface {
-	var err error = nil
-	if server.logger == nil {
-		options := []interface{}{
-			&logging.OptionCallerSkip{Value: 3},
-		}
-		server.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
-		if err != nil {
-			panic(err)
-		}
-	}
-	return server.logger
-}
-
-// Trace method entry.
-func (server *SzConfigServer) traceEntry(messageNumber int, details ...interface{}) {
-	server.getLogger().Log(messageNumber, details...)
-}
-
-// Trace method exit.
-func (server *SzConfigServer) traceExit(messageNumber int, details ...interface{}) {
-	server.getLogger().Log(messageNumber, details...)
-}
-
-// --- Errors -----------------------------------------------------------------
-
-// Create error.
-func (server *SzConfigServer) error(messageNumber int, details ...interface{}) error {
-	return server.getLogger().NewError(messageNumber, details...)
-}
-
-// --- Services ---------------------------------------------------------------
-
-// Singleton pattern for szconfig.
-// See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getSzConfig() sz.SzConfig {
-	szConfigSyncOnce.Do(func() {
-		szConfigSingleton = &szsdk.Szconfig{}
-	})
-	return szConfigSingleton
-}
-
-func GetSdkSzConfig() sz.SzConfig {
-	return getSzConfig()
-}
 
 // ----------------------------------------------------------------------------
 // Interface methods for github.com/senzing-garage/g2-sdk-go/szconfig.G2config
@@ -178,69 +127,127 @@ func (server *SzConfigServer) ImportConfig(ctx context.Context, request *szpb.Im
 	return &response, err
 }
 
-// func (server *SzConfigServer) GetObserverOrigin(ctx context.Context) string {
-// 	var err error = nil
-// 	if server.isTrace {
-// 		entryTime := time.Now()
-// 		server.traceEntry(27)
-// 		defer func() { server.traceExit(28, err, time.Since(entryTime)) }()
-// 	}
-// 	szconfig := getSzConfig()
-// 	return szconfig.GetObserverOrigin(ctx)
+// ----------------------------------------------------------------------------
+// Internal methods
+// ----------------------------------------------------------------------------
+
+// --- Logging ----------------------------------------------------------------
+
+// Get the Logger singleton.
+func (server *SzConfigServer) getLogger() logging.LoggingInterface {
+	var err error = nil
+	if server.logger == nil {
+		options := []interface{}{
+			&logging.OptionCallerSkip{Value: 3},
+		}
+		server.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
+		if err != nil {
+			panic(err)
+		}
+	}
+	return server.logger
+}
+
+// Trace method entry.
+func (server *SzConfigServer) traceEntry(messageNumber int, details ...interface{}) {
+	server.getLogger().Log(messageNumber, details...)
+}
+
+// Trace method exit.
+func (server *SzConfigServer) traceExit(messageNumber int, details ...interface{}) {
+	server.getLogger().Log(messageNumber, details...)
+}
+
+func (server *SzConfigServer) SetLogLevel(ctx context.Context, logLevelName string) error {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(25, logLevelName)
+		defer func() { server.traceExit(26, logLevelName, err, time.Since(entryTime)) }()
+	}
+	if !logging.IsValidLogLevelName(logLevelName) {
+		return fmt.Errorf("invalid error level: %s", logLevelName)
+	}
+	// szconfig := getSzConfig()
+	// err = szconfig.SetLogLevel(ctx, logLevelName)
+	// if err != nil {
+	// 	return err
+	// }
+	err = server.getLogger().SetLogLevel(logLevelName)
+	if err != nil {
+		return err
+	}
+	server.isTrace = (logLevelName == logging.LevelTraceName)
+	return err
+}
+
+// --- Errors -----------------------------------------------------------------
+
+// Create error.
+// func (server *SzConfigServer) error(messageNumber int, details ...interface{}) error {
+// 	return server.getLogger().NewError(messageNumber, details...)
 // }
 
-// func (server *SzConfigServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
-// 	var err error = nil
-// 	if server.isTrace {
-// 		entryTime := time.Now()
-// 		server.traceEntry(3, observer.GetObserverId(ctx))
-// 		defer func() { server.traceExit(4, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-// 	}
-// 	szconfig := getSzConfig()
-// 	return szconfig.RegisterObserver(ctx, observer)
-// }
+// --- Services ---------------------------------------------------------------
 
-// func (server *SzConfigServer) SetLogLevel(ctx context.Context, logLevelName string) error {
-// 	var err error = nil
-// 	if server.isTrace {
-// 		entryTime := time.Now()
-// 		server.traceEntry(25, logLevelName)
-// 		defer func() { server.traceExit(26, logLevelName, err, time.Since(entryTime)) }()
-// 	}
-// 	if !logging.IsValidLogLevelName(logLevelName) {
-// 		return fmt.Errorf("invalid error level: %s", logLevelName)
-// 	}
-// 	szconfig := getSzConfig()
-// 	err = szconfig.SetLogLevel(ctx, logLevelName)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	err = server.getLogger().SetLogLevel(logLevelName)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	server.isTrace = (logLevelName == logging.LevelTraceName)
-// 	return err
-// }
+// Singleton pattern for szconfig.
+// See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
+func getSzConfig() sz.SzConfig {
+	szConfigSyncOnce.Do(func() {
+		szConfigSingleton = &szsdk.Szconfig{}
+	})
+	return szConfigSingleton
+}
 
-// func (server *SzConfigServer) SetObserverOrigin(ctx context.Context, origin string) {
-// 	var err error = nil
-// 	if server.isTrace {
-// 		entryTime := time.Now()
-// 		server.traceEntry(29, origin)
-// 		defer func() { server.traceExit(30, origin, err, time.Since(entryTime)) }()
-// 	}
-// 	szconfig := getSzConfig()
-// 	szconfig.SetObserverOrigin(ctx, origin)
-// }
+func GetSdkSzConfig() sz.SzConfig {
+	return getSzConfig()
+}
 
-// func (server *SzConfigServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
-// 	var err error = nil
-// 	if server.isTrace {
-// 		entryTime := time.Now()
-// 		server.traceEntry(13, observer.GetObserverId(ctx))
-// 		defer func() { server.traceExit(14, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-// 	}
-// 	szconfig := getSzConfig()
-// 	return szconfig.UnregisterObserver(ctx, observer)
-// }
+// --- Observer ---------------------------------------------------------------
+
+func (server *SzConfigServer) GetObserverOrigin(ctx context.Context) string {
+	// var err error = nil
+	// if server.isTrace {
+	// 	entryTime := time.Now()
+	// 	server.traceEntry(27)
+	// 	defer func() { server.traceExit(28, err, time.Since(entryTime)) }()
+	// }
+	// szconfig := getSzConfig()
+	// return szconfig.GetObserverOrigin(ctx)
+	return ""
+}
+
+func (server *SzConfigServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+	// var err error = nil
+	// if server.isTrace {
+	// 	entryTime := time.Now()
+	// 	server.traceEntry(3, observer.GetObserverId(ctx))
+	// 	defer func() { server.traceExit(4, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	// }
+	// szconfig := getSzConfig()
+	// return szconfig.RegisterObserver(ctx, observer)
+	return nil
+}
+
+func (server *SzConfigServer) SetObserverOrigin(ctx context.Context, origin string) {
+	// var err error = nil
+	// if server.isTrace {
+	// 	entryTime := time.Now()
+	// 	server.traceEntry(29, origin)
+	// 	defer func() { server.traceExit(30, origin, err, time.Since(entryTime)) }()
+	// }
+	// szconfig := getSzConfig()
+	// szconfig.SetObserverOrigin(ctx, origin)
+}
+
+func (server *SzConfigServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
+	// var err error = nil
+	// if server.isTrace {
+	// 	entryTime := time.Now()
+	// 	server.traceEntry(13, observer.GetObserverId(ctx))
+	// 	defer func() { server.traceExit(14, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+	// }
+	// szconfig := getSzConfig()
+	// return szconfig.UnregisterObserver(ctx, observer)
+	return nil
+}

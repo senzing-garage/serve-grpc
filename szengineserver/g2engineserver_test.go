@@ -199,9 +199,8 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 	}
 
 	datasourceNames := []string{"CUSTOMERS", "REFERENCE", "WATCHLIST"}
-	for _, datasourceName := range datasourceNames {
-		datasource := truthset.TruthsetDataSources[datasourceName]
-		_, err := szConfig.AddDataSource(ctx, configHandle, datasource.Json)
+	for _, dataSourceCode := range datasourceNames {
+		_, err := szConfig.AddDataSource(ctx, configHandle, dataSourceCode)
 		if err != nil {
 			return createError(5908, err)
 		}
