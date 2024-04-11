@@ -87,19 +87,19 @@ func RunE(_ *cobra.Command, _ []string) error {
 	}
 
 	grpcserver := &grpcserver.GrpcServerImpl{
-		EnableAll:                      viper.GetBool(option.EnableAll.Arg),
-		EnableG2config:                 viper.GetBool(option.EnableSzConfig.Arg),
-		EnableG2configmgr:              viper.GetBool(option.EnableSzConfigManager.Arg),
-		EnableG2diagnostic:             viper.GetBool(option.EnableSzDiagnostic.Arg),
-		EnableG2engine:                 viper.GetBool(option.EnableSzEngine.Arg),
-		EnableG2product:                viper.GetBool(option.EnableSzProduct.Arg),
-		LogLevelName:                   viper.GetString(option.LogLevel.Arg),
-		ObserverOrigin:                 viper.GetString(option.ObserverOrigin.Arg),
-		ObserverUrl:                    viper.GetString(option.ObserverUrl.Arg),
-		Port:                           viper.GetInt(option.GrpcPort.Arg),
-		SenzingEngineConfigurationJson: senzingEngineConfigurationJson,
-		SenzingModuleName:              viper.GetString(option.EngineModuleName.Arg),
-		SenzingVerboseLogging:          viper.GetInt64(option.EngineLogLevel.Arg),
+		EnableAll:             viper.GetBool(option.EnableAll.Arg),
+		EnableSzConfig:        viper.GetBool(option.EnableSzConfig.Arg),
+		EnableSzConfigManager: viper.GetBool(option.EnableSzConfigManager.Arg),
+		EnableSzDiagnostic:    viper.GetBool(option.EnableSzDiagnostic.Arg),
+		EnableSzEngine:        viper.GetBool(option.EnableSzEngine.Arg),
+		EnableSzProduct:       viper.GetBool(option.EnableSzProduct.Arg),
+		LogLevelName:          viper.GetString(option.LogLevel.Arg),
+		ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
+		ObserverUrl:           viper.GetString(option.ObserverUrl.Arg),
+		Port:                  viper.GetInt(option.GrpcPort.Arg),
+		SenzingSettings:       senzingEngineConfigurationJson,
+		SenzingInstanceName:   viper.GetString(option.EngineModuleName.Arg),
+		SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
 	}
 	return grpcserver.Serve(ctx)
 }

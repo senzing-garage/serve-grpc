@@ -28,21 +28,21 @@ import (
 
 // GrpcServerImpl is the default implementation of the GrpcServer interface.
 type GrpcServerImpl struct {
-	EnableAll                      bool
-	EnableG2config                 bool
-	EnableG2configmgr              bool
-	EnableG2diagnostic             bool
-	EnableG2engine                 bool
-	EnableG2product                bool
-	logger                         logging.LoggingInterface
-	LogLevelName                   string
-	ObserverOrigin                 string
-	Observers                      []observer.Observer
-	ObserverUrl                    string
-	Port                           int
-	SenzingEngineConfigurationJson string
-	SenzingModuleName              string
-	SenzingVerboseLogging          int64
+	EnableAll             bool
+	EnableSzConfig        bool
+	EnableSzConfigManager bool
+	EnableSzDiagnostic    bool
+	EnableSzEngine        bool
+	EnableSzProduct       bool
+	logger                logging.LoggingInterface
+	LogLevelName          string
+	ObserverOrigin        string
+	Observers             []observer.Observer
+	ObserverUrl           string
+	Port                  int
+	SenzingSettings       string
+	SenzingInstanceName   string
+	SenzingVerboseLogging int64
 }
 
 // ----------------------------------------------------------------------------
@@ -107,7 +107,7 @@ func (grpcServer *GrpcServerImpl) enableG2config(ctx context.Context, serviceReg
 	if err != nil {
 		panic(err)
 	}
-	err = szconfigserver.GetSdkSzConfig().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	err = szconfigserver.GetSdkSzConfig().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -132,7 +132,7 @@ func (grpcServer *GrpcServerImpl) enableG2configmgr(ctx context.Context, service
 	if err != nil {
 		panic(err)
 	}
-	err = szconfigmanagerserver.GetSdkSzConfigManager().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	err = szconfigmanagerserver.GetSdkSzConfigManager().Init(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -157,7 +157,7 @@ func (grpcServer *GrpcServerImpl) enableG2diagnostic(ctx context.Context, servic
 	if err != nil {
 		panic(err)
 	}
-	err = szdiagnosticserver.GetSdkSzDiagnostic().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	err = szdiagnosticserver.GetSdkSzDiagnostic().Init(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -182,7 +182,7 @@ func (grpcServer *GrpcServerImpl) enableG2engine(ctx context.Context, serviceReg
 	if err != nil {
 		panic(err)
 	}
-	err = szengineserver.GetSdkG2engine().Initialize(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	err = szengineserver.GetSdkG2engine().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -207,7 +207,7 @@ func (grpcServer *GrpcServerImpl) enableG2product(ctx context.Context, serviceRe
 	if err != nil {
 		panic(err)
 	}
-	err = szproductserver.GetSdkSzProduct().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	err = szproductserver.GetSdkSzProduct().Init(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -269,19 +269,19 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 
 	// Register services with gRPC server.
 
-	if grpcServer.EnableAll || grpcServer.EnableG2config {
+	if grpcServer.EnableAll || grpcServer.EnableSzConfig {
 		grpcServer.enableG2config(ctx, aGrpcServer)
 	}
-	if grpcServer.EnableAll || grpcServer.EnableG2configmgr {
+	if grpcServer.EnableAll || grpcServer.EnableSzConfigManager {
 		grpcServer.enableG2configmgr(ctx, aGrpcServer)
 	}
-	if grpcServer.EnableAll || grpcServer.EnableG2diagnostic {
+	if grpcServer.EnableAll || grpcServer.EnableSzDiagnostic {
 		grpcServer.enableG2diagnostic(ctx, aGrpcServer)
 	}
-	if grpcServer.EnableAll || grpcServer.EnableG2engine {
+	if grpcServer.EnableAll || grpcServer.EnableSzEngine {
 		grpcServer.enableG2engine(ctx, aGrpcServer)
 	}
-	if grpcServer.EnableAll || grpcServer.EnableG2product {
+	if grpcServer.EnableAll || grpcServer.EnableSzProduct {
 		grpcServer.enableG2product(ctx, aGrpcServer)
 	}
 
