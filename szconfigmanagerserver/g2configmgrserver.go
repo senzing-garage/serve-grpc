@@ -137,28 +137,6 @@ func (server *SzConfigManagerServer) GetDefaultConfigId(ctx context.Context, req
 	return &response, err
 }
 
-// func (server *SzConfigManagerServer) GetObserverOrigin(ctx context.Context) string {
-// 	var err error = nil
-// 	if server.isTrace {
-// 		entryTime := time.Now()
-// 		server.traceEntry(25)
-// 		defer func() { server.traceExit(26, err, time.Since(entryTime)) }()
-// 	}
-// 	szConfigManager := getSzConfigManager()
-// 	return szConfigManager.GetObserverOrigin(ctx)
-// }
-
-// func (server *SzConfigManagerServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
-// 	var err error = nil
-// 	if server.isTrace {
-// 		entryTime := time.Now()
-// 		server.traceEntry(3, observer.GetObserverId(ctx))
-// 		defer func() { server.traceExit(4, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-// 	}
-// 	szConfigManager := getSzConfigManager()
-// 	return szConfigManager.RegisterObserver(ctx, observer)
-// }
-
 func (server *SzConfigManagerServer) ReplaceDefaultConfigId(ctx context.Context, request *szpb.ReplaceDefaultConfigIdRequest) (*szpb.ReplaceDefaultConfigIdResponse, error) {
 	var err error = nil
 	if server.isTrace {
@@ -184,6 +162,28 @@ func (server *SzConfigManagerServer) SetDefaultConfigId(ctx context.Context, req
 	response := szpb.SetDefaultConfigIdResponse{}
 	return &response, err
 }
+
+// func (server *SzConfigManagerServer) GetObserverOrigin(ctx context.Context) string {
+// 	var err error = nil
+// 	if server.isTrace {
+// 		entryTime := time.Now()
+// 		server.traceEntry(25)
+// 		defer func() { server.traceExit(26, err, time.Since(entryTime)) }()
+// 	}
+// 	szConfigManager := getSzConfigManager()
+// 	return szConfigManager.GetObserverOrigin(ctx)
+// }
+
+// func (server *SzConfigManagerServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
+// 	var err error = nil
+// 	if server.isTrace {
+// 		entryTime := time.Now()
+// 		server.traceEntry(3, observer.GetObserverId(ctx))
+// 		defer func() { server.traceExit(4, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
+// 	}
+// 	szConfigManager := getSzConfigManager()
+// 	return szConfigManager.RegisterObserver(ctx, observer)
+// }
 
 // func (server *SzConfigManagerServer) SetLogLevel(ctx context.Context, logLevelName string) error {
 // 	var err error = nil

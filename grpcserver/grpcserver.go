@@ -207,7 +207,7 @@ func (grpcServer *GrpcServerImpl) enableG2product(ctx context.Context, serviceRe
 	if err != nil {
 		panic(err)
 	}
-	err = szproductserver.GetSdkG2product().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
+	err = szproductserver.GetSdkSzProduct().Init(ctx, grpcServer.SenzingModuleName, grpcServer.SenzingEngineConfigurationJson, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}

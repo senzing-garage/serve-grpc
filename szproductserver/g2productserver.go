@@ -2,20 +2,18 @@ package szproductserver
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
 	"github.com/senzing-garage/go-logging/logging"
-	"github.com/senzing-garage/go-observing/observer"
-	g2sdk "github.com/senzing-garage/sz-sdk-go-core/szproduct"
+	szsdk "github.com/senzing-garage/sz-sdk-go-core/szproduct"
 	"github.com/senzing-garage/sz-sdk-go/sz"
-	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
+	szpb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 )
 
 var (
-	g2productSingleton sz.G2product
-	g2productSyncOnce  sync.Once
+	szProductSingleton sz.SzProduct
+	szProductSyncOnce  sync.Once
 )
 
 // ----------------------------------------------------------------------------
@@ -52,71 +50,41 @@ func (server *SzProductServer) traceExit(messageNumber int, details ...interface
 // --- Errors -----------------------------------------------------------------
 
 // Create error.
-func (server *SzProductServer) error(messageNumber int, details ...interface{}) error {
-	return server.getLogger().NewError(messageNumber, details...)
-}
+// func (server *SzProductServer) error(messageNumber int, details ...interface{}) error {
+// 	return server.getLogger().NewError(messageNumber, details...)
+// }
 
 // --- Services ---------------------------------------------------------------
 
 // Singleton pattern for g2product.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getG2product() sz.G2product {
-	g2productSyncOnce.Do(func() {
-		g2productSingleton = &g2sdk.G2product{}
+func getSzProduct() sz.SzProduct {
+	szProductSyncOnce.Do(func() {
+		szProductSingleton = &szsdk.Szproduct{}
 	})
-	return g2productSingleton
+	return szProductSingleton
 }
 
-func GetSdkG2product() sz.G2product {
-	return getG2product()
+func GetSdkSzProduct() sz.SzProduct {
+	return getSzProduct()
 }
 
 // ----------------------------------------------------------------------------
 // Interface methods for github.com/senzing-garage/g2-sdk-go/g2product.G2product
 // ----------------------------------------------------------------------------
 
-func (server *SzProductServer) Destroy(ctx context.Context, request *g2pb.DestroyRequest) (*g2pb.DestroyResponse, error) {
-	var err error = nil
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(3, request)
-		defer func() { server.traceExit(4, request, err, time.Since(entryTime)) }()
-	}
-	// Not allowed by gRPC server
-	// g2product := getG2product()
-	// err := g2product.Destroy(ctx)
-	err = server.error(4001)
-	response := g2pb.DestroyResponse{}
-	return &response, err
-}
+// func (server *SzProductServer) GetObserverOrigin(ctx context.Context) string {
+// 	var err error = nil
+// 	if server.isTrace {
+// 		entryTime := time.Now()
+// 		server.traceEntry(21)
+// 		defer func() { server.traceExit(22, err, time.Since(entryTime)) }()
+// 	}
+// 	g2product := getG2product()
+// 	return g2product.GetObserverOrigin(ctx)
+// }
 
-func (server *SzProductServer) GetObserverOrigin(ctx context.Context) string {
-	var err error = nil
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(21)
-		defer func() { server.traceExit(22, err, time.Since(entryTime)) }()
-	}
-	g2product := getG2product()
-	return g2product.GetObserverOrigin(ctx)
-}
-
-func (server *SzProductServer) Init(ctx context.Context, request *g2pb.InitRequest) (*g2pb.InitResponse, error) {
-	var err error = nil
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(9, request)
-		defer func() { server.traceExit(10, request, err, time.Since(entryTime)) }()
-	}
-	// Not allowed by gRPC server
-	// g2product := getG2product()
-	// err := g2product.Init(ctx, request.GetModuleName(), request.GetIniParams(), int(request.GetVerboseLogging()))
-	err = server.error(4002)
-	response := g2pb.InitResponse{}
-	return &response, err
-}
-
-func (server *SzProductServer) License(ctx context.Context, request *g2pb.LicenseRequest) (*g2pb.LicenseResponse, error) {
+func (server *SzProductServer) GetLicense(ctx context.Context, request *szpb.GetLicenseRequest) (*szpb.GetLicenseResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -124,71 +92,15 @@ func (server *SzProductServer) License(ctx context.Context, request *g2pb.Licens
 		server.traceEntry(11, request)
 		defer func() { server.traceExit(12, request, result, err, time.Since(entryTime)) }()
 	}
-	g2product := getG2product()
-	result, err = g2product.License(ctx)
-	response := g2pb.LicenseResponse{
+	szproduct := getSzProduct()
+	result, err = szproduct.GetLicense(ctx)
+	response := szpb.GetLicenseResponse{
 		Result: result,
 	}
 	return &response, err
 }
 
-func (server *SzProductServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
-	var err error = nil
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(1, observer.GetObserverId(ctx))
-		defer func() { server.traceExit(2, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-	}
-	g2product := getG2product()
-	return g2product.RegisterObserver(ctx, observer)
-}
-
-func (server *SzProductServer) SetLogLevel(ctx context.Context, logLevelName string) error {
-	var err error = nil
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(13, logLevelName)
-		defer func() { server.traceExit(14, logLevelName, err, time.Since(entryTime)) }()
-	}
-	if !logging.IsValidLogLevelName(logLevelName) {
-		return fmt.Errorf("invalid error level: %s", logLevelName)
-	}
-	g2product := getG2product()
-	err = g2product.SetLogLevel(ctx, logLevelName)
-	if err != nil {
-		return err
-	}
-	err = server.getLogger().SetLogLevel(logLevelName)
-	if err != nil {
-		return err
-	}
-	server.isTrace = (logLevelName == logging.LevelTraceName)
-	return err
-}
-
-func (server *SzProductServer) SetObserverOrigin(ctx context.Context, origin string) {
-	var err error = nil
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(23, origin)
-		defer func() { server.traceExit(24, origin, err, time.Since(entryTime)) }()
-	}
-	g2product := getG2product()
-	g2product.SetObserverOrigin(ctx, origin)
-}
-
-func (server *SzProductServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
-	var err error = nil
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(5, observer.GetObserverId(ctx))
-		defer func() { server.traceExit(6, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-	}
-	g2product := getG2product()
-	return g2product.UnregisterObserver(ctx, observer)
-}
-
-func (server *SzProductServer) Version(ctx context.Context, request *g2pb.VersionRequest) (*g2pb.VersionResponse, error) {
+func (server *SzProductServer) GetVersion(ctx context.Context, request *szpb.GetVersionRequest) (*szpb.GetVersionResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -196,9 +108,9 @@ func (server *SzProductServer) Version(ctx context.Context, request *g2pb.Versio
 		server.traceEntry(19, request)
 		defer func() { server.traceExit(20, request, result, err, time.Since(entryTime)) }()
 	}
-	g2product := getG2product()
-	result, err = g2product.Version(ctx)
-	response := g2pb.VersionResponse{
+	szproduct := getSzProduct()
+	result, err = szproduct.GetVersion(ctx)
+	response := szpb.GetVersionResponse{
 		Result: result,
 	}
 	return &response, err

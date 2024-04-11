@@ -11,7 +11,7 @@ import (
 
 // server is used to implement helloworld.GreeterServer.
 type SzEngineServer struct {
-	g2pb.UnimplementedG2EngineServer
+	g2pb.UnimplementedSzEngineServer
 	isTrace bool
 	logger  logging.LoggingInterface
 }

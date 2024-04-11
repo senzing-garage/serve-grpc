@@ -2,14 +2,13 @@ package szproductserver
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 	"testing"
 
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
-	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
+	szpb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,7 +18,7 @@ const (
 )
 
 var (
-	g2productTestSingleton *SzProductServer
+	szProductTestSingleton *SzProductServer
 )
 
 // ----------------------------------------------------------------------------
@@ -27,37 +26,37 @@ var (
 // ----------------------------------------------------------------------------
 
 func getTestObject(ctx context.Context, test *testing.T) SzProductServer {
-	if g2productTestSingleton == nil {
-		g2productTestSingleton = &SzProductServer{}
-		moduleName := "Test module name"
+	if szProductTestSingleton == nil {
+		szProductTestSingleton = &SzProductServer{}
+		instanceName := "Test module name"
 		verboseLogging := int64(0)
-		iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
-		err = GetSdkG2product().Init(ctx, moduleName, iniParams, verboseLogging)
+		err = GetSdkSzProduct().Initialize(ctx, instanceName, settings, verboseLogging)
 		if err != nil {
 			test.Logf("Cannot Init. Error: %v", err)
 		}
 	}
-	return *g2productTestSingleton
+	return *szProductTestSingleton
 }
 
-func getG2ProductServer(ctx context.Context) SzProductServer {
-	if g2productTestSingleton == nil {
-		g2productTestSingleton = &SzProductServer{}
-		moduleName := "Test module name"
+func getSzProductServer(ctx context.Context) SzProductServer {
+	if szProductTestSingleton == nil {
+		szProductTestSingleton = &SzProductServer{}
+		instanceName := "Test module name"
 		verboseLogging := int64(0)
-		iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
-		err = GetSdkG2product().Init(ctx, moduleName, iniParams, verboseLogging)
+		err = GetSdkSzProduct().Initialize(ctx, instanceName, settings, verboseLogging)
 		if err != nil {
 			fmt.Println(err)
 		}
 	}
-	return *g2productTestSingleton
+	return *szProductTestSingleton
 }
 
 func truncate(aString string, length int) string {
@@ -74,25 +73,27 @@ func printActual(test *testing.T, actual interface{}) {
 	printResult(test, "Actual", actual)
 }
 
-func testError(test *testing.T, ctx context.Context, g2product SzProductServer, err error) {
+func testError(test *testing.T, ctx context.Context, err error) {
+	_ = ctx
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
 	}
 }
 
-func expectError(test *testing.T, ctx context.Context, g2product SzProductServer, err error, messageId string) {
-	if err != nil {
-		var dictionary map[string]interface{}
-		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
-		if unmarshalErr != nil {
-			test.Log("Unmarshal Error:", unmarshalErr.Error())
-		}
-		assert.Equal(test, messageId, dictionary["id"].(string))
-	} else {
-		assert.FailNow(test, "Should have failed with", messageId)
-	}
-}
+// func expectError(test *testing.T, ctx context.Context, err error, messageId string) {
+// 	_ = ctx
+// 	if err != nil {
+// 		var dictionary map[string]interface{}
+// 		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
+// 		if unmarshalErr != nil {
+// 			test.Log("Unmarshal Error:", unmarshalErr.Error())
+// 		}
+// 		assert.Equal(test, messageId, dictionary["id"].(string))
+// 	} else {
+// 		assert.FailNow(test, "Should have failed with", messageId)
+// 	}
+// }
 
 // ----------------------------------------------------------------------------
 // Test harness
@@ -135,46 +136,20 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 // Test interface functions
 // ----------------------------------------------------------------------------
 
-func TestG2productServer_Init(test *testing.T) {
+func TestSzProductServer_License(test *testing.T) {
 	ctx := context.TODO()
-	g2product := getTestObject(ctx, test)
-	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-	if err != nil {
-		assert.FailNow(test, err.Error())
-	}
-	request := &g2pb.InitRequest{
-		ModuleName:     "Test module name",
-		IniParams:      iniParams,
-		VerboseLogging: int64(0),
-	}
-	response, err := g2product.Init(ctx, request)
-	expectError(test, ctx, g2product, err, "senzing-60164002")
-	printActual(test, response)
-}
-
-func TestG2productServer_License(test *testing.T) {
-	ctx := context.TODO()
-	g2product := getTestObject(ctx, test)
-	request := &g2pb.LicenseRequest{}
-	actual, err := g2product.License(ctx, request)
-	testError(test, ctx, g2product, err)
+	szProductServer := getTestObject(ctx, test)
+	request := &szpb.GetLicenseRequest{}
+	actual, err := szProductServer.GetLicense(ctx, request)
+	testError(test, ctx, err)
 	printActual(test, actual)
 }
 
-func TestG2productServer_Version(test *testing.T) {
+func TestSzProductServer_Version(test *testing.T) {
 	ctx := context.TODO()
-	g2product := getTestObject(ctx, test)
-	request := &g2pb.VersionRequest{}
-	actual, err := g2product.Version(ctx, request)
-	testError(test, ctx, g2product, err)
-	printActual(test, actual)
-}
-
-func TestG2productServer_Destroy(test *testing.T) {
-	ctx := context.TODO()
-	g2product := getTestObject(ctx, test)
-	request := &g2pb.DestroyRequest{}
-	actual, err := g2product.Destroy(ctx, request)
-	expectError(test, ctx, g2product, err, "senzing-60164001")
+	szProductServer := getTestObject(ctx, test)
+	request := &szpb.GetVersionRequest{}
+	actual, err := szProductServer.GetVersion(ctx, request)
+	testError(test, ctx, err)
 	printActual(test, actual)
 }

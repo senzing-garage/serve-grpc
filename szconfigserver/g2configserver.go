@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/senzing-garage/go-logging/logging"
-	g2sdk "github.com/senzing-garage/sz-sdk-go-core/szconfig"
+	szsdk "github.com/senzing-garage/sz-sdk-go-core/szconfig"
 	"github.com/senzing-garage/sz-sdk-go/sz"
-	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
+	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 )
 
 var (
@@ -60,7 +60,7 @@ func (server *SzConfigServer) error(messageNumber int, details ...interface{}) e
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
 func getSzConfig() sz.SzConfig {
 	szConfigSyncOnce.Do(func() {
-		szConfigSingleton = &g2sdk.Szconfig{}
+		szConfigSingleton = &szsdk.Szconfig{}
 	})
 	return szConfigSingleton
 }
@@ -73,7 +73,7 @@ func GetSdkG2config() sz.SzConfig {
 // Interface methods for github.com/senzing-garage/g2-sdk-go/szconfig.G2config
 // ----------------------------------------------------------------------------
 
-func (server *SzConfigServer) AddDataSource(ctx context.Context, request *g2pb.AddDataSourceRequest) (*g2pb.AddDataSourceResponse, error) {
+func (server *SzConfigServer) AddDataSource(ctx context.Context, request *szpb.AddDataSourceRequest) (*szpb.AddDataSourceResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -83,13 +83,13 @@ func (server *SzConfigServer) AddDataSource(ctx context.Context, request *g2pb.A
 	}
 	szConfig := getSzConfig()
 	result, err = szConfig.AddDataSource(ctx, uintptr(request.GetConfigHandle()), request.GetDataSourceCode())
-	response := g2pb.AddDataSourceResponse{
+	response := szpb.AddDataSourceResponse{
 		Result: result,
 	}
 	return &response, err
 }
 
-func (server *SzConfigServer) CloseConfig(ctx context.Context, request *g2pb.CloseConfigRequest) (*g2pb.CloseConfigResponse, error) {
+func (server *SzConfigServer) CloseConfig(ctx context.Context, request *szpb.CloseConfigRequest) (*szpb.CloseConfigResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -98,11 +98,11 @@ func (server *SzConfigServer) CloseConfig(ctx context.Context, request *g2pb.Clo
 	}
 	szConfig := getSzConfig()
 	err = szConfig.CloseConfig(ctx, uintptr(request.GetConfigHandle()))
-	response := g2pb.CloseConfigResponse{}
+	response := szpb.CloseConfigResponse{}
 	return &response, err
 }
 
-func (server *SzConfigServer) CreateConfig(ctx context.Context, request *g2pb.CreateConfigRequest) (*g2pb.CreateConfigResponse, error) {
+func (server *SzConfigServer) CreateConfig(ctx context.Context, request *szpb.CreateConfigRequest) (*szpb.CreateConfigResponse, error) {
 	var err error = nil
 	var result uintptr
 	if server.isTrace {
@@ -112,13 +112,13 @@ func (server *SzConfigServer) CreateConfig(ctx context.Context, request *g2pb.Cr
 	}
 	szConfig := getSzConfig()
 	result, err = szConfig.CreateConfig(ctx)
-	response := g2pb.CreateConfigResponse{
+	response := szpb.CreateConfigResponse{
 		Result: int64(result),
 	}
 	return &response, err
 }
 
-func (server *SzConfigServer) DeleteDataSource(ctx context.Context, request *g2pb.DeleteDataSourceRequest) (*g2pb.DeleteDataSourceResponse, error) {
+func (server *SzConfigServer) DeleteDataSource(ctx context.Context, request *szpb.DeleteDataSourceRequest) (*szpb.DeleteDataSourceResponse, error) {
 	var err error = nil
 	if server.isTrace {
 		entryTime := time.Now()
@@ -127,7 +127,54 @@ func (server *SzConfigServer) DeleteDataSource(ctx context.Context, request *g2p
 	}
 	szConfig := getSzConfig()
 	err = szConfig.DeleteDataSource(ctx, uintptr(request.GetConfigHandle()), request.GetDataSourceCode())
-	response := g2pb.DeleteDataSourceResponse{}
+	response := szpb.DeleteDataSourceResponse{}
+	return &response, err
+}
+
+func (server *SzConfigServer) ExportConfig(ctx context.Context, request *szpb.ExportConfigRequest) (*szpb.ExportConfigResponse, error) {
+	var err error = nil
+	var result string
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(23, request)
+		defer func() { server.traceExit(24, request, result, err, time.Since(entryTime)) }()
+	}
+	szConfig := getSzConfig()
+	result, err = szConfig.ExportConfig(ctx, uintptr(request.GetConfigHandle()))
+	response := szpb.ExportConfigResponse{
+		Result: result,
+	}
+	return &response, err
+}
+
+func (server *SzConfigServer) GetDataSources(ctx context.Context, request *szpb.GetDataSourcesRequest) (*szpb.GetDataSourcesResponse, error) {
+	var err error = nil
+	var result string
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(19, request)
+		defer func() { server.traceExit(20, request, result, err, time.Since(entryTime)) }()
+	}
+	szConfig := getSzConfig()
+	result, err = szConfig.GetDataSources(ctx, uintptr(request.GetConfigHandle()))
+	response := szpb.GetDataSourcesResponse{
+		Result: result,
+	}
+	return &response, err
+}
+
+func (server *SzConfigServer) ImportConfig(ctx context.Context, request *szpb.ImportConfigRequest) (*szpb.ImportConfigResponse, error) {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(21, request)
+		defer func() { server.traceExit(22, request, err, time.Since(entryTime)) }()
+	}
+	szConfig := getSzConfig()
+	result, err := szConfig.ImportConfig(ctx, request.GetJsonConfig())
+	response := szpb.ImportConfigResponse{
+		Result: int64(result),
+	}
 	return &response, err
 }
 
@@ -142,37 +189,6 @@ func (server *SzConfigServer) DeleteDataSource(ctx context.Context, request *g2p
 // 	return szconfig.GetObserverOrigin(ctx)
 // }
 
-func (server *SzConfigServer) GetDataSources(ctx context.Context, request *g2pb.GetDataSourcesRequest) (*g2pb.GetDataSourcesResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(19, request)
-		defer func() { server.traceExit(20, request, result, err, time.Since(entryTime)) }()
-	}
-	szConfig := getSzConfig()
-	result, err = szConfig.GetDataSources(ctx, uintptr(request.GetConfigHandle()))
-	response := g2pb.GetDataSourcesResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
-func (server *SzConfigServer) ImportConfig(ctx context.Context, request *g2pb.ImportConfigRequest) (*g2pb.ImportConfigResponse, error) {
-	var err error = nil
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(21, request)
-		defer func() { server.traceExit(22, request, err, time.Since(entryTime)) }()
-	}
-	szConfig := getSzConfig()
-	result, err := szConfig.ImportConfig(ctx, request.GetJsonConfig())
-	response := g2pb.ImportConfigResponse{
-		Result: int64(result),
-	}
-	return &response, err
-}
-
 // func (server *SzConfigServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
 // 	var err error = nil
 // 	if server.isTrace {
@@ -183,22 +199,6 @@ func (server *SzConfigServer) ImportConfig(ctx context.Context, request *g2pb.Im
 // 	szconfig := getSzConfig()
 // 	return szconfig.RegisterObserver(ctx, observer)
 // }
-
-func (server *SzConfigServer) ExportConfig(ctx context.Context, request *g2pb.ExportConfigRequest) (*g2pb.ExportConfigResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(23, request)
-		defer func() { server.traceExit(24, request, result, err, time.Since(entryTime)) }()
-	}
-	szConfig := getSzConfig()
-	result, err = szConfig.ExportConfig(ctx, uintptr(request.GetConfigHandle()))
-	response := g2pb.ExportConfigResponse{
-		Result: result,
-	}
-	return &response, err
-}
 
 // func (server *SzConfigServer) SetLogLevel(ctx context.Context, logLevelName string) error {
 // 	var err error = nil
