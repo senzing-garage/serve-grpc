@@ -20,17 +20,17 @@ type SzDiagnosticServer struct {
 // Constants
 // ----------------------------------------------------------------------------
 
-// Identfier of the g2diagnostic package found messages having the format "senzing-6999xxxx".
+// Identfier of the szdiagnostic package found messages having the format "senzing-6999xxxx".
 const ComponentId = 6013
 
 // Log message prefix.
-const Prefix = "serve-grpc.g2diagnosticserver."
+const Prefix = "serve-grpc.szdiagnosticserver."
 
 // ----------------------------------------------------------------------------
 // Variables
 // ----------------------------------------------------------------------------
 
-// Message templates for the g2diagnostic package.
+// Message templates for the sz2diagnostic package.
 var IdMessages = map[int]string{
 	1:    "Enter " + Prefix + "CheckDBPerf(%+v).",
 	2:    "Exit  " + Prefix + "CheckDBPerf(%+v) returned (%s, %v).",
@@ -56,7 +56,7 @@ var IdMessages = map[int]string{
 	4002: Prefix + "Init() not supported in gRPC",
 	4003: Prefix + "InitWithConfigID() not supported in gRPC",
 	5901: "During test setup, call to messagelogger.NewSenzingApiLogger() failed.",
-	5902: "During test setup, call to g2eg2engineconfigurationjson.BuildSimpleSystemConfigurationJson() failed.",
+	5902: "During test setup, call to g2engineconfigurationjson.BuildSimpleSystemConfigurationJson() failed.",
 	5903: "During test setup, call to g2engine.Init() failed.",
 	5904: "During test setup, call to g2diagnostic.PurgeRepository() failed.",
 	5905: "During test setup, call to g2engine.Destroy() failed.",
@@ -81,5 +81,5 @@ var IdMessages = map[int]string{
 	5933: "During test setup, call to g2engine.Destroy() failed.",
 }
 
-// Status strings for specific g2diagnostic messages.
+// Status strings for specific szdiagnostic messages.
 var IdStatuses = map[int]string{}

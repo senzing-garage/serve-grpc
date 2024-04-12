@@ -311,7 +311,7 @@ func TestSzConfigManagerServer_AddConfig(test *testing.T) {
 	szConfigManagerServer := getTestObject(ctx, test)
 	request := &szpb.AddConfigRequest{
 		ConfigDefinition: responseFromSave.GetResult(),
-		ConfigComment:    fmt.Sprintf("g2configmgrserver_test at %s", now.UTC()),
+		ConfigComment:    fmt.Sprintf("szconfigmanagerserver_test at %s", now.UTC()),
 	}
 	response, err := szConfigManagerServer.AddConfig(ctx, request)
 	testError(test, ctx, szConfigManagerServer, err)

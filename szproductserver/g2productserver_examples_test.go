@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
+	szpb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 )
 
 // ----------------------------------------------------------------------------
@@ -14,10 +14,10 @@ import (
 // ----------------------------------------------------------------------------
 
 func ExampleSzProductServer_GetLicense() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2productserver/g2productserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szproductserver/szproductserver_test.go
 	ctx := context.TODO()
 	szProductServer := getSzProductServer(ctx)
-	request := &g2pb.GetLicenseRequest{}
+	request := &szpb.GetLicenseRequest{}
 	response, err := szProductServer.GetLicense(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -27,10 +27,10 @@ func ExampleSzProductServer_GetLicense() {
 }
 
 func ExampleSzProductServer_GetVersion() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2productserver/g2productserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szproductserver/szproductserver_test.go
 	ctx := context.TODO()
 	szProductServer := getSzProductServer(ctx)
-	request := &g2pb.GetVersionRequest{}
+	request := &szpb.GetVersionRequest{}
 	response, err := szProductServer.GetVersion(ctx, request)
 	if err != nil {
 		fmt.Println(err)

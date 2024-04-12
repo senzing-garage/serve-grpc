@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	"github.com/senzing-garage/sz-sdk-go/sz"
-	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szengine"
+	szpb "github.com/senzing-garage/sz-sdk-proto/go/szengine"
 )
 
 // ----------------------------------------------------------------------------
@@ -15,10 +15,10 @@ import (
 // ----------------------------------------------------------------------------
 
 func ExampleSzEngineServer_AddRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.AddRecordRequest{
+	request := &szpb.AddRecordRequest{
 		DataSourceCode:   "CUSTOMERS",
 		RecordId:         "1001",
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
@@ -33,10 +33,10 @@ func ExampleSzEngineServer_AddRecord() {
 }
 
 func ExampleSzEngineServer_AddRecord_secondRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.AddRecordRequest{
+	request := &szpb.AddRecordRequest{
 		DataSourceCode:   "CUSTOMERS",
 		RecordId:         "1002",
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1002", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Bob", "DATE_OF_BIRTH": "11/12/1978", "ADDR_TYPE": "HOME", "ADDR_LINE1": "1515 Adela Lane", "ADDR_CITY": "Las Vegas", "ADDR_STATE": "NV", "ADDR_POSTAL_CODE": "89111", "PHONE_TYPE": "MOBILE", "PHONE_NUMBER": "702-919-1300", "DATE": "3/10/17", "STATUS": "Inactive", "AMOUNT": "200"}`,
@@ -51,10 +51,10 @@ func ExampleSzEngineServer_AddRecord_secondRecord() {
 }
 
 func ExampleSzEngineServer_AddRecord_withInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.AddRecordRequest{
+	request := &szpb.AddRecordRequest{
 		DataSourceCode:   "CUSTOMERS",
 		RecordId:         "1003",
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1003", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Bob", "PRIMARY_NAME_MIDDLE": "J", "DATE_OF_BIRTH": "12/11/1978", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "4/9/16", "STATUS": "Inactive", "AMOUNT": "300"}`,
@@ -69,12 +69,12 @@ func ExampleSzEngineServer_AddRecord_withInfo() {
 }
 
 func ExampleSzEngineServer_CloseExport() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 
 	// Create a handle for the example.
-	requestToExportJsonEntityReport := &g2pb.ExportJsonEntityReportRequest{
+	requestToExportJsonEntityReport := &szpb.ExportJsonEntityReportRequest{
 		Flags: sz.SZ_NO_FLAGS,
 	}
 	responseFromExportJsonEntityReport, err := szEngineServer.ExportJsonEntityReport(ctx, requestToExportJsonEntityReport)
@@ -82,7 +82,7 @@ func ExampleSzEngineServer_CloseExport() {
 		fmt.Println(err)
 	}
 	// Example
-	request := &g2pb.CloseExportRequest{
+	request := &szpb.CloseExportRequest{
 		ResponseHandle: responseFromExportJsonEntityReport.GetResult(),
 	}
 	response, err := szEngineServer.CloseExport(ctx, request)
@@ -94,10 +94,10 @@ func ExampleSzEngineServer_CloseExport() {
 }
 
 func ExampleSzEngineServer_CountRedoRecords() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.CountRedoRecordsRequest{}
+	request := &szpb.CountRedoRecordsRequest{}
 	response, err := szEngineServer.CountRedoRecords(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -107,10 +107,10 @@ func ExampleSzEngineServer_CountRedoRecords() {
 }
 
 func ExampleSzEngineServer_ExportCsvEntityReport() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.ExportCsvEntityReportRequest{
+	request := &szpb.ExportCsvEntityReportRequest{
 		CsvColumnList: "",
 		Flags:         sz.SZ_NO_FLAGS,
 	}
@@ -123,10 +123,10 @@ func ExampleSzEngineServer_ExportCsvEntityReport() {
 }
 
 func ExampleSzEngineServer_ExportJsonEntityReport() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.ExportJsonEntityReportRequest{
+	request := &szpb.ExportJsonEntityReportRequest{
 		Flags: sz.SZ_NO_FLAGS,
 	}
 	response, err := szEngineServer.ExportJsonEntityReport(ctx, request)
@@ -138,12 +138,12 @@ func ExampleSzEngineServer_ExportJsonEntityReport() {
 }
 
 func ExampleSzEngineServer_FetchNext() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 
 	// Create a handle for the example.
-	requestToExportJsonEntityReport := &g2pb.ExportJsonEntityReportRequest{
+	requestToExportJsonEntityReport := &szpb.ExportJsonEntityReportRequest{
 		Flags: sz.SZ_NO_FLAGS,
 	}
 	responseFromExportJsonEntityReport, err := szEngineServer.ExportJsonEntityReport(ctx, requestToExportJsonEntityReport)
@@ -151,7 +151,7 @@ func ExampleSzEngineServer_FetchNext() {
 		fmt.Println(err)
 	}
 	// Example
-	request := &g2pb.FetchNextRequest{
+	request := &szpb.FetchNextRequest{
 		ResponseHandle: responseFromExportJsonEntityReport.GetResult(),
 	}
 	response, err := szEngineServer.FetchNext(ctx, request)
@@ -163,11 +163,11 @@ func ExampleSzEngineServer_FetchNext() {
 }
 
 func ExampleSzEngineServer_FindNetworkByEntityId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	entityList := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1001") + `}, {"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1002") + `}]}`
-	request := &g2pb.FindNetworkByEntityIdRequest{
+	request := &szpb.FindNetworkByEntityIdRequest{
 		EntityList:     entityList,
 		MaxDegrees:     2,
 		BuildOutDegree: 1,
@@ -183,10 +183,10 @@ func ExampleSzEngineServer_FindNetworkByEntityId() {
 }
 
 func ExampleSzEngineServer_FindNetworkByRecordId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.FindNetworkByRecordIdRequest{
+	request := &szpb.FindNetworkByRecordIdRequest{
 		RecordList:     `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001"}, {"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1002"}]}`,
 		MaxDegrees:     1,
 		BuildOutDegree: 2,
@@ -202,10 +202,10 @@ func ExampleSzEngineServer_FindNetworkByRecordId() {
 }
 
 func ExampleSzEngineServer_FindPathByEntityId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.FindPathByEntityIdRequest{
+	request := &szpb.FindPathByEntityIdRequest{
 		StartEntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
 		EndEntityId:   getEntityIdForRecord("CUSTOMERS", "1002"),
 		MaxDegrees:    1,
@@ -220,11 +220,11 @@ func ExampleSzEngineServer_FindPathByEntityId() {
 }
 
 func ExampleSzEngineServer_FindPathByEntityId_exclusions() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	exclusions := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
-	request := &g2pb.FindPathByEntityIdRequest{
+	request := &szpb.FindPathByEntityIdRequest{
 		StartEntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
 		EndEntityId:   getEntityIdForRecord("CUSTOMERS", "1002"),
 		MaxDegrees:    1,
@@ -240,11 +240,11 @@ func ExampleSzEngineServer_FindPathByEntityId_exclusions() {
 }
 
 func ExampleSzEngineServer_FindPathByEntityId_inclusions() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
-	request := &g2pb.FindPathByEntityIdRequest{
+	request := &szpb.FindPathByEntityIdRequest{
 		StartEntityId:       getEntityIdForRecord("CUSTOMERS", "1001"),
 		EndEntityId:         getEntityIdForRecord("CUSTOMERS", "1002"),
 		MaxDegrees:          1,
@@ -261,10 +261,10 @@ func ExampleSzEngineServer_FindPathByEntityId_inclusions() {
 }
 
 func ExampleSzEngineServer_FindPathByRecordId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.FindPathByRecordIdRequest{
+	request := &szpb.FindPathByRecordIdRequest{
 		StartDataSourceCode: "CUSTOMERS",
 		StartRecordId:       "1001",
 		EndDataSourceCode:   "CUSTOMERS",
@@ -281,10 +281,10 @@ func ExampleSzEngineServer_FindPathByRecordId() {
 }
 
 func ExampleSzEngineServer_FindPathByRecordId_exclusions() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.FindPathByRecordIdRequest{
+	request := &szpb.FindPathByRecordIdRequest{
 		StartDataSourceCode: "CUSTOMERS",
 		StartRecordId:       "1001",
 		EndDataSourceCode:   "CUSTOMERS",
@@ -302,10 +302,10 @@ func ExampleSzEngineServer_FindPathByRecordId_exclusions() {
 }
 
 func ExampleSzEngineServer_FindPathByRecordId_inclusions() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.FindPathByRecordIdRequest{
+	request := &szpb.FindPathByRecordIdRequest{
 		StartDataSourceCode: "CUSTOMERS",
 		StartRecordId:       "1001",
 		EndDataSourceCode:   "CUSTOMERS",
@@ -324,10 +324,10 @@ func ExampleSzEngineServer_FindPathByRecordId_inclusions() {
 }
 
 func ExampleSzEngineServer_GetActiveConfigId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.GetActiveConfigIdRequest{}
+	request := &szpb.GetActiveConfigIdRequest{}
 	response, err := szEngineServer.GetActiveConfigId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -337,10 +337,10 @@ func ExampleSzEngineServer_GetActiveConfigId() {
 }
 
 func ExampleSzEngineServer_GetEntityByEntityId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.GetEntityByEntityIdRequest{
+	request := &szpb.GetEntityByEntityIdRequest{
 		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
 		Flags:    sz.SZ_NO_FLAGS,
 	}
@@ -353,10 +353,10 @@ func ExampleSzEngineServer_GetEntityByEntityId() {
 }
 
 func ExampleSzEngineServer_GetEntityByRecordId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.GetEntityByRecordIdRequest{
+	request := &szpb.GetEntityByRecordIdRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordId:       "1001",
 		Flags:          sz.SZ_NO_FLAGS,
@@ -370,10 +370,10 @@ func ExampleSzEngineServer_GetEntityByRecordId() {
 }
 
 func ExampleSzEngineServer_GetRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.GetRecordRequest{
+	request := &szpb.GetRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordId:       "1001",
 		Flags:          sz.SZ_NO_FLAGS,
@@ -387,10 +387,10 @@ func ExampleSzEngineServer_GetRecord() {
 }
 
 func ExampleSzEngineServer_GetRedoRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.GetRedoRecordRequest{}
+	request := &szpb.GetRedoRecordRequest{}
 	response, err := szEngineServer.GetRedoRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -400,10 +400,10 @@ func ExampleSzEngineServer_GetRedoRecord() {
 }
 
 func ExampleSzEngineServer_GetRepositoryLastModifiedTime() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.GetRepositoryLastModifiedTimeRequest{}
+	request := &szpb.GetRepositoryLastModifiedTimeRequest{}
 	response, err := szEngineServer.GetRepositoryLastModifiedTime(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -413,10 +413,10 @@ func ExampleSzEngineServer_GetRepositoryLastModifiedTime() {
 }
 
 func ExampleSzEngineServer_GetStats() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.GetStatsRequest{}
+	request := &szpb.GetStatsRequest{}
 	response, err := szEngineServer.GetStats(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -426,10 +426,10 @@ func ExampleSzEngineServer_GetStats() {
 }
 
 func ExampleSzEngineServer_GetVirtualEntityByRecordId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.GetVirtualEntityByRecordIdRequest{
+	request := &szpb.GetVirtualEntityByRecordIdRequest{
 		RecordList: `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1001"},{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1002"}]}`,
 		Flags:      sz.SZ_NO_FLAGS,
 	}
@@ -442,10 +442,10 @@ func ExampleSzEngineServer_GetVirtualEntityByRecordId() {
 }
 
 func ExampleSzEngineServer_HowEntityByEntityId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.HowEntityByEntityIdRequest{
+	request := &szpb.HowEntityByEntityIdRequest{
 		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
 		Flags:    sz.SZ_NO_FLAGS,
 	}
@@ -458,10 +458,10 @@ func ExampleSzEngineServer_HowEntityByEntityId() {
 }
 
 func ExampleSzEngineServer_PrimeEngine() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.PrimeEngineRequest{}
+	request := &szpb.PrimeEngineRequest{}
 	response, err := szEngineServer.PrimeEngine(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -471,10 +471,10 @@ func ExampleSzEngineServer_PrimeEngine() {
 }
 
 func ExampleSzEngineServer_SearchByAttributes() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.SearchByAttributesRequest{
+	request := &szpb.SearchByAttributesRequest{
 		Attributes: `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "Smith"}], "EMAIL_ADDRESS": "bsmith@work.com"}`,
 		Flags:      sz.SZ_NO_FLAGS,
 	}
@@ -487,11 +487,11 @@ func ExampleSzEngineServer_SearchByAttributes() {
 }
 
 func ExampleSzEngineServer_SearchByAttributes_searchProfile() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	// TODO: Fix SearchProfile value
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.SearchByAttributesRequest{
+	request := &szpb.SearchByAttributesRequest{
 		Attributes:    `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "Smith"}], "EMAIL_ADDRESS": "bsmith@work.com"}`,
 		SearchProfile: "SEARCH",
 		Flags:         sz.SZ_NO_FLAGS,
@@ -505,10 +505,10 @@ func ExampleSzEngineServer_SearchByAttributes_searchProfile() {
 }
 
 func ExampleSzEngineServer_WhyEntities() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.WhyEntitiesRequest{
+	request := &szpb.WhyEntitiesRequest{
 		EntityId1: getEntityIdForRecord("CUSTOMERS", "1001"),
 		EntityId2: getEntityIdForRecord("CUSTOMERS", "1002"),
 		Flags:     sz.SZ_NO_FLAGS,
@@ -522,10 +522,10 @@ func ExampleSzEngineServer_WhyEntities() {
 }
 
 func ExampleSzEngineServer_WhyRecords() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.WhyRecordsRequest{
+	request := &szpb.WhyRecordsRequest{
 		DataSourceCode1: "CUSTOMERS",
 		RecordId1:       "1001",
 		DataSourceCode2: "CUSTOMERS",
@@ -541,10 +541,10 @@ func ExampleSzEngineServer_WhyRecords() {
 }
 
 func ExampleSzEngineServer_ReevaluateEntity() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.ReevaluateEntityRequest{
+	request := &szpb.ReevaluateEntityRequest{
 		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
 		Flags:    sz.SZ_WITHOUT_INFO,
 	}
@@ -557,11 +557,11 @@ func ExampleSzEngineServer_ReevaluateEntity() {
 }
 
 func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	// TODO: Fix Output
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.ReevaluateEntityRequest{
+	request := &szpb.ReevaluateEntityRequest{
 		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
 		Flags:    sz.SZ_WITH_INFO,
 	}
@@ -574,10 +574,10 @@ func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
 }
 
 func ExampleSzEngineServer_ReevaluateRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.ReevaluateRecordRequest{
+	request := &szpb.ReevaluateRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordId:       "1001",
 		Flags:          sz.SZ_WITHOUT_INFO,
@@ -591,11 +591,11 @@ func ExampleSzEngineServer_ReevaluateRecord() {
 }
 
 func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	// TODO: Fix Output
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.ReevaluateRecordRequest{
+	request := &szpb.ReevaluateRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordId:       "1001",
 		Flags:          sz.SZ_WITH_INFO,
@@ -609,10 +609,10 @@ func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 }
 
 func ExampleSzEngineServer_ReplaceRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.ReplaceRecordRequest{
+	request := &szpb.ReplaceRecordRequest{
 		DataSourceCode:   "CUSTOMERS",
 		RecordId:         "1001",
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
@@ -627,11 +627,11 @@ func ExampleSzEngineServer_ReplaceRecord() {
 }
 
 func ExampleSzEngineServer_ReplaceRecord_withInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	// TODO: Fix Output
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.ReplaceRecordRequest{
+	request := &szpb.ReplaceRecordRequest{
 		DataSourceCode:   "CUSTOMERS",
 		RecordId:         "1001",
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
@@ -646,10 +646,10 @@ func ExampleSzEngineServer_ReplaceRecord_withInfo() {
 }
 
 func ExampleSzEngineServer_DeleteRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.DeleteRecordRequest{
+	request := &szpb.DeleteRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordId:       "1003",
 		Flags:          sz.SZ_WITHOUT_INFO,
@@ -663,10 +663,10 @@ func ExampleSzEngineServer_DeleteRecord() {
 }
 
 func ExampleSzEngineServer_DeleteRecord_withInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &g2pb.DeleteRecordRequest{
+	request := &szpb.DeleteRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordId:       "1003",
 		Flags:          sz.SZ_WITH_INFO,

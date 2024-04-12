@@ -19,7 +19,7 @@ import (
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
 	"github.com/senzing-garage/sz-sdk-go/sz"
 	"github.com/senzing-garage/sz-sdk-go/szerror"
-	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szengine"
+	szpb "github.com/senzing-garage/sz-sdk-proto/go/szengine"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -35,7 +35,7 @@ type GetEntityByRecordIdResponse struct {
 }
 
 var (
-	g2engineTestSingleton *SzEngineServer
+	szEngineTestSingleton *SzEngineServer
 	localLogger           logging.LoggingInterface
 )
 
@@ -48,8 +48,8 @@ func createError(errorId int, err error) error {
 }
 
 func getTestObject(ctx context.Context, test *testing.T) SzEngineServer {
-	if g2engineTestSingleton == nil {
-		g2engineTestSingleton = &SzEngineServer{}
+	if szEngineTestSingleton == nil {
+		szEngineTestSingleton = &SzEngineServer{}
 		instanceName := "Test name"
 		verboseLogging := sz.SZ_NO_LOGGING
 		configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
@@ -57,17 +57,17 @@ func getTestObject(ctx context.Context, test *testing.T) SzEngineServer {
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
-		err = GetSdkG2engine().Initialize(ctx, instanceName, settings, verboseLogging, configId)
+		err = GetSdkSzEngine().Initialize(ctx, instanceName, settings, verboseLogging, configId)
 		if err != nil {
 			test.Logf("Cannot Init. Error: %v", err)
 		}
 	}
-	return *g2engineTestSingleton
+	return *szEngineTestSingleton
 }
 
 func getSzEngineServer(ctx context.Context) SzEngineServer {
-	if g2engineTestSingleton == nil {
-		g2engineTestSingleton = &SzEngineServer{}
+	if szEngineTestSingleton == nil {
+		szEngineTestSingleton = &SzEngineServer{}
 		instanceName := "Test name"
 		verboseLogging := sz.SZ_NO_LOGGING
 		configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
@@ -75,23 +75,23 @@ func getSzEngineServer(ctx context.Context) SzEngineServer {
 		if err != nil {
 			fmt.Println(err)
 		}
-		err = GetSdkG2engine().Initialize(ctx, instanceName, setting, verboseLogging, configId)
+		err = GetSdkSzEngine().Initialize(ctx, instanceName, setting, verboseLogging, configId)
 		if err != nil {
 			fmt.Println(err)
 		}
 	}
-	return *g2engineTestSingleton
+	return *szEngineTestSingleton
 }
 
 func getEntityIdForRecord(datasource string, id string) int64 {
 	ctx := context.TODO()
 	var result int64 = 0
-	g2engine := getSzEngineServer(ctx)
-	request := &g2pb.GetEntityByRecordIdRequest{
+	szEngine := getSzEngineServer(ctx)
+	request := &szpb.GetEntityByRecordIdRequest{
 		DataSourceCode: datasource,
 		RecordId:       id,
 	}
-	response, err := g2engine.GetEntityByRecordId(ctx, request)
+	response, err := szEngine.GetEntityByRecordId(ctx, request)
 	if err != nil {
 		return result
 	}
@@ -132,9 +132,9 @@ func printResponse(test *testing.T, response interface{}) {
 	printResult(test, "Response", response)
 }
 
-func testError(test *testing.T, ctx context.Context, g2engine SzEngineServer, err error) {
+func testError(test *testing.T, ctx context.Context, szEngine SzEngineServer, err error) {
 	_ = ctx
-	_ = g2engine
+	_ = szEngine
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
@@ -228,7 +228,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 		return createError(5912, err)
 	}
 
-	configComments := fmt.Sprintf("Created by g2diagnostic_test at %s", now.UTC())
+	configComments := fmt.Sprintf("Created by szengine_test at %s", now.UTC())
 	configId, err := szConfigManager.AddConfig(ctx, configStr, configComments)
 	if err != nil {
 		return createError(5913, err)
@@ -320,7 +320,7 @@ func TestSzEngineServer_AddRecord(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	record1 := truthset.CustomerRecords["1001"]
 	record2 := truthset.CustomerRecords["1002"]
-	request1 := &g2pb.AddRecordRequest{
+	request1 := &szpb.AddRecordRequest{
 		DataSourceCode:   record1.DataSource,
 		Flags:            sz.SZ_WITH_INFO,
 		RecordDefinition: record1.Json,
@@ -329,7 +329,7 @@ func TestSzEngineServer_AddRecord(test *testing.T) {
 	response1, err := szEngineServer.AddRecord(ctx, request1)
 	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response1.GetResult())
-	request2 := &g2pb.AddRecordRequest{
+	request2 := &szpb.AddRecordRequest{
 		DataSourceCode:   record2.DataSource,
 		Flags:            sz.SZ_WITH_INFO,
 		RecordDefinition: record2.Json,
@@ -344,7 +344,7 @@ func TestSzEngineServer_AddRecord_withInfo(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1003"]
-	request := &g2pb.AddRecordRequest{
+	request := &szpb.AddRecordRequest{
 		DataSourceCode:   record.DataSource,
 		Flags:            sz.SZ_WITH_INFO,
 		RecordDefinition: record.Json,
@@ -358,7 +358,7 @@ func TestSzEngineServer_AddRecord_withInfo(test *testing.T) {
 func TestSzEngineServer_CountRedoRecords(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
-	request := &g2pb.CountRedoRecordsRequest{}
+	request := &szpb.CountRedoRecordsRequest{}
 	response, err := szEngineServer.CountRedoRecords(ctx, request)
 	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response.GetResult())
@@ -368,7 +368,7 @@ func TestSzEngineServer_ExportJsonEntityReport(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.ExportJsonEntityReportRequest{
+	request := &szpb.ExportJsonEntityReportRequest{
 		Flags: flags,
 	}
 	response, err := szEngineServer.ExportJsonEntityReport(ctx, request)
@@ -379,7 +379,7 @@ func TestSzEngineServer_ExportJsonEntityReport(test *testing.T) {
 func TestSzEngineServer_ExportCsvEntityReport(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
-	request := &g2pb.ExportCsvEntityReportRequest{
+	request := &szpb.ExportCsvEntityReportRequest{
 		CsvColumnList: "",
 		Flags:         sz.SZ_NO_FLAGS,
 	}
@@ -398,7 +398,7 @@ func TestSzEngineServer_FindNetworkByEntityId(test *testing.T) {
 	buildOutDegree := int64(1)
 	maxEntities := int64(10)
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.FindNetworkByEntityIdRequest{
+	request := &szpb.FindNetworkByEntityIdRequest{
 		BuildOutDegree: buildOutDegree,
 		EntityList:     entityList,
 		Flags:          flags,
@@ -421,7 +421,7 @@ func TestSzEngineServer_FindNetworkByRecordId(test *testing.T) {
 	buildOutDegree := int64(2)
 	maxEntities := int64(10)
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.FindNetworkByRecordIdRequest{
+	request := &szpb.FindNetworkByRecordIdRequest{
 		BuildOutDegree: buildOutDegree,
 		Flags:          flags,
 		MaxDegrees:     maxDegrees,
@@ -440,7 +440,7 @@ func TestSzEngineServer_FindPathByEntityId(test *testing.T) {
 	endEntityId := getEntityId(truthset.CustomerRecords["1002"])
 	maxDegrees := int64(1)
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.FindPathByEntityIdRequest{
+	request := &szpb.FindPathByEntityIdRequest{
 		EndEntityId:   endEntityId,
 		Flags:         flags,
 		MaxDegrees:    maxDegrees,
@@ -460,7 +460,7 @@ func TestSzEngineServer_FindPathByEntityId_exclusions(test *testing.T) {
 	maxDegrees := int64(1)
 	exclusions := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdString(record1) + `}]}`
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.FindPathByEntityIdRequest{
+	request := &szpb.FindPathByEntityIdRequest{
 		EndEntityId:   endEntityId,
 		Exclusions:    exclusions,
 		Flags:         flags,
@@ -481,7 +481,7 @@ func TestSzEngineServer_FindPathByEntityId_inclusions(test *testing.T) {
 	maxDegrees := int64(1)
 	exclusions := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdString(record1) + `}]}`
 	requiredDataSources := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
-	request := &g2pb.FindPathByEntityIdRequest{
+	request := &szpb.FindPathByEntityIdRequest{
 		EndEntityId:         endEntityId,
 		Exclusions:          exclusions,
 		MaxDegrees:          maxDegrees,
@@ -500,7 +500,7 @@ func TestSzEngineServer_FindPathByRecordId(test *testing.T) {
 	record2 := truthset.CustomerRecords["1002"]
 	maxDegrees := int64(1)
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.FindPathByRecordIdRequest{
+	request := &szpb.FindPathByRecordIdRequest{
 		EndDataSourceCode:   record2.DataSource,
 		EndRecordId:         record2.Id,
 		Flags:               flags,
@@ -521,7 +521,7 @@ func TestSzEngineServer_FindPathByRecordId_exclusions(test *testing.T) {
 	maxDegrees := int64(1)
 	exclusions := `{"RECORDS": [{ "DATA_SOURCE": "` + record1.DataSource + `", "RECORD_ID": "` + record1.Id + `"}]}`
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.FindPathByRecordIdRequest{
+	request := &szpb.FindPathByRecordIdRequest{
 		EndDataSourceCode:   record2.DataSource,
 		EndRecordId:         record2.Id,
 		Exclusions:          exclusions,
@@ -544,7 +544,7 @@ func TestSzEngineServer_FindPathByRecordId_inclusions(test *testing.T) {
 	exclusions := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdString(record1) + `}]}`
 	requiredDataSources := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.FindPathByRecordIdRequest{
+	request := &szpb.FindPathByRecordIdRequest{
 		EndDataSourceCode:   record2.DataSource,
 		EndRecordId:         record1.Id,
 		Exclusions:          exclusions,
@@ -562,7 +562,7 @@ func TestSzEngineServer_FindPathByRecordId_inclusions(test *testing.T) {
 func TestSzEngineServer_GetActiveConfigId(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
-	request := &g2pb.GetActiveConfigIdRequest{}
+	request := &szpb.GetActiveConfigIdRequest{}
 	response, err := szEngineServer.GetActiveConfigId(ctx, request)
 	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response.GetResult())
@@ -573,7 +573,7 @@ func TestSzEngineServer_GetEntityByEntityId(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	entityId := getEntityId(truthset.CustomerRecords["1001"])
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.GetEntityByEntityIdRequest{
+	request := &szpb.GetEntityByEntityIdRequest{
 		EntityId: entityId,
 		Flags:    flags,
 	}
@@ -587,7 +587,7 @@ func TestSzEngineServer_GetEntityByRecordId(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.GetEntityByRecordIdRequest{
+	request := &szpb.GetEntityByRecordIdRequest{
 		DataSourceCode: record.DataSource,
 		Flags:          flags,
 		RecordId:       record.Id,
@@ -602,7 +602,7 @@ func TestSzEngineServer_GetRecord(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.GetRecordRequest{
+	request := &szpb.GetRecordRequest{
 		DataSourceCode: record.DataSource,
 		Flags:          flags,
 		RecordId:       record.Id,
@@ -615,7 +615,7 @@ func TestSzEngineServer_GetRecord(test *testing.T) {
 func TestSzEngineServer_GetRedoRecord(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
-	request := &g2pb.GetRedoRecordRequest{}
+	request := &szpb.GetRedoRecordRequest{}
 	response, err := szEngineServer.GetRedoRecord(ctx, request)
 	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response.GetResult())
@@ -624,7 +624,7 @@ func TestSzEngineServer_GetRedoRecord(test *testing.T) {
 func TestSzEngineServer_GetRepositoryLastModifiedTime(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
-	request := &g2pb.GetRepositoryLastModifiedTimeRequest{}
+	request := &szpb.GetRepositoryLastModifiedTimeRequest{}
 	response, err := szEngineServer.GetRepositoryLastModifiedTime(ctx, request)
 	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response.GetResult())
@@ -637,7 +637,7 @@ func TestSzEngineServer_GetVirtualEntityByRecordId(test *testing.T) {
 	record2 := truthset.CustomerRecords["1002"]
 	recordList := `{"RECORDS": [{"DATA_SOURCE": "` + record1.DataSource + `", "RECORD_ID": "` + record1.Id + `"}, {"DATA_SOURCE": "` + record2.DataSource + `", "RECORD_ID": "` + record2.Id + `"}]}`
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.GetVirtualEntityByRecordIdRequest{
+	request := &szpb.GetVirtualEntityByRecordIdRequest{
 		Flags:      flags,
 		RecordList: recordList,
 	}
@@ -651,7 +651,7 @@ func TestSzEngineServer_HowEntityByEntityId(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	entityId := getEntityId(truthset.CustomerRecords["1001"])
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.HowEntityByEntityIdRequest{
+	request := &szpb.HowEntityByEntityIdRequest{
 		EntityId: entityId,
 		Flags:    flags,
 	}
@@ -663,7 +663,7 @@ func TestSzEngineServer_HowEntityByEntityId(test *testing.T) {
 func TestSzEngineServer_PrimeEngine(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
-	request := &g2pb.PrimeEngineRequest{}
+	request := &szpb.PrimeEngineRequest{}
 	response, err := szEngineServer.PrimeEngine(ctx, request)
 	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
@@ -674,7 +674,7 @@ func TestSzEngineServer_ReevaluateEntity(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	entityId := getEntityId(truthset.CustomerRecords["1001"])
 	flags := sz.SZ_WITHOUT_INFO
-	request := &g2pb.ReevaluateEntityRequest{
+	request := &szpb.ReevaluateEntityRequest{
 		EntityId: entityId,
 		Flags:    flags,
 	}
@@ -688,7 +688,7 @@ func TestSzEngineServer_ReevaluateEntity_withInfo(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	entityId := getEntityId(truthset.CustomerRecords["1001"])
 	flags := sz.SZ_WITH_INFO
-	request := &g2pb.ReevaluateEntityRequest{
+	request := &szpb.ReevaluateEntityRequest{
 		EntityId: entityId,
 		Flags:    flags,
 	}
@@ -702,7 +702,7 @@ func TestSzEngineServer_ReevaluateRecord(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	flags := sz.SZ_WITHOUT_INFO
-	request := &g2pb.ReevaluateRecordRequest{
+	request := &szpb.ReevaluateRecordRequest{
 		DataSourceCode: record.DataSource,
 		Flags:          flags,
 		RecordId:       record.Id,
@@ -717,7 +717,7 @@ func TestSzEngineServer_ReevaluateRecord_withInfo(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	flags := sz.SZ_WITH_INFO
-	request := &g2pb.ReevaluateRecordRequest{
+	request := &szpb.ReevaluateRecordRequest{
 		DataSourceCode: record.DataSource,
 		Flags:          flags,
 		RecordId:       record.Id,
@@ -729,29 +729,29 @@ func TestSzEngineServer_ReevaluateRecord_withInfo(test *testing.T) {
 
 func TestSzEngineServer_ReplaceRecord(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &g2pb.ReplaceRecordRequest{
+	szEngineServer := getTestObject(ctx, test)
+	request := &szpb.ReplaceRecordRequest{
 		DataSourceCode:   "CUSTOMERS",
 		Flags:            sz.SZ_WITHOUT_INFO,
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
 		RecordId:         "1001",
 	}
-	response, err := g2engine.ReplaceRecord(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.ReplaceRecord(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response.GetResult())
 }
 
 func TestSzEngineServer_ReplaceRecord_withInfo(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
-	request := &g2pb.ReplaceRecordRequest{
+	szEngineServer := getTestObject(ctx, test)
+	request := &szpb.ReplaceRecordRequest{
 		DataSourceCode:   "CUSTOMERS",
 		Flags:            sz.SZ_WITH_INFO,
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
 		RecordId:         "1001",
 	}
-	response, err := g2engine.ReplaceRecord(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.ReplaceRecord(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response.GetResult())
 }
 
@@ -760,7 +760,7 @@ func TestSzEngineServer_SearchByAttributes(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	attributes := `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.SearchByAttributesRequest{
+	request := &szpb.SearchByAttributesRequest{
 		Attributes: attributes,
 		Flags:      flags,
 	}
@@ -776,7 +776,7 @@ func TestSzEngineServer_SearchByAttributes_searchProfile(test *testing.T) {
 	attributes := `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
 	searchProfile := "SEARCH"
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.SearchByAttributesRequest{
+	request := &szpb.SearchByAttributesRequest{
 		Attributes:    attributes,
 		Flags:         flags,
 		SearchProfile: searchProfile,
@@ -789,7 +789,7 @@ func TestSzEngineServer_SearchByAttributes_searchProfile(test *testing.T) {
 func TestSzEngineServer_Stats(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
-	request := &g2pb.GetStatsRequest{}
+	request := &szpb.GetStatsRequest{}
 	response, err := szEngineServer.GetStats(ctx, request)
 	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response.GetResult())
@@ -801,7 +801,7 @@ func TestSzEngineServer_WhyEntities(test *testing.T) {
 	entityId1 := getEntityId(truthset.CustomerRecords["1001"])
 	entityId2 := getEntityId(truthset.CustomerRecords["1002"])
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.WhyEntitiesRequest{
+	request := &szpb.WhyEntitiesRequest{
 		EntityId1: entityId1,
 		EntityId2: entityId2,
 		Flags:     flags,
@@ -816,7 +816,7 @@ func TestSzEngineServer_WhyRecordInEntity(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	record1 := truthset.CustomerRecords["1001"]
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.WhyRecordInEntityRequest{
+	request := &szpb.WhyRecordInEntityRequest{
 		DataSourceCode: record1.DataSource,
 		Flags:          flags,
 		RecordId:       record1.Id,
@@ -832,7 +832,7 @@ func TestSzEngineServer_WhyRecords(test *testing.T) {
 	record1 := truthset.CustomerRecords["1001"]
 	record2 := truthset.CustomerRecords["1002"]
 	flags := sz.SZ_NO_FLAGS
-	request := &g2pb.WhyRecordsRequest{
+	request := &szpb.WhyRecordsRequest{
 		DataSourceCode1: record1.DataSource,
 		DataSourceCode2: record2.DataSource,
 		Flags:           flags,
@@ -849,7 +849,7 @@ func TestSzEngineServer_DeleteRecord(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1003"]
 	flags := sz.SZ_WITHOUT_INFO
-	request := &g2pb.DeleteRecordRequest{
+	request := &szpb.DeleteRecordRequest{
 		DataSourceCode: record.DataSource,
 		Flags:          flags,
 		RecordId:       record.Id,
@@ -864,7 +864,7 @@ func TestSzEngineServer_DeleteRecord_withInfo(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1003"]
 	flags := sz.SZ_WITH_INFO
-	request := &g2pb.DeleteRecordRequest{
+	request := &szpb.DeleteRecordRequest{
 		DataSourceCode: record.DataSource,
 		Flags:          flags,
 		RecordId:       record.Id,

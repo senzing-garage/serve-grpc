@@ -17,7 +17,7 @@ import (
 	"github.com/senzing-garage/sz-sdk-go-core/szengine"
 	"github.com/senzing-garage/sz-sdk-go/sz"
 	"github.com/senzing-garage/sz-sdk-go/szerror"
-	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
+	szpb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -151,60 +151,60 @@ func TestMain(m *testing.M) {
 func setupSenzingConfig(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	now := time.Now()
 
-	aG2config := &szconfig.Szconfig{}
-	err := aG2config.Initialize(ctx, instanceName, settings, verboseLogging)
+	szConfig := &szconfig.Szconfig{}
+	err := szConfig.Initialize(ctx, instanceName, settings, verboseLogging)
 	if err != nil {
 		return createError(5906, err)
 	}
 
-	configHandle, err := aG2config.CreateConfig(ctx)
+	configHandle, err := szConfig.CreateConfig(ctx)
 	if err != nil {
 		return createError(5907, err)
 	}
 
 	datasourceNames := []string{"CUSTOMERS", "REFERENCE", "WATCHLIST"}
 	for _, dataSourceCode := range datasourceNames {
-		_, err := aG2config.AddDataSource(ctx, configHandle, dataSourceCode)
+		_, err := szConfig.AddDataSource(ctx, configHandle, dataSourceCode)
 		if err != nil {
 			return createError(5908, err)
 		}
 	}
 
-	configStr, err := aG2config.ExportConfig(ctx, configHandle)
+	configStr, err := szConfig.ExportConfig(ctx, configHandle)
 	if err != nil {
 		return createError(5909, err)
 	}
 
-	err = aG2config.CloseConfig(ctx, configHandle)
+	err = szConfig.CloseConfig(ctx, configHandle)
 	if err != nil {
 		return createError(5910, err)
 	}
 
-	err = aG2config.Destroy(ctx)
+	err = szConfig.Destroy(ctx)
 	if err != nil {
 		return createError(5911, err)
 	}
 
 	// Persist the Senzing configuration to the Senzing repository.
 
-	aG2configmgr := &szconfigmanager.Szconfigmanager{}
-	err = aG2configmgr.Initialize(ctx, instanceName, settings, verboseLogging)
+	szConfigManager := &szconfigmanager.Szconfigmanager{}
+	err = szConfigManager.Initialize(ctx, instanceName, settings, verboseLogging)
 	if err != nil {
 		return createError(5912, err)
 	}
 
-	configComments := fmt.Sprintf("Created by g2diagnostic_test at %s", now.UTC())
-	configID, err := aG2configmgr.AddConfig(ctx, configStr, configComments)
+	configComments := fmt.Sprintf("Created by szdiagnostic_test at %s", now.UTC())
+	configID, err := szConfigManager.AddConfig(ctx, configStr, configComments)
 	if err != nil {
 		return createError(5913, err)
 	}
 
-	err = aG2configmgr.SetDefaultConfigId(ctx, configID)
+	err = szConfigManager.SetDefaultConfigId(ctx, configID)
 	if err != nil {
 		return createError(5914, err)
 	}
 
-	err = aG2configmgr.Destroy(ctx)
+	err = szConfigManager.Destroy(ctx)
 	if err != nil {
 		return createError(5915, err)
 	}
@@ -315,7 +315,7 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 func TestSzDiagnosticServer_CheckDatabasePerformance(test *testing.T) {
 	ctx := context.TODO()
 	szDiagnosticServer := getTestObject(ctx, test)
-	request := &g2pb.CheckDatabasePerformanceRequest{
+	request := &szpb.CheckDatabasePerformanceRequest{
 		SecondsToRun: int32(1),
 	}
 	response, err := szDiagnosticServer.CheckDatabasePerformance(ctx, request)
@@ -326,7 +326,7 @@ func TestSzDiagnosticServer_CheckDatabasePerformance(test *testing.T) {
 func TestSzDiagnosticServer_PurgeRepository(test *testing.T) {
 	ctx := context.TODO()
 	szDiagnosticServer := getTestObject(ctx, test)
-	request := &g2pb.PurgeRepositoryRequest{}
+	request := &szpb.PurgeRepositoryRequest{}
 	response, err := szDiagnosticServer.PurgeRepository(ctx, request)
 	testError(test, ctx, szDiagnosticServer, err)
 	printActual(test, response)

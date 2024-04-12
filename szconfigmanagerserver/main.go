@@ -2,7 +2,7 @@ package szconfigmanagerserver
 
 import (
 	"github.com/senzing-garage/go-logging/logging"
-	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
+	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 )
 
 // ----------------------------------------------------------------------------
@@ -11,7 +11,7 @@ import (
 
 // server is used to implement helloworld.GreeterServer.
 type SzConfigManagerServer struct {
-	g2pb.UnimplementedSzConfigManagerServer
+	szpb.UnimplementedSzConfigManagerServer
 	isTrace bool
 	logger  logging.LoggingInterface
 }
@@ -20,17 +20,17 @@ type SzConfigManagerServer struct {
 // Constants
 // ----------------------------------------------------------------------------
 
-// Identfier of the g2configmgr package found messages having the format "senzing-6999xxxx".
+// Identfier of the szconfigmanager package found messages having the format "senzing-6999xxxx".
 const ComponentId = 6012
 
 // Log message prefix.
-const Prefix = "serve-grpc.g2configmgrserver."
+const Prefix = "serve-grpc.szconfigmanagerserver."
 
 // ----------------------------------------------------------------------------
 // Variables
 // ----------------------------------------------------------------------------
 
-// Message templates for the g2configmgr package.
+// Message templates for the szconfigmanager package.
 var IdMessages = map[int]string{
 	1:    "Enter " + Prefix + "AddConfig(%+v).",
 	2:    "Exit  " + Prefix + "AddConfig(%+v) returned (%d, %v).",

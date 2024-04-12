@@ -19,7 +19,7 @@ var (
 )
 
 // ----------------------------------------------------------------------------
-// Interface methods for github.com/senzing-garage/g2-sdk-go/g2engine.G2engine
+// Interface methods for github.com/senzing-garage/sz-sdk-go/szengine.SzEngine
 // ----------------------------------------------------------------------------
 
 func (server *SzEngineServer) AddRecord(ctx context.Context, request *szpb.AddRecordRequest) (*szpb.AddRecordResponse, error) {
@@ -169,8 +169,8 @@ func (server *SzEngineServer) FindPathByEntityId(ctx context.Context, request *s
 		server.traceEntry(45, request)
 		defer func() { server.traceExit(46, request, result, err, time.Since(entryTime)) }()
 	}
-	g2engine := getSzEngine()
-	result, err = g2engine.FindPathByEntityId(ctx, request.GetStartEntityId(), request.GetEndEntityId(), request.GetMaxDegrees(), request.GetExclusions(), request.GetRequiredDataSources(), request.GetFlags())
+	szEngine := getSzEngine()
+	result, err = szEngine.FindPathByEntityId(ctx, request.GetStartEntityId(), request.GetEndEntityId(), request.GetMaxDegrees(), request.GetExclusions(), request.GetRequiredDataSources(), request.GetFlags())
 	response := szpb.FindPathByEntityIdResponse{
 		Result: result,
 	}
@@ -249,8 +249,8 @@ func (server *SzEngineServer) GetRecord(ctx context.Context, request *szpb.GetRe
 		server.traceEntry(83, request)
 		defer func() { server.traceExit(84, request, result, err, time.Since(entryTime)) }()
 	}
-	g2engine := getSzEngine()
-	result, err = g2engine.GetRecord(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetFlags())
+	szEngine := getSzEngine()
+	result, err = szEngine.GetRecord(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetFlags())
 	response := szpb.GetRecordResponse{
 		Result: result,
 	}
@@ -414,13 +414,13 @@ func (server *SzEngineServer) StreamExportCsvEntityReport(request *szpb.StreamEx
 	}
 	ctx := stream.Context()
 	entryTime := time.Now()
-	g2engine := getSzEngine()
+	szEngine := getSzEngine()
 	rowsFetched := 0
 
 	// Get the query handle.
 
 	var queryHandle uintptr
-	queryHandle, err = g2engine.ExportCsvEntityReport(ctx, request.GetCsvColumnList(), request.GetFlags())
+	queryHandle, err = szEngine.ExportCsvEntityReport(ctx, request.GetCsvColumnList(), request.GetFlags())
 	if err != nil {
 		return err
 	}
@@ -428,7 +428,7 @@ func (server *SzEngineServer) StreamExportCsvEntityReport(request *szpb.StreamEx
 	// Defer the CloseExport in case we exit early for any reason.
 
 	defer func() {
-		err = g2engine.CloseExport(ctx, queryHandle)
+		err = szEngine.CloseExport(ctx, queryHandle)
 		if server.isTrace {
 			server.traceExit(158, request, rowsFetched, err, time.Since(entryTime))
 		}
@@ -438,7 +438,7 @@ func (server *SzEngineServer) StreamExportCsvEntityReport(request *szpb.StreamEx
 
 	for {
 		var fetchResult string
-		fetchResult, err = g2engine.FetchNext(ctx, queryHandle)
+		fetchResult, err = szEngine.FetchNext(ctx, queryHandle)
 		if err != nil {
 			return err
 		}
@@ -465,13 +465,13 @@ func (server *SzEngineServer) StreamExportJsonEntityReport(request *szpb.StreamE
 	}
 	ctx := stream.Context()
 	entryTime := time.Now()
-	g2engine := getSzEngine()
+	szEngine := getSzEngine()
 	rowsFetched := 0
 
 	// Get the query handle.
 
 	var queryHandle uintptr
-	queryHandle, err = g2engine.ExportJsonEntityReport(ctx, request.GetFlags())
+	queryHandle, err = szEngine.ExportJsonEntityReport(ctx, request.GetFlags())
 	if err != nil {
 		return err
 	}
@@ -479,7 +479,7 @@ func (server *SzEngineServer) StreamExportJsonEntityReport(request *szpb.StreamE
 	// Defer the CloseExport in case we exit early for any reason.
 
 	defer func() {
-		err = g2engine.CloseExport(ctx, queryHandle)
+		err = szEngine.CloseExport(ctx, queryHandle)
 		if server.isTrace {
 			server.traceExit(160, request, rowsFetched, err, time.Since(entryTime))
 		}
@@ -489,7 +489,7 @@ func (server *SzEngineServer) StreamExportJsonEntityReport(request *szpb.StreamE
 
 	for {
 		var fetchResult string
-		fetchResult, err = g2engine.FetchNext(ctx, queryHandle)
+		fetchResult, err = szEngine.FetchNext(ctx, queryHandle)
 		if err != nil {
 			return err
 		}
@@ -630,7 +630,7 @@ func getSzEngine() sz.SzEngine {
 	return szEngineSingleton
 }
 
-func GetSdkG2engine() sz.SzEngine {
+func GetSdkSzEngine() sz.SzEngine {
 	return getSzEngine()
 }
 

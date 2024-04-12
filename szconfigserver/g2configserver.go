@@ -19,7 +19,7 @@ var (
 )
 
 // ----------------------------------------------------------------------------
-// Interface methods for github.com/senzing-garage/g2-sdk-go/szconfig.G2config
+// Interface methods for github.com/senzing-garage/sz-sdk-go/szconfig.SzCconfig
 // ----------------------------------------------------------------------------
 
 func (server *SzConfigServer) AddDataSource(ctx context.Context, request *szpb.AddDataSourceRequest) (*szpb.AddDataSourceResponse, error) {

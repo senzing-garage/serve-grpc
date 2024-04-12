@@ -175,7 +175,7 @@ func (server *SzConfigManagerServer) SetLogLevel(ctx context.Context, logLevelNa
 
 // --- Services ---------------------------------------------------------------
 
-// Singleton pattern for g2configmgr.
+// Singleton pattern for szconfigmanager.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
 func getSzConfigManager() sz.SzConfigManager {
 	szConfigManagerSyncOnce.Do(func() {

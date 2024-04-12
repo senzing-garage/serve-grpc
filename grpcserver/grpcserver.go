@@ -101,8 +101,8 @@ func (grpcServer *GrpcServerImpl) createGrpcObserver(ctx context.Context, parsed
 
 // --- Enabling services ---------------------------------------------------------------
 
-// Add G2Config service to gRPC server.
-func (grpcServer *GrpcServerImpl) enableG2config(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+// Add SzConfig service to gRPC server.
+func (grpcServer *GrpcServerImpl) enableSzConfig(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szconfigserver.SzConfigServer{}
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
@@ -126,8 +126,8 @@ func (grpcServer *GrpcServerImpl) enableG2config(ctx context.Context, serviceReg
 	szconfig.RegisterSzConfigServer(serviceRegistrar, server)
 }
 
-// Add G2Configmgr service to gRPC server.
-func (grpcServer *GrpcServerImpl) enableG2configmgr(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+// Add SzConfigManager service to gRPC server.
+func (grpcServer *GrpcServerImpl) enableSzConfigManager(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szconfigmanagerserver.SzConfigManagerServer{}
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
@@ -151,8 +151,8 @@ func (grpcServer *GrpcServerImpl) enableG2configmgr(ctx context.Context, service
 	szconfigmanager.RegisterSzConfigManagerServer(serviceRegistrar, server)
 }
 
-// Add G2Diagnostic service to gRPC server.
-func (grpcServer *GrpcServerImpl) enableG2diagnostic(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+// Add SzDiagnostic service to gRPC server.
+func (grpcServer *GrpcServerImpl) enableSzDiagnostic(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szdiagnosticserver.SzDiagnosticServer{}
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
@@ -176,14 +176,14 @@ func (grpcServer *GrpcServerImpl) enableG2diagnostic(ctx context.Context, servic
 	szdiagnostic.RegisterSzDiagnosticServer(serviceRegistrar, server)
 }
 
-// Add G2Engine service to gRPC server.
-func (grpcServer *GrpcServerImpl) enableG2engine(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+// Add SzEngine service to gRPC server.
+func (grpcServer *GrpcServerImpl) enableSzEngine(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szengineserver.SzEngineServer{}
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
 		panic(err)
 	}
-	err = szengineserver.GetSdkG2engine().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION)
+	err = szengineserver.GetSdkSzEngine().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION)
 	if err != nil {
 		panic(err)
 	}
@@ -201,8 +201,8 @@ func (grpcServer *GrpcServerImpl) enableG2engine(ctx context.Context, serviceReg
 	// szengine.RegisterG2EngineServer(serviceRegistrar, server)
 }
 
-// Add G2Product service to gRPC server.
-func (grpcServer *GrpcServerImpl) enableG2product(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+// Add SzProduct service to gRPC server.
+func (grpcServer *GrpcServerImpl) enableSzProduct(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szproductserver.SzProductServer{}
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
@@ -271,19 +271,19 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 	// Register services with gRPC server.
 
 	if grpcServer.EnableAll || grpcServer.EnableSzConfig {
-		grpcServer.enableG2config(ctx, aGrpcServer)
+		grpcServer.enableSzConfig(ctx, aGrpcServer)
 	}
 	if grpcServer.EnableAll || grpcServer.EnableSzConfigManager {
-		grpcServer.enableG2configmgr(ctx, aGrpcServer)
+		grpcServer.enableSzConfigManager(ctx, aGrpcServer)
 	}
 	if grpcServer.EnableAll || grpcServer.EnableSzDiagnostic {
-		grpcServer.enableG2diagnostic(ctx, aGrpcServer)
+		grpcServer.enableSzDiagnostic(ctx, aGrpcServer)
 	}
 	if grpcServer.EnableAll || grpcServer.EnableSzEngine {
-		grpcServer.enableG2engine(ctx, aGrpcServer)
+		grpcServer.enableSzEngine(ctx, aGrpcServer)
 	}
 	if grpcServer.EnableAll || grpcServer.EnableSzProduct {
-		grpcServer.enableG2product(ctx, aGrpcServer)
+		grpcServer.enableSzProduct(ctx, aGrpcServer)
 	}
 
 	// Enable reflection.

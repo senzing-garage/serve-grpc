@@ -19,7 +19,7 @@ var (
 )
 
 // ----------------------------------------------------------------------------
-// Interface methods for github.com/senzing-garage/g2-sdk-go/g2product.G2product
+// Interface methods for github.com/senzing-garage/sz-sdk-go/szproduct.SzProduct
 // ----------------------------------------------------------------------------
 
 func (server *SzProductServer) GetLicense(ctx context.Context, request *szpb.GetLicenseRequest) (*szpb.GetLicenseResponse, error) {

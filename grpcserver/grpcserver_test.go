@@ -82,7 +82,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 		return localLogger.NewError(5912, err)
 	}
 
-	configComment := fmt.Sprintf("Created by g2diagnostic_test at %s", now.UTC())
+	configComment := fmt.Sprintf("Created by szdiagnostic_test at %s", now.UTC())
 	configID, err := szConfigManager.AddConfig(ctx, configDefinition, configComment)
 	if err != nil {
 		return localLogger.NewError(5913, err)
@@ -168,7 +168,7 @@ func TestGrpcServerImpl_Serve(test *testing.T) {
 	// 	Id: "Observer 1",
 	// }
 
-	// senzingEngineConfigurationJson, err := g2engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	// senzingEngineConfigurationJson, err := sengineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	// if err != nil {
 	// 	fmt.Print(err)
 	// }

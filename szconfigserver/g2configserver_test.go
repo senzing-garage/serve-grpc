@@ -10,7 +10,7 @@ import (
 	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
 	"github.com/senzing-garage/sz-sdk-go/sz"
 	"github.com/senzing-garage/sz-sdk-go/szerror"
-	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
+	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -152,13 +152,13 @@ func TestSzConfigServer_AddDataSource(test *testing.T) {
 	szConfigServer := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
 	testError(test, ctx, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// AddDataSource.
-	requestToAddDataSource := &g2pb.AddDataSourceRequest{
+	requestToAddDataSource := &szpb.AddDataSourceRequest{
 		ConfigHandle:   responseFromCreateConfig.GetResult(),
 		DataSourceCode: "GO_TEST",
 	}
@@ -167,7 +167,7 @@ func TestSzConfigServer_AddDataSource(test *testing.T) {
 	printActual(test, responseFromAddDataSource.GetResult())
 
 	// Close.
-	requestToCloseConfig := &g2pb.CloseConfigRequest{
+	requestToCloseConfig := &szpb.CloseConfigRequest{
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
@@ -179,13 +179,13 @@ func TestSzConfigServer_CloseConfig(test *testing.T) {
 	szConfigServer := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
 	testError(test, ctx, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// Close.
-	requestToCloseConfig := &g2pb.CloseConfigRequest{
+	requestToCloseConfig := &szpb.CloseConfigRequest{
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
@@ -195,7 +195,7 @@ func TestSzConfigServer_CloseConfig(test *testing.T) {
 func TestSzConfigServer_CreateConfig(test *testing.T) {
 	ctx := context.TODO()
 	szConfigServer := getTestObject(ctx, test)
-	requestToCreate := &g2pb.CreateConfigRequest{}
+	requestToCreate := &szpb.CreateConfigRequest{}
 	response, err := szConfigServer.CreateConfig(ctx, requestToCreate)
 	testError(test, ctx, err)
 	printActual(test, response.GetResult())
@@ -206,13 +206,13 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 	szConfigServer := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
 	testError(test, ctx, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// GetDataSources #1.
-	requestToGetDataSources := &g2pb.GetDataSourcesRequest{
+	requestToGetDataSources := &szpb.GetDataSourcesRequest{
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	responseFromGetDataSources, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
@@ -221,7 +221,7 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 	printActual(test, initialDataSources)
 
 	// AddDataSource.
-	requestToAddDataSource := &g2pb.AddDataSourceRequest{
+	requestToAddDataSource := &szpb.AddDataSourceRequest{
 		ConfigHandle:   responseFromCreateConfig.GetResult(),
 		DataSourceCode: "GO_TEST",
 	}
@@ -235,7 +235,7 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 	printActual(test, responseFromListDataSources2.GetResult())
 
 	// DeleteDataSource.
-	requestToDeleteDataSource := &g2pb.DeleteDataSourceRequest{
+	requestToDeleteDataSource := &szpb.DeleteDataSourceRequest{
 		ConfigHandle:   responseFromCreateConfig.GetResult(),
 		DataSourceCode: "GO_TEST",
 	}
@@ -248,7 +248,7 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 	printActual(test, responseFromGetDataSources3.GetResult())
 
 	// Close.
-	requestToCloseConfig := &g2pb.CloseConfigRequest{
+	requestToCloseConfig := &szpb.CloseConfigRequest{
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
@@ -262,13 +262,13 @@ func TestSzConfigServer_GetDataSources(test *testing.T) {
 	szConfigServer := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
 	testError(test, ctx, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// ListDataSources.
-	requestToGetDataSources := &g2pb.GetDataSourcesRequest{
+	requestToGetDataSources := &szpb.GetDataSourcesRequest{
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	responseFromGetDataSources, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
@@ -276,7 +276,7 @@ func TestSzConfigServer_GetDataSources(test *testing.T) {
 	printActual(test, responseFromGetDataSources.GetResult())
 
 	// Close.
-	requestToCloseConfig := &g2pb.CloseConfigRequest{
+	requestToCloseConfig := &szpb.CloseConfigRequest{
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
@@ -288,13 +288,13 @@ func TestSzConfigServer_ImportConfig(test *testing.T) {
 	szConfigServer := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreate := &g2pb.CreateConfigRequest{}
+	requestToCreate := &szpb.CreateConfigRequest{}
 	responseFromCreate, err := szConfigServer.CreateConfig(ctx, requestToCreate)
 	testError(test, ctx, err)
 	printActual(test, responseFromCreate.GetResult())
 
 	// Export Config to string.
-	requestToExportConfig := &g2pb.ExportConfigRequest{
+	requestToExportConfig := &szpb.ExportConfigRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	responseFromExportConfig, err := szConfigServer.ExportConfig(ctx, requestToExportConfig)
@@ -302,14 +302,14 @@ func TestSzConfigServer_ImportConfig(test *testing.T) {
 	printActual(test, responseFromExportConfig.GetResult())
 
 	// Close.
-	requestToCloseConfig := &g2pb.CloseConfigRequest{
+	requestToCloseConfig := &szpb.CloseConfigRequest{
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
 	testError(test, ctx, err)
 
 	// Load.
-	requestToImportConfig := &g2pb.ImportConfigRequest{
+	requestToImportConfig := &szpb.ImportConfigRequest{
 		ConfigDefinition: responseFromExportConfig.GetResult(),
 	}
 	responseFromLoad, err := szConfigServer.ImportConfig(ctx, requestToImportConfig)
@@ -317,7 +317,7 @@ func TestSzConfigServer_ImportConfig(test *testing.T) {
 	printActual(test, responseFromLoad.GetResult())
 
 	// Close.
-	requestToCloseConfig = &g2pb.CloseConfigRequest{
+	requestToCloseConfig = &szpb.CloseConfigRequest{
 		ConfigHandle: responseFromLoad.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
@@ -329,13 +329,13 @@ func TestSzConfigServer_ExportConfig(test *testing.T) {
 	szConfigServer := getTestObject(ctx, test)
 
 	// Create.
-	requestToCreateConfig := &g2pb.CreateConfigRequest{}
+	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
 	testError(test, ctx, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// Save.
-	requestToExportConfig := &g2pb.ExportConfigRequest{
+	requestToExportConfig := &szpb.ExportConfigRequest{
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	responseFromExportConfig, err := szConfigServer.ExportConfig(ctx, requestToExportConfig)
@@ -343,7 +343,7 @@ func TestSzConfigServer_ExportConfig(test *testing.T) {
 	printActual(test, responseFromExportConfig.GetResult())
 
 	// Close.
-	requestToCloseConfig := &g2pb.CloseConfigRequest{
+	requestToCloseConfig := &szpb.CloseConfigRequest{
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)

@@ -19,7 +19,7 @@ var (
 )
 
 // ----------------------------------------------------------------------------
-// Interface methods for github.com/senzing-garage/g2-sdk-go/g2diagnostic.G2diagnostic
+// Interface methods for github.com/senzing-garage/sz-sdk-go/szdiagnostic.SzDdiagnostic
 // ----------------------------------------------------------------------------
 
 func (server *SzDiagnosticServer) CheckDatabasePerformance(ctx context.Context, request *szpb.CheckDatabasePerformanceRequest) (*szpb.CheckDatabasePerformanceResponse, error) {
@@ -30,8 +30,8 @@ func (server *SzDiagnosticServer) CheckDatabasePerformance(ctx context.Context, 
 		server.traceEntry(1, request)
 		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
 	}
-	g2diagnostic := getG2diagnostic()
-	result, err = g2diagnostic.CheckDatabasePerformance(ctx, int(request.GetSecondsToRun()))
+	szDiagnostic := getSzDiagnostic()
+	result, err = szDiagnostic.CheckDatabasePerformance(ctx, int(request.GetSecondsToRun()))
 	response := szpb.CheckDatabasePerformanceResponse{
 		Result: result,
 	}
@@ -45,7 +45,7 @@ func (server *SzDiagnosticServer) PurgeRepository(ctx context.Context, request *
 		server.traceEntry(117, request)
 		defer func() { server.traceExit(118, request, err, time.Since(entryTime)) }()
 	}
-	szDiagnostic := getG2diagnostic()
+	szDiagnostic := getSzDiagnostic()
 	err = szDiagnostic.PurgeRepository(ctx)
 	response := szpb.PurgeRepositoryResponse{}
 	return &response, err
@@ -116,7 +116,7 @@ func (server *SzDiagnosticServer) SetLogLevel(ctx context.Context, logLevelName 
 
 // Singleton pattern for g2diagnostic.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getG2diagnostic() sz.SzDiagnostic {
+func getSzDiagnostic() sz.SzDiagnostic {
 	szDiagnosticSyncOnce.Do(func() {
 		szDiagnosticSingleton = &szsdk.Szdiagnostic{}
 	})
@@ -124,7 +124,7 @@ func getG2diagnostic() sz.SzDiagnostic {
 }
 
 func GetSdkSzDiagnostic() sz.SzDiagnostic {
-	return getG2diagnostic()
+	return getSzDiagnostic()
 }
 
 // --- Observer ---------------------------------------------------------------

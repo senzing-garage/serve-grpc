@@ -2,7 +2,7 @@ package szconfigserver
 
 import (
 	"github.com/senzing-garage/go-logging/logging"
-	g2pb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
+	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 )
 
 // ----------------------------------------------------------------------------
@@ -11,7 +11,7 @@ import (
 
 // server is used to implement helloworld.GreeterServer.
 type SzConfigServer struct {
-	g2pb.UnimplementedSzConfigServer
+	szpb.UnimplementedSzConfigServer
 	isTrace bool
 	logger  logging.LoggingInterface
 }
@@ -20,17 +20,17 @@ type SzConfigServer struct {
 // Constants
 // ----------------------------------------------------------------------------
 
-// Identfier of the g2config package found messages having the format "senzing-6999xxxx".
+// Identfier of the szconfig package found messages having the format "senzing-6999xxxx".
 const ComponentId = 6011
 
 // Log message prefix.
-const Prefix = "serve-grpc.g2configserver."
+const Prefix = "serve-grpc.szconfigserver."
 
 // ----------------------------------------------------------------------------
 // Variables
 // ----------------------------------------------------------------------------
 
-// Message templates for the g2config package.
+// Message templates for the szconfig package.
 var IdMessages = map[int]string{
 	1:    "Enter " + Prefix + "AddDataSource(%+v).",
 	2:    "Exit  " + Prefix + "AddDataSource(%+v) returned (%s, %v).",
@@ -89,5 +89,5 @@ var IdMessages = map[int]string{
 	5933: "During test setup, call to g2engine.Destroy() failed.",
 }
 
-// Status strings for specific g2config messages.
+// Status strings for specific szconfig messages.
 var IdStatuses = map[int]string{}
