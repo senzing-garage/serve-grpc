@@ -31,7 +31,7 @@ jobs:
           go-version: ${{ matrix.go }}
 
       - name: install Senzing API Runtime
-        uses: senzing-factory/github-action-install-senzing-api@59-skern
+        uses: senzing-factory/github-action-install-senzing-api@v3
         with:
           senzingapi-runtime-version: ${{ matrix.senzingapi-runtime-version }}
 
