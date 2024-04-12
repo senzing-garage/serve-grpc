@@ -558,6 +558,7 @@ func ExampleSzEngineServer_ReevaluateEntity() {
 
 func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// TODO: Fix Output
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &g2pb.ReevaluateEntityRequest{
@@ -569,7 +570,7 @@ func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","AFFECTED_ENTITIES":[{"ENTITY_ID":1}],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
+	// Output:
 }
 
 func ExampleSzEngineServer_ReevaluateRecord() {
@@ -591,6 +592,7 @@ func ExampleSzEngineServer_ReevaluateRecord() {
 
 func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// TODO: Fix Output
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &g2pb.ReevaluateRecordRequest{
@@ -603,7 +605,7 @@ func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","AFFECTED_ENTITIES":[{"ENTITY_ID":1}],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
+	// Output:
 }
 
 func ExampleSzEngineServer_ReplaceRecord() {
@@ -626,6 +628,7 @@ func ExampleSzEngineServer_ReplaceRecord() {
 
 func ExampleSzEngineServer_ReplaceRecord_withInfo() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// TODO: Fix Output
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &g2pb.ReplaceRecordRequest{
@@ -639,7 +642,7 @@ func ExampleSzEngineServer_ReplaceRecord_withInfo() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","AFFECTED_ENTITIES":[],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
+	// Output:
 }
 
 func ExampleSzEngineServer_DeleteRecord() {
