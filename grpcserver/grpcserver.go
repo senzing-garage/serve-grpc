@@ -18,6 +18,8 @@ import (
 	"github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	"github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	"github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
+	"github.com/senzing-garage/sz-sdk-proto/go/szengine"
+	"github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
@@ -198,7 +200,7 @@ func (grpcServer *GrpcServerImpl) enableSzEngine(ctx context.Context, serviceReg
 	if len(grpcServer.ObserverOrigin) > 0 {
 		server.SetObserverOrigin(ctx, grpcServer.ObserverOrigin)
 	}
-	// szengine.RegisterG2EngineServer(serviceRegistrar, server)
+	szengine.RegisterSzEngineServer(serviceRegistrar, server)
 }
 
 // Add SzProduct service to gRPC server.
@@ -223,7 +225,7 @@ func (grpcServer *GrpcServerImpl) enableSzProduct(ctx context.Context, serviceRe
 	if len(grpcServer.ObserverOrigin) > 0 {
 		server.SetObserverOrigin(ctx, grpcServer.ObserverOrigin)
 	}
-	// szproduct.RegisterG2ProductServer(serviceRegistrar, server)
+	szproduct.RegisterSzProductServer(serviceRegistrar, server)
 }
 
 // ----------------------------------------------------------------------------

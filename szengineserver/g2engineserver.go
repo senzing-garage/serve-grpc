@@ -360,7 +360,9 @@ func (server *SzEngineServer) ReevaluateEntity(ctx context.Context, request *szp
 	}
 	szEngine := getSzEngine()
 	result, err = szEngine.ReevaluateEntity(ctx, request.GetEntityId(), request.GetFlags())
-	response := szpb.ReevaluateEntityResponse{}
+	response := szpb.ReevaluateEntityResponse{
+		Result: result,
+	}
 	return &response, err
 }
 
@@ -374,7 +376,9 @@ func (server *SzEngineServer) ReevaluateRecord(ctx context.Context, request *szp
 	}
 	szEngine := getSzEngine()
 	result, err = szEngine.ReevaluateRecord(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetFlags())
-	response := szpb.ReevaluateRecordResponse{}
+	response := szpb.ReevaluateRecordResponse{
+		Result: result,
+	}
 	return &response, err
 }
 
@@ -388,7 +392,9 @@ func (server *SzEngineServer) ReplaceRecord(ctx context.Context, request *szpb.R
 	}
 	szEngine := getSzEngine()
 	result, err = szEngine.ReplaceRecord(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetRecordDefinition(), request.GetFlags())
-	response := szpb.ReplaceRecordResponse{}
+	response := szpb.ReplaceRecordResponse{
+		Result: result,
+	}
 	return &response, err
 }
 
