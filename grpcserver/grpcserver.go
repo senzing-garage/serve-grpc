@@ -160,7 +160,7 @@ func (grpcServer *GrpcServerImpl) enableSzDiagnostic(ctx context.Context, servic
 	if err != nil {
 		panic(err)
 	}
-	err = szdiagnosticserver.GetSdkSzDiagnostic().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION)
+	err = szdiagnosticserver.GetSdkSzDiagnostic().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -185,7 +185,7 @@ func (grpcServer *GrpcServerImpl) enableSzEngine(ctx context.Context, serviceReg
 	if err != nil {
 		panic(err)
 	}
-	err = szengineserver.GetSdkSzEngine().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION)
+	err = szengineserver.GetSdkSzEngine().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}

@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	szConfigManagerSingleton sz.SzConfigManager
+	szConfigManagerSingleton *szsdk.Szconfigmanager
 	szConfigManagerSyncOnce  sync.Once
 )
 
@@ -177,14 +177,18 @@ func (server *SzConfigManagerServer) SetLogLevel(ctx context.Context, logLevelNa
 
 // Singleton pattern for szconfigmanager.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getSzConfigManager() sz.SzConfigManager {
+func getSzConfigManager() *szsdk.Szconfigmanager {
 	szConfigManagerSyncOnce.Do(func() {
 		szConfigManagerSingleton = &szsdk.Szconfigmanager{}
 	})
 	return szConfigManagerSingleton
 }
 
-func GetSdkSzConfigManager() sz.SzConfigManager {
+func GetSdkSzConfigManager() *szsdk.Szconfigmanager {
+	return getSzConfigManager()
+}
+
+func GetSdkSzConfigManagerAsInterface() sz.SzConfigManager {
 	return getSzConfigManager()
 }
 

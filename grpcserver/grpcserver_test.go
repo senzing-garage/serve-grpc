@@ -102,7 +102,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 
 func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	szDiagnostic := &szdiagnostic.Szdiagnostic{}
-	err := szDiagnostic.Initialize(ctx, instanceName, settings, verboseLogging, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION)
+	err := szDiagnostic.Initialize(ctx, instanceName, settings, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION, verboseLogging)
 	if err != nil {
 		return localLogger.NewError(5903, err)
 	}

@@ -40,279 +40,7 @@ var (
 )
 
 // ----------------------------------------------------------------------------
-// Internal functions
-// ----------------------------------------------------------------------------
-
-func createError(errorId int, err error) error {
-	return szerror.Cast(localLogger.NewError(errorId, err), err)
-}
-
-func getTestObject(ctx context.Context, test *testing.T) SzEngineServer {
-	if szEngineTestSingleton == nil {
-		szEngineTestSingleton = &SzEngineServer{}
-		instanceName := "Test name"
-		verboseLogging := sz.SZ_NO_LOGGING
-		configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
-		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-		if err != nil {
-			test.Logf("Cannot construct system configuration. Error: %v", err)
-		}
-		err = GetSdkSzEngine().Initialize(ctx, instanceName, settings, verboseLogging, configId)
-		if err != nil {
-			test.Logf("Cannot Init. Error: %v", err)
-		}
-	}
-	return *szEngineTestSingleton
-}
-
-func getSzEngineServer(ctx context.Context) SzEngineServer {
-	if szEngineTestSingleton == nil {
-		szEngineTestSingleton = &SzEngineServer{}
-		instanceName := "Test name"
-		verboseLogging := sz.SZ_NO_LOGGING
-		configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
-		setting, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-		if err != nil {
-			fmt.Println(err)
-		}
-		err = GetSdkSzEngine().Initialize(ctx, instanceName, setting, verboseLogging, configId)
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
-	return *szEngineTestSingleton
-}
-
-func getEntityIdForRecord(datasource string, id string) int64 {
-	ctx := context.TODO()
-	var result int64 = 0
-	szEngine := getSzEngineServer(ctx)
-	request := &szpb.GetEntityByRecordIdRequest{
-		DataSourceCode: datasource,
-		RecordId:       id,
-	}
-	response, err := szEngine.GetEntityByRecordId(ctx, request)
-	if err != nil {
-		return result
-	}
-
-	getEntityByRecordIdResponse := &GetEntityByRecordIdResponse{}
-	err = json.Unmarshal([]byte(response.Result), &getEntityByRecordIdResponse)
-	if err != nil {
-		return result
-	}
-	return getEntityByRecordIdResponse.ResolvedEntity.EntityId
-}
-
-func getEntityIdStringForRecord(datasource string, id string) string {
-	entityId := getEntityIdForRecord(datasource, id)
-	return strconv.FormatInt(entityId, 10)
-}
-
-func getEntityId(record record.Record) int64 {
-	return getEntityIdForRecord(record.DataSource, record.Id)
-}
-
-func getEntityIdString(record record.Record) string {
-	entityId := getEntityId(record)
-	return strconv.FormatInt(entityId, 10)
-}
-
-func truncate(aString string, length int) string {
-	return truncator.Truncate(aString, length, "...", truncator.PositionEnd)
-}
-
-func printResult(test *testing.T, title string, result interface{}) {
-	if printResults {
-		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
-	}
-}
-
-func printResponse(test *testing.T, response interface{}) {
-	printResult(test, "Response", response)
-}
-
-func testError(test *testing.T, ctx context.Context, szEngine SzEngineServer, err error) {
-	_ = ctx
-	_ = szEngine
-	if err != nil {
-		test.Log("Error:", err.Error())
-		assert.FailNow(test, err.Error())
-	}
-}
-
-// func expectError(test *testing.T, ctx context.Context, g2engine SzEngineServer, err error, messageId string) {
-// 	_ = ctx
-// 	_ = g2engine
-// 	if err != nil {
-// 		var dictionary map[string]interface{}
-// 		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
-// 		if unmarshalErr != nil {
-// 			test.Log("Unmarshal Error:", unmarshalErr.Error())
-// 		}
-// 		assert.Equal(test, messageId, dictionary["id"].(string))
-// 	} else {
-// 		assert.FailNow(test, "Should have failed with", messageId)
-// 	}
-// }
-
-// ----------------------------------------------------------------------------
-// Test harness
-// ----------------------------------------------------------------------------
-
-func TestMain(m *testing.M) {
-	err := setup()
-	if err != nil {
-		if szerror.Is(err, szerror.SzUnrecoverable) {
-			fmt.Printf("\nUnrecoverable error detected. \n\n")
-		}
-		if szerror.Is(err, szerror.SzRetryable) {
-			fmt.Printf("\nRetryable error detected. \n\n")
-		}
-		if szerror.Is(err, szerror.SzBadInput) {
-			fmt.Printf("\nBad user input error detected. \n\n")
-		}
-		fmt.Print(err)
-		os.Exit(1)
-	}
-	code := m.Run()
-	err = teardown()
-	if err != nil {
-		fmt.Print(err)
-	}
-	os.Exit(code)
-}
-
-func setupSenzingConfig(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
-	now := time.Now()
-
-	szConfig := &szconfig.Szconfig{}
-	err := szConfig.Initialize(ctx, instanceName, settings, verboseLogging)
-	if err != nil {
-		return createError(5906, err)
-	}
-
-	configHandle, err := szConfig.CreateConfig(ctx)
-	if err != nil {
-		return createError(5907, err)
-	}
-
-	datasourceNames := []string{"CUSTOMERS", "REFERENCE", "WATCHLIST"}
-	for _, dataSourceCode := range datasourceNames {
-		_, err := szConfig.AddDataSource(ctx, configHandle, dataSourceCode)
-		if err != nil {
-			return createError(5908, err)
-		}
-	}
-
-	configStr, err := szConfig.ExportConfig(ctx, configHandle)
-	if err != nil {
-		return createError(5909, err)
-	}
-
-	err = szConfig.CloseConfig(ctx, configHandle)
-	if err != nil {
-		return createError(5910, err)
-	}
-
-	err = szConfig.Destroy(ctx)
-	if err != nil {
-		return createError(5911, err)
-	}
-
-	// Persist the Senzing configuration to the Senzing repository.
-
-	szConfigManager := &szconfigmanager.Szconfigmanager{}
-	err = szConfigManager.Initialize(ctx, instanceName, settings, verboseLogging)
-	if err != nil {
-		return createError(5912, err)
-	}
-
-	configComments := fmt.Sprintf("Created by szengine_test at %s", now.UTC())
-	configId, err := szConfigManager.AddConfig(ctx, configStr, configComments)
-	if err != nil {
-		return createError(5913, err)
-	}
-
-	err = szConfigManager.SetDefaultConfigId(ctx, configId)
-	if err != nil {
-		return createError(5914, err)
-	}
-
-	err = szConfigManager.Destroy(ctx)
-	if err != nil {
-		return createError(5915, err)
-	}
-	return err
-}
-
-func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64, configId int64) error {
-	szDiagnostic := &szdiagnostic.Szdiagnostic{}
-	err := szDiagnostic.Initialize(ctx, instanceName, settings, verboseLogging, configId)
-	if err != nil {
-		return createError(5903, err)
-	}
-
-	err = szDiagnostic.PurgeRepository(ctx)
-	if err != nil {
-		return createError(5904, err)
-	}
-
-	err = szDiagnostic.Destroy(ctx)
-	if err != nil {
-		return createError(5905, err)
-	}
-	return err
-}
-
-func setup() error {
-	var err error = nil
-	ctx := context.TODO()
-	instanceName := "Test name"
-	verboseLogging := sz.SZ_NO_LOGGING
-	configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
-	localLogger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages)
-	if err != nil {
-		panic(err)
-	}
-
-	settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-	if err != nil {
-		return createError(5902, err)
-	}
-
-	// Add Data Sources to Senzing configuration.
-
-	err = setupSenzingConfig(ctx, instanceName, settings, verboseLogging)
-	if err != nil {
-		return createError(5920, err)
-	}
-
-	// Purge repository.
-
-	err = setupPurgeRepository(ctx, instanceName, settings, verboseLogging, configId)
-	if err != nil {
-		return createError(5921, err)
-	}
-	return err
-}
-
-func teardown() error {
-	var err error = nil
-	return err
-}
-
-func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-	if err != nil {
-		test.Log("Error:", err.Error())
-		assert.FailNow(test, actual)
-	}
-	printResponse(test, actual)
-}
-
-// ----------------------------------------------------------------------------
-// Test interface functions
+// Interface functions - test
 // ----------------------------------------------------------------------------
 
 func TestSzEngineServer_AddRecord(test *testing.T) {
@@ -872,4 +600,261 @@ func TestSzEngineServer_DeleteRecord_withInfo(test *testing.T) {
 	response, err := szEngineServer.DeleteRecord(ctx, request)
 	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response.GetResult())
+}
+
+// ----------------------------------------------------------------------------
+// Internal functions
+// ----------------------------------------------------------------------------
+
+func createError(errorId int, err error) error {
+	return szerror.Cast(localLogger.NewError(errorId, err), err)
+}
+
+func getEntityId(record record.Record) int64 {
+	return getEntityIdForRecord(record.DataSource, record.Id)
+}
+
+func getEntityIdForRecord(datasource string, id string) int64 {
+	ctx := context.TODO()
+	var result int64 = 0
+	szEngine := getSzEngineServer(ctx)
+	request := &szpb.GetEntityByRecordIdRequest{
+		DataSourceCode: datasource,
+		RecordId:       id,
+	}
+	response, err := szEngine.GetEntityByRecordId(ctx, request)
+	if err != nil {
+		return result
+	}
+
+	getEntityByRecordIdResponse := &GetEntityByRecordIdResponse{}
+	err = json.Unmarshal([]byte(response.Result), &getEntityByRecordIdResponse)
+	if err != nil {
+		return result
+	}
+	return getEntityByRecordIdResponse.ResolvedEntity.EntityId
+}
+
+func getEntityIdString(record record.Record) string {
+	entityId := getEntityId(record)
+	return strconv.FormatInt(entityId, 10)
+}
+
+func getEntityIdStringForRecord(datasource string, id string) string {
+	entityId := getEntityIdForRecord(datasource, id)
+	return strconv.FormatInt(entityId, 10)
+}
+
+func getSzEngineServer(ctx context.Context) SzEngineServer {
+	if szEngineTestSingleton == nil {
+		szEngineTestSingleton = &SzEngineServer{}
+		instanceName := "Test name"
+		verboseLogging := sz.SZ_NO_LOGGING
+		configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
+		setting, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		if err != nil {
+			fmt.Println(err)
+		}
+		err = GetSdkSzEngine().Initialize(ctx, instanceName, setting, configId, verboseLogging)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+	return *szEngineTestSingleton
+}
+
+func getTestObject(ctx context.Context, test *testing.T) SzEngineServer {
+	if szEngineTestSingleton == nil {
+		szEngineTestSingleton = &SzEngineServer{}
+		instanceName := "Test name"
+		verboseLogging := sz.SZ_NO_LOGGING
+		configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
+		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		if err != nil {
+			test.Logf("Cannot construct system configuration. Error: %v", err)
+		}
+		err = GetSdkSzEngine().Initialize(ctx, instanceName, settings, configId, verboseLogging)
+		if err != nil {
+			test.Logf("Cannot Init. Error: %v", err)
+		}
+	}
+	return *szEngineTestSingleton
+}
+
+func printResponse(test *testing.T, response interface{}) {
+	printResult(test, "Response", response)
+}
+
+func printResult(test *testing.T, title string, result interface{}) {
+	if printResults {
+		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
+	}
+}
+
+func testError(test *testing.T, ctx context.Context, szEngine SzEngineServer, err error) {
+	_ = ctx
+	_ = szEngine
+	if err != nil {
+		test.Log("Error:", err.Error())
+		assert.FailNow(test, err.Error())
+	}
+}
+
+func truncate(aString string, length int) string {
+	return truncator.Truncate(aString, length, "...", truncator.PositionEnd)
+}
+
+// ----------------------------------------------------------------------------
+// Test harness
+// ----------------------------------------------------------------------------
+
+func TestMain(m *testing.M) {
+	err := setup()
+	if err != nil {
+		if szerror.Is(err, szerror.SzUnrecoverable) {
+			fmt.Printf("\nUnrecoverable error detected. \n\n")
+		}
+		if szerror.Is(err, szerror.SzRetryable) {
+			fmt.Printf("\nRetryable error detected. \n\n")
+		}
+		if szerror.Is(err, szerror.SzBadInput) {
+			fmt.Printf("\nBad user input error detected. \n\n")
+		}
+		fmt.Print(err)
+		os.Exit(1)
+	}
+	code := m.Run()
+	err = teardown()
+	if err != nil {
+		fmt.Print(err)
+	}
+	os.Exit(code)
+}
+
+func setupSenzingConfig(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
+	now := time.Now()
+
+	szConfig := &szconfig.Szconfig{}
+	err := szConfig.Initialize(ctx, instanceName, settings, verboseLogging)
+	if err != nil {
+		return createError(5906, err)
+	}
+
+	configHandle, err := szConfig.CreateConfig(ctx)
+	if err != nil {
+		return createError(5907, err)
+	}
+
+	datasourceNames := []string{"CUSTOMERS", "REFERENCE", "WATCHLIST"}
+	for _, dataSourceCode := range datasourceNames {
+		_, err := szConfig.AddDataSource(ctx, configHandle, dataSourceCode)
+		if err != nil {
+			return createError(5908, err)
+		}
+	}
+
+	configStr, err := szConfig.ExportConfig(ctx, configHandle)
+	if err != nil {
+		return createError(5909, err)
+	}
+
+	err = szConfig.CloseConfig(ctx, configHandle)
+	if err != nil {
+		return createError(5910, err)
+	}
+
+	err = szConfig.Destroy(ctx)
+	if err != nil {
+		return createError(5911, err)
+	}
+
+	// Persist the Senzing configuration to the Senzing repository.
+
+	szConfigManager := &szconfigmanager.Szconfigmanager{}
+	err = szConfigManager.Initialize(ctx, instanceName, settings, verboseLogging)
+	if err != nil {
+		return createError(5912, err)
+	}
+
+	configComments := fmt.Sprintf("Created by szengine_test at %s", now.UTC())
+	configId, err := szConfigManager.AddConfig(ctx, configStr, configComments)
+	if err != nil {
+		return createError(5913, err)
+	}
+
+	err = szConfigManager.SetDefaultConfigId(ctx, configId)
+	if err != nil {
+		return createError(5914, err)
+	}
+
+	err = szConfigManager.Destroy(ctx)
+	if err != nil {
+		return createError(5915, err)
+	}
+	return err
+}
+
+func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64, configId int64) error {
+	szDiagnostic := &szdiagnostic.Szdiagnostic{}
+	err := szDiagnostic.Initialize(ctx, instanceName, settings, configId, verboseLogging)
+	if err != nil {
+		return createError(5903, err)
+	}
+
+	err = szDiagnostic.PurgeRepository(ctx)
+	if err != nil {
+		return createError(5904, err)
+	}
+
+	err = szDiagnostic.Destroy(ctx)
+	if err != nil {
+		return createError(5905, err)
+	}
+	return err
+}
+
+func setup() error {
+	var err error = nil
+	ctx := context.TODO()
+	instanceName := "Test name"
+	verboseLogging := sz.SZ_NO_LOGGING
+	configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
+	localLogger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages)
+	if err != nil {
+		panic(err)
+	}
+
+	settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	if err != nil {
+		return createError(5902, err)
+	}
+
+	// Add Data Sources to Senzing configuration.
+
+	err = setupSenzingConfig(ctx, instanceName, settings, verboseLogging)
+	if err != nil {
+		return createError(5920, err)
+	}
+
+	// Purge repository.
+
+	err = setupPurgeRepository(ctx, instanceName, settings, verboseLogging, configId)
+	if err != nil {
+		return createError(5921, err)
+	}
+	return err
+}
+
+func teardown() error {
+	var err error = nil
+	return err
+}
+
+func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
+	actual, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	if err != nil {
+		test.Log("Error:", err.Error())
+		assert.FailNow(test, actual)
+	}
+	printResponse(test, actual)
 }

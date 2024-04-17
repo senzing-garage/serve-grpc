@@ -24,127 +24,7 @@ var (
 )
 
 // ----------------------------------------------------------------------------
-// Internal functions
-// ----------------------------------------------------------------------------
-
-func getTestObject(ctx context.Context, test *testing.T) SzConfigServer {
-	if szConfigTestSingleton == nil {
-		szConfigTestSingleton = &SzConfigServer{}
-		instanceName := "Test name"
-		verboseLogging := sz.SZ_NO_LOGGING
-		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-		if err != nil {
-			test.Logf("Cannot construct system configuration. Error: %v", err)
-		}
-		err = GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
-		if err != nil {
-			test.Logf("Cannot Init. Error: %v", err)
-		}
-	}
-	return *szConfigTestSingleton
-}
-
-func getSzConfigServer(ctx context.Context) SzConfigServer {
-	if szConfigTestSingleton == nil {
-		szConfigTestSingleton = &SzConfigServer{}
-		instanceName := "Test name"
-		verboseLogging := sz.SZ_NO_LOGGING
-		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-		if err != nil {
-			fmt.Println(err)
-		}
-		err = GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
-	return *szConfigTestSingleton
-}
-
-func truncate(aString string, length int) string {
-	return truncator.Truncate(aString, length, "...", truncator.PositionEnd)
-}
-
-func printResult(test *testing.T, title string, result interface{}) {
-	if printResults {
-		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
-	}
-}
-
-func printActual(test *testing.T, actual interface{}) {
-	printResult(test, "Actual", actual)
-}
-
-func testError(test *testing.T, ctx context.Context, err error) {
-	_ = ctx
-	if err != nil {
-		test.Log("Error:", err.Error())
-		assert.FailNow(test, err.Error())
-	}
-}
-
-// func expectError(test *testing.T, ctx context.Context, err error, messageId string) {
-// 	_ = ctx
-// 	if err != nil {
-// 		var dictionary map[string]interface{}
-// 		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
-// 		if unmarshalErr != nil {
-// 			test.Log("Unmarshal Error:", unmarshalErr.Error())
-// 		}
-// 		assert.Equal(test, messageId, dictionary["id"].(string))
-// 	} else {
-// 		assert.FailNow(test, "Should have failed with", messageId)
-// 	}
-// }
-
-// ----------------------------------------------------------------------------
-// Test harness
-// ----------------------------------------------------------------------------
-
-func TestMain(m *testing.M) {
-	err := setup()
-	if err != nil {
-		if szerror.Is(err, szerror.SzUnrecoverable) {
-			fmt.Printf("\nUnrecoverable error detected. \n\n")
-		}
-		if szerror.Is(err, szerror.SzRetryable) {
-			fmt.Printf("\nRetryable error detected. \n\n")
-		}
-		if szerror.Is(err, szerror.SzBadInput) {
-			fmt.Printf("\nBad user input error detected. \n\n")
-		}
-		fmt.Print(err)
-		os.Exit(1)
-	}
-	code := m.Run()
-	err = teardown()
-	if err != nil {
-		fmt.Print(err)
-	}
-	os.Exit(code)
-}
-
-func setup() error {
-	var err error = nil
-	return err
-}
-
-func teardown() error {
-	var err error = nil
-	return err
-}
-
-func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-	if err != nil {
-		test.Log("Error:", err.Error())
-		assert.FailNow(test, actual)
-	}
-	printActual(test, actual)
-}
-
-// ----------------------------------------------------------------------------
-// Test interface functions
+// Interface functions - test
 // ----------------------------------------------------------------------------
 
 func TestSzConfigServer_AddDataSource(test *testing.T) {
@@ -348,4 +228,110 @@ func TestSzConfigServer_ExportConfig(test *testing.T) {
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
 	testError(test, ctx, err)
+}
+
+// ----------------------------------------------------------------------------
+// Internal functions
+// ----------------------------------------------------------------------------
+
+func getSzConfigServer(ctx context.Context) SzConfigServer {
+	if szConfigTestSingleton == nil {
+		szConfigTestSingleton = &SzConfigServer{}
+		instanceName := "Test name"
+		verboseLogging := sz.SZ_NO_LOGGING
+		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		if err != nil {
+			fmt.Println(err)
+		}
+		err = GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+	return *szConfigTestSingleton
+}
+
+func getTestObject(ctx context.Context, test *testing.T) SzConfigServer {
+	if szConfigTestSingleton == nil {
+		szConfigTestSingleton = &SzConfigServer{}
+		instanceName := "Test name"
+		verboseLogging := sz.SZ_NO_LOGGING
+		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		if err != nil {
+			test.Logf("Cannot construct system configuration. Error: %v", err)
+		}
+		err = GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
+		if err != nil {
+			test.Logf("Cannot Init. Error: %v", err)
+		}
+	}
+	return *szConfigTestSingleton
+}
+
+func printActual(test *testing.T, actual interface{}) {
+	printResult(test, "Actual", actual)
+}
+
+func printResult(test *testing.T, title string, result interface{}) {
+	if printResults {
+		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
+	}
+}
+
+func testError(test *testing.T, ctx context.Context, err error) {
+	_ = ctx
+	if err != nil {
+		test.Log("Error:", err.Error())
+		assert.FailNow(test, err.Error())
+	}
+}
+
+func truncate(aString string, length int) string {
+	return truncator.Truncate(aString, length, "...", truncator.PositionEnd)
+}
+
+// ----------------------------------------------------------------------------
+// Test harness
+// ----------------------------------------------------------------------------
+
+func TestMain(m *testing.M) {
+	err := setup()
+	if err != nil {
+		if szerror.Is(err, szerror.SzUnrecoverable) {
+			fmt.Printf("\nUnrecoverable error detected. \n\n")
+		}
+		if szerror.Is(err, szerror.SzRetryable) {
+			fmt.Printf("\nRetryable error detected. \n\n")
+		}
+		if szerror.Is(err, szerror.SzBadInput) {
+			fmt.Printf("\nBad user input error detected. \n\n")
+		}
+		fmt.Print(err)
+		os.Exit(1)
+	}
+	code := m.Run()
+	err = teardown()
+	if err != nil {
+		fmt.Print(err)
+	}
+	os.Exit(code)
+}
+
+func setup() error {
+	var err error = nil
+	return err
+}
+
+func teardown() error {
+	var err error = nil
+	return err
+}
+
+func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
+	actual, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	if err != nil {
+		test.Log("Error:", err.Error())
+		assert.FailNow(test, actual)
+	}
+	printActual(test, actual)
 }

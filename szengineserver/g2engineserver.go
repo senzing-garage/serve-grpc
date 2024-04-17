@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	szEngineSingleton sz.SzEngine
+	szEngineSingleton *szsdk.Szengine
 	szEngineSyncOnce  sync.Once
 )
 
@@ -629,14 +629,18 @@ func (server *SzEngineServer) SetLogLevel(ctx context.Context, logLevelName stri
 
 // Singleton pattern for g2config.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getSzEngine() sz.SzEngine {
+func getSzEngine() *szsdk.Szengine {
 	szEngineSyncOnce.Do(func() {
 		szEngineSingleton = &szsdk.Szengine{}
 	})
 	return szEngineSingleton
 }
 
-func GetSdkSzEngine() sz.SzEngine {
+func GetSdkSzEngine() *szsdk.Szengine {
+	return getSzEngine()
+}
+
+func GetSdkSzEngineAsInterface() sz.SzEngine {
 	return getSzEngine()
 }
 

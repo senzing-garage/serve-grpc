@@ -12,7 +12,7 @@ import (
 )
 
 // ----------------------------------------------------------------------------
-// Examples for godoc documentation
+// Interface functions - Examples for godoc documentation
 // ----------------------------------------------------------------------------
 
 func ExampleSzConfigManagerServer_AddConfig() {

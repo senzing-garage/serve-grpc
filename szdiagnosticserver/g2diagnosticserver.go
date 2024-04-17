@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	szDiagnosticSingleton sz.SzDiagnostic
+	szDiagnosticSingleton *szsdk.Szdiagnostic
 	szDiagnosticSyncOnce  sync.Once
 )
 
@@ -116,14 +116,18 @@ func (server *SzDiagnosticServer) SetLogLevel(ctx context.Context, logLevelName 
 
 // Singleton pattern for g2diagnostic.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getSzDiagnostic() sz.SzDiagnostic {
+func getSzDiagnostic() *szsdk.Szdiagnostic {
 	szDiagnosticSyncOnce.Do(func() {
 		szDiagnosticSingleton = &szsdk.Szdiagnostic{}
 	})
 	return szDiagnosticSingleton
 }
 
-func GetSdkSzDiagnostic() sz.SzDiagnostic {
+func GetSdkSzDiagnostic() *szsdk.Szdiagnostic {
+	return getSzDiagnostic()
+}
+
+func GetSdkSzDiagnosticAsInterface() sz.SzDiagnostic {
 	return getSzDiagnostic()
 }
 

@@ -32,29 +32,35 @@ var (
 )
 
 // ----------------------------------------------------------------------------
+// Interface functions - test
+// ----------------------------------------------------------------------------
+
+func TestSzDiagnosticServer_CheckDatabasePerformance(test *testing.T) {
+	ctx := context.TODO()
+	szDiagnosticServer := getTestObject(ctx, test)
+	request := &szpb.CheckDatabasePerformanceRequest{
+		SecondsToRun: int32(1),
+	}
+	response, err := szDiagnosticServer.CheckDatabasePerformance(ctx, request)
+	testError(test, ctx, szDiagnosticServer, err)
+	printActual(test, response)
+}
+
+func TestSzDiagnosticServer_PurgeRepository(test *testing.T) {
+	ctx := context.TODO()
+	szDiagnosticServer := getTestObject(ctx, test)
+	request := &szpb.PurgeRepositoryRequest{}
+	response, err := szDiagnosticServer.PurgeRepository(ctx, request)
+	testError(test, ctx, szDiagnosticServer, err)
+	printActual(test, response)
+}
+
+// ----------------------------------------------------------------------------
 // Internal functions
 // ----------------------------------------------------------------------------
 
 func createError(errorId int, err error) error {
 	return szerror.Cast(localLogger.NewError(errorId, err), err)
-}
-
-func getTestObject(ctx context.Context, test *testing.T) SzDiagnosticServer {
-	if szDiagnosticServerSingleton == nil {
-		szDiagnosticServerSingleton = &SzDiagnosticServer{}
-		instanceName := "Test name"
-		verboseLogging := sz.SZ_NO_LOGGING
-		configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
-		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-		if err != nil {
-			test.Logf("Cannot construct system configuration. Error: %v", err)
-		}
-		err = GetSdkSzDiagnostic().Initialize(ctx, instanceName, settings, verboseLogging, configId)
-		if err != nil {
-			test.Logf("Cannot Init. Error: %v", err)
-		}
-	}
-	return *szDiagnosticServerSingleton
 }
 
 func getSzDiagnosticServer(ctx context.Context) SzDiagnosticServer {
@@ -67,7 +73,7 @@ func getSzDiagnosticServer(ctx context.Context) SzDiagnosticServer {
 		if err != nil {
 			fmt.Println(err)
 		}
-		err = GetSdkSzDiagnostic().Initialize(ctx, instanceName, settings, verboseLogging, configId)
+		err = GetSdkSzDiagnostic().Initialize(ctx, instanceName, settings, configId, verboseLogging)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -75,18 +81,32 @@ func getSzDiagnosticServer(ctx context.Context) SzDiagnosticServer {
 	return *szDiagnosticServerSingleton
 }
 
-func truncate(aString string, length int) string {
-	return truncator.Truncate(aString, length, "...", truncator.PositionEnd)
+func getTestObject(ctx context.Context, test *testing.T) SzDiagnosticServer {
+	if szDiagnosticServerSingleton == nil {
+		szDiagnosticServerSingleton = &SzDiagnosticServer{}
+		instanceName := "Test name"
+		verboseLogging := sz.SZ_NO_LOGGING
+		configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
+		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		if err != nil {
+			test.Logf("Cannot construct system configuration. Error: %v", err)
+		}
+		err = GetSdkSzDiagnostic().Initialize(ctx, instanceName, settings, configId, verboseLogging)
+		if err != nil {
+			test.Logf("Cannot Init. Error: %v", err)
+		}
+	}
+	return *szDiagnosticServerSingleton
+}
+
+func printActual(test *testing.T, actual interface{}) {
+	printResult(test, "Actual", actual)
 }
 
 func printResult(test *testing.T, title string, result interface{}) {
 	if printResults {
 		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
 	}
-}
-
-func printActual(test *testing.T, actual interface{}) {
-	printResult(test, "Actual", actual)
 }
 
 func testError(test *testing.T, ctx context.Context, szDiagnosticServer SzDiagnosticServer, err error) {
@@ -98,28 +118,9 @@ func testError(test *testing.T, ctx context.Context, szDiagnosticServer SzDiagno
 	}
 }
 
-// func expectError(test *testing.T, ctx context.Context, szDiagnosticServer SzDiagnosticServer, err error, messageId string) {
-// 	_ = ctx
-// 	_ = szDiagnosticServer
-// 	if err != nil {
-// 		var dictionary map[string]interface{}
-// 		unmarshalErr := json.Unmarshal([]byte(err.Error()), &dictionary)
-// 		if unmarshalErr != nil {
-// 			test.Log("Unmarshal Error:", unmarshalErr.Error())
-// 		}
-// 		assert.Equal(test, messageId, dictionary["id"].(string))
-// 	} else {
-// 		assert.FailNow(test, "Should have failed with", messageId)
-// 	}
-// }
-
-// func testErrorNoFail(test *testing.T, ctx context.Context, szDiagnosticServer SzDiagnosticServer, err error) {
-// 	_ = ctx
-// 	_ = szDiagnosticServer
-// 	if err != nil {
-// 		test.Log("Error:", err.Error())
-// 	}
-// }
+func truncate(aString string, length int) string {
+	return truncator.Truncate(aString, length, "...", truncator.PositionEnd)
+}
 
 // ----------------------------------------------------------------------------
 // Test harness
@@ -214,7 +215,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 func setupAddRecords(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	szEngine := &szengine.Szengine{}
 	configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
-	err := szEngine.Initialize(ctx, instanceName, settings, verboseLogging, configId)
+	err := szEngine.Initialize(ctx, instanceName, settings, configId, verboseLogging)
 	if err != nil {
 		return createError(5916, err)
 	}
@@ -238,7 +239,7 @@ func setupAddRecords(ctx context.Context, instanceName string, settings string, 
 
 func setupPurgeRepository(ctx context.Context, instancename string, settings string, verboseLogging int64) error {
 	szDiagnostic := &szdiagnostic.Szdiagnostic{}
-	err := szDiagnostic.Initialize(ctx, instancename, settings, verboseLogging, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION)
+	err := szDiagnostic.Initialize(ctx, instancename, settings, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION, verboseLogging)
 	if err != nil {
 		return createError(5903, err)
 	}
@@ -306,28 +307,4 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 		assert.FailNow(test, actual)
 	}
 	printActual(test, actual)
-}
-
-// ----------------------------------------------------------------------------
-// Test interface functions
-// ----------------------------------------------------------------------------
-
-func TestSzDiagnosticServer_CheckDatabasePerformance(test *testing.T) {
-	ctx := context.TODO()
-	szDiagnosticServer := getTestObject(ctx, test)
-	request := &szpb.CheckDatabasePerformanceRequest{
-		SecondsToRun: int32(1),
-	}
-	response, err := szDiagnosticServer.CheckDatabasePerformance(ctx, request)
-	testError(test, ctx, szDiagnosticServer, err)
-	printActual(test, response)
-}
-
-func TestSzDiagnosticServer_PurgeRepository(test *testing.T) {
-	ctx := context.TODO()
-	szDiagnosticServer := getTestObject(ctx, test)
-	request := &szpb.PurgeRepositoryRequest{}
-	response, err := szDiagnosticServer.PurgeRepository(ctx, request)
-	testError(test, ctx, szDiagnosticServer, err)
-	printActual(test, response)
 }

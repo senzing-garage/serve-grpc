@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	szProductSingleton sz.SzProduct
+	szProductSingleton *szsdk.Szproduct
 	szProductSyncOnce  sync.Once
 )
 
@@ -30,8 +30,8 @@ func (server *SzProductServer) GetLicense(ctx context.Context, request *szpb.Get
 		server.traceEntry(11, request)
 		defer func() { server.traceExit(12, request, result, err, time.Since(entryTime)) }()
 	}
-	szproduct := getSzProduct()
-	result, err = szproduct.GetLicense(ctx)
+	szProduct := getSzProduct()
+	result, err = szProduct.GetLicense(ctx)
 	response := szpb.GetLicenseResponse{
 		Result: result,
 	}
@@ -46,8 +46,8 @@ func (server *SzProductServer) GetVersion(ctx context.Context, request *szpb.Get
 		server.traceEntry(19, request)
 		defer func() { server.traceExit(20, request, result, err, time.Since(entryTime)) }()
 	}
-	szproduct := getSzProduct()
-	result, err = szproduct.GetVersion(ctx)
+	szProduct := getSzProduct()
+	result, err = szProduct.GetVersion(ctx)
 	response := szpb.GetVersionResponse{
 		Result: result,
 	}
@@ -119,14 +119,18 @@ func (server *SzProductServer) SetLogLevel(ctx context.Context, logLevelName str
 
 // Singleton pattern for g2product.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
-func getSzProduct() sz.SzProduct {
+func getSzProduct() *szsdk.Szproduct {
 	szProductSyncOnce.Do(func() {
 		szProductSingleton = &szsdk.Szproduct{}
 	})
 	return szProductSingleton
 }
 
-func GetSdkSzProduct() sz.SzProduct {
+func GetSdkSzProduct() *szsdk.Szproduct {
+	return getSzProduct()
+}
+
+func GetSdkSzProductAsInterface() sz.SzProduct {
 	return getSzProduct()
 }
 
