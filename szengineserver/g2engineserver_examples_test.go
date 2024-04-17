@@ -553,7 +553,7 @@ func ExampleSzEngineServer_ReevaluateEntity() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output:
+	// Output: {}
 }
 
 func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
@@ -570,7 +570,7 @@ func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output:
+	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","AFFECTED_ENTITIES":[{"ENTITY_ID":1}],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
 
 func ExampleSzEngineServer_ReevaluateRecord() {
@@ -587,7 +587,7 @@ func ExampleSzEngineServer_ReevaluateRecord() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output:
+	// Output: {}
 }
 
 func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
@@ -605,7 +605,7 @@ func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output:
+	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","AFFECTED_ENTITIES":[{"ENTITY_ID":1}],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
 
 func ExampleSzEngineServer_ReplaceRecord() {
@@ -623,7 +623,7 @@ func ExampleSzEngineServer_ReplaceRecord() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output:
+	// Output: {}
 }
 
 func ExampleSzEngineServer_ReplaceRecord_withInfo() {
@@ -642,7 +642,7 @@ func ExampleSzEngineServer_ReplaceRecord_withInfo() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output:
+	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","AFFECTED_ENTITIES":[],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
 
 func ExampleSzEngineServer_DeleteRecord() {
