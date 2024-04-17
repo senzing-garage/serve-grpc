@@ -455,34 +455,6 @@ func TestSzEngineServer_ReevaluateRecord_withInfo(test *testing.T) {
 	printResponse(test, response.GetResult())
 }
 
-func TestSzEngineServer_ReplaceRecord(test *testing.T) {
-	ctx := context.TODO()
-	szEngineServer := getTestObject(ctx, test)
-	request := &szpb.ReplaceRecordRequest{
-		DataSourceCode:   "CUSTOMERS",
-		Flags:            sz.SZ_WITHOUT_INFO,
-		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
-		RecordId:         "1001",
-	}
-	response, err := szEngineServer.ReplaceRecord(ctx, request)
-	testError(test, ctx, szEngineServer, err)
-	printResponse(test, response.GetResult())
-}
-
-func TestSzEngineServer_ReplaceRecord_withInfo(test *testing.T) {
-	ctx := context.TODO()
-	szEngineServer := getTestObject(ctx, test)
-	request := &szpb.ReplaceRecordRequest{
-		DataSourceCode:   "CUSTOMERS",
-		Flags:            sz.SZ_WITH_INFO,
-		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
-		RecordId:         "1001",
-	}
-	response, err := szEngineServer.ReplaceRecord(ctx, request)
-	testError(test, ctx, szEngineServer, err)
-	printResponse(test, response.GetResult())
-}
-
 func TestSzEngineServer_SearchByAttributes(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)

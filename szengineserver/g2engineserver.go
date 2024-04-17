@@ -382,22 +382,6 @@ func (server *SzEngineServer) ReevaluateRecord(ctx context.Context, request *szp
 	return &response, err
 }
 
-func (server *SzEngineServer) ReplaceRecord(ctx context.Context, request *szpb.ReplaceRecordRequest) (*szpb.ReplaceRecordResponse, error) {
-	var err error = nil
-	var result string
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(129, request)
-		defer func() { server.traceExit(130, request, result, err, time.Since(entryTime)) }()
-	}
-	szEngine := getSzEngine()
-	result, err = szEngine.ReplaceRecord(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetRecordDefinition(), request.GetFlags())
-	response := szpb.ReplaceRecordResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
 func (server *SzEngineServer) SearchByAttributes(ctx context.Context, request *szpb.SearchByAttributesRequest) (*szpb.SearchByAttributesResponse, error) {
 	var err error = nil
 	var result string

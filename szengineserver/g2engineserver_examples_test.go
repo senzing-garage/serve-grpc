@@ -608,43 +608,6 @@ func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","AFFECTED_ENTITIES":[{"ENTITY_ID":1}],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
 
-func ExampleSzEngineServer_ReplaceRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
-	ctx := context.TODO()
-	szEngineServer := getSzEngineServer(ctx)
-	request := &szpb.ReplaceRecordRequest{
-		DataSourceCode:   "CUSTOMERS",
-		RecordId:         "1001",
-		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
-		Flags:            sz.SZ_WITHOUT_INFO,
-	}
-	response, err := szEngineServer.ReplaceRecord(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: {}
-}
-
-func ExampleSzEngineServer_ReplaceRecord_withInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
-	// TODO: Fix Output
-	ctx := context.TODO()
-	szEngineServer := getSzEngineServer(ctx)
-	request := &szpb.ReplaceRecordRequest{
-		DataSourceCode:   "CUSTOMERS",
-		RecordId:         "1001",
-		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
-		Flags:            sz.SZ_WITH_INFO,
-	}
-	response, err := szEngineServer.ReplaceRecord(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult())
-	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","AFFECTED_ENTITIES":[],"INTERESTING_ENTITIES":{"ENTITIES":[]}}
-}
-
 func ExampleSzEngineServer_DeleteRecord() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
