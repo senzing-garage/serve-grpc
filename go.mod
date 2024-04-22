@@ -7,7 +7,7 @@ require (
 	github.com/senzing-garage/g2-sdk-go v0.10.1
 	github.com/senzing-garage/g2-sdk-go-base v0.6.1
 	github.com/senzing-garage/g2-sdk-proto v0.6.3
-	github.com/senzing-garage/go-cmdhelping v0.2.0
+	github.com/senzing-garage/go-cmdhelping v0.2.1
 	github.com/senzing-garage/go-common v0.4.0
 	github.com/senzing-garage/go-logging v1.4.1
 	github.com/senzing-garage/go-observing v0.3.1
@@ -25,11 +25,12 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/pelletier/go-toml/v2 v2.1.1 // indirect
+	github.com/pelletier/go-toml/v2 v2.2.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
+	github.com/senzing-garage/go-helpers v0.5.1 // indirect
 	github.com/senzing-garage/go-messaging v1.4.1 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
