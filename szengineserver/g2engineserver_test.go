@@ -455,6 +455,22 @@ func TestSzEngineServer_ReevaluateRecord_withInfo(test *testing.T) {
 	printResponse(test, response.GetResult())
 }
 
+func TestSzEngineServer_Reinitialize(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+
+	requestToGetActiveConfigId := &szpb.GetActiveConfigIdRequest{}
+	responseFromGetActiveConfigId, err := szEngineServer.GetActiveConfigId(ctx, requestToGetActiveConfigId)
+	testError(test, ctx, szEngineServer, err)
+
+	request := &szpb.ReinitializeRequest{
+		ConfigId: responseFromGetActiveConfigId.GetResult(),
+	}
+	response, err := szEngineServer.Reinitialize(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
 func TestSzEngineServer_SearchByAttributes(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)

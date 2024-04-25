@@ -382,6 +382,19 @@ func (server *SzEngineServer) ReevaluateRecord(ctx context.Context, request *szp
 	return &response, err
 }
 
+func (server *SzEngineServer) Reinitialize(ctx context.Context, request *szpb.ReinitializeRequest) (*szpb.ReinitializeResponse, error) {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(127, request)
+		defer func() { server.traceExit(128, request, err, time.Since(entryTime)) }()
+	}
+	g2engine := getSzEngine()
+	err = g2engine.Reinitialize(ctx, request.GetConfigId())
+	response := szpb.ReinitializeResponse{}
+	return &response, err
+}
+
 func (server *SzEngineServer) SearchByAttributes(ctx context.Context, request *szpb.SearchByAttributesRequest) (*szpb.SearchByAttributesResponse, error) {
 	var err error = nil
 	var result string

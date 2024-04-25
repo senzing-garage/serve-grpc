@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	szconfigmanagerpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 )
 
@@ -38,5 +39,25 @@ func ExampleSzDiagnosticServer_PurgeRepository() {
 		fmt.Println(err)
 	}
 	fmt.Println(response)
+	// Output:
+}
+
+func ExampleSzDiagnosticServer_Reinitialize() {
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_test.go
+	ctx := context.TODO()
+	szDiagnosticServer := getSzDiagnosticServer(ctx)
+	szConfigManagerServer := getSzConfigManagerServer(ctx)
+	getDefaultConfigIdRequest := &szconfigmanagerpb.GetDefaultConfigIdRequest{}
+	getDefaultConfigIdResponse, err := szConfigManagerServer.GetDefaultConfigId(ctx, getDefaultConfigIdRequest)
+	if err != nil {
+		fmt.Println(err)
+	}
+	request := &szpb.ReinitializeRequest{
+		ConfigId: getDefaultConfigIdResponse.GetResult(),
+	}
+	_, err = szDiagnosticServer.Reinitialize(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
 	// Output:
 }

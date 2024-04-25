@@ -152,13 +152,13 @@ func createError(errorId int, err error) error {
 func getSzConfigManagerServer(ctx context.Context) SzConfigManagerServer {
 	if szConfigManagerServerSingleton == nil {
 		szConfigManagerServerSingleton = &SzConfigManagerServer{}
-		moduleName := "Test module name"
+		instanceName := "Test module name"
 		verboseLogging := int64(0)
-		iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
-		err = GetSdkSzConfigManager().Initialize(ctx, moduleName, iniParams, verboseLogging)
+		err = GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
 		if err != nil {
 			fmt.Println(err)
 		}

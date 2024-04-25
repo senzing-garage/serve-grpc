@@ -51,6 +51,19 @@ func (server *SzDiagnosticServer) PurgeRepository(ctx context.Context, request *
 	return &response, err
 }
 
+func (server *SzDiagnosticServer) Reinitialize(ctx context.Context, request *szpb.ReinitializeRequest) (*szpb.ReinitializeResponse, error) {
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(51, request)
+		defer func() { server.traceExit(52, request, err, time.Since(entryTime)) }()
+	}
+	szDiagnostic := getSzDiagnostic()
+	err = szDiagnostic.Reinitialize(ctx, int64(request.GetConfigId()))
+	response := szpb.ReinitializeResponse{}
+	return &response, err
+}
+
 // ----------------------------------------------------------------------------
 // Internal methods
 // ----------------------------------------------------------------------------

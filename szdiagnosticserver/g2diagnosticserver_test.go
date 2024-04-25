@@ -11,12 +11,14 @@ import (
 	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
 	"github.com/senzing-garage/go-helpers/truthset"
 	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/serve-grpc/szconfigmanagerserver"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
 	"github.com/senzing-garage/sz-sdk-go-core/szengine"
 	"github.com/senzing-garage/sz-sdk-go/sz"
 	"github.com/senzing-garage/sz-sdk-go/szerror"
+	szconfigmanagerpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 	"github.com/stretchr/testify/assert"
 )
@@ -27,8 +29,9 @@ const (
 )
 
 var (
-	szDiagnosticServerSingleton *SzDiagnosticServer
-	localLogger                 logging.LoggingInterface
+	szDiagnosticServerSingleton    *SzDiagnosticServer
+	szConfigManagerServerSingleton *szconfigmanagerserver.SzConfigManagerServer
+	localLogger                    logging.LoggingInterface
 )
 
 // ----------------------------------------------------------------------------
@@ -42,7 +45,7 @@ func TestSzDiagnosticServer_CheckDatabasePerformance(test *testing.T) {
 		SecondsToRun: int32(1),
 	}
 	response, err := szDiagnosticServer.CheckDatabasePerformance(ctx, request)
-	testError(test, ctx, szDiagnosticServer, err)
+	testError(test, err)
 	printActual(test, response)
 }
 
@@ -51,7 +54,22 @@ func TestSzDiagnosticServer_PurgeRepository(test *testing.T) {
 	szDiagnosticServer := getTestObject(ctx, test)
 	request := &szpb.PurgeRepositoryRequest{}
 	response, err := szDiagnosticServer.PurgeRepository(ctx, request)
-	testError(test, ctx, szDiagnosticServer, err)
+	testError(test, err)
+	printActual(test, response)
+}
+
+func TestSzDiagnosticServer_Reinitialize(test *testing.T) {
+	ctx := context.TODO()
+	szDiagnostic := getTestObject(ctx, test)
+	szConfigManager := getSzConfigManagerServer(ctx)
+	getDefaultConfigIdRequest := &szconfigmanagerpb.GetDefaultConfigIdRequest{}
+	getDefaultConfigIdResponse, err := szConfigManager.GetDefaultConfigId(ctx, getDefaultConfigIdRequest)
+	testError(test, err)
+	request := &szpb.ReinitializeRequest{
+		ConfigId: getDefaultConfigIdResponse.GetResult(),
+	}
+	response, err := szDiagnostic.Reinitialize(ctx, request)
+	testError(test, err)
 	printActual(test, response)
 }
 
@@ -61,6 +79,23 @@ func TestSzDiagnosticServer_PurgeRepository(test *testing.T) {
 
 func createError(errorId int, err error) error {
 	return szerror.Cast(localLogger.NewError(errorId, err), err)
+}
+
+func getSzConfigManagerServer(ctx context.Context) szconfigmanagerserver.SzConfigManagerServer {
+	if szConfigManagerServerSingleton == nil {
+		szConfigManagerServerSingleton = &szconfigmanagerserver.SzConfigManagerServer{}
+		instanceName := "Test module name"
+		verboseLogging := int64(0)
+		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		if err != nil {
+			fmt.Println(err)
+		}
+		err = szconfigmanagerserver.GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+	return *szConfigManagerServerSingleton
 }
 
 func getSzDiagnosticServer(ctx context.Context) SzDiagnosticServer {
@@ -109,9 +144,7 @@ func printResult(test *testing.T, title string, result interface{}) {
 	}
 }
 
-func testError(test *testing.T, ctx context.Context, szDiagnosticServer SzDiagnosticServer, err error) {
-	_ = ctx
-	_ = szDiagnosticServer
+func testError(test *testing.T, err error) {
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, err.Error())
