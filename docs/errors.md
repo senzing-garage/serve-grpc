@@ -9,13 +9,15 @@ Error identifiers are in the format `senzing-PPPPnnnn` where:
 
 Prefixes:
 
-1. `6011` - g2config
-1. `6012` - g2configmgr
-1. `6013` - g2diagnostic
-1. `6014` - g2engine
-1. `6015` - g2hasher
-1. `6016` - g2product
-1. `6017` - g2ssadm## Errors
+1. `6011` - szconfig
+1. `6012` - szconfigmgr
+1. `6013` - szdiagnostic
+1. `6014` - szengine
+1. `6015` - szhasher
+1. `6016` - szproduct
+1. `6017` - szssadm
+
+## Errors
 
 ## Common errors
 

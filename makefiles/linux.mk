@@ -35,7 +35,7 @@ package-osarch-specific: docker-build-package
 
 .PHONY: run-osarch-specific
 run-osarch-specific:
-	@go run main.go
+	@go run main.go --enable-all
 
 
 .PHONY: setup-osarch-specific

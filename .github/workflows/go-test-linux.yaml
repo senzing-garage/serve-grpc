@@ -15,9 +15,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        go: [1.21]
+        go: ["1.21"]
         os: [ubuntu-latest]
-        senzingapi-version: [production-v3]
+        senzingapi-version: [staging-v4]
 
     steps:
       - name: checkout repository
@@ -30,10 +30,10 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
 
-      - name: install Senzing API
+      - name: install Senzing API Runtime
         uses: senzing-factory/github-action-install-senzing-api@v3
         with:
-          senzingapi-version: ${{ matrix.senzingapi-version }}
+          senzingapi-runtime-version: ${{ matrix.senzingapi-version }}
 
       - name: copy /etc files
         run: sudo cp testdata/senzing-license/g2.lic /etc/opt/senzing/g2.lic

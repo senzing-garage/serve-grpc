@@ -14,9 +14,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        go: [1.21]
+        go: ["1.21"]
         os: [windows-latest]
-        senzingapi-version: [production-v3]
+        senzingapi-version: [staging-v4]
 
     steps:
       - name: checkout repository

@@ -11,6 +11,7 @@ permissions:
 jobs:
   go-proxy-pull:
     runs-on: ubuntu-latest
+
     steps:
       - name: pull new module version
         uses: andrewslotin/go-proxy-pull-action@v1.1.0
