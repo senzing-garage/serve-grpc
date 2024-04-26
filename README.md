@@ -39,15 +39,15 @@ server application that supports requests to the Senzing SDK via network access.
 ## Overview
 
 `serve-grpc` supports the
-[Senzing Protocol Buffer definitions](https://github.com/senzing-garage/g2-sdk-proto).
+[Senzing Protocol Buffer definitions](https://github.com/senzing-garage/sz-sdk-proto).
 Under the covers, the gRPC request is translated by the gRPC server into a Senzing Go SDK API call using
-[senzing/g2-sdk-go-base](https://github.com/senzing-garage/g2-sdk-go-base).
+[senzing/sz-sdk-go-core](https://github.com/senzing-garage/sz-sdk-go-core).
 The response from the Senzing Go SDK API is returned to the gRPC client.
 
 Senzing SDKs for accessing the gRPC server:
 
-1. Go: [g2-sdk-go-grpc](https://github.com/senzing-garage/g2-sdk-go-grpc)
-1. Python: [g2-sdk-python-grpc](https://github.com/senzing-garage/g2-sdk-python-grpc)
+1. Go: [sz-sdk-go-grpc](https://github.com/senzing-garage/sz-sdk-go-grpc)
+1. Python: [sz-sdk-python-grpc](https://github.com/senzing-garage/sz-sdk-python-grpc)
 
 A simple demonstration using `senzing-tools` and a SQLite database.
 

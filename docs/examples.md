@@ -2,10 +2,10 @@
 
 ## Command line examples
 
-### Command line example - Enable only g2engine gRPC service
+### Command line example - Enable only szengine gRPC service
 
 For security reasons, it may be that only certain gRPC services are started.
-In this example, only the G2Engine gRPC is started.
+In this example, only the SzEngine gRPC is started.
 
 1. Using command line options.
    Example:
@@ -14,7 +14,7 @@ In this example, only the G2Engine gRPC is started.
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
     senzing-tools serve-grpc \
         --database-url postgresql://username:password@postgres.example.com:5432/G2 \
-        --enable-g2engine
+        --enable-szengine
     ```
 
 ### Command line example - using SENZING_TOOLS_ENGINE_CONFIGURATION_JSON environment variable
