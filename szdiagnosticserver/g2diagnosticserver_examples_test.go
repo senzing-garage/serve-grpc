@@ -14,19 +14,32 @@ import (
 // Interface functions - Examples for godoc documentation
 // ----------------------------------------------------------------------------
 
-func ExampleSzDiagnosticServer_CheckDatabasePerformance() {
+func ExampleSzDiagnosticServer_CheckDatastorePerformance() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_examples_test.go
 	ctx := context.TODO()
 	szDiagnosticServer := getSzDiagnosticServer(ctx)
-	request := &szpb.CheckDatabasePerformanceRequest{
+	request := &szpb.CheckDatastorePerformanceRequest{
 		SecondsToRun: int32(1),
 	}
-	response, err := szDiagnosticServer.CheckDatabasePerformance(ctx, request)
+	response, err := szDiagnosticServer.CheckDatastorePerformance(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println(truncate(response.GetResult(), 25))
 	// Output: {"numRecordsInserted":...
+}
+
+func ExampleSzDiagnosticServer_GetDatastoreInfo() {
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_examples_test.go
+	ctx := context.TODO()
+	szDiagnosticServer := getSzDiagnosticServer(ctx)
+	request := &szpb.GetDatastoreInfoRequest{}
+	response, err := szDiagnosticServer.GetDatastoreInfo(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(response.GetResult())
+	// Output: {"dataStores":[{"id":"CORE", "type":"sqlite3","location":"/tmp/sqlite/G2C.db"}]}
 }
 
 func ExampleSzDiagnosticServer_PurgeRepository() {

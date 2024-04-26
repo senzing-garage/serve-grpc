@@ -38,13 +38,22 @@ var (
 // Interface functions - test
 // ----------------------------------------------------------------------------
 
-func TestSzDiagnosticServer_CheckDatabasePerformance(test *testing.T) {
+func TestSzDiagnosticServer_CheckDatastorePerformance(test *testing.T) {
 	ctx := context.TODO()
 	szDiagnosticServer := getTestObject(ctx, test)
-	request := &szpb.CheckDatabasePerformanceRequest{
+	request := &szpb.CheckDatastorePerformanceRequest{
 		SecondsToRun: int32(1),
 	}
-	response, err := szDiagnosticServer.CheckDatabasePerformance(ctx, request)
+	response, err := szDiagnosticServer.CheckDatastorePerformance(ctx, request)
+	testError(test, err)
+	printActual(test, response)
+}
+
+func TestSzDiagnosticServer_GetDatastoreInfo(test *testing.T) {
+	ctx := context.TODO()
+	szDiagnosticServer := getTestObject(ctx, test)
+	request := &szpb.GetDatastoreInfoRequest{}
+	response, err := szDiagnosticServer.GetDatastoreInfo(ctx, request)
 	testError(test, err)
 	printActual(test, response)
 }

@@ -22,7 +22,7 @@ var (
 // Interface methods for github.com/senzing-garage/sz-sdk-go/szdiagnostic.SzDdiagnostic
 // ----------------------------------------------------------------------------
 
-func (server *SzDiagnosticServer) CheckDatabasePerformance(ctx context.Context, request *szpb.CheckDatabasePerformanceRequest) (*szpb.CheckDatabasePerformanceResponse, error) {
+func (server *SzDiagnosticServer) CheckDatastorePerformance(ctx context.Context, request *szpb.CheckDatastorePerformanceRequest) (*szpb.CheckDatastorePerformanceResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -31,8 +31,24 @@ func (server *SzDiagnosticServer) CheckDatabasePerformance(ctx context.Context, 
 		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
 	}
 	szDiagnostic := getSzDiagnostic()
-	result, err = szDiagnostic.CheckDatabasePerformance(ctx, int(request.GetSecondsToRun()))
-	response := szpb.CheckDatabasePerformanceResponse{
+	result, err = szDiagnostic.CheckDatastorePerformance(ctx, int(request.GetSecondsToRun()))
+	response := szpb.CheckDatastorePerformanceResponse{
+		Result: result,
+	}
+	return &response, err
+}
+
+func (server *SzDiagnosticServer) GetDatastoreInfo(ctx context.Context, request *szpb.GetDatastoreInfoRequest) (*szpb.GetDatastoreInfoResponse, error) {
+	var err error = nil
+	var result string
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(1, request)
+		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
+	}
+	szDiagnostic := getSzDiagnostic()
+	result, err = szDiagnostic.GetDatastoreInfo(ctx)
+	response := szpb.GetDatastoreInfoResponse{
 		Result: result,
 	}
 	return &response, err
