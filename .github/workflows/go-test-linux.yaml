@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   go-test-linux:
-    name: "go test with Senzing: ${{ matrix.senzingapi-runtime-version }}; OS: ${{ matrix.os }}; Go: ${{ matrix.go }}"
+    name: "go test with Senzing: ${{ matrix.senzingapi-version }}; OS: ${{ matrix.os }}; Go: ${{ matrix.go }}"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
