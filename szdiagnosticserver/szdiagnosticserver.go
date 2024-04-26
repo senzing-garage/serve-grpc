@@ -208,18 +208,3 @@ func (server *SzDiagnosticServer) UnregisterObserver(ctx context.Context, observ
 	// return g2diagnostic.UnregisterObserver(ctx, observer)
 	return nil
 }
-
-// --- Misc -------------------------------------------------------------------
-
-// func (server *SzDiagnosticServer) Reinit(ctx context.Context, request *g2pb.ReinitRequest) (*g2pb.ReinitResponse, error) {
-// 	var err error = nil
-// 	if server.isTrace {
-// 		entryTime := time.Now()
-// 		server.traceEntry(51, request)
-// 		defer func() { server.traceExit(52, request, err, time.Since(entryTime)) }()
-// 	}
-// 	g2diagnostic := getG2diagnostic()
-// 	err = g2diagnostic.Reinit(ctx, int64(request.GetInitConfigID()))
-// 	response := g2pb.ReinitResponse{}
-// 	return &response, err
-// }

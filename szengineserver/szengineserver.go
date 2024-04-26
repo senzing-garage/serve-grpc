@@ -389,8 +389,8 @@ func (server *SzEngineServer) Reinitialize(ctx context.Context, request *szpb.Re
 		server.traceEntry(127, request)
 		defer func() { server.traceExit(128, request, err, time.Since(entryTime)) }()
 	}
-	g2engine := getSzEngine()
-	err = g2engine.Reinitialize(ctx, request.GetConfigId())
+	szEngine := getSzEngine()
+	err = szEngine.Reinitialize(ctx, request.GetConfigId())
 	response := szpb.ReinitializeResponse{}
 	return &response, err
 }
