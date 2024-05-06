@@ -273,22 +273,6 @@ func (server *SzEngineServer) GetRedoRecord(ctx context.Context, request *szpb.G
 	return &response, err
 }
 
-func (server *SzEngineServer) GetRepositoryLastModifiedTime(ctx context.Context, request *szpb.GetRepositoryLastModifiedTimeRequest) (*szpb.GetRepositoryLastModifiedTimeResponse, error) {
-	var err error = nil
-	var result int64
-	if server.isTrace {
-		entryTime := time.Now()
-		server.traceEntry(89, request)
-		defer func() { server.traceExit(90, request, result, err, time.Since(entryTime)) }()
-	}
-	szEngine := getSzEngine()
-	result, err = szEngine.GetRepositoryLastModifiedTime(ctx)
-	response := szpb.GetRepositoryLastModifiedTimeResponse{
-		Result: result,
-	}
-	return &response, err
-}
-
 func (server *SzEngineServer) GetStats(ctx context.Context, request *szpb.GetStatsRequest) (*szpb.GetStatsResponse, error) {
 	var err error = nil
 	var result string
@@ -347,6 +331,22 @@ func (server *SzEngineServer) PrimeEngine(ctx context.Context, request *szpb.Pri
 	szEngine := getSzEngine()
 	err = szEngine.PrimeEngine(ctx)
 	response := szpb.PrimeEngineResponse{}
+	return &response, err
+}
+
+func (server *SzEngineServer) ProcessRedoRecord(ctx context.Context, request *szpb.ProcessRedoRecordRequest) (*szpb.ProcessRedoRecordResponse, error) {
+	// TODO: Fix trace IDs.
+	var err error = nil
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(999, request)
+		defer func() { server.traceExit(999, request, err, time.Since(entryTime)) }()
+	}
+	szEngine := getSzEngine()
+	result, err := szEngine.ProcessRedoRecord(ctx, request.GetRedoRecord(), request.GetFlags())
+	response := szpb.ProcessRedoRecordResponse{
+		Result: result,
+	}
 	return &response, err
 }
 

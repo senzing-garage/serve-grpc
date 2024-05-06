@@ -399,19 +399,6 @@ func ExampleSzEngineServer_GetRedoRecord() {
 	// Output: {"REASON":"deferred delete","DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","DSRC_ACTION":"X"}
 }
 
-func ExampleSzEngineServer_GetRepositoryLastModifiedTime() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
-	ctx := context.TODO()
-	szEngineServer := getSzEngineServer(ctx)
-	request := &szpb.GetRepositoryLastModifiedTimeRequest{}
-	response, err := szEngineServer.GetRepositoryLastModifiedTime(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult() > 0) // Dummy output.
-	// Output: true
-}
-
 func ExampleSzEngineServer_GetStats() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()

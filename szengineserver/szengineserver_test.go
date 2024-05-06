@@ -349,15 +349,6 @@ func TestSzEngineServer_GetRedoRecord(test *testing.T) {
 	printResponse(test, response.GetResult())
 }
 
-func TestSzEngineServer_GetRepositoryLastModifiedTime(test *testing.T) {
-	ctx := context.TODO()
-	szEngineServer := getTestObject(ctx, test)
-	request := &szpb.GetRepositoryLastModifiedTimeRequest{}
-	response, err := szEngineServer.GetRepositoryLastModifiedTime(ctx, request)
-	testError(test, ctx, szEngineServer, err)
-	printResponse(test, response.GetResult())
-}
-
 func TestSzEngineServer_GetVirtualEntityByRecordId(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
