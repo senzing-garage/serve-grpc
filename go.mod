@@ -10,7 +10,7 @@ require (
 	github.com/senzing-garage/go-observing v0.3.1
 	github.com/senzing-garage/sz-sdk-go v0.12.1
 	github.com/senzing-garage/sz-sdk-go-core v0.7.0
-	github.com/senzing-garage/sz-sdk-proto v0.7.2
+	github.com/senzing-garage/sz-sdk-proto v0.7.3
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.18.2
 	github.com/stretchr/testify v1.9.0
@@ -41,8 +41,8 @@ require (
 	golang.org/x/net v0.24.0 // indirect
 	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240415180920-8c6c420018be // indirect
-	google.golang.org/protobuf v1.33.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240429193739-8cf5692501f6 // indirect
+	google.golang.org/protobuf v1.34.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
