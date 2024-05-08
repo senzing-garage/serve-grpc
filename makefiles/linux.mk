@@ -57,7 +57,8 @@ test-osarch-specific:
 only-linux:
 	@echo "Only linux has this Makefile target."
 
-	.PHONY: run-serve-grpc
+
+.PHONY: run-serve-grpc
 run-serve-grpc: build
 	@target/linux-amd64/serve-grpc
 
