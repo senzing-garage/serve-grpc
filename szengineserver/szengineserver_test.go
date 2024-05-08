@@ -118,21 +118,21 @@ func TestSzEngineServer_ExportCsvEntityReport(test *testing.T) {
 
 func TestSzEngineServer_FindInterestingEntitiesByEntityId(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	entityId := getEntityId(truthset.CustomerRecords["1001"])
 	flags := int64(0)
 	request := &szpb.FindInterestingEntitiesByEntityIdRequest{
 		EntityId: entityId,
 		Flags:    flags,
 	}
-	response, err := g2engine.FindInterestingEntitiesByEntityId(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.FindInterestingEntitiesByEntityId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 
 func TestSzEngineServer_FindInterestingEntitiesByRecordId(test *testing.T) {
 	ctx := context.TODO()
-	g2engine := getTestObject(ctx, test)
+	szEngineServer := getTestObject(ctx, test)
 	record := truthset.CustomerRecords["1001"]
 	flags := int64(0)
 	request := &szpb.FindInterestingEntitiesByRecordIdRequest{
@@ -140,8 +140,8 @@ func TestSzEngineServer_FindInterestingEntitiesByRecordId(test *testing.T) {
 		RecordId:       record.Id,
 		Flags:          flags,
 	}
-	response, err := g2engine.FindInterestingEntitiesByRecordId(ctx, request)
-	testError(test, ctx, g2engine, err)
+	response, err := szEngineServer.FindInterestingEntitiesByRecordId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
 }
 

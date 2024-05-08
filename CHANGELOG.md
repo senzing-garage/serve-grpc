@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.7.2] - 2024-05-08
+
+### Changed in 0.7.2
+
+- Update `Dockerfile`
+
 ## [0.7.1] - 2024-04-26
 
 ### Changed in 0.7.1
