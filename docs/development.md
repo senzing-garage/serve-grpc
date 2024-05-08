@@ -21,7 +21,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
 1. Identify git repository.
 
     ```console
-    export GIT_ACCOUNT=senzing
+    export GIT_ACCOUNT=senzing-garage
     export GIT_REPOSITORY=serve-grpc
     export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
     export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
@@ -58,7 +58,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
-    make clean new-sqlite test
+    make clean setup test
 
     ```
 
@@ -82,7 +82,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
 ### Test using Docker-compose stack with PostgreSql database
 
 The following instructions show how to bring up a test stack to be used
-in testing the `g2-sdk-go-base` packages.
+in testing the `sz-sdk-go-core` packages.
 
 1. Identify a directory to place docker-compose artifacts.
    The directory specified will be deleted and re-created.
