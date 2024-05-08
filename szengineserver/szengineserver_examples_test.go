@@ -83,7 +83,7 @@ func ExampleSzEngineServer_CloseExport() {
 	}
 	// Example
 	request := &szpb.CloseExportRequest{
-		ResponseHandle: responseFromExportJsonEntityReport.GetResult(),
+		ExportHandle: responseFromExportJsonEntityReport.GetResult(),
 	}
 	response, err := szEngineServer.CloseExport(ctx, request)
 	if err != nil {
@@ -152,7 +152,7 @@ func ExampleSzEngineServer_FetchNext() {
 	}
 	// Example
 	request := &szpb.FetchNextRequest{
-		ResponseHandle: responseFromExportJsonEntityReport.GetResult(),
+		ExportHandle: responseFromExportJsonEntityReport.GetResult(),
 	}
 	response, err := szEngineServer.FetchNext(ctx, request)
 	if err != nil {
@@ -160,6 +160,39 @@ func ExampleSzEngineServer_FetchNext() {
 	}
 	fmt.Println(len(response.GetResult()) >= 0) // Dummy output.
 	// Output: true
+}
+
+func ExampleSzEngineServer_FindInterestingEntitiesByEntityId() {
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	ctx := context.TODO()
+	szEngine := getSzEngineServer(ctx)
+	request := &szpb.FindInterestingEntitiesByEntityIdRequest{
+		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
+		Flags:    0,
+	}
+	response, err := szEngine.FindInterestingEntitiesByEntityId(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(response.GetResult())
+	// Output: {"INTERESTING_ENTITIES":{"ENTITIES":[]}}
+}
+
+func ExampleSzEngineServer_FindInterestingEntitiesByRecordId() {
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	ctx := context.TODO()
+	szEngine := getSzEngineServer(ctx)
+	request := &szpb.FindInterestingEntitiesByRecordIdRequest{
+		DataSourceCode: "CUSTOMERS",
+		RecordId:       "1001",
+		Flags:          0,
+	}
+	response, err := szEngine.FindInterestingEntitiesByRecordId(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(response.GetResult())
+	// Output: {"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
 
 func ExampleSzEngineServer_FindNetworkByEntityId() {

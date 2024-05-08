@@ -45,7 +45,7 @@ func (server *SzEngineServer) CloseExport(ctx context.Context, request *szpb.Clo
 		defer func() { server.traceExit(14, request, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	err = szEngine.CloseExport(ctx, uintptr(request.GetResponseHandle()))
+	err = szEngine.CloseExport(ctx, uintptr(request.GetExportHandle()))
 	response := szpb.CloseExportResponse{}
 	return &response, err
 }
@@ -122,8 +122,40 @@ func (server *SzEngineServer) FetchNext(ctx context.Context, request *szpb.Fetch
 		defer func() { server.traceExit(32, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.FetchNext(ctx, uintptr(request.GetResponseHandle()))
+	result, err = szEngine.FetchNext(ctx, uintptr(request.GetExportHandle()))
 	response := szpb.FetchNextResponse{
+		Result: result,
+	}
+	return &response, err
+}
+
+func (server *SzEngineServer) FindInterestingEntitiesByEntityId(ctx context.Context, request *szpb.FindInterestingEntitiesByEntityIdRequest) (*szpb.FindInterestingEntitiesByEntityIdResponse, error) {
+	var err error = nil
+	var result string
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(33, request)
+		defer func() { server.traceExit(34, request, result, err, time.Since(entryTime)) }()
+	}
+	szEngine := getSzEngine()
+	result, err = szEngine.FindInterestingEntitiesByEntityId(ctx, request.GetEntityId(), request.GetFlags())
+	response := szpb.FindInterestingEntitiesByEntityIdResponse{
+		Result: result,
+	}
+	return &response, err
+}
+
+func (server *SzEngineServer) FindInterestingEntitiesByRecordId(ctx context.Context, request *szpb.FindInterestingEntitiesByRecordIdRequest) (*szpb.FindInterestingEntitiesByRecordIdResponse, error) {
+	var err error = nil
+	var result string
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(35, request)
+		defer func() { server.traceExit(36, request, result, err, time.Since(entryTime)) }()
+	}
+	szEngine := getSzEngine()
+	result, err = szEngine.FindInterestingEntitiesByRecordId(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetFlags())
+	response := szpb.FindInterestingEntitiesByRecordIdResponse{
 		Result: result,
 	}
 	return &response, err

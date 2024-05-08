@@ -116,6 +116,35 @@ func TestSzEngineServer_ExportCsvEntityReport(test *testing.T) {
 	printResponse(test, response.GetResult())
 }
 
+func TestSzEngineServer_FindInterestingEntitiesByEntityId(test *testing.T) {
+	ctx := context.TODO()
+	g2engine := getTestObject(ctx, test)
+	entityId := getEntityId(truthset.CustomerRecords["1001"])
+	flags := int64(0)
+	request := &szpb.FindInterestingEntitiesByEntityIdRequest{
+		EntityId: entityId,
+		Flags:    flags,
+	}
+	response, err := g2engine.FindInterestingEntitiesByEntityId(ctx, request)
+	testError(test, ctx, g2engine, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_FindInterestingEntitiesByRecordId(test *testing.T) {
+	ctx := context.TODO()
+	g2engine := getTestObject(ctx, test)
+	record := truthset.CustomerRecords["1001"]
+	flags := int64(0)
+	request := &szpb.FindInterestingEntitiesByRecordIdRequest{
+		DataSourceCode: record.DataSource,
+		RecordId:       record.Id,
+		Flags:          flags,
+	}
+	response, err := g2engine.FindInterestingEntitiesByRecordId(ctx, request)
+	testError(test, ctx, g2engine, err)
+	printResponse(test, response)
+}
+
 func TestSzEngineServer_FindNetworkByEntityId(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)

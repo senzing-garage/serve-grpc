@@ -42,6 +42,23 @@ func ExampleSzDiagnosticServer_GetDatastoreInfo() {
 	// Output: {"dataStores":[{"id":"CORE", "type":"sqlite3","location":"/tmp/sqlite/G2C.db"}]}
 }
 
+func ExampleSzDiagnosticServer_GetFeature() {
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_examples_test.go
+	ctx := context.TODO()
+	szDiagnosticServer := getSzDiagnosticServer(ctx)
+	request := &szpb.GetFeatureRequest{
+		FeatureId: int64(1),
+	}
+	response, err := szDiagnosticServer.GetFeature(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	// fmt.Println(truncate(response.GetResult(), 25))
+	fmt.Println(response.GetResult())
+
+	// Output: {"LIB_FEAT_ID":1,"FTYPE_CODE":"NAME","ELEMENTS":[{"FELEM_CODE":"TOKENIZED_NM","FELEM_VALUE":"ROBERT|SMITH"},{"FELEM_CODE":"CATEGORY","FELEM_VALUE":"PERSON"},{"FELEM_CODE":"CULTURE","FELEM_VALUE":"ANGLO"},{"FELEM_CODE":"GIVEN_NAME","FELEM_VALUE":"Robert"},{"FELEM_CODE":"SUR_NAME","FELEM_VALUE":"Smith"},{"FELEM_CODE":"FULL_NAME","FELEM_VALUE":"Robert Smith"}]}
+}
+
 func ExampleSzDiagnosticServer_PurgeRepository() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_test.go
 	ctx := context.TODO()
