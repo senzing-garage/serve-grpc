@@ -417,6 +417,10 @@ func TestSzEngineServer_PrimeEngine(test *testing.T) {
 	printResponse(test, response)
 }
 
+func TestSzEngineServer_ProcessRedoRecord(test *testing.T) {
+	// TODO: Implement TestSzEngineServer_ProcessRedoRecord
+}
+
 func TestSzEngineServer_ReevaluateEntity(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)

@@ -490,6 +490,11 @@ func ExampleSzEngineServer_PrimeEngine() {
 	// Output:
 }
 
+func ExampleSzEngineServer_ProcessRedoRecord() {
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// TODO: Document ExampleSzEngineServer_ProcessRedoRecord
+}
+
 func ExampleSzEngineServer_SearchByAttributes() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
