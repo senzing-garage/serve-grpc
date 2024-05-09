@@ -54,6 +54,22 @@ func (server *SzDiagnosticServer) GetDatastoreInfo(ctx context.Context, request 
 	return &response, err
 }
 
+func (server *SzDiagnosticServer) GetFeature(ctx context.Context, request *szpb.GetFeatureRequest) (*szpb.GetFeatureResponse, error) {
+	var err error = nil
+	var result string
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(1, request)
+		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
+	}
+	szDiagnostic := getSzDiagnostic()
+	result, err = szDiagnostic.GetFeature(ctx, int64(request.GetFeatureId()))
+	response := szpb.GetFeatureResponse{
+		Result: result,
+	}
+	return &response, err
+}
+
 func (server *SzDiagnosticServer) PurgeRepository(ctx context.Context, request *szpb.PurgeRepositoryRequest) (*szpb.PurgeRepositoryResponse, error) {
 	var err error = nil
 	if server.isTrace {

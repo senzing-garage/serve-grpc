@@ -116,6 +116,35 @@ func TestSzEngineServer_ExportCsvEntityReport(test *testing.T) {
 	printResponse(test, response.GetResult())
 }
 
+func TestSzEngineServer_FindInterestingEntitiesByEntityId(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	entityId := getEntityId(truthset.CustomerRecords["1001"])
+	flags := int64(0)
+	request := &szpb.FindInterestingEntitiesByEntityIdRequest{
+		EntityId: entityId,
+		Flags:    flags,
+	}
+	response, err := szEngineServer.FindInterestingEntitiesByEntityId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
+func TestSzEngineServer_FindInterestingEntitiesByRecordId(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	record := truthset.CustomerRecords["1001"]
+	flags := int64(0)
+	request := &szpb.FindInterestingEntitiesByRecordIdRequest{
+		DataSourceCode: record.DataSource,
+		RecordId:       record.Id,
+		Flags:          flags,
+	}
+	response, err := szEngineServer.FindInterestingEntitiesByRecordId(ctx, request)
+	testError(test, ctx, szEngineServer, err)
+	printResponse(test, response)
+}
+
 func TestSzEngineServer_FindNetworkByEntityId(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
@@ -349,15 +378,6 @@ func TestSzEngineServer_GetRedoRecord(test *testing.T) {
 	printResponse(test, response.GetResult())
 }
 
-func TestSzEngineServer_GetRepositoryLastModifiedTime(test *testing.T) {
-	ctx := context.TODO()
-	szEngineServer := getTestObject(ctx, test)
-	request := &szpb.GetRepositoryLastModifiedTimeRequest{}
-	response, err := szEngineServer.GetRepositoryLastModifiedTime(ctx, request)
-	testError(test, ctx, szEngineServer, err)
-	printResponse(test, response.GetResult())
-}
-
 func TestSzEngineServer_GetVirtualEntityByRecordId(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
@@ -395,6 +415,10 @@ func TestSzEngineServer_PrimeEngine(test *testing.T) {
 	response, err := szEngineServer.PrimeEngine(ctx, request)
 	testError(test, ctx, szEngineServer, err)
 	printResponse(test, response)
+}
+
+func TestSzEngineServer_ProcessRedoRecord(test *testing.T) {
+	// TODO: Implement TestSzEngineServer_ProcessRedoRecord
 }
 
 func TestSzEngineServer_ReevaluateEntity(test *testing.T) {

@@ -10,6 +10,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.7.2] - 2024-05-08
+
+### Added in 0.7.2
+
+- `SzDiagnostic.GetFeature`
+- `SzEngine.FindInterestingEntitiesByEntityId`
+- `SzEngine.FindInterestingEntitiesByRecordId`
+- `SzEngine.ProcessRedoRecord`
+
+### Changed in 0.7.2
+
+- Update `Dockerfile`
+
+### Deleted in 0.7.2
+
+- `SzEngine.GetRepositoryLastModifiedTime`
+
 ## [0.7.1] - 2024-04-26
 
 ### Changed in 0.7.1
