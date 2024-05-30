@@ -18,8 +18,8 @@ FROM ${IMAGE_FINAL} as senzingapi_runtime
 FROM ${IMAGE_GO_BUILDER} as go_builder
 ENV REFRESHED_AT=2024-03-18
 LABEL Name="senzing/serve-grpc-builder" \
-      Maintainer="support@senzing.com" \
-      Version="0.6.0"
+  Maintainer="support@senzing.com" \
+  Version="0.6.0"
 
 # Copy local files from the Git repository.
 
@@ -43,7 +43,7 @@ RUN make build
 # Copy binaries to /output.
 
 RUN mkdir -p /output \
- && cp -R ${GOPATH}/src/serve-grpc/target/*  /output/
+  && cp -R ${GOPATH}/src/serve-grpc/target/*  /output/
 
 # -----------------------------------------------------------------------------
 # Stage: final
@@ -52,8 +52,8 @@ RUN mkdir -p /output \
 FROM ${IMAGE_FINAL} as final
 ENV REFRESHED_AT=2024-03-18
 LABEL Name="senzing/serve-grpc" \
-      Maintainer="support@senzing.com" \
-      Version="0.6.0"
+  Maintainer="support@senzing.com" \
+  Version="0.6.0"
 
 # Copy local files from the Git repository.
 
@@ -63,6 +63,8 @@ COPY ./testdata/sqlite/G2C.db          /tmp/sqlite/G2C.db
 # Copy files from prior stage.
 
 COPY --from=go_builder "/output/linux/serve-grpc" "/app/serve-grpc"
+
+USER 1001
 
 # Runtime environment variables.
 
