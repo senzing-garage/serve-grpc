@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
+	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
 )
 
 var (
@@ -102,7 +102,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 
 func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	szDiagnostic := &szdiagnostic.Szdiagnostic{}
-	err := szDiagnostic.Initialize(ctx, instanceName, settings, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION, verboseLogging)
+	err := szDiagnostic.Initialize(ctx, instanceName, settings, senzing.SzInitializeWithDefaultConfiguration, verboseLogging)
 	if err != nil {
 		return localLogger.NewError(5903, err)
 	}
@@ -130,7 +130,7 @@ func setup() error {
 		panic(err)
 	}
 
-	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		return localLogger.NewError(5902, err)
 	}
@@ -168,7 +168,7 @@ func TestGrpcServerImpl_Serve(test *testing.T) {
 	// 	Id: "Observer 1",
 	// }
 
-	// senzingEngineConfigurationJson, err := sengineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	// senzingsettings, err := ssettings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	// if err != nil {
 	// 	fmt.Print(err)
 	// }
@@ -176,7 +176,7 @@ func TestGrpcServerImpl_Serve(test *testing.T) {
 	// 	LogLevel:                       logger.LevelInfo,
 	// 	Observers:                      []observer.Observer{observer1},
 	// 	Port:                           8258,
-	// 	SenzingEngineConfigurationJson: senzingEngineConfigurationJson,
+	// 	Senzingsettings: senzingsettings,
 	// 	SenzingModuleName:              "Test gRPC Server",
 	// }
 	// grpcServer.Serve(ctx)

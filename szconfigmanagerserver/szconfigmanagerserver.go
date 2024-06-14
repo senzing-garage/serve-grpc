@@ -9,7 +9,7 @@ import (
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	szsdk "github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 )
 
@@ -54,7 +54,7 @@ func (server *SzConfigManagerServer) GetConfig(ctx context.Context, request *szp
 	return &response, err
 }
 
-func (server *SzConfigManagerServer) GetConfigList(ctx context.Context, request *szpb.GetConfigListRequest) (*szpb.GetConfigListResponse, error) {
+func (server *SzConfigManagerServer) GetConfigs(ctx context.Context, request *szpb.GetConfigListRequest) (*szpb.GetConfigListResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -188,7 +188,7 @@ func GetSdkSzConfigManager() *szsdk.Szconfigmanager {
 	return getSzConfigManager()
 }
 
-func GetSdkSzConfigManagerAsInterface() sz.SzConfigManager {
+func GetSdkSzConfigManagerAsInterface() senzing.SzConfigManager {
 	return getSzConfigManager()
 }
 

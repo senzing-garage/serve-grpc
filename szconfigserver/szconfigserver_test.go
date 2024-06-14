@@ -7,8 +7,7 @@ import (
 	"testing"
 
 	truncator "github.com/aquilax/truncate"
-	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	"github.com/stretchr/testify/assert"
@@ -238,8 +237,8 @@ func getSzConfigServer(ctx context.Context) SzConfigServer {
 	if szConfigTestSingleton == nil {
 		szConfigTestSingleton = &SzConfigServer{}
 		instanceName := "Test name"
-		verboseLogging := sz.SZ_NO_LOGGING
-		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		verboseLogging := senzing.SZ_NO_LOGGING
+		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -255,8 +254,8 @@ func getTestObject(ctx context.Context, test *testing.T) SzConfigServer {
 	if szConfigTestSingleton == nil {
 		szConfigTestSingleton = &SzConfigServer{}
 		instanceName := "Test name"
-		verboseLogging := sz.SZ_NO_LOGGING
-		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		verboseLogging := senzing.SZ_NO_LOGGING
+		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
@@ -328,7 +327,7 @@ func teardown() error {
 }
 
 func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	actual, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)

@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
-	"github.com/senzing-garage/go-cmdhelping/engineconfiguration"
 	"github.com/senzing-garage/go-cmdhelping/option"
+	"github.com/senzing-garage/go-cmdhelping/settings"
 	"github.com/senzing-garage/serve-grpc/grpcserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -81,7 +81,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 	var err error = nil
 	ctx := context.Background()
 
-	senzingEngineConfigurationJson, err := engineconfiguration.BuildAndVerifySenzingEngineConfigurationJson(ctx, viper.GetViper())
+	senzingSettings, err := settings.BuildAndVerifySettings(ctx, viper.GetViper())
 	if err != nil {
 		return err
 	}
@@ -97,7 +97,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 		ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
 		ObserverUrl:           viper.GetString(option.ObserverUrl.Arg),
 		Port:                  viper.GetInt(option.GrpcPort.Arg),
-		SenzingSettings:       senzingEngineConfigurationJson,
+		SenzingSettings:       senzingSettings,
 		SenzingInstanceName:   viper.GetString(option.EngineModuleName.Arg),
 		SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
 	}

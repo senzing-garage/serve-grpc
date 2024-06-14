@@ -9,7 +9,7 @@ import (
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	szsdk "github.com/senzing-garage/sz-sdk-go-core/szproduct"
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 )
 
@@ -130,7 +130,7 @@ func GetSdkSzProduct() *szsdk.Szproduct {
 	return getSzProduct()
 }
 
-func GetSdkSzProductAsInterface() sz.SzProduct {
+func GetSdkSzProductAsInterface() senzing.SzProduct {
 	return getSzProduct()
 }
 

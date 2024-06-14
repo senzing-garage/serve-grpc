@@ -14,7 +14,7 @@ import (
 	"github.com/senzing-garage/serve-grpc/szdiagnosticserver"
 	"github.com/senzing-garage/serve-grpc/szengineserver"
 	"github.com/senzing-garage/serve-grpc/szproductserver"
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
 	"github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	"github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	"github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
@@ -160,7 +160,7 @@ func (grpcServer *GrpcServerImpl) enableSzDiagnostic(ctx context.Context, servic
 	if err != nil {
 		panic(err)
 	}
-	err = szdiagnosticserver.GetSdkSzDiagnostic().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION, grpcServer.SenzingVerboseLogging)
+	err = szdiagnosticserver.GetSdkSzDiagnostic().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, senzing.SzInitializeWithDefaultConfiguration, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -185,7 +185,7 @@ func (grpcServer *GrpcServerImpl) enableSzEngine(ctx context.Context, serviceReg
 	if err != nil {
 		panic(err)
 	}
-	err = szengineserver.GetSdkSzEngine().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION, grpcServer.SenzingVerboseLogging)
+	err = szengineserver.GetSdkSzEngine().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, senzing.SzInitializeWithDefaultConfiguration, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}

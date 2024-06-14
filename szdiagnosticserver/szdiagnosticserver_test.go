@@ -8,7 +8,7 @@ import (
 	"time"
 
 	truncator "github.com/aquilax/truncate"
-	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
+	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-helpers/truthset"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/serve-grpc/szconfigmanagerserver"
@@ -16,7 +16,7 @@ import (
 	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
 	"github.com/senzing-garage/sz-sdk-go-core/szengine"
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
 	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szconfigmanagerpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
@@ -106,7 +106,7 @@ func getSzConfigManagerServer(ctx context.Context) szconfigmanagerserver.SzConfi
 		szConfigManagerServerSingleton = &szconfigmanagerserver.SzConfigManagerServer{}
 		instanceName := "Test module name"
 		verboseLogging := int64(0)
-		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -122,9 +122,9 @@ func getSzDiagnosticServer(ctx context.Context) SzDiagnosticServer {
 	if szDiagnosticServerSingleton == nil {
 		szDiagnosticServerSingleton = &SzDiagnosticServer{}
 		instanceName := "Test name"
-		verboseLogging := sz.SZ_NO_LOGGING
-		configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
-		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		verboseLogging := senzing.SZ_NO_LOGGING
+		configId := senzing.SzInitializeWithDefaultConfiguration
+		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -140,9 +140,9 @@ func getTestObject(ctx context.Context, test *testing.T) SzDiagnosticServer {
 	if szDiagnosticServerSingleton == nil {
 		szDiagnosticServerSingleton = &SzDiagnosticServer{}
 		instanceName := "Test name"
-		verboseLogging := sz.SZ_NO_LOGGING
-		configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
-		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		verboseLogging := senzing.SZ_NO_LOGGING
+		configId := senzing.SzInitializeWithDefaultConfiguration
+		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
@@ -267,13 +267,13 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 
 func setupAddRecords(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	szEngine := &szengine.Szengine{}
-	configId := sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION
+	configId := senzing.SzInitializeWithDefaultConfiguration
 	err := szEngine.Initialize(ctx, instanceName, settings, configId, verboseLogging)
 	if err != nil {
 		return createError(5916, err)
 	}
 
-	flags := sz.SZ_NO_FLAGS
+	flags := senzing.SZ_NO_FLAGS
 	testRecordIds := []string{"1001", "1002", "1003", "1004", "1005", "1039", "1040"}
 	for _, testRecordId := range testRecordIds {
 		testRecord := truthset.CustomerRecords[testRecordId]
@@ -292,7 +292,7 @@ func setupAddRecords(ctx context.Context, instanceName string, settings string, 
 
 func setupPurgeRepository(ctx context.Context, instancename string, settings string, verboseLogging int64) error {
 	szDiagnostic := &szdiagnostic.Szdiagnostic{}
-	err := szDiagnostic.Initialize(ctx, instancename, settings, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION, verboseLogging)
+	err := szDiagnostic.Initialize(ctx, instancename, settings, senzing.SzInitializeWithDefaultConfiguration, verboseLogging)
 	if err != nil {
 		return createError(5903, err)
 	}
@@ -313,13 +313,13 @@ func setup() error {
 	var err error = nil
 	ctx := context.TODO()
 	instanceName := "Test module name"
-	verboseLogging := sz.SZ_NO_LOGGING
+	verboseLogging := senzing.SZ_NO_LOGGING
 	localLogger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages)
 	if err != nil {
 		panic(err)
 	}
 
-	settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		return createError(5902, err)
 	}
@@ -354,7 +354,7 @@ func teardown() error {
 }
 
 func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	actual, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)
