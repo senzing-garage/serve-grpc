@@ -29,22 +29,22 @@ For more information, visit https://github.com/senzing-garage/serve-grpc
 
 var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	option.Configuration,
-	option.DatabaseUrl,
+	option.DatabaseURL,
 	option.EnableAll,
 	option.EnableSzConfig,
 	option.EnableSzConfigManager,
 	option.EnableSzDiagnostic,
 	option.EnableSzEngine,
 	option.EnableSzProduct,
-	option.EngineConfigurationJson,
+	option.EngineConfigurationJSON,
 	option.EngineLogLevel,
 	option.EngineModuleName,
 	option.GrpcPort,
-	option.GrpcUrl,
-	option.HttpPort,
+	option.GrpcURL,
+	option.HTTPPort,
 	option.LogLevel,
 	option.ObserverOrigin,
-	option.ObserverUrl,
+	option.ObserverURL,
 }
 
 var ContextVariables = append(ContextVariablesForMultiPlatform, ContextVariablesForOsArch...)
@@ -95,7 +95,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 		EnableSzProduct:       viper.GetBool(option.EnableSzProduct.Arg),
 		LogLevelName:          viper.GetString(option.LogLevel.Arg),
 		ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
-		ObserverUrl:           viper.GetString(option.ObserverUrl.Arg),
+		ObserverUrl:           viper.GetString(option.ObserverURL.Arg),
 		Port:                  viper.GetInt(option.GrpcPort.Arg),
 		SenzingSettings:       senzingSettings,
 		SenzingInstanceName:   viper.GetString(option.EngineModuleName.Arg),

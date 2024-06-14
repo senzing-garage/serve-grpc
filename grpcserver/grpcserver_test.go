@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	localLogger logging.LoggingInterface
+	localLogger logging.Logging
 )
 
 // ----------------------------------------------------------------------------
@@ -88,7 +88,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 		return localLogger.NewError(5913, err)
 	}
 
-	err = szConfigManager.SetDefaultConfigId(ctx, configID)
+	err = szConfigManager.SetDefaultConfigID(ctx, configID)
 	if err != nil {
 		return localLogger.NewError(5914, err)
 	}

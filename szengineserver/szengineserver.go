@@ -600,13 +600,13 @@ func (server *SzEngineServer) WhyRecords(ctx context.Context, request *szpb.WhyR
 // --- Logging ----------------------------------------------------------------
 
 // Get the Logger singleton.
-func (server *SzEngineServer) getLogger() logging.LoggingInterface {
+func (server *SzEngineServer) getLogger() logging.Logging {
 	var err error = nil
 	if server.logger == nil {
 		options := []interface{}{
 			&logging.OptionCallerSkip{Value: 3},
 		}
-		server.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
+		server.logger, err = logging.NewSenzingLogger(ComponentId, IdMessages, options...)
 		if err != nil {
 			panic(err)
 		}
