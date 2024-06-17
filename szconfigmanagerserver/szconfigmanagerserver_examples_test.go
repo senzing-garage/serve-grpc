@@ -76,12 +76,12 @@ func ExampleSzConfigManagerServer_GetConfig() {
 	// Output: {"G2_CONFIG":{"CFG_ATTR":[{"ATTR_ID":1001,"ATTR_CODE":"DATA_SOURCE","ATTR...
 }
 
-func ExampleSzConfigManagerServer_GetConfigList() {
+func ExampleSzConfigManagerServer_GetConfigs() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
 	ctx := context.TODO()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
-	request := &szpb.GetConfigListRequest{}
-	response, err := szConfigManagerServer.GetConfigList(ctx, request)
+	request := &szpb.GetConfigsRequest{}
+	response, err := szConfigManagerServer.GetConfigs(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}

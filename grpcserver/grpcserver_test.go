@@ -125,12 +125,12 @@ func setup() error {
 	moduleName := "Test module name"
 	verboseLogging := int64(0)
 
-	localLogger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages)
+	localLogger, err = logging.NewSenzingLogger(ComponentId, IdMessages)
 	if err != nil {
 		panic(err)
 	}
 
-	iniParams, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := settings.BuildSimpleSettingsUsingEnvVars()
 	if err != nil {
 		return localLogger.NewError(5902, err)
 	}

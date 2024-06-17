@@ -2,12 +2,14 @@ package szconfigserver
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"testing"
 
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/go-helpers/settings"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
 	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	"github.com/stretchr/testify/assert"
@@ -237,8 +239,8 @@ func getSzConfigServer(ctx context.Context) SzConfigServer {
 	if szConfigTestSingleton == nil {
 		szConfigTestSingleton = &SzConfigServer{}
 		instanceName := "Test name"
-		verboseLogging := senzing.SZ_NO_LOGGING
-		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		verboseLogging := senzing.SzNoLogging
+		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -254,8 +256,8 @@ func getTestObject(ctx context.Context, test *testing.T) SzConfigServer {
 	if szConfigTestSingleton == nil {
 		szConfigTestSingleton = &SzConfigServer{}
 		instanceName := "Test name"
-		verboseLogging := senzing.SZ_NO_LOGGING
-		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		verboseLogging := senzing.SzNoLogging
+		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
@@ -296,13 +298,13 @@ func truncate(aString string, length int) string {
 func TestMain(m *testing.M) {
 	err := setup()
 	if err != nil {
-		if szerror.Is(err, szerror.SzUnrecoverable) {
+		if errors.Is(err, szerror.ErrSzUnrecoverable) {
 			fmt.Printf("\nUnrecoverable error detected. \n\n")
 		}
-		if szerror.Is(err, szerror.SzRetryable) {
+		if errors.Is(err, szerror.ErrSzRetryable) {
 			fmt.Printf("\nRetryable error detected. \n\n")
 		}
-		if szerror.Is(err, szerror.SzBadInput) {
+		if errors.Is(err, szerror.ErrSzBadInput) {
 			fmt.Printf("\nBad user input error detected. \n\n")
 		}
 		fmt.Print(err)
@@ -327,7 +329,7 @@ func teardown() error {
 }
 
 func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	actual, err := settings.BuildSimpleSettingsUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)

@@ -61,13 +61,13 @@ func (server *SzProductServer) GetVersion(ctx context.Context, request *szpb.Get
 // --- Logging ----------------------------------------------------------------
 
 // Get the Logger singleton.
-func (server *SzProductServer) getLogger() logging.LoggingInterface {
+func (server *SzProductServer) getLogger() logging.Logging {
 	var err error = nil
 	if server.logger == nil {
 		options := []interface{}{
 			&logging.OptionCallerSkip{Value: 3},
 		}
-		server.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
+		server.logger, err = logging.NewSenzingLogger(ComponentId, IdMessages, options...)
 		if err != nil {
 			panic(err)
 		}

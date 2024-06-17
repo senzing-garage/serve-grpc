@@ -23,7 +23,7 @@ func ExampleSzProductServer_GetLicense() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output: {"customer":"Senzing Public Test License","contract":"Senzing Public Test - 50K records test","issueDate":"2023-11-02","licenseType":"EVAL (Solely for non-productive use)","licenseLevel":"STANDARD","billing":"YEARLY","expireDate":"2024-11-02","recordLimit":50000}
+	// Output: {"customer":"Senzing Public Test License","contract":"Senzing Public Test License","issueDate":"2024-05-02","licenseType":"EVAL (Solely for non-productive use)","licenseLevel":"STANDARD","billing":"YEARLY","expireDate":"2025-05-02","recordLimit":50000}
 }
 
 func ExampleSzProductServer_GetVersion() {

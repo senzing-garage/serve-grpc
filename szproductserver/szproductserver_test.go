@@ -52,7 +52,7 @@ func getSzProductServer(ctx context.Context) SzProductServer {
 		szProductTestSingleton = &SzProductServer{}
 		instanceName := "Test module name"
 		verboseLogging := int64(0)
-		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -69,7 +69,7 @@ func getTestObject(ctx context.Context, test *testing.T) SzProductServer {
 		szProductTestSingleton = &SzProductServer{}
 		instanceName := "Test module name"
 		verboseLogging := int64(0)
-		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
@@ -132,7 +132,7 @@ func teardown() error {
 }
 
 func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	actual, err := settings.BuildSimpleSettingsUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)

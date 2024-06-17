@@ -37,7 +37,7 @@ type GrpcServerImpl struct {
 	EnableSzDiagnostic    bool
 	EnableSzEngine        bool
 	EnableSzProduct       bool
-	logger                logging.LoggingInterface
+	logger                logging.Logging
 	LogLevelName          string
 	ObserverOrigin        string
 	Observers             []observer.Observer
@@ -55,13 +55,13 @@ type GrpcServerImpl struct {
 // --- Logging -------------------------------------------------------------------------
 
 // Get the Logger singleton.
-func (grpcServer *GrpcServerImpl) getLogger() logging.LoggingInterface {
+func (grpcServer *GrpcServerImpl) getLogger() logging.Logging {
 	var err error = nil
 	if grpcServer.logger == nil {
 		options := []interface{}{
 			&logging.OptionCallerSkip{Value: 3},
 		}
-		grpcServer.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
+		grpcServer.logger, err = logging.NewSenzingLogger(ComponentId, IdMessages, options...)
 		if err != nil {
 			panic(err)
 		}
@@ -94,9 +94,9 @@ func (grpcServer *GrpcServerImpl) createGrpcObserver(ctx context.Context, parsed
 	if err != nil {
 		return result, err
 	}
-	result = &observer.ObserverGrpc{
+	result = &observer.GrpcObserver{
 		GrpcClient: observerpb.NewObserverClient(grpcConnection),
-		Id:         "serve-grpc",
+		ID:         "serve-grpc",
 	}
 	return result, err
 }

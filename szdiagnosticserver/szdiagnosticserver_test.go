@@ -2,6 +2,7 @@ package szdiagnosticserver
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"testing"
@@ -29,9 +30,9 @@ const (
 )
 
 var (
-	szDiagnosticServerSingleton    *SzDiagnosticServer
+	logger                         logging.Logging
 	szConfigManagerServerSingleton *szconfigmanagerserver.SzConfigManagerServer
-	localLogger                    logging.LoggingInterface
+	szDiagnosticServerSingleton    *SzDiagnosticServer
 )
 
 // ----------------------------------------------------------------------------
@@ -97,8 +98,8 @@ func TestSzDiagnosticServer_Reinitialize(test *testing.T) {
 // Internal functions
 // ----------------------------------------------------------------------------
 
-func createError(errorId int, err error) error {
-	return szerror.Cast(localLogger.NewError(errorId, err), err)
+func createError(errorID int, err error) error {
+	return logger.NewError(errorID, err)
 }
 
 func getSzConfigManagerServer(ctx context.Context) szconfigmanagerserver.SzConfigManagerServer {
@@ -106,7 +107,7 @@ func getSzConfigManagerServer(ctx context.Context) szconfigmanagerserver.SzConfi
 		szConfigManagerServerSingleton = &szconfigmanagerserver.SzConfigManagerServer{}
 		instanceName := "Test module name"
 		verboseLogging := int64(0)
-		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -122,9 +123,9 @@ func getSzDiagnosticServer(ctx context.Context) SzDiagnosticServer {
 	if szDiagnosticServerSingleton == nil {
 		szDiagnosticServerSingleton = &SzDiagnosticServer{}
 		instanceName := "Test name"
-		verboseLogging := senzing.SZ_NO_LOGGING
+		verboseLogging := senzing.SzNoLogging
 		configId := senzing.SzInitializeWithDefaultConfiguration
-		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -140,9 +141,9 @@ func getTestObject(ctx context.Context, test *testing.T) SzDiagnosticServer {
 	if szDiagnosticServerSingleton == nil {
 		szDiagnosticServerSingleton = &SzDiagnosticServer{}
 		instanceName := "Test name"
-		verboseLogging := senzing.SZ_NO_LOGGING
+		verboseLogging := senzing.SzNoLogging
 		configId := senzing.SzInitializeWithDefaultConfiguration
-		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
@@ -182,13 +183,13 @@ func truncate(aString string, length int) string {
 func TestMain(m *testing.M) {
 	err := setup()
 	if err != nil {
-		if szerror.Is(err, szerror.SzUnrecoverable) {
+		if errors.Is(err, szerror.ErrSzUnrecoverable) {
 			fmt.Printf("\nUnrecoverable error detected. \n\n")
 		}
-		if szerror.Is(err, szerror.SzRetryable) {
+		if errors.Is(err, szerror.ErrSzRetryable) {
 			fmt.Printf("\nRetryable error detected. \n\n")
 		}
-		if szerror.Is(err, szerror.SzBadInput) {
+		if errors.Is(err, szerror.ErrSzBadInput) {
 			fmt.Printf("\nBad user input error detected. \n\n")
 		}
 		fmt.Print(err)
@@ -253,7 +254,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 		return createError(5913, err)
 	}
 
-	err = szConfigManager.SetDefaultConfigId(ctx, configID)
+	err = szConfigManager.SetDefaultConfigID(ctx, configID)
 	if err != nil {
 		return createError(5914, err)
 	}
@@ -273,11 +274,11 @@ func setupAddRecords(ctx context.Context, instanceName string, settings string, 
 		return createError(5916, err)
 	}
 
-	flags := senzing.SZ_NO_FLAGS
+	flags := senzing.SzNoLogging
 	testRecordIds := []string{"1001", "1002", "1003", "1004", "1005", "1039", "1040"}
 	for _, testRecordId := range testRecordIds {
 		testRecord := truthset.CustomerRecords[testRecordId]
-		_, err := szEngine.AddRecord(ctx, testRecord.DataSource, testRecord.Id, testRecord.Json, flags)
+		_, err := szEngine.AddRecord(ctx, testRecord.DataSource, testRecord.ID, testRecord.JSON, flags)
 		if err != nil {
 			return createError(5917, err)
 		}
@@ -313,13 +314,13 @@ func setup() error {
 	var err error = nil
 	ctx := context.TODO()
 	instanceName := "Test module name"
-	verboseLogging := senzing.SZ_NO_LOGGING
-	localLogger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages)
+	verboseLogging := senzing.SzNoLogging
+	logger, err = logging.NewSenzingLogger(ComponentId, IdMessages)
 	if err != nil {
 		panic(err)
 	}
 
-	settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 	if err != nil {
 		return createError(5902, err)
 	}
@@ -354,7 +355,7 @@ func teardown() error {
 }
 
 func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	actual, err := settings.BuildSimpleSettingsUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)

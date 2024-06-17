@@ -13,7 +13,7 @@ import (
 type SzConfigManagerServer struct {
 	szpb.UnimplementedSzConfigManagerServer
 	isTrace bool
-	logger  logging.LoggingInterface
+	logger  logging.Logging
 }
 
 // ----------------------------------------------------------------------------

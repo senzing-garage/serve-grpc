@@ -54,7 +54,7 @@ func (server *SzConfigManagerServer) GetConfig(ctx context.Context, request *szp
 	return &response, err
 }
 
-func (server *SzConfigManagerServer) GetConfigs(ctx context.Context, request *szpb.GetConfigListRequest) (*szpb.GetConfigListResponse, error) {
+func (server *SzConfigManagerServer) GetConfigs(ctx context.Context, request *szpb.GetConfigsRequest) (*szpb.GetConfigsResponse, error) {
 	var err error = nil
 	var result string
 	if server.isTrace {
@@ -63,8 +63,8 @@ func (server *SzConfigManagerServer) GetConfigs(ctx context.Context, request *sz
 		defer func() { server.traceExit(10, request, result, err, time.Since(entryTime)) }()
 	}
 	szConfigManager := getSzConfigManager()
-	result, err = szConfigManager.GetConfigList(ctx)
-	response := szpb.GetConfigListResponse{
+	result, err = szConfigManager.GetConfigs(ctx)
+	response := szpb.GetConfigsResponse{
 		Result: result,
 	}
 	return &response, err
@@ -79,7 +79,7 @@ func (server *SzConfigManagerServer) GetDefaultConfigId(ctx context.Context, req
 		defer func() { server.traceExit(12, request, result, err, time.Since(entryTime)) }()
 	}
 	szConfigManager := getSzConfigManager()
-	result, err = szConfigManager.GetDefaultConfigId(ctx)
+	result, err = szConfigManager.GetDefaultConfigID(ctx)
 	response := szpb.GetDefaultConfigIdResponse{
 		Result: result,
 	}
@@ -94,7 +94,7 @@ func (server *SzConfigManagerServer) ReplaceDefaultConfigId(ctx context.Context,
 		defer func() { server.traceExit(20, request, err, time.Since(entryTime)) }()
 	}
 	szConfigManager := getSzConfigManager()
-	err = szConfigManager.ReplaceDefaultConfigId(ctx, request.GetCurrentDefaultConfigId(), request.GetNewDefaultConfigId())
+	err = szConfigManager.ReplaceDefaultConfigID(ctx, request.GetCurrentDefaultConfigId(), request.GetNewDefaultConfigId())
 	response := szpb.ReplaceDefaultConfigIdResponse{}
 	return &response, err
 }
@@ -107,7 +107,7 @@ func (server *SzConfigManagerServer) SetDefaultConfigId(ctx context.Context, req
 		defer func() { server.traceExit(22, request, err, time.Since(entryTime)) }()
 	}
 	szConfigManager := getSzConfigManager()
-	err = szConfigManager.SetDefaultConfigId(ctx, request.GetConfigId())
+	err = szConfigManager.SetDefaultConfigID(ctx, request.GetConfigId())
 	response := szpb.SetDefaultConfigIdResponse{}
 	return &response, err
 }
@@ -119,13 +119,13 @@ func (server *SzConfigManagerServer) SetDefaultConfigId(ctx context.Context, req
 // --- Logging ----------------------------------------------------------------
 
 // Get the Logger singleton.
-func (server *SzConfigManagerServer) getLogger() logging.LoggingInterface {
+func (server *SzConfigManagerServer) getLogger() logging.Logging {
 	var err error = nil
 	if server.logger == nil {
 		options := []interface{}{
 			&logging.OptionCallerSkip{Value: 3},
 		}
-		server.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
+		server.logger, err = logging.NewSenzingLogger(ComponentId, IdMessages, options...)
 		if err != nil {
 			panic(err)
 		}

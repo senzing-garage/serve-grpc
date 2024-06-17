@@ -2,6 +2,7 @@ package szconfigmanagerserver
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"testing"
@@ -27,8 +28,8 @@ const (
 )
 
 var (
+	logger                         logging.Logging
 	szConfigManagerServerSingleton *SzConfigManagerServer
-	localLogger                    logging.LoggingInterface
 )
 
 // ----------------------------------------------------------------------------
@@ -89,8 +90,8 @@ func TestSzConfigManagerServerImpl_GetConfig(test *testing.T) {
 func TestSzConfigManagerServerImpl_GetConfigList(test *testing.T) {
 	ctx := context.TODO()
 	szConfigManagerServer := getTestObject(ctx, test)
-	request := &szpb.GetConfigListRequest{}
-	response, err := szConfigManagerServer.GetConfigList(ctx, request)
+	request := &szpb.GetConfigsRequest{}
+	response, err := szConfigManagerServer.GetConfigs(ctx, request)
 	testError(test, ctx, szConfigManagerServer, err)
 	printActual(test, response)
 }
@@ -145,8 +146,8 @@ func TestSzConfigManagerServerImpl_SetDefaultConfigId(test *testing.T) {
 // Internal functions
 // ----------------------------------------------------------------------------
 
-func createError(errorId int, err error) error {
-	return szerror.Cast(localLogger.NewError(errorId, err), err)
+func createError(errorID int, err error) error {
+	return logger.NewError(errorID, err)
 }
 
 func getSzConfigManagerServer(ctx context.Context) SzConfigManagerServer {
@@ -154,7 +155,7 @@ func getSzConfigManagerServer(ctx context.Context) SzConfigManagerServer {
 		szConfigManagerServerSingleton = &SzConfigManagerServer{}
 		instanceName := "Test module name"
 		verboseLogging := int64(0)
-		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -170,7 +171,7 @@ func getSzConfigServer(ctx context.Context) szconfigserver.SzConfigServer {
 	szConfigServer := &szconfigserver.SzConfigServer{}
 	instanceName := "Test name"
 	verboseLogging := int64(0)
-	settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -186,7 +187,7 @@ func getTestObject(ctx context.Context, test *testing.T) SzConfigManagerServer {
 		szConfigManagerServerSingleton = &SzConfigManagerServer{}
 		instanceName := "Test name"
 		verboseLogging := int64(0)
-		settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
@@ -228,13 +229,13 @@ func truncate(aString string, length int) string {
 func TestMain(m *testing.M) {
 	err := setup()
 	if err != nil {
-		if szerror.Is(err, szerror.SzUnrecoverable) {
+		if errors.Is(err, szerror.ErrSzUnrecoverable) {
 			fmt.Printf("\nUnrecoverable error detected. \n\n")
 		}
-		if szerror.Is(err, szerror.SzRetryable) {
+		if errors.Is(err, szerror.ErrSzRetryable) {
 			fmt.Printf("\nRetryable error detected. \n\n")
 		}
-		if szerror.Is(err, szerror.SzBadInput) {
+		if errors.Is(err, szerror.ErrSzBadInput) {
 			fmt.Printf("\nBad user input error detected. \n\n")
 		}
 		fmt.Print(err)
@@ -299,7 +300,7 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 		return createError(5913, err)
 	}
 
-	err = szConfigManager.SetDefaultConfigId(ctx, configId)
+	err = szConfigManager.SetDefaultConfigID(ctx, configId)
 	if err != nil {
 		return createError(5914, err)
 	}
@@ -334,14 +335,14 @@ func setup() error {
 	var err error = nil
 	ctx := context.TODO()
 	instanceName := "Test name"
-	verboseLogging := senzing.SZ_NO_LOGGING
+	verboseLogging := senzing.SzNoLogging
 
-	localLogger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages)
+	logger, err = logging.NewSenzingLogger(ComponentId, IdMessages)
 	if err != nil {
 		panic(err)
 	}
 
-	settings, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 	if err != nil {
 		return createError(5902, err)
 	}
@@ -368,7 +369,7 @@ func teardown() error {
 }
 
 func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := settings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	actual, err := settings.BuildSimpleSettingsUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)

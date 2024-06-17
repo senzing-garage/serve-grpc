@@ -13,7 +13,7 @@ import (
 type SzProductServer struct {
 	pb.UnimplementedSzProductServer
 	isTrace bool
-	logger  logging.LoggingInterface
+	logger  logging.Logging
 }
 
 // ----------------------------------------------------------------------------

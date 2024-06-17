@@ -13,7 +13,7 @@ import (
 type SzDiagnosticServer struct {
 	pb.UnimplementedSzDiagnosticServer
 	isTrace bool
-	logger  logging.LoggingInterface
+	logger  logging.Logging
 }
 
 // ----------------------------------------------------------------------------

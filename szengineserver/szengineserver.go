@@ -106,7 +106,7 @@ func (server *SzEngineServer) ExportJsonEntityReport(ctx context.Context, reques
 		defer func() { server.traceExit(30, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.ExportJsonEntityReport(ctx, request.GetFlags())
+	result, err = szEngine.ExportJSONEntityReport(ctx, request.GetFlags())
 	response := szpb.ExportJsonEntityReportResponse{
 		Result: int64(result),
 	}
@@ -138,7 +138,7 @@ func (server *SzEngineServer) FindInterestingEntitiesByEntityId(ctx context.Cont
 		defer func() { server.traceExit(34, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.FindInterestingEntitiesByEntityId(ctx, request.GetEntityId(), request.GetFlags())
+	result, err = szEngine.FindInterestingEntitiesByEntityID(ctx, request.GetEntityId(), request.GetFlags())
 	response := szpb.FindInterestingEntitiesByEntityIdResponse{
 		Result: result,
 	}
@@ -154,7 +154,7 @@ func (server *SzEngineServer) FindInterestingEntitiesByRecordId(ctx context.Cont
 		defer func() { server.traceExit(36, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.FindInterestingEntitiesByRecordId(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetFlags())
+	result, err = szEngine.FindInterestingEntitiesByRecordID(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetFlags())
 	response := szpb.FindInterestingEntitiesByRecordIdResponse{
 		Result: result,
 	}
@@ -170,7 +170,7 @@ func (server *SzEngineServer) FindNetworkByEntityId(ctx context.Context, request
 		defer func() { server.traceExit(38, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.FindNetworkByEntityId(ctx, request.GetEntityList(), request.GetMaxDegrees(), request.GetBuildOutDegree(), request.GetMaxEntities(), request.GetFlags())
+	result, err = szEngine.FindNetworkByEntityID(ctx, request.GetEntityIds(), request.GetMaxDegrees(), request.GetBuildOutDegree(), request.GetBuildOutMaxEntities(), request.GetFlags())
 	response := szpb.FindNetworkByEntityIdResponse{
 		Result: result,
 	}
@@ -186,7 +186,7 @@ func (server *SzEngineServer) FindNetworkByRecordId(ctx context.Context, request
 		defer func() { server.traceExit(42, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.FindNetworkByRecordId(ctx, request.GetRecordList(), request.GetMaxDegrees(), request.GetBuildOutDegree(), request.GetMaxEntities(), request.GetFlags())
+	result, err = szEngine.FindNetworkByRecordID(ctx, request.GetRecordKeys(), request.GetMaxDegrees(), request.GetBuildOutDegree(), request.GetBuildOutMaxEntities(), request.GetFlags())
 	response := szpb.FindNetworkByRecordIdResponse{
 		Result: result,
 	}
@@ -202,7 +202,7 @@ func (server *SzEngineServer) FindPathByEntityId(ctx context.Context, request *s
 		defer func() { server.traceExit(46, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.FindPathByEntityId(ctx, request.GetStartEntityId(), request.GetEndEntityId(), request.GetMaxDegrees(), request.GetExclusions(), request.GetRequiredDataSources(), request.GetFlags())
+	result, err = szEngine.FindPathByEntityID(ctx, request.GetStartEntityId(), request.GetEndEntityId(), request.GetMaxDegrees(), request.GetAvoidEntityIds(), request.GetRequiredDataSources(), request.GetFlags())
 	response := szpb.FindPathByEntityIdResponse{
 		Result: result,
 	}
@@ -218,7 +218,7 @@ func (server *SzEngineServer) FindPathByRecordId(ctx context.Context, request *s
 		defer func() { server.traceExit(50, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.FindPathByRecordId(ctx, request.GetStartDataSourceCode(), request.GetStartRecordId(), request.GetEndDataSourceCode(), request.GetEndRecordId(), request.GetMaxDegrees(), request.GetExclusions(), request.GetRequiredDataSources(), request.GetFlags())
+	result, err = szEngine.FindPathByRecordID(ctx, request.GetStartDataSourceCode(), request.GetStartRecordId(), request.GetEndDataSourceCode(), request.GetEndRecordId(), request.GetMaxDegrees(), request.GetAvoidRecordKeys(), request.GetRequiredDataSources(), request.GetFlags())
 	response := szpb.FindPathByRecordIdResponse{
 		Result: result,
 	}
@@ -234,7 +234,7 @@ func (server *SzEngineServer) GetActiveConfigId(ctx context.Context, request *sz
 		defer func() { server.traceExit(70, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.GetActiveConfigId(ctx)
+	result, err = szEngine.GetActiveConfigID(ctx)
 	response := szpb.GetActiveConfigIdResponse{
 		Result: result,
 	}
@@ -250,7 +250,7 @@ func (server *SzEngineServer) GetEntityByEntityId(ctx context.Context, request *
 		defer func() { server.traceExit(72, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.GetEntityByEntityId(ctx, request.GetEntityId(), request.GetFlags())
+	result, err = szEngine.GetEntityByEntityID(ctx, request.GetEntityId(), request.GetFlags())
 	response := szpb.GetEntityByEntityIdResponse{
 		Result: result,
 	}
@@ -266,7 +266,7 @@ func (server *SzEngineServer) GetEntityByRecordId(ctx context.Context, request *
 		defer func() { server.traceExit(76, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.GetEntityByRecordId(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetFlags())
+	result, err = szEngine.GetEntityByRecordID(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetFlags())
 	response := szpb.GetEntityByRecordIdResponse{
 		Result: result,
 	}
@@ -330,7 +330,7 @@ func (server *SzEngineServer) GetVirtualEntityByRecordId(ctx context.Context, re
 		defer func() { server.traceExit(92, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.GetVirtualEntityByRecordId(ctx, request.GetRecordList(), request.GetFlags())
+	result, err = szEngine.GetVirtualEntityByRecordID(ctx, request.GetRecordKeys(), request.GetFlags())
 	response := szpb.GetVirtualEntityByRecordIdResponse{
 		Result: result,
 	}
@@ -346,7 +346,7 @@ func (server *SzEngineServer) HowEntityByEntityId(ctx context.Context, request *
 		defer func() { server.traceExit(96, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.HowEntityByEntityId(ctx, request.GetEntityId(), request.GetFlags())
+	result, err = szEngine.HowEntityByEntityID(ctx, request.GetEntityId(), request.GetFlags())
 	response := szpb.HowEntityByEntityIdResponse{
 		Result: result,
 	}
@@ -506,7 +506,7 @@ func (server *SzEngineServer) StreamExportJsonEntityReport(request *szpb.StreamE
 	// Get the query handle.
 
 	var queryHandle uintptr
-	queryHandle, err = szEngine.ExportJsonEntityReport(ctx, request.GetFlags())
+	queryHandle, err = szEngine.ExportJSONEntityReport(ctx, request.GetFlags())
 	if err != nil {
 		return err
 	}
