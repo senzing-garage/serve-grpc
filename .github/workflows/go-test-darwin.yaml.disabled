@@ -1,11 +1,11 @@
 name: go test darwin
 
-on: [push]
+on: [pull_request, workflow_dispatch]
 
 env:
   DYLD_LIBRARY_PATH: /opt/senzing/g2/lib:/opt/senzing/g2/lib/macos
   LD_LIBRARY_PATH: /opt/senzing/g2/lib:/opt/senzing/g2/lib/macos
-  SENZING_TOOLS_DATABASE_URL: sqlite3://na:na@/tmp/sqlite/G2C.db
+  SENZING_TOOLS_DATABASE_URL: sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
 
 permissions:
   contents: read
@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         go: ["1.21"]
-        os: [macos-latest]
+        os: [macos-13]
         senzingapi-version: [staging-v4]
 
     steps:
@@ -43,4 +43,15 @@ jobs:
         run: mkdir /tmp/sqlite && cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
 
       - name: run go test
-        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 ./...
+        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -v -p 1 -coverprofile=./cover.out -covermode=atomic -coverpkg=./... ./...
+
+      - name: Store coverage file
+        uses: actions/upload-artifact@v4
+        with:
+          name: cover.out
+          path: ./cover.out
+
+  coverage:
+    name: coverage
+    needs: go-test-darwin
+    uses: senzing-factory/build-resources/.github/workflows/go-coverage.yaml@v2
