@@ -10,6 +10,7 @@ import (
 	"github.com/senzing-garage/go-helpers/settings"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -30,7 +31,7 @@ func TestSzProductServer_GetLicense(test *testing.T) {
 	szProductServer := getTestObject(ctx, test)
 	request := &szpb.GetLicenseRequest{}
 	actual, err := szProductServer.GetLicense(ctx, request)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, actual)
 }
 
@@ -39,7 +40,7 @@ func TestSzProductServer_GetVersion(test *testing.T) {
 	szProductServer := getTestObject(ctx, test)
 	request := &szpb.GetVersionRequest{}
 	actual, err := szProductServer.GetVersion(ctx, request)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, actual)
 }
 
@@ -91,14 +92,6 @@ func printResult(test *testing.T, title string, result interface{}) {
 	}
 }
 
-func testError(test *testing.T, ctx context.Context, err error) {
-	_ = ctx
-	if err != nil {
-		test.Log("Error:", err.Error())
-		assert.FailNow(test, err.Error())
-	}
-}
-
 func truncate(aString string, length int) string {
 	return truncator.Truncate(aString, length, "...", truncator.PositionEnd)
 }
@@ -122,12 +115,12 @@ func TestMain(m *testing.M) {
 }
 
 func setup() error {
-	var err error = nil
+	var err error
 	return err
 }
 
 func teardown() error {
-	var err error = nil
+	var err error
 	return err
 }
 

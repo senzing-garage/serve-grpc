@@ -20,6 +20,7 @@ import (
 	szconfigpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -64,7 +65,7 @@ func TestSzConfigManagerServer_AddConfig(test *testing.T) {
 		ConfigComment:    fmt.Sprintf("szconfigmanagerserver_test at %s", now.UTC()),
 	}
 	response, err := szConfigManagerServer.AddConfig(ctx, request)
-	testError(test, ctx, szConfigManagerServer, err)
+	require.NoError(test, err)
 	printActual(test, response)
 }
 
@@ -73,17 +74,17 @@ func TestSzConfigManagerServerImpl_GetConfig(test *testing.T) {
 	szConfigManagerServer := getTestObject(ctx, test)
 
 	// GetDefaultConfigId().
-	requestToGetDefaultConfigId := &szpb.GetDefaultConfigIdRequest{}
-	responseFromGetDefaultConfigId, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigId)
-	testError(test, ctx, szConfigManagerServer, err)
-	printActual(test, responseFromGetDefaultConfigId)
+	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	require.NoError(test, err)
+	printActual(test, responseFromGetDefaultConfigID)
 
 	// Test.
 	request := &szpb.GetConfigRequest{
-		ConfigId: responseFromGetDefaultConfigId.GetResult(),
+		ConfigId: responseFromGetDefaultConfigID.GetResult(),
 	}
 	response, err := szConfigManagerServer.GetConfig(ctx, request)
-	testError(test, ctx, szConfigManagerServer, err)
+	require.NoError(test, err)
 	printActual(test, response)
 }
 
@@ -92,7 +93,7 @@ func TestSzConfigManagerServerImpl_GetConfigList(test *testing.T) {
 	szConfigManagerServer := getTestObject(ctx, test)
 	request := &szpb.GetConfigsRequest{}
 	response, err := szConfigManagerServer.GetConfigs(ctx, request)
-	testError(test, ctx, szConfigManagerServer, err)
+	require.NoError(test, err)
 	printActual(test, response)
 }
 
@@ -101,7 +102,7 @@ func TestSzConfigManagerServerImpl_GetDefaultConfigId(test *testing.T) {
 	szConfigManagerServer := getTestObject(ctx, test)
 	request := &szpb.GetDefaultConfigIdRequest{}
 	response, err := szConfigManagerServer.GetDefaultConfigId(ctx, request)
-	testError(test, ctx, szConfigManagerServer, err)
+	require.NoError(test, err)
 	printActual(test, response)
 }
 
@@ -110,17 +111,17 @@ func TestSzConfigManagerServerImpl_ReplaceDefaultConfigId(test *testing.T) {
 	szConfigManagerServer := getTestObject(ctx, test)
 
 	// GetDefaultConfigId()
-	requestToGetDefaultConfigId := &szpb.GetDefaultConfigIdRequest{}
-	responseFromGetDefaultConfigId, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigId)
-	testError(test, ctx, szConfigManagerServer, err)
+	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	require.NoError(test, err)
 
 	// Test. Note: Cheating a little with replacing with same configId.
 	request := &szpb.ReplaceDefaultConfigIdRequest{
-		CurrentDefaultConfigId: responseFromGetDefaultConfigId.GetResult(),
-		NewDefaultConfigId:     responseFromGetDefaultConfigId.GetResult(),
+		CurrentDefaultConfigId: responseFromGetDefaultConfigID.GetResult(),
+		NewDefaultConfigId:     responseFromGetDefaultConfigID.GetResult(),
 	}
 	response, err := szConfigManagerServer.ReplaceDefaultConfigId(ctx, request)
-	testError(test, ctx, szConfigManagerServer, err)
+	require.NoError(test, err)
 	printActual(test, response)
 }
 
@@ -129,16 +130,16 @@ func TestSzConfigManagerServerImpl_SetDefaultConfigId(test *testing.T) {
 	szConfigManagerServer := getTestObject(ctx, test)
 
 	// GetDefaultConfigId()
-	requestToGetDefaultConfigId := &szpb.GetDefaultConfigIdRequest{}
-	responseFromGetDefaultConfigId, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigId)
-	testError(test, ctx, szConfigManagerServer, err)
+	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	require.NoError(test, err)
 
 	// Test.
 	request := &szpb.SetDefaultConfigIdRequest{
-		ConfigId: responseFromGetDefaultConfigId.GetResult(),
+		ConfigId: responseFromGetDefaultConfigID.GetResult(),
 	}
 	response, err := szConfigManagerServer.SetDefaultConfigId(ctx, request)
-	testError(test, ctx, szConfigManagerServer, err)
+	require.NoError(test, err)
 	printActual(test, response)
 }
 
@@ -206,15 +207,6 @@ func printActual(test *testing.T, actual interface{}) {
 func printResult(test *testing.T, title string, result interface{}) {
 	if printResults {
 		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
-	}
-}
-
-func testError(test *testing.T, ctx context.Context, szConfigManager SzConfigManagerServer, err error) {
-	_ = ctx
-	_ = szConfigManager
-	if err != nil {
-		test.Log("Error:", err.Error())
-		assert.FailNow(test, err.Error())
 	}
 }
 
@@ -295,12 +287,12 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 	}
 
 	configComment := fmt.Sprintf("Created by szconfigmanagerserver_test at %s", now.UTC())
-	configId, err := szConfigManager.AddConfig(ctx, configDefinition, configComment)
+	configID, err := szConfigManager.AddConfig(ctx, configDefinition, configComment)
 	if err != nil {
 		return createError(5913, err)
 	}
 
-	err = szConfigManager.SetDefaultConfigID(ctx, configId)
+	err = szConfigManager.SetDefaultConfigID(ctx, configID)
 	if err != nil {
 		return createError(5914, err)
 	}
@@ -332,12 +324,12 @@ func setupPurgeRepository(ctx context.Context, instanceName string, settings str
 }
 
 func setup() error {
-	var err error = nil
+	var err error
 	ctx := context.TODO()
 	instanceName := "Test name"
 	verboseLogging := senzing.SzNoLogging
 
-	logger, err = logging.NewSenzingLogger(ComponentId, IdMessages)
+	logger, err = logging.NewSenzingLogger(ComponentID, IDMessages)
 	if err != nil {
 		panic(err)
 	}
@@ -364,7 +356,7 @@ func setup() error {
 }
 
 func teardown() error {
-	var err error = nil
+	var err error
 	return err
 }
 

@@ -74,16 +74,16 @@ func ExampleSzEngineServer_CloseExport() {
 	szEngineServer := getSzEngineServer(ctx)
 
 	// Create a handle for the example.
-	requestToExportJsonEntityReport := &szpb.ExportJsonEntityReportRequest{
+	requestToExportJSONEntityReport := &szpb.ExportJsonEntityReportRequest{
 		Flags: senzing.SzNoFlags,
 	}
-	responseFromExportJsonEntityReport, err := szEngineServer.ExportJsonEntityReport(ctx, requestToExportJsonEntityReport)
+	responseFromExportJSONEntityReport, err := szEngineServer.ExportJsonEntityReport(ctx, requestToExportJSONEntityReport)
 	if err != nil {
 		fmt.Println(err)
 	}
 	// Example
 	request := &szpb.CloseExportRequest{
-		ExportHandle: responseFromExportJsonEntityReport.GetResult(),
+		ExportHandle: responseFromExportJSONEntityReport.GetResult(),
 	}
 	response, err := szEngineServer.CloseExport(ctx, request)
 	if err != nil {
@@ -143,22 +143,22 @@ func ExampleSzEngineServer_FetchNext() {
 	szEngineServer := getSzEngineServer(ctx)
 
 	// Create a handle for the example.
-	requestToExportJsonEntityReport := &szpb.ExportJsonEntityReportRequest{
+	requestToExportJSONEntityReport := &szpb.ExportJsonEntityReportRequest{
 		Flags: senzing.SzNoFlags,
 	}
-	responseFromExportJsonEntityReport, err := szEngineServer.ExportJsonEntityReport(ctx, requestToExportJsonEntityReport)
+	responseFromExportJSONEntityReport, err := szEngineServer.ExportJsonEntityReport(ctx, requestToExportJSONEntityReport)
 	if err != nil {
 		fmt.Println(err)
 	}
 	// Example
 	request := &szpb.FetchNextRequest{
-		ExportHandle: responseFromExportJsonEntityReport.GetResult(),
+		ExportHandle: responseFromExportJSONEntityReport.GetResult(),
 	}
 	response, err := szEngineServer.FetchNext(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(len(response.GetResult()) >= 0) // Dummy output.
+	fmt.Println(len(response.GetResult()) > 0) // Dummy output.
 	// Output: true
 }
 
@@ -167,7 +167,7 @@ func ExampleSzEngineServer_FindInterestingEntitiesByEntityId() {
 	ctx := context.TODO()
 	szEngine := getSzEngineServer(ctx)
 	request := &szpb.FindInterestingEntitiesByEntityIdRequest{
-		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
 		Flags:    0,
 	}
 	response, err := szEngine.FindInterestingEntitiesByEntityId(ctx, request)
@@ -199,7 +199,7 @@ func ExampleSzEngineServer_FindNetworkByEntityId() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	entityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1001") + `}, {"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1002") + `}]}`
+	entityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1001") + `}, {"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1002") + `}]}`
 	request := &szpb.FindNetworkByEntityIdRequest{
 		BuildOutDegree:      1,
 		BuildOutMaxEntities: 10,
@@ -239,8 +239,8 @@ func ExampleSzEngineServer_FindPathByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindPathByEntityIdRequest{
-		StartEntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
-		EndEntityId:   getEntityIdForRecord("CUSTOMERS", "1002"),
+		StartEntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
+		EndEntityId:   getEntityIDForRecord("CUSTOMERS", "1002"),
 		MaxDegrees:    1,
 		Flags:         senzing.SzNoFlags,
 	}
@@ -256,10 +256,10 @@ func ExampleSzEngineServer_FindPathByEntityId_exclusions() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
+	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`
 	request := &szpb.FindPathByEntityIdRequest{
-		StartEntityId:  getEntityIdForRecord("CUSTOMERS", "1001"),
-		EndEntityId:    getEntityIdForRecord("CUSTOMERS", "1002"),
+		StartEntityId:  getEntityIDForRecord("CUSTOMERS", "1001"),
+		EndEntityId:    getEntityIDForRecord("CUSTOMERS", "1002"),
 		MaxDegrees:     1,
 		AvoidEntityIds: avoidEntityIDs,
 		Flags:          senzing.SzNoFlags,
@@ -276,10 +276,10 @@ func ExampleSzEngineServer_FindPathByEntityId_inclusions() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
+	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`
 	request := &szpb.FindPathByEntityIdRequest{
-		StartEntityId:       getEntityIdForRecord("CUSTOMERS", "1001"),
-		EndEntityId:         getEntityIdForRecord("CUSTOMERS", "1002"),
+		StartEntityId:       getEntityIDForRecord("CUSTOMERS", "1001"),
+		EndEntityId:         getEntityIDForRecord("CUSTOMERS", "1002"),
 		MaxDegrees:          1,
 		AvoidEntityIds:      avoidEntityIDs,
 		RequiredDataSources: `{"DATA_SOURCES": ["CUSTOMERS"]}`,
@@ -344,7 +344,7 @@ func ExampleSzEngineServer_FindPathByRecordId_inclusions() {
 		EndDataSourceCode:   "CUSTOMERS",
 		EndRecordId:         "1002",
 		MaxDegrees:          1,
-		AvoidRecordKeys:     `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`,
+		AvoidRecordKeys:     `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`,
 		RequiredDataSources: `{"DATA_SOURCES": ["CUSTOMERS"]}`,
 		Flags:               senzing.SzNoFlags,
 	}
@@ -374,7 +374,7 @@ func ExampleSzEngineServer_GetEntityByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetEntityByEntityIdRequest{
-		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
 		Flags:    senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.GetEntityByEntityId(ctx, request)
@@ -466,7 +466,7 @@ func ExampleSzEngineServer_HowEntityByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.HowEntityByEntityIdRequest{
-		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
 		Flags:    senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.HowEntityByEntityId(ctx, request)
@@ -534,8 +534,8 @@ func ExampleSzEngineServer_WhyEntities() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.WhyEntitiesRequest{
-		EntityId1: getEntityIdForRecord("CUSTOMERS", "1001"),
-		EntityId2: getEntityIdForRecord("CUSTOMERS", "1002"),
+		EntityId1: getEntityIDForRecord("CUSTOMERS", "1001"),
+		EntityId2: getEntityIDForRecord("CUSTOMERS", "1002"),
 		Flags:     senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.WhyEntities(ctx, request)
@@ -570,7 +570,7 @@ func ExampleSzEngineServer_ReevaluateEntity() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateEntityRequest{
-		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
 		Flags:    senzing.SzWithoutInfo,
 	}
 	response, err := szEngineServer.ReevaluateEntity(ctx, request)
@@ -587,7 +587,7 @@ func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateEntityRequest{
-		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
 		Flags:    senzing.SzWithInfo,
 	}
 	response, err := szEngineServer.ReevaluateEntity(ctx, request)
@@ -673,14 +673,14 @@ func ExampleSzEngineServer_Reinitialize() {
 	szEngineServer := getSzEngineServer(ctx)
 
 	// Get a Senzing configuration ID for testing.
-	requestToGetActiveConfigId := &szpb.GetActiveConfigIdRequest{}
-	responseFromGetActiveConfigId, err := szEngineServer.GetActiveConfigId(ctx, requestToGetActiveConfigId)
+	requestToGetActiveConfigID := &szpb.GetActiveConfigIdRequest{}
+	responseFromGetActiveConfigID, err := szEngineServer.GetActiveConfigId(ctx, requestToGetActiveConfigID)
 	if err != nil {
 		fmt.Println(err)
 	}
 	// Example
 	request := &szpb.ReinitializeRequest{
-		ConfigId: responseFromGetActiveConfigId.GetResult(),
+		ConfigId: responseFromGetActiveConfigID.GetResult(),
 	}
 	response, err := szEngineServer.Reinitialize(ctx, request)
 	if err != nil {

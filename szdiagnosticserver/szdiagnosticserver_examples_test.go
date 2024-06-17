@@ -77,13 +77,13 @@ func ExampleSzDiagnosticServer_Reinitialize() {
 	ctx := context.TODO()
 	szDiagnosticServer := getSzDiagnosticServer(ctx)
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
-	getDefaultConfigIdRequest := &szconfigmanagerpb.GetDefaultConfigIdRequest{}
-	getDefaultConfigIdResponse, err := szConfigManagerServer.GetDefaultConfigId(ctx, getDefaultConfigIdRequest)
+	getDefaultConfigIDRequest := &szconfigmanagerpb.GetDefaultConfigIdRequest{}
+	getDefaultConfigIDResponse, err := szConfigManagerServer.GetDefaultConfigId(ctx, getDefaultConfigIDRequest)
 	if err != nil {
 		fmt.Println(err)
 	}
 	request := &szpb.ReinitializeRequest{
-		ConfigId: getDefaultConfigIdResponse.GetResult(),
+		ConfigId: getDefaultConfigIDResponse.GetResult(),
 	}
 	_, err = szDiagnosticServer.Reinitialize(ctx, request)
 	if err != nil {

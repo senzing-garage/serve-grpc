@@ -13,6 +13,7 @@ import (
 	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -35,7 +36,7 @@ func TestSzConfigServer_AddDataSource(test *testing.T) {
 	// Create.
 	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// AddDataSource.
@@ -44,7 +45,7 @@ func TestSzConfigServer_AddDataSource(test *testing.T) {
 		DataSourceCode: "GO_TEST",
 	}
 	responseFromAddDataSource, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromAddDataSource.GetResult())
 
 	// Close.
@@ -52,7 +53,7 @@ func TestSzConfigServer_AddDataSource(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 }
 
 func TestSzConfigServer_CloseConfig(test *testing.T) {
@@ -62,7 +63,7 @@ func TestSzConfigServer_CloseConfig(test *testing.T) {
 	// Create.
 	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// Close.
@@ -70,7 +71,7 @@ func TestSzConfigServer_CloseConfig(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 }
 
 func TestSzConfigServer_CreateConfig(test *testing.T) {
@@ -78,7 +79,7 @@ func TestSzConfigServer_CreateConfig(test *testing.T) {
 	szConfigServer := getTestObject(ctx, test)
 	requestToCreate := &szpb.CreateConfigRequest{}
 	response, err := szConfigServer.CreateConfig(ctx, requestToCreate)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
 
@@ -89,7 +90,7 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 	// Create.
 	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// GetDataSources #1.
@@ -97,7 +98,7 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	responseFromGetDataSources, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	initialDataSources := responseFromGetDataSources.GetResult()
 	printActual(test, initialDataSources)
 
@@ -107,12 +108,12 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 		DataSourceCode: "GO_TEST",
 	}
 	responseFromAddDataSource, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromAddDataSource.GetResult())
 
 	// GetDataSources #2.
 	responseFromListDataSources2, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromListDataSources2.GetResult())
 
 	// DeleteDataSource.
@@ -121,11 +122,11 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 		DataSourceCode: "GO_TEST",
 	}
 	_, err = szConfigServer.DeleteDataSource(ctx, requestToDeleteDataSource)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 
 	// ListDataSources #3.
 	responseFromGetDataSources3, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromGetDataSources3.GetResult())
 
 	// Close.
@@ -133,7 +134,7 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 
 	assert.Equal(test, initialDataSources, responseFromGetDataSources3.GetResult())
 }
@@ -145,7 +146,7 @@ func TestSzConfigServer_GetDataSources(test *testing.T) {
 	// Create.
 	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// ListDataSources.
@@ -153,7 +154,7 @@ func TestSzConfigServer_GetDataSources(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	responseFromGetDataSources, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromGetDataSources.GetResult())
 
 	// Close.
@@ -161,7 +162,7 @@ func TestSzConfigServer_GetDataSources(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 }
 
 func TestSzConfigServer_ImportConfig(test *testing.T) {
@@ -171,7 +172,7 @@ func TestSzConfigServer_ImportConfig(test *testing.T) {
 	// Create.
 	requestToCreate := &szpb.CreateConfigRequest{}
 	responseFromCreate, err := szConfigServer.CreateConfig(ctx, requestToCreate)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromCreate.GetResult())
 
 	// Export Config to string.
@@ -179,7 +180,7 @@ func TestSzConfigServer_ImportConfig(test *testing.T) {
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	responseFromExportConfig, err := szConfigServer.ExportConfig(ctx, requestToExportConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromExportConfig.GetResult())
 
 	// Close.
@@ -187,14 +188,14 @@ func TestSzConfigServer_ImportConfig(test *testing.T) {
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 
 	// Load.
 	requestToImportConfig := &szpb.ImportConfigRequest{
 		ConfigDefinition: responseFromExportConfig.GetResult(),
 	}
 	responseFromLoad, err := szConfigServer.ImportConfig(ctx, requestToImportConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromLoad.GetResult())
 
 	// Close.
@@ -202,7 +203,7 @@ func TestSzConfigServer_ImportConfig(test *testing.T) {
 		ConfigHandle: responseFromLoad.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 }
 
 func TestSzConfigServer_ExportConfig(test *testing.T) {
@@ -212,7 +213,7 @@ func TestSzConfigServer_ExportConfig(test *testing.T) {
 	// Create.
 	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// Save.
@@ -220,7 +221,7 @@ func TestSzConfigServer_ExportConfig(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	responseFromExportConfig, err := szConfigServer.ExportConfig(ctx, requestToExportConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromExportConfig.GetResult())
 
 	// Close.
@@ -228,7 +229,7 @@ func TestSzConfigServer_ExportConfig(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 }
 
 // ----------------------------------------------------------------------------
@@ -279,14 +280,6 @@ func printResult(test *testing.T, title string, result interface{}) {
 	}
 }
 
-func testError(test *testing.T, ctx context.Context, err error) {
-	_ = ctx
-	if err != nil {
-		test.Log("Error:", err.Error())
-		assert.FailNow(test, err.Error())
-	}
-}
-
 func truncate(aString string, length int) string {
 	return truncator.Truncate(aString, length, "...", truncator.PositionEnd)
 }
@@ -319,12 +312,12 @@ func TestMain(m *testing.M) {
 }
 
 func setup() error {
-	var err error = nil
+	var err error
 	return err
 }
 
 func teardown() error {
-	var err error = nil
+	var err error
 	return err
 }
 

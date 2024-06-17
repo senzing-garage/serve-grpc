@@ -78,7 +78,7 @@ func PreRun(cobraCommand *cobra.Command, args []string) {
 
 // Used in construction of cobra.Command
 func RunE(_ *cobra.Command, _ []string) error {
-	var err error = nil
+	var err error
 	ctx := context.Background()
 
 	senzingSettings, err := settings.BuildAndVerifySettings(ctx, viper.GetViper())
@@ -86,7 +86,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 		return err
 	}
 
-	grpcserver := &grpcserver.GrpcServerImpl{
+	grpcserver := &grpcserver.BasicGrpcServer{
 		EnableAll:             viper.GetBool(option.EnableAll.Arg),
 		EnableSzConfig:        viper.GetBool(option.EnableSzConfig.Arg),
 		EnableSzConfigManager: viper.GetBool(option.EnableSzConfigManager.Arg),
@@ -95,7 +95,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 		EnableSzProduct:       viper.GetBool(option.EnableSzProduct.Arg),
 		LogLevelName:          viper.GetString(option.LogLevel.Arg),
 		ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
-		ObserverUrl:           viper.GetString(option.ObserverURL.Arg),
+		ObserverURL:           viper.GetString(option.ObserverURL.Arg),
 		Port:                  viper.GetInt(option.GrpcPort.Arg),
 		SenzingSettings:       senzingSettings,
 		SenzingInstanceName:   viper.GetString(option.EngineModuleName.Arg),

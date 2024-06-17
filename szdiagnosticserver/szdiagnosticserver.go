@@ -23,7 +23,7 @@ var (
 // ----------------------------------------------------------------------------
 
 func (server *SzDiagnosticServer) CheckDatastorePerformance(ctx context.Context, request *szpb.CheckDatastorePerformanceRequest) (*szpb.CheckDatastorePerformanceResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -39,7 +39,7 @@ func (server *SzDiagnosticServer) CheckDatastorePerformance(ctx context.Context,
 }
 
 func (server *SzDiagnosticServer) GetDatastoreInfo(ctx context.Context, request *szpb.GetDatastoreInfoRequest) (*szpb.GetDatastoreInfoResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -55,7 +55,7 @@ func (server *SzDiagnosticServer) GetDatastoreInfo(ctx context.Context, request 
 }
 
 func (server *SzDiagnosticServer) GetFeature(ctx context.Context, request *szpb.GetFeatureRequest) (*szpb.GetFeatureResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -71,7 +71,7 @@ func (server *SzDiagnosticServer) GetFeature(ctx context.Context, request *szpb.
 }
 
 func (server *SzDiagnosticServer) PurgeRepository(ctx context.Context, request *szpb.PurgeRepositoryRequest) (*szpb.PurgeRepositoryResponse, error) {
-	var err error = nil
+	var err error
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(117, request)
@@ -84,7 +84,7 @@ func (server *SzDiagnosticServer) PurgeRepository(ctx context.Context, request *
 }
 
 func (server *SzDiagnosticServer) Reinitialize(ctx context.Context, request *szpb.ReinitializeRequest) (*szpb.ReinitializeResponse, error) {
-	var err error = nil
+	var err error
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(51, request)
@@ -104,12 +104,12 @@ func (server *SzDiagnosticServer) Reinitialize(ctx context.Context, request *szp
 
 // Get the Logger singleton.
 func (server *SzDiagnosticServer) getLogger() logging.Logging {
-	var err error = nil
+	var err error
 	if server.logger == nil {
 		options := []interface{}{
 			&logging.OptionCallerSkip{Value: 3},
 		}
-		server.logger, err = logging.NewSenzingLogger(ComponentId, IdMessages, options...)
+		server.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
 		if err != nil {
 			panic(err)
 		}
@@ -128,7 +128,8 @@ func (server *SzDiagnosticServer) traceExit(messageNumber int, details ...interf
 }
 
 func (server *SzDiagnosticServer) SetLogLevel(ctx context.Context, logLevelName string) error {
-	var err error = nil
+	_ = ctx
+	var err error
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(53, logLevelName)
@@ -179,7 +180,9 @@ func GetSdkSzDiagnosticAsInterface() senzing.SzDiagnostic {
 // --- Observer ---------------------------------------------------------------
 
 func (server *SzDiagnosticServer) GetObserverOrigin(ctx context.Context) string {
-	// var err error = nil
+	_ = ctx
+	// TODO: Reinstate GetObserverOrigin
+	// var err error
 	// if server.isTrace {
 	// 	entryTime := time.Now()
 	// 	server.traceEntry(55)
@@ -191,7 +194,10 @@ func (server *SzDiagnosticServer) GetObserverOrigin(ctx context.Context) string 
 }
 
 func (server SzDiagnosticServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
-	// var err error = nil
+	_ = ctx
+	_ = observer
+	// TODO: Reinstate RegisterObserver
+	// var err error
 	// if server.isTrace {
 	// 	entryTime := time.Now()
 	// 	server.traceEntry(3, observer.GetObserverId(ctx))
@@ -203,7 +209,10 @@ func (server SzDiagnosticServer) RegisterObserver(ctx context.Context, observer 
 }
 
 func (server *SzDiagnosticServer) SetObserverOrigin(ctx context.Context, origin string) {
-	// var err error = nil
+	_ = ctx
+	_ = origin
+	// TODO: Reinstate SetObserverOrigin
+	// var err error
 	// if server.isTrace {
 	// 	entryTime := time.Now()
 	// 	server.traceEntry(57, origin)
@@ -214,7 +223,10 @@ func (server *SzDiagnosticServer) SetObserverOrigin(ctx context.Context, origin 
 }
 
 func (server *SzDiagnosticServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
-	// var err error = nil
+	_ = ctx
+	_ = observer
+	// TODO: Reinstate UnregisterObserver
+	// var err error
 	// if server.isTrace {
 	// 	entryTime := time.Now()
 	// 	server.traceEntry(31, observer.GetObserverId(ctx))

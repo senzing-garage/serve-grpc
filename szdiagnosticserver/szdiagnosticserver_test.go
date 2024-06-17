@@ -22,6 +22,7 @@ import (
 	szconfigmanagerpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -46,7 +47,7 @@ func TestSzDiagnosticServer_CheckDatastorePerformance(test *testing.T) {
 		SecondsToRun: int32(1),
 	}
 	response, err := szDiagnosticServer.CheckDatastorePerformance(ctx, request)
-	testError(test, err)
+	require.NoError(test, err)
 	printActual(test, response)
 }
 
@@ -55,7 +56,7 @@ func TestSzDiagnosticServer_GetDatastoreInfo(test *testing.T) {
 	szDiagnosticServer := getTestObject(ctx, test)
 	request := &szpb.GetDatastoreInfoRequest{}
 	response, err := szDiagnosticServer.GetDatastoreInfo(ctx, request)
-	testError(test, err)
+	require.NoError(test, err)
 	printActual(test, response)
 }
 
@@ -66,7 +67,7 @@ func TestSzDiagnosticServer_GetFeature(test *testing.T) {
 		FeatureId: int64(1),
 	}
 	response, err := szDiagnosticServer.GetFeature(ctx, request)
-	testError(test, err)
+	require.NoError(test, err)
 	printActual(test, response)
 }
 
@@ -75,7 +76,7 @@ func TestSzDiagnosticServer_GetFeature(test *testing.T) {
 // 	szDiagnosticServer := getTestObject(ctx, test)
 // 	request := &szpb.PurgeRepositoryRequest{}
 // 	response, err := szDiagnosticServer.PurgeRepository(ctx, request)
-// 	testError(test, err)
+// 	require.NoError(test, err)
 // 	printActual(test, response)
 // }
 
@@ -83,14 +84,14 @@ func TestSzDiagnosticServer_Reinitialize(test *testing.T) {
 	ctx := context.TODO()
 	szDiagnostic := getTestObject(ctx, test)
 	szConfigManager := getSzConfigManagerServer(ctx)
-	getDefaultConfigIdRequest := &szconfigmanagerpb.GetDefaultConfigIdRequest{}
-	getDefaultConfigIdResponse, err := szConfigManager.GetDefaultConfigId(ctx, getDefaultConfigIdRequest)
-	testError(test, err)
+	getDefaultConfigIDRequest := &szconfigmanagerpb.GetDefaultConfigIdRequest{}
+	getDefaultConfigIDResponse, err := szConfigManager.GetDefaultConfigId(ctx, getDefaultConfigIDRequest)
+	require.NoError(test, err)
 	request := &szpb.ReinitializeRequest{
-		ConfigId: getDefaultConfigIdResponse.GetResult(),
+		ConfigId: getDefaultConfigIDResponse.GetResult(),
 	}
 	response, err := szDiagnostic.Reinitialize(ctx, request)
-	testError(test, err)
+	require.NoError(test, err)
 	printActual(test, response)
 }
 
@@ -124,12 +125,12 @@ func getSzDiagnosticServer(ctx context.Context) SzDiagnosticServer {
 		szDiagnosticServerSingleton = &SzDiagnosticServer{}
 		instanceName := "Test name"
 		verboseLogging := senzing.SzNoLogging
-		configId := senzing.SzInitializeWithDefaultConfiguration
+		configID := senzing.SzInitializeWithDefaultConfiguration
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		if err != nil {
 			fmt.Println(err)
 		}
-		err = GetSdkSzDiagnostic().Initialize(ctx, instanceName, settings, configId, verboseLogging)
+		err = GetSdkSzDiagnostic().Initialize(ctx, instanceName, settings, configID, verboseLogging)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -142,12 +143,12 @@ func getTestObject(ctx context.Context, test *testing.T) SzDiagnosticServer {
 		szDiagnosticServerSingleton = &SzDiagnosticServer{}
 		instanceName := "Test name"
 		verboseLogging := senzing.SzNoLogging
-		configId := senzing.SzInitializeWithDefaultConfiguration
+		configID := senzing.SzInitializeWithDefaultConfiguration
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		if err != nil {
 			test.Logf("Cannot construct system configuration. Error: %v", err)
 		}
-		err = GetSdkSzDiagnostic().Initialize(ctx, instanceName, settings, configId, verboseLogging)
+		err = GetSdkSzDiagnostic().Initialize(ctx, instanceName, settings, configID, verboseLogging)
 		if err != nil {
 			test.Logf("Cannot Init. Error: %v", err)
 		}
@@ -162,13 +163,6 @@ func printActual(test *testing.T, actual interface{}) {
 func printResult(test *testing.T, title string, result interface{}) {
 	if printResults {
 		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
-	}
-}
-
-func testError(test *testing.T, err error) {
-	if err != nil {
-		test.Log("Error:", err.Error())
-		assert.FailNow(test, err.Error())
 	}
 }
 
@@ -268,16 +262,16 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 
 func setupAddRecords(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	szEngine := &szengine.Szengine{}
-	configId := senzing.SzInitializeWithDefaultConfiguration
-	err := szEngine.Initialize(ctx, instanceName, settings, configId, verboseLogging)
+	configID := senzing.SzInitializeWithDefaultConfiguration
+	err := szEngine.Initialize(ctx, instanceName, settings, configID, verboseLogging)
 	if err != nil {
 		return createError(5916, err)
 	}
 
 	flags := senzing.SzNoLogging
-	testRecordIds := []string{"1001", "1002", "1003", "1004", "1005", "1039", "1040"}
-	for _, testRecordId := range testRecordIds {
-		testRecord := truthset.CustomerRecords[testRecordId]
+	testRecordIDs := []string{"1001", "1002", "1003", "1004", "1005", "1039", "1040"}
+	for _, testRecordID := range testRecordIDs {
+		testRecord := truthset.CustomerRecords[testRecordID]
 		_, err := szEngine.AddRecord(ctx, testRecord.DataSource, testRecord.ID, testRecord.JSON, flags)
 		if err != nil {
 			return createError(5917, err)
@@ -311,11 +305,11 @@ func setupPurgeRepository(ctx context.Context, instancename string, settings str
 }
 
 func setup() error {
-	var err error = nil
+	var err error
 	ctx := context.TODO()
 	instanceName := "Test module name"
 	verboseLogging := senzing.SzNoLogging
-	logger, err = logging.NewSenzingLogger(ComponentId, IdMessages)
+	logger, err = logging.NewSenzingLogger(ComponentID, IDMessages)
 	if err != nil {
 		panic(err)
 	}
@@ -350,7 +344,7 @@ func setup() error {
 }
 
 func teardown() error {
-	var err error = nil
+	var err error
 	return err
 }
 

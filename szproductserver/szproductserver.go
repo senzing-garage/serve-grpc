@@ -23,7 +23,7 @@ var (
 // ----------------------------------------------------------------------------
 
 func (server *SzProductServer) GetLicense(ctx context.Context, request *szpb.GetLicenseRequest) (*szpb.GetLicenseResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -39,7 +39,7 @@ func (server *SzProductServer) GetLicense(ctx context.Context, request *szpb.Get
 }
 
 func (server *SzProductServer) GetVersion(ctx context.Context, request *szpb.GetVersionRequest) (*szpb.GetVersionResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -62,12 +62,12 @@ func (server *SzProductServer) GetVersion(ctx context.Context, request *szpb.Get
 
 // Get the Logger singleton.
 func (server *SzProductServer) getLogger() logging.Logging {
-	var err error = nil
+	var err error
 	if server.logger == nil {
 		options := []interface{}{
 			&logging.OptionCallerSkip{Value: 3},
 		}
-		server.logger, err = logging.NewSenzingLogger(ComponentId, IdMessages, options...)
+		server.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
 		if err != nil {
 			panic(err)
 		}
@@ -86,7 +86,8 @@ func (server *SzProductServer) traceExit(messageNumber int, details ...interface
 }
 
 func (server *SzProductServer) SetLogLevel(ctx context.Context, logLevelName string) error {
-	var err error = nil
+	_ = ctx
+	var err error
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(13, logLevelName)
@@ -137,7 +138,9 @@ func GetSdkSzProductAsInterface() senzing.SzProduct {
 // --- Observer ---------------------------------------------------------------
 
 func (server *SzProductServer) GetObserverOrigin(ctx context.Context) string {
-	// var err error = nil
+	_ = ctx
+	// TODO: Reinstate GetObserverOrigin
+	// var err error
 	// if server.isTrace {
 	// 	entryTime := time.Now()
 	// 	server.traceEntry(21)
@@ -149,7 +152,10 @@ func (server *SzProductServer) GetObserverOrigin(ctx context.Context) string {
 }
 
 func (server *SzProductServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
-	// var err error = nil
+	_ = ctx
+	_ = observer
+	// TODO: Reinstate RegisterObserver
+	// var err error
 	// if server.isTrace {
 	// 	entryTime := time.Now()
 	// 	server.traceEntry(1, observer.GetObserverId(ctx))
@@ -161,7 +167,10 @@ func (server *SzProductServer) RegisterObserver(ctx context.Context, observer ob
 }
 
 func (server *SzProductServer) SetObserverOrigin(ctx context.Context, origin string) {
-	// var err error = nil
+	_ = ctx
+	_ = origin
+	// TODO: Reinstate SetObserverOrigin
+	// var err error
 	// if server.isTrace {
 	// 	entryTime := time.Now()
 	// 	server.traceEntry(23, origin)
@@ -172,7 +181,10 @@ func (server *SzProductServer) SetObserverOrigin(ctx context.Context, origin str
 }
 
 func (server *SzProductServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
-	// var err error = nil
+	_ = ctx
+	_ = observer
+	// TODO: Reinstate UnregisterObserver
+	// var err error
 	// if server.isTrace {
 	// 	entryTime := time.Now()
 	// 	server.traceEntry(5, observer.GetObserverId(ctx))

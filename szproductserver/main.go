@@ -21,7 +21,7 @@ type SzProductServer struct {
 // ----------------------------------------------------------------------------
 
 // Identfier of the szproductserver package found messages having the format "senzing-6999xxxx".
-const ComponentId = 6016
+const ComponentID = 6016
 
 // Log message prefix.
 const Prefix = "serve-grpc.szproductserver."
@@ -31,7 +31,7 @@ const Prefix = "serve-grpc.szproductserver."
 // ----------------------------------------------------------------------------
 
 // Message templates for the szproductserver package.
-var IdMessages = map[int]string{
+var IDMessages = map[int]string{
 	1:    "Enter " + Prefix + "RegisterObserver(%s).",
 	2:    "Exit  " + Prefix + "RegisterObserver(%s) returned (%v).",
 	3:    "Enter " + Prefix + "Destroy(%+v).",
@@ -84,4 +84,4 @@ var IdMessages = map[int]string{
 }
 
 // Status strings for specific szproductserver messages.
-var IdStatuses = map[int]string{}
+var IDStatuses = map[int]string{}

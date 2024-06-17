@@ -120,12 +120,12 @@ func setupPurgeRepository(ctx context.Context, instanceName string, settings str
 }
 
 func setup() error {
-	var err error = nil
+	var err error
 	ctx := context.TODO()
 	moduleName := "Test module name"
 	verboseLogging := int64(0)
 
-	localLogger, err = logging.NewSenzingLogger(ComponentId, IdMessages)
+	localLogger, err = logging.NewSenzingLogger(ComponentID, IDMessages)
 	if err != nil {
 		panic(err)
 	}
@@ -153,7 +153,7 @@ func setup() error {
 }
 
 func teardown() error {
-	var err error = nil
+	var err error
 	return err
 }
 
@@ -162,6 +162,8 @@ func teardown() error {
 // ----------------------------------------------------------------------------
 
 func TestGrpcServerImpl_Serve(test *testing.T) {
+	_ = test
+	// TODO: Implement TestGrpcServerImpl_Serve
 	// ctx := context.TODO()
 
 	// observer1 := &observer.ObserverNull{

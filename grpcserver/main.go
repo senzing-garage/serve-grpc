@@ -15,7 +15,7 @@ type GrpcServer interface {
 // ----------------------------------------------------------------------------
 
 // Identfier of the  package found messages having the format "senzing-6204xxxx".
-const ComponentId = 6204
+const ComponentID = 6204
 
 // Log message prefix.
 const Prefix = "serve-grpc.grpcserver."
@@ -28,7 +28,7 @@ const DefaultGrpcObserverPort = "8260"
 // ----------------------------------------------------------------------------
 
 // Message templates.
-var IdMessages = map[int]string{
+var IDMessages = map[int]string{
 	2000: "Entry: %+v",
 	2001: "SENZING_ENGINE_CONFIGURATION_JSON: %v",
 	2002: "Enabling all services",
@@ -40,4 +40,4 @@ var IdMessages = map[int]string{
 }
 
 // Status strings for specific messages.
-var IdStatuses = map[int]string{}
+var IDStatuses = map[int]string{}

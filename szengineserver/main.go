@@ -21,7 +21,7 @@ type SzEngineServer struct {
 // ----------------------------------------------------------------------------
 
 // Identfier of the szengineserver package found messages having the format "senzing-6999xxxx".
-const ComponentId = 6014
+const ComponentID = 6014
 
 // Log message prefix.
 const Prefix = "serve-grpc.szengineserver."
@@ -31,7 +31,7 @@ const Prefix = "serve-grpc.szengineserver."
 // ----------------------------------------------------------------------------
 
 // Message templates for the szengineserver package.
-var IdMessages = map[int]string{
+var IDMessages = map[int]string{
 	1:    "Enter " + Prefix + "AddRecord(%+v).",
 	2:    "Exit  " + Prefix + "AddRecord(%+v) returned (%v).",
 	3:    "Enter " + Prefix + "AddRecordWithInfo(%+v).",
@@ -202,4 +202,4 @@ var IdMessages = map[int]string{
 }
 
 // Status strings for specific szengineserver messages.
-var IdStatuses = map[int]string{}
+var IDStatuses = map[int]string{}

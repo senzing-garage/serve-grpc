@@ -21,7 +21,7 @@ type SzConfigManagerServer struct {
 // ----------------------------------------------------------------------------
 
 // Identfier of the szconfigmanager package found messages having the format "senzing-6999xxxx".
-const ComponentId = 6012
+const ComponentID = 6012
 
 // Log message prefix.
 const Prefix = "serve-grpc.szconfigmanagerserver."
@@ -31,7 +31,7 @@ const Prefix = "serve-grpc.szconfigmanagerserver."
 // ----------------------------------------------------------------------------
 
 // Message templates for the szconfigmanager package.
-var IdMessages = map[int]string{
+var IDMessages = map[int]string{
 	1:    "Enter " + Prefix + "AddConfig(%+v).",
 	2:    "Exit  " + Prefix + "AddConfig(%+v) returned (%d, %v).",
 	3:    "Enter " + Prefix + "RegisterObserver(%s).",
@@ -88,4 +88,4 @@ var IdMessages = map[int]string{
 }
 
 // Status strings for specific g2configmgr messages.
-var IdStatuses = map[int]string{}
+var IDStatuses = map[int]string{}

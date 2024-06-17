@@ -58,15 +58,15 @@ func ExampleSzConfigManagerServer_GetConfig() {
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 
 	// GetDefaultConfigId() to get an example configuration ID.
-	requestToGetDefaultConfigId := &szpb.GetDefaultConfigIdRequest{}
-	responseFromGetDefaultConfigId, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigId)
+	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
 	request := &szpb.GetConfigRequest{
-		ConfigId: responseFromGetDefaultConfigId.GetResult(),
+		ConfigId: responseFromGetDefaultConfigID.GetResult(),
 	}
 	response, err := szConfigManagerServer.GetConfig(ctx, request)
 	if err != nil {
@@ -110,8 +110,8 @@ func ExampleSzConfigManagerServer_ReplaceDefaultConfigId() {
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 
 	// GetDefaultConfigId() to get the current configuration ID.
-	requestForGetDefaultConfigId := &szpb.GetDefaultConfigIdRequest{}
-	responseFromGetDefaultConfigId, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestForGetDefaultConfigId)
+	requestForGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestForGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -144,7 +144,7 @@ func ExampleSzConfigManagerServer_ReplaceDefaultConfigId() {
 
 	// Example
 	request := &szpb.ReplaceDefaultConfigIdRequest{
-		CurrentDefaultConfigId: responseFromGetDefaultConfigId.GetResult(),
+		CurrentDefaultConfigId: responseFromGetDefaultConfigID.GetResult(),
 		NewDefaultConfigId:     responseFromAddConfig.GetResult(),
 	}
 	response, err := szConfigManagerServer.ReplaceDefaultConfigId(ctx, request)
@@ -161,15 +161,15 @@ func ExampleSzConfigManagerServer_SetDefaultConfigId() {
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 
 	// GetDefaultConfigId() to get an example configuration ID.
-	requestForGetDefaultConfigId := &szpb.GetDefaultConfigIdRequest{}
-	responseFromGetDefaultConfigId, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestForGetDefaultConfigId)
+	requestForGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestForGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// Example
 	request := &szpb.SetDefaultConfigIdRequest{
-		ConfigId: responseFromGetDefaultConfigId.GetResult(),
+		ConfigId: responseFromGetDefaultConfigID.GetResult(),
 	}
 	response, err := szConfigManagerServer.SetDefaultConfigId(ctx, request)
 	if err != nil {
