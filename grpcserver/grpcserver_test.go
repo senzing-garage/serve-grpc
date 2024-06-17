@@ -9,10 +9,12 @@ import (
 
 	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
+	"github.com/stretchr/testify/require"
 )
 
 var (
@@ -163,23 +165,33 @@ func teardown() error {
 
 func TestGrpcServerImpl_Serve(test *testing.T) {
 	_ = test
-	// TODO: Implement TestGrpcServerImpl_Serve
-	// ctx := context.TODO()
+	ctx := context.TODO()
 
-	// observer1 := &observer.ObserverNull{
-	// 	Id: "Observer 1",
-	// }
+	observer1 := &observer.NullObserver{
+		ID: "Observer 1",
+	}
 
-	// senzingsettings, err := ssettings.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-	// if err != nil {
-	// 	fmt.Print(err)
-	// }
-	// grpcServer := &GrpcServerImpl{
-	// 	LogLevel:                       logger.LevelInfo,
-	// 	Observers:                      []observer.Observer{observer1},
-	// 	Port:                           8258,
-	// 	Senzingsettings: senzingsettings,
-	// 	SenzingModuleName:              "Test gRPC Server",
-	// }
-	// grpcServer.Serve(ctx)
+	logLevelName := "INFO"
+	osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
+	if len(osenvLogLevel) > 0 {
+		logLevelName = osenvLogLevel
+	}
+
+	senzingsettings, err := settings.BuildSimpleSettingsUsingEnvVars()
+	require.NoError(test, err)
+
+	grpcServer := &BasicGrpcServer{
+		AvoidServing:        true,
+		EnableAll:           true,
+		LogLevelName:        logLevelName,
+		Observers:           []observer.Observer{observer1},
+		ObserverOrigin:      "Test Observer origin",
+		ObserverURL:         "grpc://localhost:1234",
+		Port:                8258,
+		SenzingInstanceName: "Test gRPC Server",
+		SenzingSettings:     senzingsettings,
+	}
+	err = grpcServer.Serve(ctx)
+	require.NoError(test, err)
+
 }

@@ -196,59 +196,45 @@ func GetSdkSzConfigManagerAsInterface() senzing.SzConfigManager {
 // --- Observer ---------------------------------------------------------------
 
 func (server *SzConfigManagerServer) GetObserverOrigin(ctx context.Context) string {
-	_ = ctx
-	// TODO: Reinstate GetObserverOrigin
-	// var err error
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(25)
-	// 	defer func() { server.traceExit(26, err, time.Since(entryTime)) }()
-	// }
-	// szConfigManager := getSzConfigManager()
-	// return szConfigManager.GetObserverOrigin(ctx)
-	return ""
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(25)
+		defer func() { server.traceExit(26, err, time.Since(entryTime)) }()
+	}
+	szConfigManager := getSzConfigManager()
+	return szConfigManager.GetObserverOrigin(ctx)
 }
 
 func (server *SzConfigManagerServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
-	_ = ctx
-	_ = observer
-	// TODO: Reinstate RegisterObserver
-	// var err error
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(3, observer.GetObserverId(ctx))
-	// 	defer func() { server.traceExit(4, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-	// }
-	// szConfigManager := getSzConfigManager()
-	// return szConfigManager.RegisterObserver(ctx, observer)
-	return nil
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(3, observer.GetObserverID(ctx))
+		defer func() { server.traceExit(4, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
+	}
+	szConfigManager := getSzConfigManager()
+	return szConfigManager.RegisterObserver(ctx, observer)
 }
 
 func (server *SzConfigManagerServer) SetObserverOrigin(ctx context.Context, origin string) {
-	_ = ctx
-	_ = origin
-	// TODO: Reinstate SetObserverOrigin
-	// var err error
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(27, origin)
-	// 	defer func() { server.traceExit(28, origin, err, time.Since(entryTime)) }()
-	// }
-	// szConfigManager := getSzConfigManager()
-	// szConfigManager.SetObserverOrigin(ctx, origin)
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(27, origin)
+		defer func() { server.traceExit(28, origin, err, time.Since(entryTime)) }()
+	}
+	szConfigManager := getSzConfigManager()
+	szConfigManager.SetObserverOrigin(ctx, origin)
 }
 
 func (server *SzConfigManagerServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
-	_ = ctx
-	_ = observer
-	// TODO: Reinstate UnregisterObserver
-	// var err error
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(13, observer.GetObserverId(ctx))
-	// 	defer func() { server.traceExit(14, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-	// }
-	// szConfigManager := getSzConfigManager()
-	// return szConfigManager.UnregisterObserver(ctx, observer)
-	return nil
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(13, observer.GetObserverID(ctx))
+		defer func() { server.traceExit(14, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
+	}
+	szConfigManager := getSzConfigManager()
+	return szConfigManager.UnregisterObserver(ctx, observer)
 }

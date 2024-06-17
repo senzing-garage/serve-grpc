@@ -31,8 +31,9 @@ const DefaultGrpcObserverPort = "8260"
 var IDMessages = map[int]string{
 	2000: "Entry: %+v",
 	2001: "SENZING_ENGINE_CONFIGURATION_JSON: %v",
-	2002: "Enabling all services",
+	2002: "Enabling all services.",
 	2003: "Server listening at %v",
+	2004: "Serving avoided.",
 	4001: "Call to net.Listen(tcp, %s) failed.",
 	4002: "Call to G2diagnostic.PurgeRepository() failed.",
 	4003: "Call to G2engine.Destroy() failed.",

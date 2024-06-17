@@ -15,6 +15,7 @@ import (
 	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-helpers/truthset"
 	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
@@ -27,6 +28,8 @@ import (
 
 const (
 	defaultTruncation = 76
+	observerID        = "Observer 1"
+	observerOrigin    = "Observer 1 origin"
 	printResults      = false
 )
 
@@ -37,7 +40,12 @@ type GetEntityByRecordIDResponse struct {
 }
 
 var (
-	logger                logging.Logging
+	logger            logging.Logging
+	logLevelName      = "INFO"
+	observerSingleton = &observer.NullObserver{
+		ID:       observerID,
+		IsSilent: true,
+	}
 	szEngineTestSingleton *SzEngineServer
 )
 
@@ -58,7 +66,7 @@ func TestSzEngineServer_AddRecord(test *testing.T) {
 	}
 	response1, err := szEngineServer.AddRecord(ctx, request1)
 	require.NoError(test, err)
-	printResponse(test, response1.GetResult())
+	printActual(test, response1.GetResult())
 	request2 := &szpb.AddRecordRequest{
 		DataSourceCode:   record2.DataSource,
 		Flags:            senzing.SzWithInfo,
@@ -67,7 +75,7 @@ func TestSzEngineServer_AddRecord(test *testing.T) {
 	}
 	response2, err := szEngineServer.AddRecord(ctx, request2)
 	require.NoError(test, err)
-	printResponse(test, response2.GetResult())
+	printActual(test, response2.GetResult())
 }
 
 func TestSzEngineServer_AddRecord_withInfo(test *testing.T) {
@@ -82,7 +90,7 @@ func TestSzEngineServer_AddRecord_withInfo(test *testing.T) {
 	}
 	response, err := szEngineServer.AddRecord(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_CountRedoRecords(test *testing.T) {
@@ -91,7 +99,7 @@ func TestSzEngineServer_CountRedoRecords(test *testing.T) {
 	request := &szpb.CountRedoRecordsRequest{}
 	response, err := szEngineServer.CountRedoRecords(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_ExportJsonEntityReport(test *testing.T) {
@@ -103,7 +111,7 @@ func TestSzEngineServer_ExportJsonEntityReport(test *testing.T) {
 	}
 	response, err := szEngineServer.ExportJsonEntityReport(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_ExportCsvEntityReport(test *testing.T) {
@@ -115,7 +123,7 @@ func TestSzEngineServer_ExportCsvEntityReport(test *testing.T) {
 	}
 	response, err := szEngineServer.ExportCsvEntityReport(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_FindInterestingEntitiesByEntityId(test *testing.T) {
@@ -129,7 +137,7 @@ func TestSzEngineServer_FindInterestingEntitiesByEntityId(test *testing.T) {
 	}
 	response, err := szEngineServer.FindInterestingEntitiesByEntityId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response)
+	printActual(test, response)
 }
 
 func TestSzEngineServer_FindInterestingEntitiesByRecordId(test *testing.T) {
@@ -144,7 +152,7 @@ func TestSzEngineServer_FindInterestingEntitiesByRecordId(test *testing.T) {
 	}
 	response, err := szEngineServer.FindInterestingEntitiesByRecordId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response)
+	printActual(test, response)
 }
 
 func TestSzEngineServer_FindNetworkByEntityId(test *testing.T) {
@@ -166,7 +174,7 @@ func TestSzEngineServer_FindNetworkByEntityId(test *testing.T) {
 	}
 	response, err := szEngineServer.FindNetworkByEntityId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_FindNetworkByRecordId(test *testing.T) {
@@ -189,7 +197,7 @@ func TestSzEngineServer_FindNetworkByRecordId(test *testing.T) {
 	}
 	response, err := szEngineServer.FindNetworkByRecordId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_FindPathByEntityId(test *testing.T) {
@@ -207,7 +215,7 @@ func TestSzEngineServer_FindPathByEntityId(test *testing.T) {
 	}
 	response, err := szEngineServer.FindPathByEntityId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_FindPathByEntityId_exclusions(test *testing.T) {
@@ -228,7 +236,7 @@ func TestSzEngineServer_FindPathByEntityId_exclusions(test *testing.T) {
 	}
 	response, err := szEngineServer.FindPathByEntityId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_FindPathByEntityId_inclusions(test *testing.T) {
@@ -249,7 +257,7 @@ func TestSzEngineServer_FindPathByEntityId_inclusions(test *testing.T) {
 	}
 	response, err := szEngineServer.FindPathByEntityId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_FindPathByRecordId(test *testing.T) {
@@ -269,7 +277,7 @@ func TestSzEngineServer_FindPathByRecordId(test *testing.T) {
 	}
 	response, err := szEngineServer.FindPathByRecordId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_FindPathByRecordId_exclusions(test *testing.T) {
@@ -291,7 +299,7 @@ func TestSzEngineServer_FindPathByRecordId_exclusions(test *testing.T) {
 	}
 	response, err := szEngineServer.FindPathByRecordId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_FindPathByRecordId_inclusions(test *testing.T) {
@@ -315,7 +323,7 @@ func TestSzEngineServer_FindPathByRecordId_inclusions(test *testing.T) {
 	}
 	response, err := szEngineServer.FindPathByRecordId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_GetActiveConfigId(test *testing.T) {
@@ -324,7 +332,7 @@ func TestSzEngineServer_GetActiveConfigId(test *testing.T) {
 	request := &szpb.GetActiveConfigIdRequest{}
 	response, err := szEngineServer.GetActiveConfigId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_GetEntityByEntityId(test *testing.T) {
@@ -338,7 +346,7 @@ func TestSzEngineServer_GetEntityByEntityId(test *testing.T) {
 	}
 	response, err := szEngineServer.GetEntityByEntityId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_GetEntityByRecordId(test *testing.T) {
@@ -353,7 +361,7 @@ func TestSzEngineServer_GetEntityByRecordId(test *testing.T) {
 	}
 	response, err := szEngineServer.GetEntityByRecordId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_GetRecord(test *testing.T) {
@@ -368,7 +376,7 @@ func TestSzEngineServer_GetRecord(test *testing.T) {
 	}
 	response, err := szEngineServer.GetRecord(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_GetRedoRecord(test *testing.T) {
@@ -377,7 +385,7 @@ func TestSzEngineServer_GetRedoRecord(test *testing.T) {
 	request := &szpb.GetRedoRecordRequest{}
 	response, err := szEngineServer.GetRedoRecord(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_GetVirtualEntityByRecordId(test *testing.T) {
@@ -393,7 +401,7 @@ func TestSzEngineServer_GetVirtualEntityByRecordId(test *testing.T) {
 	}
 	response, err := szEngineServer.GetVirtualEntityByRecordId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_HowEntityByEntityId(test *testing.T) {
@@ -407,7 +415,7 @@ func TestSzEngineServer_HowEntityByEntityId(test *testing.T) {
 	}
 	response, err := szEngineServer.HowEntityByEntityId(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_PrimeEngine(test *testing.T) {
@@ -416,7 +424,7 @@ func TestSzEngineServer_PrimeEngine(test *testing.T) {
 	request := &szpb.PrimeEngineRequest{}
 	response, err := szEngineServer.PrimeEngine(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response)
+	printActual(test, response)
 }
 
 func TestSzEngineServer_ProcessRedoRecord(test *testing.T) {
@@ -435,7 +443,7 @@ func TestSzEngineServer_ReevaluateEntity(test *testing.T) {
 	}
 	response, err := szEngineServer.ReevaluateEntity(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_ReevaluateEntity_withInfo(test *testing.T) {
@@ -449,7 +457,7 @@ func TestSzEngineServer_ReevaluateEntity_withInfo(test *testing.T) {
 	}
 	response, err := szEngineServer.ReevaluateEntity(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_ReevaluateRecord(test *testing.T) {
@@ -464,7 +472,7 @@ func TestSzEngineServer_ReevaluateRecord(test *testing.T) {
 	}
 	response, err := szEngineServer.ReevaluateRecord(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_ReevaluateRecord_withInfo(test *testing.T) {
@@ -479,7 +487,7 @@ func TestSzEngineServer_ReevaluateRecord_withInfo(test *testing.T) {
 	}
 	response, err := szEngineServer.ReevaluateRecord(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_Reinitialize(test *testing.T) {
@@ -495,7 +503,7 @@ func TestSzEngineServer_Reinitialize(test *testing.T) {
 	}
 	response, err := szEngineServer.Reinitialize(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response)
+	printActual(test, response)
 }
 
 func TestSzEngineServer_SearchByAttributes(test *testing.T) {
@@ -509,7 +517,7 @@ func TestSzEngineServer_SearchByAttributes(test *testing.T) {
 	}
 	response, err := szEngineServer.SearchByAttributes(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_SearchByAttributes_searchProfile(test *testing.T) {
@@ -526,7 +534,7 @@ func TestSzEngineServer_SearchByAttributes_searchProfile(test *testing.T) {
 	}
 	response, err := szEngineServer.SearchByAttributes(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_Stats(test *testing.T) {
@@ -535,7 +543,17 @@ func TestSzEngineServer_Stats(test *testing.T) {
 	request := &szpb.GetStatsRequest{}
 	response, err := szEngineServer.GetStats(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
+}
+
+func TestSzEngineServer_StreamExportCsvEntityReport(test *testing.T) {
+	_ = test
+	// TODO: Implement TestSzEngineServer_StreamExportCsvEntityReport
+}
+
+func TestSzEngineServer_StreamExportJsonEntityReport(test *testing.T) {
+	_ = test
+	// TODO: Implement TestSzEngineServer_StreamExportJsonEntityReport
 }
 
 func TestSzEngineServer_WhyEntities(test *testing.T) {
@@ -551,7 +569,7 @@ func TestSzEngineServer_WhyEntities(test *testing.T) {
 	}
 	response, err := szEngineServer.WhyEntities(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_WhyRecordInEntity(test *testing.T) {
@@ -566,7 +584,7 @@ func TestSzEngineServer_WhyRecordInEntity(test *testing.T) {
 	}
 	response, err := szEngineServer.WhyRecordInEntity(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_WhyRecords(test *testing.T) {
@@ -584,7 +602,7 @@ func TestSzEngineServer_WhyRecords(test *testing.T) {
 	}
 	response, err := szEngineServer.WhyRecords(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_DeleteRecord(test *testing.T) {
@@ -599,7 +617,7 @@ func TestSzEngineServer_DeleteRecord(test *testing.T) {
 	}
 	response, err := szEngineServer.DeleteRecord(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
 }
 
 func TestSzEngineServer_DeleteRecord_withInfo(test *testing.T) {
@@ -614,7 +632,52 @@ func TestSzEngineServer_DeleteRecord_withInfo(test *testing.T) {
 	}
 	response, err := szEngineServer.DeleteRecord(ctx, request)
 	require.NoError(test, err)
-	printResponse(test, response.GetResult())
+	printActual(test, response.GetResult())
+}
+
+// ----------------------------------------------------------------------------
+// Logging and observing
+// ----------------------------------------------------------------------------
+
+func TestSzEngineServer_RegisterObserver(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.RegisterObserver(ctx, observerSingleton)
+	require.NoError(test, err)
+}
+
+func TestSzEngineServer_SetLogLevel(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.SetLogLevel(ctx, "DEBUG")
+	require.NoError(test, err)
+}
+
+func TestSzEngineServer__SetLogLevel_badLevelName(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.SetLogLevel(ctx, "BADLEVELNAME")
+	require.Error(test, err)
+}
+
+func TestSzEngineServer_SetObserverOrigin(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	testObject.SetObserverOrigin(ctx, observerOrigin)
+}
+
+func TestSzEngineServer_GetObserverOrigin(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	actual := testObject.GetObserverOrigin(ctx)
+	assert.Equal(test, observerOrigin, actual)
+}
+
+func TestSzEngineServer_UnregisterObserver(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.UnregisterObserver(ctx, observerSingleton)
+	require.NoError(test, err)
 }
 
 // ----------------------------------------------------------------------------
@@ -663,41 +726,36 @@ func getEntityIDStringForRecord(datasource string, id string) string {
 func getSzEngineServer(ctx context.Context) SzEngineServer {
 	if szEngineTestSingleton == nil {
 		szEngineTestSingleton = &SzEngineServer{}
-		instanceName := "Test name"
+		instanceName := "Test instance name"
 		verboseLogging := senzing.SzNoLogging
 		configID := senzing.SzInitializeWithDefaultConfiguration
 		setting, err := settings.BuildSimpleSettingsUsingEnvVars()
-		if err != nil {
-			fmt.Println(err)
+		panicOnError(err)
+		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
+		if len(osenvLogLevel) > 0 {
+			logLevelName = osenvLogLevel
 		}
+		err = szEngineTestSingleton.SetLogLevel(ctx, logLevelName)
+		panicOnError(err)
 		err = GetSdkSzEngine().Initialize(ctx, instanceName, setting, configID, verboseLogging)
-		if err != nil {
-			fmt.Println(err)
-		}
+		panicOnError(err)
 	}
 	return *szEngineTestSingleton
 }
 
 func getTestObject(ctx context.Context, test *testing.T) SzEngineServer {
-	if szEngineTestSingleton == nil {
-		szEngineTestSingleton = &SzEngineServer{}
-		instanceName := "Test name"
-		verboseLogging := senzing.SzNoLogging
-		configID := senzing.SzInitializeWithDefaultConfiguration
-		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
-		if err != nil {
-			test.Logf("Cannot construct system configuration. Error: %v", err)
-		}
-		err = GetSdkSzEngine().Initialize(ctx, instanceName, settings, configID, verboseLogging)
-		if err != nil {
-			test.Logf("Cannot Init. Error: %v", err)
-		}
-	}
-	return *szEngineTestSingleton
+	_ = test
+	return getSzEngineServer(ctx)
 }
 
-func printResponse(test *testing.T, response interface{}) {
-	printResult(test, "Response", response)
+func panicOnError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+func printActual(test *testing.T, actual interface{}) {
+	printResult(test, "Actual", actual)
 }
 
 func printResult(test *testing.T, title string, result interface{}) {
@@ -759,7 +817,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 		}
 	}
 
-	configStr, err := szConfig.ExportConfig(ctx, configHandle)
+	configDefinition, err := szConfig.ExportConfig(ctx, configHandle)
 	if err != nil {
 		return createError(5909, err)
 	}
@@ -782,8 +840,8 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 		return createError(5912, err)
 	}
 
-	configComments := fmt.Sprintf("Created by szengine_test at %s", now.UTC())
-	configID, err := szConfigManager.AddConfig(ctx, configStr, configComments)
+	configComment := fmt.Sprintf("Created by szconfigmanagerserver_test at %s", now.UTC())
+	configID, err := szConfigManager.AddConfig(ctx, configDefinition, configComment)
 	if err != nil {
 		return createError(5913, err)
 	}
@@ -800,9 +858,9 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 	return err
 }
 
-func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64, configID int64) error {
+func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	szDiagnostic := &szdiagnostic.Szdiagnostic{}
-	err := szDiagnostic.Initialize(ctx, instanceName, settings, configID, verboseLogging)
+	err := szDiagnostic.Initialize(ctx, instanceName, settings, senzing.SzInitializeWithDefaultConfiguration, verboseLogging)
 	if err != nil {
 		return createError(5903, err)
 	}
@@ -824,7 +882,6 @@ func setup() error {
 	ctx := context.TODO()
 	instanceName := "Test name"
 	verboseLogging := senzing.SzNoLogging
-	configID := senzing.SzInitializeWithDefaultConfiguration
 	logger, err = logging.NewSenzingLogger(ComponentID, IDMessages)
 	if err != nil {
 		panic(err)
@@ -844,7 +901,7 @@ func setup() error {
 
 	// Purge repository.
 
-	err = setupPurgeRepository(ctx, instanceName, settings, verboseLogging, configID)
+	err = setupPurgeRepository(ctx, instanceName, settings, verboseLogging)
 	if err != nil {
 		return createError(5921, err)
 	}
@@ -862,5 +919,5 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)
 	}
-	printResponse(test, actual)
+	printActual(test, actual)
 }

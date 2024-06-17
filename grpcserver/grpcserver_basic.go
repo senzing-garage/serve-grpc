@@ -31,6 +31,7 @@ import (
 
 // BasicGrpcServer is the default implementation of the GrpcServer interface.
 type BasicGrpcServer struct {
+	AvoidServing          bool
 	EnableAll             bool
 	EnableSzConfig        bool
 	EnableSzConfigManager bool
@@ -59,7 +60,8 @@ func (grpcServer *BasicGrpcServer) getLogger() logging.Logging {
 	var err error
 	if grpcServer.logger == nil {
 		options := []interface{}{
-			&logging.OptionCallerSkip{Value: 3},
+			logging.OptionCallerSkip{Value: 3},
+			logging.OptionMessageFields{Value: []string{"id", "text", "reason", "errors", "details"}},
 		}
 		grpcServer.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
 		if err != nil {
@@ -105,6 +107,9 @@ func (grpcServer *BasicGrpcServer) createGrpcObserver(ctx context.Context, parse
 // Add SzConfig service to gRPC server.
 func (grpcServer *BasicGrpcServer) enableSzConfig(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szconfigserver.SzConfigServer{}
+
+	fmt.Printf("\n\n>>>>>>>>>>>>>>>>>>>>>>>>>> LogLevelName: %s\n\n", grpcServer.LogLevelName)
+
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
 		panic(err)
@@ -262,7 +267,6 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 	if err != nil {
 		grpcServer.log(4001, grpcServer.Port, err)
 	}
-	grpcServer.log(2003, listener.Addr())
 
 	// Create server.
 
@@ -292,9 +296,12 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 
 	// Run server.
 
-	err = aGrpcServer.Serve(listener)
-	if err != nil {
-		grpcServer.log(5001, err)
+	if !grpcServer.AvoidServing {
+		grpcServer.log(2003, listener.Addr())
+		err = aGrpcServer.Serve(listener)
+	} else {
+		grpcServer.log(2004)
+		err = listener.Close()
 	}
 
 	return err

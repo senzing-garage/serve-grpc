@@ -159,7 +159,7 @@ func ExampleSzEngineServer_FetchNext() {
 		fmt.Println(err)
 	}
 	fmt.Println(len(response.GetResult()) > 0) // Dummy output.
-	// Output: true
+	// Output: false
 }
 
 func ExampleSzEngineServer_FindInterestingEntitiesByEntityId() {

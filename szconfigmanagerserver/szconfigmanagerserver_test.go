@@ -11,6 +11,7 @@ import (
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/serve-grpc/szconfigserver"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
@@ -25,11 +26,18 @@ import (
 
 const (
 	defaultTruncation = 76
+	observerID        = "Observer 1"
+	observerOrigin    = "Observer 1 origin"
 	printResults      = false
 )
 
 var (
-	logger                         logging.Logging
+	logger            logging.Logging
+	logLevelName      = "INFO"
+	observerSingleton = &observer.NullObserver{
+		ID:       observerID,
+		IsSilent: true,
+	}
 	szConfigManagerServerSingleton *SzConfigManagerServer
 )
 
@@ -69,7 +77,7 @@ func TestSzConfigManagerServer_AddConfig(test *testing.T) {
 	printActual(test, response)
 }
 
-func TestSzConfigManagerServerImpl_GetConfig(test *testing.T) {
+func TestSzConfigManagerServer_GetConfig(test *testing.T) {
 	ctx := context.TODO()
 	szConfigManagerServer := getTestObject(ctx, test)
 
@@ -88,7 +96,7 @@ func TestSzConfigManagerServerImpl_GetConfig(test *testing.T) {
 	printActual(test, response)
 }
 
-func TestSzConfigManagerServerImpl_GetConfigList(test *testing.T) {
+func TestSzConfigManagerServer_GetConfigList(test *testing.T) {
 	ctx := context.TODO()
 	szConfigManagerServer := getTestObject(ctx, test)
 	request := &szpb.GetConfigsRequest{}
@@ -97,7 +105,7 @@ func TestSzConfigManagerServerImpl_GetConfigList(test *testing.T) {
 	printActual(test, response)
 }
 
-func TestSzConfigManagerServerImpl_GetDefaultConfigId(test *testing.T) {
+func TestSzConfigManagerServer_GetDefaultConfigId(test *testing.T) {
 	ctx := context.TODO()
 	szConfigManagerServer := getTestObject(ctx, test)
 	request := &szpb.GetDefaultConfigIdRequest{}
@@ -106,7 +114,7 @@ func TestSzConfigManagerServerImpl_GetDefaultConfigId(test *testing.T) {
 	printActual(test, response)
 }
 
-func TestSzConfigManagerServerImpl_ReplaceDefaultConfigId(test *testing.T) {
+func TestSzConfigManagerServer_ReplaceDefaultConfigId(test *testing.T) {
 	ctx := context.TODO()
 	szConfigManagerServer := getTestObject(ctx, test)
 
@@ -125,7 +133,7 @@ func TestSzConfigManagerServerImpl_ReplaceDefaultConfigId(test *testing.T) {
 	printActual(test, response)
 }
 
-func TestSzConfigManagerServerImpl_SetDefaultConfigId(test *testing.T) {
+func TestSzConfigManagerServer_SetDefaultConfigId(test *testing.T) {
 	ctx := context.TODO()
 	szConfigManagerServer := getTestObject(ctx, test)
 
@@ -144,6 +152,51 @@ func TestSzConfigManagerServerImpl_SetDefaultConfigId(test *testing.T) {
 }
 
 // ----------------------------------------------------------------------------
+// Logging and observing
+// ----------------------------------------------------------------------------
+
+func TestSzConfigManagerServer_RegisterObserver(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.RegisterObserver(ctx, observerSingleton)
+	require.NoError(test, err)
+}
+
+func TestSzConfigManagerServer_SetLogLevel(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.SetLogLevel(ctx, "DEBUG")
+	require.NoError(test, err)
+}
+
+func TestSzConfigManagerServer__SetLogLevel_badLevelName(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.SetLogLevel(ctx, "BADLEVELNAME")
+	require.Error(test, err)
+}
+
+func TestSzConfigManagerServer_SetObserverOrigin(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	testObject.SetObserverOrigin(ctx, observerOrigin)
+}
+
+func TestSzConfigManagerServer_GetObserverOrigin(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	actual := testObject.GetObserverOrigin(ctx)
+	assert.Equal(test, observerOrigin, actual)
+}
+
+func TestSzConfigManagerServer_UnregisterObserver(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.UnregisterObserver(ctx, observerSingleton)
+	require.NoError(test, err)
+}
+
+// ----------------------------------------------------------------------------
 // Internal functions
 // ----------------------------------------------------------------------------
 
@@ -154,50 +207,48 @@ func createError(errorID int, err error) error {
 func getSzConfigManagerServer(ctx context.Context) SzConfigManagerServer {
 	if szConfigManagerServerSingleton == nil {
 		szConfigManagerServerSingleton = &SzConfigManagerServer{}
-		instanceName := "Test module name"
-		verboseLogging := int64(0)
+		instanceName := "Test instance name"
+		verboseLogging := senzing.SzNoLogging
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
-		if err != nil {
-			fmt.Println(err)
+		panicOnError(err)
+		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
+		if len(osenvLogLevel) > 0 {
+			logLevelName = osenvLogLevel
 		}
+		err = szConfigManagerServerSingleton.SetLogLevel(ctx, logLevelName)
+		panicOnError(err)
 		err = GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
-		if err != nil {
-			fmt.Println(err)
-		}
+		panicOnError(err)
 	}
 	return *szConfigManagerServerSingleton
 }
 
 func getSzConfigServer(ctx context.Context) szconfigserver.SzConfigServer {
 	szConfigServer := &szconfigserver.SzConfigServer{}
-	instanceName := "Test name"
-	verboseLogging := int64(0)
+	instanceName := "Test instance name"
+	verboseLogging := senzing.SzNoLogging
 	settings, err := settings.BuildSimpleSettingsUsingEnvVars()
-	if err != nil {
-		fmt.Println(err)
+	panicOnError(err)
+	osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
+	if len(osenvLogLevel) > 0 {
+		logLevelName = osenvLogLevel
 	}
+	err = szConfigServer.SetLogLevel(ctx, logLevelName)
+	panicOnError(err)
 	err = szconfigserver.GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
-	if err != nil {
-		fmt.Println(err)
-	}
+	panicOnError(err)
 	return *szConfigServer
 }
 
 func getTestObject(ctx context.Context, test *testing.T) SzConfigManagerServer {
-	if szConfigManagerServerSingleton == nil {
-		szConfigManagerServerSingleton = &SzConfigManagerServer{}
-		instanceName := "Test name"
-		verboseLogging := int64(0)
-		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
-		if err != nil {
-			test.Logf("Cannot construct system configuration. Error: %v", err)
-		}
-		err = GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
-		if err != nil {
-			test.Logf("Cannot Init. Error: %v", err)
-		}
+	_ = test
+	return getSzConfigManagerServer(ctx)
+}
+
+func panicOnError(err error) {
+	if err != nil {
+		panic(err)
 	}
-	return *szConfigManagerServerSingleton
 }
 
 func printActual(test *testing.T, actual interface{}) {
@@ -241,11 +292,11 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string, verboseLogging int64) error {
+func setupSenzingConfig(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	now := time.Now()
 
 	szConfig := &szconfig.Szconfig{}
-	err := szConfig.Initialize(ctx, moduleName, iniParams, verboseLogging)
+	err := szConfig.Initialize(ctx, instanceName, settings, verboseLogging)
 	if err != nil {
 		return createError(5906, err)
 	}
@@ -281,7 +332,7 @@ func setupSenzingConfig(ctx context.Context, moduleName string, iniParams string
 	// Persist the Senzing configuration to the Senzing repository.
 
 	szConfigManager := &szconfigmanager.Szconfigmanager{}
-	err = szConfigManager.Initialize(ctx, moduleName, iniParams, verboseLogging)
+	err = szConfigManager.Initialize(ctx, instanceName, settings, verboseLogging)
 	if err != nil {
 		return createError(5912, err)
 	}
@@ -328,7 +379,6 @@ func setup() error {
 	ctx := context.TODO()
 	instanceName := "Test name"
 	verboseLogging := senzing.SzNoLogging
-
 	logger, err = logging.NewSenzingLogger(ComponentID, IDMessages)
 	if err != nil {
 		panic(err)

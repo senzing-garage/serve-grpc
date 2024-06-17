@@ -8,6 +8,7 @@ import (
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
 	"github.com/senzing-garage/go-cmdhelping/option"
+	"github.com/senzing-garage/go-cmdhelping/option/optiontype"
 	"github.com/senzing-garage/go-cmdhelping/settings"
 	"github.com/senzing-garage/serve-grpc/grpcserver"
 	"github.com/spf13/cobra"
@@ -22,6 +23,14 @@ Start a gRPC server for the Senzing SDK API.
 For more information, visit https://github.com/senzing-garage/serve-grpc
     `
 )
+
+var avoidServe = option.ContextVariable{
+	Arg:     "avoid-serving",
+	Default: option.OsLookupEnvBool("SENZING_TOOLS_AVOID_SERVING", false),
+	Envar:   "SENZING_TOOLS_AVOID_SERVING",
+	Help:    "Avoid serving.  For testing only. [%s]",
+	Type:    optiontype.Bool,
+}
 
 // ----------------------------------------------------------------------------
 // Context variables
@@ -45,6 +54,7 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	option.LogLevel,
 	option.ObserverOrigin,
 	option.ObserverURL,
+	avoidServe,
 }
 
 var ContextVariables = append(ContextVariablesForMultiPlatform, ContextVariablesForOsArch...)
@@ -87,6 +97,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 	}
 
 	grpcserver := &grpcserver.BasicGrpcServer{
+		AvoidServing:          viper.GetBool(avoidServe.Arg),
 		EnableAll:             viper.GetBool(option.EnableAll.Arg),
 		EnableSzConfig:        viper.GetBool(option.EnableSzConfig.Arg),
 		EnableSzConfigManager: viper.GetBool(option.EnableSzConfigManager.Arg),

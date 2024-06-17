@@ -9,6 +9,7 @@ import (
 
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/go-helpers/settings"
+	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
 	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
@@ -18,10 +19,17 @@ import (
 
 const (
 	defaultTruncation = 76
+	observerID        = "Observer 1"
+	observerOrigin    = "Observer 1 origin"
 	printResults      = false
 )
 
 var (
+	logLevelName      = "INFO"
+	observerSingleton = &observer.NullObserver{
+		ID:       observerID,
+		IsSilent: true,
+	}
 	szConfigTestSingleton *SzConfigServer
 )
 
@@ -233,41 +241,82 @@ func TestSzConfigServer_ExportConfig(test *testing.T) {
 }
 
 // ----------------------------------------------------------------------------
+// Logging and observing
+// ----------------------------------------------------------------------------
+
+func TestSzConfigServer_RegisterObserver(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.RegisterObserver(ctx, observerSingleton)
+	require.NoError(test, err)
+}
+
+func TestSzConfigServer_SetLogLevel(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.SetLogLevel(ctx, "DEBUG")
+	require.NoError(test, err)
+}
+
+func TestSzConfigServer__SetLogLevel_badLevelName(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.SetLogLevel(ctx, "BADLEVELNAME")
+	require.Error(test, err)
+}
+
+func TestSzConfigServer_SetObserverOrigin(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	testObject.SetObserverOrigin(ctx, observerOrigin)
+}
+
+func TestSzConfigServer_GetObserverOrigin(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	actual := testObject.GetObserverOrigin(ctx)
+	assert.Equal(test, observerOrigin, actual)
+}
+
+func TestSzConfigServer_UnregisterObserver(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.UnregisterObserver(ctx, observerSingleton)
+	require.NoError(test, err)
+}
+
+// ----------------------------------------------------------------------------
 // Internal functions
 // ----------------------------------------------------------------------------
 
 func getSzConfigServer(ctx context.Context) SzConfigServer {
 	if szConfigTestSingleton == nil {
 		szConfigTestSingleton = &SzConfigServer{}
-		instanceName := "Test name"
+		instanceName := "Test instance name"
 		verboseLogging := senzing.SzNoLogging
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
-		if err != nil {
-			fmt.Println(err)
+		panicOnError(err)
+		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
+		if len(osenvLogLevel) > 0 {
+			logLevelName = osenvLogLevel
 		}
+		err = szConfigTestSingleton.SetLogLevel(ctx, logLevelName)
+		panicOnError(err)
 		err = GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
-		if err != nil {
-			fmt.Println(err)
-		}
+		panicOnError(err)
 	}
 	return *szConfigTestSingleton
 }
 
 func getTestObject(ctx context.Context, test *testing.T) SzConfigServer {
-	if szConfigTestSingleton == nil {
-		szConfigTestSingleton = &SzConfigServer{}
-		instanceName := "Test name"
-		verboseLogging := senzing.SzNoLogging
-		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
-		if err != nil {
-			test.Logf("Cannot construct system configuration. Error: %v", err)
-		}
-		err = GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
-		if err != nil {
-			test.Logf("Cannot Init. Error: %v", err)
-		}
+	_ = test
+	return getSzConfigServer(ctx)
+}
+
+func panicOnError(err error) {
+	if err != nil {
+		panic(err)
 	}
-	return *szConfigTestSingleton
 }
 
 func printActual(test *testing.T, actual interface{}) {
