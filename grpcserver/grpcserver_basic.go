@@ -14,7 +14,7 @@ import (
 	"github.com/senzing-garage/serve-grpc/szdiagnosticserver"
 	"github.com/senzing-garage/serve-grpc/szengineserver"
 	"github.com/senzing-garage/serve-grpc/szproductserver"
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
 	"github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	"github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	"github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
@@ -29,19 +29,20 @@ import (
 // Types
 // ----------------------------------------------------------------------------
 
-// GrpcServerImpl is the default implementation of the GrpcServer interface.
-type GrpcServerImpl struct {
+// BasicGrpcServer is the default implementation of the GrpcServer interface.
+type BasicGrpcServer struct {
+	AvoidServing          bool
 	EnableAll             bool
 	EnableSzConfig        bool
 	EnableSzConfigManager bool
 	EnableSzDiagnostic    bool
 	EnableSzEngine        bool
 	EnableSzProduct       bool
-	logger                logging.LoggingInterface
+	logger                logging.Logging
 	LogLevelName          string
 	ObserverOrigin        string
 	Observers             []observer.Observer
-	ObserverUrl           string
+	ObserverURL           string
 	Port                  int
 	SenzingSettings       string
 	SenzingInstanceName   string
@@ -55,13 +56,14 @@ type GrpcServerImpl struct {
 // --- Logging -------------------------------------------------------------------------
 
 // Get the Logger singleton.
-func (grpcServer *GrpcServerImpl) getLogger() logging.LoggingInterface {
-	var err error = nil
+func (grpcServer *BasicGrpcServer) getLogger() logging.Logging {
+	var err error
 	if grpcServer.logger == nil {
 		options := []interface{}{
-			&logging.OptionCallerSkip{Value: 3},
+			logging.OptionCallerSkip{Value: 3},
+			logging.OptionMessageFields{Value: []string{"id", "text", "reason", "errors", "details"}},
 		}
-		grpcServer.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
+		grpcServer.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
 		if err != nil {
 			panic(err)
 		}
@@ -70,33 +72,32 @@ func (grpcServer *GrpcServerImpl) getLogger() logging.LoggingInterface {
 }
 
 // Log message.
-func (grpcServer *GrpcServerImpl) log(messageNumber int, details ...interface{}) {
+func (grpcServer *BasicGrpcServer) log(messageNumber int, details ...interface{}) {
 	grpcServer.getLogger().Log(messageNumber, details...)
 }
 
 // --- Observing --------------------------------------------------------------
 
-func (grpcServer *GrpcServerImpl) createGrpcObserver(ctx context.Context, parsedUrl url.URL) (observer.Observer, error) {
+func (grpcServer *BasicGrpcServer) createGrpcObserver(ctx context.Context, parsedURL url.URL) (observer.Observer, error) {
 	_ = ctx
 	var err error
 	var result observer.Observer
 
 	port := DefaultGrpcObserverPort
-	if len(parsedUrl.Port()) > 0 {
-		port = parsedUrl.Port()
+	if len(parsedURL.Port()) > 0 {
+		port = parsedURL.Port()
 	}
-	target := fmt.Sprintf("%s:%s", parsedUrl.Hostname(), port)
+	target := fmt.Sprintf("%s:%s", parsedURL.Hostname(), port)
 
 	// TODO: Allow specification of options from ObserverUrl/parsedUrl
 	grpcOptions := grpc.WithTransportCredentials(insecure.NewCredentials())
-
-	grpcConnection, err := grpc.Dial(target, grpcOptions)
+	grpcConnection, err := grpc.NewClient(target, grpcOptions)
 	if err != nil {
 		return result, err
 	}
-	result = &observer.ObserverGrpc{
+	result = &observer.GrpcObserver{
 		GrpcClient: observerpb.NewObserverClient(grpcConnection),
-		Id:         "serve-grpc",
+		ID:         "serve-grpc",
 	}
 	return result, err
 }
@@ -104,7 +105,7 @@ func (grpcServer *GrpcServerImpl) createGrpcObserver(ctx context.Context, parsed
 // --- Enabling services ---------------------------------------------------------------
 
 // Add SzConfig service to gRPC server.
-func (grpcServer *GrpcServerImpl) enableSzConfig(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+func (grpcServer *BasicGrpcServer) enableSzConfig(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szconfigserver.SzConfigServer{}
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
@@ -129,7 +130,7 @@ func (grpcServer *GrpcServerImpl) enableSzConfig(ctx context.Context, serviceReg
 }
 
 // Add SzConfigManager service to gRPC server.
-func (grpcServer *GrpcServerImpl) enableSzConfigManager(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+func (grpcServer *BasicGrpcServer) enableSzConfigManager(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szconfigmanagerserver.SzConfigManagerServer{}
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
@@ -154,13 +155,13 @@ func (grpcServer *GrpcServerImpl) enableSzConfigManager(ctx context.Context, ser
 }
 
 // Add SzDiagnostic service to gRPC server.
-func (grpcServer *GrpcServerImpl) enableSzDiagnostic(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+func (grpcServer *BasicGrpcServer) enableSzDiagnostic(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szdiagnosticserver.SzDiagnosticServer{}
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
 		panic(err)
 	}
-	err = szdiagnosticserver.GetSdkSzDiagnostic().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION, grpcServer.SenzingVerboseLogging)
+	err = szdiagnosticserver.GetSdkSzDiagnostic().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, senzing.SzInitializeWithDefaultConfiguration, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -179,13 +180,13 @@ func (grpcServer *GrpcServerImpl) enableSzDiagnostic(ctx context.Context, servic
 }
 
 // Add SzEngine service to gRPC server.
-func (grpcServer *GrpcServerImpl) enableSzEngine(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+func (grpcServer *BasicGrpcServer) enableSzEngine(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szengineserver.SzEngineServer{}
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
 		panic(err)
 	}
-	err = szengineserver.GetSdkSzEngine().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION, grpcServer.SenzingVerboseLogging)
+	err = szengineserver.GetSdkSzEngine().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, senzing.SzInitializeWithDefaultConfiguration, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -204,7 +205,7 @@ func (grpcServer *GrpcServerImpl) enableSzEngine(ctx context.Context, serviceReg
 }
 
 // Add SzProduct service to gRPC server.
-func (grpcServer *GrpcServerImpl) enableSzProduct(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
+func (grpcServer *BasicGrpcServer) enableSzProduct(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szproductserver.SzProductServer{}
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
@@ -232,7 +233,7 @@ func (grpcServer *GrpcServerImpl) enableSzProduct(ctx context.Context, serviceRe
 // Main
 // ----------------------------------------------------------------------------
 
-func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
+func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 
 	// Log entry parameters.
 
@@ -241,14 +242,13 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 	// Initialize observing.
 
 	var anObserver observer.Observer
-	if len(grpcServer.ObserverUrl) > 0 {
-		parsedUrl, err := url.Parse(grpcServer.ObserverUrl)
+	if len(grpcServer.ObserverURL) > 0 {
+		parsedURL, err := url.Parse(grpcServer.ObserverURL)
 		if err != nil {
 			return err
 		}
-		switch parsedUrl.Scheme {
-		case "grpc":
-			anObserver, err = grpcServer.createGrpcObserver(ctx, *parsedUrl)
+		if parsedURL.Scheme == "grpc" {
+			anObserver, err = grpcServer.createGrpcObserver(ctx, *parsedURL)
 			if err != nil {
 				return err
 			}
@@ -264,7 +264,6 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 	if err != nil {
 		grpcServer.log(4001, grpcServer.Port, err)
 	}
-	grpcServer.log(2003, listener.Addr())
 
 	// Create server.
 
@@ -294,9 +293,12 @@ func (grpcServer *GrpcServerImpl) Serve(ctx context.Context) error {
 
 	// Run server.
 
-	err = aGrpcServer.Serve(listener)
-	if err != nil {
-		grpcServer.log(5001, err)
+	if !grpcServer.AvoidServing {
+		grpcServer.log(2003, listener.Addr())
+		err = aGrpcServer.Serve(listener)
+	} else {
+		grpcServer.log(2004)
+		err = listener.Close()
 	}
 
 	return err

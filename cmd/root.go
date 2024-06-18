@@ -7,8 +7,9 @@ import (
 	"os"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
-	"github.com/senzing-garage/go-cmdhelping/engineconfiguration"
 	"github.com/senzing-garage/go-cmdhelping/option"
+	"github.com/senzing-garage/go-cmdhelping/option/optiontype"
+	"github.com/senzing-garage/go-cmdhelping/settings"
 	"github.com/senzing-garage/serve-grpc/grpcserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -23,28 +24,37 @@ For more information, visit https://github.com/senzing-garage/serve-grpc
     `
 )
 
+var avoidServe = option.ContextVariable{
+	Arg:     "avoid-serving",
+	Default: option.OsLookupEnvBool("SENZING_TOOLS_AVOID_SERVING", false),
+	Envar:   "SENZING_TOOLS_AVOID_SERVING",
+	Help:    "Avoid serving.  For testing only. [%s]",
+	Type:    optiontype.Bool,
+}
+
 // ----------------------------------------------------------------------------
 // Context variables
 // ----------------------------------------------------------------------------
 
 var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	option.Configuration,
-	option.DatabaseUrl,
+	option.DatabaseURL,
 	option.EnableAll,
 	option.EnableSzConfig,
 	option.EnableSzConfigManager,
 	option.EnableSzDiagnostic,
 	option.EnableSzEngine,
 	option.EnableSzProduct,
-	option.EngineConfigurationJson,
+	option.EngineConfigurationJSON,
 	option.EngineLogLevel,
 	option.EngineModuleName,
 	option.GrpcPort,
-	option.GrpcUrl,
-	option.HttpPort,
+	option.GrpcURL,
+	option.HTTPPort,
 	option.LogLevel,
 	option.ObserverOrigin,
-	option.ObserverUrl,
+	option.ObserverURL,
+	avoidServe,
 }
 
 var ContextVariables = append(ContextVariablesForMultiPlatform, ContextVariablesForOsArch...)
@@ -78,15 +88,16 @@ func PreRun(cobraCommand *cobra.Command, args []string) {
 
 // Used in construction of cobra.Command
 func RunE(_ *cobra.Command, _ []string) error {
-	var err error = nil
+	var err error
 	ctx := context.Background()
 
-	senzingEngineConfigurationJson, err := engineconfiguration.BuildAndVerifySenzingEngineConfigurationJson(ctx, viper.GetViper())
+	senzingSettings, err := settings.BuildAndVerifySettings(ctx, viper.GetViper())
 	if err != nil {
 		return err
 	}
 
-	grpcserver := &grpcserver.GrpcServerImpl{
+	grpcserver := &grpcserver.BasicGrpcServer{
+		AvoidServing:          viper.GetBool(avoidServe.Arg),
 		EnableAll:             viper.GetBool(option.EnableAll.Arg),
 		EnableSzConfig:        viper.GetBool(option.EnableSzConfig.Arg),
 		EnableSzConfigManager: viper.GetBool(option.EnableSzConfigManager.Arg),
@@ -95,9 +106,9 @@ func RunE(_ *cobra.Command, _ []string) error {
 		EnableSzProduct:       viper.GetBool(option.EnableSzProduct.Arg),
 		LogLevelName:          viper.GetString(option.LogLevel.Arg),
 		ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
-		ObserverUrl:           viper.GetString(option.ObserverUrl.Arg),
+		ObserverURL:           viper.GetString(option.ObserverURL.Arg),
 		Port:                  viper.GetInt(option.GrpcPort.Arg),
-		SenzingSettings:       senzingEngineConfigurationJson,
+		SenzingSettings:       senzingSettings,
 		SenzingInstanceName:   viper.GetString(option.EngineModuleName.Arg),
 		SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
 	}

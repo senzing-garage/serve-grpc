@@ -7,16 +7,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
+	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
+	"github.com/stretchr/testify/require"
 )
 
 var (
-	localLogger logging.LoggingInterface
+	localLogger logging.Logging
 )
 
 // ----------------------------------------------------------------------------
@@ -88,7 +90,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 		return localLogger.NewError(5913, err)
 	}
 
-	err = szConfigManager.SetDefaultConfigId(ctx, configID)
+	err = szConfigManager.SetDefaultConfigID(ctx, configID)
 	if err != nil {
 		return localLogger.NewError(5914, err)
 	}
@@ -102,7 +104,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 
 func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	szDiagnostic := &szdiagnostic.Szdiagnostic{}
-	err := szDiagnostic.Initialize(ctx, instanceName, settings, sz.SZ_INITIALIZE_WITH_DEFAULT_CONFIGURATION, verboseLogging)
+	err := szDiagnostic.Initialize(ctx, instanceName, settings, senzing.SzInitializeWithDefaultConfiguration, verboseLogging)
 	if err != nil {
 		return localLogger.NewError(5903, err)
 	}
@@ -120,17 +122,17 @@ func setupPurgeRepository(ctx context.Context, instanceName string, settings str
 }
 
 func setup() error {
-	var err error = nil
+	var err error
 	ctx := context.TODO()
 	moduleName := "Test module name"
 	verboseLogging := int64(0)
 
-	localLogger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages)
+	localLogger, err = logging.NewSenzingLogger(ComponentID, IDMessages)
 	if err != nil {
 		panic(err)
 	}
 
-	iniParams, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	iniParams, err := settings.BuildSimpleSettingsUsingEnvVars()
 	if err != nil {
 		return localLogger.NewError(5902, err)
 	}
@@ -153,7 +155,7 @@ func setup() error {
 }
 
 func teardown() error {
-	var err error = nil
+	var err error
 	return err
 }
 
@@ -162,22 +164,34 @@ func teardown() error {
 // ----------------------------------------------------------------------------
 
 func TestGrpcServerImpl_Serve(test *testing.T) {
-	// ctx := context.TODO()
+	_ = test
+	ctx := context.TODO()
 
-	// observer1 := &observer.ObserverNull{
-	// 	Id: "Observer 1",
-	// }
+	observer1 := &observer.NullObserver{
+		ID: "Observer 1",
+	}
 
-	// senzingEngineConfigurationJson, err := sengineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-	// if err != nil {
-	// 	fmt.Print(err)
-	// }
-	// grpcServer := &GrpcServerImpl{
-	// 	LogLevel:                       logger.LevelInfo,
-	// 	Observers:                      []observer.Observer{observer1},
-	// 	Port:                           8258,
-	// 	SenzingEngineConfigurationJson: senzingEngineConfigurationJson,
-	// 	SenzingModuleName:              "Test gRPC Server",
-	// }
-	// grpcServer.Serve(ctx)
+	logLevelName := "INFO"
+	osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
+	if len(osenvLogLevel) > 0 {
+		logLevelName = osenvLogLevel
+	}
+
+	senzingsettings, err := settings.BuildSimpleSettingsUsingEnvVars()
+	require.NoError(test, err)
+
+	grpcServer := &BasicGrpcServer{
+		AvoidServing:        true,
+		EnableAll:           true,
+		LogLevelName:        logLevelName,
+		Observers:           []observer.Observer{observer1},
+		ObserverOrigin:      "Test Observer origin",
+		ObserverURL:         "grpc://localhost:1234",
+		Port:                8258,
+		SenzingInstanceName: "Test gRPC Server",
+		SenzingSettings:     senzingsettings,
+	}
+	err = grpcServer.Serve(ctx)
+	require.NoError(test, err)
+
 }

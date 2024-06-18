@@ -13,7 +13,7 @@ import (
 type SzDiagnosticServer struct {
 	pb.UnimplementedSzDiagnosticServer
 	isTrace bool
-	logger  logging.LoggingInterface
+	logger  logging.Logging
 }
 
 // ----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ type SzDiagnosticServer struct {
 // ----------------------------------------------------------------------------
 
 // Identfier of the szdiagnostic package found messages having the format "senzing-6999xxxx".
-const ComponentId = 6013
+const ComponentID = 6013
 
 // Log message prefix.
 const Prefix = "serve-grpc.szdiagnosticserver."
@@ -31,7 +31,7 @@ const Prefix = "serve-grpc.szdiagnosticserver."
 // ----------------------------------------------------------------------------
 
 // Message templates for the sz2diagnostic package.
-var IdMessages = map[int]string{
+var IDMessages = map[int]string{
 	1:    "Enter " + Prefix + "CheckDBPerf(%+v).",
 	2:    "Exit  " + Prefix + "CheckDBPerf(%+v) returned (%s, %v).",
 	3:    "Enter " + Prefix + "RegisterObserver(%s).",
@@ -82,4 +82,4 @@ var IdMessages = map[int]string{
 }
 
 // Status strings for specific szdiagnostic messages.
-var IdStatuses = map[int]string{}
+var IDStatuses = map[int]string{}

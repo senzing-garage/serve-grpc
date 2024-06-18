@@ -9,7 +9,7 @@ import (
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	szsdk "github.com/senzing-garage/sz-sdk-go-core/szproduct"
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 )
 
@@ -23,7 +23,7 @@ var (
 // ----------------------------------------------------------------------------
 
 func (server *SzProductServer) GetLicense(ctx context.Context, request *szpb.GetLicenseRequest) (*szpb.GetLicenseResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -39,7 +39,7 @@ func (server *SzProductServer) GetLicense(ctx context.Context, request *szpb.Get
 }
 
 func (server *SzProductServer) GetVersion(ctx context.Context, request *szpb.GetVersionRequest) (*szpb.GetVersionResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -61,13 +61,13 @@ func (server *SzProductServer) GetVersion(ctx context.Context, request *szpb.Get
 // --- Logging ----------------------------------------------------------------
 
 // Get the Logger singleton.
-func (server *SzProductServer) getLogger() logging.LoggingInterface {
-	var err error = nil
+func (server *SzProductServer) getLogger() logging.Logging {
+	var err error
 	if server.logger == nil {
 		options := []interface{}{
 			&logging.OptionCallerSkip{Value: 3},
 		}
-		server.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
+		server.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
 		if err != nil {
 			panic(err)
 		}
@@ -86,7 +86,8 @@ func (server *SzProductServer) traceExit(messageNumber int, details ...interface
 }
 
 func (server *SzProductServer) SetLogLevel(ctx context.Context, logLevelName string) error {
-	var err error = nil
+	_ = ctx
+	var err error
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(13, logLevelName)
@@ -130,55 +131,52 @@ func GetSdkSzProduct() *szsdk.Szproduct {
 	return getSzProduct()
 }
 
-func GetSdkSzProductAsInterface() sz.SzProduct {
+func GetSdkSzProductAsInterface() senzing.SzProduct {
 	return getSzProduct()
 }
 
 // --- Observer ---------------------------------------------------------------
 
 func (server *SzProductServer) GetObserverOrigin(ctx context.Context) string {
-	// var err error = nil
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(21)
-	// 	defer func() { server.traceExit(22, err, time.Since(entryTime)) }()
-	// }
-	// g2product := getG2product()
-	// return g2product.GetObserverOrigin(ctx)
-	return ""
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(21)
+		defer func() { server.traceExit(22, err, time.Since(entryTime)) }()
+	}
+	szProduct := getSzProduct()
+	return szProduct.GetObserverOrigin(ctx)
 }
 
 func (server *SzProductServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
-	// var err error = nil
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(1, observer.GetObserverId(ctx))
-	// 	defer func() { server.traceExit(2, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-	// }
-	// g2product := getSzProduct()
-	// return g2product.RegisterObserver(ctx, observer)
-	return nil
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(1, observer.GetObserverID(ctx))
+		defer func() { server.traceExit(2, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
+	}
+	szProduct := getSzProduct()
+	return szProduct.RegisterObserver(ctx, observer)
 }
 
 func (server *SzProductServer) SetObserverOrigin(ctx context.Context, origin string) {
-	// var err error = nil
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(23, origin)
-	// 	defer func() { server.traceExit(24, origin, err, time.Since(entryTime)) }()
-	// }
-	// g2product := getSzProduct()
-	// g2product.SetObserverOrigin(ctx, origin)
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(23, origin)
+		defer func() { server.traceExit(24, origin, err, time.Since(entryTime)) }()
+	}
+	szProduct := getSzProduct()
+	szProduct.SetObserverOrigin(ctx, origin)
 }
 
 func (server *SzProductServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
-	// var err error = nil
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(5, observer.GetObserverId(ctx))
-	// 	defer func() { server.traceExit(6, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-	// }
-	// g2product := getSzProduct()
-	// return g2product.UnregisterObserver(ctx, observer)
-	return nil
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(5, observer.GetObserverID(ctx))
+		defer func() { server.traceExit(6, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
+	}
+	szProduct := getSzProduct()
+	return szProduct.UnregisterObserver(ctx, observer)
 }

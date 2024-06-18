@@ -13,7 +13,7 @@ import (
 type SzConfigServer struct {
 	szpb.UnimplementedSzConfigServer
 	isTrace bool
-	logger  logging.LoggingInterface
+	logger  logging.Logging
 }
 
 // ----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ type SzConfigServer struct {
 // ----------------------------------------------------------------------------
 
 // Identfier of the szconfig package found messages having the format "senzing-6999xxxx".
-const ComponentId = 6011
+const ComponentID = 6011
 
 // Log message prefix.
 const Prefix = "serve-grpc.szconfigserver."
@@ -31,7 +31,7 @@ const Prefix = "serve-grpc.szconfigserver."
 // ----------------------------------------------------------------------------
 
 // Message templates for the szconfig package.
-var IdMessages = map[int]string{
+var IDMessages = map[int]string{
 	1:    "Enter " + Prefix + "AddDataSource(%+v).",
 	2:    "Exit  " + Prefix + "AddDataSource(%+v) returned (%s, %v).",
 	3:    "Enter " + Prefix + "RegisterObserver(%s).",
@@ -90,4 +90,4 @@ var IdMessages = map[int]string{
 }
 
 // Status strings for specific szconfig messages.
-var IdStatuses = map[int]string{}
+var IDStatuses = map[int]string{}

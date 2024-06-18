@@ -2,24 +2,34 @@ package szconfigserver
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"testing"
 
 	truncator "github.com/aquilax/truncate"
-	"github.com/senzing-garage/go-helpers/engineconfigurationjson"
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/go-helpers/settings"
+	"github.com/senzing-garage/go-observing/observer"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
 	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const (
 	defaultTruncation = 76
+	observerID        = "Observer 1"
+	observerOrigin    = "Observer 1 origin"
 	printResults      = false
 )
 
 var (
+	logLevelName      = "INFO"
+	observerSingleton = &observer.NullObserver{
+		ID:       observerID,
+		IsSilent: true,
+	}
 	szConfigTestSingleton *SzConfigServer
 )
 
@@ -34,7 +44,7 @@ func TestSzConfigServer_AddDataSource(test *testing.T) {
 	// Create.
 	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// AddDataSource.
@@ -43,7 +53,7 @@ func TestSzConfigServer_AddDataSource(test *testing.T) {
 		DataSourceCode: "GO_TEST",
 	}
 	responseFromAddDataSource, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromAddDataSource.GetResult())
 
 	// Close.
@@ -51,7 +61,7 @@ func TestSzConfigServer_AddDataSource(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 }
 
 func TestSzConfigServer_CloseConfig(test *testing.T) {
@@ -61,7 +71,7 @@ func TestSzConfigServer_CloseConfig(test *testing.T) {
 	// Create.
 	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// Close.
@@ -69,7 +79,7 @@ func TestSzConfigServer_CloseConfig(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 }
 
 func TestSzConfigServer_CreateConfig(test *testing.T) {
@@ -77,7 +87,7 @@ func TestSzConfigServer_CreateConfig(test *testing.T) {
 	szConfigServer := getTestObject(ctx, test)
 	requestToCreate := &szpb.CreateConfigRequest{}
 	response, err := szConfigServer.CreateConfig(ctx, requestToCreate)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
 
@@ -88,7 +98,7 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 	// Create.
 	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// GetDataSources #1.
@@ -96,7 +106,7 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	responseFromGetDataSources, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	initialDataSources := responseFromGetDataSources.GetResult()
 	printActual(test, initialDataSources)
 
@@ -106,12 +116,12 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 		DataSourceCode: "GO_TEST",
 	}
 	responseFromAddDataSource, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromAddDataSource.GetResult())
 
 	// GetDataSources #2.
 	responseFromListDataSources2, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromListDataSources2.GetResult())
 
 	// DeleteDataSource.
@@ -120,11 +130,11 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 		DataSourceCode: "GO_TEST",
 	}
 	_, err = szConfigServer.DeleteDataSource(ctx, requestToDeleteDataSource)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 
 	// ListDataSources #3.
 	responseFromGetDataSources3, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromGetDataSources3.GetResult())
 
 	// Close.
@@ -132,7 +142,7 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 
 	assert.Equal(test, initialDataSources, responseFromGetDataSources3.GetResult())
 }
@@ -144,7 +154,7 @@ func TestSzConfigServer_GetDataSources(test *testing.T) {
 	// Create.
 	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// ListDataSources.
@@ -152,7 +162,7 @@ func TestSzConfigServer_GetDataSources(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	responseFromGetDataSources, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromGetDataSources.GetResult())
 
 	// Close.
@@ -160,7 +170,7 @@ func TestSzConfigServer_GetDataSources(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 }
 
 func TestSzConfigServer_ImportConfig(test *testing.T) {
@@ -170,7 +180,7 @@ func TestSzConfigServer_ImportConfig(test *testing.T) {
 	// Create.
 	requestToCreate := &szpb.CreateConfigRequest{}
 	responseFromCreate, err := szConfigServer.CreateConfig(ctx, requestToCreate)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromCreate.GetResult())
 
 	// Export Config to string.
@@ -178,7 +188,7 @@ func TestSzConfigServer_ImportConfig(test *testing.T) {
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	responseFromExportConfig, err := szConfigServer.ExportConfig(ctx, requestToExportConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromExportConfig.GetResult())
 
 	// Close.
@@ -186,14 +196,14 @@ func TestSzConfigServer_ImportConfig(test *testing.T) {
 		ConfigHandle: responseFromCreate.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 
 	// Load.
 	requestToImportConfig := &szpb.ImportConfigRequest{
 		ConfigDefinition: responseFromExportConfig.GetResult(),
 	}
 	responseFromLoad, err := szConfigServer.ImportConfig(ctx, requestToImportConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromLoad.GetResult())
 
 	// Close.
@@ -201,7 +211,7 @@ func TestSzConfigServer_ImportConfig(test *testing.T) {
 		ConfigHandle: responseFromLoad.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 }
 
 func TestSzConfigServer_ExportConfig(test *testing.T) {
@@ -211,7 +221,7 @@ func TestSzConfigServer_ExportConfig(test *testing.T) {
 	// Create.
 	requestToCreateConfig := &szpb.CreateConfigRequest{}
 	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromCreateConfig.GetResult())
 
 	// Save.
@@ -219,7 +229,7 @@ func TestSzConfigServer_ExportConfig(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	responseFromExportConfig, err := szConfigServer.ExportConfig(ctx, requestToExportConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
 	printActual(test, responseFromExportConfig.GetResult())
 
 	// Close.
@@ -227,7 +237,52 @@ func TestSzConfigServer_ExportConfig(test *testing.T) {
 		ConfigHandle: responseFromCreateConfig.GetResult(),
 	}
 	_, err = szConfigServer.CloseConfig(ctx, requestToCloseConfig)
-	testError(test, ctx, err)
+	require.NoError(test, err)
+}
+
+// ----------------------------------------------------------------------------
+// Logging and observing
+// ----------------------------------------------------------------------------
+
+func TestSzConfigServer_RegisterObserver(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.RegisterObserver(ctx, observerSingleton)
+	require.NoError(test, err)
+}
+
+func TestSzConfigServer_SetLogLevel(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.SetLogLevel(ctx, "DEBUG")
+	require.NoError(test, err)
+}
+
+func TestSzConfigServer__SetLogLevel_badLevelName(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.SetLogLevel(ctx, "BADLEVELNAME")
+	require.Error(test, err)
+}
+
+func TestSzConfigServer_SetObserverOrigin(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	testObject.SetObserverOrigin(ctx, observerOrigin)
+}
+
+func TestSzConfigServer_GetObserverOrigin(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	actual := testObject.GetObserverOrigin(ctx)
+	assert.Equal(test, observerOrigin, actual)
+}
+
+func TestSzConfigServer_UnregisterObserver(test *testing.T) {
+	ctx := context.TODO()
+	testObject := getTestObject(ctx, test)
+	err := testObject.UnregisterObserver(ctx, observerSingleton)
+	require.NoError(test, err)
 }
 
 // ----------------------------------------------------------------------------
@@ -237,35 +292,31 @@ func TestSzConfigServer_ExportConfig(test *testing.T) {
 func getSzConfigServer(ctx context.Context) SzConfigServer {
 	if szConfigTestSingleton == nil {
 		szConfigTestSingleton = &SzConfigServer{}
-		instanceName := "Test name"
-		verboseLogging := sz.SZ_NO_LOGGING
-		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-		if err != nil {
-			fmt.Println(err)
+		instanceName := "Test instance name"
+		verboseLogging := senzing.SzNoLogging
+		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
+		panicOnError(err)
+		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
+		if len(osenvLogLevel) > 0 {
+			logLevelName = osenvLogLevel
 		}
+		err = szConfigTestSingleton.SetLogLevel(ctx, logLevelName)
+		panicOnError(err)
 		err = GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
-		if err != nil {
-			fmt.Println(err)
-		}
+		panicOnError(err)
 	}
 	return *szConfigTestSingleton
 }
 
 func getTestObject(ctx context.Context, test *testing.T) SzConfigServer {
-	if szConfigTestSingleton == nil {
-		szConfigTestSingleton = &SzConfigServer{}
-		instanceName := "Test name"
-		verboseLogging := sz.SZ_NO_LOGGING
-		settings, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
-		if err != nil {
-			test.Logf("Cannot construct system configuration. Error: %v", err)
-		}
-		err = GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
-		if err != nil {
-			test.Logf("Cannot Init. Error: %v", err)
-		}
+	_ = test
+	return getSzConfigServer(ctx)
+}
+
+func panicOnError(err error) {
+	if err != nil {
+		panic(err)
 	}
-	return *szConfigTestSingleton
 }
 
 func printActual(test *testing.T, actual interface{}) {
@@ -275,14 +326,6 @@ func printActual(test *testing.T, actual interface{}) {
 func printResult(test *testing.T, title string, result interface{}) {
 	if printResults {
 		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
-	}
-}
-
-func testError(test *testing.T, ctx context.Context, err error) {
-	_ = ctx
-	if err != nil {
-		test.Log("Error:", err.Error())
-		assert.FailNow(test, err.Error())
 	}
 }
 
@@ -297,13 +340,13 @@ func truncate(aString string, length int) string {
 func TestMain(m *testing.M) {
 	err := setup()
 	if err != nil {
-		if szerror.Is(err, szerror.SzUnrecoverable) {
+		if errors.Is(err, szerror.ErrSzUnrecoverable) {
 			fmt.Printf("\nUnrecoverable error detected. \n\n")
 		}
-		if szerror.Is(err, szerror.SzRetryable) {
+		if errors.Is(err, szerror.ErrSzRetryable) {
 			fmt.Printf("\nRetryable error detected. \n\n")
 		}
-		if szerror.Is(err, szerror.SzBadInput) {
+		if errors.Is(err, szerror.ErrSzBadInput) {
 			fmt.Printf("\nBad user input error detected. \n\n")
 		}
 		fmt.Print(err)
@@ -318,17 +361,17 @@ func TestMain(m *testing.M) {
 }
 
 func setup() error {
-	var err error = nil
+	var err error
 	return err
 }
 
 func teardown() error {
-	var err error = nil
+	var err error
 	return err
 }
 
 func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := engineconfigurationjson.BuildSimpleSystemConfigurationJsonUsingEnvVars()
+	actual, err := settings.BuildSimpleSettingsUsingEnvVars()
 	if err != nil {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)

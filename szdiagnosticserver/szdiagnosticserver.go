@@ -9,7 +9,7 @@ import (
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	szsdk "github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 )
 
@@ -23,7 +23,7 @@ var (
 // ----------------------------------------------------------------------------
 
 func (server *SzDiagnosticServer) CheckDatastorePerformance(ctx context.Context, request *szpb.CheckDatastorePerformanceRequest) (*szpb.CheckDatastorePerformanceResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -39,7 +39,7 @@ func (server *SzDiagnosticServer) CheckDatastorePerformance(ctx context.Context,
 }
 
 func (server *SzDiagnosticServer) GetDatastoreInfo(ctx context.Context, request *szpb.GetDatastoreInfoRequest) (*szpb.GetDatastoreInfoResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -55,7 +55,7 @@ func (server *SzDiagnosticServer) GetDatastoreInfo(ctx context.Context, request 
 }
 
 func (server *SzDiagnosticServer) GetFeature(ctx context.Context, request *szpb.GetFeatureRequest) (*szpb.GetFeatureResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -71,7 +71,7 @@ func (server *SzDiagnosticServer) GetFeature(ctx context.Context, request *szpb.
 }
 
 func (server *SzDiagnosticServer) PurgeRepository(ctx context.Context, request *szpb.PurgeRepositoryRequest) (*szpb.PurgeRepositoryResponse, error) {
-	var err error = nil
+	var err error
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(117, request)
@@ -84,7 +84,7 @@ func (server *SzDiagnosticServer) PurgeRepository(ctx context.Context, request *
 }
 
 func (server *SzDiagnosticServer) Reinitialize(ctx context.Context, request *szpb.ReinitializeRequest) (*szpb.ReinitializeResponse, error) {
-	var err error = nil
+	var err error
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(51, request)
@@ -103,13 +103,13 @@ func (server *SzDiagnosticServer) Reinitialize(ctx context.Context, request *szp
 // --- Logging ----------------------------------------------------------------
 
 // Get the Logger singleton.
-func (server *SzDiagnosticServer) getLogger() logging.LoggingInterface {
-	var err error = nil
+func (server *SzDiagnosticServer) getLogger() logging.Logging {
+	var err error
 	if server.logger == nil {
 		options := []interface{}{
 			&logging.OptionCallerSkip{Value: 3},
 		}
-		server.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
+		server.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
 		if err != nil {
 			panic(err)
 		}
@@ -128,7 +128,8 @@ func (server *SzDiagnosticServer) traceExit(messageNumber int, details ...interf
 }
 
 func (server *SzDiagnosticServer) SetLogLevel(ctx context.Context, logLevelName string) error {
-	var err error = nil
+	_ = ctx
+	var err error
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(53, logLevelName)
@@ -172,55 +173,52 @@ func GetSdkSzDiagnostic() *szsdk.Szdiagnostic {
 	return getSzDiagnostic()
 }
 
-func GetSdkSzDiagnosticAsInterface() sz.SzDiagnostic {
+func GetSdkSzDiagnosticAsInterface() senzing.SzDiagnostic {
 	return getSzDiagnostic()
 }
 
 // --- Observer ---------------------------------------------------------------
 
 func (server *SzDiagnosticServer) GetObserverOrigin(ctx context.Context) string {
-	// var err error = nil
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(55)
-	// 	defer func() { server.traceExit(56, err, time.Since(entryTime)) }()
-	// }
-	// g2diagnostic := getG2diagnostic()
-	// return g2diagnostic.GetObserverOrigin(ctx)
-	return ""
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(55)
+		defer func() { server.traceExit(56, err, time.Since(entryTime)) }()
+	}
+	szDiagnostic := getSzDiagnostic()
+	return szDiagnostic.GetObserverOrigin(ctx)
 }
 
 func (server SzDiagnosticServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
-	// var err error = nil
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(3, observer.GetObserverId(ctx))
-	// 	defer func() { server.traceExit(4, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-	// }
-	// g2diagnostic := getG2diagnostic()
-	// return g2diagnostic.RegisterObserver(ctx, observer)
-	return nil
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(3, observer.GetObserverID(ctx))
+		defer func() { server.traceExit(4, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
+	}
+	szDiagnostic := getSzDiagnostic()
+	return szDiagnostic.RegisterObserver(ctx, observer)
 }
 
 func (server *SzDiagnosticServer) SetObserverOrigin(ctx context.Context, origin string) {
-	// var err error = nil
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(57, origin)
-	// 	defer func() { server.traceExit(58, origin, err, time.Since(entryTime)) }()
-	// }
-	// g2diagnostic := getG2diagnostic()
-	// g2diagnostic.SetObserverOrigin(ctx, origin)
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(57, origin)
+		defer func() { server.traceExit(58, origin, err, time.Since(entryTime)) }()
+	}
+	szDiagnostic := getSzDiagnostic()
+	szDiagnostic.SetObserverOrigin(ctx, origin)
 }
 
 func (server *SzDiagnosticServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
-	// var err error = nil
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(31, observer.GetObserverId(ctx))
-	// 	defer func() { server.traceExit(32, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-	// }
-	// g2diagnostic := getG2diagnostic()
-	// return g2diagnostic.UnregisterObserver(ctx, observer)
-	return nil
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(31, observer.GetObserverID(ctx))
+		defer func() { server.traceExit(32, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
+	}
+	szDiagnostic := getSzDiagnostic()
+	return szDiagnostic.UnregisterObserver(ctx, observer)
 }

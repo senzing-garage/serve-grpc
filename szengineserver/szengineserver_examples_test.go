@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szengine"
 )
 
@@ -22,7 +22,7 @@ func ExampleSzEngineServer_AddRecord() {
 		DataSourceCode:   "CUSTOMERS",
 		RecordId:         "1001",
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
-		Flags:            sz.SZ_WITHOUT_INFO,
+		Flags:            senzing.SzWithoutInfo,
 	}
 	response, err := szEngineServer.AddRecord(ctx, request)
 	if err != nil {
@@ -40,7 +40,7 @@ func ExampleSzEngineServer_AddRecord_secondRecord() {
 		DataSourceCode:   "CUSTOMERS",
 		RecordId:         "1002",
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1002", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Bob", "DATE_OF_BIRTH": "11/12/1978", "ADDR_TYPE": "HOME", "ADDR_LINE1": "1515 Adela Lane", "ADDR_CITY": "Las Vegas", "ADDR_STATE": "NV", "ADDR_POSTAL_CODE": "89111", "PHONE_TYPE": "MOBILE", "PHONE_NUMBER": "702-919-1300", "DATE": "3/10/17", "STATUS": "Inactive", "AMOUNT": "200"}`,
-		Flags:            sz.SZ_WITHOUT_INFO,
+		Flags:            senzing.SzWithoutInfo,
 	}
 	response, err := szEngineServer.AddRecord(ctx, request)
 	if err != nil {
@@ -58,7 +58,7 @@ func ExampleSzEngineServer_AddRecord_withInfo() {
 		DataSourceCode:   "CUSTOMERS",
 		RecordId:         "1003",
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1003", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Bob", "PRIMARY_NAME_MIDDLE": "J", "DATE_OF_BIRTH": "12/11/1978", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "4/9/16", "STATUS": "Inactive", "AMOUNT": "300"}`,
-		Flags:            sz.SZ_WITH_INFO,
+		Flags:            senzing.SzWithInfo,
 	}
 	response, err := szEngineServer.AddRecord(ctx, request)
 	if err != nil {
@@ -74,16 +74,16 @@ func ExampleSzEngineServer_CloseExport() {
 	szEngineServer := getSzEngineServer(ctx)
 
 	// Create a handle for the example.
-	requestToExportJsonEntityReport := &szpb.ExportJsonEntityReportRequest{
-		Flags: sz.SZ_NO_FLAGS,
+	requestToExportJSONEntityReport := &szpb.ExportJsonEntityReportRequest{
+		Flags: senzing.SzNoFlags,
 	}
-	responseFromExportJsonEntityReport, err := szEngineServer.ExportJsonEntityReport(ctx, requestToExportJsonEntityReport)
+	responseFromExportJSONEntityReport, err := szEngineServer.ExportJsonEntityReport(ctx, requestToExportJSONEntityReport)
 	if err != nil {
 		fmt.Println(err)
 	}
 	// Example
 	request := &szpb.CloseExportRequest{
-		ExportHandle: responseFromExportJsonEntityReport.GetResult(),
+		ExportHandle: responseFromExportJSONEntityReport.GetResult(),
 	}
 	response, err := szEngineServer.CloseExport(ctx, request)
 	if err != nil {
@@ -112,7 +112,7 @@ func ExampleSzEngineServer_ExportCsvEntityReport() {
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ExportCsvEntityReportRequest{
 		CsvColumnList: "",
-		Flags:         sz.SZ_NO_FLAGS,
+		Flags:         senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.ExportCsvEntityReport(ctx, request)
 	if err != nil {
@@ -127,7 +127,7 @@ func ExampleSzEngineServer_ExportJsonEntityReport() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ExportJsonEntityReportRequest{
-		Flags: sz.SZ_NO_FLAGS,
+		Flags: senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.ExportJsonEntityReport(ctx, request)
 	if err != nil {
@@ -143,23 +143,23 @@ func ExampleSzEngineServer_FetchNext() {
 	szEngineServer := getSzEngineServer(ctx)
 
 	// Create a handle for the example.
-	requestToExportJsonEntityReport := &szpb.ExportJsonEntityReportRequest{
-		Flags: sz.SZ_NO_FLAGS,
+	requestToExportJSONEntityReport := &szpb.ExportJsonEntityReportRequest{
+		Flags: senzing.SzNoFlags,
 	}
-	responseFromExportJsonEntityReport, err := szEngineServer.ExportJsonEntityReport(ctx, requestToExportJsonEntityReport)
+	responseFromExportJSONEntityReport, err := szEngineServer.ExportJsonEntityReport(ctx, requestToExportJSONEntityReport)
 	if err != nil {
 		fmt.Println(err)
 	}
 	// Example
 	request := &szpb.FetchNextRequest{
-		ExportHandle: responseFromExportJsonEntityReport.GetResult(),
+		ExportHandle: responseFromExportJSONEntityReport.GetResult(),
 	}
 	response, err := szEngineServer.FetchNext(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(len(response.GetResult()) >= 0) // Dummy output.
-	// Output: true
+	fmt.Println(len(response.GetResult()) > 0) // Dummy output.
+	// Output: false
 }
 
 func ExampleSzEngineServer_FindInterestingEntitiesByEntityId() {
@@ -167,7 +167,7 @@ func ExampleSzEngineServer_FindInterestingEntitiesByEntityId() {
 	ctx := context.TODO()
 	szEngine := getSzEngineServer(ctx)
 	request := &szpb.FindInterestingEntitiesByEntityIdRequest{
-		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
 		Flags:    0,
 	}
 	response, err := szEngine.FindInterestingEntitiesByEntityId(ctx, request)
@@ -199,13 +199,13 @@ func ExampleSzEngineServer_FindNetworkByEntityId() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	entityList := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1001") + `}, {"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1002") + `}]}`
+	entityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1001") + `}, {"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1002") + `}]}`
 	request := &szpb.FindNetworkByEntityIdRequest{
-		EntityList:     entityList,
-		MaxDegrees:     2,
-		BuildOutDegree: 1,
-		MaxEntities:    10,
-		Flags:          sz.SZ_NO_FLAGS,
+		BuildOutDegree:      1,
+		BuildOutMaxEntities: 10,
+		EntityIds:           entityIDs,
+		Flags:               senzing.SzNoFlags,
+		MaxDegrees:          2,
 	}
 	response, err := szEngineServer.FindNetworkByEntityId(ctx, request)
 	if err != nil {
@@ -220,11 +220,11 @@ func ExampleSzEngineServer_FindNetworkByRecordId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindNetworkByRecordIdRequest{
-		RecordList:     `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001"}, {"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1002"}]}`,
-		MaxDegrees:     1,
-		BuildOutDegree: 2,
-		MaxEntities:    10,
-		Flags:          sz.SZ_NO_FLAGS,
+		BuildOutDegree:      2,
+		BuildOutMaxEntities: 10,
+		Flags:               senzing.SzNoFlags,
+		MaxDegrees:          1,
+		RecordKeys:          `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001"}, {"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1002"}]}`,
 	}
 	response, err := szEngineServer.FindNetworkByRecordId(ctx, request)
 	if err != nil {
@@ -239,10 +239,10 @@ func ExampleSzEngineServer_FindPathByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindPathByEntityIdRequest{
-		StartEntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
-		EndEntityId:   getEntityIdForRecord("CUSTOMERS", "1002"),
+		StartEntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
+		EndEntityId:   getEntityIDForRecord("CUSTOMERS", "1002"),
 		MaxDegrees:    1,
-		Flags:         sz.SZ_NO_FLAGS,
+		Flags:         senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.FindPathByEntityId(ctx, request)
 	if err != nil {
@@ -256,13 +256,13 @@ func ExampleSzEngineServer_FindPathByEntityId_exclusions() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	exclusions := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
+	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`
 	request := &szpb.FindPathByEntityIdRequest{
-		StartEntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
-		EndEntityId:   getEntityIdForRecord("CUSTOMERS", "1002"),
-		MaxDegrees:    1,
-		Exclusions:    exclusions,
-		Flags:         sz.SZ_NO_FLAGS,
+		StartEntityId:  getEntityIDForRecord("CUSTOMERS", "1001"),
+		EndEntityId:    getEntityIDForRecord("CUSTOMERS", "1002"),
+		MaxDegrees:     1,
+		AvoidEntityIds: avoidEntityIDs,
+		Flags:          senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.FindPathByEntityId(ctx, request)
 	if err != nil {
@@ -276,14 +276,14 @@ func ExampleSzEngineServer_FindPathByEntityId_inclusions() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	excludedEntities := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`
+	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`
 	request := &szpb.FindPathByEntityIdRequest{
-		StartEntityId:       getEntityIdForRecord("CUSTOMERS", "1001"),
-		EndEntityId:         getEntityIdForRecord("CUSTOMERS", "1002"),
+		StartEntityId:       getEntityIDForRecord("CUSTOMERS", "1001"),
+		EndEntityId:         getEntityIDForRecord("CUSTOMERS", "1002"),
 		MaxDegrees:          1,
-		Exclusions:          excludedEntities,
+		AvoidEntityIds:      avoidEntityIDs,
 		RequiredDataSources: `{"DATA_SOURCES": ["CUSTOMERS"]}`,
-		Flags:               sz.SZ_NO_FLAGS,
+		Flags:               senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.FindPathByEntityId(ctx, request)
 	if err != nil {
@@ -303,7 +303,7 @@ func ExampleSzEngineServer_FindPathByRecordId() {
 		EndDataSourceCode:   "CUSTOMERS",
 		EndRecordId:         "1002",
 		MaxDegrees:          1,
-		Flags:               sz.SZ_NO_FLAGS,
+		Flags:               senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.FindPathByRecordId(ctx, request)
 	if err != nil {
@@ -323,8 +323,8 @@ func ExampleSzEngineServer_FindPathByRecordId_exclusions() {
 		EndDataSourceCode:   "CUSTOMERS",
 		EndRecordId:         "1002",
 		MaxDegrees:          1,
-		Exclusions:          `{"RECORDS": [{ "DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001"}]}`,
-		Flags:               sz.SZ_NO_FLAGS,
+		AvoidRecordKeys:     `{"RECORDS": [{ "DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001"}]}`,
+		Flags:               senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.FindPathByRecordId(ctx, request)
 	if err != nil {
@@ -344,9 +344,9 @@ func ExampleSzEngineServer_FindPathByRecordId_inclusions() {
 		EndDataSourceCode:   "CUSTOMERS",
 		EndRecordId:         "1002",
 		MaxDegrees:          1,
-		Exclusions:          `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIdStringForRecord("CUSTOMERS", "1003") + `}]}`,
+		AvoidRecordKeys:     `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`,
 		RequiredDataSources: `{"DATA_SOURCES": ["CUSTOMERS"]}`,
-		Flags:               sz.SZ_NO_FLAGS,
+		Flags:               senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.FindPathByRecordId(ctx, request)
 	if err != nil {
@@ -374,8 +374,8 @@ func ExampleSzEngineServer_GetEntityByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetEntityByEntityIdRequest{
-		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
-		Flags:    sz.SZ_NO_FLAGS,
+		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
+		Flags:    senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.GetEntityByEntityId(ctx, request)
 	if err != nil {
@@ -392,7 +392,7 @@ func ExampleSzEngineServer_GetEntityByRecordId() {
 	request := &szpb.GetEntityByRecordIdRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordId:       "1001",
-		Flags:          sz.SZ_NO_FLAGS,
+		Flags:          senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.GetEntityByRecordId(ctx, request)
 	if err != nil {
@@ -409,7 +409,7 @@ func ExampleSzEngineServer_GetRecord() {
 	request := &szpb.GetRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordId:       "1001",
-		Flags:          sz.SZ_NO_FLAGS,
+		Flags:          senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.GetRecord(ctx, request)
 	if err != nil {
@@ -450,8 +450,8 @@ func ExampleSzEngineServer_GetVirtualEntityByRecordId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetVirtualEntityByRecordIdRequest{
-		RecordList: `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1001"},{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1002"}]}`,
-		Flags:      sz.SZ_NO_FLAGS,
+		RecordKeys: `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1001"},{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1002"}]}`,
+		Flags:      senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.GetVirtualEntityByRecordId(ctx, request)
 	if err != nil {
@@ -466,8 +466,8 @@ func ExampleSzEngineServer_HowEntityByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.HowEntityByEntityIdRequest{
-		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
-		Flags:    sz.SZ_NO_FLAGS,
+		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
+		Flags:    senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.HowEntityByEntityId(ctx, request)
 	if err != nil {
@@ -501,7 +501,7 @@ func ExampleSzEngineServer_SearchByAttributes() {
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.SearchByAttributesRequest{
 		Attributes: `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "Smith"}], "EMAIL_ADDRESS": "bsmith@work.com"}`,
-		Flags:      sz.SZ_NO_FLAGS,
+		Flags:      senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.SearchByAttributes(ctx, request)
 	if err != nil {
@@ -519,14 +519,14 @@ func ExampleSzEngineServer_SearchByAttributes_searchProfile() {
 	request := &szpb.SearchByAttributesRequest{
 		Attributes:    `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "Smith"}], "EMAIL_ADDRESS": "bsmith@work.com"}`,
 		SearchProfile: "SEARCH",
-		Flags:         sz.SZ_NO_FLAGS,
+		Flags:         senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.SearchByAttributes(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println(truncate(response.GetResult(), 1962))
-	// Output:
+	// Output: {"RESOLVED_ENTITIES":[{"MATCH_INFO":{"MATCH_LEVEL_CODE":"POSSIBLY_RELATED","MATCH_KEY":"+PNAME+EMAIL","ERRULE_CODE":"SF1"},"ENTITY":{"RESOLVED_ENTITY":{"ENTITY_ID":1}}}]}
 }
 
 func ExampleSzEngineServer_WhyEntities() {
@@ -534,9 +534,9 @@ func ExampleSzEngineServer_WhyEntities() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.WhyEntitiesRequest{
-		EntityId1: getEntityIdForRecord("CUSTOMERS", "1001"),
-		EntityId2: getEntityIdForRecord("CUSTOMERS", "1002"),
-		Flags:     sz.SZ_NO_FLAGS,
+		EntityId1: getEntityIDForRecord("CUSTOMERS", "1001"),
+		EntityId2: getEntityIDForRecord("CUSTOMERS", "1002"),
+		Flags:     senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.WhyEntities(ctx, request)
 	if err != nil {
@@ -555,7 +555,7 @@ func ExampleSzEngineServer_WhyRecords() {
 		RecordId1:       "1001",
 		DataSourceCode2: "CUSTOMERS",
 		RecordId2:       "1002",
-		Flags:           sz.SZ_NO_FLAGS,
+		Flags:           senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.WhyRecords(ctx, request)
 	if err != nil {
@@ -570,8 +570,8 @@ func ExampleSzEngineServer_ReevaluateEntity() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateEntityRequest{
-		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
-		Flags:    sz.SZ_WITHOUT_INFO,
+		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
+		Flags:    senzing.SzWithoutInfo,
 	}
 	response, err := szEngineServer.ReevaluateEntity(ctx, request)
 	if err != nil {
@@ -587,8 +587,8 @@ func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateEntityRequest{
-		EntityId: getEntityIdForRecord("CUSTOMERS", "1001"),
-		Flags:    sz.SZ_WITH_INFO,
+		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
+		Flags:    senzing.SzWithInfo,
 	}
 	response, err := szEngineServer.ReevaluateEntity(ctx, request)
 	if err != nil {
@@ -605,7 +605,7 @@ func ExampleSzEngineServer_ReevaluateRecord() {
 	request := &szpb.ReevaluateRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordId:       "1001",
-		Flags:          sz.SZ_WITHOUT_INFO,
+		Flags:          senzing.SzWithoutInfo,
 	}
 	response, err := szEngineServer.ReevaluateRecord(ctx, request)
 	if err != nil {
@@ -623,7 +623,7 @@ func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 	request := &szpb.ReevaluateRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordId:       "1001",
-		Flags:          sz.SZ_WITH_INFO,
+		Flags:          senzing.SzWithInfo,
 	}
 	response, err := szEngineServer.ReevaluateRecord(ctx, request)
 	if err != nil {
@@ -640,7 +640,7 @@ func ExampleSzEngineServer_DeleteRecord() {
 	request := &szpb.DeleteRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordId:       "1003",
-		Flags:          sz.SZ_WITHOUT_INFO,
+		Flags:          senzing.SzWithoutInfo,
 	}
 	response, err := szEngineServer.DeleteRecord(ctx, request)
 	if err != nil {
@@ -657,7 +657,7 @@ func ExampleSzEngineServer_DeleteRecord_withInfo() {
 	request := &szpb.DeleteRecordRequest{
 		DataSourceCode: "CUSTOMERS",
 		RecordId:       "1003",
-		Flags:          sz.SZ_WITH_INFO,
+		Flags:          senzing.SzWithInfo,
 	}
 	response, err := szEngineServer.DeleteRecord(ctx, request)
 	if err != nil {
@@ -673,14 +673,14 @@ func ExampleSzEngineServer_Reinitialize() {
 	szEngineServer := getSzEngineServer(ctx)
 
 	// Get a Senzing configuration ID for testing.
-	requestToGetActiveConfigId := &szpb.GetActiveConfigIdRequest{}
-	responseFromGetActiveConfigId, err := szEngineServer.GetActiveConfigId(ctx, requestToGetActiveConfigId)
+	requestToGetActiveConfigID := &szpb.GetActiveConfigIdRequest{}
+	responseFromGetActiveConfigID, err := szEngineServer.GetActiveConfigId(ctx, requestToGetActiveConfigID)
 	if err != nil {
 		fmt.Println(err)
 	}
 	// Example
 	request := &szpb.ReinitializeRequest{
-		ConfigId: responseFromGetActiveConfigId.GetResult(),
+		ConfigId: responseFromGetActiveConfigID.GetResult(),
 	}
 	response, err := szEngineServer.Reinitialize(ctx, request)
 	if err != nil {

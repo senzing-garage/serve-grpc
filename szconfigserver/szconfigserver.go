@@ -9,7 +9,7 @@ import (
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	szsdk "github.com/senzing-garage/sz-sdk-go-core/szconfig"
-	"github.com/senzing-garage/sz-sdk-go/sz"
+	"github.com/senzing-garage/sz-sdk-go/senzing"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 )
 
@@ -23,7 +23,7 @@ var (
 // ----------------------------------------------------------------------------
 
 func (server *SzConfigServer) AddDataSource(ctx context.Context, request *szpb.AddDataSourceRequest) (*szpb.AddDataSourceResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -39,7 +39,7 @@ func (server *SzConfigServer) AddDataSource(ctx context.Context, request *szpb.A
 }
 
 func (server *SzConfigServer) CloseConfig(ctx context.Context, request *szpb.CloseConfigRequest) (*szpb.CloseConfigResponse, error) {
-	var err error = nil
+	var err error
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(5, request)
@@ -52,7 +52,7 @@ func (server *SzConfigServer) CloseConfig(ctx context.Context, request *szpb.Clo
 }
 
 func (server *SzConfigServer) CreateConfig(ctx context.Context, request *szpb.CreateConfigRequest) (*szpb.CreateConfigResponse, error) {
-	var err error = nil
+	var err error
 	var result uintptr
 	if server.isTrace {
 		entryTime := time.Now()
@@ -68,7 +68,7 @@ func (server *SzConfigServer) CreateConfig(ctx context.Context, request *szpb.Cr
 }
 
 func (server *SzConfigServer) DeleteDataSource(ctx context.Context, request *szpb.DeleteDataSourceRequest) (*szpb.DeleteDataSourceResponse, error) {
-	var err error = nil
+	var err error
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(9, request)
@@ -81,7 +81,7 @@ func (server *SzConfigServer) DeleteDataSource(ctx context.Context, request *szp
 }
 
 func (server *SzConfigServer) ExportConfig(ctx context.Context, request *szpb.ExportConfigRequest) (*szpb.ExportConfigResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -97,7 +97,7 @@ func (server *SzConfigServer) ExportConfig(ctx context.Context, request *szpb.Ex
 }
 
 func (server *SzConfigServer) GetDataSources(ctx context.Context, request *szpb.GetDataSourcesRequest) (*szpb.GetDataSourcesResponse, error) {
-	var err error = nil
+	var err error
 	var result string
 	if server.isTrace {
 		entryTime := time.Now()
@@ -113,7 +113,7 @@ func (server *SzConfigServer) GetDataSources(ctx context.Context, request *szpb.
 }
 
 func (server *SzConfigServer) ImportConfig(ctx context.Context, request *szpb.ImportConfigRequest) (*szpb.ImportConfigResponse, error) {
-	var err error = nil
+	var err error
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(21, request)
@@ -134,13 +134,13 @@ func (server *SzConfigServer) ImportConfig(ctx context.Context, request *szpb.Im
 // --- Logging ----------------------------------------------------------------
 
 // Get the Logger singleton.
-func (server *SzConfigServer) getLogger() logging.LoggingInterface {
-	var err error = nil
+func (server *SzConfigServer) getLogger() logging.Logging {
+	var err error
 	if server.logger == nil {
 		options := []interface{}{
 			&logging.OptionCallerSkip{Value: 3},
 		}
-		server.logger, err = logging.NewSenzingToolsLogger(ComponentId, IdMessages, options...)
+		server.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
 		if err != nil {
 			panic(err)
 		}
@@ -159,7 +159,8 @@ func (server *SzConfigServer) traceExit(messageNumber int, details ...interface{
 }
 
 func (server *SzConfigServer) SetLogLevel(ctx context.Context, logLevelName string) error {
-	var err error = nil
+	_ = ctx
+	var err error
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(25, logLevelName)
@@ -203,55 +204,52 @@ func GetSdkSzConfig() *szsdk.Szconfig {
 	return getSzConfig()
 }
 
-func GetSdkSzConfigAsInterface() sz.SzConfig {
+func GetSdkSzConfigAsInterface() senzing.SzConfig {
 	return getSzConfig()
 }
 
 // --- Observer ---------------------------------------------------------------
 
 func (server *SzConfigServer) GetObserverOrigin(ctx context.Context) string {
-	// var err error = nil
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(27)
-	// 	defer func() { server.traceExit(28, err, time.Since(entryTime)) }()
-	// }
-	// szconfig := getSzConfig()
-	// return szconfig.GetObserverOrigin(ctx)
-	return ""
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(27)
+		defer func() { server.traceExit(28, err, time.Since(entryTime)) }()
+	}
+	szconfig := getSzConfig()
+	return szconfig.GetObserverOrigin(ctx)
 }
 
 func (server *SzConfigServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
-	// var err error = nil
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(3, observer.GetObserverId(ctx))
-	// 	defer func() { server.traceExit(4, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-	// }
-	// szconfig := getSzConfig()
-	// return szconfig.RegisterObserver(ctx, observer)
-	return nil
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(3, observer.GetObserverID(ctx))
+		defer func() { server.traceExit(4, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
+	}
+	szconfig := getSzConfig()
+	return szconfig.RegisterObserver(ctx, observer)
 }
 
 func (server *SzConfigServer) SetObserverOrigin(ctx context.Context, origin string) {
-	// var err error = nil
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(29, origin)
-	// 	defer func() { server.traceExit(30, origin, err, time.Since(entryTime)) }()
-	// }
-	// szconfig := getSzConfig()
-	// szconfig.SetObserverOrigin(ctx, origin)
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(29, origin)
+		defer func() { server.traceExit(30, origin, err, time.Since(entryTime)) }()
+	}
+	szconfig := getSzConfig()
+	szconfig.SetObserverOrigin(ctx, origin)
 }
 
 func (server *SzConfigServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
-	// var err error = nil
-	// if server.isTrace {
-	// 	entryTime := time.Now()
-	// 	server.traceEntry(13, observer.GetObserverId(ctx))
-	// 	defer func() { server.traceExit(14, observer.GetObserverId(ctx), err, time.Since(entryTime)) }()
-	// }
-	// szconfig := getSzConfig()
-	// return szconfig.UnregisterObserver(ctx, observer)
-	return nil
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(13, observer.GetObserverID(ctx))
+		defer func() { server.traceExit(14, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
+	}
+	szconfig := getSzConfig()
+	return szconfig.UnregisterObserver(ctx, observer)
 }
