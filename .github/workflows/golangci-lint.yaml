@@ -30,19 +30,19 @@ jobs:
 
       - name: Copy Senzing headers
         run: |
-          mkdir ./szconfig/gohelpers
+          mkdir --parents ./szconfig/gohelpers
           cp /opt/senzing/g2/sdk/c/*.h ./szconfig/
           cp /opt/senzing/g2/sdk/c/gohelpers/*.h ./szconfig/gohelpers
-          mkdir ./szconfigmanager/gohelpers
+          mkdir --parents ./szconfigmanager/gohelpers
           cp /opt/senzing/g2/sdk/c/*.h ./szconfigmanager/
           cp /opt/senzing/g2/sdk/c/gohelpers/*.h ./szconfigmanager/gohelpers
-          mkdir ./szdiagnostic/gohelpers
+          mkdir --parents ./szdiagnostic/gohelpers
           cp /opt/senzing/g2/sdk/c/*.h ./szdiagnostic/
           cp /opt/senzing/g2/sdk/c/gohelpers/*.h ./szdiagnostic/gohelpers
-          mkdir ./szengine/gohelpers
+          mkdir --parents ./szengine/gohelpers
           cp /opt/senzing/g2/sdk/c/*.h ./szengine/
           cp /opt/senzing/g2/sdk/c/gohelpers/*.h ./szengine/gohelpers
-          mkdir ./szproduct/gohelpers
+          mkdir --parents ./szproduct/gohelpers
           cp /opt/senzing/g2/sdk/c/*.h ./szproduct/
           cp /opt/senzing/g2/sdk/c/gohelpers/*.h ./szproduct/gohelpers
 
