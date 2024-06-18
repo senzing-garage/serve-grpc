@@ -107,9 +107,6 @@ func (grpcServer *BasicGrpcServer) createGrpcObserver(ctx context.Context, parse
 // Add SzConfig service to gRPC server.
 func (grpcServer *BasicGrpcServer) enableSzConfig(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szconfigserver.SzConfigServer{}
-
-	fmt.Printf("\n\n>>>>>>>>>>>>>>>>>>>>>>>>>> LogLevelName: %s\n\n", grpcServer.LogLevelName)
-
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
 		panic(err)

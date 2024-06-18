@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed in 0.7.3
 
 - Update methods to Senzing 4.0.0-24162
+- From `GrpcServerImpl` to `BasicGrpcServer`
 
 ## [0.7.2] - 2024-05-08
 

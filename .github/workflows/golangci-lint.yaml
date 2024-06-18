@@ -23,6 +23,29 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install Senzing API
+        uses: senzing-factory/github-action-install-senzing-api@v3
+        with:
+          senzingapi-runtime-version: staging-v4
+
+      - name: Copy Senzing headers
+        run: |
+          mkdir ./szconfig/gohelpers
+          cp /opt/senzing/g2/sdk/c/*.h ./szconfig/
+          cp /opt/senzing/g2/sdk/c/gohelpers/*.h ./szconfig/gohelpers
+          mkdir ./szconfigmanager/gohelpers
+          cp /opt/senzing/g2/sdk/c/*.h ./szconfigmanager/
+          cp /opt/senzing/g2/sdk/c/gohelpers/*.h ./szconfigmanager/gohelpers
+          mkdir ./szdiagnostic/gohelpers
+          cp /opt/senzing/g2/sdk/c/*.h ./szdiagnostic/
+          cp /opt/senzing/g2/sdk/c/gohelpers/*.h ./szdiagnostic/gohelpers
+          mkdir ./szengine/gohelpers
+          cp /opt/senzing/g2/sdk/c/*.h ./szengine/
+          cp /opt/senzing/g2/sdk/c/gohelpers/*.h ./szengine/gohelpers
+          mkdir ./szproduct/gohelpers
+          cp /opt/senzing/g2/sdk/c/*.h ./szproduct/
+          cp /opt/senzing/g2/sdk/c/gohelpers/*.h ./szproduct/gohelpers
+
       - name: setup go
         uses: actions/setup-go@v5
         with:
