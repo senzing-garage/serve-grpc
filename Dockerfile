@@ -2,8 +2,8 @@
 # Stages
 # -----------------------------------------------------------------------------
 
-ARG IMAGE_GO_BUILDER=golang:1.22.3-bullseye@sha256:e72f9a1d29fbd6e1603df5a780e8f407caebef4dbb9f07536fc72f1c368298aa
-ARG IMAGE_FINAL=senzing/senzingapi-runtime-staging:latest
+ARG IMAGE_GO_BUILDER=golang:1.22.4-bullseye@sha256:067c5c7fe6d79f900c5ebe8351166356d6e3bbfcc6f807030e89b9a929252273
+ARG IMAGE_FINAL=senzing/senzingapi-runtime:3.10.3
 
 # -----------------------------------------------------------------------------
 # Stage: senzingapi_runtime
@@ -16,7 +16,7 @@ FROM ${IMAGE_FINAL} as senzingapi_runtime
 # -----------------------------------------------------------------------------
 
 FROM ${IMAGE_GO_BUILDER} as go_builder
-ENV REFRESHED_AT=2024-03-18
+ENV REFRESHED_AT=2024-06-24
 LABEL Name="senzing/serve-grpc-builder" \
   Maintainer="support@senzing.com" \
   Version="0.6.0"
@@ -50,7 +50,7 @@ RUN mkdir -p /output \
 # -----------------------------------------------------------------------------
 
 FROM ${IMAGE_FINAL} as final
-ENV REFRESHED_AT=2024-03-18
+ENV REFRESHED_AT=2024-06-24
 LABEL Name="senzing/serve-grpc" \
   Maintainer="support@senzing.com" \
   Version="0.6.0"
