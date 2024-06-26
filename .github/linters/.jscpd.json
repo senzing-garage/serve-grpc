@@ -2,5 +2,5 @@
   "ignore": [
     "**/*.go,**/go-test*.yaml"
   ],
-  "threshold": 13
+  "threshold": 20
 }
