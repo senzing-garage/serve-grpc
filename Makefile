@@ -67,6 +67,7 @@ hello-world: hello-world-osarch-specific
 
 .PHONY: make-dependencies
 make-dependencies:
+	@go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@latest
 	@go install github.com/vladopajic/go-test-coverage/v2@latest
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.58.1
 
