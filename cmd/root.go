@@ -45,9 +45,9 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	option.EnableSzDiagnostic,
 	option.EnableSzEngine,
 	option.EnableSzProduct,
-	option.EngineConfigurationJSON,
+	option.EngineSettings,
 	option.EngineLogLevel,
-	option.EngineModuleName,
+	option.EngineInstanceName,
 	option.GrpcPort,
 	option.GrpcURL,
 	option.HTTPPort,
@@ -109,7 +109,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 		ObserverURL:           viper.GetString(option.ObserverURL.Arg),
 		Port:                  viper.GetInt(option.GrpcPort.Arg),
 		SenzingSettings:       senzingSettings,
-		SenzingInstanceName:   viper.GetString(option.EngineModuleName.Arg),
+		SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
 		SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
 	}
 	return grpcserver.Serve(ctx)
