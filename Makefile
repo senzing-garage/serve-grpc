@@ -22,6 +22,8 @@ BUILD_VERSION := $(shell git describe --always --tags --abbrev=0 --dirty  | sed 
 BUILD_TAG := $(shell git describe --always --tags --abbrev=0  | sed 's/v//')
 BUILD_ITERATION := $(shell git log $(BUILD_TAG)..HEAD --oneline | wc -l | sed 's/^ *//')
 GIT_REMOTE_URL := $(shell git config --get remote.origin.url)
+GIT_REPOSITORY_NAME := $(shell basename `git rev-parse --show-toplevel`)
+GIT_VERSION := $(shell git describe --always --tags --long --dirty | sed -e 's/\-0//' -e 's/\-g.......//')
 GO_PACKAGE_NAME := $(shell echo $(GIT_REMOTE_URL) | sed -e 's|^git@github.com:|github.com/|' -e 's|\.git$$||' -e 's|Senzing|senzing|')
 PATH := $(MAKEFILE_DIRECTORY)/bin:$(PATH)
 
@@ -33,10 +35,9 @@ GO_ARCH = $(word 2, $(GO_OSARCH))
 
 # Conditional assignment. ('?=')
 # Can be overridden with "export"
-# Example: "export LD_LIBRARY_PATH=/path/to/my/senzing-garage/g2/lib"
 
-LD_LIBRARY_PATH ?= /opt/senzing/g2/lib
 GOBIN ?= $(shell go env GOPATH)/bin
+LD_LIBRARY_PATH ?= /opt/senzing/g2/lib
 SENZING_TOOLS_DATABASE_URL ?= sqlite3://na:na@/tmp/sqlite/G2C.db
 
 # Export environment variables.
@@ -65,8 +66,8 @@ hello-world: hello-world-osarch-specific
 # Dependency management
 # -----------------------------------------------------------------------------
 
-.PHONY: make-dependencies
-make-dependencies:
+.PHONY: dependencies-for-development
+dependencies-for-development:
 	@go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@latest
 	@go install github.com/vladopajic/go-test-coverage/v2@latest
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.58.1
@@ -79,8 +80,22 @@ dependencies:
 	@go mod tidy
 
 # -----------------------------------------------------------------------------
+# Setup
+# -----------------------------------------------------------------------------
+
+.PHONY: setup
+setup: setup-osarch-specific
+
+# -----------------------------------------------------------------------------
+# Lint
+# -----------------------------------------------------------------------------
+
+.PHONY: lint
+lint:
+	@${GOBIN}/golangci-lint run --config=.github/linters/.golangci.yaml
+
+# -----------------------------------------------------------------------------
 # Build
-#  - docker-build: https://docs.docker.com/engine/reference/commandline/build/
 # -----------------------------------------------------------------------------
 
 PLATFORMS := darwin/amd64 darwin/arm64 linux/amd64 linux/arm64 windows/amd64 windows/arm64
@@ -94,11 +109,13 @@ build: build-osarch-specific
 
 
 .PHONY: docker-build
-docker-build:
-	@docker build \
-		--tag $(DOCKER_IMAGE_NAME) \
-		--tag $(DOCKER_IMAGE_NAME):$(BUILD_VERSION) \
-		.
+docker-build: docker-build-osarch-specific
+
+#docker-build:
+#	@docker build \
+#		--tag $(DOCKER_IMAGE_NAME) \
+#		--tag $(DOCKER_IMAGE_NAME):$(BUILD_VERSION) \
+#		.
 
 # -----------------------------------------------------------------------------
 # Test
@@ -118,16 +135,8 @@ coverage: coverage-osarch-specific
 .PHONY: check-coverage
 check-coverage: export SENZING_LOG_LEVEL=TRACE
 check-coverage:
-	go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
-	${GOBIN}/go-test-coverage --config=./.testcoverage.yml
-
-# -----------------------------------------------------------------------------
-# Lint
-# -----------------------------------------------------------------------------
-
-.PHONY: run-golangci-lint
-run-golangci-lint:
-	${GOBIN}/golangci-lint run --config=.github/linters/.golangci.yml
+	@go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
+	@${GOBIN}/go-test-coverage --config=.github/coverage/.testcoverage.yaml
 
 # -----------------------------------------------------------------------------
 # Run
@@ -145,6 +154,13 @@ docker-run:
 
 .PHONY: run
 run: run-osarch-specific
+
+# -----------------------------------------------------------------------------
+# Documentation
+# -----------------------------------------------------------------------------
+
+.PHONY: documentation
+documentation: documentation-osarch-specific
 
 # -----------------------------------------------------------------------------
 # Package
@@ -167,7 +183,7 @@ docker-build-package:
 package: package-osarch-specific
 
 # -----------------------------------------------------------------------------
-# Utility targets
+# Clean
 # -----------------------------------------------------------------------------
 
 .PHONY: clean
@@ -175,6 +191,9 @@ clean: clean-osarch-specific
 	@go clean -cache
 	@go clean -testcache
 
+# -----------------------------------------------------------------------------
+# Utility targets
+# -----------------------------------------------------------------------------
 
 .PHONY: help
 help:
@@ -188,10 +207,6 @@ print-make-variables:
 	@$(foreach V,$(sort $(.VARIABLES)), \
 		$(if $(filter-out environment% default automatic, \
 		$(origin $V)),$(warning $V=$($V) ($(value $V)))))
-
-
-.PHONY: setup
-setup: setup-osarch-specific
 
 
 .PHONY: update-pkg-cache

@@ -8,7 +8,6 @@ import (
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
 	"github.com/senzing-garage/go-cmdhelping/option"
-	"github.com/senzing-garage/go-cmdhelping/option/optiontype"
 	"github.com/senzing-garage/go-cmdhelping/settings"
 	"github.com/senzing-garage/serve-grpc/grpcserver"
 	"github.com/spf13/cobra"
@@ -24,19 +23,12 @@ For more information, visit https://github.com/senzing-garage/serve-grpc
     `
 )
 
-var avoidServe = option.ContextVariable{
-	Arg:     "avoid-serving",
-	Default: option.OsLookupEnvBool("SENZING_TOOLS_AVOID_SERVING", false),
-	Envar:   "SENZING_TOOLS_AVOID_SERVING",
-	Help:    "Avoid serving.  For testing only. [%s]",
-	Type:    optiontype.Bool,
-}
-
 // ----------------------------------------------------------------------------
 // Context variables
 // ----------------------------------------------------------------------------
 
 var ContextVariablesForMultiPlatform = []option.ContextVariable{
+	option.AvoidServe,
 	option.Configuration,
 	option.DatabaseURL,
 	option.EnableAll,
@@ -45,27 +37,31 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	option.EnableSzDiagnostic,
 	option.EnableSzEngine,
 	option.EnableSzProduct,
-	option.EngineSettings,
-	option.EngineLogLevel,
 	option.EngineInstanceName,
+	option.EngineLogLevel,
+	option.EngineSettings,
 	option.GrpcPort,
 	option.GrpcURL,
 	option.HTTPPort,
 	option.LogLevel,
 	option.ObserverOrigin,
 	option.ObserverURL,
-	avoidServe,
 }
 
 var ContextVariables = append(ContextVariablesForMultiPlatform, ContextVariablesForOsArch...)
 
 // ----------------------------------------------------------------------------
-// Private functions
+// Command
 // ----------------------------------------------------------------------------
 
-// Since init() is always invoked, define command line parameters.
-func init() {
-	cmdhelper.Init(RootCmd, ContextVariables)
+// RootCmd represents the command.
+var RootCmd = &cobra.Command{
+	Use:     Use,
+	Short:   Short,
+	Long:    Long,
+	PreRun:  PreRun,
+	RunE:    RunE,
+	Version: Version(),
 }
 
 // ----------------------------------------------------------------------------
@@ -97,7 +93,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 	}
 
 	grpcserver := &grpcserver.BasicGrpcServer{
-		AvoidServing:          viper.GetBool(avoidServe.Arg),
+		AvoidServing:          viper.GetBool(option.AvoidServe.Arg),
 		EnableAll:             viper.GetBool(option.EnableAll.Arg),
 		EnableSzConfig:        viper.GetBool(option.EnableSzConfig.Arg),
 		EnableSzConfigManager: viper.GetBool(option.EnableSzConfigManager.Arg),
@@ -121,15 +117,10 @@ func Version() string {
 }
 
 // ----------------------------------------------------------------------------
-// Command
+// Private functions
 // ----------------------------------------------------------------------------
 
-// RootCmd represents the command.
-var RootCmd = &cobra.Command{
-	Use:     Use,
-	Short:   Short,
-	Long:    Long,
-	PreRun:  PreRun,
-	RunE:    RunE,
-	Version: Version(),
+// Since init() is always invoked, define command line parameters.
+func init() {
+	cmdhelper.Init(RootCmd, ContextVariables)
 }
