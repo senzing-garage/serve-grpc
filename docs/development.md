@@ -155,7 +155,8 @@ the binary built can be run.
 
 ### Test using SQLite database
 
-1. Run tests.
+1. Run Go tests.
+   Example:
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
