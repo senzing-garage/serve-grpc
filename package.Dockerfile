@@ -2,7 +2,7 @@
 # Stages
 # -----------------------------------------------------------------------------
 
-ARG IMAGE_SENZINGAPI_RUNTIME=senzing/senzingapi-runtime:3.10.1
+ARG IMAGE_SENZINGAPI_RUNTIME=senzing/senzingapi-runtime-staging:latest
 ARG IMAGE_GO_BUILDER=golang:1.22.3-bullseye
 ARG IMAGE_FPM_BUILDER=dockter/fpm:latest
 ARG IMAGE_FINAL=alpine
