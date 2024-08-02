@@ -103,7 +103,7 @@ the binary built can be run.
         Examples:
 
             ```console
-            export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
+            export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
             export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
             senzing-tools init-database
 
@@ -321,7 +321,7 @@ For other gRPC tools, visit [Awesome gRPC].
             ```json
             {
               "moduleName": "Test of gRPC",
-              "iniParams": "{\"PIPELINE\":{\"CONFIGPATH\":\"/etc/opt/senzing\",\"RESOURCEPATH\":\"/opt/senzing/g2/resources\",\"SUPPORTPATH\":\"/opt/senzing/data\"},\"SQL\":{\"CONNECTION\":\"sqlite3://na:na@/tmp/sqlite/G2C.db\"}}",
+              "iniParams": "{\"PIPELINE\":{\"CONFIGPATH\":\"/etc/opt/senzing\",\"RESOURCEPATH\":\"/opt/senzing/g2/resources\",\"SUPPORTPATH\":\"/opt/senzing/data\"},\"SQL\":{\"CONNECTION\":\"sqlite3://na:na@nowhere/tmp/sqlite/G2C.db\"}}",
               "verboseLogging": 0
             }
             ```
@@ -453,7 +453,7 @@ The actual packaging is done in the [senzing-tools] repository.
    Example:
 
     ```console
-    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
+    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
 
     ```
 
@@ -499,7 +499,7 @@ The actual packaging is done in the [senzing-tools] repository.
    Example:
 
     ```console
-    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
+    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
 
     ```
 

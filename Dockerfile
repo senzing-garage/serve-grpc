@@ -47,7 +47,7 @@ RUN make build
 # Copy binaries to /output.
 
 RUN mkdir -p /output \
- && cp -R ${GOPATH}/src/serve-grpc/target/*  /output/
+      && cp -R ${GOPATH}/src/serve-grpc/target/*  /output/
 
 # -----------------------------------------------------------------------------
 # Stage: final
@@ -76,7 +76,7 @@ COPY ./testdata/sqlite/G2C.db          /tmp/sqlite/G2C.db
 
 # Runtime environment variables.
 
-ENV SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
+ENV SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
 
 # Runtime execution.
 

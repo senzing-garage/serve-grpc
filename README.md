@@ -43,7 +43,7 @@ A simple demonstration using `senzing-tools` and a SQLite database.
 
 ```console
 export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db
+export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
 senzing-tools init-database
 senzing-tools serve-grpc --enable-all
 
