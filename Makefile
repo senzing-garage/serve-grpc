@@ -138,6 +138,11 @@ run: run-osarch-specific
 .PHONY: test
 test: test-osarch-specific
 
+
+.PHONY: docker-test
+docker-test:
+	@docker-compose -f docker-compose.test.yaml up
+
 # -----------------------------------------------------------------------------
 # Coverage
 # -----------------------------------------------------------------------------
