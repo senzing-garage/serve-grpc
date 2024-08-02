@@ -19,13 +19,14 @@ the recommendation is not to use it yet.
 `serve-grpc` is a command in the [senzing-tools] suite of tools.
 This command is a [gRPC] server application that supports requests to the Senzing SDK via network access.
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/senzing-garage/serve-grpc.svg)](https://pkg.go.dev/github.com/senzing-garage/serve-grpc)
-[![Go Report Card](https://goreportcard.com/badge/github.com/senzing-garage/serve-grpc)](https://goreportcard.com/report/github.com/senzing-garage/serve-grpc)
-[![License](https://img.shields.io/badge/License-Apache2-brightgreen.svg)](https://github.com/senzing-garage/serve-grpc/blob/main/LICENSE)
+[![Go Reference Badge]][Package reference]
+[![Go Report Card Badge]][Go Report Card]
+[![License Badge]][License]
+[![go-test-linux.yaml Badge]][go-test-linux.yaml]
+[![go-test-darwin.yaml Badge]][go-test-darwin.yaml]
+[![go-test-windows.yaml Badge]][go-test-windows.yaml]
 
-[![go-test-linux.yaml](https://github.com/senzing-garage/serve-grpc/actions/workflows/go-test-linux.yaml/badge.svg)](https://github.com/senzing-garage/serve-grpc/actions/workflows/go-test-linux.yaml)
-[![go-test-darwin.yaml](https://github.com/senzing-garage/serve-grpc/actions/workflows/go-test-darwin.yaml/badge.svg)](https://github.com/senzing-garage/serve-grpc/actions/workflows/go-test-darwin.yaml)
-[![go-test-windows.yaml](https://github.com/senzing-garage/serve-grpc/actions/workflows/go-test-windows.yaml/badge.svg)](https://github.com/senzing-garage/serve-grpc/actions/workflows/go-test-windows.yaml)
+[![golangci-lint.yaml Badge]][golangci-lint.yaml]
 
 ## Overview
 
@@ -147,8 +148,24 @@ This usage shows how to initialze a database with a Docker container.
 [Development]: docs/development.md
 [Errors]: docs/errors.md
 [Examples]: docs/examples.md
-[gRPC]: https://grpc.io/
+[Go Reference Badge]: https://pkg.go.dev/badge/github.com/senzing-garage/serve-grpc.svg
+[Go Report Card Badge]: https://goreportcard.com/badge/github.com/senzing-garage/serve-grpc
+[Go Report Card]: https://goreportcard.com/report/github.com/senzing-garage/serve-grpc
+[go-test-darwin.yaml Badge]: https://github.com/senzing-garage/serve-grpc/actions/workflows/go-test-darwin.yaml/badge.svg
+[go-test-darwin.yaml]: https://github.com/senzing-garage/serve-grpc/actions/workflows/go-test-darwin.yaml
+[go-test-linux.yaml Badge]: https://github.com/senzing-garage/serve-grpc/actions/workflows/go-test-linux.yaml/badge.svg
+[go-test-linux.yaml]: https://github.com/senzing-garage/serve-grpc/actions/workflows/go-test-linux.yaml
+[go-test-windows.yaml Badge]: https://github.com/senzing-garage/serve-grpc/actions/workflows/go-test-windows.yaml/badge.svg
+[go-test-windows.yaml]: https://github.com/senzing-garage/serve-grpc/actions/workflows/go-test-windows.yaml
+[golangci-lint.yaml Badge]: https://github.com/senzing-garage/serve-grpc/actions/workflows/golangci-lint.yaml/badge.svg
+[golangci-lint.yaml]: https://github.com/senzing-garage/serve-grpc/actions/workflows/golangci-lint.yaml
+[gRPC]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/grpc.md
+[License Badge]: https://img.shields.io/badge/License-Apache2-brightgreen.svg
+[License]: https://github.com/senzing-garage/serve-grpc/blob/main/LICENSE
+[Package reference]: https://pkg.go.dev/github.com/senzing-garage/serve-grpc
+[Senzing Garage]: https://github.com/senzing-garage
 [Senzing Protocol Buffer definitions]: https://github.com/senzing-garage/sz-sdk-proto
+[Senzing Quick Start guides]: https://docs.senzing.com/quickstart/
 [SENZING_TOOLS_DATABASE_URL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_database_url
 [SENZING_TOOLS_ENABLE_ALL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_all
 [SENZING_TOOLS_ENABLE_G2CONFIG]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2config
@@ -162,6 +179,7 @@ This usage shows how to initialze a database with a Docker container.
 [SENZING_TOOLS_GRPC_PORT]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_grpc_port
 [SENZING_TOOLS_LOG_LEVEL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_log_level
 [senzing-tools]: https://github.com/senzing-garage/senzing-tools
+[Senzing]: https://senzing.com/
 [senzing/sz-sdk-go-core]: https://github.com/senzing-garage/sz-sdk-go-core
 [sz-sdk-go-grpc]: https://github.com/senzing-garage/sz-sdk-go-grpc
 [sz-sdk-python-grpc]: https://github.com/senzing-garage/sz-sdk-python-grpc

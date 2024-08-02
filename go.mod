@@ -8,8 +8,8 @@ require (
 	github.com/senzing-garage/go-helpers v0.5.2
 	github.com/senzing-garage/go-logging v1.5.0
 	github.com/senzing-garage/go-observing v0.3.2
-	github.com/senzing-garage/sz-sdk-go v0.13.5
-	github.com/senzing-garage/sz-sdk-go-core v0.7.4
+	github.com/senzing-garage/sz-sdk-go v0.13.6-0.20240802143103-89f0c19fc814
+	github.com/senzing-garage/sz-sdk-go-core v0.7.5-0.20240802144828-eb5601c14fce
 	github.com/senzing-garage/sz-sdk-proto v0.7.6
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0

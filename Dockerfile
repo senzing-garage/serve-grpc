@@ -2,7 +2,7 @@
 # Stages
 # -----------------------------------------------------------------------------
 
-ARG IMAGE_GO_BUILDER=golang:1.22.3-bullseye
+ARG IMAGE_BUILDER=golang:1.22.3-bullseye
 ARG IMAGE_FINAL=senzing/senzingapi-runtime-staging:latest
 
 # -----------------------------------------------------------------------------
@@ -12,14 +12,18 @@ ARG IMAGE_FINAL=senzing/senzingapi-runtime-staging:latest
 FROM ${IMAGE_FINAL} as senzingapi_runtime
 
 # -----------------------------------------------------------------------------
-# Stage: go_builder
+# Stage: builder
 # -----------------------------------------------------------------------------
 
-FROM ${IMAGE_GO_BUILDER} as go_builder
+FROM ${IMAGE_BUILDER} as builder
 ENV REFRESHED_AT=2024-07-01
-LABEL Name="senzing/serve-grpc-builder" \
+LABEL Name="senzing/go-builder" \
       Maintainer="support@senzing.com" \
-      Version="0.6.0"
+      Version="0.1.0"
+
+# Run as "root" for system installation.
+
+USER root
 
 # Copy local files from the Git repository.
 
@@ -57,13 +61,15 @@ LABEL Name="senzing/serve-grpc" \
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "/app/healthcheck.sh" ]
 USER root
 
-# Copy local files from the Git repository.
+# Copy files from repository.
 
 COPY ./rootfs /
 
 # Copy files from prior stage.
 
-COPY --from=go_builder "/output/linux/serve-grpc" "/app/serve-grpc"
+COPY --from=builder "/output/linux/serve-grpc" "/app/serve-grpc"
+
+# Run as non-root container
 
 USER 1001
 COPY ./testdata/sqlite/G2C.db          /tmp/sqlite/G2C.db

@@ -1,5 +1,8 @@
-# serve-grpc
+# template-go
 
-Placeholder for [GitHub pages](https://pages.github.com/).
+Placeholder for [GitHub pages].
 
-See [https://garage.senzing.com/serve-grpc](https://garage.senzing.com/serve-grpc).
+See [GitHub page].
+
+[GitHub page]: https://garage.senzing.com/serve-grpc
+[GitHub pages]: https://pages.github.com/
