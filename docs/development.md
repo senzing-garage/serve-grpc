@@ -133,7 +133,6 @@ the binary built can be run.
     1. Linux
 
         ```console
-        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
         ${GIT_REPOSITORY_DIR}/target/linux-amd64/serve-grpc
 
         ```
@@ -141,7 +140,6 @@ the binary built can be run.
     1. macOS
 
         ```console
-        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
         ${GIT_REPOSITORY_DIR}/target/darwin-amd64/serve-grpc
 
         ```
@@ -149,7 +147,6 @@ the binary built can be run.
     1. Windows
 
         ```console
-        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
         ${GIT_REPOSITORY_DIR}/target/windows-amd64/serve-grpc
 
         ```
@@ -519,6 +516,8 @@ The actual packaging is done in the [senzing-tools] repository.
     sudo yum remove serve-grpc
 
     ```
+
+## References
 
 [Awesome gRPC]: https://github.com/grpc-ecosystem/awesome-grpc#tools
 [bloomrpc]: https://github.com/bloomrpc/bloomrpc
