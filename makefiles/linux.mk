@@ -5,7 +5,7 @@
 # -----------------------------------------------------------------------------
 
 LD_LIBRARY_PATH ?= /opt/senzing/g2/lib
-SENZING_TOOLS_DATABASE_URL ?= sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
+SENZING_TOOLS_DATABASE_URL ?= "sqlite3://na:na@nowhere/tmp/sqlite/G2C.db"
 PATH := $(MAKEFILE_DIRECTORY)/bin:/$(HOME)/go/bin:$(PATH)
 
 # -----------------------------------------------------------------------------
