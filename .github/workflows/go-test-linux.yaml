@@ -47,6 +47,9 @@ jobs:
       - name: Copy test database files
         run: mkdir -p /tmp/sqlite && cp testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
 
+      - name: Print database URL
+        run: echo ${SENZING_TOOLS_DATABASE_URL}
+
       - name: Run go test
         run: go test -json -v -p 1 -coverprofile=./cover.out -covermode=atomic -coverpkg=./... ./...  2>&1 | tee /tmp/gotest.log | gotestfmt
 
