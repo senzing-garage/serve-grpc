@@ -1,4 +1,4 @@
-# template-go
+# serve-grpc
 
 Placeholder for [GitHub pages].
 

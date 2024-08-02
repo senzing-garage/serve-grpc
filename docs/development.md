@@ -525,8 +525,8 @@ The actual packaging is done in the [senzing-tools] repository.
 [clone-repository]: https://github.com/senzing-garage/knowledge-base/blob/main/HOWTO/clone-repository.md
 [docker]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/docker.md
 [git]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/git.md
-[Go Reference Badge]: https://pkg.go.dev/badge/github.com/senzing-garage/template-go.svg
-[Go Reference]: https://pkg.go.dev/github.com/senzing-garage/template-go
+[Go Reference Badge]: https://pkg.go.dev/badge/github.com/senzing-garage/serve-grpc.svg
+[Go Reference]: https://pkg.go.dev/github.com/senzing-garage/serve-grpc
 [go]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/go.md
 [How to Install Senzing for Go Development]: https://github.com/senzing-garage/knowledge-base/blob/main/HOWTO/install-senzing-for-go-development.md
 [latest release]: https://github.com/bloomrpc/bloomrpc/releases
