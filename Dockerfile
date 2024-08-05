@@ -9,15 +9,15 @@ ARG IMAGE_FINAL=senzing/senzingapi-runtime-staging:latest
 # Stage: senzingapi_runtime
 # -----------------------------------------------------------------------------
 
-FROM ${IMAGE_FINAL} as senzingapi_runtime
+FROM ${IMAGE_FINAL} AS senzingapi_runtime
 
 # -----------------------------------------------------------------------------
 # Stage: builder
 # -----------------------------------------------------------------------------
 
-FROM ${IMAGE_BUILDER} as builder
+FROM ${IMAGE_BUILDER} AS builder
 ENV REFRESHED_AT=2024-07-01
-LABEL Name="senzing/go-builder" \
+LABEL Name="senzing/builder" \
       Maintainer="support@senzing.com" \
       Version="0.1.0"
 
@@ -53,11 +53,11 @@ RUN mkdir -p /output \
 # Stage: final
 # -----------------------------------------------------------------------------
 
-FROM ${IMAGE_FINAL} as final
+FROM ${IMAGE_FINAL} AS final
 ENV REFRESHED_AT=2024-07-01
 LABEL Name="senzing/serve-grpc" \
       Maintainer="support@senzing.com" \
-      Version="0.6.0"
+      Version="0.7.6"
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "/app/healthcheck.sh" ]
 USER root
 
@@ -68,11 +68,12 @@ COPY ./rootfs /
 # Copy files from prior stage.
 
 COPY --from=builder "/output/linux/serve-grpc" "/app/serve-grpc"
+COPY ./testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
+RUN chmod --recursive 777 /tmp/sqlite
 
 # Run as non-root container
 
 USER 1001
-COPY ./testdata/sqlite/G2C.db          /tmp/sqlite/G2C.db
 
 # Runtime environment variables.
 
