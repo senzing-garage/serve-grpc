@@ -107,7 +107,7 @@ LABEL Name="senzing/final-stage" \
       Version="0.1.0"
 HEALTHCHECK CMD ["/app/healthcheck.sh"]
 
-# Copy local files from the Git repository.
+# Copy files from repository.
 
 COPY ./rootfs /
 
