@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+
+## [0.7.6] - 2024-08-05
+
+### Changed in 0.7.6
+
+- Fix permissions on Sqlite database file
+
 ## [0.7.5] - 2024-08-05
 
 ### Changed in 0.7.5
