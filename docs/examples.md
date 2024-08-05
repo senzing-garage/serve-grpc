@@ -60,7 +60,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 
     ```console
     docker run \
-        --env SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@/tmp/sqlite/G2C.db \
+        --env SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db \
         --interactive \
         --publish 8258:8258 \
         --rm \

@@ -1,13 +1,8 @@
 # serve-grpc
 
-## Commands
+Placeholder for [GitHub pages].
 
-1. [senzing-tools serve-grpc](https://hub.senzing.com/senzing-tools/senzing-tools_serve-grpc.html)
+See [GitHub page].
 
-## Examples
-
-1. [examples](examples.md)
-
-## Errors
-
-1. [errors](errors.md)
+[GitHub page]: https://garage.senzing.com/serve-grpc
+[GitHub pages]: https://pages.github.com/
