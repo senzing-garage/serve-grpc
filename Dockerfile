@@ -17,7 +17,7 @@ FROM ${IMAGE_FINAL} AS senzingapi_runtime
 
 FROM ${IMAGE_BUILDER} AS builder
 ENV REFRESHED_AT=2024-07-01
-LABEL Name="senzing/builder" \
+LABEL Name="senzing/go-builder" \
       Maintainer="support@senzing.com" \
       Version="0.1.0"
 
