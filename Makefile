@@ -156,7 +156,7 @@ coverage: coverage-osarch-specific
 check-coverage: export SENZING_LOG_LEVEL=TRACE
 check-coverage:
 	@go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
-	@${GOBIN}/go-test-coverage --config=.github/coverage/.testcoverage.yaml
+	@${GOBIN}/go-test-coverage --config=.github/coverage/testcoverage.yaml
 
 # -----------------------------------------------------------------------------
 # Documentation

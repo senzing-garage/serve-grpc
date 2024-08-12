@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+## [0.7.7] - 2024-08-12
+
+### Changed in 0.7.7
+
+- Updated `senzing/senzingapi-runtime-staging` to 4.0.0.24211
 
 ## [0.7.6] - 2024-08-05
 
