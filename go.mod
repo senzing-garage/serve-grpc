@@ -4,8 +4,8 @@ go 1.21
 
 require (
 	github.com/aquilax/truncate v1.0.0
-	github.com/senzing-garage/go-cmdhelping v0.2.3
-	github.com/senzing-garage/go-helpers v0.5.2
+	github.com/senzing-garage/go-cmdhelping v0.3.0
+	github.com/senzing-garage/go-helpers v0.6.0
 	github.com/senzing-garage/go-logging v1.5.0
 	github.com/senzing-garage/go-observing v0.3.2
 	github.com/senzing-garage/sz-sdk-go v0.13.6
