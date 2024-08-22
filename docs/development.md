@@ -99,7 +99,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     1. Linux
 
-        1. :pencil2: Identify location for database.
+        1. :pencil2: Identify a location for database.
            Example:
 
             ```console
@@ -113,7 +113,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
             ```console
             mkdir --parents ${SENZING_TOOLS_DATABASE_FILE%/*}
             cp ${GIT_REPOSITORY_DIR}/testdata/sqlite/G2C.db ${SENZING_TOOLS_DATABASE_FILE}
-            export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere${SENZING_TOOLS_DATABASE_PATH}
+            export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere${SENZING_TOOLS_DATABASE_FILE}
             ${GIT_REPOSITORY_DIR}/target/linux-amd64/serve-grpc
 
             ```
