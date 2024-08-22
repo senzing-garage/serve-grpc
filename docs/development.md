@@ -230,7 +230,10 @@ Example:
    Example:
 
     ```console
-    docker run --rm senzing/serve-grpc
+    docker run \
+        --publish 8261:8261 \
+        --rm \
+        senzing/serve-grpc
 
     ```
 
