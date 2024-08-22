@@ -141,77 +141,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     ```
 
-## Run
-
-After running `make build`,
-the binary built can be run.
-
-1. Identify the database by setting the `SENZING_TOOLS_DATABASE_URL` environment variable.
-    1. If using Sqlite database
-        1. :pencil2: Create a new Sqlite database.
-        Examples:
-
-            ```console
-            export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
-            export LD_LIBRARY_PATH=/opt/senzing/er/lib/
-            senzing-tools init-database
-
-            ```
-
-    1. If using PostgreSQL database
-        1. :pencil2: Identify an existing PostgreSQL database.
-           Example:
-
-            ```console
-            export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-            export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/er/?sslmode=disable
-
-            ```
-
-        1. If needed, initialize PostgreSQL database.
-           Example:
-
-            ```console
-            export LD_LIBRARY_PATH=/opt/senzing/er/lib/
-            senzing-tools init-database
-
-            ```
-
-1. Set `LD_LIBRARY_PATH` and run the command.
-   Examples:
-    1. Linux
-
-        ```console
-        ${GIT_REPOSITORY_DIR}/target/linux-amd64/serve-grpc
-
-        ```
-
-    1. macOS
-
-        ```console
-        ${GIT_REPOSITORY_DIR}/target/darwin-amd64/serve-grpc
-
-        ```
-
-    1. Windows
-
-        ```console
-        ${GIT_REPOSITORY_DIR}/target/windows-amd64/serve-grpc
-
-        ```
-
-1. Clean up.
-   Example:
-
-    ```console
-    cd ${GIT_REPOSITORY_DIR}
-    make clean
-
-    ```
-
 ## Test
-
-### Test using SQLite database
 
 1. Run tests.
    Example:
@@ -238,142 +168,6 @@ the binary built can be run.
     ```
 
    Visit [localhost:9174].
-
-### Test using Docker-compose stack with PostgreSql database
-
-The following instructions show how to bring up a test stack to be used
-in testing the `sz-sdk-go-core` packages.
-
-1. Identify a directory to place docker-compose artifacts.
-   The directory specified will be deleted and re-created.
-   Example:
-
-    ```console
-    export SENZING_DEMO_DIR=~/my-senzing-demo
-
-    ```
-
-1. Bring up the docker-compose stack.
-   Example:
-
-    ```console
-    export PGADMIN_DIR=${SENZING_DEMO_DIR}/pgadmin
-    export POSTGRES_DIR=${SENZING_DEMO_DIR}/postgres
-    export RABBITMQ_DIR=${SENZING_DEMO_DIR}/rabbitmq
-    export SENZING_VAR_DIR=${SENZING_DEMO_DIR}/var
-    export SENZING_UID=$(id -u)
-    export SENZING_GID=$(id -g)
-
-    rm -rf ${SENZING_DEMO_DIR:-/tmp/nowhere/for/safety}
-    mkdir ${SENZING_DEMO_DIR}
-    mkdir -p ${PGADMIN_DIR} ${POSTGRES_DIR} ${RABBITMQ_DIR} ${SENZING_VAR_DIR}
-    chmod -R 777 ${SENZING_DEMO_DIR}
-
-    curl -X GET \
-        --output ${SENZING_DEMO_DIR}/docker-versions-stable.sh \
-        https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/lists/docker-versions-stable.sh
-    source ${SENZING_DEMO_DIR}/docker-versions-stable.sh
-    curl -X GET \
-        --output ${SENZING_DEMO_DIR}/docker-compose.yaml \
-        "https://raw.githubusercontent.com/senzing-garage/docker-compose-demo/main/resources/postgresql/docker-compose-postgresql.yaml"
-
-    cd ${SENZING_DEMO_DIR}
-    sudo --preserve-env docker-compose up
-
-    ```
-
-1. In a separate terminal window, set environment variables.
-   Identify Database URL of database in docker-compose stack.
-   Example:
-
-    ```console
-    export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/er/?sslmode=disable
-
-    ```
-
-1. Run tests.
-
-    ```console
-    cd ${GIT_REPOSITORY_DIR}
-    make clean test
-
-    ```
-
-1. **Optional:** View the PostgreSQL database.
-
-   Visit [localhost:9171].
-   For the initial login, review the instructions at the top of the web page.
-   For server password information, see the `POSTGRESQL_POSTGRES_PASSWORD` value in `${SENZING_DEMO_DIR}/docker-compose.yaml`.
-   Usually, it's "postgres".
-
-1. Cleanup.
-
-    ```console
-    cd ${SENZING_DEMO_DIR}
-    sudo --preserve-env docker-compose down
-
-    cd ${GIT_REPOSITORY_DIR}
-    make clean
-
-    ```
-
-### Test using bloomrpc
-
-Using a (deprecated) BloomRPC client, test the Senzing gRPC Server.
-For other gRPC tools, visit [Awesome gRPC].
-
-1. Install the [bloomrpc] gRPC test client.
-   1. Example for Ubuntu.
-
-       1. Find [latest release].
-
-       1. :pencil2: Install.
-          Example:
-
-           ```console
-           wget https://github.com/bloomrpc/bloomrpc/releases/download/1.5.3/bloomrpc_1.5.3_amd64.deb
-           sudo apt install ./bloomrpc_1.5.3_amd64.deb
-
-           ```
-
-1. Start the test server.
-   Example:
-
-    ```console
-    cd ${GIT_REPOSITORY_DIR}
-    make clean run-serve-grpc
-
-    ```
-
-1. In a separate terminal, start the gRPC test client.
-   Example:
-
-    ```console
-    bloomrpc
-
-    ```
-
-1. In `bloomrpc`:
-    1. Near top-center, use the address of `0.0.0.0:8258` to reach the local gRPC server.
-    1. In upper-left, click on plus sign ("+").
-        1. Navigate to the ${GIT_REPOSITORY_DIR}/proto directory
-        1. Choose one or more `.proto` files.
-    1. In left-hand pane,
-        1. Choose the `Init` message.
-        1. Set the request values.
-           Example:
-
-            ```json
-            {
-              "moduleName": "Test of gRPC",
-              "iniParams": "{\"PIPELINE\":{\"CONFIGPATH\":\"/etc/opt/senzing\",\"RESOURCEPATH\":\"/opt/senzing/er/resources\",\"SUPPORTPATH\":\"/opt/senzing/data\"},\"SQL\":{\"CONNECTION\":\"sqlite3://na:na@nowhere/tmp/sqlite/G2C.db\"}}",
-              "verboseLogging": 0
-            }
-            ```
-
-        1. Near the center, click the green "play" button.
-    1. The Senzing object is initialized and other messages can be tried.
 
 ## Coverage
 
@@ -405,7 +199,7 @@ Create a code coverage map.
 
 1. If a web page doesn't appear, visit [localhost:6060].
 1. Senzing documentation will be in the "Third party" section.
-   `github.com` > `senzing` > `serve-grpc`
+   `github.com` > `senzing-garage` > `serve-grpc`
 
 1. When a versioned release is published with a `v0.0.0` format tag,
 the reference can be found by clicking on the following badge at the top of the README.md page.
@@ -573,6 +367,144 @@ The actual packaging is done in the [senzing-tools] repository.
     sudo yum remove serve-grpc
 
     ```
+
+## Specialty
+
+### Test using Docker-compose stack with PostgreSql database
+
+The following instructions show how to bring up a test stack to be used
+in testing the `sz-sdk-go-core` packages.
+
+1. Identify a directory to place docker-compose artifacts.
+   The directory specified will be deleted and re-created.
+   Example:
+
+    ```console
+    export SENZING_DEMO_DIR=~/my-senzing-demo
+
+    ```
+
+1. Bring up the docker-compose stack.
+   Example:
+
+    ```console
+    export PGADMIN_DIR=${SENZING_DEMO_DIR}/pgadmin
+    export POSTGRES_DIR=${SENZING_DEMO_DIR}/postgres
+    export RABBITMQ_DIR=${SENZING_DEMO_DIR}/rabbitmq
+    export SENZING_VAR_DIR=${SENZING_DEMO_DIR}/var
+    export SENZING_UID=$(id -u)
+    export SENZING_GID=$(id -g)
+
+    rm -rf ${SENZING_DEMO_DIR:-/tmp/nowhere/for/safety}
+    mkdir ${SENZING_DEMO_DIR}
+    mkdir -p ${PGADMIN_DIR} ${POSTGRES_DIR} ${RABBITMQ_DIR} ${SENZING_VAR_DIR}
+    chmod -R 777 ${SENZING_DEMO_DIR}
+
+    curl -X GET \
+        --output ${SENZING_DEMO_DIR}/docker-versions-stable.sh \
+        https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/lists/docker-versions-stable.sh
+    source ${SENZING_DEMO_DIR}/docker-versions-stable.sh
+    curl -X GET \
+        --output ${SENZING_DEMO_DIR}/docker-compose.yaml \
+        "https://raw.githubusercontent.com/senzing-garage/docker-compose-demo/main/resources/postgresql/docker-compose-postgresql.yaml"
+
+    cd ${SENZING_DEMO_DIR}
+    sudo --preserve-env docker-compose up
+
+    ```
+
+1. In a separate terminal window, set environment variables.
+   Identify Database URL of database in docker-compose stack.
+   Example:
+
+    ```console
+    export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
+    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/er/?sslmode=disable
+
+    ```
+
+1. Run tests.
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean test
+
+    ```
+
+1. **Optional:** View the PostgreSQL database.
+
+   Visit [localhost:9171].
+   For the initial login, review the instructions at the top of the web page.
+   For server password information, see the `POSTGRESQL_POSTGRES_PASSWORD` value in `${SENZING_DEMO_DIR}/docker-compose.yaml`.
+   Usually, it's "postgres".
+
+1. Cleanup.
+
+    ```console
+    cd ${SENZING_DEMO_DIR}
+    sudo --preserve-env docker-compose down
+
+    cd ${GIT_REPOSITORY_DIR}
+    make clean
+
+    ```
+
+### Test using bloomrpc
+
+Using a (deprecated) BloomRPC client, test the Senzing gRPC Server.
+For other gRPC tools, visit [Awesome gRPC].
+
+1. Install the [bloomrpc] gRPC test client.
+   1. Example for Ubuntu.
+
+       1. Find [latest release].
+
+       1. :pencil2: Install.
+          Example:
+
+           ```console
+           wget https://github.com/bloomrpc/bloomrpc/releases/download/1.5.3/bloomrpc_1.5.3_amd64.deb
+           sudo apt install ./bloomrpc_1.5.3_amd64.deb
+
+           ```
+
+1. Start the test server.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean run-serve-grpc
+
+    ```
+
+1. In a separate terminal, start the gRPC test client.
+   Example:
+
+    ```console
+    bloomrpc
+
+    ```
+
+1. In `bloomrpc`:
+    1. Near top-center, use the address of `0.0.0.0:8258` to reach the local gRPC server.
+    1. In upper-left, click on plus sign ("+").
+        1. Navigate to the ${GIT_REPOSITORY_DIR}/proto directory
+        1. Choose one or more `.proto` files.
+    1. In left-hand pane,
+        1. Choose the `Init` message.
+        1. Set the request values.
+           Example:
+
+            ```json
+            {
+              "moduleName": "Test of gRPC",
+              "iniParams": "{\"PIPELINE\":{\"CONFIGPATH\":\"/etc/opt/senzing\",\"RESOURCEPATH\":\"/opt/senzing/er/resources\",\"SUPPORTPATH\":\"/opt/senzing/data\"},\"SQL\":{\"CONNECTION\":\"sqlite3://na:na@nowhere/tmp/sqlite/G2C.db\"}}",
+              "verboseLogging": 0
+            }
+            ```
+
+        1. Near the center, click the green "play" button.
+    1. The Senzing object is initialized and other messages can be tried.
 
 ## References
 
