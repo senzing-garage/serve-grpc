@@ -47,7 +47,7 @@ RUN make build
 # Copy binaries to /output.
 
 RUN mkdir -p /output \
-      && cp -R ${GOPATH}/src/serve-grpc/target/*  /output/
+ && cp -R ${GOPATH}/src/serve-grpc/target/*  /output/
 
 # -----------------------------------------------------------------------------
 # Stage: final

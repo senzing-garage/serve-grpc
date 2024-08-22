@@ -28,6 +28,7 @@ clean-osarch-specific:
 	@rm -fr $(TARGET_DIRECTORY) || true
 	@rm -fr /tmp/sqlite || true
 	@pkill godoc || true
+	@docker-compose -f docker-compose.test.yaml down 2> /dev/null || true
 
 
 .PHONY: coverage-osarch-specific
@@ -38,18 +39,18 @@ coverage-osarch-specific:
 	@xdg-open $(MAKEFILE_DIRECTORY)/coverage.html
 
 
-.PHONY: documentation-osarch-specific
-documentation-osarch-specific:
-	@godoc &
-	@xdg-open http://localhost:6060
-
-
 .PHONY: docker-build-osarch-specific
 docker-build-osarch-specific:
 	@$(DOCKER_BUILDKIT) docker build \
 		--tag $(DOCKER_IMAGE_NAME) \
 		--tag $(DOCKER_IMAGE_NAME):$(BUILD_VERSION) \
 		.
+
+
+.PHONY: documentation-osarch-specific
+documentation-osarch-specific:
+	@godoc &
+	@xdg-open http://localhost:6060
 
 
 .PHONY: hello-world-osarch-specific

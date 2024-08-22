@@ -94,6 +94,55 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
 ## Run
 
+1. Run program.
+   Examples:
+
+    1. Linux
+
+        1. :pencil2: Identify location for database.
+           Example:
+
+            ```console
+            export SENZING_TOOLS_DATABASE_FILE=/tmp/sqlite/G2C.db
+
+            ```
+
+        1. Copy template database and run command.
+           Example:
+
+            ```console
+            mkdir --parents ${SENZING_TOOLS_DATABASE_FILE%/*}
+            cp ${GIT_REPOSITORY_DIR}/testdata/sqlite/G2C.db ${SENZING_TOOLS_DATABASE_FILE}
+            export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere${SENZING_TOOLS_DATABASE_PATH}
+            ${GIT_REPOSITORY_DIR}/target/linux-amd64/serve-grpc
+
+            ```
+
+    1. macOS
+
+        ```console
+        ${GIT_REPOSITORY_DIR}/target/darwin-amd64/serve-grpc
+
+        ```
+
+    1. Windows
+
+        ```console
+        ${GIT_REPOSITORY_DIR}/target/windows-amd64/serve-grpc
+
+        ```
+
+1. Clean up.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean
+
+    ```
+
+## Run
+
 After running `make build`,
 the binary built can be run.
 
@@ -356,7 +405,7 @@ Create a code coverage map.
 
 1. If a web page doesn't appear, visit [localhost:6060].
 1. Senzing documentation will be in the "Third party" section.
-   `github.com` > `senzing` > `go-cmdhelping`
+   `github.com` > `senzing` > `serve-grpc`
 
 1. When a versioned release is published with a `v0.0.0` format tag,
 the reference can be found by clicking on the following badge at the top of the README.md page.
@@ -397,6 +446,14 @@ Example:
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make docker-test
+
+    ```
+
+   To bring the `docker-compose` formation, run
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean
 
     ```
 
