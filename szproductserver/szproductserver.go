@@ -96,8 +96,8 @@ func (server *SzProductServer) SetLogLevel(ctx context.Context, logLevelName str
 	if !logging.IsValidLogLevelName(logLevelName) {
 		return fmt.Errorf("invalid error level: %s", logLevelName)
 	}
-	// g2product := getG2product()
-	// err = g2product.SetLogLevel(ctx, logLevelName)
+	// szproduct := getSzproduct()
+	// err = szproduct.SetLogLevel(ctx, logLevelName)
 	// if err != nil {
 	// 	return err
 	// }
@@ -118,7 +118,7 @@ func (server *SzProductServer) SetLogLevel(ctx context.Context, logLevelName str
 
 // --- Services ---------------------------------------------------------------
 
-// Singleton pattern for g2product.
+// Singleton pattern for szproduct.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
 func getSzProduct() *szsdk.Szproduct {
 	szProductSyncOnce.Do(func() {

@@ -2,4 +2,4 @@
 
 package szproductserver
 
-var licenseFilePath = "/opt/senzing/g2/etc/g2.lic"
+var licenseFilePath = "/opt/senzing/er/etc/g2.lic"

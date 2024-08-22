@@ -35,8 +35,8 @@ var IDMessages = map[int]string{
 	2003: "Server listening at %v",
 	2004: "Serving avoided.",
 	4001: "Call to net.Listen(tcp, %s) failed.",
-	4002: "Call to G2diagnostic.PurgeRepository() failed.",
-	4003: "Call to G2engine.Destroy() failed.",
+	4002: "Call to Szdiagnostic.PurgeRepository() failed.",
+	4003: "Call to Szengine.Destroy() failed.",
 	5001: "Failed to serve.",
 }
 

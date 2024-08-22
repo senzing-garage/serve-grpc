@@ -1,4 +1,4 @@
 /*
-The szengineserver package handles gRPC requests for Senzing's G2Engine object.
+The szengineserver package handles gRPC requests for Senzing's SzEngine object.
 */
 package szengineserver

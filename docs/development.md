@@ -21,8 +21,8 @@ These are "one-time tasks" which may already have been completed.
 Since the Senzing library is a prerequisite, it must be installed first.
 
 1. Verify Senzing C shared objects, configuration, and SDK header files are installed.
-    1. `/opt/senzing/g2/lib`
-    1. `/opt/senzing/g2/sdk/c`
+    1. `/opt/senzing/er/lib`
+    1. `/opt/senzing/er/sdk/c`
     1. `/etc/opt/senzing`
 
 1. If not installed, see [How to Install Senzing for Go Development].
@@ -104,7 +104,7 @@ the binary built can be run.
 
             ```console
             export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
-            export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+            export LD_LIBRARY_PATH=/opt/senzing/er/lib/
             senzing-tools init-database
 
             ```
@@ -115,7 +115,7 @@ the binary built can be run.
 
             ```console
             export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-            export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
+            export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/er/?sslmode=disable
 
             ```
 
@@ -123,7 +123,7 @@ the binary built can be run.
            Example:
 
             ```console
-            export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+            export LD_LIBRARY_PATH=/opt/senzing/er/lib/
             senzing-tools init-database
 
             ```
@@ -239,7 +239,7 @@ in testing the `sz-sdk-go-core` packages.
 
     ```console
     export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
+    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/er/?sslmode=disable
 
     ```
 
@@ -318,7 +318,7 @@ For other gRPC tools, visit [Awesome gRPC].
             ```json
             {
               "moduleName": "Test of gRPC",
-              "iniParams": "{\"PIPELINE\":{\"CONFIGPATH\":\"/etc/opt/senzing\",\"RESOURCEPATH\":\"/opt/senzing/g2/resources\",\"SUPPORTPATH\":\"/opt/senzing/data\"},\"SQL\":{\"CONNECTION\":\"sqlite3://na:na@nowhere/tmp/sqlite/G2C.db\"}}",
+              "iniParams": "{\"PIPELINE\":{\"CONFIGPATH\":\"/etc/opt/senzing\",\"RESOURCEPATH\":\"/opt/senzing/er/resources\",\"SUPPORTPATH\":\"/opt/senzing/data\"},\"SQL\":{\"CONNECTION\":\"sqlite3://na:na@nowhere/tmp/sqlite/G2C.db\"}}",
               "verboseLogging": 0
             }
             ```
@@ -458,7 +458,7 @@ The actual packaging is done in the [senzing-tools] repository.
    Example:
 
     ```console
-    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    export LD_LIBRARY_PATH=/opt/senzing/er/lib/
     serve-grpc
 
     ```
@@ -504,7 +504,7 @@ The actual packaging is done in the [senzing-tools] repository.
    Example:
 
     ```console
-    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    export LD_LIBRARY_PATH=/opt/senzing/er/lib/
     serve-grpc
 
     ```

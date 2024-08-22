@@ -1,4 +1,4 @@
 /*
-The szdiagnosticserver package handles gRPC requests for Senzing's G2Diagnostic object.
+The szdiagnosticserver package handles gRPC requests for Senzing's SzDiagnostic object.
 */
 package szdiagnosticserver

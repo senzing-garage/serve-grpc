@@ -635,8 +635,8 @@ func (server *SzEngineServer) SetLogLevel(ctx context.Context, logLevelName stri
 	if !logging.IsValidLogLevelName(logLevelName) {
 		return fmt.Errorf("invalid error level: %s", logLevelName)
 	}
-	// g2engine := getG2engine()
-	// err = g2engine.SetLogLevel(ctx, logLevelName)
+	// szengine := getSzengine()
+	// err = szengine.SetLogLevel(ctx, logLevelName)
 	// if err != nil {
 	// 	return err
 	// }
@@ -657,7 +657,7 @@ func (server *SzEngineServer) SetLogLevel(ctx context.Context, logLevelName stri
 
 // --- Services ---------------------------------------------------------------
 
-// Singleton pattern for g2config.
+// Singleton pattern for szconfig.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
 func getSzEngine() *szsdk.Szengine {
 	szEngineSyncOnce.Do(func() {

@@ -11,7 +11,7 @@ In this example, only the SzEngine gRPC is started.
    Example:
 
     ```console
-    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    export LD_LIBRARY_PATH=/opt/senzing/er/lib/
     senzing-tools serve-grpc \
         --database-url postgresql://username:password@postgres.example.com:5432/G2 \
         --enable-szengine
@@ -29,7 +29,7 @@ If using multiple databases or non-system locations of Senzing binaries,
     export SENZING_TOOLS_ENGINE_CONFIGURATION_JSON='{
         "PIPELINE": {
             "CONFIGPATH": "/etc/opt/senzing",
-            "RESOURCEPATH": "/opt/senzing/g2/resources",
+            "RESOURCEPATH": "/opt/senzing/er/resources",
             "SUPPORTPATH": "/opt/senzing/data"
         },
         "SQL": {
@@ -42,7 +42,7 @@ If using multiple databases or non-system locations of Senzing binaries,
    Example:
 
     ```console
-    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    export LD_LIBRARY_PATH=/opt/senzing/er/lib/
     senzing-tools serve-grpc
     ```
 
