@@ -68,6 +68,9 @@ COPY ./rootfs /
 # Copy files from prior stage.
 
 COPY --from=builder "/output/linux/serve-grpc" "/app/serve-grpc"
+
+# Install database
+
 COPY ./testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
 RUN chmod --recursive 777 /tmp/sqlite
 

@@ -308,6 +308,24 @@ The actual packaging is done in the [senzing-tools] repository.
 
     ```
 
+1. :pencil2: Identify a location for database.
+    Example:
+
+    ```console
+    export SENZING_TOOLS_DATABASE_FILE=/tmp/sqlite/G2C.db
+
+    ```
+
+1. Copy template database and run command.
+    Example:
+
+    ```console
+    mkdir --parents ${SENZING_TOOLS_DATABASE_FILE%/*}
+    cp ${GIT_REPOSITORY_DIR}/testdata/sqlite/G2C.db ${SENZING_TOOLS_DATABASE_FILE}
+    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere${SENZING_TOOLS_DATABASE_FILE}
+
+    ```
+
 1. :pencil2: Run command.
    Example:
 
