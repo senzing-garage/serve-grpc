@@ -299,15 +299,6 @@ The actual packaging is done in the [senzing-tools] repository.
 
     ```
 
-1. :pencil2: Identify database.
-   One option is to bring up PostgreSql as see in [Test using Docker-compose stack with PostgreSql database].
-   Example:
-
-    ```console
-    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
-
-    ```
-
 1. :pencil2: Identify a location for database.
     Example:
 
