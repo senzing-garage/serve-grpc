@@ -108,8 +108,9 @@ func (server *SzEngineServer) ExportJsonEntityReport(ctx context.Context, reques
 	}
 	szEngine := getSzEngine()
 	result, err = szEngine.ExportJSONEntityReport(ctx, request.GetFlags())
+	responseResult := int64(result) //nolint:gosec
 	response := szpb.ExportJsonEntityReportResponse{
-		Result: int64(result),
+		Result: responseResult,
 	}
 	return &response, err
 }
