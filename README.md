@@ -42,7 +42,7 @@ Senzing SDKs for accessing the gRPC server:
 A simple demonstration using `senzing-tools` and a SQLite database.
 
 ```console
-export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+export LD_LIBRARY_PATH=/opt/senzing/er/lib/
 export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
 senzing-tools init-database
 senzing-tools serve-grpc --enable-all
@@ -57,7 +57,7 @@ senzing-tools serve-grpc --enable-all
 ## Use
 
 ```console
-export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+export LD_LIBRARY_PATH=/opt/senzing/er/lib/
 senzing-tools serve-grpc [flags]
 ```
 
@@ -66,7 +66,7 @@ senzing-tools serve-grpc [flags]
     1. Runtime documentation:
 
         ```console
-        export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+        export LD_LIBRARY_PATH=/opt/senzing/er/lib/
         senzing-tools serve-grpc --help
         ```
 
@@ -78,7 +78,7 @@ senzing-tools serve-grpc [flags]
    Example:
 
     ```console
-    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    export LD_LIBRARY_PATH=/opt/senzing/er/lib/
     senzing-tools serve-grpc \
         --database-url postgresql://username:password@postgres.example.com:5432/G2 \
         --enable-all
@@ -93,7 +93,7 @@ senzing-tools serve-grpc [flags]
    Example:
 
     ```console
-    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+    export LD_LIBRARY_PATH=/opt/senzing/er/lib/
     export SENZING_TOOLS_DATABASE_URL=postgresql://username:password@postgres.example.com:5432/G2
     export SENZING_TOOLS_ENABLE_ALL=true
     senzing-tools serve-grpc

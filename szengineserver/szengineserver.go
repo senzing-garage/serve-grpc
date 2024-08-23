@@ -91,8 +91,9 @@ func (server *SzEngineServer) ExportCsvEntityReport(ctx context.Context, request
 	}
 	szEngine := getSzEngine()
 	result, err = szEngine.ExportCsvEntityReport(ctx, request.GetCsvColumnList(), request.GetFlags())
+	responseResult := int64(result) //nolint:gosec
 	response := szpb.ExportCsvEntityReportResponse{
-		Result: int64(result),
+		Result: responseResult,
 	}
 	return &response, err
 }
@@ -107,8 +108,9 @@ func (server *SzEngineServer) ExportJsonEntityReport(ctx context.Context, reques
 	}
 	szEngine := getSzEngine()
 	result, err = szEngine.ExportJSONEntityReport(ctx, request.GetFlags())
+	responseResult := int64(result) //nolint:gosec
 	response := szpb.ExportJsonEntityReportResponse{
-		Result: int64(result),
+		Result: responseResult,
 	}
 	return &response, err
 }
@@ -635,8 +637,8 @@ func (server *SzEngineServer) SetLogLevel(ctx context.Context, logLevelName stri
 	if !logging.IsValidLogLevelName(logLevelName) {
 		return fmt.Errorf("invalid error level: %s", logLevelName)
 	}
-	// g2engine := getG2engine()
-	// err = g2engine.SetLogLevel(ctx, logLevelName)
+	// szengine := getSzengine()
+	// err = szengine.SetLogLevel(ctx, logLevelName)
 	// if err != nil {
 	// 	return err
 	// }
@@ -657,7 +659,7 @@ func (server *SzEngineServer) SetLogLevel(ctx context.Context, logLevelName stri
 
 // --- Services ---------------------------------------------------------------
 
-// Singleton pattern for g2config.
+// Singleton pattern for szconfig.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
 func getSzEngine() *szsdk.Szengine {
 	szEngineSyncOnce.Do(func() {

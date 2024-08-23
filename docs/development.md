@@ -21,8 +21,8 @@ These are "one-time tasks" which may already have been completed.
 Since the Senzing library is a prerequisite, it must be installed first.
 
 1. Verify Senzing C shared objects, configuration, and SDK header files are installed.
-    1. `/opt/senzing/g2/lib`
-    1. `/opt/senzing/g2/sdk/c`
+    1. `/opt/senzing/er/lib`
+    1. `/opt/senzing/er/sdk/c`
     1. `/etc/opt/senzing`
 
 1. If not installed, see [How to Install Senzing for Go Development].
@@ -94,48 +94,29 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
 ## Run
 
-After running `make build`,
-the binary built can be run.
-
-1. Identify the database by setting the `SENZING_TOOLS_DATABASE_URL` environment variable.
-    1. If using Sqlite database
-        1. :pencil2: Create a new Sqlite database.
-        Examples:
-
-            ```console
-            export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
-            export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-            senzing-tools init-database
-
-            ```
-
-    1. If using PostgreSQL database
-        1. :pencil2: Identify an existing PostgreSQL database.
-           Example:
-
-            ```console
-            export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-            export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
-
-            ```
-
-        1. If needed, initialize PostgreSQL database.
-           Example:
-
-            ```console
-            export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-            senzing-tools init-database
-
-            ```
-
-1. Set `LD_LIBRARY_PATH` and run the command.
+1. Run program.
    Examples:
+
     1. Linux
 
-        ```console
-        ${GIT_REPOSITORY_DIR}/target/linux-amd64/serve-grpc
+        1. :pencil2: Identify a location for database.
+           Example:
 
-        ```
+            ```console
+            export SENZING_TOOLS_DATABASE_FILE=/tmp/sqlite/G2C.db
+
+            ```
+
+        1. Copy template database and run command.
+           Example:
+
+            ```console
+            mkdir --parents ${SENZING_TOOLS_DATABASE_FILE%/*}
+            cp ${GIT_REPOSITORY_DIR}/testdata/sqlite/G2C.db ${SENZING_TOOLS_DATABASE_FILE}
+            export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere${SENZING_TOOLS_DATABASE_FILE}
+            ${GIT_REPOSITORY_DIR}/target/linux-amd64/serve-grpc
+
+            ```
 
     1. macOS
 
@@ -162,8 +143,6 @@ the binary built can be run.
 
 ## Test
 
-### Test using SQLite database
-
 1. Run tests.
    Example:
 
@@ -189,6 +168,219 @@ the binary built can be run.
     ```
 
    Visit [localhost:9174].
+
+## Coverage
+
+Create a code coverage map.
+
+1. Run Go tests.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean setup coverage
+
+    ```
+
+   A web-browser will show the results of the coverage.
+   The goal is to have over 80% coverage.
+   Anything less needs to be reflected in [testcoverage.yaml].
+
+## Documentation
+
+1. View documentation.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean documentation
+
+    ```
+
+1. If a web page doesn't appear, visit [localhost:6060].
+1. Senzing documentation will be in the "Third party" section.
+   `github.com` > `senzing-garage` > `serve-grpc`
+
+1. When a versioned release is published with a `v0.0.0` format tag,
+the reference can be found by clicking on the following badge at the top of the README.md page.
+Example:
+
+    [![Go Reference Badge]][Go Reference]
+
+1. To stop the `godoc` server, run
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean
+
+    ```
+
+## Docker
+
+1. Use make target to run a docker images that builds RPM and DEB files.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make docker-build
+
+    ```
+
+1. Run docker container.
+   Example:
+
+    ```console
+    docker run \
+        --publish 8261:8261 \
+        --rm \
+        senzing/serve-grpc
+
+    ```
+
+1. **Optional:** Test using `docker-compose`.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make docker-test
+
+    ```
+
+   To bring the `docker-compose` formation, run
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean
+
+    ```
+
+## Package
+
+**Note:** This only packages the `serve-grpc` command.
+It is only to be used in development and test.
+The actual packaging is done in the [senzing-tools] repository.
+
+### Package RPM and DEB files
+
+1. Use make target to run a docker images that builds RPM and DEB files.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make package
+
+    ```
+
+1. The results will be in the `${GIT_REPOSITORY_DIR}/target` directory.
+   Example:
+
+    ```console
+    tree ${GIT_REPOSITORY_DIR}/target
+
+    ```
+
+### Test DEB package on Ubuntu
+
+1. Determine if `serve-grpc` is installed.
+   Example:
+
+    ```console
+    apt list --installed | grep serve-grpc
+
+    ```
+
+1. :pencil2: Install `serve-grpc`.
+   The `serve-grpc-...` filename will need modification.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}/target
+    sudo apt install ./serve-grpc-0.0.0.deb
+
+    ```
+
+1. :pencil2: Identify a location for database.
+    Example:
+
+    ```console
+    export SENZING_TOOLS_DATABASE_FILE=/tmp/sqlite/G2C.db
+
+    ```
+
+1. Copy template database and run command.
+    Example:
+
+    ```console
+    mkdir --parents ${SENZING_TOOLS_DATABASE_FILE%/*}
+    cp ${GIT_REPOSITORY_DIR}/testdata/sqlite/G2C.db ${SENZING_TOOLS_DATABASE_FILE}
+    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere${SENZING_TOOLS_DATABASE_FILE}
+
+    ```
+
+1. :pencil2: Run command.
+   Example:
+
+    ```console
+    export LD_LIBRARY_PATH=/opt/senzing/er/lib/
+    serve-grpc
+
+    ```
+
+1. Remove `serve-grpc` from system.
+   Example:
+
+    ```console
+    sudo apt-get remove serve-grpc
+
+    ```
+
+### Test RPM package on Centos
+
+1. Determine if `serve-grpc` is installed.
+   Example:
+
+    ```console
+    yum list installed | grep serve-grpc
+
+    ```
+
+1. :pencil2: Install `serve-grpc`.
+   The `serve-grpc-...` filename will need modification.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}/target
+    sudo yum install ./serve-grpc-0.0.0.rpm
+
+    ```
+
+1. :pencil2: Identify database.
+   One option is to bring up PostgreSql as see in [Test using Docker-compose stack with PostgreSql database].
+   Example:
+
+    ```console
+    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
+
+    ```
+
+1. Run command.
+   Example:
+
+    ```console
+    export LD_LIBRARY_PATH=/opt/senzing/er/lib/
+    serve-grpc
+
+    ```
+
+1. Remove `serve-grpc` from system.
+   Example:
+
+    ```console
+    sudo yum remove serve-grpc
+
+    ```
+
+## Specialty
 
 ### Test using Docker-compose stack with PostgreSql database
 
@@ -239,7 +431,7 @@ in testing the `sz-sdk-go-core` packages.
 
     ```console
     export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
+    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/er/?sslmode=disable
 
     ```
 
@@ -318,204 +510,13 @@ For other gRPC tools, visit [Awesome gRPC].
             ```json
             {
               "moduleName": "Test of gRPC",
-              "iniParams": "{\"PIPELINE\":{\"CONFIGPATH\":\"/etc/opt/senzing\",\"RESOURCEPATH\":\"/opt/senzing/g2/resources\",\"SUPPORTPATH\":\"/opt/senzing/data\"},\"SQL\":{\"CONNECTION\":\"sqlite3://na:na@nowhere/tmp/sqlite/G2C.db\"}}",
+              "iniParams": "{\"PIPELINE\":{\"CONFIGPATH\":\"/etc/opt/senzing\",\"RESOURCEPATH\":\"/opt/senzing/er/resources\",\"SUPPORTPATH\":\"/opt/senzing/data\"},\"SQL\":{\"CONNECTION\":\"sqlite3://na:na@nowhere/tmp/sqlite/G2C.db\"}}",
               "verboseLogging": 0
             }
             ```
 
         1. Near the center, click the green "play" button.
     1. The Senzing object is initialized and other messages can be tried.
-
-## Coverage
-
-Create a code coverage map.
-
-1. Run Go tests.
-   Example:
-
-    ```console
-    cd ${GIT_REPOSITORY_DIR}
-    make clean setup coverage
-
-    ```
-
-   A web-browser will show the results of the coverage.
-   The goal is to have over 80% coverage.
-   Anything less needs to be reflected in [testcoverage.yaml].
-
-## Documentation
-
-1. View documentation.
-   Example:
-
-    ```console
-    cd ${GIT_REPOSITORY_DIR}
-    make clean documentation
-
-    ```
-
-1. If a web page doesn't appear, visit [localhost:6060].
-1. Senzing documentation will be in the "Third party" section.
-   `github.com` > `senzing` > `go-cmdhelping`
-
-1. When a versioned release is published with a `v0.0.0` format tag,
-the reference can be found by clicking on the following badge at the top of the README.md page.
-Example:
-
-    [![Go Reference Badge]][Go Reference]
-
-1. To stop the `godoc` server, run
-
-    ```console
-    cd ${GIT_REPOSITORY_DIR}
-    make clean
-
-    ```
-
-## Docker
-
-1. Use make target to run a docker images that builds RPM and DEB files.
-   Example:
-
-    ```console
-    cd ${GIT_REPOSITORY_DIR}
-    make docker-build
-
-    ```
-
-1. Run docker container.
-   Example:
-
-    ```console
-    docker run --rm senzing/serve-grpc
-
-    ```
-
-1. **Optional:** Test using `docker-compose`.
-   Example:
-
-    ```console
-    cd ${GIT_REPOSITORY_DIR}
-    make docker-test
-
-    ```
-
-## Package
-
-**Note:** This only packages the `serve-grpc` command.
-It is only to be used in development and test.
-The actual packaging is done in the [senzing-tools] repository.
-
-### Package RPM and DEB files
-
-1. Use make target to run a docker images that builds RPM and DEB files.
-   Example:
-
-    ```console
-    cd ${GIT_REPOSITORY_DIR}
-    make package
-
-    ```
-
-1. The results will be in the `${GIT_REPOSITORY_DIR}/target` directory.
-   Example:
-
-    ```console
-    tree ${GIT_REPOSITORY_DIR}/target
-
-    ```
-
-### Test DEB package on Ubuntu
-
-1. Determine if `serve-grpc` is installed.
-   Example:
-
-    ```console
-    apt list --installed | grep serve-grpc
-
-    ```
-
-1. :pencil2: Install `serve-grpc`.
-   The `serve-grpc-...` filename will need modification.
-   Example:
-
-    ```console
-    cd ${GIT_REPOSITORY_DIR}/target
-    sudo apt install ./serve-grpc-0.0.0.deb
-
-    ```
-
-1. :pencil2: Identify database.
-   One option is to bring up PostgreSql as see in [Test using Docker-compose stack with PostgreSql database].
-   Example:
-
-    ```console
-    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
-
-    ```
-
-1. :pencil2: Run command.
-   Example:
-
-    ```console
-    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-    serve-grpc
-
-    ```
-
-1. Remove `serve-grpc` from system.
-   Example:
-
-    ```console
-    sudo apt-get remove serve-grpc
-
-    ```
-
-### Test RPM package on Centos
-
-1. Determine if `serve-grpc` is installed.
-   Example:
-
-    ```console
-    yum list installed | grep serve-grpc
-
-    ```
-
-1. :pencil2: Install `serve-grpc`.
-   The `serve-grpc-...` filename will need modification.
-   Example:
-
-    ```console
-    cd ${GIT_REPOSITORY_DIR}/target
-    sudo yum install ./serve-grpc-0.0.0.rpm
-
-    ```
-
-1. :pencil2: Identify database.
-   One option is to bring up PostgreSql as see in [Test using Docker-compose stack with PostgreSql database].
-   Example:
-
-    ```console
-    export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
-
-    ```
-
-1. Run command.
-   Example:
-
-    ```console
-    export LD_LIBRARY_PATH=/opt/senzing/g2/lib/
-    serve-grpc
-
-    ```
-
-1. Remove `serve-grpc` from system.
-   Example:
-
-    ```console
-    sudo yum remove serve-grpc
-
-    ```
 
 ## References
 

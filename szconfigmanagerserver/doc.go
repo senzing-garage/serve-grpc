@@ -1,4 +1,4 @@
 /*
-The szconfigmgrserver package handles gRPC requests for Senzing's G2ConfigMgr object.
+Package szconfigmgrserver handles gRPC requests for Senzing's SzConfigMgr object.
 */
 package szconfigmanagerserver

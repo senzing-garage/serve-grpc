@@ -138,8 +138,8 @@ func (server *SzDiagnosticServer) SetLogLevel(ctx context.Context, logLevelName 
 	if !logging.IsValidLogLevelName(logLevelName) {
 		return fmt.Errorf("invalid error level: %s", logLevelName)
 	}
-	// g2diagnostic := getG2diagnostic()
-	// err = g2diagnostic.SetLogLevel(ctx, logLevelName)
+	// szdiagnostic := getSzdiagnostic()
+	// err = szdiagnostic.SetLogLevel(ctx, logLevelName)
 	// if err != nil {
 	// 	return err
 	// }
@@ -160,7 +160,7 @@ func (server *SzDiagnosticServer) SetLogLevel(ctx context.Context, logLevelName 
 
 // --- Services ---------------------------------------------------------------
 
-// Singleton pattern for g2diagnostic.
+// Singleton pattern for szdiagnostic.
 // See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
 func getSzDiagnostic() *szsdk.Szdiagnostic {
 	szDiagnosticSyncOnce.Do(func() {

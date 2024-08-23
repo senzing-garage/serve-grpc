@@ -163,7 +163,7 @@ func ExampleSzEngineServer_FetchNext() {
 }
 
 func ExampleSzEngineServer_FindInterestingEntitiesByEntityId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngine := getSzEngineServer(ctx)
 	request := &szpb.FindInterestingEntitiesByEntityIdRequest{
@@ -179,7 +179,7 @@ func ExampleSzEngineServer_FindInterestingEntitiesByEntityId() {
 }
 
 func ExampleSzEngineServer_FindInterestingEntitiesByRecordId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/g2engineserver/g2engineserver_test.go
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngine := getSzEngineServer(ctx)
 	request := &szpb.FindInterestingEntitiesByRecordIdRequest{

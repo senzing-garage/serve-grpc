@@ -32,12 +32,12 @@ COPY . ${GOPATH}/src/serve-grpc
 
 # Copy files from prior stage.
 
-COPY --from=senzingapi_runtime  "/opt/senzing/g2/lib/"   "/opt/senzing/g2/lib/"
-COPY --from=senzingapi_runtime  "/opt/senzing/g2/sdk/c/" "/opt/senzing/g2/sdk/c/"
+COPY --from=senzingapi_runtime  "/opt/senzing/er/lib/"   "/opt/senzing/er/lib/"
+COPY --from=senzingapi_runtime  "/opt/senzing/er/sdk/c/" "/opt/senzing/er/sdk/c/"
 
 # Set path to Senzing libs.
 
-ENV LD_LIBRARY_PATH=/opt/senzing/g2/lib/
+ENV LD_LIBRARY_PATH=/opt/senzing/er/lib/
 
 # Build go program.
 
@@ -68,6 +68,9 @@ COPY ./rootfs /
 # Copy files from prior stage.
 
 COPY --from=builder "/output/linux/serve-grpc" "/app/serve-grpc"
+
+# Install database
+
 COPY ./testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
 RUN chmod --recursive 777 /tmp/sqlite
 
@@ -78,6 +81,7 @@ USER 1001
 # Runtime environment variables.
 
 ENV SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
+ENV LD_LIBRARY_PATH=/opt/senzing/er/lib/
 
 # Runtime execution.
 
