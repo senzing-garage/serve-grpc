@@ -61,8 +61,9 @@ func (server *SzConfigServer) CreateConfig(ctx context.Context, request *szpb.Cr
 	}
 	szConfig := getSzConfig()
 	result, err = szConfig.CreateConfig(ctx)
+	responseResult := int64(result) //nolint:gosec
 	response := szpb.CreateConfigResponse{
-		Result: int64(result),
+		Result: responseResult,
 	}
 	return &response, err
 }
@@ -121,8 +122,9 @@ func (server *SzConfigServer) ImportConfig(ctx context.Context, request *szpb.Im
 	}
 	szConfig := getSzConfig()
 	result, err := szConfig.ImportConfig(ctx, request.GetConfigDefinition())
+	responseResult := int64(result) //nolint:gosec
 	response := szpb.ImportConfigResponse{
-		Result: int64(result),
+		Result: responseResult,
 	}
 	return &response, err
 }

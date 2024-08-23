@@ -91,8 +91,9 @@ func (server *SzEngineServer) ExportCsvEntityReport(ctx context.Context, request
 	}
 	szEngine := getSzEngine()
 	result, err = szEngine.ExportCsvEntityReport(ctx, request.GetCsvColumnList(), request.GetFlags())
+	responseResult := int64(result) //nolint:gosec
 	response := szpb.ExportCsvEntityReportResponse{
-		Result: int64(result),
+		Result: responseResult,
 	}
 	return &response, err
 }
