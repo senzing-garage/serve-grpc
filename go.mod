@@ -7,7 +7,7 @@ toolchain go1.22.0
 require (
 	github.com/aquilax/truncate v1.0.0
 	github.com/senzing-garage/go-cmdhelping v0.3.0
-	github.com/senzing-garage/go-helpers v0.6.0
+	github.com/senzing-garage/go-helpers v0.6.1
 	github.com/senzing-garage/go-logging v1.5.1
 	github.com/senzing-garage/go-observing v0.3.3
 	github.com/senzing-garage/sz-sdk-go v0.14.0
@@ -39,7 +39,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/exp v0.0.0-20240823005443-9b4947da3948 // indirect
+	golang.org/x/exp v0.0.0-20240904232852-e7e105dedf7e // indirect
 	golang.org/x/net v0.28.0 // indirect
 	golang.org/x/sys v0.24.0 // indirect
 	golang.org/x/text v0.17.0 // indirect
