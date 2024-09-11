@@ -242,7 +242,7 @@ Example:
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
-    make docker-test
+    make clean docker-test
 
     ```
 

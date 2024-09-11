@@ -201,7 +201,7 @@ func ExampleSzEngineServer_FindNetworkByEntityId() {
 	szEngineServer := getSzEngineServer(ctx)
 	entityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1001") + `}, {"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1002") + `}]}`
 	request := &szpb.FindNetworkByEntityIdRequest{
-		BuildOutDegree:      1,
+		BuildOutDegrees:     1,
 		BuildOutMaxEntities: 10,
 		EntityIds:           entityIDs,
 		Flags:               senzing.SzNoFlags,
@@ -220,7 +220,7 @@ func ExampleSzEngineServer_FindNetworkByRecordId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindNetworkByRecordIdRequest{
-		BuildOutDegree:      2,
+		BuildOutDegrees:     2,
 		BuildOutMaxEntities: 10,
 		Flags:               senzing.SzNoFlags,
 		MaxDegrees:          1,
