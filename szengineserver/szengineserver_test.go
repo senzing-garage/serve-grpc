@@ -166,7 +166,7 @@ func TestSzEngineServer_FindNetworkByEntityId(test *testing.T) {
 	buildOutMaxEntities := int64(10)
 	flags := senzing.SzNoFlags
 	request := &szpb.FindNetworkByEntityIdRequest{
-		BuildOutDegree:      buildOutDegree,
+		BuildOutDegrees:     buildOutDegree,
 		BuildOutMaxEntities: buildOutMaxEntities,
 		EntityIds:           entityIDs,
 		Flags:               flags,
@@ -189,7 +189,7 @@ func TestSzEngineServer_FindNetworkByRecordId(test *testing.T) {
 	buildOutMaxEntities := int64(10)
 	flags := senzing.SzNoFlags
 	request := &szpb.FindNetworkByRecordIdRequest{
-		BuildOutDegree:      buildOutDegree,
+		BuildOutDegrees:     buildOutDegree,
 		BuildOutMaxEntities: buildOutMaxEntities,
 		Flags:               flags,
 		MaxDegrees:          maxDegrees,

@@ -172,7 +172,7 @@ func (server *SzEngineServer) FindNetworkByEntityId(ctx context.Context, request
 		defer func() { server.traceExit(38, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.FindNetworkByEntityID(ctx, request.GetEntityIds(), request.GetMaxDegrees(), request.GetBuildOutDegree(), request.GetBuildOutMaxEntities(), request.GetFlags())
+	result, err = szEngine.FindNetworkByEntityID(ctx, request.GetEntityIds(), request.GetMaxDegrees(), request.GetBuildOutDegrees(), request.GetBuildOutMaxEntities(), request.GetFlags())
 	response := szpb.FindNetworkByEntityIdResponse{
 		Result: result,
 	}
@@ -188,7 +188,7 @@ func (server *SzEngineServer) FindNetworkByRecordId(ctx context.Context, request
 		defer func() { server.traceExit(42, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.FindNetworkByRecordID(ctx, request.GetRecordKeys(), request.GetMaxDegrees(), request.GetBuildOutDegree(), request.GetBuildOutMaxEntities(), request.GetFlags())
+	result, err = szEngine.FindNetworkByRecordID(ctx, request.GetRecordKeys(), request.GetMaxDegrees(), request.GetBuildOutDegrees(), request.GetBuildOutMaxEntities(), request.GetFlags())
 	response := szpb.FindNetworkByRecordIdResponse{
 		Result: result,
 	}
