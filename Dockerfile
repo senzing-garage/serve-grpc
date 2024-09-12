@@ -80,7 +80,7 @@ USER 1001
 
 # Runtime environment variables.
 
-ENV SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
+ENV SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db?mode=memory&cache=shared
 ENV LD_LIBRARY_PATH=/opt/senzing/er/lib/
 
 # Runtime execution.

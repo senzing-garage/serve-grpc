@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 -
 
+## [0.8.3] - 2024-09-13
+
+### Changed in 0.8.3
+
+- Make in-memory database
+
 ## [0.8.2] - 2024-09-11
 
 ### Changed in 0.8.2
