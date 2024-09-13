@@ -4,6 +4,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"os"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
@@ -91,6 +92,8 @@ func RunE(_ *cobra.Command, _ []string) error {
 	if err != nil {
 		return err
 	}
+
+	fmt.Printf(">>>>> settings: %s", senzingSettings)
 
 	grpcserver := &grpcserver.BasicGrpcServer{
 		AvoidServing:          viper.GetBool(option.AvoidServe.Arg),
