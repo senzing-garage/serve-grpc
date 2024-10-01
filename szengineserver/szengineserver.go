@@ -355,6 +355,21 @@ func (server *SzEngineServer) HowEntityByEntityId(ctx context.Context, request *
 	return &response, err
 }
 
+func (server *SzEngineServer) PreprocessRecord(ctx context.Context, request *szpb.PreprocessRecordRequest) (*szpb.PreprocessRecordResponse, error) {
+	var err error
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(165, request)
+		defer func() { server.traceExit(166, request, err, time.Since(entryTime)) }()
+	}
+	szEngine := getSzEngine()
+	result, err := szEngine.PreprocessRecord(ctx, request.GetRecordDefinition(), request.GetFlags())
+	response := szpb.PreprocessRecordResponse{
+		Result: result,
+	}
+	return &response, err
+}
+
 func (server *SzEngineServer) PrimeEngine(ctx context.Context, request *szpb.PrimeEngineRequest) (*szpb.PrimeEngineResponse, error) {
 	var err error
 	if server.isTrace {

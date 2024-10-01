@@ -418,6 +418,19 @@ func TestSzEngineServer_HowEntityByEntityId(test *testing.T) {
 	printActual(test, response.GetResult())
 }
 
+func TestSzEngineServer_PreprocessRecord(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	record := truthset.CustomerRecords["1001"]
+	request := &szpb.PreprocessRecordRequest{
+		Flags:            senzing.SzNoFlags,
+		RecordDefinition: record.JSON,
+	}
+	response, err := szEngineServer.PreprocessRecord(ctx, request)
+	require.NoError(test, err)
+	printActual(test, response.GetResult())
+}
+
 func TestSzEngineServer_PrimeEngine(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
