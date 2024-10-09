@@ -36,6 +36,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
     export GIT_REPOSITORY=serve-grpc
     export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
     export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
+
     ```
 
 1. Using the environment variables values just set, follow
@@ -49,6 +50,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make dependencies-for-development
+
     ```
 
 1. Install dependencies needed for [Go] code.
@@ -57,6 +59,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make dependencies
+
     ```
 
 ## Lint
@@ -67,6 +70,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make lint
+
     ```
 
 ## Build
@@ -77,6 +81,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make clean build
+
     ```
 
 1. The binaries will be found in the `${GIT_REPOSITORY_DIR}/target` directory.
@@ -84,6 +89,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     ```console
     tree ${GIT_REPOSITORY_DIR}/target
+
     ```
 
 ## Run
@@ -98,6 +104,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
             ```console
             export SENZING_TOOLS_DATABASE_FILE=/tmp/sqlite/G2C.db
+
             ```
 
         1. Copy template database and run command.
@@ -108,18 +115,21 @@ Since the Senzing library is a prerequisite, it must be installed first.
             cp ${GIT_REPOSITORY_DIR}/testdata/sqlite/G2C.db ${SENZING_TOOLS_DATABASE_FILE}
             export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere${SENZING_TOOLS_DATABASE_FILE}
             ${GIT_REPOSITORY_DIR}/target/linux-amd64/serve-grpc
+
             ```
 
     1. macOS
 
         ```console
         ${GIT_REPOSITORY_DIR}/target/darwin-amd64/serve-grpc
+
         ```
 
     1. Windows
 
         ```console
         ${GIT_REPOSITORY_DIR}/target/windows-amd64/serve-grpc
+
         ```
 
 1. Clean up.
@@ -128,6 +138,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make clean
+
     ```
 
 ## Test
@@ -138,6 +149,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make clean setup test
+
     ```
 
 1. **Optional:** View the SQLite database.
@@ -152,6 +164,7 @@ Since the Senzing library is a prerequisite, it must be installed first.
         --tty \
         --volume /tmp/sqlite:/data \
         coleifer/sqlite-web
+
     ```
 
    Visit [localhost:9174].
@@ -166,6 +179,7 @@ Create a code coverage map.
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make clean setup coverage
+
     ```
 
    A web-browser will show the results of the coverage.
@@ -180,6 +194,7 @@ Create a code coverage map.
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make clean documentation
+
     ```
 
 1. If a web page doesn't appear, visit [localhost:6060].
@@ -197,6 +212,7 @@ Example:
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make clean
+
     ```
 
 ## Docker
@@ -207,6 +223,7 @@ Example:
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make docker-build
+
     ```
 
 1. Run docker container.
@@ -219,6 +236,7 @@ Example:
         --rm \
         --tty \
         senzing/serve-grpc
+
     ```
 
 1. **Optional:** Test using `docker-compose`.
@@ -227,6 +245,7 @@ Example:
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make clean docker-test
+
     ```
 
    To bring the `docker-compose` formation, run
@@ -234,6 +253,7 @@ Example:
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make clean
+
     ```
 
 ## Package
@@ -250,6 +270,7 @@ The actual packaging is done in the [senzing-tools] repository.
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make package
+
     ```
 
 1. The results will be in the `${GIT_REPOSITORY_DIR}/target` directory.
@@ -257,6 +278,7 @@ The actual packaging is done in the [senzing-tools] repository.
 
     ```console
     tree ${GIT_REPOSITORY_DIR}/target
+
     ```
 
 ### Test DEB package on Ubuntu
@@ -266,6 +288,7 @@ The actual packaging is done in the [senzing-tools] repository.
 
     ```console
     apt list --installed | grep serve-grpc
+
     ```
 
 1. :pencil2: Install `serve-grpc`.
@@ -275,6 +298,7 @@ The actual packaging is done in the [senzing-tools] repository.
     ```console
     cd ${GIT_REPOSITORY_DIR}/target
     sudo apt install ./serve-grpc-0.0.0.deb
+
     ```
 
 1. :pencil2: Identify a location for database.
@@ -282,6 +306,7 @@ The actual packaging is done in the [senzing-tools] repository.
 
     ```console
     export SENZING_TOOLS_DATABASE_FILE=/tmp/sqlite/G2C.db
+
     ```
 
 1. Copy template database and run command.
@@ -291,6 +316,7 @@ The actual packaging is done in the [senzing-tools] repository.
     mkdir --parents ${SENZING_TOOLS_DATABASE_FILE%/*}
     cp ${GIT_REPOSITORY_DIR}/testdata/sqlite/G2C.db ${SENZING_TOOLS_DATABASE_FILE}
     export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere${SENZING_TOOLS_DATABASE_FILE}
+
     ```
 
 1. :pencil2: Run command.
@@ -299,6 +325,7 @@ The actual packaging is done in the [senzing-tools] repository.
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/er/lib/
     serve-grpc
+
     ```
 
 1. Remove `serve-grpc` from system.
@@ -306,6 +333,7 @@ The actual packaging is done in the [senzing-tools] repository.
 
     ```console
     sudo apt-get remove serve-grpc
+
     ```
 
 ### Test RPM package on Centos
@@ -315,6 +343,7 @@ The actual packaging is done in the [senzing-tools] repository.
 
     ```console
     yum list installed | grep serve-grpc
+
     ```
 
 1. :pencil2: Install `serve-grpc`.
@@ -324,6 +353,7 @@ The actual packaging is done in the [senzing-tools] repository.
     ```console
     cd ${GIT_REPOSITORY_DIR}/target
     sudo yum install ./serve-grpc-0.0.0.rpm
+
     ```
 
 1. :pencil2: Identify database.
@@ -332,6 +362,7 @@ The actual packaging is done in the [senzing-tools] repository.
 
     ```console
     export SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
+
     ```
 
 1. Run command.
@@ -340,6 +371,7 @@ The actual packaging is done in the [senzing-tools] repository.
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/er/lib/
     serve-grpc
+
     ```
 
 1. Remove `serve-grpc` from system.
@@ -347,6 +379,7 @@ The actual packaging is done in the [senzing-tools] repository.
 
     ```console
     sudo yum remove serve-grpc
+
     ```
 
 ## Specialty
@@ -362,6 +395,7 @@ in testing the `sz-sdk-go-core` packages.
 
     ```console
     export SENZING_DEMO_DIR=~/my-senzing-demo
+
     ```
 
 1. Bring up the docker-compose stack.
@@ -390,6 +424,7 @@ in testing the `sz-sdk-go-core` packages.
 
     cd ${SENZING_DEMO_DIR}
     sudo --preserve-env docker-compose up
+
     ```
 
 1. In a separate terminal window, set environment variables.
@@ -399,6 +434,7 @@ in testing the `sz-sdk-go-core` packages.
     ```console
     export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
     export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/er/?sslmode=disable
+
     ```
 
 1. Run tests.
@@ -406,6 +442,7 @@ in testing the `sz-sdk-go-core` packages.
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make clean test
+
     ```
 
 1. **Optional:** View the PostgreSQL database.
@@ -423,6 +460,7 @@ in testing the `sz-sdk-go-core` packages.
 
     cd ${GIT_REPOSITORY_DIR}
     make clean
+
     ```
 
 ### Test using bloomrpc
@@ -441,6 +479,7 @@ For other gRPC tools, visit [Awesome gRPC].
            ```console
            wget https://github.com/bloomrpc/bloomrpc/releases/download/1.5.3/bloomrpc_1.5.3_amd64.deb
            sudo apt install ./bloomrpc_1.5.3_amd64.deb
+
            ```
 
 1. Start the test server.
@@ -449,6 +488,7 @@ For other gRPC tools, visit [Awesome gRPC].
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make clean run-serve-grpc
+
     ```
 
 1. In a separate terminal, start the gRPC test client.
@@ -456,6 +496,7 @@ For other gRPC tools, visit [Awesome gRPC].
 
     ```console
     bloomrpc
+
     ```
 
 1. In `bloomrpc`:
@@ -474,6 +515,7 @@ For other gRPC tools, visit [Awesome gRPC].
               "iniParams": "{\"PIPELINE\":{\"CONFIGPATH\":\"/etc/opt/senzing\",\"RESOURCEPATH\":\"/opt/senzing/er/resources\",\"SUPPORTPATH\":\"/opt/senzing/data\"},\"SQL\":{\"CONNECTION\":\"sqlite3://na:na@nowhere/tmp/sqlite/G2C.db\"}}",
               "verboseLogging": 0
             }
+
             ```
 
         1. Near the center, click the green "play" button.
