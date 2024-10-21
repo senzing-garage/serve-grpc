@@ -2,7 +2,7 @@
 # Stages
 # -----------------------------------------------------------------------------
 
-ARG IMAGE_BUILDER=golang:1.22.3-bullseye
+ARG IMAGE_BUILDER=golang:1.22.4-bullseye
 ARG IMAGE_FINAL=senzing/senzingapi-runtime-staging:latest
 
 # -----------------------------------------------------------------------------
@@ -57,7 +57,7 @@ FROM ${IMAGE_FINAL} AS final
 ENV REFRESHED_AT=2024-07-01
 LABEL Name="senzing/serve-grpc" \
       Maintainer="support@senzing.com" \
-      Version="0.7.6"
+      Version="0.8.3"
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "/app/healthcheck.sh" ]
 USER root
 

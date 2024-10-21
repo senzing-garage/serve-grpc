@@ -231,8 +231,10 @@ Example:
 
     ```console
     docker run \
+        --interactive \
         --publish 8261:8261 \
         --rm \
+        --tty \
         senzing/serve-grpc
 
     ```
@@ -513,6 +515,7 @@ For other gRPC tools, visit [Awesome gRPC].
               "iniParams": "{\"PIPELINE\":{\"CONFIGPATH\":\"/etc/opt/senzing\",\"RESOURCEPATH\":\"/opt/senzing/er/resources\",\"SUPPORTPATH\":\"/opt/senzing/data\"},\"SQL\":{\"CONNECTION\":\"sqlite3://na:na@nowhere/tmp/sqlite/G2C.db\"}}",
               "verboseLogging": 0
             }
+
             ```
 
         1. Near the center, click the green "play" button.
