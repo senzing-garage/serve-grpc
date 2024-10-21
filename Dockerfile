@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 ARG IMAGE_BUILDER=golang:1.22.4-bullseye
-ARG IMAGE_FINAL=senzing/senzingapi-runtime-staging:latest
+ARG IMAGE_FINAL=senzing/senzingapi-runtime-beta:latest
 
 # -----------------------------------------------------------------------------
 # Stage: senzingapi_runtime
@@ -69,11 +69,6 @@ COPY ./rootfs /
 
 COPY --from=builder "/output/linux/serve-grpc" "/app/serve-grpc"
 
-# Install database
-
-COPY ./testdata/sqlite/G2C.db /tmp/sqlite/G2C.db
-RUN chmod --recursive 777 /tmp/sqlite
-
 # Run as non-root container
 
 USER 1001
@@ -81,6 +76,7 @@ USER 1001
 # Runtime environment variables.
 
 ENV SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db?mode=memory&cache=shared
+ENV SENZING_TOOLS_ENABLE_ALL=true
 ENV LD_LIBRARY_PATH=/opt/senzing/er/lib/
 
 # Runtime execution.
