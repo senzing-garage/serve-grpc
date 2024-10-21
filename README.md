@@ -40,16 +40,13 @@ Senzing SDKs for accessing the gRPC server:
 
 ## Use
 
-### Using command line options
-
-### Using environment variables
-
-### Using Docker
-
-This usage shows how to initialze a database with a Docker container.
-
-1. This usage specifies a URL of an external database.
+1. Docker container with internal, ephemeral database and
+   gRPC accessable on port 8261.
    Example:
+
+    ```console
+    docker run -it --name senzing-serve-grpc -p 8261:8261 --pull always --rm senzing/serve-grpc
+    ```
 
     ```console
     docker run \
@@ -67,11 +64,6 @@ This usage shows how to initialze a database with a Docker container.
 
 - **[SENZING_TOOLS_DATABASE_URL]**
 - **[SENZING_TOOLS_ENABLE_ALL]**
-- **[SENZING_TOOLS_ENABLE_G2CONFIG]**
-- **[SENZING_TOOLS_ENABLE_G2CONFIGMGR]**
-- **[SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]**
-- **[SENZING_TOOLS_ENABLE_G2ENGINE]**
-- **[SENZING_TOOLS_ENABLE_G2PRODUCT]**
 - **[SENZING_TOOLS_ENGINE_CONFIGURATION_JSON]**
 - **[SENZING_TOOLS_ENGINE_LOG_LEVEL]**
 - **[SENZING_TOOLS_ENGINE_MODULE_NAME]**
@@ -108,11 +100,6 @@ This usage shows how to initialze a database with a Docker container.
 [Senzing Quick Start guides]: https://docs.senzing.com/quickstart/
 [SENZING_TOOLS_DATABASE_URL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_database_url
 [SENZING_TOOLS_ENABLE_ALL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_all
-[SENZING_TOOLS_ENABLE_G2CONFIG]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2config
-[SENZING_TOOLS_ENABLE_G2CONFIGMGR]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2configmgr
-[SENZING_TOOLS_ENABLE_G2DIAGNOSTIC]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2diagnostic
-[SENZING_TOOLS_ENABLE_G2ENGINE]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2engine
-[SENZING_TOOLS_ENABLE_G2PRODUCT]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_g2product
 [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_configuration_json
 [SENZING_TOOLS_ENGINE_LOG_LEVEL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_log_level
 [SENZING_TOOLS_ENGINE_MODULE_NAME]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_module_name
