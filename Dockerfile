@@ -69,15 +69,19 @@ COPY ./rootfs /
 
 COPY --from=builder "/output/linux/serve-grpc" "/app/serve-grpc"
 
+# Prepare environment file system.
+
+RUN chmod --recursive 777 /tmp
+
 # Run as non-root container
 
 USER 1001
 
 # Runtime environment variables.
 
+ENV LD_LIBRARY_PATH=/opt/senzing/er/lib/
 ENV SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db?mode=memory&cache=shared
 ENV SENZING_TOOLS_ENABLE_ALL=true
-ENV LD_LIBRARY_PATH=/opt/senzing/er/lib/
 
 # Runtime execution.
 
