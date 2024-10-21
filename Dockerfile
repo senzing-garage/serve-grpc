@@ -2,7 +2,7 @@
 # Stages
 # -----------------------------------------------------------------------------
 
-ARG IMAGE_BUILDER=golang:1.22.4-bullseye
+ARG IMAGE_BUILDER=golang:1.23.2-bullseye
 ARG IMAGE_FINAL=senzing/senzingapi-runtime-beta:latest
 
 # -----------------------------------------------------------------------------
