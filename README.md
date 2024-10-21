@@ -45,17 +45,7 @@ Senzing SDKs for accessing the gRPC server:
    Example:
 
     ```console
-    docker run -it --name senzing-serve-grpc -p 8261:8261 --pull always --rm senzing/serve-grpc
-    ```
-
-    ```console
-    docker run \
-        --interactive \
-        --publish 8261:8261 \
-        --rm \
-        --tty \
-        senzing/serve-grpc
-
+    docker run -it --name senzing-serve-grpc -p 8261:8261 --rm senzing/serve-grpc
     ```
 
 1. See [Parameters](#parameters) for additional parameters.
