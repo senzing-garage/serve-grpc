@@ -69,13 +69,13 @@ COPY ./rootfs /
 
 COPY --from=builder "/output/linux/serve-grpc" "/app/serve-grpc"
 
-# Run as non-root container
-
-USER 1001
-
 # Prepare environment file system.
 
 RUN chmod --recursive 777 /tmp
+
+# Run as non-root container
+
+USER 1001
 
 # Runtime environment variables.
 
