@@ -1,19 +1,17 @@
-name: Docker push containers to dockerhub
+name: docker push containers to dockerhub - manual
 
 on:
-  push:
-    tags:
-      - "[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  docker-push-containers-to-dockerhub:
+  docker-push-containers-to-dockerhub-manual:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get repository name
+      - name: Get repo name
         id: repo-basename
         run: |
           echo "repo=$(basename ${{ github.repository }})" >> "$GITHUB_OUTPUT"
@@ -24,6 +22,6 @@ jobs:
         with:
           build-options: "--push"
           image-repository: senzing/${{ steps.repo-basename.outputs.repo }}
-          image-tag: ${{ github.ref_name }}
+          image-tag: latest
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
           username: ${{ secrets.DOCKERHUB_USERNAME }}
