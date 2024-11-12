@@ -6,9 +6,12 @@ import (
 	"net"
 	"net/url"
 
+	"github.com/senzing-garage/go-cmdhelping/option"
+	"github.com/senzing-garage/go-helpers/settingsparser"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/go-observing/observerpb"
+	"github.com/senzing-garage/init-database/initializer"
 	"github.com/senzing-garage/serve-grpc/szconfigmanagerserver"
 	"github.com/senzing-garage/serve-grpc/szconfigserver"
 	"github.com/senzing-garage/serve-grpc/szdiagnosticserver"
@@ -20,6 +23,7 @@ import (
 	"github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 	"github.com/senzing-garage/sz-sdk-proto/go/szengine"
 	"github.com/senzing-garage/sz-sdk-proto/go/szproduct"
+	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
@@ -47,6 +51,88 @@ type BasicGrpcServer struct {
 	SenzingSettings       string
 	SenzingInstanceName   string
 	SenzingVerboseLogging int64
+}
+
+// ----------------------------------------------------------------------------
+// Main
+// ----------------------------------------------------------------------------
+
+func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
+
+	// Log entry parameters.
+
+	grpcServer.log(2000, grpcServer)
+
+	// Initialize observing.
+
+	var anObserver observer.Observer
+	if len(grpcServer.ObserverURL) > 0 {
+		parsedURL, err := url.Parse(grpcServer.ObserverURL)
+		if err != nil {
+			return err
+		}
+		if parsedURL.Scheme == "grpc" {
+			anObserver, err = grpcServer.createGrpcObserver(ctx, *parsedURL)
+			if err != nil {
+				return err
+			}
+		}
+		if anObserver != nil {
+			grpcServer.Observers = append(grpcServer.Observers, anObserver)
+		}
+	}
+
+	// Special database processing.
+
+	err := grpcServer.initializeDatabase(ctx, grpcServer.SenzingSettings)
+	if err != nil {
+		return err
+	}
+
+	// Set up socket listener.
+
+	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcServer.Port))
+	if err != nil {
+		grpcServer.log(4001, grpcServer.Port, err)
+	}
+
+	// Create server.
+
+	aGrpcServer := grpc.NewServer()
+
+	// Register services with gRPC server.
+
+	if grpcServer.EnableAll || grpcServer.EnableSzConfig {
+		grpcServer.enableSzConfig(ctx, aGrpcServer)
+	}
+	if grpcServer.EnableAll || grpcServer.EnableSzConfigManager {
+		grpcServer.enableSzConfigManager(ctx, aGrpcServer)
+	}
+	if grpcServer.EnableAll || grpcServer.EnableSzDiagnostic {
+		grpcServer.enableSzDiagnostic(ctx, aGrpcServer)
+	}
+	if grpcServer.EnableAll || grpcServer.EnableSzEngine {
+		grpcServer.enableSzEngine(ctx, aGrpcServer)
+	}
+	if grpcServer.EnableAll || grpcServer.EnableSzProduct {
+		grpcServer.enableSzProduct(ctx, aGrpcServer)
+	}
+
+	// Enable reflection.
+
+	reflection.Register(aGrpcServer)
+
+	// Run server.
+
+	if !grpcServer.AvoidServing {
+		grpcServer.log(2003, listener.Addr())
+		err = aGrpcServer.Serve(listener)
+	} else {
+		grpcServer.log(2004)
+		err = listener.Close()
+	}
+
+	return err
 }
 
 // ----------------------------------------------------------------------------
@@ -229,77 +315,42 @@ func (grpcServer *BasicGrpcServer) enableSzProduct(ctx context.Context, serviceR
 	szproduct.RegisterSzProductServer(serviceRegistrar, server)
 }
 
-// ----------------------------------------------------------------------------
-// Main
-// ----------------------------------------------------------------------------
+// Special database initialization.
+func (grpcServer *BasicGrpcServer) initializeDatabase(ctx context.Context, senzingSettings string) error {
+	var err error
 
-func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
+	parsedSenzingSettings, err := settingsparser.New(senzingSettings)
+	if err != nil {
+		return err
+	}
 
-	// Log entry parameters.
+	databaseURLs, err := parsedSenzingSettings.GetDatabaseURLs(ctx)
+	if err != nil {
+		return err
+	}
 
-	grpcServer.log(2000, grpcServer)
-
-	// Initialize observing.
-
-	var anObserver observer.Observer
-	if len(grpcServer.ObserverURL) > 0 {
-		parsedURL, err := url.Parse(grpcServer.ObserverURL)
+	if len(databaseURLs) == 1 {
+		parsedDatabaseURL, err := url.Parse(databaseURLs[0])
 		if err != nil {
 			return err
 		}
-		if parsedURL.Scheme == "grpc" {
-			anObserver, err = grpcServer.createGrpcObserver(ctx, *parsedURL)
-			if err != nil {
-				return err
+		if parsedDatabaseURL.Scheme == "sqlite3" {
+			queryParameters := parsedDatabaseURL.Query()
+			if (queryParameters.Get("mode") == "memory") && (queryParameters.Get("cache") == "shared") {
+				initializer := &initializer.BasicInitializer{
+					ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
+					ObserverURL:           viper.GetString(option.ObserverURL.Arg),
+					SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
+					SenzingLogLevel:       viper.GetString(option.LogLevel.Arg),
+					SenzingSettings:       senzingSettings,
+					SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
+				}
+				err = initializer.Initialize(ctx)
+				if err != nil {
+					return err
+				}
 			}
 		}
-		if anObserver != nil {
-			grpcServer.Observers = append(grpcServer.Observers, anObserver)
-		}
 	}
-
-	// Set up socket listener.
-
-	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcServer.Port))
-	if err != nil {
-		grpcServer.log(4001, grpcServer.Port, err)
-	}
-
-	// Create server.
-
-	aGrpcServer := grpc.NewServer()
-
-	// Register services with gRPC server.
-
-	if grpcServer.EnableAll || grpcServer.EnableSzConfig {
-		grpcServer.enableSzConfig(ctx, aGrpcServer)
-	}
-	if grpcServer.EnableAll || grpcServer.EnableSzConfigManager {
-		grpcServer.enableSzConfigManager(ctx, aGrpcServer)
-	}
-	if grpcServer.EnableAll || grpcServer.EnableSzDiagnostic {
-		grpcServer.enableSzDiagnostic(ctx, aGrpcServer)
-	}
-	if grpcServer.EnableAll || grpcServer.EnableSzEngine {
-		grpcServer.enableSzEngine(ctx, aGrpcServer)
-	}
-	if grpcServer.EnableAll || grpcServer.EnableSzProduct {
-		grpcServer.enableSzProduct(ctx, aGrpcServer)
-	}
-
-	// Enable reflection.
-
-	reflection.Register(aGrpcServer)
-
-	// Run server.
-
-	if !grpcServer.AvoidServing {
-		grpcServer.log(2003, listener.Addr())
-		err = aGrpcServer.Serve(listener)
-	} else {
-		grpcServer.log(2004)
-		err = listener.Close()
-	}
-
 	return err
 }
