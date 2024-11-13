@@ -7,6 +7,7 @@ toolchain go1.23.2
 require (
 	github.com/aquilax/truncate v1.0.0
 	github.com/senzing-garage/go-cmdhelping v0.3.1
+	github.com/senzing-garage/go-databasing v0.5.4-0.20241113172545-2b3bd2371f4d
 	github.com/senzing-garage/go-helpers v0.6.3
 	github.com/senzing-garage/go-logging v1.5.1
 	github.com/senzing-garage/go-observing v0.3.3
@@ -44,7 +45,6 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.6.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
-	github.com/senzing-garage/go-databasing v0.5.4-0.20241113172545-2b3bd2371f4d // indirect
 	github.com/senzing-garage/go-messaging v1.5.2 // indirect
 	github.com/senzing-garage/go-sdk-abstract-factory v0.9.3 // indirect
 	github.com/senzing-garage/sz-sdk-go-grpc v0.8.4 // indirect
@@ -60,7 +60,7 @@ require (
 	golang.org/x/net v0.31.0 // indirect
 	golang.org/x/sys v0.27.0 // indirect
 	golang.org/x/text v0.20.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20241113154021-e0fbfb71d213 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20241113202542-65e8d215514f // indirect
 	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
