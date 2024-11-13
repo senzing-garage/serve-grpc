@@ -231,11 +231,12 @@ Example:
 
     ```console
     docker run \
-        --interactive \
-        --publish 8261:8261 \
-        --rm \
-        --tty \
-        senzing/serve-grpc
+      --interactive \
+      --publish 8261:8261 \
+      --read-only \
+      --rm \
+      --tty \
+      senzing/serve-grpc
 
     ```
 
