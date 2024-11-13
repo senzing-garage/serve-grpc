@@ -7,6 +7,7 @@ import (
 	"net/url"
 
 	"github.com/senzing-garage/go-cmdhelping/option"
+	"github.com/senzing-garage/go-databasing/dbhelper"
 	"github.com/senzing-garage/go-helpers/settingsparser"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
@@ -330,7 +331,8 @@ func (grpcServer *BasicGrpcServer) initializeDatabase(ctx context.Context, senzi
 	}
 
 	if len(databaseURLs) == 1 {
-		parsedDatabaseURL, err := url.Parse(databaseURLs[0])
+		databaseURL := databaseURLs[0]
+		parsedDatabaseURL, err := dbhelper.ParseDatabaseURL(databaseURL)
 		if err != nil {
 			return err
 		}

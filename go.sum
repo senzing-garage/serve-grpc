@@ -90,6 +90,8 @@ github.com/senzing-garage/go-cmdhelping v0.3.1 h1:MCAvjx1kv3yEob1gPv4cUQ+fIrE1C/
 github.com/senzing-garage/go-cmdhelping v0.3.1/go.mod h1:JTEcyT9VnuwqxSAolhtZEJB2IbdsFyv5KmEeoKHrUsU=
 github.com/senzing-garage/go-databasing v0.5.4-0.20241112193432-d8bf85179749 h1:V1jg8Um8m/LhOsOrIBKB++E3hIe8UUh28644xJHydf4=
 github.com/senzing-garage/go-databasing v0.5.4-0.20241112193432-d8bf85179749/go.mod h1:rMy8eqm0zwl9DaqPEcEYa/ZJzayyrkI0+VpX09JISWg=
+github.com/senzing-garage/go-databasing v0.5.4-0.20241113172545-2b3bd2371f4d h1:qisdYuFYUgGsugKkUOXgK/X6XTipdaeLRUPrgmovHRc=
+github.com/senzing-garage/go-databasing v0.5.4-0.20241113172545-2b3bd2371f4d/go.mod h1:AgZaT41rT8mGA1oid2Ni9m6Vus0sNFdZ0O3tipnFM3I=
 github.com/senzing-garage/go-helpers v0.6.3 h1:iZ0cPGgGkRfuh+DGlcVQeKLnCRgW92qaHDXZnw1xgs4=
 github.com/senzing-garage/go-helpers v0.6.3/go.mod h1:YerS7RDFiZMc/2kp9RpAPO8HrsPVy+kMQ2wyGjiAn6U=
 github.com/senzing-garage/go-logging v1.5.1 h1:3nqw75gN5x+6PQRop34/49+3kag1aE9dlFne7pILQAg=
@@ -102,6 +104,8 @@ github.com/senzing-garage/go-sdk-abstract-factory v0.9.3 h1:V2Iq//f3kyGdf9W0sH12
 github.com/senzing-garage/go-sdk-abstract-factory v0.9.3/go.mod h1:O9TZ/T5DQqBt2kqmleFdbSM26fJuRogFHGz4wWRAr/c=
 github.com/senzing-garage/init-database v0.7.3-0.20241112215538-0979d2cd311e h1:Nh00ksNk2BWcJXCC8+LmwGXKMfCsCqDHBk/t9QUN5Us=
 github.com/senzing-garage/init-database v0.7.3-0.20241112215538-0979d2cd311e/go.mod h1:dP3JZXsYVodwVZFP0QAkvZelrXgj1xye2RuPE1fIPOw=
+github.com/senzing-garage/init-database v0.7.3-0.20241113173439-419c8379c1ea h1:ydSwMWJTnCdP7QGXesNNeBGL+dm8jpfFOLUVDF3sRK0=
+github.com/senzing-garage/init-database v0.7.3-0.20241113173439-419c8379c1ea/go.mod h1:vfyvIWPjzBxmCqFXVhEqqtf8Mc5cL2PN8l0Ix+qrI/Y=
 github.com/senzing-garage/sz-sdk-go v0.14.3 h1:vcTJDn84bTGuFt2kWw8jDf4FfgUSePB+UJg3C2cPIBk=
 github.com/senzing-garage/sz-sdk-go v0.14.3/go.mod h1:rj9HH6qo+kW5PsFSRnEIUQqDZBE34gZjQGsDvAxw6dI=
 github.com/senzing-garage/sz-sdk-go-core v0.8.5 h1:8z9QZNEIF6q98E3NkcRQCB/9bx6o+4MhcQ7S+nrqwkE=
@@ -146,6 +150,8 @@ golang.org/x/text v0.20.0 h1:gK/Kv2otX8gz+wn7Rmb3vT96ZwuoxnQlY+HlJVj7Qug=
 golang.org/x/text v0.20.0/go.mod h1:D4IsuqiFMhST5bX19pQ9ikHC2GsaKyk/oF+pn3ducp4=
 google.golang.org/genproto/googleapis/rpc v0.0.0-20241104194629-dd2ea8efbc28 h1:XVhgTWWV3kGQlwJHR3upFWZeTsei6Oks1apkZSeonIE=
 google.golang.org/genproto/googleapis/rpc v0.0.0-20241104194629-dd2ea8efbc28/go.mod h1:GX3210XPVPUjJbTUbvwI8f2IpZDMZuPJWDzDuebbviI=
+google.golang.org/genproto/googleapis/rpc v0.0.0-20241113154021-e0fbfb71d213 h1:L+WcQXqkyf5MX6g7AudgYEuJjmYbqSRkTmJqGfAPw+Y=
+google.golang.org/genproto/googleapis/rpc v0.0.0-20241113154021-e0fbfb71d213/go.mod h1:GX3210XPVPUjJbTUbvwI8f2IpZDMZuPJWDzDuebbviI=
 google.golang.org/grpc v1.68.0 h1:aHQeeJbo8zAkAa3pRzrVjZlbz6uSfeOXlJNQM0RAbz0=
 google.golang.org/grpc v1.68.0/go.mod h1:fmSPC5AsjSBCK54MyHRx48kpOti1/jRfOlwEWywNjWA=
 google.golang.org/protobuf v1.35.1 h1:m3LfL6/Ca+fqnjnlqQXNpFPABW1UD7mjh8KO2mKFytA=
