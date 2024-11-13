@@ -403,7 +403,7 @@ in testing the `sz-sdk-go-core` packages.
 
    Visit [localhost:9171].
    For the initial login, review the instructions at the top of the web page.
-   For server password information, see the `POSTGRESQL_POSTGRES_PASSWORD` value in `${SENZING_DEMO_DIR}/docker-compose.yaml`.
+   For server password information, see the `POSTGRES_PASSWORD` value in [docker-compose.yaml].
    Usually, it's "postgres".
 
 1. Example programs using gRPC:
@@ -483,6 +483,7 @@ For other gRPC tools, visit [Awesome gRPC].
 [Awesome gRPC]: https://github.com/grpc-ecosystem/awesome-grpc#tools
 [bloomrpc]: https://github.com/bloomrpc/bloomrpc
 [clone-repository]: https://github.com/senzing-garage/knowledge-base/blob/main/HOWTO/clone-repository.md
+[docker-compose.yaml]: ../docker-compose.yaml
 [docker]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/docker.md
 [git]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/git.md
 [Go Reference Badge]: https://pkg.go.dev/badge/github.com/senzing-garage/serve-grpc.svg
@@ -494,7 +495,7 @@ For other gRPC tools, visit [Awesome gRPC].
 [localhost:9171]: http://localhost:9171
 [localhost:9174]: http://localhost:9174
 [make]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/make.md
+[senzing-garage/knowledge-base/proposals/quickstart-grpc]: https://github.com/senzing-garage/knowledge-base/tree/main/proposals/quickstart-grpc
 [senzing-tools]: https://github.com/senzing-garage/senzing-tools
 [Test using Docker-compose stack with PostgreSql database]: #test-using-docker-compose-stack-with-postgresql-database
 [testcoverage.yaml]: ../.github/coverage/testcoverage.yaml
-[senzing-garage/knowledge-base/proposals/quickstart-grpc]: https://github.com/senzing-garage/knowledge-base/tree/main/proposals/quickstart-grpc
