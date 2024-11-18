@@ -231,11 +231,12 @@ Example:
 
     ```console
     docker run \
-        --interactive \
-        --publish 8261:8261 \
-        --rm \
-        --tty \
-        senzing/serve-grpc
+      --interactive \
+      --publish 8261:8261 \
+      --read-only \
+      --rm \
+      --tty \
+      senzing/serve-grpc
 
     ```
 
@@ -389,59 +390,12 @@ The actual packaging is done in the [senzing-tools] repository.
 The following instructions show how to bring up a test stack to be used
 in testing the `sz-sdk-go-core` packages.
 
-1. Identify a directory to place docker-compose artifacts.
-   The directory specified will be deleted and re-created.
-   Example:
-
-    ```console
-    export SENZING_DEMO_DIR=~/my-senzing-demo
-
-    ```
-
 1. Bring up the docker-compose stack.
    Example:
 
     ```console
-    export PGADMIN_DIR=${SENZING_DEMO_DIR}/pgadmin
-    export POSTGRES_DIR=${SENZING_DEMO_DIR}/postgres
-    export RABBITMQ_DIR=${SENZING_DEMO_DIR}/rabbitmq
-    export SENZING_VAR_DIR=${SENZING_DEMO_DIR}/var
-    export SENZING_UID=$(id -u)
-    export SENZING_GID=$(id -g)
-
-    rm -rf ${SENZING_DEMO_DIR:-/tmp/nowhere/for/safety}
-    mkdir ${SENZING_DEMO_DIR}
-    mkdir -p ${PGADMIN_DIR} ${POSTGRES_DIR} ${RABBITMQ_DIR} ${SENZING_VAR_DIR}
-    chmod -R 777 ${SENZING_DEMO_DIR}
-
-    curl -X GET \
-        --output ${SENZING_DEMO_DIR}/docker-versions-stable.sh \
-        https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/lists/docker-versions-stable.sh
-    source ${SENZING_DEMO_DIR}/docker-versions-stable.sh
-    curl -X GET \
-        --output ${SENZING_DEMO_DIR}/docker-compose.yaml \
-        "https://raw.githubusercontent.com/senzing-garage/docker-compose-demo/main/resources/postgresql/docker-compose-postgresql.yaml"
-
-    cd ${SENZING_DEMO_DIR}
-    sudo --preserve-env docker-compose up
-
-    ```
-
-1. In a separate terminal window, set environment variables.
-   Identify Database URL of database in docker-compose stack.
-   Example:
-
-    ```console
-    export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/er/?sslmode=disable
-
-    ```
-
-1. Run tests.
-
-    ```console
     cd ${GIT_REPOSITORY_DIR}
-    make clean test
+    docker-compose up
 
     ```
 
@@ -449,14 +403,17 @@ in testing the `sz-sdk-go-core` packages.
 
    Visit [localhost:9171].
    For the initial login, review the instructions at the top of the web page.
-   For server password information, see the `POSTGRESQL_POSTGRES_PASSWORD` value in `${SENZING_DEMO_DIR}/docker-compose.yaml`.
+   For server password information, see the `POSTGRES_PASSWORD` value in [docker-compose.yaml].
    Usually, it's "postgres".
+
+1. Example programs using gRPC:
+    1. [senzing-garage/knowledge-base/proposals/quickstart-grpc]
 
 1. Cleanup.
 
     ```console
     cd ${SENZING_DEMO_DIR}
-    sudo --preserve-env docker-compose down
+    docker-compose down
 
     cd ${GIT_REPOSITORY_DIR}
     make clean
@@ -526,6 +483,7 @@ For other gRPC tools, visit [Awesome gRPC].
 [Awesome gRPC]: https://github.com/grpc-ecosystem/awesome-grpc#tools
 [bloomrpc]: https://github.com/bloomrpc/bloomrpc
 [clone-repository]: https://github.com/senzing-garage/knowledge-base/blob/main/HOWTO/clone-repository.md
+[docker-compose.yaml]: ../docker-compose.yaml
 [docker]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/docker.md
 [git]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/git.md
 [Go Reference Badge]: https://pkg.go.dev/badge/github.com/senzing-garage/serve-grpc.svg
@@ -537,6 +495,7 @@ For other gRPC tools, visit [Awesome gRPC].
 [localhost:9171]: http://localhost:9171
 [localhost:9174]: http://localhost:9174
 [make]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/make.md
+[senzing-garage/knowledge-base/proposals/quickstart-grpc]: https://github.com/senzing-garage/knowledge-base/tree/main/proposals/quickstart-grpc
 [senzing-tools]: https://github.com/senzing-garage/senzing-tools
 [Test using Docker-compose stack with PostgreSql database]: #test-using-docker-compose-stack-with-postgresql-database
 [testcoverage.yaml]: ../.github/coverage/testcoverage.yaml

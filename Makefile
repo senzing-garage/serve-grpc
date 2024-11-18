@@ -41,7 +41,7 @@ GO_ARCH = $(word 2, $(GO_OSARCH))
 
 DOCKER_IMAGE_TAG ?= $(GIT_REPOSITORY_NAME):$(GIT_VERSION)
 GOBIN ?= $(shell go env GOPATH)/bin
-LD_LIBRARY_PATH ?= /opt/senzing/er/lib
+LD_LIBRARY_PATH ?= /opt/senzing/er/lib:/opt/oracle/instantclient_23_5
 
 # Export environment variables.
 
@@ -106,8 +106,18 @@ $(PLATFORMS):
 	@GOOS=$(GO_OS) GOARCH=$(GO_ARCH) go build -o $(TARGET_DIRECTORY)/$(GO_OS)-$(GO_ARCH)/$(PROGRAM_NAME)
 
 
+PLATFORMS_WITH_LIBSQLITE3 := linux/amd64/libsqlite3  linux/arm64/libsqlite3
+$(PLATFORMS_WITH_LIBSQLITE3):
+	$(info Building $(TARGET_DIRECTORY)/$(GO_OS)-$(GO_ARCH)/$(PROGRAM_NAME))
+	@GOOS=$(GO_OS) GOARCH=$(GO_ARCH) go build -tags "libsqlite3 linux" -o $(TARGET_DIRECTORY)/$(GO_OS)-$(GO_ARCH)/$(PROGRAM_NAME)
+
+
 .PHONY: build
 build: build-osarch-specific
+
+
+.PHONY: build-with-libsqlite3
+build-with-libsqlite3: build-with-libsqlite3-osarch-specific
 
 
 .PHONY: docker-build
