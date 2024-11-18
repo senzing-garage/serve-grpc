@@ -62,7 +62,7 @@ this action runs [golangci-lint] to run multiple linters against the code.
     - [.golangci.yaml]
   - Uses:
     - [actions/checkout]
-    - [senzing-factory/github-action-install-senzing-api]
+    - [senzing-factory/github-action-install-senzing-sdk]
     - [actions/setup-go]
     - [golangci/golangci-lint-action]
 
@@ -85,7 +85,7 @@ this action runs `go test` with coverage testing on macOS.
     - [actions/checkout]
     - [actions/setup-go]
     - [gotesttools/gotestfmt-action]
-    - [senzing-factory/github-action-install-senzing-api]
+    - [senzing-factory/github-action-install-senzing-sdk]
     - [actions/upload-artifact]
     - [senzing-factory/build-resources/.../go-coverage.yaml]
 
@@ -100,7 +100,7 @@ this action runs `go test` with coverage testing on Linux.
     - [actions/checkout]
     - [actions/setup-go]
     - [gotesttools/gotestfmt-action]
-    - [senzing-factory/github-action-install-senzing-api]
+    - [senzing-factory/github-action-install-senzing-sdk]
     - [actions/upload-artifact]
     - [senzing-factory/build-resources/.../go-coverage.yaml]
 
@@ -115,7 +115,7 @@ this action runs `go test` with coverage testing on Windows.
     - [actions/checkout]
     - [actions/setup-go]
     - [gotesttools/gotestfmt-action]
-    - [senzing-factory/github-action-install-senzing-api]
+    - [senzing-factory/github-action-install-senzing-sdk]
     - [actions/upload-artifact]
     - [senzing-factory/build-resources/.../go-coverage.yaml]
 
@@ -199,7 +199,7 @@ this action moves the PR on the "Garage" project board to "Done".
 [senzing-factory/build-resources/.../make-go-github-file.yaml]: https://github.com/senzing-factory/build-resources/blob/main/.github/workflows/make-go-github-file.yaml
 [senzing-factory/build-resources/.../move-pr-to-done-dependabot.yaml]: https://github.com/senzing-factory/build-resources/blob/main/.github/workflows/move-pr-to-done-dependabot.yaml
 [senzing-factory/github-action-docker-buildx-build]: https://github.com/senzing-factory/github-action-docker-buildx-build
-[senzing-factory/github-action-install-senzing-api]: https://github.com/senzing-factory/github-action-install-senzing-api
+[senzing-factory/github-action-install-senzing-sdk]: https://github.com/senzing-factory/github-action-install-senzing-sdk
 [senzing-factory/github-action-make-go-tag]: https://github.com/senzing-factory/github-action-make-go-tag
 [super-linter]: https://github.com/super-linter/super-linter
 [testcoverage.yaml]: ../coverage/README.md#testcoverageyaml
