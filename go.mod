@@ -17,7 +17,7 @@ require (
 	github.com/senzing-garage/sz-sdk-proto v0.7.10
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	google.golang.org/grpc v1.68.0
 )
 
