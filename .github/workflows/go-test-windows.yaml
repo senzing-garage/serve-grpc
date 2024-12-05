@@ -41,9 +41,7 @@ jobs:
           senzingsdk-version: ${{ matrix.senzingsdk-version }}
 
       - name: Add to "Path" environment variable
-        run: |
-          # shellcheck disable=SC2028
-          echo "C:\Program Files\Senzing\er\lib" >> "$env:GITHUB_PATH"
+        run: printf "C:\Program Files\Senzing\er\lib" | Out-File -FilePath "$env:GITHUB_PATH" -Encoding utf8 -Append
 
       - name: Copy /etc files
         run: copy testdata/senzing-license/g2.lic "C:\Program Files\Senzing\er\etc\g2.lic"
