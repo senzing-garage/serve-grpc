@@ -28,8 +28,8 @@ the recommendation is not to use it yet.
 ## Overview
 
 `serve-grpc` supports the [Senzing Protocol Buffer definitions].
-Under the covers, the gRPC request is translated by the gRPC server into a Senzing Go SDK API call using [senzing/sz-sdk-go-core].
-The response from the Senzing Go SDK API is returned to the gRPC client.
+Under the covers, the gRPC request is translated by the gRPC server into a Senzing Go SDK call using [senzing/sz-sdk-go-core].
+The response from the Senzing Go SDK is returned to the gRPC client.
 
 Senzing SDKs for accessing the gRPC server:
 
