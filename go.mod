@@ -5,7 +5,7 @@ go 1.22.7
 toolchain go1.23.2
 
 require (
-	github.com/aquilax/truncate v1.0.0
+	github.com/aquilax/truncate v1.0.1
 	github.com/senzing-garage/go-cmdhelping v0.3.1
 	github.com/senzing-garage/go-databasing v0.5.4
 	github.com/senzing-garage/go-helpers v0.6.3
