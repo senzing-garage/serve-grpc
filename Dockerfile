@@ -55,8 +55,8 @@ RUN make build-with-libsqlite3
 # Copy binaries to /output.
 
 RUN mkdir -p /output \
- && cp -R ${GOPATH}/src/serve-grpc/target/*  /output/ \
- && ls -la /output/
+ && cp -R ${GOPATH}/src/serve-grpc/target/*  /output/
+RUN ls -la /output/
 
 # -----------------------------------------------------------------------------
 # Stage: final
