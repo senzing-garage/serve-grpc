@@ -51,6 +51,7 @@ ENV LD_LIBRARY_PATH=/opt/senzing/er/lib/
 
 WORKDIR ${GOPATH}/src/serve-grpc
 RUN make build-with-libsqlite3
+RUN stat ${GOPATH}/src/serve-grpc/target/linux/serve-grpc
 
 # Copy binaries to /output.
 
