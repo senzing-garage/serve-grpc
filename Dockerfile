@@ -55,9 +55,8 @@ RUN stat ${GOPATH}/src/serve-grpc/target/linux/serve-grpc
 
 # Copy binaries to /output.
 
-RUN mkdir -p /output/linux \
- && cp -R ${GOPATH}/src/serve-grpc/target/linux/serve-grpc  /output/linux/serve-grpc
-RUN ls -la /output/
+RUN mkdir -p /output \
+ && cp -R ${GOPATH}/src/serve-grpc/target/*  /output/
 
 # -----------------------------------------------------------------------------
 # Stage: final
