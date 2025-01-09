@@ -9,6 +9,7 @@
    is the SENZING_APT_REPOSITORY_URL value.
    It starts with `https://senzing-` and ends with `.com`.
    It needs to be the value of the `SENZING_APT_REPOSITORY_URL` environment variable.
+
    Example:
 
     ```console
