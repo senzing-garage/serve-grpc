@@ -36,7 +36,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Senzing SDK
-        uses: senzing-factory/github-action-install-senzing-sdk@v1
+        uses: senzing-factory/github-action-install-senzing-sdk@v2
         with:
           senzingsdk-version: ${{ matrix.senzingsdk-version }}
 
