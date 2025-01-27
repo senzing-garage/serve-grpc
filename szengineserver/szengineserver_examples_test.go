@@ -29,7 +29,7 @@ func ExampleSzEngineServer_AddRecord() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output: {}
+	// Output:
 }
 
 func ExampleSzEngineServer_AddRecord_secondRecord() {
@@ -47,7 +47,7 @@ func ExampleSzEngineServer_AddRecord_secondRecord() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output: {}
+	// Output:
 }
 
 func ExampleSzEngineServer_AddRecord_withInfo() {
@@ -594,7 +594,7 @@ func ExampleSzEngineServer_ReevaluateEntity() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output: {}
+	// Output:
 }
 
 func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
@@ -628,7 +628,7 @@ func ExampleSzEngineServer_ReevaluateRecord() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output: {}
+	// Output:
 }
 
 func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
@@ -663,7 +663,7 @@ func ExampleSzEngineServer_DeleteRecord() {
 		fmt.Println(err)
 	}
 	fmt.Println(response.GetResult())
-	// Output: {}
+	// Output:
 }
 
 func ExampleSzEngineServer_DeleteRecord_withInfo() {
