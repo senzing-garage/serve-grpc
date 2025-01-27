@@ -13,7 +13,7 @@ require (
 	github.com/senzing-garage/go-observing v0.3.3
 	github.com/senzing-garage/init-database v0.7.4
 	github.com/senzing-garage/sz-sdk-go v0.14.4
-	github.com/senzing-garage/sz-sdk-go-core v0.8.6
+	github.com/senzing-garage/sz-sdk-go-core v0.8.7
 	github.com/senzing-garage/sz-sdk-proto v0.7.10
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
@@ -44,25 +44,25 @@ require (
 	github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/sagikazarmark/locafero v0.6.0 // indirect
+	github.com/sagikazarmark/locafero v0.7.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/senzing-garage/go-messaging v1.5.2 // indirect
 	github.com/senzing-garage/go-sdk-abstract-factory v0.9.4 // indirect
 	github.com/senzing-garage/sz-sdk-go-grpc v0.8.6 // indirect
 	github.com/senzing-garage/sz-sdk-go-mock v0.8.4 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
-	github.com/spf13/afero v1.11.0 // indirect
+	github.com/spf13/afero v1.12.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.31.0 // indirect
+	golang.org/x/crypto v0.32.0 // indirect
 	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8 // indirect
-	golang.org/x/net v0.33.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/net v0.34.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20241219192143-6b3ec007d9bb // indirect
-	google.golang.org/protobuf v1.36.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250124145028-65684f501c47 // indirect
+	google.golang.org/protobuf v1.36.4 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
