@@ -2,6 +2,7 @@ package szconfigmanagerserver
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"sync"
 	"time"
@@ -12,6 +13,10 @@ import (
 	"github.com/senzing-garage/sz-sdk-go/senzing"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 )
+
+type GetDataSourceCodes struct {
+	DsrcCodes []string `json:"DSRC_CODES"`
+}
 
 var (
 	szConfigManagerSingleton *szsdk.Szconfigmanager
@@ -33,6 +38,27 @@ func (server *SzConfigManagerServer) AddConfig(ctx context.Context, request *szp
 	szConfigManager := getSzConfigManager()
 	result, err = szConfigManager.AddConfig(ctx, request.GetConfigDefinition(), request.GetConfigComment())
 	response := szpb.AddConfigResponse{
+		Result: result,
+	}
+	return &response, err
+}
+
+func (server *SzConfigManagerServer) CreateNewConfig(ctx context.Context, request *szpb.CreateNewConfigRequest) (*szpb.CreateNewConfigResponse, error) {
+	var err error
+	var result int64
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(999, request)
+		defer func() { server.traceExit(999, request, result, err, time.Since(entryTime)) }()
+	}
+	szConfigManager := getSzConfigManager()
+	dataSourceCodes := &GetDataSourceCodes{}
+	err = json.Unmarshal([]byte(request.GetDataSourceCodes()), &dataSourceCodes)
+	if err != nil {
+		return &szpb.CreateNewConfigResponse{}, err
+	}
+	result, err = szConfigManager.CreateNewConfig(ctx, request.GetConfigId(), request.GetConfigComment(), dataSourceCodes.DsrcCodes...)
+	response := szpb.CreateNewConfigResponse{
 		Result: result,
 	}
 	return &response, err
@@ -70,6 +96,22 @@ func (server *SzConfigManagerServer) GetConfigs(ctx context.Context, request *sz
 	return &response, err
 }
 
+func (server *SzConfigManagerServer) GetDataSources(ctx context.Context, request *szpb.GetDataSourcesRequest) (*szpb.GetDataSourcesResponse, error) { //revive:disable var-naming
+	var err error
+	var result string
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(999, request)
+		defer func() { server.traceExit(999, request, result, err, time.Since(entryTime)) }()
+	}
+	szConfigManager := getSzConfigManager()
+	result, err = szConfigManager.GetDataSources(ctx, request.GetConfigId())
+	response := szpb.GetDataSourcesResponse{
+		Result: result,
+	}
+	return &response, err
+}
+
 func (server *SzConfigManagerServer) GetDefaultConfigId(ctx context.Context, request *szpb.GetDefaultConfigIdRequest) (*szpb.GetDefaultConfigIdResponse, error) { //revive:disable var-naming
 	var err error
 	var result int64
@@ -81,6 +123,22 @@ func (server *SzConfigManagerServer) GetDefaultConfigId(ctx context.Context, req
 	szConfigManager := getSzConfigManager()
 	result, err = szConfigManager.GetDefaultConfigID(ctx)
 	response := szpb.GetDefaultConfigIdResponse{
+		Result: result,
+	}
+	return &response, err
+}
+
+func (server *SzConfigManagerServer) GetTemplateConfigId(ctx context.Context, request *szpb.GetTemplateConfigIdRequest) (*szpb.GetTemplateConfigIdResponse, error) { //revive:disable var-naming
+	var err error
+	var result int64
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(999, request)
+		defer func() { server.traceExit(999, request, result, err, time.Since(entryTime)) }()
+	}
+	szConfigManager := getSzConfigManager()
+	result, err = szConfigManager.GetTemplateConfigID(ctx)
+	response := szpb.GetTemplateConfigIdResponse{
 		Result: result,
 	}
 	return &response, err

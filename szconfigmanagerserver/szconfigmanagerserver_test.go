@@ -77,6 +77,29 @@ func TestSzConfigManagerServer_AddConfig(test *testing.T) {
 	printActual(test, response)
 }
 
+func TestSzConfigManagerServer_CreateNewConfig(test *testing.T) {
+	ctx := context.TODO()
+	configComments := "Test comments"
+	dataSourceCodes := `{"DSRC_CODES":["DS_1","DS_2","DS_3"]}`
+	szConfigManagerServer := getTestObject(ctx, test)
+
+	// GetDefaultConfigId().
+	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	require.NoError(test, err)
+	printActual(test, responseFromGetDefaultConfigID)
+
+	// Test.
+	request := &szpb.CreateNewConfigRequest{
+		ConfigId:        responseFromGetDefaultConfigID.GetResult(),
+		ConfigComment:   configComments,
+		DataSourceCodes: dataSourceCodes,
+	}
+	response, err := szConfigManagerServer.CreateNewConfig(ctx, request)
+	require.NoError(test, err)
+	printActual(test, response)
+}
+
 func TestSzConfigManagerServer_GetConfig(test *testing.T) {
 	ctx := context.TODO()
 	szConfigManagerServer := getTestObject(ctx, test)
@@ -96,11 +119,22 @@ func TestSzConfigManagerServer_GetConfig(test *testing.T) {
 	printActual(test, response)
 }
 
-func TestSzConfigManagerServer_GetConfigList(test *testing.T) {
+func TestSzConfigManagerServer_GetConfigs(test *testing.T) {
 	ctx := context.TODO()
 	szConfigManagerServer := getTestObject(ctx, test)
 	request := &szpb.GetConfigsRequest{}
 	response, err := szConfigManagerServer.GetConfigs(ctx, request)
+	require.NoError(test, err)
+	printActual(test, response)
+}
+
+func TestSzConfigManagerServer_GetDataSources(test *testing.T) {
+	ctx := context.TODO()
+	szConfigManagerServer := getTestObject(ctx, test)
+	request := &szpb.GetDataSourcesRequest{
+		ConfigId: 0,
+	}
+	response, err := szConfigManagerServer.GetDataSources(ctx, request)
 	require.NoError(test, err)
 	printActual(test, response)
 }
@@ -110,6 +144,15 @@ func TestSzConfigManagerServer_GetDefaultConfigId(test *testing.T) {
 	szConfigManagerServer := getTestObject(ctx, test)
 	request := &szpb.GetDefaultConfigIdRequest{}
 	response, err := szConfigManagerServer.GetDefaultConfigId(ctx, request)
+	require.NoError(test, err)
+	printActual(test, response)
+}
+
+func TestSzConfigManagerServer_GetTemplateConfigId(test *testing.T) {
+	ctx := context.TODO()
+	szConfigManagerServer := getTestObject(ctx, test)
+	request := &szpb.GetTemplateConfigIdRequest{}
+	response, err := szConfigManagerServer.GetTemplateConfigId(ctx, request)
 	require.NoError(test, err)
 	printActual(test, response)
 }
