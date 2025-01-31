@@ -456,6 +456,7 @@ func TestSzEngineServer_ReevaluateEntity(test *testing.T) {
 	}
 	response, err := szEngineServer.ReevaluateEntity(ctx, request)
 	require.NoError(test, err)
+	require.Equal(test, "", response.GetResult())
 	printActual(test, response.GetResult())
 }
 
@@ -485,6 +486,7 @@ func TestSzEngineServer_ReevaluateRecord(test *testing.T) {
 	}
 	response, err := szEngineServer.ReevaluateRecord(ctx, request)
 	require.NoError(test, err)
+	require.Equal(test, "", response.GetResult())
 	printActual(test, response.GetResult())
 }
 
@@ -630,6 +632,7 @@ func TestSzEngineServer_DeleteRecord(test *testing.T) {
 	}
 	response, err := szEngineServer.DeleteRecord(ctx, request)
 	require.NoError(test, err)
+	require.Equal(test, "", response.GetResult())
 	printActual(test, response.GetResult())
 }
 
