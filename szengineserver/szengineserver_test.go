@@ -66,6 +66,7 @@ func TestSzEngineServer_AddRecord(test *testing.T) {
 	}
 	response1, err := szEngineServer.AddRecord(ctx, request1)
 	require.NoError(test, err)
+	require.NotEqual(test, "", response1.GetResult())
 	printActual(test, response1.GetResult())
 	request2 := &szpb.AddRecordRequest{
 		DataSourceCode:   record2.DataSource,
@@ -75,6 +76,7 @@ func TestSzEngineServer_AddRecord(test *testing.T) {
 	}
 	response2, err := szEngineServer.AddRecord(ctx, request2)
 	require.NoError(test, err)
+	require.NotEqual(test, "", response1.GetResult())
 	printActual(test, response2.GetResult())
 }
 
@@ -90,6 +92,7 @@ func TestSzEngineServer_AddRecord_withInfo(test *testing.T) {
 	}
 	response, err := szEngineServer.AddRecord(ctx, request)
 	require.NoError(test, err)
+	require.NotEqual(test, "", response.GetResult())
 	printActual(test, response.GetResult())
 }
 
@@ -471,6 +474,7 @@ func TestSzEngineServer_ReevaluateEntity_withInfo(test *testing.T) {
 	}
 	response, err := szEngineServer.ReevaluateEntity(ctx, request)
 	require.NoError(test, err)
+	require.NotEqual(test, "", response.GetResult())
 	printActual(test, response.GetResult())
 }
 
@@ -502,6 +506,7 @@ func TestSzEngineServer_ReevaluateRecord_withInfo(test *testing.T) {
 	}
 	response, err := szEngineServer.ReevaluateRecord(ctx, request)
 	require.NoError(test, err)
+	require.NotEqual(test, "", response.GetResult())
 	printActual(test, response.GetResult())
 }
 
@@ -648,6 +653,7 @@ func TestSzEngineServer_DeleteRecord_withInfo(test *testing.T) {
 	}
 	response, err := szEngineServer.DeleteRecord(ctx, request)
 	require.NoError(test, err)
+	require.NotEqual(test, "", response.GetResult())
 	printActual(test, response.GetResult())
 }
 
