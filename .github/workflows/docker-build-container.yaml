@@ -29,6 +29,16 @@ jobs:
           platforms: linux/amd64
           username: ${{ secrets.DOCKERHUB_USERNAME }}
 
+  docker-build-arm-container:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get repository name
+        id: repo-basename
+        run: |
+          echo "repo=$(basename ${{ github.repository }})" >> "$GITHUB_OUTPUT"
+        shell: bash
+
       - name: Build docker image arm
         uses: senzing-factory/github-action-docker-buildx-build@v1
         with:
