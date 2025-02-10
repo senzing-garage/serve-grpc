@@ -1,0 +1,6 @@
+# We aren't actually hosting this, actionlint
+# just doesn't have the arm runners listed
+# in their defaults
+self-hosted-runner:
+  labels:
+    - ubuntu-24.04-arm
