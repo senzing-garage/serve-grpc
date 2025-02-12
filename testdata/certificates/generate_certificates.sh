@@ -9,15 +9,15 @@ rm server/*.pem
 echo "----- Generate Certificate Authority's private key and self-signed certificate."
 openssl req \
     -days 365 \
-    -keyout ca-private_key.pem \
+    -keyout certificate-authority/private_key.pem \
     -newkey rsa:4096 \
     -noenc \
-    -out ca-certificate.pem \
+    -out certificate-authority/certificate.pem \
     -subj "/C=US/ST=NV/L=Las Vegas/O=Senzing/OU=Test CA/CN=senzing.com" \
     -x509
 
 openssl x509 \
-    -in ca-certificate.pem \
+    -in certificate-authority/certificate.pem \
     -noout \
     -text
 
@@ -35,9 +35,9 @@ openssl req \
 # Use CA's private key to sign web server's CSR and get back the signed certificate.
 
 openssl x509 \
-    -CA ca-certificate.pem \
+    -CA certificate-authority/certificate.pem \
     -CAcreateserial \
-    -CAkey ca-private_key.pem \
+    -CAkey certificate-authority/private_key.pem \
     -days 360 \
     -extfile server/ext.cnf \
     -in server/certificate_request.pem \
@@ -63,9 +63,9 @@ openssl req \
 # Use CA's private key to sign client's CSR and get back the signed certificate
 
 openssl x509 \
-    -CA ca-certificate.pem \
+    -CA certificate-authority/certificate.pem \
     -CAcreateserial \
-    -CAkey ca-private_key.pem \
+    -CAkey certificate-authority/private_key.pem \
     -days 360 \
     -extfile client/ext.cnf \
     -in client/certificate_request.pem \
