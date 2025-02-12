@@ -90,6 +90,10 @@ dependencies:
 .PHONY: setup
 setup: setup-osarch-specific
 
+
+.PHONY: generate-certificates
+generate-certificates: generate-certificates-osarch-specific
+
 # -----------------------------------------------------------------------------
 # Lint
 # -----------------------------------------------------------------------------
