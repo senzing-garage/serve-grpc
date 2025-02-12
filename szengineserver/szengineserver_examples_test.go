@@ -550,9 +550,9 @@ func ExampleSzEngineServer_WhyEntities() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.WhyEntitiesRequest{
-		EntityId1: getEntityIDForRecord("CUSTOMERS", "1001"),
-		EntityId2: getEntityIDForRecord("CUSTOMERS", "1002"),
-		Flags:     senzing.SzNoFlags,
+		EntityId_1: getEntityIDForRecord("CUSTOMERS", "1001"),
+		EntityId_2: getEntityIDForRecord("CUSTOMERS", "1002"),
+		Flags:      senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.WhyEntities(ctx, request)
 	if err != nil {
@@ -567,11 +567,11 @@ func ExampleSzEngineServer_WhyRecords() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.WhyRecordsRequest{
-		DataSourceCode1: "CUSTOMERS",
-		RecordId1:       "1001",
-		DataSourceCode2: "CUSTOMERS",
-		RecordId2:       "1002",
-		Flags:           senzing.SzNoFlags,
+		DataSourceCode_1: "CUSTOMERS",
+		RecordId_1:       "1001",
+		DataSourceCode_2: "CUSTOMERS",
+		RecordId_2:       "1002",
+		Flags:            senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.WhyRecords(ctx, request)
 	if err != nil {
