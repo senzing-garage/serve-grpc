@@ -43,6 +43,7 @@ type BasicGrpcServer struct {
 	EnableSzDiagnostic    bool
 	EnableSzEngine        bool
 	EnableSzProduct       bool
+	GrpcServerOptions     []grpc.ServerOption
 	logger                logging.Logging
 	LogLevelName          string
 	ObserverOrigin        string
@@ -99,7 +100,7 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 
 	// Create server.
 
-	aGrpcServer := grpc.NewServer()
+	aGrpcServer := grpc.NewServer(grpcServer.GrpcServerOptions...)
 
 	// Register services with gRPC server.
 

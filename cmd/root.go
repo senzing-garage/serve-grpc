@@ -4,14 +4,17 @@ package cmd
 
 import (
 	"context"
+	"crypto/tls"
 	"os"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
 	"github.com/senzing-garage/go-cmdhelping/option"
+	"github.com/senzing-garage/go-cmdhelping/option/optiontype"
 	"github.com/senzing-garage/go-cmdhelping/settings"
 	"github.com/senzing-garage/serve-grpc/grpcserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"google.golang.org/grpc/credentials"
 )
 
 const (
@@ -27,7 +30,25 @@ For more information, visit https://github.com/senzing-garage/serve-grpc
 // Context variables
 // ----------------------------------------------------------------------------
 
+var serverCertificate = option.ContextVariable{
+	Arg:     "server-certificate",
+	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_CERTIFICATE", ""),
+	Envar:   "SENZING_TOOLS_SERVER_CERTIFICATE",
+	Help:    "Path to server certificate file. [%s]",
+	Type:    optiontype.String,
+}
+
+var serverKey = option.ContextVariable{
+	Arg:     "server-key",
+	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_KEY", ""),
+	Envar:   "SENZING_TOOLS_SERVER_KEY",
+	Help:    "Path to server key file. [%s]",
+	Type:    optiontype.String,
+}
+
 var ContextVariablesForMultiPlatform = []option.ContextVariable{
+	serverCertificate,
+	serverKey,
 	option.AvoidServe,
 	option.Configuration,
 	option.DatabaseURL,
@@ -124,3 +145,43 @@ func Version() string {
 func init() {
 	cmdhelper.Init(RootCmd, ContextVariables)
 }
+
+func loadTLSCredentials(certFile string, keyFile string) (credentials.TransportCredentials, error) {
+	certificate, err := tls.LoadX509KeyPair(certFile, keyFile)
+	if err != nil {
+		return nil, err
+	}
+	config := &tls.Config{
+		Certificates: []tls.Certificate{certificate},
+		ClientAuth:   tls.RequireAndVerifyClientCert,
+	}
+	return credentials.NewServerTLSFromCert()
+}
+
+// func loadTLSCredentialsX() (credentials.TransportCredentials, error) {
+// 	// Load certificate of the CA who signed client's certificate
+// 	pemClientCA, err := ioutil.ReadFile(clientCACertFile)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	certPool := x509.NewCertPool()
+// 	if !certPool.AppendCertsFromPEM(pemClientCA) {
+// 		return nil, fmt.Errorf("failed to add client CA's certificate")
+// 	}
+
+// 	// Load server's certificate and private key
+// 	serverCert, err := tls.LoadX509KeyPair(serverCertFile, serverKeyFile)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	// Create the credentials and return it
+// 	config := &tls.Config{
+// 		Certificates: []tls.Certificate{serverCert},
+// 		ClientAuth:   tls.RequireAndVerifyClientCert,
+// 		ClientCAs:    certPool,
+// 	}
+
+// 	return credentials.NewTLS(config), nil
+// }
