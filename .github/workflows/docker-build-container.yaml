@@ -26,24 +26,24 @@ jobs:
           build-options: "-q"
           image-repository: senzing/${{ steps.repo-basename.outputs.repo }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           username: ${{ secrets.DOCKERHUB_USERNAME }}
 
-  docker-build-arm-container:
-    runs-on: ubuntu-24.04-arm
+  #docker-build-arm-container:
+  #  runs-on: ubuntu-24.04-arm
 
-    steps:
-      - name: Get repository name
-        id: repo-basename
-        run: |
-          echo "repo=$(basename ${{ github.repository }})" >> "$GITHUB_OUTPUT"
-        shell: bash
+  #  steps:
+  #    - name: Get repository name
+  #      id: repo-basename
+  #      run: |
+  #        echo "repo=$(basename ${{ github.repository }})" >> "$GITHUB_OUTPUT"
+  #      shell: bash
 
-      - name: Build docker image arm
-        uses: senzing-factory/github-action-docker-buildx-build@v1
-        with:
-          build-options: "-q"
-          image-repository: senzing/${{ steps.repo-basename.outputs.repo }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-          platforms: linux/arm64
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #    - name: Build docker image arm
+  #      uses: senzing-factory/github-action-docker-buildx-build@v1
+  #      with:
+  #        build-options: "-q"
+  #        image-repository: senzing/${{ steps.repo-basename.outputs.repo }}
+  #        password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+  #        platforms: linux/arm64
+  #        username: ${{ secrets.DOCKERHUB_USERNAME }}
