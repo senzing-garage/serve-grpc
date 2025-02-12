@@ -13,7 +13,7 @@ openssl req \
     -newkey rsa:4096 \
     -noenc \
     -out ca-certificate.pem \
-    -subj "/C=US/ST=NV/L=Las Vegas/O=Senzing/OU=Development CA/CN=senzing.com" \
+    -subj "/C=US/ST=NV/L=Las Vegas/O=Senzing/OU=Test CA/CN=senzing.com" \
     -x509
 
 openssl x509 \
@@ -30,7 +30,7 @@ openssl req \
     -newkey rsa:4096 \
     -noenc \
     -out server/certificate_request.pem \
-    -subj "/C=US/ST=NV/L=Las Vegas/O=Senzing/OU=Development Server/CN=senzing.com"
+    -subj "/C=US/ST=NV/L=Las Vegas/O=Senzing/OU=Test Server/CN=senzing.com"
 
 # Use CA's private key to sign web server's CSR and get back the signed certificate.
 
@@ -58,7 +58,7 @@ openssl req \
     -newkey rsa:4096 \
     -noenc \
     -out client/certificate_request.pem \
-    -subj "/C=US/ST=NV/L=Las Vegas/O=Senzing/OU=Development Client/CN=senzing.com"
+    -subj "/C=US/ST=NV/L=Las Vegas/O=Senzing/OU=Test Client/CN=senzing.com"
 
 # Use CA's private key to sign client's CSR and get back the signed certificate
 
