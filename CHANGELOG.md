@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning].
 
 -
 
+## [0.8.12] - 2025-02-12
+
+### Changed in 0.8.12
+
+- Update dependencies
+- `.proto` field names
+
 ## [0.8.11] - 2025-02-10
 
 ### Changed in 0.8.11
