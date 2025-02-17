@@ -5,6 +5,7 @@ package cmd
 import (
 	"context"
 	"crypto/tls"
+	"fmt"
 	"os"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
@@ -14,6 +15,7 @@ import (
 	"github.com/senzing-garage/serve-grpc/grpcserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
 
@@ -30,25 +32,25 @@ For more information, visit https://github.com/senzing-garage/serve-grpc
 // Context variables
 // ----------------------------------------------------------------------------
 
-var serverCertificate = option.ContextVariable{
-	Arg:     "server-certificate",
-	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_CERTIFICATE", ""),
-	Envar:   "SENZING_TOOLS_SERVER_CERTIFICATE",
+var serverCertificatePath = option.ContextVariable{
+	Arg:     "server-certificate-path",
+	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_CERTIFICATE_PATH", ""),
+	Envar:   "SENZING_TOOLS_SERVER_CERTIFICATE_PATH",
 	Help:    "Path to server certificate file. [%s]",
 	Type:    optiontype.String,
 }
 
-var serverKey = option.ContextVariable{
-	Arg:     "server-key",
-	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_KEY", ""),
-	Envar:   "SENZING_TOOLS_SERVER_KEY",
+var serverKeyPath = option.ContextVariable{
+	Arg:     "server-key-path",
+	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_KEY_PATH", ""),
+	Envar:   "SENZING_TOOLS_SERVER_KEY_PATH",
 	Help:    "Path to server key file. [%s]",
 	Type:    optiontype.String,
 }
 
 var ContextVariablesForMultiPlatform = []option.ContextVariable{
-	serverCertificate,
-	serverKey,
+	serverCertificatePath,
+	serverKeyPath,
 	option.AvoidServe,
 	option.Configuration,
 	option.DatabaseURL,
@@ -113,6 +115,25 @@ func RunE(_ *cobra.Command, _ []string) error {
 		return err
 	}
 
+	// Add gRPC server options.
+
+	var grpcServerOptions []grpc.ServerOption
+
+	serverCertificatePathValue := viper.GetString(serverCertificatePath.Arg)
+	serverKeyPathValue := viper.GetString(serverKeyPath.Arg)
+	if serverCertificatePathValue != "" && serverKeyPathValue != "" {
+
+		fmt.Println(">>>>>> In Certificate code")
+
+		certificate, err := tls.LoadX509KeyPair(serverCertificatePathValue, serverKeyPathValue)
+		if err != nil {
+			return err
+		}
+		transportCredentials := credentials.NewServerTLSFromCert(&certificate)
+		grpcServerOption := grpc.Creds(transportCredentials)
+		grpcServerOptions = append(grpcServerOptions, grpcServerOption)
+	}
+
 	grpcserver := &grpcserver.BasicGrpcServer{
 		AvoidServing:          viper.GetBool(option.AvoidServe.Arg),
 		EnableAll:             viper.GetBool(option.EnableAll.Arg),
@@ -121,6 +142,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 		EnableSzDiagnostic:    viper.GetBool(option.EnableSzDiagnostic.Arg),
 		EnableSzEngine:        viper.GetBool(option.EnableSzEngine.Arg),
 		EnableSzProduct:       viper.GetBool(option.EnableSzProduct.Arg),
+		GrpcServerOptions:     grpcServerOptions,
 		LogLevelName:          viper.GetString(option.LogLevel.Arg),
 		ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
 		ObserverURL:           viper.GetString(option.ObserverURL.Arg),
@@ -146,17 +168,17 @@ func init() {
 	cmdhelper.Init(RootCmd, ContextVariables)
 }
 
-func loadTLSCredentials(certFile string, keyFile string) (credentials.TransportCredentials, error) {
-	certificate, err := tls.LoadX509KeyPair(certFile, keyFile)
-	if err != nil {
-		return nil, err
-	}
-	config := &tls.Config{
-		Certificates: []tls.Certificate{certificate},
-		ClientAuth:   tls.RequireAndVerifyClientCert,
-	}
-	return credentials.NewServerTLSFromCert()
-}
+// func loadTLSCredentials(certFile string, keyFile string) (credentials.TransportCredentials, error) {
+// 	certificate, err := tls.LoadX509KeyPair(certFile, keyFile)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// config := &tls.Config{
+// 	Certificates: []tls.Certificate{certificate},
+// 	ClientAuth:   tls.NoClientCert,
+// }
+// 	return credentials.NewServerTLSFromCert(&certificate), nil
+// }
 
 // func loadTLSCredentialsX() (credentials.TransportCredentials, error) {
 // 	// Load certificate of the CA who signed client's certificate

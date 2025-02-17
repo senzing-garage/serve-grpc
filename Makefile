@@ -145,6 +145,9 @@ docker-run:
 .PHONY: run
 run: run-osarch-specific
 
+.PHONY: run-server-side-tls
+run-server-side-tls: run-server-side-tls-osarch-specific
+
 # -----------------------------------------------------------------------------
 # Test
 # -----------------------------------------------------------------------------

@@ -70,6 +70,13 @@ run-osarch-specific:
 	@go run -tags "libsqlite3 linux" main.go --enable-all
 
 
+.PHONY: run-server-side-tls-osarch-specific
+run-server-side-tls-osarch-specific: export SENZING_TOOLS_SERVER_CERTIFICATE_PATH=$(MAKEFILE_DIRECTORY)/testdata/certificates/server/certificate.pem
+run-server-side-tls-osarch-specific: export SENZING_TOOLS_SERVER_KEY_PATH=$(MAKEFILE_DIRECTORY)/testdata/certificates/server/private_key.pem
+run-server-side-tls-osarch-specific:
+	@go run -tags "libsqlite3 linux" main.go --enable-all
+
+
 .PHONY: setup-osarch-specific
 setup-osarch-specific:
 	@mkdir /tmp/sqlite
