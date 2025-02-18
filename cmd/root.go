@@ -129,7 +129,14 @@ func RunE(_ *cobra.Command, _ []string) error {
 		if err != nil {
 			return err
 		}
-		transportCredentials := credentials.NewServerTLSFromCert(&certificate)
+
+		tlsConfig := &tls.Config{
+			Certificates: []tls.Certificate{certificate},
+			ClientAuth:   tls.NoClientCert,
+		}
+		// transportCredentials := credentials.NewServerTLSFromCert(&certificate)
+
+		transportCredentials := credentials.NewTLS(tlsConfig)
 		grpcServerOption := grpc.Creds(transportCredentials)
 		grpcServerOptions = append(grpcServerOptions, grpcServerOption)
 	}
