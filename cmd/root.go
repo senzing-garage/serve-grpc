@@ -5,6 +5,7 @@ package cmd
 import (
 	"context"
 	"crypto/tls"
+	"fmt"
 	"os"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
@@ -109,31 +110,25 @@ func RunE(_ *cobra.Command, _ []string) error {
 	var err error
 	ctx := context.Background()
 
+	// Build Senzing SDK configuration.
+
 	senzingSettings, err := settings.BuildAndVerifySettings(ctx, viper.GetViper())
 	if err != nil {
 		return err
 	}
 
-	// Add gRPC server options.
+	// Aggregate gRPC server options.
 
 	var grpcServerOptions []grpc.ServerOption
-
-	serverCertificatePathValue := viper.GetString(serverCertificatePath.Arg)
-	serverKeyPathValue := viper.GetString(serverKeyPath.Arg)
-	if serverCertificatePathValue != "" && serverKeyPathValue != "" {
-		certificate, err := tls.LoadX509KeyPair(serverCertificatePathValue, serverKeyPathValue)
-		if err != nil {
-			return err
-		}
-		tlsConfig := &tls.Config{
-			Certificates: []tls.Certificate{certificate},
-			ClientAuth:   tls.NoClientCert,
-		}
-		// transportCredentials := credentials.NewServerTLSFromCert(&certificate)
-		transportCredentials := credentials.NewTLS(tlsConfig)
-		grpcServerOption := grpc.Creds(transportCredentials)
-		grpcServerOptions = append(grpcServerOptions, grpcServerOption)
+	serverSideTlsServerOption, err := getServerSideTlsServerOption()
+	if err != nil {
+		return err
 	}
+	if serverSideTlsServerOption != nil {
+		grpcServerOptions = append(grpcServerOptions, serverSideTlsServerOption)
+	}
+
+	// Create and Serve gRPC Server.
 
 	grpcserver := &grpcserver.BasicGrpcServer{
 		AvoidServing:          viper.GetBool(option.AvoidServe.Arg),
@@ -169,42 +164,34 @@ func init() {
 	cmdhelper.Init(RootCmd, ContextVariables)
 }
 
-// func loadTLSCredentials(certFile string, keyFile string) (credentials.TransportCredentials, error) {
-// 	certificate, err := tls.LoadX509KeyPair(certFile, keyFile)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// config := &tls.Config{
-// 	Certificates: []tls.Certificate{certificate},
-// 	ClientAuth:   tls.NoClientCert,
-// }
-// 	return credentials.NewServerTLSFromCert(&certificate), nil
-// }
-
-// func loadTLSCredentialsX() (credentials.TransportCredentials, error) {
-// 	// Load certificate of the CA who signed client's certificate
-// 	pemClientCA, err := ioutil.ReadFile(clientCACertFile)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	certPool := x509.NewCertPool()
-// 	if !certPool.AppendCertsFromPEM(pemClientCA) {
-// 		return nil, fmt.Errorf("failed to add client CA's certificate")
-// 	}
-
-// 	// Load server's certificate and private key
-// 	serverCert, err := tls.LoadX509KeyPair(serverCertFile, serverKeyFile)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	// Create the credentials and return it
-// 	config := &tls.Config{
-// 		Certificates: []tls.Certificate{serverCert},
-// 		ClientAuth:   tls.RequireAndVerifyClientCert,
-// 		ClientCAs:    certPool,
-// 	}
-
-// 	return credentials.NewTLS(config), nil
-// }
+// If TLS environment variables specified, construct the appropriate gRPC server option.
+func getServerSideTlsServerOption() (grpc.ServerOption, error) {
+	var err error
+	var result grpc.ServerOption
+	serverCertificatePathValue := viper.GetString(serverCertificatePath.Arg)
+	serverKeyPathValue := viper.GetString(serverKeyPath.Arg)
+	if serverCertificatePathValue != "" && serverKeyPathValue != "" {
+		certificate, err := tls.LoadX509KeyPair(serverCertificatePathValue, serverKeyPathValue)
+		if err != nil {
+			return result, err
+		}
+		tlsConfig := &tls.Config{
+			Certificates: []tls.Certificate{certificate},
+			ClientAuth:   tls.NoClientCert,
+			MinVersion:   tls.VersionTLS12, // See https://pkg.go.dev/crypto/tls#pkg-constants
+			MaxVersion:   tls.VersionTLS13,
+		}
+		transportCredentials := credentials.NewTLS(tlsConfig)
+		result = grpc.Creds(transportCredentials)
+		return result, err
+	}
+	if serverCertificatePathValue != "" {
+		err = fmt.Errorf("%s is set, but %s is not set. Both need to be set", serverCertificatePath.Envar, serverKeyPath.Envar)
+		return result, err
+	}
+	if serverKeyPathValue != "" {
+		err = fmt.Errorf("%s is set, but %s is not set. Both need to be set", serverKeyPath.Envar, serverCertificatePath.Envar)
+		return result, err
+	}
+	return result, err
+}
