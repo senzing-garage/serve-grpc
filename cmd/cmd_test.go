@@ -36,6 +36,39 @@ func Test_Execute_help(test *testing.T) {
 	Execute()
 }
 
+func Test_Execute_tls(test *testing.T) {
+	_ = test
+	// os.Args = []string{
+	// 	"command-name",
+	// 	"--avoid-serving",
+	// 	"--server-certificate-path",
+	// 	"../testdata/certificates/server/certificate.pem",
+	// 	"--server-key-path",
+	// 	"../testdata/certificates/server/private_key.pem"}
+	os.Args = []string{"command-name", "--avoid-serving"}
+	Execute()
+}
+
+// func Test_Execute_tls_bad_no_server_key_path(test *testing.T) {
+// 	_ = test
+// 	os.Args = []string{
+// 		"command-name",
+// 		"--avoid-serving",
+// 		"--server-certificate-path",
+// 		"../testdata/certificates/server/certificate.pem"}
+// 	Execute()
+// }
+
+// func Test_Execute_tls_bad_no_server_certificate_path(test *testing.T) {
+// 	_ = test
+// 	os.Args = []string{
+// 		"command-name",
+// 		"--avoid-serving",
+// 		"--server-key-path",
+// 		"../testdata/certificates/server/Xprivate_key.pem"}
+// 	Execute()
+// }
+
 func Test_PreRun(test *testing.T) {
 	_ = test
 	args := []string{"command-name", "--help"}
@@ -44,7 +77,21 @@ func Test_PreRun(test *testing.T) {
 
 func Test_RunE(test *testing.T) {
 	test.Setenv("SENZING_TOOLS_AVOID_SERVING", "true")
+	os.Args = []string{}
 	err := RunE(RootCmd, []string{})
+	require.NoError(test, err)
+}
+
+func Test_RunE_tls(test *testing.T) {
+	// test.Setenv("SENZING_TOOLS_AVOID_SERVING", "true")
+	cmdLineArgs := []string{
+		"command-name",
+		"--avoid-serving",
+		"--server-certificate-path",
+		"../testdata/certificates/server/certificate.pem",
+		"--server-key-path",
+		"../testdata/certificates/server/private_key.pem"}
+	err := RunE(RootCmd, cmdLineArgs)
 	require.NoError(test, err)
 }
 
