@@ -5,7 +5,6 @@ package cmd
 import (
 	"context"
 	"crypto/tls"
-	"fmt"
 	"os"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
@@ -122,20 +121,15 @@ func RunE(_ *cobra.Command, _ []string) error {
 	serverCertificatePathValue := viper.GetString(serverCertificatePath.Arg)
 	serverKeyPathValue := viper.GetString(serverKeyPath.Arg)
 	if serverCertificatePathValue != "" && serverKeyPathValue != "" {
-
-		fmt.Println(">>>>>> In Certificate code")
-
 		certificate, err := tls.LoadX509KeyPair(serverCertificatePathValue, serverKeyPathValue)
 		if err != nil {
 			return err
 		}
-
 		tlsConfig := &tls.Config{
 			Certificates: []tls.Certificate{certificate},
 			ClientAuth:   tls.NoClientCert,
 		}
 		// transportCredentials := credentials.NewServerTLSFromCert(&certificate)
-
 		transportCredentials := credentials.NewTLS(tlsConfig)
 		grpcServerOption := grpc.Creds(transportCredentials)
 		grpcServerOptions = append(grpcServerOptions, grpcServerOption)
