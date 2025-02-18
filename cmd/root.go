@@ -120,12 +120,12 @@ func RunE(_ *cobra.Command, _ []string) error {
 	// Aggregate gRPC server options.
 
 	var grpcServerOptions []grpc.ServerOption
-	serverSideTlsServerOption, err := getServerSideTlsServerOption()
+	serverSideTLSServerOption, err := getServerSideTLSServerOption()
 	if err != nil {
 		return err
 	}
-	if serverSideTlsServerOption != nil {
-		grpcServerOptions = append(grpcServerOptions, serverSideTlsServerOption)
+	if serverSideTLSServerOption != nil {
+		grpcServerOptions = append(grpcServerOptions, serverSideTLSServerOption)
 	}
 
 	// Create and Serve gRPC Server.
@@ -165,7 +165,7 @@ func init() {
 }
 
 // If TLS environment variables specified, construct the appropriate gRPC server option.
-func getServerSideTlsServerOption() (grpc.ServerOption, error) {
+func getServerSideTLSServerOption() (grpc.ServerOption, error) {
 	var err error
 	var result grpc.ServerOption
 	serverCertificatePathValue := viper.GetString(serverCertificatePath.Arg)
