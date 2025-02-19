@@ -47,6 +47,11 @@ documentation-osarch-specific:
 	@xdg-open http://localhost:6060
 
 
+.PHONY: generate-certificates-osarch-specific
+generate-certificates-osarch-specific:
+	cd testdata/certificates; ./generate_certificates.sh; cd $(MAKEFILE_DIRECTORY)
+
+
 .PHONY: hello-world-osarch-specific
 hello-world-osarch-specific:
 	$(info Hello World, from linux.)
@@ -62,6 +67,13 @@ package-osarch-specific: docker-build-package
 
 .PHONY: run-osarch-specific
 run-osarch-specific:
+	@go run -tags "libsqlite3 linux" main.go --enable-all
+
+
+.PHONY: run-server-side-tls-osarch-specific
+run-server-side-tls-osarch-specific: export SENZING_TOOLS_SERVER_CERTIFICATE_PATH=$(MAKEFILE_DIRECTORY)/testdata/certificates/server/certificate.pem
+run-server-side-tls-osarch-specific: export SENZING_TOOLS_SERVER_KEY_PATH=$(MAKEFILE_DIRECTORY)/testdata/certificates/server/private_key.pem
+run-server-side-tls-osarch-specific:
 	@go run -tags "libsqlite3 linux" main.go --enable-all
 
 
