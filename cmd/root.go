@@ -171,9 +171,6 @@ func getServerSideTLSServerOption() (grpc.ServerOption, error) {
 	serverCertificatePathValue := viper.GetString(serverCertificatePath.Arg)
 	serverKeyPathValue := viper.GetString(serverKeyPath.Arg)
 	if serverCertificatePathValue != "" && serverKeyPathValue != "" {
-
-		fmt.Println(">>>>>> Secure")
-
 		certificate, err := tls.LoadX509KeyPair(serverCertificatePathValue, serverKeyPathValue)
 		if err != nil {
 			return result, err
