@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   docker-build-container:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-latest
 
     steps:
       - name: Get repository name
