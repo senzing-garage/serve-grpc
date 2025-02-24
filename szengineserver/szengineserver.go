@@ -571,7 +571,7 @@ func (server *SzEngineServer) WhyEntities(ctx context.Context, request *szpb.Why
 		defer func() { server.traceExit(142, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.WhyEntities(ctx, request.GetEntityId1(), request.GetEntityId2(), request.GetFlags())
+	result, err = szEngine.WhyEntities(ctx, request.GetEntityId_1(), request.GetEntityId_2(), request.GetFlags())
 	response := szpb.WhyEntitiesResponse{
 		Result: result,
 	}
@@ -603,7 +603,7 @@ func (server *SzEngineServer) WhyRecords(ctx context.Context, request *szpb.WhyR
 		defer func() { server.traceExit(154, request, result, err, time.Since(entryTime)) }()
 	}
 	szEngine := getSzEngine()
-	result, err = szEngine.WhyRecords(ctx, request.GetDataSourceCode1(), request.GetRecordId1(), request.GetDataSourceCode2(), request.GetRecordId2(), request.GetFlags())
+	result, err = szEngine.WhyRecords(ctx, request.GetDataSourceCode_1(), request.GetRecordId_1(), request.GetDataSourceCode_2(), request.GetRecordId_2(), request.GetFlags())
 	response := szpb.WhyRecordsResponse{
 		Result: result,
 	}

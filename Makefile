@@ -90,6 +90,10 @@ dependencies:
 .PHONY: setup
 setup: setup-osarch-specific
 
+
+.PHONY: generate-certificates
+generate-certificates: generate-certificates-osarch-specific
+
 # -----------------------------------------------------------------------------
 # Lint
 # -----------------------------------------------------------------------------
@@ -140,6 +144,10 @@ docker-run:
 
 .PHONY: run
 run: run-osarch-specific
+
+
+.PHONY: run-server-side-tls
+run-server-side-tls: run-server-side-tls-osarch-specific
 
 # -----------------------------------------------------------------------------
 # Test

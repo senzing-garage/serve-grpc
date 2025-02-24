@@ -583,9 +583,9 @@ func TestSzEngineServer_WhyEntities(test *testing.T) {
 	entityID2 := getEntityID(truthset.CustomerRecords["1002"])
 	flags := senzing.SzNoFlags
 	request := &szpb.WhyEntitiesRequest{
-		EntityId1: entityID1,
-		EntityId2: entityID2,
-		Flags:     flags,
+		EntityId_1: entityID1,
+		EntityId_2: entityID2,
+		Flags:      flags,
 	}
 	response, err := szEngineServer.WhyEntities(ctx, request)
 	require.NoError(test, err)
@@ -614,11 +614,11 @@ func TestSzEngineServer_WhyRecords(test *testing.T) {
 	record2 := truthset.CustomerRecords["1002"]
 	flags := senzing.SzNoFlags
 	request := &szpb.WhyRecordsRequest{
-		DataSourceCode1: record1.DataSource,
-		DataSourceCode2: record2.DataSource,
-		Flags:           flags,
-		RecordId1:       record1.ID,
-		RecordId2:       record2.ID,
+		DataSourceCode_1: record1.DataSource,
+		DataSourceCode_2: record2.DataSource,
+		Flags:            flags,
+		RecordId_1:       record1.ID,
+		RecordId_2:       record2.ID,
 	}
 	response, err := szEngineServer.WhyRecords(ctx, request)
 	require.NoError(test, err)

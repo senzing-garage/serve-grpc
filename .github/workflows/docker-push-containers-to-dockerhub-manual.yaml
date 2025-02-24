@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 jobs:
-  docker-push-containers-to-dockerhub-manual:
+  docker-push-container-to-dockerhub-manual:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +18,7 @@ jobs:
         shell: bash
 
       - name: Build docker image and push to DockerHub
-        uses: senzing-factory/github-action-docker-buildx-build@v1
+        uses: senzing-factory/github-action-docker-buildx-build@1.0.3
         with:
           build-options: "-q --push"
           image-repository: senzing/${{ steps.repo-basename.outputs.repo }}
