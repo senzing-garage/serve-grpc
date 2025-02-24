@@ -2,15 +2,75 @@ package cmd
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"testing"
 
+	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/stretchr/testify/require"
 )
 
 // ----------------------------------------------------------------------------
 // Test public functions
 // ----------------------------------------------------------------------------
+
+func Test_RootCmd_Execute_1(test *testing.T) {
+	_ = test
+	args := []string{"--avoid-serving"}
+	RootCmd.SetArgs(args)
+	err := RootCmd.Execute()
+	require.NoError(test, err)
+}
+
+func Test_RootCmd_Execute_tls_bad_server_certificate_path(test *testing.T) {
+	_ = test
+	args := []string{
+		"--avoid-serving",
+		"--server-certificate-path",
+		"",
+		"--server-key-path",
+		"../testdata/certificates/server/private_key.pem",
+	}
+	RootCmd.SetArgs(args)
+	err := RootCmd.Execute()
+	require.Error(test, err)
+}
+func Test_RootCmd_Execute_tls_bad_server_key_path(test *testing.T) {
+	_ = test
+	args := []string{
+		"--avoid-serving",
+		"--server-certificate-path",
+		"../testdata/certificates/server/certificate.pem",
+		"--server-key-path",
+		"",
+	}
+	RootCmd.SetArgs(args)
+	err := RootCmd.Execute()
+	require.Error(test, err)
+}
+
+func Test_RootCmd_Execute_tls(test *testing.T) {
+	_ = test
+	args := []string{
+		"--avoid-serving",
+		"--server-certificate-path",
+		"../testdata/certificates/server/certificate.pem",
+		"--server-key-path",
+		"../testdata/certificates/server/private_key.pem",
+	}
+	RootCmd.SetArgs(args)
+	err := RootCmd.Execute()
+	require.NoError(test, err)
+}
+
+func Test_RootCmd_Execute_2(test *testing.T) {
+	_ = test
+	args := []string{"--avoid-serving"}
+	setArgs(RootCmd, args)
+	err := RootCmd.Execute()
+	require.NoError(test, err)
+}
 
 func Test_Execute(test *testing.T) {
 	_ = test
@@ -32,8 +92,10 @@ func Test_Execute_docs(test *testing.T) {
 
 func Test_Execute_help(test *testing.T) {
 	_ = test
-	os.Args = []string{"command-name", "--help"}
-	Execute()
+	args := []string{"--help"}
+	RootCmd.SetArgs(args)
+	err := RootCmd.Execute()
+	require.NoError(test, err)
 }
 
 func Test_PreRun(test *testing.T) {
@@ -44,12 +106,14 @@ func Test_PreRun(test *testing.T) {
 
 func Test_RunE(test *testing.T) {
 	test.Setenv("SENZING_TOOLS_AVOID_SERVING", "true")
+	os.Args = []string{}
 	err := RunE(RootCmd, []string{})
 	require.NoError(test, err)
 }
 
 func Test_RootCmd(test *testing.T) {
 	_ = test
+	os.Args = []string{"command-name", "--avoid-serving"}
 	err := RootCmd.Execute()
 	require.NoError(test, err)
 	err = RootCmd.RunE(RootCmd, []string{})
@@ -87,4 +151,16 @@ func Test_docsAction_badDir(test *testing.T) {
 	badDir := "/tmp/no/directory/exists"
 	err := docsAction(&buffer, badDir)
 	require.Error(test, err)
+}
+
+// Hack from https://github.com/spf13/cobra/issues/2079
+func setArgs(cmd *cobra.Command, args []string) {
+	if cmd.Flags().Parsed() {
+		cmd.Flags().Visit(func(pf *pflag.Flag) {
+			if err := pf.Value.Set(pf.DefValue); err != nil {
+				panic(fmt.Errorf("reset argument[%s] value error %w", pf.Name, err))
+			}
+		})
+	}
+	cmd.SetArgs(args)
 }
