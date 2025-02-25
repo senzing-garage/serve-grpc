@@ -43,10 +43,10 @@ jobs:
       - name: Add to "Path" environment variable
         run: |
           # shellcheck disable=SC2028
-          echo "C:\Program Files\Senzing\er\lib" >> "$env:GITHUB_PATH"
+          echo "$Env:USERPROFILE\Senzing\er\lib" >> "$env:GITHUB_PATH"
 
       - name: Copy /etc files
-        run: copy testdata/senzing-license/g2.lic "C:\Program Files\Senzing\er\etc\g2.lic"
+        run: copy testdata/senzing-license/g2.lic "$Env:USERPROFILE\Senzing\er\etc\g2.lic"
 
       - name: Copy test database files
         run: mkdir "C:\Temp\sqlite" && copy testdata/sqlite/G2C.db "C:\Temp\sqlite\G2C.db"

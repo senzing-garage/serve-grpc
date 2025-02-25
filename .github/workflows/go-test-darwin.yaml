@@ -4,8 +4,6 @@ on: [pull_request, workflow_dispatch]
 
 env:
   CGO_LDFLAGS: "-Wl,-no_warn_duplicate_libraries"
-  DYLD_LIBRARY_PATH: /opt/senzing/er/lib:/opt/senzing/er/lib/macos
-  LD_LIBRARY_PATH: /opt/senzing/er/lib:/opt/senzing/er/lib/macos
   SENZING_LOG_LEVEL: TRACE
   SENZING_TOOLS_DATABASE_URL: sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
 
@@ -44,13 +42,17 @@ jobs:
           senzingsdk-repository-path: ${{ secrets.SENZING_OSX_BETA_REPOSITORY }}
 
       - name: Copy /etc files
-        run: sudo mkdir -p /opt/senzing/er/etc && sudo cp testdata/senzing-license/g2.lic /opt/senzing/er/etc/g2.lic
+        run: sudo mkdir -p "$HOME"/senzing/er/etc && sudo cp testdata/senzing-license/g2.lic "$HOME"/senzing/er/etc/g2.lic
 
       - name: Copy test database files
         run: mkdir -p /tmp/sqlite && cp testdata/sqlite/G2C.db /tmp/sqlite/
 
       - name: Run go test
-        run: go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -json -v -p 1 -coverprofile=./cover.out -covermode=atomic -coverpkg=./... ./...  2>&1 | tee /tmp/gotest.log | gotestfmt
+        run: |
+          # shellcheck disable=SC2034
+          DYLD_LIBRARY_PATH="$HOME"/senzing/er/lib:"$HOME"/senzing/er/lib/macos
+          LD_LIBRARY_PATH="$HOME"/senzing/er/lib:"$HOME"/senzing/er/lib/macos
+          go test -exec /Users/runner/work/serve-grpc/serve-grpc/bin/macos_exec_dyld.sh -json -v -p 1 -coverprofile=./cover.out -covermode=atomic -coverpkg=./... ./...  2>&1 | tee /tmp/gotest.log | gotestfmt
 
       - name: Store coverage file
         uses: actions/upload-artifact@v4
