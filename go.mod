@@ -6,14 +6,14 @@ toolchain go1.23.2
 
 require (
 	github.com/aquilax/truncate v1.0.1
-	github.com/senzing-garage/go-cmdhelping v0.3.2-0.20250227143536-b7fbc405aecb
+	github.com/senzing-garage/go-cmdhelping v0.3.2
 	github.com/senzing-garage/go-databasing v0.5.4
-	github.com/senzing-garage/go-helpers v0.6.6-0.20250227143412-039b70893564
+	github.com/senzing-garage/go-helpers v0.6.6
 	github.com/senzing-garage/go-logging v1.5.1
 	github.com/senzing-garage/go-observing v0.3.3
 	github.com/senzing-garage/init-database v0.7.4
 	github.com/senzing-garage/sz-sdk-go v0.14.5
-	github.com/senzing-garage/sz-sdk-go-core v0.8.9-0.20250227143604-a8a99dccbbe0
+	github.com/senzing-garage/sz-sdk-go-core v0.9.0
 	github.com/senzing-garage/sz-sdk-proto v0.8.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
