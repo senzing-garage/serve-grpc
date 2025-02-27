@@ -6,14 +6,14 @@ toolchain go1.23.2
 
 require (
 	github.com/aquilax/truncate v1.0.1
-	github.com/senzing-garage/go-cmdhelping v0.3.1
+	github.com/senzing-garage/go-cmdhelping v0.3.2
 	github.com/senzing-garage/go-databasing v0.5.4
-	github.com/senzing-garage/go-helpers v0.6.5
+	github.com/senzing-garage/go-helpers v0.6.6
 	github.com/senzing-garage/go-logging v1.5.1
 	github.com/senzing-garage/go-observing v0.3.3
 	github.com/senzing-garage/init-database v0.7.4
 	github.com/senzing-garage/sz-sdk-go v0.14.5
-	github.com/senzing-garage/sz-sdk-go-core v0.8.8
+	github.com/senzing-garage/sz-sdk-go-core v0.9.0
 	github.com/senzing-garage/sz-sdk-proto v0.8.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
@@ -49,19 +49,19 @@ require (
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/senzing-garage/go-messaging v1.5.2 // indirect
 	github.com/senzing-garage/go-sdk-abstract-factory v0.9.4 // indirect
-	github.com/senzing-garage/sz-sdk-go-grpc v0.8.9 // indirect
+	github.com/senzing-garage/sz-sdk-go-grpc v0.9.0 // indirect
 	github.com/senzing-garage/sz-sdk-go-mock v0.8.4 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.12.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.34.0 // indirect
+	golang.org/x/crypto v0.35.0 // indirect
 	golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa // indirect
 	golang.org/x/net v0.35.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/text v0.22.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250219182151-9fdb1cabc7b2 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250224174004-546df14abb99 // indirect
 	google.golang.org/protobuf v1.36.5 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
