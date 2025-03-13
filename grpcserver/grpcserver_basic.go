@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net"
 	"net/url"
+	"strings"
 
 	"github.com/senzing-garage/go-cmdhelping/option"
-	"github.com/senzing-garage/go-databasing/dbhelper"
 	"github.com/senzing-garage/go-helpers/settingsparser"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
@@ -326,18 +326,18 @@ func (grpcServer *BasicGrpcServer) initializeDatabase(ctx context.Context, senzi
 		return err
 	}
 
-	databaseURLs, err := parsedSenzingSettings.GetDatabaseURLs(ctx)
+	databaseURIs, err := parsedSenzingSettings.GetDatabaseURIs(ctx)
 	if err != nil {
 		return err
 	}
 
-	if len(databaseURLs) == 1 {
-		databaseURL := databaseURLs[0]
-		parsedDatabaseURL, err := dbhelper.ParseDatabaseURL(databaseURL)
-		if err != nil {
-			return err
-		}
-		if parsedDatabaseURL.Scheme == "sqlite3" {
+	if len(databaseURIs) >= 1 {
+		databaseURI := databaseURIs[0]
+		if strings.HasPrefix(databaseURI, "sqlite3://") {
+			parsedDatabaseURL, err := url.Parse(databaseURI)
+			if err != nil {
+				return err
+			}
 			queryParameters := parsedDatabaseURL.Query()
 			if (queryParameters.Get("mode") == "memory") && (queryParameters.Get("cache") == "shared") {
 				initializer := &initializer.BasicInitializer{
