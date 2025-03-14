@@ -49,7 +49,7 @@ jobs:
       - name: Use grpcurl
         run: |
           grpcurl \
+            -plaintext \
             -format text \
-            -insecure \
             localhost:8261 \
               szproduct.SzProduct.GetVersion
