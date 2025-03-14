@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning].
 
 ## [0.9.2] - 2025-03-14
 
-### Added in 0.9.1
+### Added in 0.9.2
 
 - Mutual TLS support
 
