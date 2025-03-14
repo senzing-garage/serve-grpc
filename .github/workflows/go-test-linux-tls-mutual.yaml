@@ -1,4 +1,4 @@
-name: Go test linux - Server-side TLS
+name: Go test linux - Mutual TLS
 
 on: [push, workflow_dispatch]
 
@@ -33,6 +33,7 @@ jobs:
         run: |
           docker run \
             --detach \
+            --env SENZING_TOOLS_CLIENT_CA_CERTIFICATE_PATH=/testdata/certificates/certificate-authority/certificate.pem \
             --env SENZING_TOOLS_ENABLE_ALL=true \
             --env SENZING_TOOLS_SERVER_CERTIFICATE_PATH=/testdata/certificates/server/certificate.pem \
             --env SENZING_TOOLS_SERVER_KEY_PATH=/testdata/certificates/server/private_key.pem \
@@ -53,6 +54,8 @@ jobs:
           grpcurl \
             -authority www.senzing.com \
             -cacert ${{ github.workspace }}/testdata/certificates/certificate-authority/certificate.pem \
+            -cert ${{ github.workspace }}/testdata/certificates/client/certificate.pem \
             -format text \
+            -key ${{ github.workspace }}/testdata/certificates/client/private_key.pem \
             localhost:8261 \
               szproduct.SzProduct.GetVersion
