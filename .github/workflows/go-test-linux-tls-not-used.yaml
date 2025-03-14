@@ -50,5 +50,6 @@ jobs:
         run: |
           grpcurl \
             -format text \
+            -insecure \
             localhost:8261 \
               szproduct.SzProduct.GetVersion
