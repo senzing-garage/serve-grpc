@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning].
 
 -
 
+## [0.9.2] - 2025-03-14
+
+### Added in 0.9.2
+
+- Mutual TLS support
+
+## [0.9.1] - 2025-02-27
+
+### Added in 0.9.1
+
+- Support `SENZING_PATH`
+
 ## [0.9.0] - 2025-02-23
 
 ### Added in 0.9.0
