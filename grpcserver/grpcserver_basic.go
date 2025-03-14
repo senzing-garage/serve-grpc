@@ -341,6 +341,7 @@ func (grpcServer *BasicGrpcServer) initializeDatabase(ctx context.Context, senzi
 			queryParameters := parsedDatabaseURL.Query()
 			if (queryParameters.Get("mode") == "memory") && (queryParameters.Get("cache") == "shared") {
 				initializer := &initializer.BasicInitializer{
+					DatabaseURLs:          databaseURIs,
 					ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
 					ObserverURL:           viper.GetString(option.ObserverURL.Arg),
 					SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
