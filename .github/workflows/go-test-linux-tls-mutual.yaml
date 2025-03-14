@@ -58,4 +58,4 @@ jobs:
             -format text \
             -key ${{ github.workspace }}/testdata/certificates/client/private_key.pem \
             localhost:8261 \
-              szproduct.SzProduct.GetVersion
+              szproduct.SzProduct.GetVersionXX
