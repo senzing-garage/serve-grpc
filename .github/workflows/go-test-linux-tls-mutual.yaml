@@ -49,7 +49,7 @@ jobs:
           sudo apt-get install -y ./grpcurl_1.9.3_linux_amd64.deb
           grpcurl -version
 
-      - name: Use grpcurl
+      - name: Test using grpcurl
         run: |
           grpcurl \
             -authority www.senzing.com \
