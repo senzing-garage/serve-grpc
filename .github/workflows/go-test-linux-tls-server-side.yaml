@@ -2,10 +2,6 @@ name: Go test linux - Server-side TLS
 
 on: [push]
 
-env:
-  SENZING_LOG_LEVEL: TRACE
-  SENZING_TOOLS_DATABASE_URL: sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
-
 permissions:
   contents: read
 
@@ -25,7 +21,7 @@ jobs:
 
       - name: Build docker image
         run: |
-          docker build senzing/serve-grpc .
+          docker buildx build --tag senzing/serve-grpc:github-action .
 
       - name: Docker run
         run: |
@@ -38,7 +34,7 @@ jobs:
             --publish 8261:8261 \
             --rm \
             --volume ${{ github.workspace }}/testdata:/testdata \
-            senzing/serve-grpc
+            senzing/serve-grpc:github-action
 
       - name: Install grpcurl
         run: |
@@ -49,7 +45,7 @@ jobs:
       - name: Use grpcurl
         run: |
           grpcurl \
-            -authority bob.senzing.com \
+            -authority www.senzing.com \
             -cacert ${{ github.workspace }}/testdata/certificates/certificate-authority/certificate.pem \
             -format text \
             localhost:8261 \
