@@ -1,0 +1,56 @@
+name: Go test linux - Server-side TLS
+
+on: [push]
+
+env:
+  SENZING_LOG_LEVEL: TRACE
+  SENZING_TOOLS_DATABASE_URL: sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
+
+permissions:
+  contents: read
+
+jobs:
+  go-test-linux:
+    name: "Go test with OS: ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build docker image
+        run: |
+          docker build senzing/serve-grpc .
+
+      - name: Docker run
+        run: |
+          docker run \
+            --detach \
+            --env SENZING_TOOLS_ENABLE_ALL=true \
+            --env SENZING_TOOLS_SERVER_CERTIFICATE_PATH=/testdata/certificates/server/certificate.pem \
+            --env SENZING_TOOLS_SERVER_KEY_PATH=/testdata/certificates/server/private_key.pem \
+            --name servegrpc \
+            --publish 8261:8261 \
+            --rm \
+            --volume ${{ github.workspace }}/testdata:/testdata \
+            senzing/serve-grpc
+
+      - name: Install grpcurl
+        run: |
+          wget https://github.com/fullstorydev/grpcurl/releases/download/v1.9.3/grpcurl_1.9.3_linux_amd64.deb
+          sudo apt-get install -y ./grpcurl_1.9.3_linux_amd64.deb
+          grpcurl -version
+
+      - name: Use grpcurl
+        run: |
+          grpcurl \
+            -authority bob.senzing.com \
+            -cacert ${{ github.workspace }}/testdata/certificates/certificate-authority/certificate.pem \
+            -format text \
+            localhost:8261 \
+              szproduct.SzProduct.GetVersion
