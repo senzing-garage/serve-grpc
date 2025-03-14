@@ -1,0 +1,54 @@
+name: Go test linux - No TLS
+
+on: [push, workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  go-test-linux:
+    name: "Go test with OS: ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+      - name: Build docker image
+        run: |
+          docker buildx build --tag senzing/serve-grpc:github-action .
+
+      - name: Docker run
+        run: |
+          docker run \
+            --detach \
+            --env SENZING_TOOLS_ENABLE_ALL=true \
+            --name servegrpc \
+            --publish 8261:8261 \
+            --rm \
+            --volume ${{ github.workspace }}/testdata:/testdata \
+            senzing/serve-grpc:github-action
+
+      - name: Install grpcurl
+        run: |
+          wget https://github.com/fullstorydev/grpcurl/releases/download/v1.9.3/grpcurl_1.9.3_linux_amd64.deb
+          sudo apt-get install -y ./grpcurl_1.9.3_linux_amd64.deb
+          grpcurl -version
+
+      - name: Use grpcurl
+        run: |
+          grpcurl \
+            -format text \
+            localhost:8261 \
+              szproduct.SzProduct.GetVersion
