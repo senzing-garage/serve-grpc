@@ -65,6 +65,14 @@ var serverKeyFile = option.ContextVariable{
 	Type:    optiontype.String,
 }
 
+var serverKeyPassPhrase = option.ContextVariable{
+	Arg:     "server-key-passphrase",
+	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_KEY_PASSPHRASE", ""),
+	Envar:   "SENZING_TOOLS_SERVER_KEY_PASSPHRASE",
+	Help:    "Pass phrase used to decrypt SENZING_TOOLS_SERVER_KEY_FILE. [%s]",
+	Type:    optiontype.String,
+}
+
 var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	clientCaCertificateFile,
 	clientCaCertificateFiless,
