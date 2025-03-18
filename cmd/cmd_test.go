@@ -27,9 +27,9 @@ func Test_RootCmd_Execute_tls_bad_server_certificate_path(test *testing.T) {
 	_ = test
 	args := []string{
 		"--avoid-serving",
-		"--server-certificate-path",
+		"--server-certificate-file",
 		"",
-		"--server-key-path",
+		"--server-key-file",
 		"../testdata/certificates/server/private_key.pem",
 	}
 	RootCmd.SetArgs(args)
@@ -40,9 +40,9 @@ func Test_RootCmd_Execute_tls_bad_server_key_path(test *testing.T) {
 	_ = test
 	args := []string{
 		"--avoid-serving",
-		"--server-certificate-path",
+		"--server-certificate-file",
 		"../testdata/certificates/server/certificate.pem",
-		"--server-key-path",
+		"--server-key-file",
 		"",
 	}
 	RootCmd.SetArgs(args)
@@ -54,9 +54,9 @@ func Test_RootCmd_Execute_tls(test *testing.T) {
 	_ = test
 	args := []string{
 		"--avoid-serving",
-		"--server-certificate-path",
+		"--server-certificate-file",
 		"../testdata/certificates/server/certificate.pem",
-		"--server-key-path",
+		"--server-key-file",
 		"../testdata/certificates/server/private_key.pem",
 	}
 	RootCmd.SetArgs(args)

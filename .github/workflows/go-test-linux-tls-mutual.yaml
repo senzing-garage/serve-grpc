@@ -33,10 +33,10 @@ jobs:
         run: |
           docker run \
             --detach \
-            --env SENZING_TOOLS_CLIENT_CA_CERTIFICATE_PATH=/testdata/certificates/certificate-authority/certificate.pem \
+            --env SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE=/testdata/certificates/certificate-authority/certificate.pem \
             --env SENZING_TOOLS_ENABLE_ALL=true \
-            --env SENZING_TOOLS_SERVER_CERTIFICATE_PATH=/testdata/certificates/server/certificate.pem \
-            --env SENZING_TOOLS_SERVER_KEY_PATH=/testdata/certificates/server/private_key.pem \
+            --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/testdata/certificates/server/certificate.pem \
+            --env SENZING_TOOLS_SERVER_KEY_FILE=/testdata/certificates/server/private_key.pem \
             --name servegrpc \
             --publish 8261:8261 \
             --rm \

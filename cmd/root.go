@@ -33,43 +33,43 @@ For more information, visit https://github.com/senzing-garage/serve-grpc
 // Context variables
 // ----------------------------------------------------------------------------
 
-var clientCaCertificatePath = option.ContextVariable{
-	Arg:     "client-ca-certificate-path",
-	Default: option.OsLookupEnvString("SENZING_TOOLS_CLIENT_CA_CERTIFICATE_PATH", ""),
-	Envar:   "SENZING_TOOLS_CLIENT_CA_CERTIFICATE_PATH",
+var clientCaCertificateFile = option.ContextVariable{
+	Arg:     "client-ca-certificate-file",
+	Default: option.OsLookupEnvString("SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE", ""),
+	Envar:   "SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE",
 	Help:    "Path to client Certificate Authority certificate file. [%s]",
 	Type:    optiontype.String,
 }
 
-var clientCaCertificatePaths = option.ContextVariable{
-	Arg:     "client-ca-certificate-paths",
+var clientCaCertificateFiless = option.ContextVariable{
+	Arg:     "client-ca-certificate-files",
 	Default: []string{},
-	Envar:   "SENZING_TOOLS_CLIENT_CA_CERTIFICATE_PATHS",
+	Envar:   "SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILES",
 	Help:    "Paths to client Certificate Authority certificate files. [%s]",
 	Type:    optiontype.StringSlice,
 }
 
-var serverCertificatePath = option.ContextVariable{
-	Arg:     "server-certificate-path",
-	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_CERTIFICATE_PATH", ""),
-	Envar:   "SENZING_TOOLS_SERVER_CERTIFICATE_PATH",
+var serverCertificateFile = option.ContextVariable{
+	Arg:     "server-certificate-file",
+	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_CERTIFICATE_FILE", ""),
+	Envar:   "SENZING_TOOLS_SERVER_CERTIFICATE_FILE",
 	Help:    "Path to server certificate file. [%s]",
 	Type:    optiontype.String,
 }
 
-var serverKeyPath = option.ContextVariable{
-	Arg:     "server-key-path",
-	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_KEY_PATH", ""),
-	Envar:   "SENZING_TOOLS_SERVER_KEY_PATH",
+var serverKeyFile = option.ContextVariable{
+	Arg:     "server-key-file",
+	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_KEY_FILE", ""),
+	Envar:   "SENZING_TOOLS_SERVER_KEY_FILE",
 	Help:    "Path to server key file. [%s]",
 	Type:    optiontype.String,
 }
 
 var ContextVariablesForMultiPlatform = []option.ContextVariable{
-	clientCaCertificatePath,
-	clientCaCertificatePaths,
-	serverCertificatePath,
-	serverKeyPath,
+	clientCaCertificateFile,
+	clientCaCertificateFiless,
+	serverCertificateFile,
+	serverKeyFile,
 	option.AvoidServe,
 	option.DatabaseURL,
 	option.EnableAll,
@@ -187,8 +187,8 @@ func getServerSideTLSServerOption() (grpc.ServerOption, error) {
 	var clientAuth tls.ClientAuthType
 	var certificates []tls.Certificate
 
-	serverCertificatePathValue := viper.GetString(serverCertificatePath.Arg)
-	serverKeyPathValue := viper.GetString(serverKeyPath.Arg)
+	serverCertificatePathValue := viper.GetString(serverCertificateFile.Arg)
+	serverKeyPathValue := viper.GetString(serverKeyFile.Arg)
 	if serverCertificatePathValue != "" && serverKeyPathValue != "" {
 
 		// Server-side TLS.
@@ -202,8 +202,8 @@ func getServerSideTLSServerOption() (grpc.ServerOption, error) {
 
 		// Mutual TLS.
 
-		caCertificatePathsValue := viper.GetStringSlice(clientCaCertificatePaths.Arg)
-		caCertificatePathValue := viper.GetString(clientCaCertificatePath.Arg)
+		caCertificatePathsValue := viper.GetStringSlice(clientCaCertificateFiless.Arg)
+		caCertificatePathValue := viper.GetString(clientCaCertificateFile.Arg)
 		if len(caCertificatePathValue) > 0 {
 			caCertificatePathsValue = append(caCertificatePathsValue, caCertificatePathValue)
 		}
@@ -239,11 +239,11 @@ func getServerSideTLSServerOption() (grpc.ServerOption, error) {
 	// Input error detection.
 
 	if serverCertificatePathValue != "" {
-		err = fmt.Errorf("%s is set, but %s is not set. Both need to be set", serverCertificatePath.Envar, serverKeyPath.Envar)
+		err = fmt.Errorf("%s is set, but %s is not set. Both need to be set", serverCertificateFile.Envar, serverKeyFile.Envar)
 		return result, err
 	}
 	if serverKeyPathValue != "" {
-		err = fmt.Errorf("%s is set, but %s is not set. Both need to be set", serverKeyPath.Envar, serverCertificatePath.Envar)
+		err = fmt.Errorf("%s is set, but %s is not set. Both need to be set", serverKeyFile.Envar, serverCertificateFile.Envar)
 		return result, err
 	}
 	return result, err

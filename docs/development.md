@@ -152,6 +152,22 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
     ```
 
+    Test "Server-Side TLS".
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean setup-server-side-tls test-server-side-tls
+
+    ```
+
+    Test "Mutual TLS".
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean setup-mutual-tls test-mutual-tls
+
+    ```
+
 1. **Optional:** View the SQLite database.
    Example:
 
