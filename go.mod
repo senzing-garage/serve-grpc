@@ -7,7 +7,7 @@ toolchain go1.23.2
 require (
 	github.com/aquilax/truncate v1.0.1
 	github.com/senzing-garage/go-cmdhelping v0.3.3
-	github.com/senzing-garage/go-helpers v0.6.8
+	github.com/senzing-garage/go-helpers v0.6.9-0.20250319212227-cffa9a8824a2
 	github.com/senzing-garage/go-logging v1.5.1
 	github.com/senzing-garage/go-observing v0.3.3
 	github.com/senzing-garage/init-database v0.7.7
@@ -39,7 +39,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.24 // indirect
 	github.com/microsoft/go-mssqldb v1.8.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
-	github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 // indirect
+	github.com/planetscale/vtprotobuf v0.6.1-0.20250313105119-ba97887b0a25 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.8.0 // indirect

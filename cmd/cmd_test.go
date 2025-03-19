@@ -50,6 +50,20 @@ func Test_RootCmd_Execute_tls_bad_server_key_path(test *testing.T) {
 	require.Error(test, err)
 }
 
+// func Test_RootCmd_Execute_tls_bad_encrypted_key_no_passphrase(test *testing.T) {
+// 	_ = test
+// 	args := []string{
+// 		"--avoid-serving",
+// 		"--server-certificate-file",
+// 		"../testdata/certificates/server/certificate.pem",
+// 		"--server-key-file",
+// 		"../testdata/certificates/server/private_key_encrypted.pem",
+// 	}
+// 	RootCmd.SetArgs(args)
+// 	err := RootCmd.Execute()
+// 	require.Error(test, err)
+// }
+
 func Test_RootCmd_Execute_tls(test *testing.T) {
 	_ = test
 	args := []string{

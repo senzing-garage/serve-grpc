@@ -71,9 +71,9 @@ run-osarch-specific:
 
 
 .PHONY: run-mutual-tls-osarch-specific
+run-mutual-tls-osarch-specific: export SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE=$(MAKEFILE_DIRECTORY)/testdata/certificates/certificate-authority/certificate.pem
 run-mutual-tls-osarch-specific: export SENZING_TOOLS_SERVER_CERTIFICATE_FILE=$(MAKEFILE_DIRECTORY)/testdata/certificates/server/certificate.pem
 run-mutual-tls-osarch-specific: export SENZING_TOOLS_SERVER_KEY_FILE=$(MAKEFILE_DIRECTORY)/testdata/certificates/server/private_key.pem
-run-mutual-tls-osarch-specific: export SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE=$(MAKEFILE_DIRECTORY)/testdata/certificates/certificate-authority/certificate.pem
 run-mutual-tls-osarch-specific:
 	@go run -tags "libsqlite3 linux" main.go --enable-all
 

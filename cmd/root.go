@@ -13,6 +13,7 @@ import (
 	"github.com/senzing-garage/go-cmdhelping/option"
 	"github.com/senzing-garage/go-cmdhelping/option/optiontype"
 	"github.com/senzing-garage/go-cmdhelping/settings"
+	tlshelper "github.com/senzing-garage/go-helpers/tls"
 	"github.com/senzing-garage/serve-grpc/grpcserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -78,6 +79,7 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	clientCaCertificateFiless,
 	serverCertificateFile,
 	serverKeyFile,
+	serverKeyPassPhrase,
 	option.AvoidServe,
 	option.DatabaseURL,
 	option.EnableAll,
@@ -201,8 +203,9 @@ func getServerSideTLSServerOption() (grpc.ServerOption, error) {
 
 		// Server-side TLS.
 
+		serverKeyPassPhraseValue := viper.GetString(serverKeyPassPhrase.Arg)
 		clientAuth = tls.NoClientCert
-		serverCertificate, err := tls.LoadX509KeyPair(serverCertificatePathValue, serverKeyPathValue)
+		serverCertificate, err := tlshelper.LoadX509KeyPair(serverCertificatePathValue, serverKeyPathValue, serverKeyPassPhraseValue)
 		if err != nil {
 			return result, err
 		}
