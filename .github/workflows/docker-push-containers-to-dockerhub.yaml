@@ -20,7 +20,7 @@ jobs:
         shell: bash
 
       - name: Build docker image and push to DockerHub
-        uses: senzing-factory/github-action-docker-buildx-build@1.0.5
+        uses: senzing-factory/github-action-docker-buildx-build@2.0.0
         with:
           build-options: "-q --push"
           image-repository: senzing/${{ steps.repo-basename.outputs.repo }}
