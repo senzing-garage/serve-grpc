@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 -
 
+## [0.9.3] - 2025-03-20
+
+### Added in 0.9.3
+
+- TLS pass phrase support
+
 ## [0.9.2] - 2025-03-14
 
 ### Added in 0.9.2

@@ -169,6 +169,66 @@ Since the Senzing library is a prerequisite, it must be installed first.
 
    Visit [localhost:9174].
 
+## Test TLS with grpcurl
+
+1. Install [grpcurl].
+
+### Test Server-Side TLS
+
+1. Run a gRPC server.
+   Either:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean setup run-server-side-tls
+    ```
+
+   Or:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean setup run-server-side-tls-encrypted-key
+    ```
+
+1. Test with `grpcurl`
+
+    ```console
+    grpcurl \
+    -cacert ${GIT_REPOSITORY_DIR}/testdata/certificates/certificate-authority/certificate.pem \
+    -format text \
+    localhost:8261 \
+        szproduct.SzProduct.GetVersion
+    ```
+
+## Test Mutual TLS
+
+1. Run a gRPC server.
+   Either:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean setup run-mutual-tls
+    ```
+
+   Or:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make clean setup run-mutual-tls-encrypted-key
+    ```
+
+1. Run `grpcurl`
+
+    ```console
+    grpcurl \
+    -cacert ${GIT_REPOSITORY_DIR}/testdata/certificates/certificate-authority/certificate.pem \
+    -cert ${GIT_REPOSITORY_DIR}/testdata/certificates/client/certificate.pem \
+    -format text \
+    -key ${GIT_REPOSITORY_DIR}/testdata/certificates/client/private_key.pem \
+    localhost:8261 \
+        szproduct.SzProduct.GetVersion
+    ```
+
 ## Coverage
 
 Create a code coverage map.
@@ -489,6 +549,7 @@ For other gRPC tools, visit [Awesome gRPC].
 [Go Reference Badge]: https://pkg.go.dev/badge/github.com/senzing-garage/serve-grpc.svg
 [Go Reference]: https://pkg.go.dev/github.com/senzing-garage/serve-grpc
 [go]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/go.md
+[grpcurl]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/grpcurl.md
 [How to Install Senzing for Go Development]: https://github.com/senzing-garage/knowledge-base/blob/main/HOWTO/install-senzing-for-go-development.md
 [latest release]: https://github.com/bloomrpc/bloomrpc/releases
 [localhost:6060]: http://localhost:6060/pkg/github.com/senzing-garage/serve-grpc/
