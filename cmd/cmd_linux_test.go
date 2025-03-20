@@ -14,6 +14,15 @@ import (
 // Test public functions
 // ----------------------------------------------------------------------------
 
+func Test_RootCmd(test *testing.T) {
+	_ = test
+	os.Args = []string{"command-name", "--avoid-serving"}
+	err := RootCmd.Execute()
+	require.NoError(test, err)
+	err = RootCmd.RunE(RootCmd, []string{})
+	require.NoError(test, err)
+}
+
 func Test_Execute(test *testing.T) {
 	_ = test
 	os.Args = []string{"command-name", "--avoid-serving"}
