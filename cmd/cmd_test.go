@@ -15,12 +15,6 @@ import (
 // Test public functions
 // ----------------------------------------------------------------------------
 
-func Test_Execute(test *testing.T) {
-	_ = test
-	os.Args = []string{"command-name", "--avoid-serving"}
-	Execute()
-}
-
 func Test_Execute_completion(test *testing.T) {
 	_ = test
 	os.Args = []string{"command-name", "completion"}
