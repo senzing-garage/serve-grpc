@@ -29,7 +29,7 @@ jobs:
         run: |
           docker buildx build --tag senzing/serve-grpc:github-action .
 
-      - name: Docker run
+      - name: Docker run on port 8261
         run: |
           docker run \
             --detach \
@@ -42,17 +42,40 @@ jobs:
             --volume ${{ github.workspace }}/testdata:/testdata \
             senzing/serve-grpc:github-action
 
+      - name: Docker run with encrypted private key on port 8262
+        run: |
+          docker run \
+            --detach \
+            --env SENZING_TOOLS_ENABLE_ALL=true \
+            --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/testdata/certificates/server/certificate.pem \
+            --env SENZING_TOOLS_SERVER_KEY_FILE=/testdata/certificates/server/private_key_encrypted.pem \
+            --env SENZING_TOOLS_SERVER_KEY_PASSPHRASE=Passw0rd \
+            --name servegrpc \
+            --publish 8262:8261 \
+            --rm \
+            --volume ${{ github.workspace }}/testdata:/testdata \
+            senzing/serve-grpc:github-action
+
       - name: Install grpcurl
         run: |
           wget https://github.com/fullstorydev/grpcurl/releases/download/v1.9.3/grpcurl_1.9.3_linux_amd64.deb
           sudo apt-get install -y ./grpcurl_1.9.3_linux_amd64.deb
           grpcurl -version
 
-      - name: Test using grpcurl
+      - name: Test using grpcurl on port 8261
         run: |
           grpcurl \
             -authority www.senzing.com \
             -cacert ${{ github.workspace }}/testdata/certificates/certificate-authority/certificate.pem \
             -format text \
             localhost:8261 \
+              szproduct.SzProduct.GetVersion
+
+      - name: Test using grpcurl on port 8262
+        run: |
+          grpcurl \
+            -authority www.senzing.com \
+            -cacert ${{ github.workspace }}/testdata/certificates/certificate-authority/certificate.pem \
+            -format text \
+            localhost:8262 \
               szproduct.SzProduct.GetVersion
