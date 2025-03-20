@@ -13,6 +13,20 @@ import (
 // Test public functions
 // ----------------------------------------------------------------------------
 
+func Test_RootCmd_Execute_tls(test *testing.T) {
+	_ = test
+	args := []string{
+		"--avoid-serving",
+		"--server-certificate-file",
+		"../testdata/certificates/server/certificate.pem",
+		"--server-key-file",
+		"../testdata/certificates/server/private_key.pem",
+	}
+	RootCmd.SetArgs(args)
+	err := RootCmd.Execute()
+	require.NoError(test, err)
+}
+
 func Test_RootCmd_Execute_tls_encrypted_key(test *testing.T) {
 	_ = test
 	args := []string{
