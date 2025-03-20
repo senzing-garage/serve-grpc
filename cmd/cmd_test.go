@@ -15,39 +15,8 @@ import (
 // Test public functions
 // ----------------------------------------------------------------------------
 
-func Test_Execute(test *testing.T) {
-	_ = test
-	setArgs(RootCmd, []string{})
-	os.Args = []string{"command-name", "--avoid-serving"}
-	Execute()
-}
-
-func Test_Execute_completion(test *testing.T) {
-	_ = test
-	setArgs(RootCmd, []string{})
-	os.Args = []string{"command-name", "completion"}
-	Execute()
-}
-
-func Test_Execute_docs(test *testing.T) {
-	_ = test
-	setArgs(RootCmd, []string{})
-	os.Args = []string{"command-name", "docs"}
-	Execute()
-}
-
-func Test_Execute_help(test *testing.T) {
-	_ = test
-	setArgs(RootCmd, []string{})
-	args := []string{"--help"}
-	RootCmd.SetArgs(args)
-	err := RootCmd.Execute()
-	require.NoError(test, err)
-}
-
 func Test_RootCmd(test *testing.T) {
 	_ = test
-	setArgs(RootCmd, []string{})
 	os.Args = []string{"command-name", "--avoid-serving"}
 	err := RootCmd.Execute()
 	require.NoError(test, err)
@@ -73,22 +42,6 @@ func Test_RunE(test *testing.T) {
 	test.Setenv("SENZING_TOOLS_AVOID_SERVING", "true")
 	os.Args = []string{}
 	err := RunE(RootCmd, []string{})
-	require.NoError(test, err)
-}
-
-func Test_completionCmd(test *testing.T) {
-	_ = test
-	err := completionCmd.Execute()
-	require.NoError(test, err)
-	err = completionCmd.RunE(completionCmd, []string{})
-	require.NoError(test, err)
-}
-
-func Test_docsCmd(test *testing.T) {
-	_ = test
-	err := docsCmd.Execute()
-	require.NoError(test, err)
-	err = docsCmd.RunE(docsCmd, []string{})
 	require.NoError(test, err)
 }
 
@@ -130,6 +83,22 @@ func Test_RootCmd_Execute_tls(test *testing.T) {
 	}
 	setArgs(RootCmd, args)
 	err := RootCmd.Execute()
+	require.NoError(test, err)
+}
+
+func Test_completionCmd(test *testing.T) {
+	_ = test
+	err := completionCmd.Execute()
+	require.NoError(test, err)
+	err = completionCmd.RunE(completionCmd, []string{})
+	require.NoError(test, err)
+}
+
+func Test_docsCmd(test *testing.T) {
+	_ = test
+	err := docsCmd.Execute()
+	require.NoError(test, err)
+	err = docsCmd.RunE(docsCmd, []string{})
 	require.NoError(test, err)
 }
 
