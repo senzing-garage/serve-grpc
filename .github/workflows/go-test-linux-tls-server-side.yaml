@@ -36,7 +36,7 @@ jobs:
             --env SENZING_TOOLS_ENABLE_ALL=true \
             --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/testdata/certificates/server/certificate.pem \
             --env SENZING_TOOLS_SERVER_KEY_FILE=/testdata/certificates/server/private_key.pem \
-            --name servegrpc \
+            --name servegrpc-8261 \
             --publish 8261:8261 \
             --rm \
             --volume ${{ github.workspace }}/testdata:/testdata \
@@ -50,7 +50,7 @@ jobs:
             --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/testdata/certificates/server/certificate.pem \
             --env SENZING_TOOLS_SERVER_KEY_FILE=/testdata/certificates/server/private_key_encrypted.pem \
             --env SENZING_TOOLS_SERVER_KEY_PASSPHRASE=Passw0rd \
-            --name servegrpc \
+            --name servegrpc-8262 \
             --publish 8262:8261 \
             --rm \
             --volume ${{ github.workspace }}/testdata:/testdata \
