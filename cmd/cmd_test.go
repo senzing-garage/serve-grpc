@@ -114,6 +114,20 @@ func Test_RootCmd_Execute_tls_bad_server_key_file(test *testing.T) {
 	require.Error(test, err)
 }
 
+func Test_RootCmd_Execute_tls(test *testing.T) {
+	_ = test
+	args := []string{
+		"--avoid-serving",
+		"--server-certificate-file",
+		"../testdata/certificates/server/certificate.pem",
+		"--server-key-file",
+		"../testdata/certificates/server/private_key.pem",
+	}
+	RootCmd.SetArgs(args)
+	err := RootCmd.Execute()
+	require.NoError(test, err)
+}
+
 // ----------------------------------------------------------------------------
 // Test private functions
 // ----------------------------------------------------------------------------
