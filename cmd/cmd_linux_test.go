@@ -4,7 +4,6 @@ package cmd
 
 import (
 	"bytes"
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -14,11 +13,6 @@ import (
 // Test public functions
 // ----------------------------------------------------------------------------
 
-func Test_Execute(test *testing.T) {
-	_ = test
-	os.Args = []string{"command-name", "--avoid-serving"}
-	Execute()
-}
 func Test_RootCmd_Execute_tls_encrypted_key(test *testing.T) {
 	_ = test
 	args := []string{

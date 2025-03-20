@@ -15,20 +15,30 @@ import (
 // Test public functions
 // ----------------------------------------------------------------------------
 
+func Test_Execute(test *testing.T) {
+	_ = test
+	setArgs(RootCmd, []string{})
+	os.Args = []string{"command-name", "--avoid-serving"}
+	Execute()
+}
+
 func Test_Execute_completion(test *testing.T) {
 	_ = test
+	setArgs(RootCmd, []string{})
 	os.Args = []string{"command-name", "completion"}
 	Execute()
 }
 
 func Test_Execute_docs(test *testing.T) {
 	_ = test
+	setArgs(RootCmd, []string{})
 	os.Args = []string{"command-name", "docs"}
 	Execute()
 }
 
 func Test_Execute_help(test *testing.T) {
 	_ = test
+	setArgs(RootCmd, []string{})
 	args := []string{"--help"}
 	RootCmd.SetArgs(args)
 	err := RootCmd.Execute()
@@ -37,6 +47,7 @@ func Test_Execute_help(test *testing.T) {
 
 func Test_RootCmd(test *testing.T) {
 	_ = test
+	setArgs(RootCmd, []string{})
 	os.Args = []string{"command-name", "--avoid-serving"}
 	err := RootCmd.Execute()
 	require.NoError(test, err)
@@ -117,7 +128,7 @@ func Test_RootCmd_Execute_tls(test *testing.T) {
 		"--server-key-file",
 		"../testdata/certificates/server/private_key.pem",
 	}
-	RootCmd.SetArgs(args)
+	setArgs(RootCmd, args)
 	err := RootCmd.Execute()
 	require.NoError(test, err)
 }
