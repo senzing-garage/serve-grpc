@@ -150,8 +150,16 @@ run: run-osarch-specific
 run-mutual-tls: run-mutual-tls-osarch-specific
 
 
+.PHONY: run-mutual-tls-encrypted-key
+run-mutual-tls-encrypted-key: run-mutual-tls-encrypted-key-osarch-specific
+
+
 .PHONY: run-server-side-tls
 run-server-side-tls: run-server-side-tls-osarch-specific
+
+
+.PHONY: run-server-side-tls-encrypted-key
+run-server-side-tls-encrypted-key: run-server-side-tls-encrypted-key-osarch-specific
 
 # -----------------------------------------------------------------------------
 # Test

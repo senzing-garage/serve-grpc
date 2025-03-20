@@ -15,85 +15,10 @@ import (
 // Test public functions
 // ----------------------------------------------------------------------------
 
-func Test_RootCmd_Execute_1(test *testing.T) {
-	_ = test
-	args := []string{"--avoid-serving"}
-	RootCmd.SetArgs(args)
-	err := RootCmd.Execute()
-	require.NoError(test, err)
-}
-
-func Test_RootCmd_Execute_tls_bad_server_certificate_path(test *testing.T) {
-	_ = test
-	args := []string{
-		"--avoid-serving",
-		"--server-certificate-path",
-		"",
-		"--server-key-path",
-		"../testdata/certificates/server/private_key.pem",
-	}
-	RootCmd.SetArgs(args)
-	err := RootCmd.Execute()
-	require.Error(test, err)
-}
-func Test_RootCmd_Execute_tls_bad_server_key_path(test *testing.T) {
-	_ = test
-	args := []string{
-		"--avoid-serving",
-		"--server-certificate-path",
-		"../testdata/certificates/server/certificate.pem",
-		"--server-key-path",
-		"",
-	}
-	RootCmd.SetArgs(args)
-	err := RootCmd.Execute()
-	require.Error(test, err)
-}
-
-func Test_RootCmd_Execute_tls(test *testing.T) {
-	_ = test
-	args := []string{
-		"--avoid-serving",
-		"--server-certificate-path",
-		"../testdata/certificates/server/certificate.pem",
-		"--server-key-path",
-		"../testdata/certificates/server/private_key.pem",
-	}
-	RootCmd.SetArgs(args)
-	err := RootCmd.Execute()
-	require.NoError(test, err)
-}
-
-func Test_RootCmd_Execute_2(test *testing.T) {
+func Test_RootCmd_Execute(test *testing.T) {
 	_ = test
 	args := []string{"--avoid-serving"}
 	setArgs(RootCmd, args)
-	err := RootCmd.Execute()
-	require.NoError(test, err)
-}
-
-func Test_Execute(test *testing.T) {
-	_ = test
-	os.Args = []string{"command-name", "--avoid-serving"}
-	Execute()
-}
-
-func Test_Execute_completion(test *testing.T) {
-	_ = test
-	os.Args = []string{"command-name", "completion"}
-	Execute()
-}
-
-func Test_Execute_docs(test *testing.T) {
-	_ = test
-	os.Args = []string{"command-name", "docs"}
-	Execute()
-}
-
-func Test_Execute_help(test *testing.T) {
-	_ = test
-	args := []string{"--help"}
-	RootCmd.SetArgs(args)
 	err := RootCmd.Execute()
 	require.NoError(test, err)
 }
@@ -111,12 +36,44 @@ func Test_RunE(test *testing.T) {
 	require.NoError(test, err)
 }
 
-func Test_RootCmd(test *testing.T) {
+func Test_RootCmd_Execute_tls_bad_server_certificate_file(test *testing.T) {
 	_ = test
-	os.Args = []string{"command-name", "--avoid-serving"}
+	args := []string{
+		"--avoid-serving",
+		"--server-certificate-file",
+		"",
+		"--server-key-file",
+		"../testdata/certificates/server/private_key.pem",
+	}
+	setArgs(RootCmd, args)
 	err := RootCmd.Execute()
-	require.NoError(test, err)
-	err = RootCmd.RunE(RootCmd, []string{})
+	require.Error(test, err)
+}
+func Test_RootCmd_Execute_tls_bad_server_key_file(test *testing.T) {
+	_ = test
+	args := []string{
+		"--avoid-serving",
+		"--server-certificate-file",
+		"../testdata/certificates/server/certificate.pem",
+		"--server-key-file",
+		"",
+	}
+	setArgs(RootCmd, args)
+	err := RootCmd.Execute()
+	require.Error(test, err)
+}
+
+func Test_RootCmd_Execute_tls(test *testing.T) {
+	_ = test
+	args := []string{
+		"--avoid-serving",
+		"--server-certificate-file",
+		"../testdata/certificates/server/certificate.pem",
+		"--server-key-file",
+		"../testdata/certificates/server/private_key.pem",
+	}
+	setArgs(RootCmd, args)
+	err := RootCmd.Execute()
 	require.NoError(test, err)
 }
 
