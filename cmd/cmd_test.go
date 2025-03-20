@@ -23,7 +23,7 @@ func Test_RootCmd_Execute_1(test *testing.T) {
 	require.NoError(test, err)
 }
 
-func Test_RootCmd_Execute_tls_bad_server_certificate_path(test *testing.T) {
+func Test_RootCmd_Execute_tls_bad_server_certificate_file(test *testing.T) {
 	_ = test
 	args := []string{
 		"--avoid-serving",
@@ -36,7 +36,7 @@ func Test_RootCmd_Execute_tls_bad_server_certificate_path(test *testing.T) {
 	err := RootCmd.Execute()
 	require.Error(test, err)
 }
-func Test_RootCmd_Execute_tls_bad_server_key_path(test *testing.T) {
+func Test_RootCmd_Execute_tls_bad_server_key_file(test *testing.T) {
 	_ = test
 	args := []string{
 		"--avoid-serving",
