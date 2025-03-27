@@ -72,6 +72,7 @@ hello-world: hello-world-osarch-specific
 
 .PHONY: dependencies-for-development
 dependencies-for-development: dependencies-for-development-osarch-specific
+	@go install github.com/daixiang0/gci@latest
 	@go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@latest
 	@go install github.com/vladopajic/go-test-coverage/v2@latest
 	@go install golang.org/x/tools/cmd/godoc@latest
@@ -89,10 +90,6 @@ dependencies:
 
 .PHONY: setup
 setup: setup-osarch-specific
-
-
-.PHONY: generate-certificates
-generate-certificates: generate-certificates-osarch-specific
 
 # -----------------------------------------------------------------------------
 # Lint
