@@ -47,11 +47,6 @@ documentation-osarch-specific:
 	@xdg-open http://localhost:6060
 
 
-.PHONY: generate-certificates-osarch-specific
-generate-certificates-osarch-specific:
-	cd testdata/certificates; ./generate_certificates.sh; cd $(MAKEFILE_DIRECTORY)
-
-
 .PHONY: hello-world-osarch-specific
 hello-world-osarch-specific:
 	$(info Hello World, from linux.)
