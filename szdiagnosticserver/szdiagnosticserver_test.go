@@ -1,4 +1,4 @@
-package szdiagnosticserver
+package szdiagnosticserver_test
 
 import (
 	"context"
@@ -13,6 +13,7 @@ import (
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/serve-grpc/szconfigmanagerserver"
+	"github.com/senzing-garage/serve-grpc/szdiagnosticserver"
 	"github.com/senzing-garage/sz-sdk-go-core/szabstractfactory"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
 	"github.com/senzing-garage/sz-sdk-go-core/szengine"
@@ -38,7 +39,7 @@ var (
 		IsSilent: true,
 	}
 	szConfigManagerServerSingleton *szconfigmanagerserver.SzConfigManagerServer
-	szDiagnosticServerSingleton    *SzDiagnosticServer
+	szDiagnosticServerSingleton    *szdiagnosticserver.SzDiagnosticServer
 )
 
 // ----------------------------------------------------------------------------
@@ -181,9 +182,9 @@ func getSzConfigManagerServer(ctx context.Context) szconfigmanagerserver.SzConfi
 	return *szConfigManagerServerSingleton
 }
 
-func getSzDiagnosticServer(ctx context.Context) SzDiagnosticServer {
+func getSzDiagnosticServer(ctx context.Context) *szdiagnosticserver.SzDiagnosticServer {
 	if szDiagnosticServerSingleton == nil {
-		szDiagnosticServerSingleton = &SzDiagnosticServer{}
+		szDiagnosticServerSingleton = &szdiagnosticserver.SzDiagnosticServer{}
 		instanceName := "Test instance name"
 		verboseLogging := senzing.SzNoLogging
 		configID := senzing.SzInitializeWithDefaultConfiguration
@@ -195,13 +196,13 @@ func getSzDiagnosticServer(ctx context.Context) SzDiagnosticServer {
 		}
 		err = szDiagnosticServerSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
-		err = GetSdkSzDiagnostic().Initialize(ctx, instanceName, settings, configID, verboseLogging)
+		err = szdiagnosticserver.GetSdkSzDiagnostic().Initialize(ctx, instanceName, settings, configID, verboseLogging)
 		panicOnError(err)
 	}
-	return *szDiagnosticServerSingleton
+	return szDiagnosticServerSingleton
 }
 
-func getTestObject(ctx context.Context, test *testing.T) SzDiagnosticServer {
+func getTestObject(ctx context.Context, test *testing.T) *szdiagnosticserver.SzDiagnosticServer {
 	_ = test
 	return getSzDiagnosticServer(ctx)
 }

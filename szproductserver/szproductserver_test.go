@@ -1,4 +1,4 @@
-package szproductserver
+package szproductserver_test
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-observing/observer"
+	"github.com/senzing-garage/serve-grpc/szproductserver"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 	"github.com/stretchr/testify/assert"
@@ -28,7 +29,7 @@ var (
 		ID:       observerID,
 		IsSilent: true,
 	}
-	szProductTestSingleton *SzProductServer
+	szProductTestSingleton *szproductserver.SzProductServer
 )
 
 // ----------------------------------------------------------------------------
@@ -112,9 +113,9 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 // Internal functions
 // ----------------------------------------------------------------------------
 
-func getSzProductServer(ctx context.Context) SzProductServer {
+func getSzProductServer(ctx context.Context) *szproductserver.SzProductServer {
 	if szProductTestSingleton == nil {
-		szProductTestSingleton = &SzProductServer{}
+		szProductTestSingleton = &szproductserver.SzProductServer{}
 		instanceName := "Test instance name"
 		verboseLogging := senzing.SzNoLogging
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
@@ -125,14 +126,14 @@ func getSzProductServer(ctx context.Context) SzProductServer {
 		}
 		err = szProductTestSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
-		err = GetSdkSzProduct().Initialize(ctx, instanceName, settings, verboseLogging)
+		err = szproductserver.GetSdkSzProduct().Initialize(ctx, instanceName, settings, verboseLogging)
 		panicOnError(err)
 
 	}
-	return *szProductTestSingleton
+	return szProductTestSingleton
 }
 
-func getTestObject(ctx context.Context, test *testing.T) SzProductServer {
+func getTestObject(ctx context.Context, test *testing.T) *szproductserver.SzProductServer {
 	_ = test
 	return getSzProductServer(ctx)
 }

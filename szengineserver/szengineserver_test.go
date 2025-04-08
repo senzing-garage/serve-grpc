@@ -1,4 +1,4 @@
-package szengineserver
+package szengineserver_test
 
 import (
 	"context"
@@ -15,6 +15,7 @@ import (
 	"github.com/senzing-garage/go-helpers/truthset"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
+	"github.com/senzing-garage/serve-grpc/szengineserver"
 	"github.com/senzing-garage/sz-sdk-go-core/szabstractfactory"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
@@ -43,7 +44,7 @@ var (
 		ID:       observerID,
 		IsSilent: true,
 	}
-	szEngineTestSingleton *SzEngineServer
+	szEngineTestSingleton *szengineserver.SzEngineServer
 )
 
 // ----------------------------------------------------------------------------
@@ -752,9 +753,9 @@ func getEntityIDStringForRecord(datasource string, id string) string {
 	return strconv.FormatInt(entityID, 10)
 }
 
-func getSzEngineServer(ctx context.Context) SzEngineServer {
+func getSzEngineServer(ctx context.Context) *szengineserver.SzEngineServer {
 	if szEngineTestSingleton == nil {
-		szEngineTestSingleton = &SzEngineServer{}
+		szEngineTestSingleton = &szengineserver.SzEngineServer{}
 		instanceName := "Test instance name"
 		verboseLogging := senzing.SzNoLogging
 		configID := senzing.SzInitializeWithDefaultConfiguration
@@ -766,13 +767,13 @@ func getSzEngineServer(ctx context.Context) SzEngineServer {
 		}
 		err = szEngineTestSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
-		err = GetSdkSzEngine().Initialize(ctx, instanceName, setting, configID, verboseLogging)
+		err = szengineserver.GetSdkSzEngine().Initialize(ctx, instanceName, setting, configID, verboseLogging)
 		panicOnError(err)
 	}
-	return *szEngineTestSingleton
+	return szEngineTestSingleton
 }
 
-func getTestObject(ctx context.Context, test *testing.T) SzEngineServer {
+func getTestObject(ctx context.Context, test *testing.T) *szengineserver.SzEngineServer {
 	_ = test
 	return getSzEngineServer(ctx)
 }

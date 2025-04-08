@@ -1,4 +1,4 @@
-package grpcserver
+package grpcserver_test
 
 import (
 	"context"
@@ -10,6 +10,7 @@ import (
 	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
+	"github.com/senzing-garage/serve-grpc/grpcserver"
 	"github.com/senzing-garage/sz-sdk-go-core/szabstractfactory"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
@@ -111,15 +112,8 @@ func setup() error {
 	moduleName := "Test module name"
 	verboseLogging := int64(0)
 
-	localLogger, err = logging.NewSenzingLogger(ComponentID, IDMessages)
-	if err != nil {
-		panic(err)
-	}
-
 	iniParams, err := settings.BuildSimpleSettingsUsingEnvVars()
-	if err != nil {
-		return localLogger.NewError(5902, err)
-	}
+	panicOnError(err)
 
 	// Add Data Sources to Senzing configuration.
 
@@ -128,9 +122,7 @@ func setup() error {
 	// Purge repository.
 
 	err = setupPurgeRepository(ctx, moduleName, iniParams, verboseLogging)
-	if err != nil {
-		return localLogger.NewError(5921, err)
-	}
+	panicOnError(err)
 
 	return err
 }
@@ -161,7 +153,7 @@ func TestGrpcServerImpl_Serve(test *testing.T) {
 	senzingsettings, err := settings.BuildSimpleSettingsUsingEnvVars()
 	require.NoError(test, err)
 
-	grpcServer := &BasicGrpcServer{
+	grpcServer := &grpcserver.BasicGrpcServer{
 		AvoidServing:        true,
 		EnableAll:           true,
 		LogLevelName:        logLevelName,

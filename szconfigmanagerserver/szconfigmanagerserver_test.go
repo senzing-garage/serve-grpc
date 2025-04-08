@@ -1,4 +1,4 @@
-package szconfigmanagerserver
+package szconfigmanagerserver_test
 
 import (
 	"context"
@@ -11,6 +11,7 @@ import (
 	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
+	"github.com/senzing-garage/serve-grpc/szconfigmanagerserver"
 	"github.com/senzing-garage/serve-grpc/szconfigserver"
 	"github.com/senzing-garage/sz-sdk-go-core/szabstractfactory"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
@@ -35,7 +36,7 @@ var (
 		ID:       observerID,
 		IsSilent: true,
 	}
-	szConfigManagerServerSingleton *SzConfigManagerServer
+	szConfigManagerServerSingleton *szconfigmanagerserver.SzConfigManagerServer
 )
 
 // ----------------------------------------------------------------------------
@@ -226,9 +227,9 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 // Internal functions
 // ----------------------------------------------------------------------------
 
-func getSzConfigManagerServer(ctx context.Context) SzConfigManagerServer {
+func getSzConfigManagerServer(ctx context.Context) *szconfigmanagerserver.SzConfigManagerServer {
 	if szConfigManagerServerSingleton == nil {
-		szConfigManagerServerSingleton = &SzConfigManagerServer{}
+		szConfigManagerServerSingleton = &szconfigmanagerserver.SzConfigManagerServer{}
 		instanceName := "Test instance name"
 		verboseLogging := senzing.SzNoLogging
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
@@ -239,13 +240,13 @@ func getSzConfigManagerServer(ctx context.Context) SzConfigManagerServer {
 		}
 		err = szConfigManagerServerSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
-		err = GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
+		err = szconfigmanagerserver.GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
 		panicOnError(err)
 	}
-	return *szConfigManagerServerSingleton
+	return szConfigManagerServerSingleton
 }
 
-func getSzConfigServer(ctx context.Context) szconfigserver.SzConfigServer {
+func getSzConfigServer(ctx context.Context) *szconfigserver.SzConfigServer {
 	szConfigServer := &szconfigserver.SzConfigServer{}
 	instanceName := "Test instance name"
 	verboseLogging := senzing.SzNoLogging
@@ -259,10 +260,10 @@ func getSzConfigServer(ctx context.Context) szconfigserver.SzConfigServer {
 	panicOnError(err)
 	err = szConfigServer.GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
 	panicOnError(err)
-	return *szConfigServer
+	return szConfigServer
 }
 
-func getTestObject(ctx context.Context, test *testing.T) SzConfigManagerServer {
+func getTestObject(ctx context.Context, test *testing.T) *szconfigmanagerserver.SzConfigManagerServer {
 	_ = test
 	return getSzConfigManagerServer(ctx)
 }

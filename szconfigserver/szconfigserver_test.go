@@ -156,7 +156,7 @@ func TestSzConfigServer_UnregisterObserver(test *testing.T) {
 
 func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 	actual, err := settings.BuildSimpleSettingsUsingEnvVars()
-	handleErrorWithPanic(err)
+	panicOnError(err)
 	printActual(test, actual)
 }
 
@@ -172,7 +172,7 @@ func getSzConfigManagerServer(ctx context.Context) *szconfigmanagerserver.SzConf
 			logLevelName = osenvLogLevel
 		}
 		err := szConfigTestSingleton.SetLogLevel(ctx, logLevelName)
-		handleErrorWithPanic(err)
+		panicOnError(err)
 	}
 	return szConfigManagerTestSingleton
 }
@@ -185,7 +185,7 @@ func getSzConfigServer(ctx context.Context) *szconfigserver.SzConfigServer {
 			logLevelName = osenvLogLevel
 		}
 		err := szConfigTestSingleton.SetLogLevel(ctx, logLevelName)
-		handleErrorWithPanic(err)
+		panicOnError(err)
 	}
 	return szConfigTestSingleton
 }
@@ -195,7 +195,7 @@ func getTestObject(ctx context.Context, test *testing.T) *szconfigserver.SzConfi
 	return getSzConfigServer(ctx)
 }
 
-func handleErrorWithPanic(err error) {
+func panicOnError(err error) {
 	if err != nil {
 		panic(err)
 	}

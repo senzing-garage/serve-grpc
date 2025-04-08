@@ -1,6 +1,6 @@
 //go:build linux
 
-package szconfigmanagerserver
+package szconfigmanagerserver_test
 
 import (
 	"context"
