@@ -22,7 +22,10 @@ var (
 // Interface methods for github.com/senzing-garage/sz-sdk-go/szdiagnostic.SzDdiagnostic
 // ----------------------------------------------------------------------------
 
-func (server *SzDiagnosticServer) CheckDatastorePerformance(ctx context.Context, request *szpb.CheckDatastorePerformanceRequest) (*szpb.CheckDatastorePerformanceResponse, error) {
+func (server *SzDiagnosticServer) CheckDatastorePerformance(
+	ctx context.Context,
+	request *szpb.CheckDatastorePerformanceRequest,
+) (*szpb.CheckDatastorePerformanceResponse, error) {
 	var err error
 	var result string
 	if server.isTrace {
@@ -38,7 +41,10 @@ func (server *SzDiagnosticServer) CheckDatastorePerformance(ctx context.Context,
 	return &response, err
 }
 
-func (server *SzDiagnosticServer) GetDatastoreInfo(ctx context.Context, request *szpb.GetDatastoreInfoRequest) (*szpb.GetDatastoreInfoResponse, error) {
+func (server *SzDiagnosticServer) GetDatastoreInfo(
+	ctx context.Context,
+	request *szpb.GetDatastoreInfoRequest,
+) (*szpb.GetDatastoreInfoResponse, error) {
 	var err error
 	var result string
 	if server.isTrace {
@@ -54,7 +60,10 @@ func (server *SzDiagnosticServer) GetDatastoreInfo(ctx context.Context, request 
 	return &response, err
 }
 
-func (server *SzDiagnosticServer) GetFeature(ctx context.Context, request *szpb.GetFeatureRequest) (*szpb.GetFeatureResponse, error) {
+func (server *SzDiagnosticServer) GetFeature(
+	ctx context.Context,
+	request *szpb.GetFeatureRequest,
+) (*szpb.GetFeatureResponse, error) {
 	var err error
 	var result string
 	if server.isTrace {
@@ -70,7 +79,10 @@ func (server *SzDiagnosticServer) GetFeature(ctx context.Context, request *szpb.
 	return &response, err
 }
 
-func (server *SzDiagnosticServer) PurgeRepository(ctx context.Context, request *szpb.PurgeRepositoryRequest) (*szpb.PurgeRepositoryResponse, error) {
+func (server *SzDiagnosticServer) PurgeRepository(
+	ctx context.Context,
+	request *szpb.PurgeRepositoryRequest,
+) (*szpb.PurgeRepositoryResponse, error) {
 	var err error
 	if server.isTrace {
 		entryTime := time.Now()
@@ -83,7 +95,10 @@ func (server *SzDiagnosticServer) PurgeRepository(ctx context.Context, request *
 	return &response, err
 }
 
-func (server *SzDiagnosticServer) Reinitialize(ctx context.Context, request *szpb.ReinitializeRequest) (*szpb.ReinitializeResponse, error) {
+func (server *SzDiagnosticServer) Reinitialize(
+	ctx context.Context,
+	request *szpb.ReinitializeRequest,
+) (*szpb.ReinitializeResponse, error) {
 	var err error
 	if server.isTrace {
 		entryTime := time.Now()

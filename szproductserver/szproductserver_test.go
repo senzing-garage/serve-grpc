@@ -2,7 +2,6 @@ package szproductserver
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"testing"
@@ -11,7 +10,6 @@ import (
 	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
-	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -101,6 +99,16 @@ func TestSzProductServer_UnregisterObserver(test *testing.T) {
 }
 
 // ----------------------------------------------------------------------------
+// Test harness
+// ----------------------------------------------------------------------------
+
+func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
+	actual, err := settings.BuildSimpleSettingsUsingEnvVars()
+	panicOnError(err)
+	printActual(test, actual)
+}
+
+// ----------------------------------------------------------------------------
 // Internal functions
 // ----------------------------------------------------------------------------
 
@@ -147,50 +155,4 @@ func printResult(test *testing.T, title string, result interface{}) {
 
 func truncate(aString string, length int) string {
 	return truncator.Truncate(aString, length, "...", truncator.PositionEnd)
-}
-
-// ----------------------------------------------------------------------------
-// Test harness
-// ----------------------------------------------------------------------------
-
-func TestMain(m *testing.M) {
-	err := setup()
-	if err != nil {
-		if errors.Is(err, szerror.ErrSzUnrecoverable) {
-			fmt.Printf("\nUnrecoverable error detected. \n\n")
-		}
-		if errors.Is(err, szerror.ErrSzRetryable) {
-			fmt.Printf("\nRetryable error detected. \n\n")
-		}
-		if errors.Is(err, szerror.ErrSzBadInput) {
-			fmt.Printf("\nBad user input error detected. \n\n")
-		}
-		fmt.Print(err)
-		os.Exit(1)
-	}
-	code := m.Run()
-	err = teardown()
-	if err != nil {
-		fmt.Print(err)
-	}
-	os.Exit(code)
-}
-
-func setup() error {
-	var err error
-	return err
-}
-
-func teardown() error {
-	var err error
-	return err
-}
-
-func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := settings.BuildSimpleSettingsUsingEnvVars()
-	if err != nil {
-		test.Log("Error:", err.Error())
-		assert.FailNow(test, actual)
-	}
-	printActual(test, actual)
 }

@@ -3,7 +3,6 @@ package szengineserver
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -16,11 +15,9 @@ import (
 	"github.com/senzing-garage/go-helpers/truthset"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
-	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
-	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
+	"github.com/senzing-garage/sz-sdk-go-core/szabstractfactory"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
-	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szengine"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -163,7 +160,11 @@ func TestSzEngineServer_FindNetworkByEntityId(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	record1 := truthset.CustomerRecords["1001"]
 	record2 := truthset.CustomerRecords["1002"]
-	entityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDString(record1) + `}, {"ENTITY_ID": ` + getEntityIDString(record2) + `}]}`
+	entityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDString(
+		record1,
+	) + `}, {"ENTITY_ID": ` + getEntityIDString(
+		record2,
+	) + `}]}`
 	maxDegrees := int64(2)
 	buildOutDegree := int64(1)
 	buildOutMaxEntities := int64(10)
@@ -703,12 +704,18 @@ func TestSzEngineServer_UnregisterObserver(test *testing.T) {
 }
 
 // ----------------------------------------------------------------------------
-// Internal functions
+// Test harness
 // ----------------------------------------------------------------------------
 
-func createError(errorID int, err error) error {
-	return logger.NewError(errorID, err)
+func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
+	actual, err := settings.BuildSimpleSettingsUsingEnvVars()
+	panicOnError(err)
+	printActual(test, actual)
 }
+
+// ----------------------------------------------------------------------------
+// Internal functions
+// ----------------------------------------------------------------------------
 
 func getEntityID(record record.Record) int64 {
 	return getEntityIDForRecord(record.DataSource, record.ID)
@@ -795,151 +802,70 @@ func truncate(aString string, length int) string {
 // ----------------------------------------------------------------------------
 
 func TestMain(m *testing.M) {
-	err := setup()
-	if err != nil {
-		if errors.Is(err, szerror.ErrSzUnrecoverable) {
-			fmt.Printf("\nUnrecoverable error detected. \n\n")
-		}
-		if errors.Is(err, szerror.ErrSzRetryable) {
-			fmt.Printf("\nRetryable error detected. \n\n")
-		}
-		if errors.Is(err, szerror.ErrSzBadInput) {
-			fmt.Printf("\nBad user input error detected. \n\n")
-		}
-		fmt.Print(err)
-		os.Exit(1)
-	}
+	setup()
 	code := m.Run()
-	err = teardown()
-	if err != nil {
-		fmt.Print(err)
-	}
 	os.Exit(code)
 }
 
-func setupSenzingConfig(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
+func setupSenzingConfig(ctx context.Context, instanceName string, settings string, verboseLogging int64) {
 	now := time.Now()
 
-	szConfig := &szconfig.Szconfig{}
-	err := szConfig.Initialize(ctx, instanceName, settings, verboseLogging)
-	if err != nil {
-		return createError(5906, err)
+	szAbstractFactory := &szabstractfactory.Szabstractfactory{
+		ConfigID:       senzing.SzInitializeWithDefaultConfiguration,
+		InstanceName:   instanceName,
+		Settings:       settings,
+		VerboseLogging: verboseLogging,
 	}
 
-	configHandle, err := szConfig.CreateConfig(ctx)
-	if err != nil {
-		return createError(5907, err)
-	}
+	szConfigManager, err := szAbstractFactory.CreateConfigManager(ctx)
+	panicOnError(err)
+
+	szConfig, err := szConfigManager.CreateConfigFromTemplate(ctx)
+	panicOnError(err)
 
 	datasourceNames := []string{"CUSTOMERS", "REFERENCE", "WATCHLIST"}
 	for _, dataSourceCode := range datasourceNames {
-		_, err := szConfig.AddDataSource(ctx, configHandle, dataSourceCode)
-		if err != nil {
-			return createError(5908, err)
-		}
-	}
-
-	configDefinition, err := szConfig.ExportConfig(ctx, configHandle)
-	if err != nil {
-		return createError(5909, err)
-	}
-
-	err = szConfig.CloseConfig(ctx, configHandle)
-	if err != nil {
-		return createError(5910, err)
-	}
-
-	err = szConfig.Destroy(ctx)
-	if err != nil {
-		return createError(5911, err)
-	}
-
-	// Persist the Senzing configuration to the Senzing repository.
-
-	szConfigManager := &szconfigmanager.Szconfigmanager{}
-	err = szConfigManager.Initialize(ctx, instanceName, settings, verboseLogging)
-	if err != nil {
-		return createError(5912, err)
+		_, err := szConfig.AddDataSource(ctx, dataSourceCode)
+		panicOnError(err)
 	}
 
 	configComment := fmt.Sprintf("Created by szconfigmanagerserver_test at %s", now.UTC())
-	configID, err := szConfigManager.AddConfig(ctx, configDefinition, configComment)
-	if err != nil {
-		return createError(5913, err)
-	}
+	configDefinition, err := szConfig.Export(ctx)
+	panicOnError(err)
 
-	err = szConfigManager.SetDefaultConfigID(ctx, configID)
-	if err != nil {
-		return createError(5914, err)
-	}
+	configID, err := szConfigManager.SetDefaultConfig(ctx, configDefinition, configComment)
+	panicOnError(err)
 
-	err = szConfigManager.Destroy(ctx)
-	if err != nil {
-		return createError(5915, err)
-	}
-	return err
+	szAbstractFactory.Reinitialize(ctx, configID)
 }
 
 func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	szDiagnostic := &szdiagnostic.Szdiagnostic{}
-	err := szDiagnostic.Initialize(ctx, instanceName, settings, senzing.SzInitializeWithDefaultConfiguration, verboseLogging)
-	if err != nil {
-		return createError(5903, err)
-	}
+	err := szDiagnostic.Initialize(
+		ctx,
+		instanceName,
+		settings,
+		senzing.SzInitializeWithDefaultConfiguration,
+		verboseLogging,
+	)
+	panicOnError(err)
 
 	err = szDiagnostic.PurgeRepository(ctx)
-	if err != nil {
-		return createError(5904, err)
-	}
+	panicOnError(err)
 
 	err = szDiagnostic.Destroy(ctx)
-	if err != nil {
-		return createError(5905, err)
-	}
+	panicOnError(err)
+
 	return err
 }
 
-func setup() error {
-	var err error
+func setup() {
 	ctx := context.TODO()
 	instanceName := "Test name"
 	verboseLogging := senzing.SzNoLogging
-	logger, err = logging.NewSenzingLogger(ComponentID, IDMessages)
-	if err != nil {
-		panic(err)
-	}
-
 	settings, err := settings.BuildSimpleSettingsUsingEnvVars()
-	if err != nil {
-		return createError(5902, err)
-	}
-
-	// Add Data Sources to Senzing configuration.
-
-	err = setupSenzingConfig(ctx, instanceName, settings, verboseLogging)
-	if err != nil {
-		return createError(5920, err)
-	}
-
-	// Purge repository.
-
+	panicOnError(err)
+	setupSenzingConfig(ctx, instanceName, settings, verboseLogging)
 	err = setupPurgeRepository(ctx, instanceName, settings, verboseLogging)
-	if err != nil {
-		return createError(5921, err)
-	}
-	return err
-}
-
-func teardown() error {
-	var err error
-	return err
-}
-
-func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := settings.BuildSimpleSettingsUsingEnvVars()
-	if err != nil {
-		test.Log("Error:", err.Error())
-		assert.FailNow(test, actual)
-	}
-	printActual(test, actual)
+	panicOnError(err)
 }

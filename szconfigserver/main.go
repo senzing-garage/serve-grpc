@@ -2,6 +2,7 @@ package szconfigserver
 
 import (
 	"github.com/senzing-garage/go-logging/logging"
+	"github.com/senzing-garage/go-observing/observer"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 )
 
@@ -11,9 +12,12 @@ import (
 
 // server is used to implement helloworld.GreeterServer.
 type SzConfigServer struct {
+	isTrace        bool
+	logger         logging.Logging
+	logLevelName   string
+	observerOrigin string
+	observers      []observer.Observer
 	szpb.UnimplementedSzConfigServer
-	isTrace bool
-	logger  logging.Logging
 }
 
 // ----------------------------------------------------------------------------
