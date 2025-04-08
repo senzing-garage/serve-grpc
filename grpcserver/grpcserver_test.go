@@ -78,7 +78,8 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 	configID, err := szConfigManager.SetDefaultConfig(ctx, configDefinition, configComment)
 	panicOnError(err)
 
-	szAbstractFactory.Reinitialize(ctx, configID)
+	err = szAbstractFactory.Reinitialize(ctx, configID)
+	panicOnError(err)
 }
 
 func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {

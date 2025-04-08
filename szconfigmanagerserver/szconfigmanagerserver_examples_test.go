@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/senzing-garage/go-helpers/jsonutil"
 	szconfigpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 )
@@ -35,8 +36,8 @@ func ExampleSzConfigManagerServer_GetConfig() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(truncate(response.GetResult(), defaultTruncation))
-	// Output: {"G2_CONFIG":{"CFG_ATTR":[{"ATTR_ID":1001,"ATTR_CODE":"DATA_SOURCE","ATTR...
+	fmt.Println(jsonutil.Truncate(response.GetResult(), 5))
+	// Output: {"G2_CONFIG":{"CFG_ATTR":[{"ATTR_CLASS":"ADDRESS",...
 }
 
 func ExampleSzConfigManagerServer_GetConfigs() {
@@ -48,8 +49,8 @@ func ExampleSzConfigManagerServer_GetConfigs() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(truncate(response.GetResult(), 28))
-	// Output: {"CONFIGS":[{"CONFIG_ID":...
+	fmt.Println(jsonutil.Truncate(response.GetResult(), 3))
+	// Output: {"CONFIGS":[{...
 }
 
 func ExampleSzConfigManagerServer_GetDefaultConfigId() {
@@ -73,8 +74,8 @@ func ExampleSzConfigManagerServer_GetTemplateConfig() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response.GetResult())
-	// Output: true
+	fmt.Println(jsonutil.Truncate(response.GetResult(), 5))
+	// Output: {"G2_CONFIG":{"CFG_ATTR":[{"ATTR_CLASS":"ADDRESS",...
 }
 
 func ExampleSzConfigManagerServer_RegisterConfig() {
@@ -114,8 +115,8 @@ func ExampleSzConfigManagerServer_RegisterConfig() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(response.GetResult())
-	// Output:
+	fmt.Println(response.GetResult() > 0) // Dummy output.
+	// Output: true
 }
 
 func ExampleSzConfigManagerServer_ReplaceDefaultConfigId() {

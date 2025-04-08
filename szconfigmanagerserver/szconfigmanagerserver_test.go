@@ -9,7 +9,6 @@ import (
 
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/go-helpers/settings"
-	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/serve-grpc/szconfigmanagerserver"
 	"github.com/senzing-garage/serve-grpc/szconfigserver"
@@ -24,13 +23,13 @@ import (
 
 const (
 	defaultTruncation = 76
+	jsonIndentation   = "    "
 	observerID        = "Observer 1"
 	observerOrigin    = "Observer 1 origin"
 	printResults      = false
 )
 
 var (
-	logger            logging.Logging
 	logLevelName      = "INFO"
 	observerSingleton = &observer.NullObserver{
 		ID:       observerID,
@@ -143,10 +142,13 @@ func TestSzConfigManagerServer_ReplaceDefaultConfigID(test *testing.T) {
 	printActual(test, response)
 }
 
-func TestSzConfigManagerServer_SetDefaultConfig(test *testing.T) {}
+func TestSzConfigManagerServer_SetDefaultConfig(test *testing.T) {
+	_ = test
+	// FIXME:
+}
 
 func TestSzConfigManagerServer_SetDefaultConfigId(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	szConfigManagerServer := getTestObject(ctx, test)
 
 	// Get the ConfigID of the default Senzing configuration.
@@ -258,7 +260,7 @@ func getSzConfigServer(ctx context.Context) *szconfigserver.SzConfigServer {
 	}
 	err = szConfigServer.SetLogLevel(ctx, logLevelName)
 	panicOnError(err)
-	err = szConfigServer.GetSdkSzConfig().Initialize(ctx, instanceName, settings, verboseLogging)
+	err = szconfigserver.GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
 	panicOnError(err)
 	return szConfigServer
 }
@@ -327,7 +329,8 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 	configID, err := szConfigManager.SetDefaultConfig(ctx, configDefinition, configComment)
 	panicOnError(err)
 
-	szAbstractFactory.Reinitialize(ctx, configID)
+	err = szAbstractFactory.Reinitialize(ctx, configID)
+	panicOnError(err)
 }
 
 func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {

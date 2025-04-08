@@ -3,18 +3,20 @@ package szconfigserver
 import (
 	"context"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/senzing-garage/go-logging/logging"
 	szobserver "github.com/senzing-garage/go-observing/observer"
-	szsdk "github.com/senzing-garage/sz-sdk-go-core/szconfig"
+	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 )
 
-// var (
-// 	szConfig         *szsdk.Szconfig
-// )
+var (
+	szConfigManagerSingleton *szconfigmanager.Szconfigmanager
+	szConfigManagerSyncOnce  sync.Once
+)
 
 // ----------------------------------------------------------------------------
 // Interface methods for github.com/senzing-garage/sz-sdk-go/szconfig.SzConfig
@@ -24,57 +26,66 @@ func (server *SzConfigServer) AddDataSource(
 	ctx context.Context,
 	request *szpb.AddDataSourceRequest,
 ) (*szpb.AddDataSourceResponse, error) {
-	var err error
-	var result string
+	var (
+		err      error
+		response *szpb.AddDataSourceResponse
+		result   string
+	)
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(1, request)
 		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
 	}
 
-	szConfig := server.createSzConfig(ctx, request.GetConfigDefinition())
+	szConfig, err := server.createSzConfig(ctx, request.GetConfigDefinition())
 	result, err = szConfig.AddDataSource(ctx, request.GetDataSourceCode())
-	response := szpb.AddDataSourceResponse{
+	response = &szpb.AddDataSourceResponse{
 		Result: result,
 	}
-	return &response, err
+	return response, err
 }
 
 func (server *SzConfigServer) DeleteDataSource(
 	ctx context.Context,
 	request *szpb.DeleteDataSourceRequest,
 ) (*szpb.DeleteDataSourceResponse, error) {
-	var err error
+	var (
+		err      error
+		response *szpb.DeleteDataSourceResponse
+	)
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(9, request)
 		defer func() { server.traceExit(10, request, err, time.Since(entryTime)) }()
 	}
-	szConfig := server.createSzConfig(ctx, request.GetConfigDefinition())
+	szConfig, err := server.createSzConfig(ctx, request.GetConfigDefinition())
 	result, err := szConfig.DeleteDataSource(ctx, request.GetDataSourceCode())
-	response := szpb.DeleteDataSourceResponse{
+	response = &szpb.DeleteDataSourceResponse{
 		Result: result,
 	}
-	return &response, err
+	return response, err
 }
 
 func (server *SzConfigServer) GetDataSources(
 	ctx context.Context,
 	request *szpb.GetDataSourcesRequest,
 ) (*szpb.GetDataSourcesResponse, error) {
-	var err error
-	var result string
+	var (
+		err      error
+		response *szpb.GetDataSourcesResponse
+		result   string
+	)
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(19, request)
 		defer func() { server.traceExit(20, request, result, err, time.Since(entryTime)) }()
 	}
-	szConfig := server.createSzConfig(ctx, request.GetConfigDefinition())
+	szConfig, err := server.createSzConfig(ctx, request.GetConfigDefinition())
 	result, err = szConfig.GetDataSources(ctx)
-	response := szpb.GetDataSourcesResponse{
+	response = &szpb.GetDataSourcesResponse{
 		Result: result,
 	}
-	return &response, err
+	return response, err
 }
 
 // ----------------------------------------------------------------------------
@@ -136,30 +147,40 @@ func (server *SzConfigServer) SetLogLevel(ctx context.Context, logLevelName stri
 
 // --- Services ---------------------------------------------------------------
 
-func (server *SzConfigServer) createSzConfig(ctx context.Context, configDefinition string) *szsdk.Szconfig {
-	szConfig := &szsdk.Szconfig{}
-	szConfig.SetLogLevel(ctx, server.logLevelName)
-	szConfig.Import(ctx, configDefinition)
-	szConfig.SetObserverOrigin(ctx, server.observerOrigin)
-	for _, x := range server.observers {
-		szConfig.RegisterObserver(ctx, x)
-	}
-	return szConfig
+func (server *SzConfigServer) createSzConfig(ctx context.Context, configDefinition string) (senzing.SzConfig, error) {
+	szConfigManager := getSzConfigManager()
+	return szConfigManager.CreateConfigFromString(ctx, configDefinition)
 }
 
-func (server *SzConfigServer) GetSdkSzConfig() *szsdk.Szconfig {
-	ctx := context.TODO()
-	return server.createSzConfig(ctx, "")
-}
-
-func (server *SzConfigServer) GetSdkSzConfigAsInterface(ctx context.Context, configDefinition string) senzing.SzConfig {
+func (server *SzConfigServer) GetSdkSzConfigAsInterface(
+	ctx context.Context,
+	configDefinition string,
+) (senzing.SzConfig, error) {
 	return server.createSzConfig(ctx, configDefinition)
+}
+
+// Singleton pattern for szconfigmanager.
+// See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
+func getSzConfigManager() *szconfigmanager.Szconfigmanager {
+	szConfigManagerSyncOnce.Do(func() {
+		szConfigManagerSingleton = &szconfigmanager.Szconfigmanager{}
+	})
+	return szConfigManagerSingleton
+}
+
+func GetSdkSzConfigManager() *szconfigmanager.Szconfigmanager {
+	return getSzConfigManager()
+}
+
+func GetSdkSzConfigManagerAsInterface() senzing.SzConfigManager {
+	return getSzConfigManager()
 }
 
 // --- Observer ---------------------------------------------------------------
 
 func (server *SzConfigServer) GetObserverOrigin(ctx context.Context) string {
 	var err error
+	_ = ctx
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(27)
@@ -183,6 +204,7 @@ func (server *SzConfigServer) RegisterObserver(ctx context.Context, observer szo
 
 func (server *SzConfigServer) SetObserverOrigin(ctx context.Context, origin string) {
 	var err error
+	_ = ctx
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(29, origin)
@@ -193,7 +215,9 @@ func (server *SzConfigServer) SetObserverOrigin(ctx context.Context, origin stri
 }
 
 func (server *SzConfigServer) UnregisterObserver(ctx context.Context, observer szobserver.Observer) error {
-	var err error
+	var (
+		err error
+	)
 
 	if server.isTrace {
 		entryTime := time.Now()
@@ -201,13 +225,17 @@ func (server *SzConfigServer) UnregisterObserver(ctx context.Context, observer s
 		defer func() { server.traceExit(14, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
 	}
 
-	result := make([]szobserver.Observer, len(server.observers))
-	for _, registeredObserver := range server.observers {
-		if registeredObserver.GetObserverID(ctx) != observer.GetObserverID(ctx) {
-			result = append(result, registeredObserver)
-		}
-	}
-	server.observers = result
-	return nil
+	if len(server.observers) > 0 {
 
+		result := make([]szobserver.Observer, 0, len(server.observers))
+		for _, registeredObserver := range server.observers {
+			if registeredObserver.GetObserverID(ctx) != observer.GetObserverID(ctx) {
+				result = append(result, registeredObserver)
+			}
+		}
+		server.observers = result
+
+	}
+
+	return nil
 }

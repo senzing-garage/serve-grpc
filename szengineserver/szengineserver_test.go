@@ -13,7 +13,6 @@ import (
 	"github.com/senzing-garage/go-helpers/record"
 	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-helpers/truthset"
-	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/serve-grpc/szengineserver"
 	"github.com/senzing-garage/sz-sdk-go-core/szabstractfactory"
@@ -38,7 +37,6 @@ type GetEntityByRecordIDResponse struct {
 }
 
 var (
-	logger            logging.Logging
 	logLevelName      = "INFO"
 	observerSingleton = &observer.NullObserver{
 		ID:       observerID,
@@ -837,7 +835,8 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 	configID, err := szConfigManager.SetDefaultConfig(ctx, configDefinition, configComment)
 	panicOnError(err)
 
-	szAbstractFactory.Reinitialize(ctx, configID)
+	err = szAbstractFactory.Reinitialize(ctx, configID)
+	panicOnError(err)
 }
 
 func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {

@@ -202,7 +202,7 @@ func (grpcServer *BasicGrpcServer) enableSzConfig(ctx context.Context, serviceRe
 	if err != nil {
 		panic(err)
 	}
-	err = server.GetSdkSzConfig().
+	err = szconfigserver.GetSdkSzConfigManager().
 		Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)

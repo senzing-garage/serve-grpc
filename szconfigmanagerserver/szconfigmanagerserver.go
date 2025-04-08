@@ -61,7 +61,7 @@ func (server *SzConfigManagerServer) GetConfigs(
 	return &response, err
 }
 
-func (server *SzConfigManagerServer) GetDefaultConfigId(
+func (server *SzConfigManagerServer) GetDefaultConfigID(
 	ctx context.Context,
 	request *szpb.GetDefaultConfigIdRequest,
 ) (*szpb.GetDefaultConfigIdResponse, error) { //revive:disable var-naming
@@ -78,6 +78,33 @@ func (server *SzConfigManagerServer) GetDefaultConfigId(
 		Result: result,
 	}
 	return &response, err
+}
+
+func (server *SzConfigManagerServer) GetTemplateConfig(
+	ctx context.Context,
+	request *szpb.GetTemplateConfigRequest,
+) (*szpb.GetTemplateConfigResponse, error) {
+	var (
+		err      error
+		result   string
+		response *szpb.GetTemplateConfigResponse
+	)
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(99, request)
+		defer func() { server.traceExit(99, request, result, err, time.Since(entryTime)) }()
+	}
+	szConfigManager := getSzConfigManager()
+	szConfig, err := szConfigManager.CreateConfigFromTemplate(ctx)
+	if err != nil {
+		return response, err
+	}
+
+	configDefinition, err := szConfig.Export(ctx)
+	response = &szpb.GetTemplateConfigResponse{
+		Result: configDefinition,
+	}
+	return response, err
 }
 
 func (server *SzConfigManagerServer) RegisterConfig(
