@@ -143,8 +143,38 @@ func TestSzConfigManagerServer_ReplaceDefaultConfigID(test *testing.T) {
 }
 
 func TestSzConfigManagerServer_SetDefaultConfig(test *testing.T) {
-	_ = test
-	// FIXME:
+	ctx := test.Context()
+
+	szConfigManagerServer := getTestObject(ctx, test)
+
+	// Get the ConfigID of the default Senzing configuration.
+
+	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	require.NoError(test, err)
+
+	defaultConfigID := responseFromGetDefaultConfigID.GetResult()
+
+	// Get the definition of the default Senzing configuration.
+
+	requestToGetConfig := &szpb.GetConfigRequest{
+		ConfigId: defaultConfigID,
+	}
+	responseFromGetConfig, err := szConfigManagerServer.GetConfig(ctx, requestToGetConfig)
+	require.NoError(test, err)
+
+	defaultConfigDefinition := responseFromGetConfig.GetResult()
+
+	// Set the new Senzing configuration.
+	// Note: This cheats a little.  Normally a non-default configuration is used in SetDefaultConfig.
+
+	requestToSetDefaultConfig := &szpb.SetDefaultConfigRequest{
+		ConfigDefinition: defaultConfigDefinition,
+		ConfigComment:    "Just a test",
+	}
+	_, err = szConfigManagerServer.SetDefaultConfig(ctx, requestToSetDefaultConfig)
+	require.NoError(test, err)
+
 }
 
 func TestSzConfigManagerServer_SetDefaultConfigId(test *testing.T) {

@@ -146,6 +146,50 @@ func ExampleSzConfigManagerServer_ReplaceDefaultConfigId() {
 	// Output:
 }
 
+func ExampleSzConfigManagerServer_SetDefaultConfig() {
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
+	ctx := context.TODO()
+
+	szConfigManagerServer := getSzConfigManagerServer(ctx)
+
+	// Get the ConfigID of the default Senzing configuration.
+
+	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defaultConfigID := responseFromGetDefaultConfigID.GetResult()
+
+	// Get the definition of the default Senzing configuration.
+
+	requestToGetConfig := &szpb.GetConfigRequest{
+		ConfigId: defaultConfigID,
+	}
+	responseFromGetConfig, err := szConfigManagerServer.GetConfig(ctx, requestToGetConfig)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defaultConfigDefinition := responseFromGetConfig.GetResult()
+
+	// Set the new Senzing configuration.
+	// Note: This cheats a little.  Normally a non-default configuration is used in SetDefaultConfig.
+
+	requestToSetDefaultConfig := &szpb.SetDefaultConfigRequest{
+		ConfigDefinition: defaultConfigDefinition,
+		ConfigComment:    "Just a test",
+	}
+	response, err := szConfigManagerServer.SetDefaultConfig(ctx, requestToSetDefaultConfig)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(response.GetResult() > 0) // Dummy output.
+	// Output: true
+}
+
 func ExampleSzConfigManagerServer_SetDefaultConfigId() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
 	ctx := context.TODO()
