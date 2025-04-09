@@ -26,27 +26,34 @@ func (server *SzDiagnosticServer) CheckDatastorePerformance(
 	ctx context.Context,
 	request *szpb.CheckDatastorePerformanceRequest,
 ) (*szpb.CheckDatastorePerformanceResponse, error) {
-	var err error
-	var result string
+	var (
+		err      error
+		response *szpb.CheckDatastorePerformanceResponse
+		result   string
+	)
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(1, request)
 		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szDiagnostic := getSzDiagnostic()
 	result, err = szDiagnostic.CheckDatastorePerformance(ctx, int(request.GetSecondsToRun()))
-	response := szpb.CheckDatastorePerformanceResponse{
+	response = &szpb.CheckDatastorePerformanceResponse{
 		Result: result,
 	}
-	return &response, err
+	return response, err
 }
 
 func (server *SzDiagnosticServer) GetDatastoreInfo(
 	ctx context.Context,
 	request *szpb.GetDatastoreInfoRequest,
 ) (*szpb.GetDatastoreInfoResponse, error) {
-	var err error
-	var result string
+	var (
+		err      error
+		response *szpb.GetDatastoreInfoResponse
+		result   string
+	)
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(1, request)
@@ -54,10 +61,10 @@ func (server *SzDiagnosticServer) GetDatastoreInfo(
 	}
 	szDiagnostic := getSzDiagnostic()
 	result, err = szDiagnostic.GetDatastoreInfo(ctx)
-	response := szpb.GetDatastoreInfoResponse{
+	response = &szpb.GetDatastoreInfoResponse{
 		Result: result,
 	}
-	return &response, err
+	return response, err
 }
 
 func (server *SzDiagnosticServer) GetFeature(

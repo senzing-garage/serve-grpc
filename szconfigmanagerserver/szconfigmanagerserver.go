@@ -26,8 +26,11 @@ func (server *SzConfigManagerServer) GetConfig(
 	ctx context.Context,
 	request *szpb.GetConfigRequest,
 ) (*szpb.GetConfigResponse, error) {
-	var err error
-	var result string
+	var (
+		err      error
+		response *szpb.GetConfigResponse
+		result   string
+	)
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(7, request)
@@ -35,19 +38,25 @@ func (server *SzConfigManagerServer) GetConfig(
 	}
 	szConfigManager := getSzConfigManager()
 	szConfig, err := szConfigManager.CreateConfigFromConfigID(ctx, request.GetConfigId())
+	if err != nil {
+		return response, err
+	}
 	result, err = szConfig.Export(ctx)
-	response := szpb.GetConfigResponse{
+	response = &szpb.GetConfigResponse{
 		Result: result,
 	}
-	return &response, err
+	return response, err
 }
 
 func (server *SzConfigManagerServer) GetConfigs(
 	ctx context.Context,
 	request *szpb.GetConfigsRequest,
 ) (*szpb.GetConfigsResponse, error) {
-	var err error
-	var result string
+	var (
+		err      error
+		response *szpb.GetConfigsResponse
+		result   string
+	)
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(9, request)
@@ -55,18 +64,21 @@ func (server *SzConfigManagerServer) GetConfigs(
 	}
 	szConfigManager := getSzConfigManager()
 	result, err = szConfigManager.GetConfigs(ctx)
-	response := szpb.GetConfigsResponse{
+	response = &szpb.GetConfigsResponse{
 		Result: result,
 	}
-	return &response, err
+	return response, err
 }
 
-func (server *SzConfigManagerServer) GetDefaultConfigID(
+func (server *SzConfigManagerServer) GetDefaultConfigId(
 	ctx context.Context,
 	request *szpb.GetDefaultConfigIdRequest,
 ) (*szpb.GetDefaultConfigIdResponse, error) { //revive:disable var-naming
-	var err error
-	var result int64
+	var (
+		err      error
+		response *szpb.GetDefaultConfigIdResponse
+		result   int64
+	)
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(11, request)
@@ -74,10 +86,13 @@ func (server *SzConfigManagerServer) GetDefaultConfigID(
 	}
 	szConfigManager := getSzConfigManager()
 	result, err = szConfigManager.GetDefaultConfigID(ctx)
-	response := szpb.GetDefaultConfigIdResponse{
+	if err != nil {
+		return response, err
+	}
+	response = &szpb.GetDefaultConfigIdResponse{
 		Result: result,
 	}
-	return &response, err
+	return response, err
 }
 
 func (server *SzConfigManagerServer) GetTemplateConfig(
@@ -94,6 +109,7 @@ func (server *SzConfigManagerServer) GetTemplateConfig(
 		server.traceEntry(99, request)
 		defer func() { server.traceExit(99, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szConfigManager := getSzConfigManager()
 	szConfig, err := szConfigManager.CreateConfigFromTemplate(ctx)
 	if err != nil {
@@ -111,26 +127,33 @@ func (server *SzConfigManagerServer) RegisterConfig(
 	ctx context.Context,
 	request *szpb.RegisterConfigRequest,
 ) (*szpb.RegisterConfigResponse, error) {
-	var err error
-	var result int64
+	var (
+		err      error
+		response *szpb.RegisterConfigResponse
+		result   int64
+	)
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(1, request)
 		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szConfigManager := getSzConfigManager()
 	result, err = szConfigManager.RegisterConfig(ctx, request.GetConfigDefinition(), request.GetConfigComment())
-	response := szpb.RegisterConfigResponse{
+	response = &szpb.RegisterConfigResponse{
 		Result: result,
 	}
-	return &response, err
+	return response, err
 }
 
 func (server *SzConfigManagerServer) ReplaceDefaultConfigId(
 	ctx context.Context,
 	request *szpb.ReplaceDefaultConfigIdRequest,
 ) (*szpb.ReplaceDefaultConfigIdResponse, error) {
-	var err error
+	var (
+		err      error
+		response *szpb.ReplaceDefaultConfigIdResponse
+	)
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(19, request)
@@ -142,15 +165,18 @@ func (server *SzConfigManagerServer) ReplaceDefaultConfigId(
 		request.GetCurrentDefaultConfigId(),
 		request.GetNewDefaultConfigId(),
 	)
-	response := szpb.ReplaceDefaultConfigIdResponse{}
-	return &response, err
+	response = &szpb.ReplaceDefaultConfigIdResponse{}
+	return response, err
 }
 
 func (server *SzConfigManagerServer) SetDefaultConfigId(
 	ctx context.Context,
 	request *szpb.SetDefaultConfigIdRequest,
 ) (*szpb.SetDefaultConfigIdResponse, error) {
-	var err error
+	var (
+		err      error
+		response *szpb.SetDefaultConfigIdResponse
+	)
 	if server.isTrace {
 		entryTime := time.Now()
 		server.traceEntry(21, request)
@@ -158,8 +184,8 @@ func (server *SzConfigManagerServer) SetDefaultConfigId(
 	}
 	szConfigManager := getSzConfigManager()
 	err = szConfigManager.SetDefaultConfigID(ctx, request.GetConfigId())
-	response := szpb.SetDefaultConfigIdResponse{}
-	return &response, err
+	response = &szpb.SetDefaultConfigIdResponse{}
+	return response, err
 }
 
 // ----------------------------------------------------------------------------

@@ -38,9 +38,19 @@ func (server *SzConfigServer) AddDataSource(
 	}
 
 	szConfig, err := server.createSzConfig(ctx, request.GetConfigDefinition())
+	if err != nil {
+		return response, err
+	}
+
 	result, err = szConfig.AddDataSource(ctx, request.GetDataSourceCode())
+	if err != nil {
+		return response, err
+	}
+
+	configDefinition, err := szConfig.Export(ctx)
 	response = &szpb.AddDataSourceResponse{
-		Result: result,
+		Result:           result,
+		ConfigDefinition: configDefinition,
 	}
 	return response, err
 }
@@ -59,9 +69,19 @@ func (server *SzConfigServer) DeleteDataSource(
 		defer func() { server.traceExit(10, request, err, time.Since(entryTime)) }()
 	}
 	szConfig, err := server.createSzConfig(ctx, request.GetConfigDefinition())
+	if err != nil {
+		return response, err
+	}
+
 	result, err := szConfig.DeleteDataSource(ctx, request.GetDataSourceCode())
+	if err != nil {
+		return response, err
+	}
+
+	configDefinition, err := szConfig.Export(ctx)
 	response = &szpb.DeleteDataSourceResponse{
-		Result: result,
+		Result:           result,
+		ConfigDefinition: configDefinition,
 	}
 	return response, err
 }
@@ -80,7 +100,12 @@ func (server *SzConfigServer) GetDataSources(
 		server.traceEntry(19, request)
 		defer func() { server.traceExit(20, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szConfig, err := server.createSzConfig(ctx, request.GetConfigDefinition())
+	if err != nil {
+		return response, err
+	}
+
 	result, err = szConfig.GetDataSources(ctx)
 	response = &szpb.GetDataSourcesResponse{
 		Result: result,
