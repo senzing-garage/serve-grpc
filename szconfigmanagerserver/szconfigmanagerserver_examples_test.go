@@ -1,12 +1,13 @@
 //go:build linux
 
-package szconfigmanagerserver
+package szconfigmanagerserver_test
 
 import (
 	"context"
 	"fmt"
 	"time"
 
+	"github.com/senzing-garage/go-helpers/jsonutil"
 	szconfigpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 )
@@ -14,43 +15,6 @@ import (
 // ----------------------------------------------------------------------------
 // Interface functions - Examples for godoc documentation
 // ----------------------------------------------------------------------------
-
-func ExampleSzConfigManagerServer_AddConfig() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
-	ctx := context.TODO()
-	now := time.Now()
-	szConfigServer := getSzConfigServer(ctx)
-
-	// SzConfig CreateConfig() to create a Senzing configuration.
-	requestToCreateConfig := &szconfigpb.CreateConfigRequest{}
-	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// SzConfig ExportConfig() to create a JSON string.
-	requestToExportConfig := &szconfigpb.ExportConfigRequest{
-		ConfigHandle: responseFromCreateConfig.GetResult(),
-	}
-	responseFromExportConfig, err := szConfigServer.ExportConfig(ctx, requestToExportConfig)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// Example
-	szConfigManagerServer := getSzConfigManagerServer(ctx)
-	request := &szpb.AddConfigRequest{
-		ConfigDefinition: responseFromExportConfig.GetResult(),
-		ConfigComment:    fmt.Sprintf("szconfigmanagerserver_test at %s", now.UTC()),
-	}
-	response, err := szConfigManagerServer.AddConfig(ctx, request)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response.GetResult() > 0) // Dummy output.
-	// Output: true
-
-}
 
 func ExampleSzConfigManagerServer_GetConfig() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
@@ -72,8 +36,8 @@ func ExampleSzConfigManagerServer_GetConfig() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(truncate(response.GetResult(), defaultTruncation))
-	// Output: {"G2_CONFIG":{"CFG_ATTR":[{"ATTR_ID":1001,"ATTR_CODE":"DATA_SOURCE","ATTR...
+	fmt.Println(jsonutil.Truncate(response.GetResult(), 5))
+	// Output: {"G2_CONFIG":{"CFG_ATTR":[{"ATTR_CLASS":"ADDRESS",...
 }
 
 func ExampleSzConfigManagerServer_GetConfigs() {
@@ -85,8 +49,8 @@ func ExampleSzConfigManagerServer_GetConfigs() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(truncate(response.GetResult(), 28))
-	// Output: {"CONFIGS":[{"CONFIG_ID":...
+	fmt.Println(jsonutil.Truncate(response.GetResult(), 3))
+	// Output: {"CONFIGS":[{...
 }
 
 func ExampleSzConfigManagerServer_GetDefaultConfigId() {
@@ -102,50 +66,77 @@ func ExampleSzConfigManagerServer_GetDefaultConfigId() {
 	// Output: true
 }
 
-func ExampleSzConfigManagerServer_ReplaceDefaultConfigId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
+func ExampleSzConfigManagerServer_GetTemplateConfig() {
 	ctx := context.TODO()
+	szConfigManagerServer := getSzConfigManagerServer(ctx)
+	request := &szpb.GetTemplateConfigRequest{}
+	response, err := szConfigManagerServer.GetTemplateConfig(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(jsonutil.Truncate(response.GetResult(), 5))
+	// Output: {"G2_CONFIG":{"CFG_ATTR":[{"ATTR_CLASS":"ADDRESS",...
+}
+
+func ExampleSzConfigManagerServer_RegisterConfig() {
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
+
 	now := time.Now()
+	ctx := context.TODO()
 	szConfigServer := getSzConfigServer(ctx)
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 
-	// GetDefaultConfigId() to get the current configuration ID.
-	requestForGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
-	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestForGetDefaultConfigID)
+	// Get the template configuration.
+
+	requestToGetTemplateConfig := &szpb.GetTemplateConfigRequest{}
+	responseFromGetTemplateConfig, err := szConfigManagerServer.GetTemplateConfig(ctx, requestToGetTemplateConfig)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	// SzConfig CreateConfig() to create a Senzing configuration.
-	requestToCreateConfig := &szconfigpb.CreateConfigRequest{}
-	responseFromCreateConfig, err := szConfigServer.CreateConfig(ctx, requestToCreateConfig)
+	// Add DataSource to the Senzing configuration.
+
+	requestToAddDataSource := &szconfigpb.AddDataSourceRequest{
+		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
+		DataSourceCode:   "GO_TEST",
+	}
+	responseFromAddDataSource, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	// SzConfig ExportConfig() to create a JSON string.
-	requestToExportConfig := &szconfigpb.ExportConfigRequest{
-		ConfigHandle: responseFromCreateConfig.GetResult(),
-	}
-	responseFromExportConfig, err := szConfigServer.ExportConfig(ctx, requestToExportConfig)
-	if err != nil {
-		fmt.Println(err)
-	}
+	// Test RegisterConfig.
 
-	// AddConfig() to modify the configuration.
-	requestForAddConfig := &szpb.AddConfigRequest{
-		ConfigDefinition: responseFromExportConfig.GetResult(),
+	request := &szpb.RegisterConfigRequest{
+		ConfigDefinition: responseFromAddDataSource.GetResult(),
 		ConfigComment:    fmt.Sprintf("szconfigmanagerserver_test at %s", now.UTC()),
 	}
-	responseFromAddConfig, err := szConfigManagerServer.AddConfig(ctx, requestForAddConfig)
+	response, err := szConfigManagerServer.RegisterConfig(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(response.GetResult() > 0) // Dummy output.
+	// Output: true
+}
+
+func ExampleSzConfigManagerServer_ReplaceDefaultConfigId() {
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
+	ctx := context.TODO()
+	szConfigManagerServer := getSzConfigManagerServer(ctx)
+
+	// Get the ConfigID of the default Senzing configuration.
+
+	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	// Example
+	// Test. Note: Cheating a little with replacing with same configId.
+
 	request := &szpb.ReplaceDefaultConfigIdRequest{
 		CurrentDefaultConfigId: responseFromGetDefaultConfigID.GetResult(),
-		NewDefaultConfigId:     responseFromAddConfig.GetResult(),
+		NewDefaultConfigId:     responseFromGetDefaultConfigID.GetResult(),
 	}
 	response, err := szConfigManagerServer.ReplaceDefaultConfigId(ctx, request)
 	if err != nil {
@@ -153,6 +144,50 @@ func ExampleSzConfigManagerServer_ReplaceDefaultConfigId() {
 	}
 	fmt.Println(response)
 	// Output:
+}
+
+func ExampleSzConfigManagerServer_SetDefaultConfig() {
+	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
+	ctx := context.TODO()
+
+	szConfigManagerServer := getSzConfigManagerServer(ctx)
+
+	// Get the ConfigID of the default Senzing configuration.
+
+	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defaultConfigID := responseFromGetDefaultConfigID.GetResult()
+
+	// Get the definition of the default Senzing configuration.
+
+	requestToGetConfig := &szpb.GetConfigRequest{
+		ConfigId: defaultConfigID,
+	}
+	responseFromGetConfig, err := szConfigManagerServer.GetConfig(ctx, requestToGetConfig)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defaultConfigDefinition := responseFromGetConfig.GetResult()
+
+	// Set the new Senzing configuration.
+	// Note: This cheats a little.  Normally a non-default configuration is used in SetDefaultConfig.
+
+	requestToSetDefaultConfig := &szpb.SetDefaultConfigRequest{
+		ConfigDefinition: defaultConfigDefinition,
+		ConfigComment:    "Just a test",
+	}
+	response, err := szConfigManagerServer.SetDefaultConfig(ctx, requestToSetDefaultConfig)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(response.GetResult() > 0) // Dummy output.
+	// Output: true
 }
 
 func ExampleSzConfigManagerServer_SetDefaultConfigId() {

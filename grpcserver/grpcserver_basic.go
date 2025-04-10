@@ -166,7 +166,10 @@ func (grpcServer *BasicGrpcServer) log(messageNumber int, details ...interface{}
 
 // --- Observing --------------------------------------------------------------
 
-func (grpcServer *BasicGrpcServer) createGrpcObserver(ctx context.Context, parsedURL url.URL) (observer.Observer, error) {
+func (grpcServer *BasicGrpcServer) createGrpcObserver(
+	ctx context.Context,
+	parsedURL url.URL,
+) (observer.Observer, error) {
 	_ = ctx
 	var err error
 	var result observer.Observer
@@ -199,7 +202,8 @@ func (grpcServer *BasicGrpcServer) enableSzConfig(ctx context.Context, serviceRe
 	if err != nil {
 		panic(err)
 	}
-	err = szconfigserver.GetSdkSzConfig().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
+	err = szconfigserver.GetSdkSzConfigManager().
+		Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -224,7 +228,8 @@ func (grpcServer *BasicGrpcServer) enableSzConfigManager(ctx context.Context, se
 	if err != nil {
 		panic(err)
 	}
-	err = szconfigmanagerserver.GetSdkSzConfigManager().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
+	err = szconfigmanagerserver.GetSdkSzConfigManager().
+		Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -249,7 +254,8 @@ func (grpcServer *BasicGrpcServer) enableSzDiagnostic(ctx context.Context, servi
 	if err != nil {
 		panic(err)
 	}
-	err = szdiagnosticserver.GetSdkSzDiagnostic().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, senzing.SzInitializeWithDefaultConfiguration, grpcServer.SenzingVerboseLogging)
+	err = szdiagnosticserver.GetSdkSzDiagnostic().
+		Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, senzing.SzInitializeWithDefaultConfiguration, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -274,7 +280,8 @@ func (grpcServer *BasicGrpcServer) enableSzEngine(ctx context.Context, serviceRe
 	if err != nil {
 		panic(err)
 	}
-	err = szengineserver.GetSdkSzEngine().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, senzing.SzInitializeWithDefaultConfiguration, grpcServer.SenzingVerboseLogging)
+	err = szengineserver.GetSdkSzEngine().
+		Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, senzing.SzInitializeWithDefaultConfiguration, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
@@ -299,7 +306,8 @@ func (grpcServer *BasicGrpcServer) enableSzProduct(ctx context.Context, serviceR
 	if err != nil {
 		panic(err)
 	}
-	err = szproductserver.GetSdkSzProduct().Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
+	err = szproductserver.GetSdkSzProduct().
+		Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}

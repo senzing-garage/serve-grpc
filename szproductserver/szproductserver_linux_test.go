@@ -1,3 +1,3 @@
 //go:build linux
 
-package szproductserver
+package szproductserver_test

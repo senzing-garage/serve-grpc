@@ -1,8 +1,7 @@
-package szproductserver
+package szproductserver_test
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"testing"
@@ -10,8 +9,8 @@ import (
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-observing/observer"
+	"github.com/senzing-garage/serve-grpc/szproductserver"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
-	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -30,7 +29,7 @@ var (
 		ID:       observerID,
 		IsSilent: true,
 	}
-	szProductTestSingleton *SzProductServer
+	szProductTestSingleton *szproductserver.SzProductServer
 )
 
 // ----------------------------------------------------------------------------
@@ -101,12 +100,22 @@ func TestSzProductServer_UnregisterObserver(test *testing.T) {
 }
 
 // ----------------------------------------------------------------------------
+// Test harness
+// ----------------------------------------------------------------------------
+
+func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
+	actual, err := settings.BuildSimpleSettingsUsingEnvVars()
+	panicOnError(err)
+	printActual(test, actual)
+}
+
+// ----------------------------------------------------------------------------
 // Internal functions
 // ----------------------------------------------------------------------------
 
-func getSzProductServer(ctx context.Context) SzProductServer {
+func getSzProductServer(ctx context.Context) *szproductserver.SzProductServer {
 	if szProductTestSingleton == nil {
-		szProductTestSingleton = &SzProductServer{}
+		szProductTestSingleton = &szproductserver.SzProductServer{}
 		instanceName := "Test instance name"
 		verboseLogging := senzing.SzNoLogging
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
@@ -117,14 +126,14 @@ func getSzProductServer(ctx context.Context) SzProductServer {
 		}
 		err = szProductTestSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
-		err = GetSdkSzProduct().Initialize(ctx, instanceName, settings, verboseLogging)
+		err = szproductserver.GetSdkSzProduct().Initialize(ctx, instanceName, settings, verboseLogging)
 		panicOnError(err)
 
 	}
-	return *szProductTestSingleton
+	return szProductTestSingleton
 }
 
-func getTestObject(ctx context.Context, test *testing.T) SzProductServer {
+func getTestObject(ctx context.Context, test *testing.T) *szproductserver.SzProductServer {
 	_ = test
 	return getSzProductServer(ctx)
 }
@@ -147,50 +156,4 @@ func printResult(test *testing.T, title string, result interface{}) {
 
 func truncate(aString string, length int) string {
 	return truncator.Truncate(aString, length, "...", truncator.PositionEnd)
-}
-
-// ----------------------------------------------------------------------------
-// Test harness
-// ----------------------------------------------------------------------------
-
-func TestMain(m *testing.M) {
-	err := setup()
-	if err != nil {
-		if errors.Is(err, szerror.ErrSzUnrecoverable) {
-			fmt.Printf("\nUnrecoverable error detected. \n\n")
-		}
-		if errors.Is(err, szerror.ErrSzRetryable) {
-			fmt.Printf("\nRetryable error detected. \n\n")
-		}
-		if errors.Is(err, szerror.ErrSzBadInput) {
-			fmt.Printf("\nBad user input error detected. \n\n")
-		}
-		fmt.Print(err)
-		os.Exit(1)
-	}
-	code := m.Run()
-	err = teardown()
-	if err != nil {
-		fmt.Print(err)
-	}
-	os.Exit(code)
-}
-
-func setup() error {
-	var err error
-	return err
-}
-
-func teardown() error {
-	var err error
-	return err
-}
-
-func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
-	actual, err := settings.BuildSimpleSettingsUsingEnvVars()
-	if err != nil {
-		test.Log("Error:", err.Error())
-		assert.FailNow(test, actual)
-	}
-	printActual(test, actual)
 }

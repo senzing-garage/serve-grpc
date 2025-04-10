@@ -1,6 +1,6 @@
 //go:build linux
 
-package szengineserver
+package szengineserver_test
 
 import (
 	"context"
@@ -77,7 +77,10 @@ func ExampleSzEngineServer_CloseExport() {
 	requestToExportJSONEntityReport := &szpb.ExportJsonEntityReportRequest{
 		Flags: senzing.SzNoFlags,
 	}
-	responseFromExportJSONEntityReport, err := szEngineServer.ExportJsonEntityReport(ctx, requestToExportJSONEntityReport)
+	responseFromExportJSONEntityReport, err := szEngineServer.ExportJsonEntityReport(
+		ctx,
+		requestToExportJSONEntityReport,
+	)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -146,7 +149,10 @@ func ExampleSzEngineServer_FetchNext() {
 	requestToExportJSONEntityReport := &szpb.ExportJsonEntityReportRequest{
 		Flags: senzing.SzNoFlags,
 	}
-	responseFromExportJSONEntityReport, err := szEngineServer.ExportJsonEntityReport(ctx, requestToExportJSONEntityReport)
+	responseFromExportJSONEntityReport, err := szEngineServer.ExportJsonEntityReport(
+		ctx,
+		requestToExportJSONEntityReport,
+	)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -199,7 +205,13 @@ func ExampleSzEngineServer_FindNetworkByEntityId() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	entityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1001") + `}, {"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1002") + `}]}`
+	entityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord(
+		"CUSTOMERS",
+		"1001",
+	) + `}, {"ENTITY_ID": ` + getEntityIDStringForRecord(
+		"CUSTOMERS",
+		"1002",
+	) + `}]}`
 	request := &szpb.FindNetworkByEntityIdRequest{
 		BuildOutDegrees:     1,
 		BuildOutMaxEntities: 10,

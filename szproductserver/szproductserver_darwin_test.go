@@ -1,5 +1,5 @@
 //go:build darwin
 
-package szproductserver
+package szproductserver_test
 
 var licenseFilePath = "/opt/senzing/er/etc/g2.lic"

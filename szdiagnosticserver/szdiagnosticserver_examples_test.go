@@ -1,6 +1,6 @@
 //go:build linux
 
-package szdiagnosticserver
+package szdiagnosticserver_test
 
 import (
 	"context"

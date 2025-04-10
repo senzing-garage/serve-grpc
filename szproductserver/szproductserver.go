@@ -22,7 +22,10 @@ var (
 // Interface methods for github.com/senzing-garage/sz-sdk-go/szproduct.SzProduct
 // ----------------------------------------------------------------------------
 
-func (server *SzProductServer) GetLicense(ctx context.Context, request *szpb.GetLicenseRequest) (*szpb.GetLicenseResponse, error) {
+func (server *SzProductServer) GetLicense(
+	ctx context.Context,
+	request *szpb.GetLicenseRequest,
+) (*szpb.GetLicenseResponse, error) {
 	var err error
 	var result string
 	if server.isTrace {
@@ -38,7 +41,10 @@ func (server *SzProductServer) GetLicense(ctx context.Context, request *szpb.Get
 	return &response, err
 }
 
-func (server *SzProductServer) GetVersion(ctx context.Context, request *szpb.GetVersionRequest) (*szpb.GetVersionResponse, error) {
+func (server *SzProductServer) GetVersion(
+	ctx context.Context,
+	request *szpb.GetVersionRequest,
+) (*szpb.GetVersionResponse, error) {
 	var err error
 	var result string
 	if server.isTrace {
