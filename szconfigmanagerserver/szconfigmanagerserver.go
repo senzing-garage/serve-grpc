@@ -70,10 +70,10 @@ func (server *SzConfigManagerServer) GetConfigs(
 	return response, err
 }
 
-func (server *SzConfigManagerServer) GetDefaultConfigId(
+func (server *SzConfigManagerServer) GetDefaultConfigId( //revive:disable var-naming
 	ctx context.Context,
 	request *szpb.GetDefaultConfigIdRequest,
-) (*szpb.GetDefaultConfigIdResponse, error) { //revive:disable var-naming
+) (*szpb.GetDefaultConfigIdResponse, error) {
 	var (
 		err      error
 		response *szpb.GetDefaultConfigIdResponse
@@ -166,6 +166,27 @@ func (server *SzConfigManagerServer) ReplaceDefaultConfigId(
 		request.GetNewDefaultConfigId(),
 	)
 	response = &szpb.ReplaceDefaultConfigIdResponse{}
+	return response, err
+}
+
+func (server *SzConfigManagerServer) SetDefaultConfig(
+	ctx context.Context,
+	request *szpb.SetDefaultConfigRequest,
+) (*szpb.SetDefaultConfigResponse, error) {
+	var (
+		err      error
+		response *szpb.SetDefaultConfigResponse
+	)
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(21, request)
+		defer func() { server.traceExit(22, request, err, time.Since(entryTime)) }()
+	}
+	szConfigManager := getSzConfigManager()
+	result, err := szConfigManager.SetDefaultConfig(ctx, request.GetConfigDefinition(), request.GetConfigComment())
+	response = &szpb.SetDefaultConfigResponse{
+		Result: result,
+	}
 	return response, err
 }
 
