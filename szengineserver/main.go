@@ -172,6 +172,8 @@ var IDMessages = map[int]string{
 	164:  "Exit  " + Prefix + "SetObserverOrigin(%s) returned (%v).",
 	165:  "Enter " + Prefix + "PreprocessRecord(%+v).",
 	166:  "Exit  " + Prefix + "PreprocessRecord(%+v) returned (%v).",
+	167:  "Enter " + Prefix + "WhySearch(%+v).",
+	168:  "Exit  " + Prefix + "WhySearch(%+v) returned (%s, %v).",
 	601:  "Send  " + Prefix + "StreamExportCSVEntityReport(%+v) item(%s).",
 	602:  "Send  " + Prefix + "StreamExportJSONEntityReport(%+v) item(%s).",
 	4001: Prefix + "Destroy() not supported in gRPC",

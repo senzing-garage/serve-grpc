@@ -625,6 +625,25 @@ func TestSzEngineServer_WhyRecords(test *testing.T) {
 	printActual(test, response.GetResult())
 }
 
+func TestSzEngineServer_WhySearch(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	attributes := `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
+	entityID := getEntityID(truthset.CustomerRecords["1001"])
+	searchProfile := "SEARCH"
+
+	flags := senzing.SzNoFlags
+	request := &szpb.WhySearchRequest{
+		Attributes:    attributes,
+		EntityId:      entityID,
+		SearchProfile: searchProfile,
+		Flags:         flags,
+	}
+	response, err := szEngineServer.WhySearch(ctx, request)
+	require.NoError(test, err)
+	printActual(test, response.GetResult())
+}
+
 func TestSzEngineServer_DeleteRecord(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
