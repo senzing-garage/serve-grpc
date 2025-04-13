@@ -104,6 +104,44 @@ func TestSzConfigServer_GetDataSources(test *testing.T) {
 	printActual(test, responseFromGetDataSources.GetResult())
 }
 
+func TestSzConfigServer_VerifyConfig(test *testing.T) {
+	ctx := context.TODO()
+	szConfigManagerServer := getSzConfigManagerServer(ctx)
+	szConfigServer := getTestObject(ctx, test)
+
+	// Get the template configuration.
+
+	requestToGetTemplateConfig := &szconfigmanagerpb.GetTemplateConfigRequest{}
+	responseFromGetTemplateConfig, err := szConfigManagerServer.GetTemplateConfig(ctx, requestToGetTemplateConfig)
+	require.NoError(test, err)
+	printActual(test, responseFromGetTemplateConfig.GetResult())
+
+	// Delete DataSource to the Senzing configuration.
+
+	requestToVerifyConfig := &szpb.VerifyConfigRequest{
+		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
+	}
+	responseFromGetDataSources, err := szConfigServer.VerifyConfig(ctx, requestToVerifyConfig)
+	require.NoError(test, err)
+	printActual(test, responseFromGetDataSources.GetResult())
+}
+
+func TestSzConfigServer_VerifyConfig_bad_config(test *testing.T) {
+	ctx := context.TODO()
+	badConfigDefinition := "}{"
+
+	szConfigServer := getTestObject(ctx, test)
+
+	// Delete DataSource to the Senzing configuration.
+
+	requestToVerifyConfig := &szpb.VerifyConfigRequest{
+		ConfigDefinition: badConfigDefinition,
+	}
+	responseFromGetDataSources, err := szConfigServer.VerifyConfig(ctx, requestToVerifyConfig)
+	require.NoError(test, err)
+	printActual(test, responseFromGetDataSources.GetResult())
+}
+
 // ----------------------------------------------------------------------------
 // Logging and observing
 // ----------------------------------------------------------------------------
