@@ -143,6 +143,7 @@ func (server *SzConfigServer) VerifyConfig(
 	response = &szpb.VerifyConfigResponse{
 		Result: result,
 	}
+
 	return response, err
 }
 
