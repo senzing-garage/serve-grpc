@@ -140,8 +140,6 @@ func (server *SzConfigServer) VerifyConfig(
 		result = false
 	}
 
-	fmt.Printf(">>>>>>>>> VerifyConfigDefinition %v\n", err)
-
 	response = &szpb.VerifyConfigResponse{
 		Result: result,
 	}
@@ -209,7 +207,7 @@ func (server *SzConfigServer) SetLogLevel(ctx context.Context, logLevelName stri
 
 func (server *SzConfigServer) createSzConfig(ctx context.Context, configDefinition string) (*szconfig.Szconfig, error) {
 	szConfigManager := getSzConfigManager()
-	return szConfigManager.createConfigFromString(ctx, configDefinition)
+	return szConfigManager.CreateConfigFromStringChoreography(ctx, configDefinition)
 }
 
 func (server *SzConfigServer) GetSdkSzConfigAsInterface(
