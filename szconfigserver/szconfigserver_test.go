@@ -12,6 +12,7 @@ import (
 	"github.com/senzing-garage/serve-grpc/szconfigmanagerserver"
 	"github.com/senzing-garage/serve-grpc/szconfigserver"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
+	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	szconfigmanagerpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	"github.com/stretchr/testify/require"
@@ -138,7 +139,7 @@ func TestSzConfigServer_VerifyConfig_bad_config(test *testing.T) {
 		ConfigDefinition: badConfigDefinition,
 	}
 	responseFromGetDataSources, err := szConfigServer.VerifyConfig(ctx, requestToVerifyConfig)
-	require.NoError(test, err)
+	require.ErrorIs(test, err, szerror.ErrSzBadInput)
 	printActual(test, responseFromGetDataSources.GetResult())
 }
 
