@@ -9,8 +9,8 @@ require (
 	github.com/senzing-garage/go-logging v1.5.1
 	github.com/senzing-garage/go-observing v0.3.3
 	github.com/senzing-garage/init-database v0.7.9
-	github.com/senzing-garage/sz-sdk-go v0.15.1-0.20250414173652-66f438716757
-	github.com/senzing-garage/sz-sdk-go-core v0.9.2-0.20250414174327-50190fd52a17
+	github.com/senzing-garage/sz-sdk-go v0.15.1
+	github.com/senzing-garage/sz-sdk-go-core v0.9.2
 	github.com/senzing-garage/sz-sdk-proto v0.8.2
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
@@ -45,7 +45,7 @@ require (
 	github.com/senzing-garage/go-messaging v1.5.2 // indirect
 	github.com/senzing-garage/go-sdk-abstract-factory v0.9.6 // indirect
 	github.com/senzing-garage/sz-sdk-go-grpc v0.9.4-0.20250413224937-ccec0f228f23 // indirect
-	github.com/senzing-garage/sz-sdk-go-mock v0.8.6-0.20250414191500-11ef6729c2ec // indirect
+	github.com/senzing-garage/sz-sdk-go-mock v0.8.6 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.14.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
