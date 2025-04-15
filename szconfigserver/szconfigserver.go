@@ -8,6 +8,7 @@ import (
 
 	"github.com/senzing-garage/go-logging/logging"
 	szobserver "github.com/senzing-garage/go-observing/observer"
+	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
@@ -113,6 +114,39 @@ func (server *SzConfigServer) GetDataSources(
 	return response, err
 }
 
+func (server *SzConfigServer) VerifyConfig(
+	ctx context.Context,
+	request *szpb.VerifyConfigRequest,
+) (*szpb.VerifyConfigResponse, error) {
+	var (
+		err      error
+		response *szpb.VerifyConfigResponse
+		result   bool
+	)
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(999, request)
+		defer func() { server.traceExit(999, request, result, err, time.Since(entryTime)) }()
+	}
+
+	szConfig, err := server.createSzConfig(ctx, request.GetConfigDefinition())
+	if err != nil {
+		return response, err
+	}
+
+	result = true
+	err = szConfig.VerifyConfigDefinition(ctx, request.GetConfigDefinition())
+	if err != nil {
+		result = false
+	}
+
+	response = &szpb.VerifyConfigResponse{
+		Result: result,
+	}
+
+	return response, err
+}
+
 // ----------------------------------------------------------------------------
 // Internal methods
 // ----------------------------------------------------------------------------
@@ -172,9 +206,9 @@ func (server *SzConfigServer) SetLogLevel(ctx context.Context, logLevelName stri
 
 // --- Services ---------------------------------------------------------------
 
-func (server *SzConfigServer) createSzConfig(ctx context.Context, configDefinition string) (senzing.SzConfig, error) {
+func (server *SzConfigServer) createSzConfig(ctx context.Context, configDefinition string) (*szconfig.Szconfig, error) {
 	szConfigManager := getSzConfigManager()
-	return szConfigManager.CreateConfigFromString(ctx, configDefinition)
+	return szConfigManager.CreateConfigFromStringChoreography(ctx, configDefinition)
 }
 
 func (server *SzConfigServer) GetSdkSzConfigAsInterface(

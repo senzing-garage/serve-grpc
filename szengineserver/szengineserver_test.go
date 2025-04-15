@@ -24,6 +24,7 @@ import (
 )
 
 const (
+	attributes        = `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
 	defaultTruncation = 76
 	observerID        = "Observer 1"
 	observerOrigin    = "Observer 1 origin"
@@ -529,7 +530,6 @@ func TestSzEngineServer_Reinitialize(test *testing.T) {
 func TestSzEngineServer_SearchByAttributes(test *testing.T) {
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
-	attributes := `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
 	flags := senzing.SzNoFlags
 	request := &szpb.SearchByAttributesRequest{
 		Attributes: attributes,
@@ -544,7 +544,6 @@ func TestSzEngineServer_SearchByAttributes_searchProfile(test *testing.T) {
 	// TODO:  Use actual searchProfile
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
-	attributes := `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
 	searchProfile := "SEARCH"
 	flags := senzing.SzNoFlags
 	request := &szpb.SearchByAttributesRequest{
@@ -621,6 +620,24 @@ func TestSzEngineServer_WhyRecords(test *testing.T) {
 		RecordId_2:       record2.ID,
 	}
 	response, err := szEngineServer.WhyRecords(ctx, request)
+	require.NoError(test, err)
+	printActual(test, response.GetResult())
+}
+
+func TestSzEngineServer_WhySearch(test *testing.T) {
+	ctx := context.TODO()
+	szEngineServer := getTestObject(ctx, test)
+	entityID := getEntityID(truthset.CustomerRecords["1001"])
+	searchProfile := "SEARCH"
+
+	flags := senzing.SzNoFlags
+	request := &szpb.WhySearchRequest{
+		Attributes:    attributes,
+		EntityId:      entityID,
+		SearchProfile: searchProfile,
+		Flags:         flags,
+	}
+	response, err := szEngineServer.WhySearch(ctx, request)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }

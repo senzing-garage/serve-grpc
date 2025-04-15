@@ -12,6 +12,7 @@ import (
 	"github.com/senzing-garage/serve-grpc/szconfigmanagerserver"
 	"github.com/senzing-garage/serve-grpc/szconfigserver"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
+	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	szconfigmanagerpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	"github.com/stretchr/testify/require"
@@ -101,6 +102,44 @@ func TestSzConfigServer_GetDataSources(test *testing.T) {
 	}
 	responseFromGetDataSources, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
 	require.NoError(test, err)
+	printActual(test, responseFromGetDataSources.GetResult())
+}
+
+func TestSzConfigServer_VerifyConfig(test *testing.T) {
+	ctx := context.TODO()
+	szConfigManagerServer := getSzConfigManagerServer(ctx)
+	szConfigServer := getTestObject(ctx, test)
+
+	// Get the template configuration.
+
+	requestToGetTemplateConfig := &szconfigmanagerpb.GetTemplateConfigRequest{}
+	responseFromGetTemplateConfig, err := szConfigManagerServer.GetTemplateConfig(ctx, requestToGetTemplateConfig)
+	require.NoError(test, err)
+	printActual(test, responseFromGetTemplateConfig.GetResult())
+
+	// Delete DataSource to the Senzing configuration.
+
+	requestToVerifyConfig := &szpb.VerifyConfigRequest{
+		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
+	}
+	responseFromGetDataSources, err := szConfigServer.VerifyConfig(ctx, requestToVerifyConfig)
+	require.NoError(test, err)
+	printActual(test, responseFromGetDataSources.GetResult())
+}
+
+func TestSzConfigServer_VerifyConfig_bad_config(test *testing.T) {
+	ctx := context.TODO()
+	badConfigDefinition := "}{"
+
+	szConfigServer := getTestObject(ctx, test)
+
+	// Delete DataSource to the Senzing configuration.
+
+	requestToVerifyConfig := &szpb.VerifyConfigRequest{
+		ConfigDefinition: badConfigDefinition,
+	}
+	responseFromGetDataSources, err := szConfigServer.VerifyConfig(ctx, requestToVerifyConfig)
+	require.ErrorIs(test, err, szerror.ErrSzBadInput)
 	printActual(test, responseFromGetDataSources.GetResult())
 }
 

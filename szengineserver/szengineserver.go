@@ -610,6 +610,22 @@ func (server *SzEngineServer) WhyRecords(ctx context.Context, request *szpb.WhyR
 	return &response, err
 }
 
+func (server *SzEngineServer) WhySearch(ctx context.Context, request *szpb.WhySearchRequest) (*szpb.WhySearchResponse, error) {
+	var err error
+	var result string
+	if server.isTrace {
+		entryTime := time.Now()
+		server.traceEntry(167, request)
+		defer func() { server.traceExit(168, request, result, err, time.Since(entryTime)) }()
+	}
+	szEngine := getSzEngine()
+	result, err = szEngine.WhySearch(ctx, request.GetAttributes(), request.GetEntityId(), request.GetSearchProfile(), request.GetFlags())
+	response := szpb.WhySearchResponse{
+		Result: result,
+	}
+	return &response, err
+}
+
 // ----------------------------------------------------------------------------
 // Internal methods
 // ----------------------------------------------------------------------------
