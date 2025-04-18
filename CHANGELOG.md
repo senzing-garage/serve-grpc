@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 -
 
+## [0.9.7] - 2025-04-18
+
+### Changed in 0.9.7
+
+- Migrate from `_Ctype_longlong` to `_Ctype_int64_t`
+
 ## [0.9.6] - 2025-04-15
 
 ### Added in 0.9.6
