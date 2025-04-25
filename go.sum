@@ -88,10 +88,10 @@ github.com/senzing-garage/go-databasing v0.5.6 h1:nDhE5rw5bUJG5vDds4l3OZxpDtqnHD
 github.com/senzing-garage/go-databasing v0.5.6/go.mod h1:MPil7OWDVju69UUnNOuwi3bKlz2NLeX7KOvWwMh5iJQ=
 github.com/senzing-garage/go-helpers v0.6.10 h1:38jbZDzSLze2ooRStB/2pnwaxo/Lm4byiqGnGUFF+BI=
 github.com/senzing-garage/go-helpers v0.6.10/go.mod h1:98w6+o6u0l1byzoj0vJW7V59hLSGqhBFZ3gaks9n2G0=
-github.com/senzing-garage/go-logging v1.5.1 h1:3nqw75gN5x+6PQRop34/49+3kag1aE9dlFne7pILQAg=
-github.com/senzing-garage/go-logging v1.5.1/go.mod h1:ki4sQ46iI1Kjl1kkknYFQC2DY+zJj6Pod61wohGUs4E=
-github.com/senzing-garage/go-messaging v1.5.2 h1:lU9W2HV3zKQsDU9Vs7lwe/C/LbHVCMng9kQOL/r8pOI=
-github.com/senzing-garage/go-messaging v1.5.2/go.mod h1:iEWGVuDGWjolIkwLqnn9oJS7ifF3aoZjTtI44tf1gWQ=
+github.com/senzing-garage/go-logging v1.5.2 h1:9Rhsvxu6jLHfCLIoDxSMXX0sf/w0TY/L7i7fFfSdP64=
+github.com/senzing-garage/go-logging v1.5.2/go.mod h1:+QsFSi/qKmCC3YAyuXcRbQlBpvpmhTWLWVH2Miap1Fw=
+github.com/senzing-garage/go-messaging v1.5.3 h1:bH+LtEgNJj/PRbg1VMK9/Gk457CdfdcjMiubxffbTog=
+github.com/senzing-garage/go-messaging v1.5.3/go.mod h1:7qvSNAVyWcSIcsnDAm8obCxHItljN295O3fX4bOgfp0=
 github.com/senzing-garage/go-observing v0.3.4 h1:SQuRmgXZEzcvHYBxObmRf7GYyPt+olZPZhm46ckYGe0=
 github.com/senzing-garage/go-observing v0.3.4/go.mod h1:EC0jh0estTXmrnLQyUtbsVzSBNdSWFjL5O+gCA/RJJc=
 github.com/senzing-garage/go-sdk-abstract-factory v0.9.8 h1:s9iGIy/cCiR93p81MrZMg6iJmE0rwkRwqYy07huzCxk=
