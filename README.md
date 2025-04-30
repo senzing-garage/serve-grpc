@@ -41,7 +41,7 @@ Senzing SDKs for accessing the gRPC server:
 ## Use
 
 1. Docker container with internal, ephemeral database and
-   gRPC accessable on port 8261.
+   gRPC accessible on port 8261.
    Example:
 
     ```console

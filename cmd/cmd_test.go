@@ -79,17 +79,17 @@ func Test_RootCmd_Execute_tls(test *testing.T) {
 
 func Test_completionCmd(test *testing.T) {
 	_ = test
-	err := completionCmd.Execute()
+	err := CompletionCmd.Execute()
 	require.NoError(test, err)
-	err = completionCmd.RunE(completionCmd, []string{})
+	err = CompletionCmd.RunE(CompletionCmd, []string{})
 	require.NoError(test, err)
 }
 
 func Test_docsCmd(test *testing.T) {
 	_ = test
-	err := docsCmd.Execute()
+	err := DocsCmd.Execute()
 	require.NoError(test, err)
-	err = docsCmd.RunE(docsCmd, []string{})
+	err = DocsCmd.RunE(DocsCmd, []string{})
 	require.NoError(test, err)
 }
 
