@@ -6,7 +6,6 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
-	"fmt"
 	"os"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
@@ -14,6 +13,7 @@ import (
 	"github.com/senzing-garage/go-cmdhelping/option/optiontype"
 	"github.com/senzing-garage/go-cmdhelping/settings"
 	tlshelper "github.com/senzing-garage/go-helpers/tls"
+	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/serve-grpc/grpcserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -205,7 +205,11 @@ func getServerSideTLSServerOption() (grpc.ServerOption, error) {
 
 		serverKeyPassPhraseValue := viper.GetString(serverKeyPassPhrase.Arg)
 		clientAuth = tls.NoClientCert
-		serverCertificate, err := tlshelper.LoadX509KeyPair(serverCertificatePathValue, serverKeyPathValue, serverKeyPassPhraseValue)
+		serverCertificate, err := tlshelper.LoadX509KeyPair(
+			serverCertificatePathValue,
+			serverKeyPathValue,
+			serverKeyPassPhraseValue,
+		)
 		if err != nil {
 			return result, err
 		}
@@ -228,7 +232,11 @@ func getServerSideTLSServerOption() (grpc.ServerOption, error) {
 					return result, err
 				}
 				if !clientCAs.AppendCertsFromPEM(pemClientCA) {
-					return result, fmt.Errorf("failed to add client CA's certificate for %s", caCertificatePath)
+					return result, wraperror.Errorf(
+						errPackage,
+						"failed to add client CA's certificate for %s",
+						caCertificatePath,
+					)
 				}
 			}
 		}
@@ -250,12 +258,20 @@ func getServerSideTLSServerOption() (grpc.ServerOption, error) {
 	// Input error detection.
 
 	if serverCertificatePathValue != "" {
-		err = fmt.Errorf("%s is set, but %s is not set. Both need to be set", serverCertificateFile.Envar, serverKeyFile.Envar)
-		return result, err
+		return result, wraperror.Errorf(
+			errPackage,
+			"%s is set, but %s is not set. Both need to be set",
+			serverCertificateFile.Envar,
+			serverKeyFile.Envar,
+		)
 	}
 	if serverKeyPathValue != "" {
-		err = fmt.Errorf("%s is set, but %s is not set. Both need to be set", serverKeyFile.Envar, serverCertificateFile.Envar)
-		return result, err
+		return result, wraperror.Errorf(
+			errPackage,
+			"%s is set, but %s is not set. Both need to be set",
+			serverKeyFile.Envar,
+			serverCertificateFile.Envar,
+		)
 	}
 	return result, err
 }

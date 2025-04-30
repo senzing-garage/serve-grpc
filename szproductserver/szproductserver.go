@@ -2,10 +2,10 @@ package szproductserver
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
+	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	szsdk "github.com/senzing-garage/sz-sdk-go-core/szproduct"
@@ -100,7 +100,7 @@ func (server *SzProductServer) SetLogLevel(ctx context.Context, logLevelName str
 		defer func() { server.traceExit(14, logLevelName, err, time.Since(entryTime)) }()
 	}
 	if !logging.IsValidLogLevelName(logLevelName) {
-		return fmt.Errorf("invalid error level: %s", logLevelName)
+		return wraperror.Errorf(errPackage, "invalid error level: %s", logLevelName)
 	}
 	// szproduct := getSzproduct()
 	// err = szproduct.SetLogLevel(ctx, logLevelName)

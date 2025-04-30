@@ -2,10 +2,10 @@ package szdiagnosticserver
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
+	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	szsdk "github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
@@ -158,7 +158,7 @@ func (server *SzDiagnosticServer) SetLogLevel(ctx context.Context, logLevelName 
 		defer func() { server.traceExit(54, logLevelName, err, time.Since(entryTime)) }()
 	}
 	if !logging.IsValidLogLevelName(logLevelName) {
-		return fmt.Errorf("invalid error level: %s", logLevelName)
+		return wraperror.Errorf(errPackage, "invalid error level: %s", logLevelName)
 	}
 	// szdiagnostic := getSzdiagnostic()
 	// err = szdiagnostic.SetLogLevel(ctx, logLevelName)

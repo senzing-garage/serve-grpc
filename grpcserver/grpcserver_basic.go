@@ -56,7 +56,7 @@ type BasicGrpcServer struct {
 }
 
 // ----------------------------------------------------------------------------
-// Main
+// Public methods
 // ----------------------------------------------------------------------------
 
 func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
@@ -104,21 +104,7 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 
 	// Register services with gRPC server.
 
-	if grpcServer.EnableAll || grpcServer.EnableSzConfig {
-		grpcServer.enableSzConfig(ctx, aGrpcServer)
-	}
-	if grpcServer.EnableAll || grpcServer.EnableSzConfigManager {
-		grpcServer.enableSzConfigManager(ctx, aGrpcServer)
-	}
-	if grpcServer.EnableAll || grpcServer.EnableSzDiagnostic {
-		grpcServer.enableSzDiagnostic(ctx, aGrpcServer)
-	}
-	if grpcServer.EnableAll || grpcServer.EnableSzEngine {
-		grpcServer.enableSzEngine(ctx, aGrpcServer)
-	}
-	if grpcServer.EnableAll || grpcServer.EnableSzProduct {
-		grpcServer.enableSzProduct(ctx, aGrpcServer)
-	}
+	grpcServer.enableServices(ctx, aGrpcServer)
 
 	// Enable reflection.
 
@@ -138,7 +124,7 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 }
 
 // ----------------------------------------------------------------------------
-// Internal methods
+// Private methods
 // ----------------------------------------------------------------------------
 
 // --- Logging -------------------------------------------------------------------------
@@ -194,6 +180,24 @@ func (grpcServer *BasicGrpcServer) createGrpcObserver(
 }
 
 // --- Enabling services ---------------------------------------------------------------
+
+func (grpcServer *BasicGrpcServer) enableServices(ctx context.Context, aGrpcServer *grpc.Server) {
+	if grpcServer.EnableAll || grpcServer.EnableSzConfig {
+		grpcServer.enableSzConfig(ctx, aGrpcServer)
+	}
+	if grpcServer.EnableAll || grpcServer.EnableSzConfigManager {
+		grpcServer.enableSzConfigManager(ctx, aGrpcServer)
+	}
+	if grpcServer.EnableAll || grpcServer.EnableSzDiagnostic {
+		grpcServer.enableSzDiagnostic(ctx, aGrpcServer)
+	}
+	if grpcServer.EnableAll || grpcServer.EnableSzEngine {
+		grpcServer.enableSzEngine(ctx, aGrpcServer)
+	}
+	if grpcServer.EnableAll || grpcServer.EnableSzProduct {
+		grpcServer.enableSzProduct(ctx, aGrpcServer)
+	}
+}
 
 // Add SzConfig service to gRPC server.
 func (grpcServer *BasicGrpcServer) enableSzConfig(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {

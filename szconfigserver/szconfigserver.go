@@ -2,10 +2,10 @@ package szconfigserver
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
+	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/go-logging/logging"
 	szobserver "github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/sz-sdk-go-core/szconfig"
@@ -187,7 +187,7 @@ func (server *SzConfigServer) SetLogLevel(ctx context.Context, logLevelName stri
 		defer func() { server.traceExit(26, logLevelName, err, time.Since(entryTime)) }()
 	}
 	if !logging.IsValidLogLevelName(logLevelName) {
-		return fmt.Errorf("invalid error level: %s", logLevelName)
+		return wraperror.Errorf(errPackage, "invalid error level: %s", logLevelName)
 	}
 
 	server.logLevelName = logLevelName

@@ -1,6 +1,8 @@
 package szconfigmanagerserver
 
 import (
+	"errors"
+
 	"github.com/senzing-garage/go-logging/logging"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 )
@@ -89,3 +91,5 @@ var IDMessages = map[int]string{
 
 // Status strings for specific szconfigmgr messages.
 var IDStatuses = map[int]string{}
+
+var errPackage = errors.New("szconfigmanagerserver")

@@ -1,6 +1,8 @@
 package szdiagnosticserver
 
 import (
+	"errors"
+
 	"github.com/senzing-garage/go-logging/logging"
 	pb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 )
@@ -83,3 +85,5 @@ var IDMessages = map[int]string{
 
 // Status strings for specific szdiagnostic messages.
 var IDStatuses = map[int]string{}
+
+var errPackage = errors.New("szdiagnosticserver")

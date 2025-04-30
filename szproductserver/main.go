@@ -1,6 +1,8 @@
 package szproductserver
 
 import (
+	"errors"
+
 	"github.com/senzing-garage/go-logging/logging"
 	pb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 )
@@ -85,3 +87,5 @@ var IDMessages = map[int]string{
 
 // Status strings for specific szproductserver messages.
 var IDStatuses = map[int]string{}
+
+var errPackage = errors.New("szproductserver")
