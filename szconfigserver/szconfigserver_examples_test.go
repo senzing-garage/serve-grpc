@@ -23,6 +23,7 @@ func ExampleSzConfigServer_AddDataSource() {
 	// Get the template configuration.
 
 	requestToGetTemplateConfig := &szconfigmanagerpb.GetTemplateConfigRequest{}
+
 	responseFromGetTemplateConfig, err := szConfigManagerServer.GetTemplateConfig(ctx, requestToGetTemplateConfig)
 	if err != nil {
 		fmt.Println(err)
@@ -34,6 +35,7 @@ func ExampleSzConfigServer_AddDataSource() {
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   "GO_TEST",
 	}
+
 	response, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
 	if err != nil {
 		fmt.Println(err)
@@ -52,6 +54,7 @@ func ExampleSzConfigServer_DeleteDataSource() {
 	// Get the template configuration.
 
 	requestToGetTemplateConfig := &szconfigmanagerpb.GetTemplateConfigRequest{}
+
 	responseFromGetTemplateConfig, err := szConfigManagerServer.GetTemplateConfig(ctx, requestToGetTemplateConfig)
 	if err != nil {
 		fmt.Println(err)
@@ -63,6 +66,7 @@ func ExampleSzConfigServer_DeleteDataSource() {
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   "GO_TEST",
 	}
+
 	response, err := szConfigServer.DeleteDataSource(ctx, requestToDeleteDataSource)
 	if err != nil {
 		fmt.Println(err)
@@ -81,6 +85,7 @@ func ExampleSzConfigServer_GetDataSources() {
 	// Get the template configuration.
 
 	requestToGetTemplateConfig := &szconfigmanagerpb.GetTemplateConfigRequest{}
+
 	responseFromGetTemplateConfig, err := szConfigManagerServer.GetTemplateConfig(ctx, requestToGetTemplateConfig)
 	if err != nil {
 		fmt.Println(err)
@@ -91,6 +96,7 @@ func ExampleSzConfigServer_GetDataSources() {
 	requestToDeleteDataSource := &szpb.GetDataSourcesRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 	}
+
 	response, err := szConfigServer.GetDataSources(ctx, requestToDeleteDataSource)
 	if err != nil {
 		fmt.Println(err)

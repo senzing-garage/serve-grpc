@@ -21,10 +21,12 @@ func ExampleSzDiagnosticServer_CheckDatastorePerformance() {
 	request := &szpb.CheckDatastorePerformanceRequest{
 		SecondsToRun: int32(1),
 	}
+
 	response, err := szDiagnosticServer.CheckDatastorePerformance(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(truncate(response.GetResult(), 25))
 	// Output: {"numRecordsInserted":...
 }
@@ -34,10 +36,12 @@ func ExampleSzDiagnosticServer_GetDatastoreInfo() {
 	ctx := context.TODO()
 	szDiagnosticServer := getSzDiagnosticServer(ctx)
 	request := &szpb.GetDatastoreInfoRequest{}
+
 	response, err := szDiagnosticServer.GetDatastoreInfo(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"dataStores":[{"id":"CORE","type":"sqlite3","location":"nowhere"}]}
 }
@@ -49,6 +53,7 @@ func ExampleSzDiagnosticServer_GetFeature() {
 	request := &szpb.GetFeatureRequest{
 		FeatureId: int64(1),
 	}
+
 	response, err := szDiagnosticServer.GetFeature(ctx, request)
 	if err != nil {
 		fmt.Println(err)
@@ -64,10 +69,12 @@ func ExampleSzDiagnosticServer_PurgeRepository() {
 	ctx := context.TODO()
 	szDiagnosticServer := getSzDiagnosticServer(ctx)
 	request := &szpb.PurgeRepositoryRequest{}
+
 	response, err := szDiagnosticServer.PurgeRepository(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response)
 	// Output:
 }
@@ -78,13 +85,16 @@ func ExampleSzDiagnosticServer_Reinitialize() {
 	szDiagnosticServer := getSzDiagnosticServer(ctx)
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	getDefaultConfigIDRequest := &szconfigmanagerpb.GetDefaultConfigIdRequest{}
+
 	getDefaultConfigIDResponse, err := szConfigManagerServer.GetDefaultConfigId(ctx, getDefaultConfigIDRequest)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	request := &szpb.ReinitializeRequest{
 		ConfigId: getDefaultConfigIDResponse.GetResult(),
 	}
+
 	_, err = szDiagnosticServer.Reinitialize(ctx, request)
 	if err != nil {
 		fmt.Println(err)

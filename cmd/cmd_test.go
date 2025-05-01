@@ -31,6 +31,7 @@ func Test_PreRun(test *testing.T) {
 
 func Test_RunE(test *testing.T) {
 	test.Setenv("SENZING_TOOLS_AVOID_SERVING", "true")
+
 	os.Args = []string{}
 	err := RunE(RootCmd, []string{})
 	require.NoError(test, err)
@@ -105,6 +106,7 @@ func Test_completionAction(test *testing.T) {
 
 func Test_docsAction_badDir(test *testing.T) {
 	var buffer bytes.Buffer
+
 	badDir := "/tmp/no/directory/exists"
 	err := docsAction(&buffer, badDir)
 	require.Error(test, err)
@@ -119,5 +121,6 @@ func setArgs(cmd *cobra.Command, args []string) {
 			}
 		})
 	}
+
 	cmd.SetArgs(args)
 }

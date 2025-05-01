@@ -20,7 +20,7 @@ const ComponentID = 6204
 // Log message prefix.
 const Prefix = "serve-grpc.grpcserver."
 
-// Default gRPC Observer port
+// Default gRPC Observer port.
 const DefaultGrpcObserverPort = "8260"
 
 // ----------------------------------------------------------------------------

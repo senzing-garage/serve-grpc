@@ -14,6 +14,8 @@ import (
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 )
 
+const OptionCallerSkip = 3
+
 var (
 	szConfigManagerSingleton *szconfigmanager.Szconfigmanager
 	szConfigManagerSyncOnce  sync.Once
@@ -32,9 +34,12 @@ func (server *SzConfigServer) AddDataSource(
 		response *szpb.AddDataSourceResponse
 		result   string
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(1, request)
+
 		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
 	}
 
@@ -53,6 +58,7 @@ func (server *SzConfigServer) AddDataSource(
 		Result:           result,
 		ConfigDefinition: configDefinition,
 	}
+
 	return response, err
 }
 
@@ -64,11 +70,15 @@ func (server *SzConfigServer) DeleteDataSource(
 		err      error
 		response *szpb.DeleteDataSourceResponse
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(9, request)
+
 		defer func() { server.traceExit(10, request, err, time.Since(entryTime)) }()
 	}
+
 	szConfig, err := server.createSzConfig(ctx, request.GetConfigDefinition())
 	if err != nil {
 		return response, err
@@ -84,6 +94,7 @@ func (server *SzConfigServer) DeleteDataSource(
 		Result:           result,
 		ConfigDefinition: configDefinition,
 	}
+
 	return response, err
 }
 
@@ -96,9 +107,12 @@ func (server *SzConfigServer) GetDataSources(
 		response *szpb.GetDataSourcesResponse
 		result   string
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(19, request)
+
 		defer func() { server.traceExit(20, request, result, err, time.Since(entryTime)) }()
 	}
 
@@ -111,6 +125,7 @@ func (server *SzConfigServer) GetDataSources(
 	response = &szpb.GetDataSourcesResponse{
 		Result: result,
 	}
+
 	return response, err
 }
 
@@ -123,9 +138,12 @@ func (server *SzConfigServer) VerifyConfig(
 		response *szpb.VerifyConfigResponse
 		result   bool
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(999, request)
+
 		defer func() { server.traceExit(999, request, result, err, time.Since(entryTime)) }()
 	}
 
@@ -136,6 +154,7 @@ func (server *SzConfigServer) VerifyConfig(
 
 	result = true
 	err = szConfig.VerifyConfigDefinition(ctx, request.GetConfigDefinition())
+
 	if err != nil {
 		result = false
 	}
@@ -156,15 +175,18 @@ func (server *SzConfigServer) VerifyConfig(
 // Get the Logger singleton.
 func (server *SzConfigServer) getLogger() logging.Logging {
 	var err error
+
 	if server.logger == nil {
 		options := []interface{}{
-			&logging.OptionCallerSkip{Value: 3},
+			&logging.OptionCallerSkip{Value: OptionCallerSkip},
 		}
+
 		server.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
 		if err != nil {
 			panic(err)
 		}
 	}
+
 	return server.logger
 }
 
@@ -180,12 +202,17 @@ func (server *SzConfigServer) traceExit(messageNumber int, details ...interface{
 
 func (server *SzConfigServer) SetLogLevel(ctx context.Context, logLevelName string) error {
 	_ = ctx
+
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(25, logLevelName)
+
 		defer func() { server.traceExit(26, logLevelName, err, time.Since(entryTime)) }()
 	}
+
 	if !logging.IsValidLogLevelName(logLevelName) {
 		return wraperror.Errorf(errPackage, "invalid error level: %s", logLevelName)
 	}
@@ -200,7 +227,9 @@ func (server *SzConfigServer) SetLogLevel(ctx context.Context, logLevelName stri
 	if err != nil {
 		return err
 	}
+
 	server.isTrace = (logLevelName == logging.LevelTraceName)
+
 	return err
 }
 
@@ -224,6 +253,7 @@ func getSzConfigManager() *szconfigmanager.Szconfigmanager {
 	szConfigManagerSyncOnce.Do(func() {
 		szConfigManagerSingleton = &szconfigmanager.Szconfigmanager{}
 	})
+
 	return szConfigManagerSingleton
 }
 
@@ -239,10 +269,14 @@ func GetSdkSzConfigManagerAsInterface() senzing.SzConfigManager {
 
 func (server *SzConfigServer) GetObserverOrigin(ctx context.Context) string {
 	var err error
+
 	_ = ctx
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(27)
+
 		defer func() { server.traceExit(28, err, time.Since(entryTime)) }()
 	}
 
@@ -251,22 +285,30 @@ func (server *SzConfigServer) GetObserverOrigin(ctx context.Context) string {
 
 func (server *SzConfigServer) RegisterObserver(ctx context.Context, observer szobserver.Observer) error {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(3, observer.GetObserverID(ctx))
+
 		defer func() { server.traceExit(4, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
 	}
 
 	server.observers = append(server.observers, observer)
+
 	return err
 }
 
 func (server *SzConfigServer) SetObserverOrigin(ctx context.Context, origin string) {
 	var err error
+
 	_ = ctx
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(29, origin)
+
 		defer func() { server.traceExit(30, origin, err, time.Since(entryTime)) }()
 	}
 
@@ -280,20 +322,22 @@ func (server *SzConfigServer) UnregisterObserver(ctx context.Context, observer s
 
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(13, observer.GetObserverID(ctx))
+
 		defer func() { server.traceExit(14, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
 	}
 
 	if len(server.observers) > 0 {
-
 		result := make([]szobserver.Observer, 0, len(server.observers))
+
 		for _, registeredObserver := range server.observers {
 			if registeredObserver.GetObserverID(ctx) != observer.GetObserverID(ctx) {
 				result = append(result, registeredObserver)
 			}
 		}
-		server.observers = result
 
+		server.observers = result
 	}
 
 	return nil

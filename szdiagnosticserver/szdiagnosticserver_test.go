@@ -91,6 +91,7 @@ func TestSzDiagnosticServer_Reinitialize(test *testing.T) {
 	getDefaultConfigIDRequest := &szconfigmanagerpb.GetDefaultConfigIdRequest{}
 	getDefaultConfigIDResponse, err := szConfigManager.GetDefaultConfigId(ctx, getDefaultConfigIDRequest)
 	require.NoError(test, err)
+
 	request := &szpb.ReinitializeRequest{
 		ConfigId: getDefaultConfigIDResponse.GetResult(),
 	}
@@ -154,6 +155,7 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)
 	}
+
 	printActual(test, actual)
 }
 
@@ -168,15 +170,18 @@ func getSzConfigManagerServer(ctx context.Context) szconfigmanagerserver.SzConfi
 		verboseLogging := senzing.SzNoLogging
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		panicOnError(err)
+
 		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
 		if len(osenvLogLevel) > 0 {
 			logLevelName = osenvLogLevel
 		}
+
 		err = szConfigManagerServerSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
 		err = szconfigmanagerserver.GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
 		panicOnError(err)
 	}
+
 	return *szConfigManagerServerSingleton
 }
 
@@ -188,15 +193,18 @@ func getSzDiagnosticServer(ctx context.Context) *szdiagnosticserver.SzDiagnostic
 		configID := senzing.SzInitializeWithDefaultConfiguration
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		panicOnError(err)
+
 		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
 		if len(osenvLogLevel) > 0 {
 			logLevelName = osenvLogLevel
 		}
+
 		err = szDiagnosticServerSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
 		err = szdiagnosticserver.GetSdkSzDiagnostic().Initialize(ctx, instanceName, settings, configID, verboseLogging)
 		panicOnError(err)
 	}
+
 	return szDiagnosticServerSingleton
 }
 
@@ -231,6 +239,7 @@ func truncate(aString string, length int) string {
 
 func TestMain(m *testing.M) {
 	setup()
+
 	code := m.Run()
 	os.Exit(code)
 }
@@ -275,12 +284,12 @@ func setupAddRecords(ctx context.Context, instanceName string, settings string, 
 	panicOnError(err)
 
 	flags := senzing.SzNoLogging
+
 	testRecordIDs := []string{"1001", "1002", "1003", "1004", "1005", "1039", "1040"}
 	for _, testRecordID := range testRecordIDs {
 		testRecord := truthset.CustomerRecords[testRecordID]
 		_, err := szEngine.AddRecord(ctx, testRecord.DataSource, testRecord.ID, testRecord.JSON, flags)
 		panicOnError(err)
-
 	}
 
 	err = szEngine.Destroy(ctx)
@@ -305,6 +314,7 @@ func setupPurgeRepository(ctx context.Context, instanceName string, settings str
 
 	err = szDiagnostic.Destroy(ctx)
 	panicOnError(err)
+
 	return err
 }
 

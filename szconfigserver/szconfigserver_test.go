@@ -196,15 +196,18 @@ func getSzConfigManagerServer(ctx context.Context) *szconfigmanagerserver.SzConf
 		verboseLogging := senzing.SzNoLogging
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		panicOnError(err)
+
 		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
 		if len(osenvLogLevel) > 0 {
 			logLevelName = osenvLogLevel
 		}
+
 		err = szConfigManagerServerSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
 		err = szconfigmanagerserver.GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
 		panicOnError(err)
 	}
+
 	return szConfigManagerServerSingleton
 }
 
@@ -214,14 +217,17 @@ func getSzConfigServer(ctx context.Context) *szconfigserver.SzConfigServer {
 	verboseLogging := senzing.SzNoLogging
 	settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 	panicOnError(err)
+
 	osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
 	if len(osenvLogLevel) > 0 {
 		logLevelName = osenvLogLevel
 	}
+
 	err = szConfigServer.SetLogLevel(ctx, logLevelName)
 	panicOnError(err)
 	err = szconfigserver.GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
 	panicOnError(err)
+
 	return szConfigServer
 }
 

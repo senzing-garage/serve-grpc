@@ -13,6 +13,8 @@ import (
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 )
 
+const OptionCallerSkip = 3
+
 var (
 	szDiagnosticSingleton *szsdk.Szdiagnostic
 	szDiagnosticSyncOnce  sync.Once
@@ -31,9 +33,12 @@ func (server *SzDiagnosticServer) CheckDatastorePerformance(
 		response *szpb.CheckDatastorePerformanceResponse
 		result   string
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(1, request)
+
 		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
 	}
 
@@ -42,6 +47,7 @@ func (server *SzDiagnosticServer) CheckDatastorePerformance(
 	response = &szpb.CheckDatastorePerformanceResponse{
 		Result: result,
 	}
+
 	return response, err
 }
 
@@ -54,16 +60,21 @@ func (server *SzDiagnosticServer) GetDatastoreInfo(
 		response *szpb.GetDatastoreInfoResponse
 		result   string
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(1, request)
+
 		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szDiagnostic := getSzDiagnostic()
 	result, err = szDiagnostic.GetDatastoreInfo(ctx)
 	response = &szpb.GetDatastoreInfoResponse{
 		Result: result,
 	}
+
 	return response, err
 }
 
@@ -72,17 +83,23 @@ func (server *SzDiagnosticServer) GetFeature(
 	request *szpb.GetFeatureRequest,
 ) (*szpb.GetFeatureResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(1, request)
+
 		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szDiagnostic := getSzDiagnostic()
 	result, err = szDiagnostic.GetFeature(ctx, int64(request.GetFeatureId()))
 	response := szpb.GetFeatureResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -91,14 +108,19 @@ func (server *SzDiagnosticServer) PurgeRepository(
 	request *szpb.PurgeRepositoryRequest,
 ) (*szpb.PurgeRepositoryResponse, error) {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(117, request)
+
 		defer func() { server.traceExit(118, request, err, time.Since(entryTime)) }()
 	}
+
 	szDiagnostic := getSzDiagnostic()
 	err = szDiagnostic.PurgeRepository(ctx)
 	response := szpb.PurgeRepositoryResponse{}
+
 	return &response, err
 }
 
@@ -107,14 +129,19 @@ func (server *SzDiagnosticServer) Reinitialize(
 	request *szpb.ReinitializeRequest,
 ) (*szpb.ReinitializeResponse, error) {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(51, request)
+
 		defer func() { server.traceExit(52, request, err, time.Since(entryTime)) }()
 	}
+
 	szDiagnostic := getSzDiagnostic()
 	err = szDiagnostic.Reinitialize(ctx, int64(request.GetConfigId()))
 	response := szpb.ReinitializeResponse{}
+
 	return &response, err
 }
 
@@ -127,15 +154,18 @@ func (server *SzDiagnosticServer) Reinitialize(
 // Get the Logger singleton.
 func (server *SzDiagnosticServer) getLogger() logging.Logging {
 	var err error
+
 	if server.logger == nil {
 		options := []interface{}{
-			&logging.OptionCallerSkip{Value: 3},
+			&logging.OptionCallerSkip{Value: OptionCallerSkip},
 		}
+
 		server.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
 		if err != nil {
 			panic(err)
 		}
 	}
+
 	return server.logger
 }
 
@@ -151,12 +181,17 @@ func (server *SzDiagnosticServer) traceExit(messageNumber int, details ...interf
 
 func (server *SzDiagnosticServer) SetLogLevel(ctx context.Context, logLevelName string) error {
 	_ = ctx
+
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(53, logLevelName)
+
 		defer func() { server.traceExit(54, logLevelName, err, time.Since(entryTime)) }()
 	}
+
 	if !logging.IsValidLogLevelName(logLevelName) {
 		return wraperror.Errorf(errPackage, "invalid error level: %s", logLevelName)
 	}
@@ -169,7 +204,9 @@ func (server *SzDiagnosticServer) SetLogLevel(ctx context.Context, logLevelName 
 	if err != nil {
 		return err
 	}
+
 	server.isTrace = (logLevelName == logging.LevelTraceName)
+
 	return err
 }
 
@@ -188,6 +225,7 @@ func getSzDiagnostic() *szsdk.Szdiagnostic {
 	szDiagnosticSyncOnce.Do(func() {
 		szDiagnosticSingleton = &szsdk.Szdiagnostic{}
 	})
+
 	return szDiagnosticSingleton
 }
 
@@ -203,44 +241,63 @@ func GetSdkSzDiagnosticAsInterface() senzing.SzDiagnostic {
 
 func (server *SzDiagnosticServer) GetObserverOrigin(ctx context.Context) string {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(55)
+
 		defer func() { server.traceExit(56, err, time.Since(entryTime)) }()
 	}
+
 	szDiagnostic := getSzDiagnostic()
+
 	return szDiagnostic.GetObserverOrigin(ctx)
 }
 
 func (server SzDiagnosticServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(3, observer.GetObserverID(ctx))
+
 		defer func() { server.traceExit(4, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
 	}
+
 	szDiagnostic := getSzDiagnostic()
+
 	return szDiagnostic.RegisterObserver(ctx, observer)
 }
 
 func (server *SzDiagnosticServer) SetObserverOrigin(ctx context.Context, origin string) {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(57, origin)
+
 		defer func() { server.traceExit(58, origin, err, time.Since(entryTime)) }()
 	}
+
 	szDiagnostic := getSzDiagnostic()
 	szDiagnostic.SetObserverOrigin(ctx, origin)
 }
 
 func (server *SzDiagnosticServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(31, observer.GetObserverID(ctx))
+
 		defer func() { server.traceExit(32, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
 	}
+
 	szDiagnostic := getSzDiagnostic()
+
 	return szDiagnostic.UnregisterObserver(ctx, observer)
 }

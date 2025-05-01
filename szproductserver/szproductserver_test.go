@@ -120,16 +120,18 @@ func getSzProductServer(ctx context.Context) *szproductserver.SzProductServer {
 		verboseLogging := senzing.SzNoLogging
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		panicOnError(err)
+
 		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
 		if len(osenvLogLevel) > 0 {
 			logLevelName = osenvLogLevel
 		}
+
 		err = szProductTestSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
 		err = szproductserver.GetSdkSzProduct().Initialize(ctx, instanceName, settings, verboseLogging)
 		panicOnError(err)
-
 	}
+
 	return szProductTestSingleton
 }
 

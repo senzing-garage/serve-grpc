@@ -65,6 +65,7 @@ func TestSzEngineServer_AddRecord(test *testing.T) {
 	require.NoError(test, err)
 	require.NotEqual(test, "", response1.GetResult())
 	printActual(test, response1.GetResult())
+
 	request2 := &szpb.AddRecordRequest{
 		DataSourceCode:   record2.DataSource,
 		Flags:            senzing.SzWithInfo,
@@ -446,7 +447,7 @@ func TestSzEngineServer_PrimeEngine(test *testing.T) {
 
 func TestSzEngineServer_ProcessRedoRecord(test *testing.T) {
 	_ = test
-	// TODO: Implement TestSzEngineServer_ProcessRedoRecord
+	// IMPROVE: Implement TestSzEngineServer_ProcessRedoRecord
 }
 
 func TestSzEngineServer_ReevaluateEntity(test *testing.T) {
@@ -541,7 +542,7 @@ func TestSzEngineServer_SearchByAttributes(test *testing.T) {
 }
 
 func TestSzEngineServer_SearchByAttributes_searchProfile(test *testing.T) {
-	// TODO:  Use actual searchProfile
+	// IMPROVE:  Use actual searchProfile
 	ctx := context.TODO()
 	szEngineServer := getTestObject(ctx, test)
 	searchProfile := "SEARCH"
@@ -567,12 +568,12 @@ func TestSzEngineServer_Stats(test *testing.T) {
 
 func TestSzEngineServer_StreamExportCsvEntityReport(test *testing.T) {
 	_ = test
-	// TODO: Implement TestSzEngineServer_StreamExportCsvEntityReport
+	// IMPROVE: Implement TestSzEngineServer_StreamExportCsvEntityReport
 }
 
 func TestSzEngineServer_StreamExportJsonEntityReport(test *testing.T) {
 	_ = test
-	// TODO: Implement TestSzEngineServer_StreamExportJsonEntityReport
+	// IMPROVE: Implement TestSzEngineServer_StreamExportJsonEntityReport
 }
 
 func TestSzEngineServer_WhyEntities(test *testing.T) {
@@ -739,22 +740,27 @@ func getEntityID(record record.Record) int64 {
 
 func getEntityIDForRecord(datasource string, id string) int64 {
 	ctx := context.TODO()
+
 	var result int64
+
 	szEngine := getSzEngineServer(ctx)
 	request := &szpb.GetEntityByRecordIdRequest{
 		DataSourceCode: datasource,
 		RecordId:       id,
 	}
+
 	response, err := szEngine.GetEntityByRecordId(ctx, request)
 	if err != nil {
 		return result
 	}
 
 	getEntityByRecordIDResponse := &GetEntityByRecordIDResponse{}
+
 	err = json.Unmarshal([]byte(response.GetResult()), &getEntityByRecordIDResponse)
 	if err != nil {
 		return result
 	}
+
 	return getEntityByRecordIDResponse.ResolvedEntity.EntityID
 }
 
@@ -776,15 +782,18 @@ func getSzEngineServer(ctx context.Context) *szengineserver.SzEngineServer {
 		configID := senzing.SzInitializeWithDefaultConfiguration
 		setting, err := settings.BuildSimpleSettingsUsingEnvVars()
 		panicOnError(err)
+
 		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
 		if len(osenvLogLevel) > 0 {
 			logLevelName = osenvLogLevel
 		}
+
 		err = szEngineTestSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
 		err = szengineserver.GetSdkSzEngine().Initialize(ctx, instanceName, setting, configID, verboseLogging)
 		panicOnError(err)
 	}
+
 	return szEngineTestSingleton
 }
 
@@ -819,6 +828,7 @@ func truncate(aString string, length int) string {
 
 func TestMain(m *testing.M) {
 	setup()
+
 	code := m.Run()
 	os.Exit(code)
 }

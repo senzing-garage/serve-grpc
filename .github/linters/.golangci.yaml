@@ -24,24 +24,24 @@ linters:
     - errname
     - errorlint
     - exhaustive
-    # - exhaustruct
+    - exhaustruct
     - exptostd
     - fatcontext
-    # - forbidigo
+    - forbidigo
     - forcetypeassert
     - funcorder
-    # - funlen
+    - funlen
     - ginkgolinter
     - gocheckcompilerdirectives
-    # - gochecknoglobals
-    # - gochecknoinits
+    - gochecknoglobals
+    - gochecknoinits
     - gochecksumtype
     - gocognit
     - goconst
     - gocritic
     - gocyclo
-    # - godot
-    # - godox
+    - godot
+    - godox
     - goheader
     - gomoddirectives
     - gomodguard
@@ -56,14 +56,14 @@ linters:
     - ineffassign
     - interfacebloat
     - intrange
-    # - ireturn
-    # - lll
+    - ireturn
+    - lll
     - loggercheck
     - maintidx
     - makezero
     - mirror
     - misspell
-    # - mnd
+    - mnd
     - musttag
     # - nakedret
     # - nestif
@@ -110,6 +110,7 @@ linters:
   disable:
     - gochecknoglobals
     - gochecknoinits
+    - lll
   exclusions:
     generated: lax
     presets:
@@ -136,15 +137,39 @@ linters:
     exhaustruct:
       exclude:
         - '.+/cobra\.Command$'
+        - '.+/grpcserver\.BasicGrpcServer$'
+        - '.+/initializer\.BasicInitializer$'
+        - '.+/observer\.NullObserver$'
+        - '.+/szconfigmanagerserver\.SzConfigManagerServer$'
+        - '.+/szconfigserver\.SzConfigServer$'
+        - '.+/szdiagnosticserver\.SzDiagnosticServer$'
+        - '.+/szengine\.FindPathByEntityIdRequest$'
+        - '.+/szengine\.FindPathByRecordIdRequest$'
+        - '.+/szengine\.GetEntityByRecordIdRequest$'
+        - '.+/szengine\.SearchByAttributesRequest$'
+        - '.+/szengineserver_test\.GetEntityByRecordIDResponse$'
+        - '.+/szengineserver\.SzEngineServer$'
+        - '.+/szproductserver\.SzProductServer$'
+        - '.+/tls\.Config$'
     ireturn:
       allow:
-        - anon
-        - empty
         - error
-        - stdlib
+        - grpc.ServerOption
+        - logging.Logging
+        - observer.Observer
+        - senzing.SzConfig
+        - senzing.SzConfigManager
+        - senzing.SzDiagnostic
+        - senzing.SzEngine
+        - senzing.SzProduct
     mnd:
       ignored-functions:
+        - '^grpcServer\.log$'
         - '^logger\.Log$'
+        - '^logging\.OptionCallerSkip$'
+        - '^server\.traceEntry$'
+        - '^server\.traceExit$'
+        - "^Value$"
 
 formatters:
   enable:

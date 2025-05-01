@@ -23,6 +23,7 @@ func ExampleSzConfigManagerServer_GetConfig() {
 
 	// GetDefaultConfigId() to get an example configuration ID.
 	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+
 	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
@@ -32,10 +33,12 @@ func ExampleSzConfigManagerServer_GetConfig() {
 	request := &szpb.GetConfigRequest{
 		ConfigId: responseFromGetDefaultConfigID.GetResult(),
 	}
+
 	response, err := szConfigManagerServer.GetConfig(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(jsonutil.Truncate(response.GetResult(), 5))
 	// Output: {"G2_CONFIG":{"CFG_ATTR":[{"ATTR_CLASS":"ADDRESS",...
 }
@@ -45,10 +48,12 @@ func ExampleSzConfigManagerServer_GetConfigs() {
 	ctx := context.TODO()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	request := &szpb.GetConfigsRequest{}
+
 	response, err := szConfigManagerServer.GetConfigs(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(jsonutil.Truncate(response.GetResult(), 3))
 	// Output: {"CONFIGS":[{...
 }
@@ -58,10 +63,12 @@ func ExampleSzConfigManagerServer_GetDefaultConfigId() {
 	ctx := context.TODO()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	request := &szpb.GetDefaultConfigIdRequest{}
+
 	response, err := szConfigManagerServer.GetDefaultConfigId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
 }
@@ -70,17 +77,18 @@ func ExampleSzConfigManagerServer_GetTemplateConfig() {
 	ctx := context.TODO()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	request := &szpb.GetTemplateConfigRequest{}
+
 	response, err := szConfigManagerServer.GetTemplateConfig(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(jsonutil.Truncate(response.GetResult(), 5))
 	// Output: {"G2_CONFIG":{"CFG_ATTR":[{"ATTR_CLASS":"ADDRESS",...
 }
 
 func ExampleSzConfigManagerServer_RegisterConfig() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
-
 	now := time.Now()
 	ctx := context.TODO()
 	szConfigServer := getSzConfigServer(ctx)
@@ -89,6 +97,7 @@ func ExampleSzConfigManagerServer_RegisterConfig() {
 	// Get the template configuration.
 
 	requestToGetTemplateConfig := &szpb.GetTemplateConfigRequest{}
+
 	responseFromGetTemplateConfig, err := szConfigManagerServer.GetTemplateConfig(ctx, requestToGetTemplateConfig)
 	if err != nil {
 		fmt.Println(err)
@@ -100,6 +109,7 @@ func ExampleSzConfigManagerServer_RegisterConfig() {
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   "GO_TEST",
 	}
+
 	responseFromAddDataSource, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
 	if err != nil {
 		fmt.Println(err)
@@ -111,10 +121,12 @@ func ExampleSzConfigManagerServer_RegisterConfig() {
 		ConfigDefinition: responseFromAddDataSource.GetResult(),
 		ConfigComment:    fmt.Sprintf("szconfigmanagerserver_test at %s", now.UTC()),
 	}
+
 	response, err := szConfigManagerServer.RegisterConfig(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
 }
@@ -127,6 +139,7 @@ func ExampleSzConfigManagerServer_ReplaceDefaultConfigId() {
 	// Get the ConfigID of the default Senzing configuration.
 
 	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+
 	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
@@ -138,10 +151,12 @@ func ExampleSzConfigManagerServer_ReplaceDefaultConfigId() {
 		CurrentDefaultConfigId: responseFromGetDefaultConfigID.GetResult(),
 		NewDefaultConfigId:     responseFromGetDefaultConfigID.GetResult(),
 	}
+
 	response, err := szConfigManagerServer.ReplaceDefaultConfigId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response)
 	// Output:
 }
@@ -155,6 +170,7 @@ func ExampleSzConfigManagerServer_SetDefaultConfig() {
 	// Get the ConfigID of the default Senzing configuration.
 
 	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+
 	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
@@ -167,6 +183,7 @@ func ExampleSzConfigManagerServer_SetDefaultConfig() {
 	requestToGetConfig := &szpb.GetConfigRequest{
 		ConfigId: defaultConfigID,
 	}
+
 	responseFromGetConfig, err := szConfigManagerServer.GetConfig(ctx, requestToGetConfig)
 	if err != nil {
 		fmt.Println(err)
@@ -181,6 +198,7 @@ func ExampleSzConfigManagerServer_SetDefaultConfig() {
 		ConfigDefinition: defaultConfigDefinition,
 		ConfigComment:    "Just a test",
 	}
+
 	response, err := szConfigManagerServer.SetDefaultConfig(ctx, requestToSetDefaultConfig)
 	if err != nil {
 		fmt.Println(err)
@@ -197,6 +215,7 @@ func ExampleSzConfigManagerServer_SetDefaultConfigId() {
 
 	// GetDefaultConfigId() to get an example configuration ID.
 	requestForGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+
 	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestForGetDefaultConfigID)
 	if err != nil {
 		fmt.Println(err)
@@ -206,10 +225,12 @@ func ExampleSzConfigManagerServer_SetDefaultConfigId() {
 	request := &szpb.SetDefaultConfigIdRequest{
 		ConfigId: responseFromGetDefaultConfigID.GetResult(),
 	}
+
 	response, err := szConfigManagerServer.SetDefaultConfigId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response)
 	// Output:
 }

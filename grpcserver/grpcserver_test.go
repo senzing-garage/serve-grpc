@@ -38,14 +38,16 @@ func panicOnError(err error) {
 func TestMain(m *testing.M) {
 	err := setup()
 	if err != nil {
-		fmt.Print(err)
-		os.Exit(1)
+		panic(err)
 	}
+
 	code := m.Run()
+
 	err = teardown()
 	if err != nil {
-		fmt.Print(err)
+		panic(err)
 	}
+
 	os.Exit(code)
 }
 
@@ -84,6 +86,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 
 func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	szDiagnostic := &szdiagnostic.Szdiagnostic{}
+
 	err := szDiagnostic.Initialize(
 		ctx,
 		instanceName,
@@ -104,11 +107,13 @@ func setupPurgeRepository(ctx context.Context, instanceName string, settings str
 	if err != nil {
 		return localLogger.NewError(5905, err)
 	}
+
 	return err
 }
 
 func setup() error {
 	var err error
+
 	ctx := context.TODO()
 	moduleName := "Test module name"
 	verboseLogging := int64(0)
@@ -147,6 +152,7 @@ func TestGrpcServerImpl_Serve(test *testing.T) {
 
 	logLevelName := "INFO"
 	osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
+
 	if len(osenvLogLevel) > 0 {
 		logLevelName = osenvLogLevel
 	}
@@ -167,5 +173,4 @@ func TestGrpcServerImpl_Serve(test *testing.T) {
 	}
 	err = grpcServer.Serve(ctx)
 	require.NoError(test, err)
-
 }

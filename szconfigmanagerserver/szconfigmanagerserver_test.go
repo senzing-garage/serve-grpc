@@ -174,7 +174,6 @@ func TestSzConfigManagerServer_SetDefaultConfig(test *testing.T) {
 	}
 	_, err = szConfigManagerServer.SetDefaultConfig(ctx, requestToSetDefaultConfig)
 	require.NoError(test, err)
-
 }
 
 func TestSzConfigManagerServer_SetDefaultConfigId(test *testing.T) {
@@ -252,6 +251,7 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)
 	}
+
 	printActual(test, actual)
 }
 
@@ -266,15 +266,18 @@ func getSzConfigManagerServer(ctx context.Context) *szconfigmanagerserver.SzConf
 		verboseLogging := senzing.SzNoLogging
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		panicOnError(err)
+
 		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
 		if len(osenvLogLevel) > 0 {
 			logLevelName = osenvLogLevel
 		}
+
 		err = szConfigManagerServerSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
 		err = szconfigmanagerserver.GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
 		panicOnError(err)
 	}
+
 	return szConfigManagerServerSingleton
 }
 
@@ -284,14 +287,17 @@ func getSzConfigServer(ctx context.Context) *szconfigserver.SzConfigServer {
 	verboseLogging := senzing.SzNoLogging
 	settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 	panicOnError(err)
+
 	osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
 	if len(osenvLogLevel) > 0 {
 		logLevelName = osenvLogLevel
 	}
+
 	err = szConfigServer.SetLogLevel(ctx, logLevelName)
 	panicOnError(err)
 	err = szconfigserver.GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
 	panicOnError(err)
+
 	return szConfigServer
 }
 
@@ -326,6 +332,7 @@ func truncate(aString string, length int) string {
 
 func TestMain(m *testing.M) {
 	setup()
+
 	code := m.Run()
 	os.Exit(code)
 }

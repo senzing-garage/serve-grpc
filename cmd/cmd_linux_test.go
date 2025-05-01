@@ -26,18 +26,21 @@ func Test_RootCmd(test *testing.T) {
 func Test_Execute(test *testing.T) {
 	_ = test
 	os.Args = []string{"command-name", "--avoid-serving"}
+
 	Execute()
 }
 
 func Test_Execute_completion(test *testing.T) {
 	_ = test
 	os.Args = []string{"command-name", "completion"}
+
 	Execute()
 }
 
 func Test_Execute_docs(test *testing.T) {
 	_ = test
 	os.Args = []string{"command-name", "docs"}
+
 	Execute()
 }
 

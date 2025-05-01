@@ -13,6 +13,8 @@ import (
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szengine"
 )
 
+const OptionCallerSkip = 3
+
 var (
 	szEngineSingleton *szsdk.Szengine
 	szEngineSyncOnce  sync.Once
@@ -27,11 +29,15 @@ func (server *SzEngineServer) AddRecord(
 	request *szpb.AddRecordRequest,
 ) (*szpb.AddRecordResponse, error) {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(1, request)
+
 		defer func() { server.traceExit(2, request, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err := szEngine.AddRecord(
 		ctx,
@@ -43,6 +49,7 @@ func (server *SzEngineServer) AddRecord(
 	response := szpb.AddRecordResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -51,14 +58,19 @@ func (server *SzEngineServer) CloseExport(
 	request *szpb.CloseExportRequest,
 ) (*szpb.CloseExportResponse, error) {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(13, request)
+
 		defer func() { server.traceExit(14, request, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	err = szEngine.CloseExport(ctx, uintptr(request.GetExportHandle()))
 	response := szpb.CloseExportResponse{}
+
 	return &response, err
 }
 
@@ -67,17 +79,23 @@ func (server *SzEngineServer) CountRedoRecords(
 	request *szpb.CountRedoRecordsRequest,
 ) (*szpb.CountRedoRecordsResponse, error) {
 	var err error
+
 	var result int64
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(15, request)
+
 		defer func() { server.traceExit(16, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.CountRedoRecords(ctx)
 	response := szpb.CountRedoRecordsResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -86,16 +104,21 @@ func (server *SzEngineServer) DeleteRecord(
 	request *szpb.DeleteRecordRequest,
 ) (*szpb.DeleteRecordResponse, error) {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(17, request)
+
 		defer func() { server.traceExit(18, request, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err := szEngine.DeleteRecord(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetFlags())
 	response := szpb.DeleteRecordResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -104,38 +127,50 @@ func (server *SzEngineServer) ExportCsvEntityReport(
 	request *szpb.ExportCsvEntityReportRequest,
 ) (*szpb.ExportCsvEntityReportResponse, error) {
 	var err error
+
 	var result uintptr
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(27, request)
+
 		defer func() { server.traceExit(28, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.ExportCsvEntityReport(ctx, request.GetCsvColumnList(), request.GetFlags())
 	responseResult := int64(result) //nolint:gosec
 	response := szpb.ExportCsvEntityReportResponse{
 		Result: responseResult,
 	}
+
 	return &response, err
 }
 
-func (server *SzEngineServer) ExportJsonEntityReport(
+func (server *SzEngineServer) ExportJsonEntityReport( //revive:disable-line var-naming
 	ctx context.Context,
 	request *szpb.ExportJsonEntityReportRequest,
-) (*szpb.ExportJsonEntityReportResponse, error) { //revive:disable-line var-naming
+) (*szpb.ExportJsonEntityReportResponse, error) {
 	var err error
+
 	var result uintptr
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(29, request)
+
 		defer func() { server.traceExit(30, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.ExportJSONEntityReport(ctx, request.GetFlags())
 	responseResult := int64(result) //nolint:gosec
 	response := szpb.ExportJsonEntityReportResponse{
 		Result: responseResult,
 	}
+
 	return &response, err
 }
 
@@ -144,50 +179,67 @@ func (server *SzEngineServer) FetchNext(
 	request *szpb.FetchNextRequest,
 ) (*szpb.FetchNextResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(31, request)
+
 		defer func() { server.traceExit(32, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.FetchNext(ctx, uintptr(request.GetExportHandle()))
 	response := szpb.FetchNextResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
-func (server *SzEngineServer) FindInterestingEntitiesByEntityId(
+func (server *SzEngineServer) FindInterestingEntitiesByEntityId( //revive:disable-line var-naming
 	ctx context.Context,
 	request *szpb.FindInterestingEntitiesByEntityIdRequest,
-) (*szpb.FindInterestingEntitiesByEntityIdResponse, error) { //revive:disable-line var-naming
+) (*szpb.FindInterestingEntitiesByEntityIdResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(33, request)
+
 		defer func() { server.traceExit(34, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.FindInterestingEntitiesByEntityID(ctx, request.GetEntityId(), request.GetFlags())
 	response := szpb.FindInterestingEntitiesByEntityIdResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
-func (server *SzEngineServer) FindInterestingEntitiesByRecordId(
+func (server *SzEngineServer) FindInterestingEntitiesByRecordId( //revive:disable-line var-naming
 	ctx context.Context,
 	request *szpb.FindInterestingEntitiesByRecordIdRequest,
-) (*szpb.FindInterestingEntitiesByRecordIdResponse, error) { //revive:disable-line var-naming
+) (*szpb.FindInterestingEntitiesByRecordIdResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(35, request)
+
 		defer func() { server.traceExit(36, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.FindInterestingEntitiesByRecordID(
 		ctx,
@@ -198,20 +250,26 @@ func (server *SzEngineServer) FindInterestingEntitiesByRecordId(
 	response := szpb.FindInterestingEntitiesByRecordIdResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
-func (server *SzEngineServer) FindNetworkByEntityId(
+func (server *SzEngineServer) FindNetworkByEntityId( //revive:disable-line var-naming
 	ctx context.Context,
 	request *szpb.FindNetworkByEntityIdRequest,
-) (*szpb.FindNetworkByEntityIdResponse, error) { //revive:disable-line var-naming
+) (*szpb.FindNetworkByEntityIdResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(37, request)
+
 		defer func() { server.traceExit(38, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.FindNetworkByEntityID(
 		ctx,
@@ -224,20 +282,26 @@ func (server *SzEngineServer) FindNetworkByEntityId(
 	response := szpb.FindNetworkByEntityIdResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
-func (server *SzEngineServer) FindNetworkByRecordId(
+func (server *SzEngineServer) FindNetworkByRecordId( //revive:disable-line var-naming
 	ctx context.Context,
 	request *szpb.FindNetworkByRecordIdRequest,
-) (*szpb.FindNetworkByRecordIdResponse, error) { //revive:disable-line var-naming
+) (*szpb.FindNetworkByRecordIdResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(41, request)
+
 		defer func() { server.traceExit(42, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.FindNetworkByRecordID(
 		ctx,
@@ -250,20 +314,26 @@ func (server *SzEngineServer) FindNetworkByRecordId(
 	response := szpb.FindNetworkByRecordIdResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
-func (server *SzEngineServer) FindPathByEntityId(
+func (server *SzEngineServer) FindPathByEntityId( //revive:disable-line var-naming
 	ctx context.Context,
 	request *szpb.FindPathByEntityIdRequest,
-) (*szpb.FindPathByEntityIdResponse, error) { //revive:disable-line var-naming
+) (*szpb.FindPathByEntityIdResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(45, request)
+
 		defer func() { server.traceExit(46, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.FindPathByEntityID(
 		ctx,
@@ -277,20 +347,26 @@ func (server *SzEngineServer) FindPathByEntityId(
 	response := szpb.FindPathByEntityIdResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
-func (server *SzEngineServer) FindPathByRecordId(
+func (server *SzEngineServer) FindPathByRecordId( //revive:disable-line var-naming
 	ctx context.Context,
 	request *szpb.FindPathByRecordIdRequest,
-) (*szpb.FindPathByRecordIdResponse, error) { //revive:disable-line var-naming
+) (*szpb.FindPathByRecordIdResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(49, request)
+
 		defer func() { server.traceExit(50, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.FindPathByRecordID(
 		ctx,
@@ -306,58 +382,76 @@ func (server *SzEngineServer) FindPathByRecordId(
 	response := szpb.FindPathByRecordIdResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
-func (server *SzEngineServer) GetActiveConfigId(
+func (server *SzEngineServer) GetActiveConfigId( //revive:disable-line var-naming
 	ctx context.Context,
 	request *szpb.GetActiveConfigIdRequest,
-) (*szpb.GetActiveConfigIdResponse, error) { //revive:disable-line var-naming
+) (*szpb.GetActiveConfigIdResponse, error) {
 	var err error
+
 	var result int64
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(69, request)
+
 		defer func() { server.traceExit(70, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.GetActiveConfigID(ctx)
 	response := szpb.GetActiveConfigIdResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
-func (server *SzEngineServer) GetEntityByEntityId(
+func (server *SzEngineServer) GetEntityByEntityId( //revive:disable-line var-naming
 	ctx context.Context,
 	request *szpb.GetEntityByEntityIdRequest,
-) (*szpb.GetEntityByEntityIdResponse, error) { //revive:disable-line var-naming
+) (*szpb.GetEntityByEntityIdResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(71, request)
+
 		defer func() { server.traceExit(72, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.GetEntityByEntityID(ctx, request.GetEntityId(), request.GetFlags())
 	response := szpb.GetEntityByEntityIdResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
-func (server *SzEngineServer) GetEntityByRecordId(
+func (server *SzEngineServer) GetEntityByRecordId( //revive:disable-line var-naming
 	ctx context.Context,
 	request *szpb.GetEntityByRecordIdRequest,
-) (*szpb.GetEntityByRecordIdResponse, error) { //revive:disable-line var-naming
+) (*szpb.GetEntityByRecordIdResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(75, request)
+
 		defer func() { server.traceExit(76, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.GetEntityByRecordID(
 		ctx,
@@ -368,6 +462,7 @@ func (server *SzEngineServer) GetEntityByRecordId(
 	response := szpb.GetEntityByRecordIdResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -376,17 +471,23 @@ func (server *SzEngineServer) GetRecord(
 	request *szpb.GetRecordRequest,
 ) (*szpb.GetRecordResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(83, request)
+
 		defer func() { server.traceExit(84, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.GetRecord(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetFlags())
 	response := szpb.GetRecordResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -395,17 +496,23 @@ func (server *SzEngineServer) GetRedoRecord(
 	request *szpb.GetRedoRecordRequest,
 ) (*szpb.GetRedoRecordResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(87, request)
+
 		defer func() { server.traceExit(88, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.GetRedoRecord(ctx)
 	response := szpb.GetRedoRecordResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -414,55 +521,73 @@ func (server *SzEngineServer) GetStats(
 	request *szpb.GetStatsRequest,
 ) (*szpb.GetStatsResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(139, request)
+
 		defer func() { server.traceExit(140, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.GetStats(ctx)
 	response := szpb.GetStatsResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
-func (server *SzEngineServer) GetVirtualEntityByRecordId(
+func (server *SzEngineServer) GetVirtualEntityByRecordId( //revive:disable-line var-naming
 	ctx context.Context,
 	request *szpb.GetVirtualEntityByRecordIdRequest,
-) (*szpb.GetVirtualEntityByRecordIdResponse, error) { //revive:disable-line var-naming
+) (*szpb.GetVirtualEntityByRecordIdResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(91, request)
+
 		defer func() { server.traceExit(92, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.GetVirtualEntityByRecordID(ctx, request.GetRecordKeys(), request.GetFlags())
 	response := szpb.GetVirtualEntityByRecordIdResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
-func (server *SzEngineServer) HowEntityByEntityId(
+func (server *SzEngineServer) HowEntityByEntityId( //revive:disable-line var-naming
 	ctx context.Context,
 	request *szpb.HowEntityByEntityIdRequest,
-) (*szpb.HowEntityByEntityIdResponse, error) { //revive:disable-line var-naming
+) (*szpb.HowEntityByEntityIdResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(95, request)
+
 		defer func() { server.traceExit(96, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.HowEntityByEntityID(ctx, request.GetEntityId(), request.GetFlags())
 	response := szpb.HowEntityByEntityIdResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -471,16 +596,21 @@ func (server *SzEngineServer) PreprocessRecord(
 	request *szpb.PreprocessRecordRequest,
 ) (*szpb.PreprocessRecordResponse, error) {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(165, request)
+
 		defer func() { server.traceExit(166, request, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err := szEngine.PreprocessRecord(ctx, request.GetRecordDefinition(), request.GetFlags())
 	response := szpb.PreprocessRecordResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -489,14 +619,19 @@ func (server *SzEngineServer) PrimeEngine(
 	request *szpb.PrimeEngineRequest,
 ) (*szpb.PrimeEngineResponse, error) {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(103, request)
+
 		defer func() { server.traceExit(104, request, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	err = szEngine.PrimeEngine(ctx)
 	response := szpb.PrimeEngineResponse{}
+
 	return &response, err
 }
 
@@ -504,18 +639,23 @@ func (server *SzEngineServer) ProcessRedoRecord(
 	ctx context.Context,
 	request *szpb.ProcessRedoRecordRequest,
 ) (*szpb.ProcessRedoRecordResponse, error) {
-	// TODO: Fix trace IDs.
+	// IMPROVE: Fix trace IDs.
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(999, request)
+
 		defer func() { server.traceExit(999, request, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err := szEngine.ProcessRedoRecord(ctx, request.GetRedoRecord(), request.GetFlags())
 	response := szpb.ProcessRedoRecordResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -524,17 +664,23 @@ func (server *SzEngineServer) ReevaluateEntity(
 	request *szpb.ReevaluateEntityRequest,
 ) (*szpb.ReevaluateEntityResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(119, request)
+
 		defer func() { server.traceExit(120, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.ReevaluateEntity(ctx, request.GetEntityId(), request.GetFlags())
 	response := szpb.ReevaluateEntityResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -543,17 +689,23 @@ func (server *SzEngineServer) ReevaluateRecord(
 	request *szpb.ReevaluateRecordRequest,
 ) (*szpb.ReevaluateRecordResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(123, request)
+
 		defer func() { server.traceExit(124, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.ReevaluateRecord(ctx, request.GetDataSourceCode(), request.GetRecordId(), request.GetFlags())
 	response := szpb.ReevaluateRecordResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -562,14 +714,19 @@ func (server *SzEngineServer) Reinitialize(
 	request *szpb.ReinitializeRequest,
 ) (*szpb.ReinitializeResponse, error) {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(127, request)
+
 		defer func() { server.traceExit(128, request, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	err = szEngine.Reinitialize(ctx, request.GetConfigId())
 	response := szpb.ReinitializeResponse{}
+
 	return &response, err
 }
 
@@ -578,12 +735,17 @@ func (server *SzEngineServer) SearchByAttributes(
 	request *szpb.SearchByAttributesRequest,
 ) (*szpb.SearchByAttributesResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(133, request)
+
 		defer func() { server.traceExit(134, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.SearchByAttributes(
 		ctx,
@@ -594,6 +756,7 @@ func (server *SzEngineServer) SearchByAttributes(
 	response := szpb.SearchByAttributesResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -604,6 +767,7 @@ func (server *SzEngineServer) StreamExportCsvEntityReport(
 	if server.isTrace {
 		server.traceEntry(157, request)
 	}
+
 	ctx := stream.Context()
 	entryTime := time.Now()
 	szEngine := getSzEngine()
@@ -612,6 +776,7 @@ func (server *SzEngineServer) StreamExportCsvEntityReport(
 	// Get the query handle.
 
 	var queryHandle uintptr
+
 	queryHandle, err = szEngine.ExportCsvEntityReport(ctx, request.GetCsvColumnList(), request.GetFlags())
 	if err != nil {
 		return err
@@ -630,34 +795,41 @@ func (server *SzEngineServer) StreamExportCsvEntityReport(
 
 	for {
 		var fetchResult string
+
 		fetchResult, err = szEngine.FetchNext(ctx, queryHandle)
 		if err != nil {
 			return err
 		}
+
 		if len(fetchResult) == 0 {
 			break
 		}
+
 		response := szpb.StreamExportCsvEntityReportResponse{
 			Result: fetchResult,
 		}
 		if err = stream.Send(&response); err != nil {
 			return err
 		}
+
 		server.traceEntry(601, request, fetchResult)
+
 		rowsFetched++
 	}
 
 	err = nil
+
 	return
 }
 
-func (server *SzEngineServer) StreamExportJsonEntityReport(
+func (server *SzEngineServer) StreamExportJsonEntityReport( //revive:disable-line var-naming
 	request *szpb.StreamExportJsonEntityReportRequest,
 	stream szpb.SzEngine_StreamExportJsonEntityReportServer,
-) (err error) { //revive:disable-line var-naming
+) (err error) {
 	if server.isTrace {
 		server.traceEntry(159, request)
 	}
+
 	ctx := stream.Context()
 	entryTime := time.Now()
 	szEngine := getSzEngine()
@@ -666,6 +838,7 @@ func (server *SzEngineServer) StreamExportJsonEntityReport(
 	// Get the query handle.
 
 	var queryHandle uintptr
+
 	queryHandle, err = szEngine.ExportJSONEntityReport(ctx, request.GetFlags())
 	if err != nil {
 		return err
@@ -684,24 +857,30 @@ func (server *SzEngineServer) StreamExportJsonEntityReport(
 
 	for {
 		var fetchResult string
+
 		fetchResult, err = szEngine.FetchNext(ctx, queryHandle)
 		if err != nil {
 			return err
 		}
+
 		if len(fetchResult) == 0 {
 			break
 		}
+
 		response := szpb.StreamExportJsonEntityReportResponse{
 			Result: fetchResult,
 		}
 		if err = stream.Send(&response); err != nil {
 			return err
 		}
+
 		server.traceEntry(602, request, fetchResult)
+
 		rowsFetched++
 	}
 
 	err = nil
+
 	return
 }
 
@@ -710,17 +889,23 @@ func (server *SzEngineServer) WhyEntities(
 	request *szpb.WhyEntitiesRequest,
 ) (*szpb.WhyEntitiesResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(141, request)
+
 		defer func() { server.traceExit(142, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.WhyEntities(ctx, request.GetEntityId_1(), request.GetEntityId_2(), request.GetFlags())
 	response := szpb.WhyEntitiesResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -729,12 +914,17 @@ func (server *SzEngineServer) WhyRecordInEntity(
 	request *szpb.WhyRecordInEntityRequest,
 ) (*szpb.WhyRecordInEntityResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(153, request)
+
 		defer func() { server.traceExit(154, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.WhyRecordInEntity(
 		ctx,
@@ -745,6 +935,7 @@ func (server *SzEngineServer) WhyRecordInEntity(
 	response := szpb.WhyRecordInEntityResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -753,12 +944,17 @@ func (server *SzEngineServer) WhyRecords(
 	request *szpb.WhyRecordsRequest,
 ) (*szpb.WhyRecordsResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(153, request)
+
 		defer func() { server.traceExit(154, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.WhyRecords(
 		ctx,
@@ -771,6 +967,7 @@ func (server *SzEngineServer) WhyRecords(
 	response := szpb.WhyRecordsResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -779,12 +976,17 @@ func (server *SzEngineServer) WhySearch(
 	request *szpb.WhySearchRequest,
 ) (*szpb.WhySearchResponse, error) {
 	var err error
+
 	var result string
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(167, request)
+
 		defer func() { server.traceExit(168, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	result, err = szEngine.WhySearch(
 		ctx,
@@ -796,6 +998,7 @@ func (server *SzEngineServer) WhySearch(
 	response := szpb.WhySearchResponse{
 		Result: result,
 	}
+
 	return &response, err
 }
 
@@ -808,15 +1011,18 @@ func (server *SzEngineServer) WhySearch(
 // Get the Logger singleton.
 func (server *SzEngineServer) getLogger() logging.Logging {
 	var err error
+
 	if server.logger == nil {
 		options := []interface{}{
-			&logging.OptionCallerSkip{Value: 3},
+			&logging.OptionCallerSkip{Value: OptionCallerSkip},
 		}
+
 		server.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
 		if err != nil {
 			panic(err)
 		}
 	}
+
 	return server.logger
 }
 
@@ -832,12 +1038,17 @@ func (server *SzEngineServer) traceExit(messageNumber int, details ...interface{
 
 func (server *SzEngineServer) SetLogLevel(ctx context.Context, logLevelName string) error {
 	_ = ctx
+
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(137, logLevelName)
+
 		defer func() { server.traceExit(138, logLevelName, err, time.Since(entryTime)) }()
 	}
+
 	if !logging.IsValidLogLevelName(logLevelName) {
 		return wraperror.Errorf(errPackage, "invalid error level: %s", logLevelName)
 	}
@@ -850,7 +1061,9 @@ func (server *SzEngineServer) SetLogLevel(ctx context.Context, logLevelName stri
 	if err != nil {
 		return err
 	}
+
 	server.isTrace = (logLevelName == logging.LevelTraceName)
+
 	return err
 }
 
@@ -869,6 +1082,7 @@ func getSzEngine() *szsdk.Szengine {
 	szEngineSyncOnce.Do(func() {
 		szEngineSingleton = &szsdk.Szengine{}
 	})
+
 	return szEngineSingleton
 }
 
@@ -884,44 +1098,63 @@ func GetSdkSzEngineAsInterface() senzing.SzEngine {
 
 func (server *SzEngineServer) GetObserverOrigin(ctx context.Context) string {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(161)
+
 		defer func() { server.traceExit(162, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
+
 	return szEngine.GetObserverOrigin(ctx)
 }
 
 func (server *SzEngineServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(11, observer.GetObserverID(ctx))
+
 		defer func() { server.traceExit(12, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
+
 	return szEngine.RegisterObserver(ctx, observer)
 }
 
 func (server *SzEngineServer) SetObserverOrigin(ctx context.Context, origin string) {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(163, origin)
+
 		defer func() { server.traceExit(164, origin, err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
 	szEngine.SetObserverOrigin(ctx, origin)
 }
 
 func (server *SzEngineServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(79, observer.GetObserverID(ctx))
+
 		defer func() { server.traceExit(80, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
 	}
+
 	szEngine := getSzEngine()
+
 	return szEngine.UnregisterObserver(ctx, observer)
 }
