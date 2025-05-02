@@ -270,27 +270,31 @@ func getServerSideTLSServerOption() (grpc.ServerOption, error) {
 
 	// Input error detection.
 
+	err = checkForInputErrors(serverCertificatePathValue, serverKeyPathValue)
+
+	return result, wraperror.Errorf(err, "cmd.getServerSideTLSServerOption error: %w", err)
+}
+
+func checkForInputErrors(serverCertificatePathValue string, serverKeyPathValue string) error {
+	var err error
+
 	if serverCertificatePathValue != "" {
-		err = wraperror.Errorf(
+		return wraperror.Errorf(
 			errPackage,
 			"%s is set, but %s is not set. Both need to be set",
 			serverCertificateFile.Envar,
 			serverKeyFile.Envar,
 		)
-
-		return result, err
 	}
 
 	if serverKeyPathValue != "" {
-		err = wraperror.Errorf(
+		return wraperror.Errorf(
 			errPackage,
 			"%s is set, but %s is not set. Both need to be set",
 			serverKeyFile.Envar,
 			serverCertificateFile.Envar,
 		)
-
-		return result, err
 	}
 
-	return result, wraperror.Errorf(err, "cmd.getServerSideTLSServerOption error: %w", err)
+	return err
 }
