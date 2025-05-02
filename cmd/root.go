@@ -6,7 +6,6 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
-	"fmt"
 	"os"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
@@ -14,6 +13,7 @@ import (
 	"github.com/senzing-garage/go-cmdhelping/option/optiontype"
 	"github.com/senzing-garage/go-cmdhelping/settings"
 	tlshelper "github.com/senzing-garage/go-helpers/tls"
+	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/serve-grpc/grpcserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -25,9 +25,9 @@ const (
 	Short string = "Start a gRPC server for the Senzing SDK API"
 	Use   string = "serve-grpc"
 	Long  string = `
-Start a gRPC server for the Senzing SDK API.
-For more information, visit https://github.com/senzing-garage/serve-grpc
-    `
+ Start a gRPC server for the Senzing SDK API.
+ For more information, visit https://github.com/senzing-garage/serve-grpc
+	 `
 )
 
 // ----------------------------------------------------------------------------
@@ -125,32 +125,35 @@ func Execute() {
 	}
 }
 
-// Used in construction of cobra.Command
+// Used in construction of cobra.Command.
 func PreRun(cobraCommand *cobra.Command, args []string) {
 	cmdhelper.PreRun(cobraCommand, args, Use, ContextVariables)
 }
 
-// Used in construction of cobra.Command
+// Used in construction of cobra.Command.
 func RunE(_ *cobra.Command, _ []string) error {
 	var err error
+
 	ctx := context.Background()
 
 	// Build Senzing SDK configuration.
 
 	senzingSettings, err := settings.BuildAndVerifySettings(ctx, viper.GetViper())
 	if err != nil {
-		return err
+		return wraperror.Errorf(err, "cmd.RunE.BuildAndVerifySettings error: %w", err)
 	}
 
 	// Aggregate gRPC server options.
 
 	var grpcServerOptions []grpc.ServerOption
-	serverSideTLSServerOption, err := getServerSideTLSServerOption()
+
+	tlsOption, err := getTLSOption()
 	if err != nil {
 		return err
 	}
-	if serverSideTLSServerOption != nil {
-		grpcServerOptions = append(grpcServerOptions, serverSideTLSServerOption)
+
+	if tlsOption != nil {
+		grpcServerOptions = append(grpcServerOptions, tlsOption)
 	}
 
 	// Create and Serve gRPC Server.
@@ -172,10 +175,13 @@ func RunE(_ *cobra.Command, _ []string) error {
 		SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
 		SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
 	}
-	return grpcserver.Serve(ctx)
+
+	err = grpcserver.Serve(ctx)
+
+	return wraperror.Errorf(err, "cmd.RunE error: %w", err)
 }
 
-// Used in construction of cobra.Command
+// Used in construction of cobra.Command.
 func Version() string {
 	return cmdhelper.Version(githubVersion, githubIteration)
 }
@@ -189,73 +195,115 @@ func init() {
 	cmdhelper.Init(RootCmd, ContextVariables)
 }
 
-// If TLS environment variables specified, construct the appropriate gRPC server option.
-func getServerSideTLSServerOption() (grpc.ServerOption, error) {
-	var err error
-	var result grpc.ServerOption
-	var clientCAs *x509.CertPool
-	var clientAuth tls.ClientAuthType
-	var certificates []tls.Certificate
+// Get the appropriate GRPC server options.
+func getTLSOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
 
 	serverCertificatePathValue := viper.GetString(serverCertificateFile.Arg)
 	serverKeyPathValue := viper.GetString(serverKeyFile.Arg)
-	if serverCertificatePathValue != "" && serverKeyPathValue != "" {
 
-		// Server-side TLS.
+	// Determine if TLS is requested.
 
-		serverKeyPassPhraseValue := viper.GetString(serverKeyPassPhrase.Arg)
-		clientAuth = tls.NoClientCert
-		serverCertificate, err := tlshelper.LoadX509KeyPair(serverCertificatePathValue, serverKeyPathValue, serverKeyPassPhraseValue)
-		if err != nil {
-			return result, err
-		}
-		certificates = []tls.Certificate{serverCertificate}
+	switch {
+	case serverCertificatePathValue != "" && serverKeyPathValue != "":
+		result, err = createTLSOption(serverCertificatePathValue, serverKeyPathValue)
+	case serverCertificatePathValue != "" && serverKeyPathValue == "":
+		err = wraperror.Errorf(
+			errPackage,
+			"%s is set, but %s is not set. Both need to be set",
+			serverCertificateFile.Envar,
+			serverKeyFile.Envar,
+		)
+	case serverCertificatePathValue == "" && serverKeyPathValue != "":
+		err = wraperror.Errorf(
+			errPackage,
+			"%s is set, but %s is not set. Both need to be set",
+			serverKeyFile.Envar,
+			serverCertificateFile.Envar,
+		)
+	default:
+		err = nil
+	}
 
-		// Mutual TLS.
+	return result, err
+}
 
-		caCertificatePathsValue := viper.GetStringSlice(clientCaCertificateFiless.Arg)
-		caCertificatePathValue := viper.GetString(clientCaCertificateFile.Arg)
-		if len(caCertificatePathValue) > 0 {
-			caCertificatePathsValue = append(caCertificatePathsValue, caCertificatePathValue)
-		}
+func createTLSOption(serverCertificatePathValue string, serverKeyPathValue string) (grpc.ServerOption, error) {
+	var (
+		err          error
+		result       grpc.ServerOption
+		clientCAs    *x509.CertPool
+		clientAuth   tls.ClientAuthType
+		certificates []tls.Certificate
+	)
 
-		if len(caCertificatePathsValue) > 0 {
-			clientAuth = tls.RequireAndVerifyClientCert
-			clientCAs = x509.NewCertPool()
-			for _, caCertificatePath := range caCertificatePathsValue {
-				pemClientCA, err := os.ReadFile(caCertificatePath)
-				if err != nil {
-					return result, err
-				}
-				if !clientCAs.AppendCertsFromPEM(pemClientCA) {
-					return result, fmt.Errorf("failed to add client CA's certificate for %s", caCertificatePath)
-				}
+	// Server-side TLS.
+
+	serverKeyPassPhraseValue := viper.GetString(serverKeyPassPhrase.Arg)
+	clientAuth = tls.NoClientCert
+
+	serverCertificate, err := tlshelper.LoadX509KeyPair(
+		serverCertificatePathValue,
+		serverKeyPathValue,
+		serverKeyPassPhraseValue,
+	)
+	if err != nil {
+		return result, wraperror.Errorf(err, "cmd.getServerSideTLSServerOption.LoadX509KeyPair error: %w", err)
+	}
+
+	certificates = []tls.Certificate{serverCertificate}
+
+	// Mutual TLS.
+
+	caCertificatePathsValue := viper.GetStringSlice(clientCaCertificateFiless.Arg)
+	caCertificatePathValue := viper.GetString(clientCaCertificateFile.Arg)
+
+	if len(caCertificatePathValue) > 0 {
+		caCertificatePathsValue = append(caCertificatePathsValue, caCertificatePathValue)
+	}
+
+	if len(caCertificatePathsValue) > 0 {
+		clientAuth = tls.RequireAndVerifyClientCert
+		clientCAs = x509.NewCertPool()
+
+		for _, caCertificatePath := range caCertificatePathsValue {
+			pemClientCA, err := os.ReadFile(caCertificatePath)
+			if err != nil {
+				return result, wraperror.Errorf(err, "cmd.getServerSideTLSServerOption.os.ReadFile error: %w", err)
+			}
+
+			if !clientCAs.AppendCertsFromPEM(pemClientCA) {
+				return result, wraperror.Errorf(
+					errPackage,
+					"failed to add client CA's certificate for %s",
+					caCertificatePath,
+				)
 			}
 		}
-
-		// Create TLS configuration.
-
-		tlsConfig := &tls.Config{
-			Certificates: certificates,
-			ClientAuth:   clientAuth,
-			ClientCAs:    clientCAs,
-			MinVersion:   tls.VersionTLS12, // See https://pkg.go.dev/crypto/tls#pkg-constants
-			MaxVersion:   tls.VersionTLS13,
-		}
-		transportCredentials := credentials.NewTLS(tlsConfig)
-		result = grpc.Creds(transportCredentials)
-		return result, err
 	}
 
-	// Input error detection.
+	result = buildGrpcServerOption(certificates, clientAuth, clientCAs)
 
-	if serverCertificatePathValue != "" {
-		err = fmt.Errorf("%s is set, but %s is not set. Both need to be set", serverCertificateFile.Envar, serverKeyFile.Envar)
-		return result, err
+	return result, wraperror.Errorf(err, "cmd.getServerSideTLSServerOption error: %w", err)
+}
+
+func buildGrpcServerOption(
+	certificates []tls.Certificate,
+	clientAuth tls.ClientAuthType,
+	clientCAs *x509.CertPool,
+) grpc.ServerOption {
+	tlsConfig := &tls.Config{
+		Certificates: certificates,
+		ClientAuth:   clientAuth,
+		ClientCAs:    clientCAs,
+		MinVersion:   tls.VersionTLS12, // See https://pkg.go.dev/crypto/tls#pkg-constants
+		MaxVersion:   tls.VersionTLS13,
 	}
-	if serverKeyPathValue != "" {
-		err = fmt.Errorf("%s is set, but %s is not set. Both need to be set", serverKeyFile.Envar, serverCertificateFile.Envar)
-		return result, err
-	}
-	return result, err
+	transportCredentials := credentials.NewTLS(tlsConfig)
+	result := grpc.Creds(transportCredentials)
+
+	return result
 }

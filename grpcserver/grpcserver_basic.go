@@ -9,6 +9,7 @@ import (
 
 	"github.com/senzing-garage/go-cmdhelping/option"
 	"github.com/senzing-garage/go-helpers/settingsparser"
+	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/go-observing/observerpb"
@@ -55,38 +56,30 @@ type BasicGrpcServer struct {
 	SenzingVerboseLogging int64
 }
 
+const OptionCallerSkip = 3
+
 // ----------------------------------------------------------------------------
-// Main
+// Public methods
 // ----------------------------------------------------------------------------
 
 func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
+	var err error
 
 	// Log entry parameters.
-
 	grpcServer.log(2000, grpcServer)
 
 	// Initialize observing.
 
-	var anObserver observer.Observer
 	if len(grpcServer.ObserverURL) > 0 {
-		parsedURL, err := url.Parse(grpcServer.ObserverURL)
+		err = grpcServer.setupObserver(ctx)
 		if err != nil {
 			return err
-		}
-		if parsedURL.Scheme == "grpc" {
-			anObserver, err = grpcServer.createGrpcObserver(ctx, *parsedURL)
-			if err != nil {
-				return err
-			}
-		}
-		if anObserver != nil {
-			grpcServer.Observers = append(grpcServer.Observers, anObserver)
 		}
 	}
 
 	// Special database processing.
 
-	err := grpcServer.initializeDatabase(ctx, grpcServer.SenzingSettings)
+	err = initializeDatabase(ctx, grpcServer.SenzingSettings)
 	if err != nil {
 		return err
 	}
@@ -104,21 +97,7 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 
 	// Register services with gRPC server.
 
-	if grpcServer.EnableAll || grpcServer.EnableSzConfig {
-		grpcServer.enableSzConfig(ctx, aGrpcServer)
-	}
-	if grpcServer.EnableAll || grpcServer.EnableSzConfigManager {
-		grpcServer.enableSzConfigManager(ctx, aGrpcServer)
-	}
-	if grpcServer.EnableAll || grpcServer.EnableSzDiagnostic {
-		grpcServer.enableSzDiagnostic(ctx, aGrpcServer)
-	}
-	if grpcServer.EnableAll || grpcServer.EnableSzEngine {
-		grpcServer.enableSzEngine(ctx, aGrpcServer)
-	}
-	if grpcServer.EnableAll || grpcServer.EnableSzProduct {
-		grpcServer.enableSzProduct(ctx, aGrpcServer)
-	}
+	grpcServer.enableServices(ctx, aGrpcServer)
 
 	// Enable reflection.
 
@@ -131,14 +110,15 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 		err = aGrpcServer.Serve(listener)
 	} else {
 		grpcServer.log(2004)
+
 		err = listener.Close()
 	}
 
-	return err
+	return wraperror.Errorf(err, "grpcserver.Serve error: %w", err)
 }
 
 // ----------------------------------------------------------------------------
-// Internal methods
+// Private methods
 // ----------------------------------------------------------------------------
 
 // --- Logging -------------------------------------------------------------------------
@@ -146,16 +126,19 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 // Get the Logger singleton.
 func (grpcServer *BasicGrpcServer) getLogger() logging.Logging {
 	var err error
+
 	if grpcServer.logger == nil {
 		options := []interface{}{
-			logging.OptionCallerSkip{Value: 3},
+			logging.OptionCallerSkip{Value: OptionCallerSkip},
 			logging.OptionMessageFields{Value: []string{"id", "text", "reason", "errors", "details"}},
 		}
+
 		grpcServer.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
 		if err != nil {
 			panic(err)
 		}
 	}
+
 	return grpcServer.logger
 }
 
@@ -171,42 +154,73 @@ func (grpcServer *BasicGrpcServer) createGrpcObserver(
 	parsedURL url.URL,
 ) (observer.Observer, error) {
 	_ = ctx
+
 	var err error
+
 	var result observer.Observer
 
 	port := DefaultGrpcObserverPort
 	if len(parsedURL.Port()) > 0 {
 		port = parsedURL.Port()
 	}
+
 	target := fmt.Sprintf("%s:%s", parsedURL.Hostname(), port)
 
-	// TODO: Allow specification of options from ObserverUrl/parsedUrl
+	// IMPROVE: Allow specification of options from ObserverUrl/parsedUrl
 	grpcOptions := grpc.WithTransportCredentials(insecure.NewCredentials())
+
 	grpcConnection, err := grpc.NewClient(target, grpcOptions)
 	if err != nil {
-		return result, err
+		return result, wraperror.Errorf(err, "grpcserver.grpc.NewClient error: %w", err)
 	}
+
 	result = &observer.GrpcObserver{
 		GrpcClient: observerpb.NewObserverClient(grpcConnection),
 		ID:         "serve-grpc",
 	}
-	return result, err
+
+	return result, wraperror.Errorf(err, "grpcserver.createGrpcObserver error: %w", err)
 }
 
 // --- Enabling services ---------------------------------------------------------------
 
+func (grpcServer *BasicGrpcServer) enableServices(ctx context.Context, aGrpcServer *grpc.Server) {
+	if grpcServer.EnableAll || grpcServer.EnableSzConfig {
+		grpcServer.enableSzConfig(ctx, aGrpcServer)
+	}
+
+	if grpcServer.EnableAll || grpcServer.EnableSzConfigManager {
+		grpcServer.enableSzConfigManager(ctx, aGrpcServer)
+	}
+
+	if grpcServer.EnableAll || grpcServer.EnableSzDiagnostic {
+		grpcServer.enableSzDiagnostic(ctx, aGrpcServer)
+	}
+
+	if grpcServer.EnableAll || grpcServer.EnableSzEngine {
+		grpcServer.enableSzEngine(ctx, aGrpcServer)
+	}
+
+	if grpcServer.EnableAll || grpcServer.EnableSzProduct {
+		grpcServer.enableSzProduct(ctx, aGrpcServer)
+	}
+}
+
 // Add SzConfig service to gRPC server.
 func (grpcServer *BasicGrpcServer) enableSzConfig(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szconfigserver.SzConfigServer{}
+
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
 		panic(err)
 	}
+
 	err = szconfigserver.GetSdkSzConfigManager().
 		Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
+
 	if grpcServer.Observers != nil {
 		for _, observer := range grpcServer.Observers {
 			err = server.RegisterObserver(ctx, observer)
@@ -215,24 +229,29 @@ func (grpcServer *BasicGrpcServer) enableSzConfig(ctx context.Context, serviceRe
 			}
 		}
 	}
+
 	if len(grpcServer.ObserverOrigin) > 0 {
 		server.SetObserverOrigin(ctx, grpcServer.ObserverOrigin)
 	}
+
 	szconfig.RegisterSzConfigServer(serviceRegistrar, server)
 }
 
 // Add SzConfigManager service to gRPC server.
 func (grpcServer *BasicGrpcServer) enableSzConfigManager(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szconfigmanagerserver.SzConfigManagerServer{}
+
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
 		panic(err)
 	}
+
 	err = szconfigmanagerserver.GetSdkSzConfigManager().
 		Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
+
 	if grpcServer.Observers != nil {
 		for _, observer := range grpcServer.Observers {
 			err = server.RegisterObserver(ctx, observer)
@@ -241,24 +260,29 @@ func (grpcServer *BasicGrpcServer) enableSzConfigManager(ctx context.Context, se
 			}
 		}
 	}
+
 	if len(grpcServer.ObserverOrigin) > 0 {
 		server.SetObserverOrigin(ctx, grpcServer.ObserverOrigin)
 	}
+
 	szconfigmanager.RegisterSzConfigManagerServer(serviceRegistrar, server)
 }
 
 // Add SzDiagnostic service to gRPC server.
 func (grpcServer *BasicGrpcServer) enableSzDiagnostic(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szdiagnosticserver.SzDiagnosticServer{}
+
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
 		panic(err)
 	}
+
 	err = szdiagnosticserver.GetSdkSzDiagnostic().
 		Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, senzing.SzInitializeWithDefaultConfiguration, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
+
 	if grpcServer.Observers != nil {
 		for _, observer := range grpcServer.Observers {
 			err = server.RegisterObserver(ctx, observer)
@@ -267,24 +291,29 @@ func (grpcServer *BasicGrpcServer) enableSzDiagnostic(ctx context.Context, servi
 			}
 		}
 	}
+
 	if len(grpcServer.ObserverOrigin) > 0 {
 		server.SetObserverOrigin(ctx, grpcServer.ObserverOrigin)
 	}
+
 	szdiagnostic.RegisterSzDiagnosticServer(serviceRegistrar, server)
 }
 
 // Add SzEngine service to gRPC server.
 func (grpcServer *BasicGrpcServer) enableSzEngine(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szengineserver.SzEngineServer{}
+
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
 		panic(err)
 	}
+
 	err = szengineserver.GetSdkSzEngine().
 		Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, senzing.SzInitializeWithDefaultConfiguration, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
+
 	if grpcServer.Observers != nil {
 		for _, observer := range grpcServer.Observers {
 			err = server.RegisterObserver(ctx, observer)
@@ -293,24 +322,29 @@ func (grpcServer *BasicGrpcServer) enableSzEngine(ctx context.Context, serviceRe
 			}
 		}
 	}
+
 	if len(grpcServer.ObserverOrigin) > 0 {
 		server.SetObserverOrigin(ctx, grpcServer.ObserverOrigin)
 	}
+
 	szengine.RegisterSzEngineServer(serviceRegistrar, server)
 }
 
 // Add SzProduct service to gRPC server.
 func (grpcServer *BasicGrpcServer) enableSzProduct(ctx context.Context, serviceRegistrar grpc.ServiceRegistrar) {
 	server := &szproductserver.SzProductServer{}
+
 	err := server.SetLogLevel(ctx, grpcServer.LogLevelName)
 	if err != nil {
 		panic(err)
 	}
+
 	err = szproductserver.GetSdkSzProduct().
 		Initialize(ctx, grpcServer.SenzingInstanceName, grpcServer.SenzingSettings, grpcServer.SenzingVerboseLogging)
 	if err != nil {
 		panic(err)
 	}
+
 	if grpcServer.Observers != nil {
 		for _, observer := range grpcServer.Observers {
 			err = server.RegisterObserver(ctx, observer)
@@ -319,50 +353,94 @@ func (grpcServer *BasicGrpcServer) enableSzProduct(ctx context.Context, serviceR
 			}
 		}
 	}
+
 	if len(grpcServer.ObserverOrigin) > 0 {
 		server.SetObserverOrigin(ctx, grpcServer.ObserverOrigin)
 	}
+
 	szproduct.RegisterSzProductServer(serviceRegistrar, server)
 }
 
+func (grpcServer *BasicGrpcServer) setupObserver(ctx context.Context) error {
+	var (
+		anObserver observer.Observer
+		err        error
+	)
+
+	parsedURL, err := url.Parse(grpcServer.ObserverURL)
+	if err != nil {
+		return wraperror.Errorf(err, "grpcserver.setupObserver.urlParse error: %w", err)
+	}
+
+	if parsedURL.Scheme == "grpc" {
+		anObserver, err = grpcServer.createGrpcObserver(ctx, *parsedURL)
+		if err != nil {
+			return wraperror.Errorf(err, "grpcserver.setupObserver.createGrpcObserver error: %w", err)
+		}
+	}
+
+	if anObserver != nil {
+		grpcServer.Observers = append(grpcServer.Observers, anObserver)
+	}
+
+	return wraperror.Errorf(err, "grpcserver.setupObserver error: %w", err)
+}
+
+// ----------------------------------------------------------------------------
+// Private functions
+// ----------------------------------------------------------------------------
+
 // Special database initialization.
-func (grpcServer *BasicGrpcServer) initializeDatabase(ctx context.Context, senzingSettings string) error {
+func initializeDatabase(ctx context.Context, senzingSettings string) error {
 	var err error
 
 	parsedSenzingSettings, err := settingsparser.New(senzingSettings)
 	if err != nil {
-		return err
+		return wraperror.Errorf(err, "grpcserver.initializeDatabase.settingsparser.New error: %w", err)
 	}
 
 	databaseURIs, err := parsedSenzingSettings.GetDatabaseURIs(ctx)
 	if err != nil {
-		return err
+		return wraperror.Errorf(err, "grpcserver.initializeDatabase.GetDatabaseURIs error: %w", err)
 	}
 
 	if len(databaseURIs) >= 1 {
 		databaseURI := databaseURIs[0]
 		if strings.HasPrefix(databaseURI, "sqlite3://") {
-			parsedDatabaseURL, err := url.Parse(databaseURI)
-			if err != nil {
-				return err
-			}
-			queryParameters := parsedDatabaseURL.Query()
-			if (queryParameters.Get("mode") == "memory") && (queryParameters.Get("cache") == "shared") {
-				initializer := &initializer.BasicInitializer{
-					DatabaseURLs:          databaseURIs,
-					ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
-					ObserverURL:           viper.GetString(option.ObserverURL.Arg),
-					SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
-					SenzingLogLevel:       viper.GetString(option.LogLevel.Arg),
-					SenzingSettings:       senzingSettings,
-					SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
-				}
-				err = initializer.Initialize(ctx)
-				if err != nil {
-					return err
-				}
-			}
+			err = initializeSqlite(ctx, senzingSettings, databaseURIs)
 		}
 	}
-	return err
+
+	return wraperror.Errorf(err, "grpcserver.initializeDatabase error: %w", err)
+}
+
+func initializeSqlite(ctx context.Context, senzingSettings string, databaseURIs []string) error {
+	var err error
+
+	databaseURI := databaseURIs[0]
+
+	parsedDatabaseURL, err := url.Parse(databaseURI)
+	if err != nil {
+		return wraperror.Errorf(err, "grpcserver.initializeSqlite.url.Parse error: %w", err)
+	}
+
+	queryParameters := parsedDatabaseURL.Query()
+	if (queryParameters.Get("mode") == "memory") && (queryParameters.Get("cache") == "shared") {
+		initializer := &initializer.BasicInitializer{
+			DatabaseURLs:          databaseURIs,
+			ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
+			ObserverURL:           viper.GetString(option.ObserverURL.Arg),
+			SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
+			SenzingLogLevel:       viper.GetString(option.LogLevel.Arg),
+			SenzingSettings:       senzingSettings,
+			SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
+		}
+
+		err = initializer.Initialize(ctx)
+		if err != nil {
+			return wraperror.Errorf(err, "grpcserver.initializeSqlite.Initialize error: %w", err)
+		}
+	}
+
+	return wraperror.Errorf(err, "grpcserver.initializeSqlite error: %w", err)
 }

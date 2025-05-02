@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/senzing-garage/go-helpers/settings"
+	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/serve-grpc/grpcserver"
@@ -17,9 +18,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var (
-	localLogger logging.Logging
-)
+var localLogger logging.Logging
 
 // ----------------------------------------------------------------------------
 // Internal functions
@@ -38,14 +37,16 @@ func panicOnError(err error) {
 func TestMain(m *testing.M) {
 	err := setup()
 	if err != nil {
-		fmt.Print(err)
-		os.Exit(1)
+		panic(err)
 	}
+
 	code := m.Run()
+
 	err = teardown()
 	if err != nil {
-		fmt.Print(err)
+		panic(err)
 	}
+
 	os.Exit(code)
 }
 
@@ -84,6 +85,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 
 func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
 	szDiagnostic := &szdiagnostic.Szdiagnostic{}
+
 	err := szDiagnostic.Initialize(
 		ctx,
 		instanceName,
@@ -92,23 +94,31 @@ func setupPurgeRepository(ctx context.Context, instanceName string, settings str
 		verboseLogging,
 	)
 	if err != nil {
-		return localLogger.NewError(5903, err)
+		err = localLogger.NewError(5903, err)
+
+		return wraperror.Errorf(err, "grpcserver_test.setupPurgeRepository.Initialize error: %w", err)
 	}
 
 	err = szDiagnostic.PurgeRepository(ctx)
 	if err != nil {
-		return localLogger.NewError(5904, err)
+		err = localLogger.NewError(5904, err)
+
+		return wraperror.Errorf(err, "grpcserver_test.setupPurgeRepository.PurgeRepository error: %w", err)
 	}
 
 	err = szDiagnostic.Destroy(ctx)
 	if err != nil {
-		return localLogger.NewError(5905, err)
+		err = localLogger.NewError(5905, err)
+
+		return wraperror.Errorf(err, "grpcserver_test.setupPurgeRepository.Destroy error: %w", err)
 	}
-	return err
+
+	return wraperror.Errorf(err, "grpcserver_test.setupPurgeRepository error: %w", err)
 }
 
 func setup() error {
 	var err error
+
 	ctx := context.TODO()
 	moduleName := "Test module name"
 	verboseLogging := int64(0)
@@ -129,8 +139,7 @@ func setup() error {
 }
 
 func teardown() error {
-	var err error
-	return err
+	return nil
 }
 
 // ----------------------------------------------------------------------------
@@ -139,7 +148,7 @@ func teardown() error {
 
 func TestGrpcServerImpl_Serve(test *testing.T) {
 	_ = test
-	ctx := context.TODO()
+	ctx := test.Context()
 
 	observer1 := &observer.NullObserver{
 		ID: "Observer 1",
@@ -147,6 +156,7 @@ func TestGrpcServerImpl_Serve(test *testing.T) {
 
 	logLevelName := "INFO"
 	osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
+
 	if len(osenvLogLevel) > 0 {
 		logLevelName = osenvLogLevel
 	}
@@ -167,5 +177,4 @@ func TestGrpcServerImpl_Serve(test *testing.T) {
 	}
 	err = grpcServer.Serve(ctx)
 	require.NoError(test, err)
-
 }

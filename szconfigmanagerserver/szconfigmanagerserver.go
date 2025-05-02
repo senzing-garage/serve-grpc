@@ -2,16 +2,18 @@ package szconfigmanagerserver
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
+	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	szsdk "github.com/senzing-garage/sz-sdk-go-core/szconfigmanager"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 )
+
+const OptionCallerSkip = 3
 
 var (
 	szConfigManagerSingleton *szsdk.Szconfigmanager
@@ -31,21 +33,32 @@ func (server *SzConfigManagerServer) GetConfig(
 		response *szpb.GetConfigResponse
 		result   string
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(7, request)
+
 		defer func() { server.traceExit(8, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szConfigManager := getSzConfigManager()
+
 	szConfig, err := szConfigManager.CreateConfigFromConfigID(ctx, request.GetConfigId())
 	if err != nil {
-		return response, err
+		return response, wraperror.Errorf(
+			err,
+			"szconfigmanagerserver.GetConfig.CreateConfigFromConfigID error: %w",
+			err,
+		)
 	}
+
 	result, err = szConfig.Export(ctx)
 	response = &szpb.GetConfigResponse{
 		Result: result,
 	}
-	return response, err
+
+	return response, wraperror.Errorf(err, "szconfigmanagerserver.GetConfig error: %w", err)
 }
 
 func (server *SzConfigManagerServer) GetConfigs(
@@ -57,17 +70,22 @@ func (server *SzConfigManagerServer) GetConfigs(
 		response *szpb.GetConfigsResponse
 		result   string
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(9, request)
+
 		defer func() { server.traceExit(10, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szConfigManager := getSzConfigManager()
 	result, err = szConfigManager.GetConfigs(ctx)
 	response = &szpb.GetConfigsResponse{
 		Result: result,
 	}
-	return response, err
+
+	return response, wraperror.Errorf(err, "szconfigmanagerserver.GetConfigs error: %w", err)
 }
 
 func (server *SzConfigManagerServer) GetDefaultConfigId( //revive:disable var-naming
@@ -79,20 +97,31 @@ func (server *SzConfigManagerServer) GetDefaultConfigId( //revive:disable var-na
 		response *szpb.GetDefaultConfigIdResponse
 		result   int64
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(11, request)
+
 		defer func() { server.traceExit(12, request, result, err, time.Since(entryTime)) }()
 	}
+
 	szConfigManager := getSzConfigManager()
+
 	result, err = szConfigManager.GetDefaultConfigID(ctx)
 	if err != nil {
-		return response, err
+		return response, wraperror.Errorf(
+			err,
+			"szconfigmanagerserver.GetDefaultConfigId.GetDefaultConfigID error: %w",
+			err,
+		)
 	}
+
 	response = &szpb.GetDefaultConfigIdResponse{
 		Result: result,
 	}
-	return response, err
+
+	return response, wraperror.Errorf(err, "szconfigmanagerserver.GetDefaultConfigId error: %w", err)
 }
 
 func (server *SzConfigManagerServer) GetTemplateConfig(
@@ -104,23 +133,32 @@ func (server *SzConfigManagerServer) GetTemplateConfig(
 		result   string
 		response *szpb.GetTemplateConfigResponse
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(99, request)
+
 		defer func() { server.traceExit(99, request, result, err, time.Since(entryTime)) }()
 	}
 
 	szConfigManager := getSzConfigManager()
+
 	szConfig, err := szConfigManager.CreateConfigFromTemplate(ctx)
 	if err != nil {
-		return response, err
+		return response, wraperror.Errorf(
+			err,
+			"szconfigmanagerserver.GetTemplateConfig.CreateConfigFromTemplate error: %w",
+			err,
+		)
 	}
 
 	configDefinition, err := szConfig.Export(ctx)
 	response = &szpb.GetTemplateConfigResponse{
 		Result: configDefinition,
 	}
-	return response, err
+
+	return response, wraperror.Errorf(err, "szconfigmanagerserver.GetTemplateConfig error: %w", err)
 }
 
 func (server *SzConfigManagerServer) RegisterConfig(
@@ -132,9 +170,12 @@ func (server *SzConfigManagerServer) RegisterConfig(
 		response *szpb.RegisterConfigResponse
 		result   int64
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(1, request)
+
 		defer func() { server.traceExit(2, request, result, err, time.Since(entryTime)) }()
 	}
 
@@ -143,7 +184,8 @@ func (server *SzConfigManagerServer) RegisterConfig(
 	response = &szpb.RegisterConfigResponse{
 		Result: result,
 	}
-	return response, err
+
+	return response, wraperror.Errorf(err, "szconfigmanagerserver.RegisterConfig error: %w", err)
 }
 
 func (server *SzConfigManagerServer) ReplaceDefaultConfigId(
@@ -154,11 +196,15 @@ func (server *SzConfigManagerServer) ReplaceDefaultConfigId(
 		err      error
 		response *szpb.ReplaceDefaultConfigIdResponse
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(19, request)
+
 		defer func() { server.traceExit(20, request, err, time.Since(entryTime)) }()
 	}
+
 	szConfigManager := getSzConfigManager()
 	err = szConfigManager.ReplaceDefaultConfigID(
 		ctx,
@@ -166,7 +212,8 @@ func (server *SzConfigManagerServer) ReplaceDefaultConfigId(
 		request.GetNewDefaultConfigId(),
 	)
 	response = &szpb.ReplaceDefaultConfigIdResponse{}
-	return response, err
+
+	return response, wraperror.Errorf(err, "szconfigmanagerserver.ReplaceDefaultConfigId error: %w", err)
 }
 
 func (server *SzConfigManagerServer) SetDefaultConfig(
@@ -177,17 +224,22 @@ func (server *SzConfigManagerServer) SetDefaultConfig(
 		err      error
 		response *szpb.SetDefaultConfigResponse
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(21, request)
+
 		defer func() { server.traceExit(22, request, err, time.Since(entryTime)) }()
 	}
+
 	szConfigManager := getSzConfigManager()
 	result, err := szConfigManager.SetDefaultConfig(ctx, request.GetConfigDefinition(), request.GetConfigComment())
 	response = &szpb.SetDefaultConfigResponse{
 		Result: result,
 	}
-	return response, err
+
+	return response, wraperror.Errorf(err, "szconfigmanagerserver.SetDefaultConfig error: %w", err)
 }
 
 func (server *SzConfigManagerServer) SetDefaultConfigId(
@@ -198,15 +250,20 @@ func (server *SzConfigManagerServer) SetDefaultConfigId(
 		err      error
 		response *szpb.SetDefaultConfigIdResponse
 	)
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(21, request)
+
 		defer func() { server.traceExit(22, request, err, time.Since(entryTime)) }()
 	}
+
 	szConfigManager := getSzConfigManager()
 	err = szConfigManager.SetDefaultConfigID(ctx, request.GetConfigId())
 	response = &szpb.SetDefaultConfigIdResponse{}
-	return response, err
+
+	return response, wraperror.Errorf(err, "szconfigmanagerserver.SetDefaultConfigId error: %w", err)
 }
 
 // ----------------------------------------------------------------------------
@@ -218,15 +275,18 @@ func (server *SzConfigManagerServer) SetDefaultConfigId(
 // Get the Logger singleton.
 func (server *SzConfigManagerServer) getLogger() logging.Logging {
 	var err error
+
 	if server.logger == nil {
 		options := []interface{}{
-			&logging.OptionCallerSkip{Value: 3},
+			&logging.OptionCallerSkip{Value: OptionCallerSkip},
 		}
+
 		server.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
 		if err != nil {
 			panic(err)
 		}
 	}
+
 	return server.logger
 }
 
@@ -242,14 +302,19 @@ func (server *SzConfigManagerServer) traceExit(messageNumber int, details ...int
 
 func (server *SzConfigManagerServer) SetLogLevel(ctx context.Context, logLevelName string) error {
 	_ = ctx
+
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(23, logLevelName)
+
 		defer func() { server.traceExit(24, logLevelName, err, time.Since(entryTime)) }()
 	}
+
 	if !logging.IsValidLogLevelName(logLevelName) {
-		return fmt.Errorf("invalid error level: %s", logLevelName)
+		return wraperror.Errorf(errPackage, "invalid error level: %s", logLevelName)
 	}
 	// szConfigManager := getSzConfigManager()
 	// err = szConfigManager.SetLogLevel(ctx, logLevelName)
@@ -258,10 +323,12 @@ func (server *SzConfigManagerServer) SetLogLevel(ctx context.Context, logLevelNa
 	// }
 	err = server.getLogger().SetLogLevel(logLevelName)
 	if err != nil {
-		return err
+		return wraperror.Errorf(err, "szconfigmanagerserver.SetLogLevel.SetLogLevel error: %w", err)
 	}
+
 	server.isTrace = (logLevelName == logging.LevelTraceName)
-	return err
+
+	return wraperror.Errorf(err, "szconfigmanagerserver.SetLogLevel error: %w", err)
 }
 
 // --- Errors -----------------------------------------------------------------
@@ -279,6 +346,7 @@ func getSzConfigManager() *szsdk.Szconfigmanager {
 	szConfigManagerSyncOnce.Do(func() {
 		szConfigManagerSingleton = &szsdk.Szconfigmanager{}
 	})
+
 	return szConfigManagerSingleton
 }
 
@@ -294,44 +362,67 @@ func GetSdkSzConfigManagerAsInterface() senzing.SzConfigManager {
 
 func (server *SzConfigManagerServer) GetObserverOrigin(ctx context.Context) string {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(25)
+
 		defer func() { server.traceExit(26, err, time.Since(entryTime)) }()
 	}
+
 	szConfigManager := getSzConfigManager()
+
 	return szConfigManager.GetObserverOrigin(ctx)
 }
 
 func (server *SzConfigManagerServer) RegisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(3, observer.GetObserverID(ctx))
+
 		defer func() { server.traceExit(4, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
 	}
+
 	szConfigManager := getSzConfigManager()
-	return szConfigManager.RegisterObserver(ctx, observer)
+
+	err = szConfigManager.RegisterObserver(ctx, observer)
+
+	return wraperror.Errorf(err, "szconfigmanagerserver.SetLogLevel error: %w", err)
 }
 
 func (server *SzConfigManagerServer) SetObserverOrigin(ctx context.Context, origin string) {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(27, origin)
+
 		defer func() { server.traceExit(28, origin, err, time.Since(entryTime)) }()
 	}
+
 	szConfigManager := getSzConfigManager()
 	szConfigManager.SetObserverOrigin(ctx, origin)
 }
 
 func (server *SzConfigManagerServer) UnregisterObserver(ctx context.Context, observer observer.Observer) error {
 	var err error
+
 	if server.isTrace {
 		entryTime := time.Now()
+
 		server.traceEntry(13, observer.GetObserverID(ctx))
+
 		defer func() { server.traceExit(14, observer.GetObserverID(ctx), err, time.Since(entryTime)) }()
 	}
+
 	szConfigManager := getSzConfigManager()
-	return szConfigManager.UnregisterObserver(ctx, observer)
+
+	err = szConfigManager.UnregisterObserver(ctx, observer)
+
+	return wraperror.Errorf(err, "szconfigmanagerserver.SetLogLevel error: %w", err)
 }

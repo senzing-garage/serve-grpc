@@ -1,12 +1,13 @@
 //go:build linux
 
-package cmd
+package cmd_test
 
 import (
 	"bytes"
 	"os"
 	"testing"
 
+	"github.com/senzing-garage/serve-grpc/cmd"
 	"github.com/stretchr/testify/require"
 )
 
@@ -17,35 +18,38 @@ import (
 func Test_RootCmd(test *testing.T) {
 	_ = test
 	os.Args = []string{"command-name", "--avoid-serving"}
-	err := RootCmd.Execute()
+	err := cmd.RootCmd.Execute()
 	require.NoError(test, err)
-	err = RootCmd.RunE(RootCmd, []string{})
+	err = cmd.RootCmd.RunE(cmd.RootCmd, []string{})
 	require.NoError(test, err)
 }
 
 func Test_Execute(test *testing.T) {
 	_ = test
 	os.Args = []string{"command-name", "--avoid-serving"}
-	Execute()
+
+	cmd.Execute()
 }
 
 func Test_Execute_completion(test *testing.T) {
 	_ = test
 	os.Args = []string{"command-name", "completion"}
-	Execute()
+
+	cmd.Execute()
 }
 
 func Test_Execute_docs(test *testing.T) {
 	_ = test
 	os.Args = []string{"command-name", "docs"}
-	Execute()
+
+	cmd.Execute()
 }
 
 func Test_Execute_help(test *testing.T) {
 	_ = test
 	args := []string{"--help"}
-	RootCmd.SetArgs(args)
-	err := RootCmd.Execute()
+	cmd.RootCmd.SetArgs(args)
+	err := cmd.RootCmd.Execute()
 	require.NoError(test, err)
 }
 
@@ -60,17 +64,13 @@ func Test_RootCmd_Execute_tls_encrypted_key(test *testing.T) {
 		"--server-key-passphrase",
 		"Passw0rd",
 	}
-	RootCmd.SetArgs(args)
-	err := RootCmd.Execute()
+	cmd.RootCmd.SetArgs(args)
+	err := cmd.RootCmd.Execute()
 	require.NoError(test, err)
 }
 
-// ----------------------------------------------------------------------------
-// Test private functions
-// ----------------------------------------------------------------------------
-
-func Test_docsAction(test *testing.T) {
+func Test_DocsAction(test *testing.T) {
 	var buffer bytes.Buffer
-	err := docsAction(&buffer, "/tmp")
+	err := cmd.DocsAction(&buffer, "/tmp")
 	require.NoError(test, err)
 }

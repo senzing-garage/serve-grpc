@@ -24,10 +24,12 @@ func ExampleSzEngineServer_AddRecord() {
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
 		Flags:            senzing.SzWithoutInfo,
 	}
+
 	response, err := szEngineServer.AddRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output:
 }
@@ -42,10 +44,12 @@ func ExampleSzEngineServer_AddRecord_secondRecord() {
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1002", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Bob", "DATE_OF_BIRTH": "11/12/1978", "ADDR_TYPE": "HOME", "ADDR_LINE1": "1515 Adela Lane", "ADDR_CITY": "Las Vegas", "ADDR_STATE": "NV", "ADDR_POSTAL_CODE": "89111", "PHONE_TYPE": "MOBILE", "PHONE_NUMBER": "702-919-1300", "DATE": "3/10/17", "STATUS": "Inactive", "AMOUNT": "200"}`,
 		Flags:            senzing.SzWithoutInfo,
 	}
+
 	response, err := szEngineServer.AddRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output:
 }
@@ -60,10 +64,12 @@ func ExampleSzEngineServer_AddRecord_withInfo() {
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1003", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Bob", "PRIMARY_NAME_MIDDLE": "J", "DATE_OF_BIRTH": "12/11/1978", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "4/9/16", "STATUS": "Inactive", "AMOUNT": "300"}`,
 		Flags:            senzing.SzWithInfo,
 	}
+
 	response, err := szEngineServer.AddRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1003","AFFECTED_ENTITIES":[{"ENTITY_ID":1}]}
 }
@@ -77,6 +83,7 @@ func ExampleSzEngineServer_CloseExport() {
 	requestToExportJSONEntityReport := &szpb.ExportJsonEntityReportRequest{
 		Flags: senzing.SzNoFlags,
 	}
+
 	responseFromExportJSONEntityReport, err := szEngineServer.ExportJsonEntityReport(
 		ctx,
 		requestToExportJSONEntityReport,
@@ -88,10 +95,12 @@ func ExampleSzEngineServer_CloseExport() {
 	request := &szpb.CloseExportRequest{
 		ExportHandle: responseFromExportJSONEntityReport.GetResult(),
 	}
+
 	response, err := szEngineServer.CloseExport(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response)
 	// Output:
 }
@@ -101,10 +110,12 @@ func ExampleSzEngineServer_CountRedoRecords() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.CountRedoRecordsRequest{}
+
 	response, err := szEngineServer.CountRedoRecords(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: 1
 }
@@ -117,10 +128,12 @@ func ExampleSzEngineServer_ExportCsvEntityReport() {
 		CsvColumnList: "",
 		Flags:         senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.ExportCsvEntityReport(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
 }
@@ -132,10 +145,12 @@ func ExampleSzEngineServer_ExportJsonEntityReport() {
 	request := &szpb.ExportJsonEntityReportRequest{
 		Flags: senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.ExportJsonEntityReport(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
 }
@@ -149,6 +164,7 @@ func ExampleSzEngineServer_FetchNext() {
 	requestToExportJSONEntityReport := &szpb.ExportJsonEntityReportRequest{
 		Flags: senzing.SzNoFlags,
 	}
+
 	responseFromExportJSONEntityReport, err := szEngineServer.ExportJsonEntityReport(
 		ctx,
 		requestToExportJSONEntityReport,
@@ -160,10 +176,12 @@ func ExampleSzEngineServer_FetchNext() {
 	request := &szpb.FetchNextRequest{
 		ExportHandle: responseFromExportJSONEntityReport.GetResult(),
 	}
+
 	response, err := szEngineServer.FetchNext(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(len(response.GetResult()) > 0) // Dummy output.
 	// Output: false
 }
@@ -176,10 +194,12 @@ func ExampleSzEngineServer_FindInterestingEntitiesByEntityId() {
 		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
 		Flags:    0,
 	}
+
 	response, err := szEngine.FindInterestingEntitiesByEntityId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
@@ -193,10 +213,12 @@ func ExampleSzEngineServer_FindInterestingEntitiesByRecordId() {
 		RecordId:       "1001",
 		Flags:          0,
 	}
+
 	response, err := szEngine.FindInterestingEntitiesByRecordId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"INTERESTING_ENTITIES":{"ENTITIES":[]}}
 }
@@ -219,10 +241,12 @@ func ExampleSzEngineServer_FindNetworkByEntityId() {
 		Flags:               senzing.SzNoFlags,
 		MaxDegrees:          2,
 	}
+
 	response, err := szEngineServer.FindNetworkByEntityId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"ENTITY_PATHS":[],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":1}}]}
 }
@@ -238,10 +262,12 @@ func ExampleSzEngineServer_FindNetworkByRecordId() {
 		MaxDegrees:          1,
 		RecordKeys:          `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001"}, {"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1002"}]}`,
 	}
+
 	response, err := szEngineServer.FindNetworkByRecordId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"ENTITY_PATHS":[],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":1}}]}
 }
@@ -256,10 +282,12 @@ func ExampleSzEngineServer_FindPathByEntityId() {
 		MaxDegrees:    1,
 		Flags:         senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.FindPathByEntityId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(truncate(response.GetResult(), 107))
 	// Output: {"ENTITY_PATHS":[{"START_ENTITY_ID":1,"END_ENTITY_ID":1,"ENTITIES":[1]}],"ENTITIES":[{"RESOLVED_ENTITY":...
 }
@@ -276,10 +304,12 @@ func ExampleSzEngineServer_FindPathByEntityId_exclusions() {
 		AvoidEntityIds: avoidEntityIDs,
 		Flags:          senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.FindPathByEntityId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(truncate(response.GetResult(), 107))
 	// Output: {"ENTITY_PATHS":[{"START_ENTITY_ID":1,"END_ENTITY_ID":1,"ENTITIES":[1]}],"ENTITIES":[{"RESOLVED_ENTITY":...
 }
@@ -297,10 +327,12 @@ func ExampleSzEngineServer_FindPathByEntityId_inclusions() {
 		RequiredDataSources: `{"DATA_SOURCES": ["CUSTOMERS"]}`,
 		Flags:               senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.FindPathByEntityId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(truncate(response.GetResult(), 106))
 	// Output: {"ENTITY_PATHS":[{"START_ENTITY_ID":1,"END_ENTITY_ID":1,"ENTITIES":[]}],"ENTITIES":[{"RESOLVED_ENTITY":...
 }
@@ -317,10 +349,12 @@ func ExampleSzEngineServer_FindPathByRecordId() {
 		MaxDegrees:          1,
 		Flags:               senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.FindPathByRecordId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(truncate(response.GetResult(), 87))
 	// Output: {"ENTITY_PATHS":[{"START_ENTITY_ID":1,"END_ENTITY_ID":1,"ENTITIES":[1]}],"ENTITIES":...
 }
@@ -338,10 +372,12 @@ func ExampleSzEngineServer_FindPathByRecordId_exclusions() {
 		AvoidRecordKeys:     `{"RECORDS": [{ "DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001"}]}`,
 		Flags:               senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.FindPathByRecordId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(truncate(response.GetResult(), 107))
 	// Output: {"ENTITY_PATHS":[{"START_ENTITY_ID":1,"END_ENTITY_ID":1,"ENTITIES":[1]}],"ENTITIES":[{"RESOLVED_ENTITY":...
 }
@@ -360,10 +396,12 @@ func ExampleSzEngineServer_FindPathByRecordId_inclusions() {
 		RequiredDataSources: `{"DATA_SOURCES": ["CUSTOMERS"]}`,
 		Flags:               senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.FindPathByRecordId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(truncate(response.GetResult(), 119))
 	// Output: {"ENTITY_PATHS":[{"START_ENTITY_ID":1,"END_ENTITY_ID":1,"ENTITIES":[]}],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":...
 }
@@ -373,10 +411,12 @@ func ExampleSzEngineServer_GetActiveConfigId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetActiveConfigIdRequest{}
+
 	response, err := szEngineServer.GetActiveConfigId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult() > 0) // Dummy output.
 	// Output: true
 }
@@ -389,10 +429,12 @@ func ExampleSzEngineServer_GetEntityByEntityId() {
 		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
 		Flags:    senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.GetEntityByEntityId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"RESOLVED_ENTITY":{"ENTITY_ID":1}}
 }
@@ -406,10 +448,12 @@ func ExampleSzEngineServer_GetEntityByRecordId() {
 		RecordId:       "1001",
 		Flags:          senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.GetEntityByRecordId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"RESOLVED_ENTITY":{"ENTITY_ID":1}}
 }
@@ -423,10 +467,12 @@ func ExampleSzEngineServer_GetRecord() {
 		RecordId:       "1001",
 		Flags:          senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.GetRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001"}
 }
@@ -436,10 +482,12 @@ func ExampleSzEngineServer_GetRedoRecord() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetRedoRecordRequest{}
+
 	response, err := szEngineServer.GetRedoRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"REASON":"deferred delete","DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","REEVAL_ITERATION":1,"DSRC_ACTION":"X"}
 }
@@ -449,10 +497,12 @@ func ExampleSzEngineServer_GetStats() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetStatsRequest{}
+
 	response, err := szEngineServer.GetStats(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(truncate(response.GetResult(), 16))
 	// Output: { "workload":...
 }
@@ -465,10 +515,12 @@ func ExampleSzEngineServer_GetVirtualEntityByRecordId() {
 		RecordKeys: `{"RECORDS": [{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1001"},{"DATA_SOURCE": "CUSTOMERS","RECORD_ID": "1002"}]}`,
 		Flags:      senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.GetVirtualEntityByRecordId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"RESOLVED_ENTITY":{"ENTITY_ID":1}}
 }
@@ -481,10 +533,12 @@ func ExampleSzEngineServer_HowEntityByEntityId() {
 		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
 		Flags:    senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.HowEntityByEntityId(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"HOW_RESULTS":{"RESOLUTION_STEPS":[{"STEP":1,"VIRTUAL_ENTITY_1":{"VIRTUAL_ENTITY_ID":"V1","MEMBER_RECORDS":[{"INTERNAL_ID":1,"RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001"}]}]},"VIRTUAL_ENTITY_2":{"VIRTUAL_ENTITY_ID":"V2","MEMBER_RECORDS":[{"INTERNAL_ID":2,"RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1002"}]}]},"INBOUND_VIRTUAL_ENTITY_ID":"V2","RESULT_VIRTUAL_ENTITY_ID":"V1-S1","MATCH_INFO":{"MATCH_KEY":"+NAME+DOB+PHONE","ERRULE_CODE":"CNAME_CFF_CEXCL"}},{"STEP":2,"VIRTUAL_ENTITY_1":{"VIRTUAL_ENTITY_ID":"V1-S1","MEMBER_RECORDS":[{"INTERNAL_ID":1,"RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001"}]},{"INTERNAL_ID":2,"RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1002"}]}]},"VIRTUAL_ENTITY_2":{"VIRTUAL_ENTITY_ID":"V100001","MEMBER_RECORDS":[{"INTERNAL_ID":100001,"RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1003"}]}]},"INBOUND_VIRTUAL_ENTITY_ID":"V1-S1","RESULT_VIRTUAL_ENTITY_ID":"V1-S2","MATCH_INFO":{"MATCH_KEY":"+NAME+DOB+EMAIL","ERRULE_CODE":"SF1_PNAME_CSTAB"}}],"FINAL_STATE":{"NEED_REEVALUATION":0,"VIRTUAL_ENTITIES":[{"VIRTUAL_ENTITY_ID":"V1-S2","MEMBER_RECORDS":[{"INTERNAL_ID":1,"RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001"}]},{"INTERNAL_ID":2,"RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1002"}]},{"INTERNAL_ID":100001,"RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1003"}]}]}]}}}
 }
@@ -497,10 +551,12 @@ func ExampleSzEngineServer_PreprocessRecord() {
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
 		Flags:            senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.PreprocessRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {}
 }
@@ -510,17 +566,21 @@ func ExampleSzEngineServer_PrimeEngine() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.PrimeEngineRequest{}
+
 	response, err := szEngineServer.PrimeEngine(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response)
 	// Output:
 }
 
 func ExampleSzEngineServer_ProcessRedoRecord() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
-	// TODO: Document ExampleSzEngineServer_ProcessRedoRecord
+	// IMPROVE: Document ExampleSzEngineServer_ProcessRedoRecord
+
+	// Output:
 }
 
 func ExampleSzEngineServer_SearchByAttributes() {
@@ -531,17 +591,19 @@ func ExampleSzEngineServer_SearchByAttributes() {
 		Attributes: `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "Smith"}], "EMAIL_ADDRESS": "bsmith@work.com"}`,
 		Flags:      senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.SearchByAttributes(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"RESOLVED_ENTITIES":[{"MATCH_INFO":{"MATCH_LEVEL_CODE":"POSSIBLY_RELATED","MATCH_KEY":"+PNAME+EMAIL","ERRULE_CODE":"SF1"},"ENTITY":{"RESOLVED_ENTITY":{"ENTITY_ID":1}}}]}
 }
 
 func ExampleSzEngineServer_SearchByAttributes_searchProfile() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
-	// TODO: Fix SearchProfile value
+	// IMPROVE: Fix SearchProfile value
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.SearchByAttributesRequest{
@@ -549,10 +611,12 @@ func ExampleSzEngineServer_SearchByAttributes_searchProfile() {
 		SearchProfile: "SEARCH",
 		Flags:         senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.SearchByAttributes(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(truncate(response.GetResult(), 1962))
 	// Output: {"RESOLVED_ENTITIES":[{"MATCH_INFO":{"MATCH_LEVEL_CODE":"POSSIBLY_RELATED","MATCH_KEY":"+PNAME+EMAIL","ERRULE_CODE":"SF1"},"ENTITY":{"RESOLVED_ENTITY":{"ENTITY_ID":1}}}]}
 }
@@ -566,10 +630,12 @@ func ExampleSzEngineServer_WhyEntities() {
 		EntityId_2: getEntityIDForRecord("CUSTOMERS", "1002"),
 		Flags:      senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.WhyEntities(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(truncate(response.GetResult(), 74))
 	// Output: {"WHY_RESULTS":[{"ENTITY_ID":1,"ENTITY_ID_2":1,"MATCH_INFO":{"WHY_KEY":...
 }
@@ -585,10 +651,12 @@ func ExampleSzEngineServer_WhyRecords() {
 		RecordId_2:       "1002",
 		Flags:            senzing.SzNoFlags,
 	}
+
 	response, err := szEngineServer.WhyRecords(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(truncate(response.GetResult(), 115))
 	// Output: {"WHY_RESULTS":[{"INTERNAL_ID":1,"ENTITY_ID":1,"FOCUS_RECORDS":[{"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001"}],...
 }
@@ -601,27 +669,31 @@ func ExampleSzEngineServer_ReevaluateEntity() {
 		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
 		Flags:    senzing.SzWithoutInfo,
 	}
+
 	response, err := szEngineServer.ReevaluateEntity(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output:
 }
 
 func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
-	// TODO: Fix Output
+	// IMPROVE: Fix Output
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateEntityRequest{
 		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
 		Flags:    senzing.SzWithInfo,
 	}
+
 	response, err := szEngineServer.ReevaluateEntity(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"AFFECTED_ENTITIES":[{"ENTITY_ID":1}]}
 }
@@ -635,17 +707,19 @@ func ExampleSzEngineServer_ReevaluateRecord() {
 		RecordId:       "1001",
 		Flags:          senzing.SzWithoutInfo,
 	}
+
 	response, err := szEngineServer.ReevaluateRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output:
 }
 
 func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
-	// TODO: Fix Output
+	// IMPROVE: Fix Output
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateRecordRequest{
@@ -653,10 +727,12 @@ func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 		RecordId:       "1001",
 		Flags:          senzing.SzWithInfo,
 	}
+
 	response, err := szEngineServer.ReevaluateRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","AFFECTED_ENTITIES":[{"ENTITY_ID":1}]}
 }
@@ -670,10 +746,12 @@ func ExampleSzEngineServer_DeleteRecord() {
 		RecordId:       "1003",
 		Flags:          senzing.SzWithoutInfo,
 	}
+
 	response, err := szEngineServer.DeleteRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output:
 }
@@ -687,10 +765,12 @@ func ExampleSzEngineServer_DeleteRecord_withInfo() {
 		RecordId:       "1003",
 		Flags:          senzing.SzWithInfo,
 	}
+
 	response, err := szEngineServer.DeleteRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response.GetResult())
 	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1003","AFFECTED_ENTITIES":[]}
 }
@@ -702,6 +782,7 @@ func ExampleSzEngineServer_Reinitialize() {
 
 	// Get a Senzing configuration ID for testing.
 	requestToGetActiveConfigID := &szpb.GetActiveConfigIdRequest{}
+
 	responseFromGetActiveConfigID, err := szEngineServer.GetActiveConfigId(ctx, requestToGetActiveConfigID)
 	if err != nil {
 		fmt.Println(err)
@@ -710,10 +791,12 @@ func ExampleSzEngineServer_Reinitialize() {
 	request := &szpb.ReinitializeRequest{
 		ConfigId: responseFromGetActiveConfigID.GetResult(),
 	}
+
 	response, err := szEngineServer.Reinitialize(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(response)
 	// Output:
 }

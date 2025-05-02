@@ -39,7 +39,7 @@ var (
 // ----------------------------------------------------------------------------
 
 func TestSzConfigServer_AddDataSource(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getTestObject(ctx, test)
 
@@ -62,7 +62,7 @@ func TestSzConfigServer_AddDataSource(test *testing.T) {
 }
 
 func TestSzConfigServer_DeleteDataSource(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getTestObject(ctx, test)
 
@@ -84,7 +84,7 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 }
 
 func TestSzConfigServer_GetDataSources(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getTestObject(ctx, test)
 
@@ -106,7 +106,7 @@ func TestSzConfigServer_GetDataSources(test *testing.T) {
 }
 
 func TestSzConfigServer_VerifyConfig(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getTestObject(ctx, test)
 
@@ -128,7 +128,7 @@ func TestSzConfigServer_VerifyConfig(test *testing.T) {
 }
 
 func TestSzConfigServer_VerifyConfig_bad_config(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	badConfigDefinition := "}{"
 
 	szConfigServer := getTestObject(ctx, test)
@@ -148,28 +148,28 @@ func TestSzConfigServer_VerifyConfig_bad_config(test *testing.T) {
 // ----------------------------------------------------------------------------
 
 func TestSzConfigServer_RegisterObserver(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.RegisterObserver(ctx, observerSingleton)
 	require.NoError(test, err)
 }
 
 func TestSzConfigServer_SetLogLevel(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.SetLogLevel(ctx, "DEBUG")
 	require.NoError(test, err)
 }
 
 func TestSzConfigServer__SetLogLevel_badLevelName(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.SetLogLevel(ctx, "BADLEVELNAME")
 	require.Error(test, err)
 }
 
 func TestSzConfigServer_UnregisterObserver(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.UnregisterObserver(ctx, observerSingleton)
 	require.NoError(test, err)
@@ -196,15 +196,18 @@ func getSzConfigManagerServer(ctx context.Context) *szconfigmanagerserver.SzConf
 		verboseLogging := senzing.SzNoLogging
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		panicOnError(err)
+
 		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
 		if len(osenvLogLevel) > 0 {
 			logLevelName = osenvLogLevel
 		}
+
 		err = szConfigManagerServerSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
 		err = szconfigmanagerserver.GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
 		panicOnError(err)
 	}
+
 	return szConfigManagerServerSingleton
 }
 
@@ -214,19 +217,23 @@ func getSzConfigServer(ctx context.Context) *szconfigserver.SzConfigServer {
 	verboseLogging := senzing.SzNoLogging
 	settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 	panicOnError(err)
+
 	osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
 	if len(osenvLogLevel) > 0 {
 		logLevelName = osenvLogLevel
 	}
+
 	err = szConfigServer.SetLogLevel(ctx, logLevelName)
 	panicOnError(err)
 	err = szconfigserver.GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
 	panicOnError(err)
+
 	return szConfigServer
 }
 
-func getTestObject(ctx context.Context, test *testing.T) *szconfigserver.SzConfigServer {
-	_ = test
+func getTestObject(ctx context.Context, t *testing.T) *szconfigserver.SzConfigServer {
+	t.Helper()
+
 	return getSzConfigServer(ctx)
 }
 
@@ -236,13 +243,16 @@ func panicOnError(err error) {
 	}
 }
 
-func printActual(test *testing.T, actual interface{}) {
-	printResult(test, "Actual", actual)
+func printActual(t *testing.T, actual interface{}) {
+	t.Helper()
+	printResult(t, "Actual", actual)
 }
 
-func printResult(test *testing.T, title string, result interface{}) {
+func printResult(t *testing.T, title string, result interface{}) {
+	t.Helper()
+
 	if printResults {
-		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
+		t.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
 	}
 }
 

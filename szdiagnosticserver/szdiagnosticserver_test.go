@@ -10,6 +10,7 @@ import (
 	truncator "github.com/aquilax/truncate"
 	"github.com/senzing-garage/go-helpers/settings"
 	"github.com/senzing-garage/go-helpers/truthset"
+	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/serve-grpc/szconfigmanagerserver"
 	"github.com/senzing-garage/serve-grpc/szdiagnosticserver"
@@ -45,7 +46,7 @@ var (
 // ----------------------------------------------------------------------------
 
 func TestSzDiagnosticServer_CheckDatastorePerformance(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	szDiagnosticServer := getTestObject(ctx, test)
 	request := &szpb.CheckDatastorePerformanceRequest{
 		SecondsToRun: int32(1),
@@ -56,7 +57,7 @@ func TestSzDiagnosticServer_CheckDatastorePerformance(test *testing.T) {
 }
 
 func TestSzDiagnosticServer_GetDatastoreInfo(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	szDiagnosticServer := getTestObject(ctx, test)
 	request := &szpb.GetDatastoreInfoRequest{}
 	response, err := szDiagnosticServer.GetDatastoreInfo(ctx, request)
@@ -65,7 +66,7 @@ func TestSzDiagnosticServer_GetDatastoreInfo(test *testing.T) {
 }
 
 func TestSzDiagnosticServer_GetFeature(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	szDiagnosticServer := getTestObject(ctx, test)
 	request := &szpb.GetFeatureRequest{
 		FeatureId: int64(1),
@@ -76,7 +77,7 @@ func TestSzDiagnosticServer_GetFeature(test *testing.T) {
 }
 
 // func TestSzDiagnosticServer_PurgeRepository(test *testing.T) {
-// 	ctx := context.TODO()
+// 	ctx := test.Context()
 // 	szDiagnosticServer := getTestObject(ctx, test)
 // 	request := &szpb.PurgeRepositoryRequest{}
 // 	response, err := szDiagnosticServer.PurgeRepository(ctx, request)
@@ -85,12 +86,13 @@ func TestSzDiagnosticServer_GetFeature(test *testing.T) {
 // }
 
 func TestSzDiagnosticServer_Reinitialize(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	szDiagnostic := getTestObject(ctx, test)
 	szConfigManager := getSzConfigManagerServer(ctx)
 	getDefaultConfigIDRequest := &szconfigmanagerpb.GetDefaultConfigIdRequest{}
 	getDefaultConfigIDResponse, err := szConfigManager.GetDefaultConfigId(ctx, getDefaultConfigIDRequest)
 	require.NoError(test, err)
+
 	request := &szpb.ReinitializeRequest{
 		ConfigId: getDefaultConfigIDResponse.GetResult(),
 	}
@@ -104,41 +106,41 @@ func TestSzDiagnosticServer_Reinitialize(test *testing.T) {
 // ----------------------------------------------------------------------------
 
 func TestSzDiagnosticServer_RegisterObserver(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.RegisterObserver(ctx, observerSingleton)
 	require.NoError(test, err)
 }
 
 func TestSzDiagnosticServer_SetLogLevel(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.SetLogLevel(ctx, "DEBUG")
 	require.NoError(test, err)
 }
 
 func TestSzDiagnosticServer__SetLogLevel_badLevelName(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.SetLogLevel(ctx, "BADLEVELNAME")
 	require.Error(test, err)
 }
 
 func TestSzDiagnosticServer_SetObserverOrigin(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	testObject.SetObserverOrigin(ctx, observerOrigin)
 }
 
 func TestSzDiagnosticServer_GetObserverOrigin(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	actual := testObject.GetObserverOrigin(ctx)
 	assert.Equal(test, observerOrigin, actual)
 }
 
 func TestSzDiagnosticServer_UnregisterObserver(test *testing.T) {
-	ctx := context.TODO()
+	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.UnregisterObserver(ctx, observerSingleton)
 	require.NoError(test, err)
@@ -154,6 +156,7 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 		test.Log("Error:", err.Error())
 		assert.FailNow(test, actual)
 	}
+
 	printActual(test, actual)
 }
 
@@ -168,15 +171,18 @@ func getSzConfigManagerServer(ctx context.Context) szconfigmanagerserver.SzConfi
 		verboseLogging := senzing.SzNoLogging
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		panicOnError(err)
+
 		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
 		if len(osenvLogLevel) > 0 {
 			logLevelName = osenvLogLevel
 		}
+
 		err = szConfigManagerServerSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
 		err = szconfigmanagerserver.GetSdkSzConfigManager().Initialize(ctx, instanceName, settings, verboseLogging)
 		panicOnError(err)
 	}
+
 	return *szConfigManagerServerSingleton
 }
 
@@ -188,20 +194,24 @@ func getSzDiagnosticServer(ctx context.Context) *szdiagnosticserver.SzDiagnostic
 		configID := senzing.SzInitializeWithDefaultConfiguration
 		settings, err := settings.BuildSimpleSettingsUsingEnvVars()
 		panicOnError(err)
+
 		osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
 		if len(osenvLogLevel) > 0 {
 			logLevelName = osenvLogLevel
 		}
+
 		err = szDiagnosticServerSingleton.SetLogLevel(ctx, logLevelName)
 		panicOnError(err)
 		err = szdiagnosticserver.GetSdkSzDiagnostic().Initialize(ctx, instanceName, settings, configID, verboseLogging)
 		panicOnError(err)
 	}
+
 	return szDiagnosticServerSingleton
 }
 
-func getTestObject(ctx context.Context, test *testing.T) *szdiagnosticserver.SzDiagnosticServer {
-	_ = test
+func getTestObject(ctx context.Context, t *testing.T) *szdiagnosticserver.SzDiagnosticServer {
+	t.Helper()
+
 	return getSzDiagnosticServer(ctx)
 }
 
@@ -211,13 +221,16 @@ func panicOnError(err error) {
 	}
 }
 
-func printActual(test *testing.T, actual interface{}) {
-	printResult(test, "Actual", actual)
+func printActual(t *testing.T, actual interface{}) {
+	t.Helper()
+	printResult(t, "Actual", actual)
 }
 
-func printResult(test *testing.T, title string, result interface{}) {
+func printResult(t *testing.T, title string, result interface{}) {
+	t.Helper()
+
 	if printResults {
-		test.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
+		t.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
 	}
 }
 
@@ -231,6 +244,7 @@ func truncate(aString string, length int) string {
 
 func TestMain(m *testing.M) {
 	setup()
+
 	code := m.Run()
 	os.Exit(code)
 }
@@ -275,18 +289,18 @@ func setupAddRecords(ctx context.Context, instanceName string, settings string, 
 	panicOnError(err)
 
 	flags := senzing.SzNoLogging
+
 	testRecordIDs := []string{"1001", "1002", "1003", "1004", "1005", "1039", "1040"}
 	for _, testRecordID := range testRecordIDs {
 		testRecord := truthset.CustomerRecords[testRecordID]
 		_, err := szEngine.AddRecord(ctx, testRecord.DataSource, testRecord.ID, testRecord.JSON, flags)
 		panicOnError(err)
-
 	}
 
 	err = szEngine.Destroy(ctx)
 	panicOnError(err)
 
-	return err
+	return wraperror.Errorf(err, "szdiagnosticserver.setupAddRecords error: %w", err)
 }
 
 func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
@@ -305,7 +319,8 @@ func setupPurgeRepository(ctx context.Context, instanceName string, settings str
 
 	err = szDiagnostic.Destroy(ctx)
 	panicOnError(err)
-	return err
+
+	return wraperror.Errorf(err, "szdiagnosticserver.setupPurgeRepository error: %w", err)
 }
 
 func setup() {
