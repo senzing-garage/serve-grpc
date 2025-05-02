@@ -27,7 +27,7 @@ var DocsCmd = &cobra.Command{
 			}
 		}
 
-		return docsAction(os.Stdout, dir)
+		return DocsAction(os.Stdout, dir)
 	},
 }
 
@@ -36,7 +36,7 @@ func init() {
 	DocsCmd.Flags().StringP("dir", "d", "", "Destination directory for docs")
 }
 
-func docsAction(out io.Writer, dir string) error {
+func DocsAction(out io.Writer, dir string) error {
 	if err := doc.GenMarkdownTree(RootCmd, dir); err != nil {
 		return fmt.Errorf("DocsAction: %w", err)
 	}

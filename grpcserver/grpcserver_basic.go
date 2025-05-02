@@ -9,6 +9,7 @@ import (
 
 	"github.com/senzing-garage/go-cmdhelping/option"
 	"github.com/senzing-garage/go-helpers/settingsparser"
+	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/go-observing/observerpb"
@@ -62,34 +63,23 @@ const OptionCallerSkip = 3
 // ----------------------------------------------------------------------------
 
 func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
+	var err error
+
 	// Log entry parameters.
 	grpcServer.log(2000, grpcServer)
 
 	// Initialize observing.
 
-	var anObserver observer.Observer
-
 	if len(grpcServer.ObserverURL) > 0 {
-		parsedURL, err := url.Parse(grpcServer.ObserverURL)
+		err = grpcServer.setupObserver(ctx)
 		if err != nil {
 			return err
-		}
-
-		if parsedURL.Scheme == "grpc" {
-			anObserver, err = grpcServer.createGrpcObserver(ctx, *parsedURL)
-			if err != nil {
-				return err
-			}
-		}
-
-		if anObserver != nil {
-			grpcServer.Observers = append(grpcServer.Observers, anObserver)
 		}
 	}
 
 	// Special database processing.
 
-	err := grpcServer.initializeDatabase(ctx, grpcServer.SenzingSettings)
+	err = initializeDatabase(ctx, grpcServer.SenzingSettings)
 	if err != nil {
 		return err
 	}
@@ -124,7 +114,7 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 		err = listener.Close()
 	}
 
-	return err
+	return wraperror.Errorf(err, "grpcserver.Serve error: %w", err)
 }
 
 // ----------------------------------------------------------------------------
@@ -181,7 +171,7 @@ func (grpcServer *BasicGrpcServer) createGrpcObserver(
 
 	grpcConnection, err := grpc.NewClient(target, grpcOptions)
 	if err != nil {
-		return result, err
+		return result, wraperror.Errorf(err, "grpcserver.grpc.NewClient error: %w", err)
 	}
 
 	result = &observer.GrpcObserver{
@@ -189,7 +179,7 @@ func (grpcServer *BasicGrpcServer) createGrpcObserver(
 		ID:         "serve-grpc",
 	}
 
-	return result, err
+	return result, wraperror.Errorf(err, "grpcserver.createGrpcObserver error: %w", err)
 }
 
 // --- Enabling services ---------------------------------------------------------------
@@ -371,47 +361,86 @@ func (grpcServer *BasicGrpcServer) enableSzProduct(ctx context.Context, serviceR
 	szproduct.RegisterSzProductServer(serviceRegistrar, server)
 }
 
+func (grpcServer *BasicGrpcServer) setupObserver(ctx context.Context) error {
+	var (
+		anObserver observer.Observer
+		err        error
+	)
+
+	parsedURL, err := url.Parse(grpcServer.ObserverURL)
+	if err != nil {
+		return wraperror.Errorf(err, "grpcserver.setupObserver.urlParse error: %w", err)
+	}
+
+	if parsedURL.Scheme == "grpc" {
+		anObserver, err = grpcServer.createGrpcObserver(ctx, *parsedURL)
+		if err != nil {
+			return wraperror.Errorf(err, "grpcserver.setupObserver.createGrpcObserver error: %w", err)
+		}
+	}
+
+	if anObserver != nil {
+		grpcServer.Observers = append(grpcServer.Observers, anObserver)
+	}
+
+	return wraperror.Errorf(err, "grpcserver.setupObserver error: %w", err)
+}
+
+// ----------------------------------------------------------------------------
+// Private functions
+// ----------------------------------------------------------------------------
+
 // Special database initialization.
-func (grpcServer *BasicGrpcServer) initializeDatabase(ctx context.Context, senzingSettings string) error {
+func initializeDatabase(ctx context.Context, senzingSettings string) error {
 	var err error
 
 	parsedSenzingSettings, err := settingsparser.New(senzingSettings)
 	if err != nil {
-		return err
+		return wraperror.Errorf(err, "grpcserver.initializeDatabase.settingsparser.New error: %w", err)
 	}
 
 	databaseURIs, err := parsedSenzingSettings.GetDatabaseURIs(ctx)
 	if err != nil {
-		return err
+		return wraperror.Errorf(err, "grpcserver.initializeDatabase.GetDatabaseURIs error: %w", err)
 	}
 
 	if len(databaseURIs) >= 1 {
 		databaseURI := databaseURIs[0]
 		if strings.HasPrefix(databaseURI, "sqlite3://") {
-			parsedDatabaseURL, err := url.Parse(databaseURI)
-			if err != nil {
-				return err
-			}
-
-			queryParameters := parsedDatabaseURL.Query()
-			if (queryParameters.Get("mode") == "memory") && (queryParameters.Get("cache") == "shared") {
-				initializer := &initializer.BasicInitializer{
-					DatabaseURLs:          databaseURIs,
-					ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
-					ObserverURL:           viper.GetString(option.ObserverURL.Arg),
-					SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
-					SenzingLogLevel:       viper.GetString(option.LogLevel.Arg),
-					SenzingSettings:       senzingSettings,
-					SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
-				}
-
-				err = initializer.Initialize(ctx)
-				if err != nil {
-					return err
-				}
-			}
+			err = initializeSqlite(ctx, senzingSettings, databaseURIs)
 		}
 	}
 
-	return err
+	return wraperror.Errorf(err, "grpcserver.initializeDatabase error: %w", err)
+}
+
+func initializeSqlite(ctx context.Context, senzingSettings string, databaseURIs []string) error {
+	var err error
+
+	databaseURI := databaseURIs[0]
+
+	parsedDatabaseURL, err := url.Parse(databaseURI)
+	if err != nil {
+		return wraperror.Errorf(err, "grpcserver.initializeSqlite.url.Parse error: %w", err)
+	}
+
+	queryParameters := parsedDatabaseURL.Query()
+	if (queryParameters.Get("mode") == "memory") && (queryParameters.Get("cache") == "shared") {
+		initializer := &initializer.BasicInitializer{
+			DatabaseURLs:          databaseURIs,
+			ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
+			ObserverURL:           viper.GetString(option.ObserverURL.Arg),
+			SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
+			SenzingLogLevel:       viper.GetString(option.LogLevel.Arg),
+			SenzingSettings:       senzingSettings,
+			SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
+		}
+
+		err = initializer.Initialize(ctx)
+		if err != nil {
+			return wraperror.Errorf(err, "grpcserver.initializeSqlite.Initialize error: %w", err)
+		}
+	}
+
+	return wraperror.Errorf(err, "grpcserver.initializeSqlite error: %w", err)
 }

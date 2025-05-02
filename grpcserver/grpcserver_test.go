@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/senzing-garage/go-helpers/settings"
+	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/go-logging/logging"
 	"github.com/senzing-garage/go-observing/observer"
 	"github.com/senzing-garage/serve-grpc/grpcserver"
@@ -17,9 +18,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var (
-	localLogger logging.Logging
-)
+var localLogger logging.Logging
 
 // ----------------------------------------------------------------------------
 // Internal functions
@@ -95,20 +94,26 @@ func setupPurgeRepository(ctx context.Context, instanceName string, settings str
 		verboseLogging,
 	)
 	if err != nil {
-		return localLogger.NewError(5903, err)
+		err = localLogger.NewError(5903, err)
+
+		return wraperror.Errorf(err, "grpcserver_test.setupPurgeRepository.Initialize error: %w", err)
 	}
 
 	err = szDiagnostic.PurgeRepository(ctx)
 	if err != nil {
-		return localLogger.NewError(5904, err)
+		err = localLogger.NewError(5904, err)
+
+		return wraperror.Errorf(err, "grpcserver_test.setupPurgeRepository.PurgeRepository error: %w", err)
 	}
 
 	err = szDiagnostic.Destroy(ctx)
 	if err != nil {
-		return localLogger.NewError(5905, err)
+		err = localLogger.NewError(5905, err)
+
+		return wraperror.Errorf(err, "grpcserver_test.setupPurgeRepository.Destroy error: %w", err)
 	}
 
-	return err
+	return wraperror.Errorf(err, "grpcserver_test.setupPurgeRepository error: %w", err)
 }
 
 func setup() error {
@@ -134,8 +139,7 @@ func setup() error {
 }
 
 func teardown() error {
-	var err error
-	return err
+	return nil
 }
 
 // ----------------------------------------------------------------------------
@@ -144,7 +148,7 @@ func teardown() error {
 
 func TestGrpcServerImpl_Serve(test *testing.T) {
 	_ = test
-	ctx := context.TODO()
+	ctx := test.Context()
 
 	observer1 := &observer.NullObserver{
 		ID: "Observer 1",

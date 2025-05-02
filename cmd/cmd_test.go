@@ -1,4 +1,4 @@
-package cmd
+package cmd_test
 
 import (
 	"bytes"
@@ -6,6 +6,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/senzing-garage/serve-grpc/cmd"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/stretchr/testify/require"
@@ -18,22 +19,22 @@ import (
 func Test_RootCmd_Execute(test *testing.T) {
 	_ = test
 	args := []string{"--avoid-serving"}
-	setArgs(RootCmd, args)
-	err := RootCmd.Execute()
+	setArgs(cmd.RootCmd, args)
+	err := cmd.RootCmd.Execute()
 	require.NoError(test, err)
 }
 
 func Test_PreRun(test *testing.T) {
 	_ = test
 	args := []string{"command-name", "--help"}
-	PreRun(RootCmd, args)
+	cmd.PreRun(cmd.RootCmd, args)
 }
 
 func Test_RunE(test *testing.T) {
 	test.Setenv("SENZING_TOOLS_AVOID_SERVING", "true")
 
 	os.Args = []string{}
-	err := RunE(RootCmd, []string{})
+	err := cmd.RunE(cmd.RootCmd, []string{})
 	require.NoError(test, err)
 }
 
@@ -46,10 +47,12 @@ func Test_RootCmd_Execute_tls_bad_server_certificate_file(test *testing.T) {
 		"--server-key-file",
 		"../testdata/certificates/server/private_key.pem",
 	}
-	setArgs(RootCmd, args)
-	err := RootCmd.Execute()
+
+	setArgs(cmd.RootCmd, args)
+	err := cmd.RootCmd.Execute()
 	require.Error(test, err)
 }
+
 func Test_RootCmd_Execute_tls_bad_server_key_file(test *testing.T) {
 	_ = test
 	args := []string{
@@ -59,8 +62,8 @@ func Test_RootCmd_Execute_tls_bad_server_key_file(test *testing.T) {
 		"--server-key-file",
 		"",
 	}
-	setArgs(RootCmd, args)
-	err := RootCmd.Execute()
+	setArgs(cmd.RootCmd, args)
+	err := cmd.RootCmd.Execute()
 	require.Error(test, err)
 }
 
@@ -73,44 +76,38 @@ func Test_RootCmd_Execute_tls(test *testing.T) {
 		"--server-key-file",
 		"../testdata/certificates/server/private_key.pem",
 	}
-	setArgs(RootCmd, args)
-	err := RootCmd.Execute()
+	setArgs(cmd.RootCmd, args)
+	err := cmd.RootCmd.Execute()
 	require.NoError(test, err)
 }
 
-func Test_completionCmd(test *testing.T) {
+func Test_CompletionCmd(test *testing.T) {
 	_ = test
-	err := CompletionCmd.Execute()
+	err := cmd.CompletionCmd.Execute()
 	require.NoError(test, err)
-	err = CompletionCmd.RunE(CompletionCmd, []string{})
+	err = cmd.CompletionCmd.RunE(cmd.CompletionCmd, []string{})
 	require.NoError(test, err)
 }
 
-func Test_docsCmd(test *testing.T) {
+func Test_DocsCmd(test *testing.T) {
 	_ = test
-	err := DocsCmd.Execute()
+	err := cmd.DocsCmd.Execute()
 	require.NoError(test, err)
-	err = DocsCmd.RunE(DocsCmd, []string{})
-	require.NoError(test, err)
-}
-
-// ----------------------------------------------------------------------------
-// Test private functions
-// ----------------------------------------------------------------------------
-
-func Test_completionAction(test *testing.T) {
-	var buffer bytes.Buffer
-	err := completionAction(&buffer)
+	err = cmd.DocsCmd.RunE(cmd.DocsCmd, []string{})
 	require.NoError(test, err)
 }
 
-func Test_docsAction_badDir(test *testing.T) {
+func Test_DocsAction_badDir(test *testing.T) {
 	var buffer bytes.Buffer
 
 	badDir := "/tmp/no/directory/exists"
-	err := docsAction(&buffer, badDir)
+	err := cmd.DocsAction(&buffer, badDir)
 	require.Error(test, err)
 }
+
+// ----------------------------------------------------------------------------
+// Private functions
+// ----------------------------------------------------------------------------
 
 // Hack from https://github.com/spf13/cobra/issues/2079
 func setArgs(cmd *cobra.Command, args []string) {

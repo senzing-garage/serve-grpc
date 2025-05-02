@@ -1,11 +1,12 @@
 //go:build darwin
 
-package cmd
+package cmd_test
 
 import (
 	"bytes"
 	"testing"
 
+	"github.com/senzing-garage/serve-grpc/cmd"
 	"github.com/stretchr/testify/require"
 )
 
@@ -24,17 +25,13 @@ func Test_RootCmd_Execute_tls_encrypted_key(test *testing.T) {
 		"--server-key-passphrase",
 		"Passw0rd",
 	}
-	RootCmd.SetArgs(args)
-	err := RootCmd.Execute()
+	cmd.RootCmd.SetArgs(args)
+	err := cmd.RootCmd.Execute()
 	require.Error(test, err)
 }
 
-// ----------------------------------------------------------------------------
-// Test private functions
-// ----------------------------------------------------------------------------
-
-func Test_docsAction(test *testing.T) {
+func Test_DocsAction(test *testing.T) {
 	var buffer bytes.Buffer
-	err := docsAction(&buffer, "/tmp")
+	err := cmd.DocsAction(&buffer, "/tmp")
 	require.NoError(test, err)
 }

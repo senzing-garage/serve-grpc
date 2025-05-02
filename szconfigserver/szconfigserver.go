@@ -45,12 +45,12 @@ func (server *SzConfigServer) AddDataSource(
 
 	szConfig, err := server.createSzConfig(ctx, request.GetConfigDefinition())
 	if err != nil {
-		return response, err
+		return response, wraperror.Errorf(err, "szconfigserver.AddDataSource.createSzConfig error: %w", err)
 	}
 
 	result, err = szConfig.AddDataSource(ctx, request.GetDataSourceCode())
 	if err != nil {
-		return response, err
+		return response, wraperror.Errorf(err, "szconfigserver.AddDataSource.AddDataSource error: %w", err)
 	}
 
 	configDefinition, err := szConfig.Export(ctx)
@@ -59,7 +59,7 @@ func (server *SzConfigServer) AddDataSource(
 		ConfigDefinition: configDefinition,
 	}
 
-	return response, err
+	return response, wraperror.Errorf(err, "szconfigserver.AddDataSource error: %w", err)
 }
 
 func (server *SzConfigServer) DeleteDataSource(
@@ -81,12 +81,12 @@ func (server *SzConfigServer) DeleteDataSource(
 
 	szConfig, err := server.createSzConfig(ctx, request.GetConfigDefinition())
 	if err != nil {
-		return response, err
+		return response, wraperror.Errorf(err, "szconfigserver.DeleteDataSource.createSzConfig error: %w", err)
 	}
 
 	result, err := szConfig.DeleteDataSource(ctx, request.GetDataSourceCode())
 	if err != nil {
-		return response, err
+		return response, wraperror.Errorf(err, "szconfigserver.DeleteDataSource.DeleteDataSource error: %w", err)
 	}
 
 	configDefinition, err := szConfig.Export(ctx)
@@ -95,7 +95,7 @@ func (server *SzConfigServer) DeleteDataSource(
 		ConfigDefinition: configDefinition,
 	}
 
-	return response, err
+	return response, wraperror.Errorf(err, "szconfigserver.DeleteDataSource error: %w", err)
 }
 
 func (server *SzConfigServer) GetDataSources(
@@ -126,7 +126,7 @@ func (server *SzConfigServer) GetDataSources(
 		Result: result,
 	}
 
-	return response, err
+	return response, wraperror.Errorf(err, "szconfigserver.GetDataSources error: %w", err)
 }
 
 func (server *SzConfigServer) VerifyConfig(
@@ -153,8 +153,8 @@ func (server *SzConfigServer) VerifyConfig(
 	}
 
 	result = true
-	err = szConfig.VerifyConfigDefinition(ctx, request.GetConfigDefinition())
 
+	err = szConfig.VerifyConfigDefinition(ctx, request.GetConfigDefinition())
 	if err != nil {
 		result = false
 	}
@@ -163,7 +163,7 @@ func (server *SzConfigServer) VerifyConfig(
 		Result: result,
 	}
 
-	return response, err
+	return response, wraperror.Errorf(err, "szconfigserver.VerifyConfig error: %w", err)
 }
 
 // ----------------------------------------------------------------------------
@@ -225,26 +225,31 @@ func (server *SzConfigServer) SetLogLevel(ctx context.Context, logLevelName stri
 	// }
 	err = server.getLogger().SetLogLevel(logLevelName)
 	if err != nil {
-		return err
+		return wraperror.Errorf(err, "szconfigserver.SetLogLevel.SetLogLevel error: %w", err)
 	}
 
 	server.isTrace = (logLevelName == logging.LevelTraceName)
 
-	return err
+	return wraperror.Errorf(err, "szconfigserver.SetLogLevel error: %w", err)
 }
 
 // --- Services ---------------------------------------------------------------
 
 func (server *SzConfigServer) createSzConfig(ctx context.Context, configDefinition string) (*szconfig.Szconfig, error) {
 	szConfigManager := getSzConfigManager()
-	return szConfigManager.CreateConfigFromStringChoreography(ctx, configDefinition)
+
+	result, err := szConfigManager.CreateConfigFromStringChoreography(ctx, configDefinition)
+
+	return result, wraperror.Errorf(err, "szconfigserver.createSzConfig error: %w", err)
 }
 
 func (server *SzConfigServer) GetSdkSzConfigAsInterface(
 	ctx context.Context,
 	configDefinition string,
 ) (senzing.SzConfig, error) {
-	return server.createSzConfig(ctx, configDefinition)
+	result, err := server.createSzConfig(ctx, configDefinition)
+
+	return result, wraperror.Errorf(err, "szconfigserver.createSzConfig error: %w", err)
 }
 
 // Singleton pattern for szconfigmanager.
@@ -296,7 +301,7 @@ func (server *SzConfigServer) RegisterObserver(ctx context.Context, observer szo
 
 	server.observers = append(server.observers, observer)
 
-	return err
+	return wraperror.Errorf(err, "szconfigserver.RegisterObserver error: %w", err)
 }
 
 func (server *SzConfigServer) SetObserverOrigin(ctx context.Context, origin string) {
@@ -316,9 +321,7 @@ func (server *SzConfigServer) SetObserverOrigin(ctx context.Context, origin stri
 }
 
 func (server *SzConfigServer) UnregisterObserver(ctx context.Context, observer szobserver.Observer) error {
-	var (
-		err error
-	)
+	var err error
 
 	if server.isTrace {
 		entryTime := time.Now()
@@ -340,5 +343,5 @@ func (server *SzConfigServer) UnregisterObserver(ctx context.Context, observer s
 		server.observers = result
 	}
 
-	return nil
+	return wraperror.Errorf(err, "szconfigserver.RegisterObserver error: %w", err)
 }

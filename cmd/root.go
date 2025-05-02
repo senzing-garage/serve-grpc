@@ -140,7 +140,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 
 	senzingSettings, err := settings.BuildAndVerifySettings(ctx, viper.GetViper())
 	if err != nil {
-		return err
+		return wraperror.Errorf(err, "cmd.RunE.BuildAndVerifySettings error: %w", err)
 	}
 
 	// Aggregate gRPC server options.
@@ -149,7 +149,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 
 	serverSideTLSServerOption, err := getServerSideTLSServerOption()
 	if err != nil {
-		return err
+		return wraperror.Errorf(err, "cmd.RunE.getServerSideTLSServerOption error: %w", err)
 	}
 
 	if serverSideTLSServerOption != nil {
@@ -176,7 +176,9 @@ func RunE(_ *cobra.Command, _ []string) error {
 		SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
 	}
 
-	return grpcserver.Serve(ctx)
+	err = grpcserver.Serve(ctx)
+
+	return wraperror.Errorf(err, "cmd.RunE error: %w", err)
 }
 
 // Used in construction of cobra.Command.
@@ -244,7 +246,7 @@ func createTLSOptionDetails() (grpc.ServerOption, error) {
 		serverKeyPassPhraseValue,
 	)
 	if err != nil {
-		return result, err
+		return result, wraperror.Errorf(err, "cmd.createTLSOptionDetails error: %w", err)
 	}
 
 	certificates := []tls.Certificate{serverCertificate}
@@ -265,7 +267,7 @@ func createTLSOptionDetails() (grpc.ServerOption, error) {
 		for _, caCertificatePath := range caCertificatePathsValue {
 			pemClientCA, err := os.ReadFile(caCertificatePath)
 			if err != nil {
-				return result, err
+				return result, wraperror.Errorf(err, "cmd.createTLSOptionDetails.os.ReadFile error: %w", err)
 			}
 
 			if !clientCAs.AppendCertsFromPEM(pemClientCA) {
@@ -278,10 +280,9 @@ func createTLSOptionDetails() (grpc.ServerOption, error) {
 		}
 	}
 
-	createGrpcServerOption(certificates, clientAuth, clientCAs)
+	result = createGrpcServerOption(certificates, clientAuth, clientCAs)
 
-	return result, err
-
+	return result, wraperror.Errorf(err, "cmd.createTLSOptionDetails error: %w", err)
 }
 
 func createGrpcServerOption(
@@ -289,9 +290,7 @@ func createGrpcServerOption(
 	clientAuth tls.ClientAuthType,
 	clientCAs *x509.CertPool,
 ) grpc.ServerOption {
-
 	// Create TLS configuration.
-
 	tlsConfig := &tls.Config{
 		Certificates: certificates,
 		ClientAuth:   clientAuth,
@@ -300,5 +299,6 @@ func createGrpcServerOption(
 		MaxVersion:   tls.VersionTLS13,
 	}
 	transportCredentials := credentials.NewTLS(tlsConfig)
+
 	return grpc.Creds(transportCredentials)
 }

@@ -65,24 +65,24 @@ linters:
     - misspell
     - mnd
     - musttag
-    # - nakedret
-    # - nestif
+    - nakedret
+    - nestif
     - nilerr
     - nilnesserr
     - nilnil
-    # - nlreturn
+    - nlreturn
     - noctx
-    # - nolintlint
+    - nolintlint
     - nonamedreturns
     - nosprintfhostport
-    # - paralleltest
+    - paralleltest
     - perfsprint
     - prealloc
     - predeclared
     - promlinter
     - protogetter
     - reassign
-    # - recvcheck
+    - recvcheck
     - revive
     - rowserrcheck
     - sloglint
@@ -90,27 +90,28 @@ linters:
     - sqlclosecheck
     - staticcheck
     - tagalign
-    # - tagliatelle
-    # - testableexamples
-    # - testifylint
-    # - testpackage
-    # - thelper
+    - tagliatelle
+    - testableexamples
+    - testifylint
+    - testpackage
+    - thelper
     - tparallel
-    # - unconvert
-    # - unparam
+    - unconvert
+    - unparam
     - unused
     - usestdlibvars
-    # - usetesting
-    # - varnamelen
+    - usetesting
+    - varnamelen
     - wastedassign
-    # - whitespace
-    # - wrapcheck
-    # - wsl
+    - whitespace
+    - wrapcheck
+    - wsl
     - zerologlint
   disable:
     - gochecknoglobals
     - gochecknoinits
     - lll
+    - paralleltest
   exclusions:
     generated: lax
     presets:
@@ -169,15 +170,17 @@ linters:
         - '^logging\.OptionCallerSkip$'
         - '^server\.traceEntry$'
         - '^server\.traceExit$'
-        - "^Value$"
-
+    tagliatelle:
+      case:
+        rules:
+          json: upperSnake
 formatters:
   enable:
     - gci
     - gofmt
-    # - gofumpt
+    - gofumpt
     - goimports
-    # - golines
+    - golines
   exclusions:
     generated: lax
     paths:

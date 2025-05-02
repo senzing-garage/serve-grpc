@@ -579,6 +579,8 @@ func ExampleSzEngineServer_PrimeEngine() {
 func ExampleSzEngineServer_ProcessRedoRecord() {
 	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	// IMPROVE: Document ExampleSzEngineServer_ProcessRedoRecord
+
+	// Output:
 }
 
 func ExampleSzEngineServer_SearchByAttributes() {
