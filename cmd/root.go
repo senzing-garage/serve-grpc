@@ -147,13 +147,13 @@ func RunE(_ *cobra.Command, _ []string) error {
 
 	var grpcServerOptions []grpc.ServerOption
 
-	serverSideTLSServerOption, err := getGrpcServerOption()
+	tlsOption, err := getTLSOption()
 	if err != nil {
 		return err
 	}
 
-	if serverSideTLSServerOption != nil {
-		grpcServerOptions = append(grpcServerOptions, serverSideTLSServerOption)
+	if tlsOption != nil {
+		grpcServerOptions = append(grpcServerOptions, tlsOption)
 	}
 
 	// Create and Serve gRPC Server.
@@ -195,35 +195,40 @@ func init() {
 	cmdhelper.Init(RootCmd, ContextVariables)
 }
 
-// If TLS environment variables specified, construct the appropriate gRPC server option.
-func getGrpcServerOption() (grpc.ServerOption, error) {
-	var result grpc.ServerOption
+// Get the appropriate GRPC server options.
+func getTLSOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
 
 	serverCertificatePathValue := viper.GetString(serverCertificateFile.Arg)
 	serverKeyPathValue := viper.GetString(serverKeyFile.Arg)
 
+	// Determine if TLS is requested.
+
 	switch {
 	case serverCertificatePathValue != "" && serverKeyPathValue != "":
-		result, err := createTLSOption(serverCertificatePathValue, serverKeyPathValue)
-
-		return result, wraperror.Errorf(err, "cmd")
+		result, err = createTLSOption(serverCertificatePathValue, serverKeyPathValue)
 	case serverCertificatePathValue != "" && serverKeyPathValue == "":
-		return result, wraperror.Errorf(
+		err = wraperror.Errorf(
 			errPackage,
 			"%s is set, but %s is not set. Both need to be set",
 			serverCertificateFile.Envar,
 			serverKeyFile.Envar,
 		)
 	case serverCertificatePathValue == "" && serverKeyPathValue != "":
-		return result, wraperror.Errorf(
+		err = wraperror.Errorf(
 			errPackage,
 			"%s is set, but %s is not set. Both need to be set",
 			serverKeyFile.Envar,
 			serverCertificateFile.Envar,
 		)
 	default:
-		return result, nil
+		err = nil
 	}
+
+	return result, err
 }
 
 func createTLSOption(serverCertificatePathValue string, serverKeyPathValue string) (grpc.ServerOption, error) {
@@ -280,23 +285,12 @@ func createTLSOption(serverCertificatePathValue string, serverKeyPathValue strin
 		}
 	}
 
-	result = createGrpcServerOption(certificates, clientAuth, clientCAs)
-	// Create TLS configuration.
-
-	// tlsConfig := &tls.Config{
-	// 	Certificates: certificates,
-	// 	ClientAuth:   clientAuth,
-	// 	ClientCAs:    clientCAs,
-	// 	MinVersion:   tls.VersionTLS12, // See https://pkg.go.dev/crypto/tls#pkg-constants
-	// 	MaxVersion:   tls.VersionTLS13,
-	// }
-	// transportCredentials := credentials.NewTLS(tlsConfig)
-	// result = grpc.Creds(transportCredentials)
+	result = buildGrpcServerOption(certificates, clientAuth, clientCAs)
 
 	return result, wraperror.Errorf(err, "cmd.getServerSideTLSServerOption error: %w", err)
 }
 
-func createGrpcServerOption(
+func buildGrpcServerOption(
 	certificates []tls.Certificate,
 	clientAuth tls.ClientAuthType,
 	clientCAs *x509.CertPool,
