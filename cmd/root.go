@@ -6,6 +6,7 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"fmt"
 	"os"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
@@ -235,6 +236,8 @@ func createTLSOptionDetails() (grpc.ServerOption, error) {
 
 	// Server-side TLS.
 
+	fmt.Printf(">>>>>>>> in createTLSOptionDetails.server-side TLS\n")
+
 	serverCertificatePathValue := viper.GetString(serverCertificateFile.Arg)
 	serverKeyPathValue := viper.GetString(serverKeyFile.Arg)
 	serverKeyPassPhraseValue := viper.GetString(serverKeyPassPhrase.Arg)
@@ -252,6 +255,8 @@ func createTLSOptionDetails() (grpc.ServerOption, error) {
 	certificates := []tls.Certificate{serverCertificate}
 
 	// Mutual TLS.
+
+	fmt.Printf(">>>>>>>> in createTLSOptionDetails.mutual TLS\n")
 
 	caCertificatePathsValue := viper.GetStringSlice(clientCaCertificateFiless.Arg)
 	caCertificatePathValue := viper.GetString(clientCaCertificateFile.Arg)
@@ -280,7 +285,11 @@ func createTLSOptionDetails() (grpc.ServerOption, error) {
 		}
 	}
 
+	fmt.Printf(">>>>>>>> in createTLSOptionDetails.mutual TLS - 2\n")
+
 	result = createGrpcServerOption(certificates, clientAuth, clientCAs)
+
+	fmt.Printf(">>>>>>>> in createTLSOptionDetails.mutual TLS - result %v\n", result)
 
 	return result, wraperror.Errorf(err, "cmd.createTLSOptionDetails error: %w", err)
 }
@@ -290,6 +299,9 @@ func createGrpcServerOption(
 	clientAuth tls.ClientAuthType,
 	clientCAs *x509.CertPool,
 ) grpc.ServerOption {
+
+	fmt.Printf(">>>>>>>> in createGrpcServerOption\n")
+
 	// Create TLS configuration.
 	tlsConfig := &tls.Config{
 		Certificates: certificates,
