@@ -4,9 +4,12 @@ import (
 	"context"
 	"fmt"
 	"net"
+
+	"net/http"
 	"net/url"
 	"strings"
 
+	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"github.com/senzing-garage/go-cmdhelping/option"
 	"github.com/senzing-garage/go-helpers/settingsparser"
 	"github.com/senzing-garage/go-helpers/wraperror"
@@ -39,20 +42,22 @@ import (
 type BasicGrpcServer struct {
 	AvoidServing          bool
 	EnableAll             bool
+	EnableHTTP            bool
 	EnableSzConfig        bool
 	EnableSzConfigManager bool
 	EnableSzDiagnostic    bool
 	EnableSzEngine        bool
 	EnableSzProduct       bool
 	GrpcServerOptions     []grpc.ServerOption
+	HTTPPort              int
 	logger                logging.Logging
 	LogLevelName          string
 	ObserverOrigin        string
 	Observers             []observer.Observer
 	ObserverURL           string
 	Port                  int
-	SenzingSettings       string
 	SenzingInstanceName   string
+	SenzingSettings       string
 	SenzingVerboseLogging int64
 }
 
@@ -90,6 +95,7 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 	if err != nil {
 		grpcServer.log(4001, grpcServer.Port, err)
 	}
+	defer listener.Close()
 
 	// Create server.
 
@@ -105,14 +111,47 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 
 	// Run server.
 
-	if !grpcServer.AvoidServing {
+	fmt.Printf(">>>>>> enabled: %t\n", grpcServer.EnableHTTP)
+
+	switch {
+	case grpcServer.AvoidServing:
+		grpcServer.log(2004)
+	case grpcServer.EnableHTTP:
+
+		fmt.Printf("\n\n>>>>>> HTTP enabled\n\n")
+		wrappedOptions := []grpcweb.Option{}
+		wrappedGrpc := grpcweb.WrapServer(aGrpcServer, wrappedOptions...)
+		myHandler := http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
+			if wrappedGrpc.IsGrpcWebRequest(req) {
+				wrappedGrpc.ServeHTTP(resp, req)
+				return
+			}
+			// Fall back to other servers.
+			http.DefaultServeMux.ServeHTTP(resp, req)
+		})
+
+		httpServer := http.Server{
+			Addr:    fmt.Sprintf(":%d", grpcServer.HTTPPort),
+			Handler: http.HandlerFunc(myHandler),
+		}
+
+		if err := httpServer.ListenAndServe(); err != nil {
+			panic(err)
+		}
+
+	default:
 		grpcServer.log(2003, listener.Addr())
 		err = aGrpcServer.Serve(listener)
-	} else {
-		grpcServer.log(2004)
-
-		err = listener.Close()
 	}
+
+	// if !grpcServer.AvoidServing {
+	// 	grpcServer.log(2003, listener.Addr())
+	// 	err = aGrpcServer.Serve(listener)
+	// } else {
+	// 	grpcServer.log(2004)
+
+	// 	err = listener.Close()
+	// }
 
 	return wraperror.Errorf(err, "grpcserver.Serve error: %w", err)
 }

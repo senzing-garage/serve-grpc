@@ -167,6 +167,10 @@ run-server-side-tls-encrypted-key: run-server-side-tls-encrypted-key-osarch-spec
 .PHONY: test
 test: test-osarch-specific
 
+.PHONY: test-http
+test-http: export SENZING_TOOLS_ENABLE_HTTP=true
+test-http: test-osarch-specific
+
 
 .PHONY: docker-test
 docker-test:
@@ -248,6 +252,11 @@ update-pkg-cache:
 # -----------------------------------------------------------------------------
 # Specific programs
 # -----------------------------------------------------------------------------
+
+.PHONY: bearer
+bearer:
+	@bearer scan .
+
 
 .PHONY: cspell
 cspell:

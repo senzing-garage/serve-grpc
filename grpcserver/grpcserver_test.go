@@ -178,3 +178,29 @@ func TestGrpcServerImpl_Serve(test *testing.T) {
 	err = grpcServer.Serve(ctx)
 	require.NoError(test, err)
 }
+
+func TestGrpcServerImpl_Serve_HTTP(test *testing.T) {
+	_ = test
+	ctx := test.Context()
+
+	logLevelName := "INFO"
+	osenvLogLevel := os.Getenv("SENZING_LOG_LEVEL")
+
+	if len(osenvLogLevel) > 0 {
+		logLevelName = osenvLogLevel
+	}
+
+	senzingsettings, err := settings.BuildSimpleSettingsUsingEnvVars()
+	require.NoError(test, err)
+
+	grpcServer := &grpcserver.BasicGrpcServer{
+		EnableAll:           true,
+		EnableHTTP:          true,
+		LogLevelName:        logLevelName,
+		Port:                8258,
+		SenzingInstanceName: "Test gRPC Server",
+		SenzingSettings:     senzingsettings,
+	}
+	err = grpcServer.Serve(ctx)
+	require.NoError(test, err)
+}

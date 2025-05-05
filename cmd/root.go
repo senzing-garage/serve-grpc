@@ -50,6 +50,14 @@ var clientCaCertificateFiless = option.ContextVariable{
 	Type:    optiontype.StringSlice,
 }
 
+var enableHTTP = option.ContextVariable{
+	Arg:     "enable-http",
+	Default: option.OsLookupEnvBool("SENZING_TOOLS_ENABLE_HTTP", false),
+	Envar:   "SENZING_TOOLS_ENABLE_HTTP",
+	Help:    "Enable GRPC over HTTP service [%s]",
+	Type:    optiontype.Bool,
+}
+
 var serverCertificateFile = option.ContextVariable{
 	Arg:     "server-certificate-file",
 	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_CERTIFICATE_FILE", ""),
@@ -77,9 +85,7 @@ var serverKeyPassPhrase = option.ContextVariable{
 var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	clientCaCertificateFile,
 	clientCaCertificateFiless,
-	serverCertificateFile,
-	serverKeyFile,
-	serverKeyPassPhrase,
+	enableHTTP,
 	option.AvoidServe,
 	option.DatabaseURL,
 	option.EnableAll,
@@ -91,9 +97,13 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	option.EngineInstanceName,
 	option.EngineLogLevel,
 	option.GrpcPort,
+	option.HTTPPort,
 	option.LogLevel,
 	option.ObserverOrigin,
 	option.ObserverURL,
+	serverCertificateFile,
+	serverKeyFile,
+	serverKeyPassPhrase,
 }
 
 var ContextVariables = append(ContextVariablesForMultiPlatform, ContextVariablesForOsArch...)
@@ -161,18 +171,20 @@ func RunE(_ *cobra.Command, _ []string) error {
 	grpcserver := &grpcserver.BasicGrpcServer{
 		AvoidServing:          viper.GetBool(option.AvoidServe.Arg),
 		EnableAll:             viper.GetBool(option.EnableAll.Arg),
+		EnableHTTP:            viper.GetBool(enableHTTP.Arg),
 		EnableSzConfig:        viper.GetBool(option.EnableSzConfig.Arg),
 		EnableSzConfigManager: viper.GetBool(option.EnableSzConfigManager.Arg),
 		EnableSzDiagnostic:    viper.GetBool(option.EnableSzDiagnostic.Arg),
 		EnableSzEngine:        viper.GetBool(option.EnableSzEngine.Arg),
 		EnableSzProduct:       viper.GetBool(option.EnableSzProduct.Arg),
 		GrpcServerOptions:     grpcServerOptions,
+		HTTPPort:              viper.GetInt(option.HTTPPort.Arg),
 		LogLevelName:          viper.GetString(option.LogLevel.Arg),
 		ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
 		ObserverURL:           viper.GetString(option.ObserverURL.Arg),
 		Port:                  viper.GetInt(option.GrpcPort.Arg),
-		SenzingSettings:       senzingSettings,
 		SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
+		SenzingSettings:       senzingSettings,
 		SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
 	}
 
