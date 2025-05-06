@@ -1,6 +1,9 @@
 package grpcserver
 
-import "context"
+import (
+	"context"
+	"errors"
+)
 
 // ----------------------------------------------------------------------------
 // Types
@@ -42,3 +45,5 @@ var IDMessages = map[int]string{
 
 // Status strings for specific messages.
 var IDStatuses = map[int]string{}
+
+var errForPackage = errors.New("grpcserver")

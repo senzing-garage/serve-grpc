@@ -6,7 +6,9 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"fmt"
 	"os"
+	"sync"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
 	"github.com/senzing-garage/go-cmdhelping/option"
@@ -188,7 +190,31 @@ func RunE(_ *cobra.Command, _ []string) error {
 		SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
 	}
 
-	err = grpcserver.Serve(ctx)
+	err = grpcserver.Initialize(ctx)
+	if err != nil {
+		return wraperror.Errorf(err, "cmd.RunE.Initialize error: %w", err)
+	}
+
+	waitGroupCount := 1
+	if grpcserver.EnableHTTP {
+		waitGroupCount += 1
+	}
+
+	var waitGroup sync.WaitGroup
+	waitGroup.Add(waitGroupCount)
+
+	go func() {
+		defer waitGroup.Done()
+		err = grpcserver.Serve(ctx)
+		if err != nil {
+			fmt.Printf("Error: grpcServer - %v\n", err)
+		}
+	}()
+
+	if grpcserver.EnableHTTP {
+	}
+
+	waitGroup.Wait()
 
 	return wraperror.Errorf(err, "cmd.RunE error: %w", err)
 }
