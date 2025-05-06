@@ -8,6 +8,7 @@ import (
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"github.com/senzing-garage/go-helpers/wraperror"
+	"github.com/senzing-garage/go-logging/logging"
 	"google.golang.org/grpc"
 )
 
@@ -22,10 +23,14 @@ type BasicHTTPServer struct {
 	EnableGRPC        bool
 	GRPCRoutePrefix   string // IMPROVE: Only works with "grpc"
 	GRPCServer        *grpc.Server
+	logger            logging.Logging
+	LogLevelName      string
 	ReadHeaderTimeout time.Duration
 	ServerAddress     string
 	ServerPort        int
 }
+
+const OptionCallerSkip = 3
 
 // ----------------------------------------------------------------------------
 // Interface methods
@@ -43,21 +48,19 @@ Output
 
 func (httpServer *BasicHTTPServer) Serve(ctx context.Context) error {
 	var (
-		err          error
-		userMessages []string
+		err error
 	)
 
 	rootMux := http.NewServeMux()
 
 	// Enable GRPC over HTTP.
 
-	userMessages = httpServer.registerGRPC(ctx, rootMux, userMessages)
+	httpServer.registerGRPC(ctx, rootMux)
 
 	// Start service.
 
 	listenOnAddress := fmt.Sprintf("%s:%v", httpServer.ServerAddress, httpServer.ServerPort)
-	userMessages = append(userMessages, fmt.Sprintf("Starting server on interface:port '%s'...\n", listenOnAddress))
-	outputUserMessages(userMessages)
+	httpServer.log(2001, listenOnAddress)
 
 	server := http.Server{
 		ReadHeaderTimeout: httpServer.ReadHeaderTimeout,
@@ -88,44 +91,61 @@ func (httpServer *BasicHTTPServer) grpcFunc(ctx context.Context) http.HandlerFun
 
 	return http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
 		if wrappedGrpc.IsGrpcWebRequest(req) {
+			httpServer.log(1000, req)
+			req = httpServer.modifyRequest(req)
 			wrappedGrpc.ServeHTTP(resp, req)
-		} else {
-			// Fall back to other servers.
+		} else { // Fall back to other servers.
+			httpServer.log(1001, req)
 			http.DefaultServeMux.ServeHTTP(resp, req)
 		}
 	})
 }
 
-func (httpServer *BasicHTTPServer) registerGRPC(
-	ctx context.Context,
-	rootMux *http.ServeMux,
-	userMessages []string,
-) []string {
-	result := userMessages
+// --- Logging -------------------------------------------------------------------------
 
-	if httpServer.EnableAll || httpServer.EnableGRPC {
-		rootMux.HandleFunc(fmt.Sprintf("/%s/", httpServer.GRPCRoutePrefix), httpServer.grpcFunc(ctx))
-		result = append(result,
-			fmt.Sprintf(
-				"Serving GRPC over HTTP at http://localhost:%d/%s",
-				httpServer.ServerPort,
-				httpServer.GRPCRoutePrefix,
-			))
+// Get the Logger singleton.
+func (httpServer *BasicHTTPServer) getLogger() logging.Logging {
+	var err error
+
+	if httpServer.logger == nil {
+		options := []interface{}{
+			logging.OptionCallerSkip{Value: OptionCallerSkip},
+			logging.OptionMessageFields{Value: []string{"id", "text", "reason", "errors", "details"}},
+		}
+
+		httpServer.logger, err = logging.NewSenzingLogger(ComponentID, IDMessages, options...)
+		if err != nil {
+			panic(err)
+		}
+
+		err = httpServer.logger.SetLogLevel(httpServer.LogLevelName)
+		if err != nil {
+			panic(err)
+		}
 	}
 
-	return result
+	return httpServer.logger
 }
 
-// ----------------------------------------------------------------------------
-// Private functions
-// ----------------------------------------------------------------------------
-
-func outputln(message ...any) {
-	fmt.Println(message...) //nolint
+// Log message.
+func (httpServer *BasicHTTPServer) log(messageNumber int, details ...interface{}) {
+	httpServer.getLogger().Log(messageNumber, details...)
 }
 
-func outputUserMessages(messages []string) {
-	for _, message := range messages {
-		outputln(message)
+// Tricky code to modify the incoming gRPC request.
+func (httpServer *BasicHTTPServer) modifyRequest(request *http.Request) *http.Request {
+	// Tricky code:  Modify the request to remove `/GRPCRoutePrefix` value.
+
+	prefixLen := len(httpServer.GRPCRoutePrefix) + 1
+	request.URL.Path = request.URL.Path[prefixLen:]
+	request.RequestURI = request.RequestURI[prefixLen:]
+	request.Pattern = "/"
+	return request
+}
+
+func (httpServer *BasicHTTPServer) registerGRPC(ctx context.Context, rootMux *http.ServeMux) {
+	if httpServer.EnableAll || httpServer.EnableGRPC {
+		rootMux.HandleFunc(fmt.Sprintf("/%s/", httpServer.GRPCRoutePrefix), httpServer.grpcFunc(ctx))
+		httpServer.log(2002, httpServer.ServerPort, httpServer.GRPCRoutePrefix)
 	}
 }

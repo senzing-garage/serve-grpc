@@ -104,6 +104,7 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	option.LogLevel,
 	option.ObserverOrigin,
 	option.ObserverURL,
+	option.ServerAddress,
 	serverCertificateFile,
 	serverKeyFile,
 	serverKeyPassPhrase,
@@ -248,6 +249,8 @@ func buildBasicHTTPServer(grpcServer *grpc.Server) *httpserver.BasicHTTPServer {
 		EnableGRPC:      viper.GetBool(enableHTTP.Arg),
 		GRPCRoutePrefix: "grpc",
 		GRPCServer:      grpcServer,
+		LogLevelName:    viper.GetString(option.LogLevel.Arg),
+		ServerAddress:   viper.GetString(option.ServerAddress.Arg),
 		ServerPort:      viper.GetInt(option.HTTPPort.Arg),
 	}
 }
