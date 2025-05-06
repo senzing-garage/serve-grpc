@@ -145,6 +145,11 @@ docker-run:
 run: run-osarch-specific
 
 
+.PHONY: run-http
+test-http: export SENZING_TOOLS_ENABLE_HTTP=true
+run-http:
+	@go run main.go --enable-all
+
 .PHONY: run-mutual-tls
 run-mutual-tls: run-mutual-tls-osarch-specific
 

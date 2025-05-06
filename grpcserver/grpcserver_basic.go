@@ -39,7 +39,6 @@ import (
 type BasicGrpcServer struct {
 	AvoidServing          bool
 	EnableAll             bool
-	EnableHTTP            bool
 	EnableSzConfig        bool
 	EnableSzConfigManager bool
 	EnableSzDiagnostic    bool
@@ -47,7 +46,6 @@ type BasicGrpcServer struct {
 	EnableSzProduct       bool
 	grpcserver            *grpc.Server
 	GrpcServerOptions     []grpc.ServerOption
-	HTTPPort              int
 	isInitialized         bool
 	logger                logging.Logging
 	LogLevelName          string

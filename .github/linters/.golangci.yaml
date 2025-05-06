@@ -152,6 +152,9 @@ linters:
         - '.+/szengineserver\.SzEngineServer$'
         - '.+/szproductserver\.SzProductServer$'
         - '.+/tls\.Config$'
+        - '.+/httpserver\.BasicHTTPServer$'
+        - '.+/http\.Server$'
+
     ireturn:
       allow:
         - error
