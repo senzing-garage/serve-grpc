@@ -146,9 +146,9 @@ run: run-osarch-specific
 
 
 .PHONY: run-http
-test-http: export SENZING_TOOLS_ENABLE_HTTP=true
+run-http: export SENZING_TOOLS_ENABLE_HTTP=true
 run-http:
-	@go run main.go --enable-all
+	@go run main.go --enable-all --enable-http
 
 .PHONY: run-mutual-tls
 run-mutual-tls: run-mutual-tls-osarch-specific
