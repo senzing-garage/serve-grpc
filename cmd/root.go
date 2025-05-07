@@ -150,28 +150,19 @@ func RunE(_ *cobra.Command, _ []string) error {
 
 	ctx := context.Background()
 
-	// Build Senzing SDK configuration.
+	// Create and Initialize gRPC Server.
 
-	senzingSettings, err := settings.BuildAndVerifySettings(ctx, viper.GetViper())
+	grpcserver, err := buildBasicGrpcServer(ctx)
 	if err != nil {
-		return wraperror.Errorf(err, "cmd.RunE.BuildAndVerifySettings error: %w", err)
+		return wraperror.Errorf(err, "cmd.RunE.buildBasicGrpcServer error: %w", err)
 	}
-
-	// Aggregate gRPC server options.
-
-	grpcServerOptions, err := getGrpcServerOptions()
-	if err != nil {
-		return wraperror.Errorf(err, "cmd.RunE.getGrpcServerOptions error: %w", err)
-	}
-
-	// Create and Serve gRPC Server.
-
-	grpcserver := buildBasicGrpcServer(grpcServerOptions, senzingSettings)
 
 	err = grpcserver.Initialize(ctx)
 	if err != nil {
 		return wraperror.Errorf(err, "cmd.RunE.Initialize error: %w", err)
 	}
+
+	// Start services.
 
 	err = startServers(ctx, grpcserver)
 
@@ -187,8 +178,27 @@ func Version() string {
 // Private functions
 // ----------------------------------------------------------------------------
 
-func buildBasicGrpcServer(grpcServerOptions []grpc.ServerOption, senzingSettings string) *grpcserver.BasicGrpcServer {
-	return &grpcserver.BasicGrpcServer{
+func buildBasicGrpcServer(ctx context.Context) (*grpcserver.BasicGrpcServer, error) {
+	var (
+		err    error
+		result *grpcserver.BasicGrpcServer
+	)
+
+	senzingSettings, err := settings.BuildAndVerifySettings(ctx, viper.GetViper())
+	if err != nil {
+		return result, wraperror.Errorf(err, "cmd.buildBasicGrpcServer.BuildAndVerifySettings error: %w", err)
+	}
+
+	// Aggregate gRPC server options.
+
+	grpcServerOptions, err := getGrpcServerOptions()
+	if err != nil {
+		return result, wraperror.Errorf(err, "cmd.buildBasicGrpcServer.getGrpcServerOptions error: %w", err)
+	}
+
+	// Create Server.
+
+	result = &grpcserver.BasicGrpcServer{
 		AvoidServing:          viper.GetBool(option.AvoidServe.Arg),
 		EnableAll:             viper.GetBool(option.EnableAll.Arg),
 		EnableSzConfig:        viper.GetBool(option.EnableSzConfig.Arg),
@@ -205,6 +215,8 @@ func buildBasicGrpcServer(grpcServerOptions []grpc.ServerOption, senzingSettings
 		SenzingSettings:       senzingSettings,
 		SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
 	}
+
+	return result, err
 }
 
 func buildBasicHTTPServer(grpcServer *grpc.Server) *httpserver.BasicHTTPServer {
