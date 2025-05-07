@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 -
 
+## [0.9.9] - 2025-05-07
+
+### Added in 0.9.9
+
+- gRPC over HTTP
+
 ## [0.9.8] - 2025-05-02
 
 ### Changed in 0.9.8

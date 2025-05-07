@@ -44,15 +44,17 @@ type BasicGrpcServer struct {
 	EnableSzDiagnostic    bool
 	EnableSzEngine        bool
 	EnableSzProduct       bool
+	grpcserver            *grpc.Server
 	GrpcServerOptions     []grpc.ServerOption
+	isInitialized         bool
 	logger                logging.Logging
 	LogLevelName          string
 	ObserverOrigin        string
 	Observers             []observer.Observer
 	ObserverURL           string
 	Port                  int
-	SenzingSettings       string
 	SenzingInstanceName   string
+	SenzingSettings       string
 	SenzingVerboseLogging int64
 }
 
@@ -62,10 +64,15 @@ const OptionCallerSkip = 3
 // Public methods
 // ----------------------------------------------------------------------------
 
-func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
+func (grpcServer *BasicGrpcServer) GetGRPCServer() *grpc.Server {
+	return grpcServer.grpcserver
+}
+
+func (grpcServer *BasicGrpcServer) Initialize(ctx context.Context) error {
 	var err error
 
 	// Log entry parameters.
+
 	grpcServer.log(2000, grpcServer)
 
 	// Initialize observing.
@@ -84,34 +91,50 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 		return err
 	}
 
+	// Create server.
+
+	grpcServer.grpcserver = grpc.NewServer(grpcServer.GrpcServerOptions...)
+
+	// Register services with gRPC server.
+
+	grpcServer.enableServices(ctx, grpcServer.grpcserver)
+
+	// Enable reflection.
+
+	reflection.Register(grpcServer.grpcserver)
+
+	grpcServer.isInitialized = true
+
+	return wraperror.Errorf(err, "grpcserver.Initialize error: %w", err)
+}
+
+func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
+	var err error
+
+	_ = ctx
+
+	if !grpcServer.isInitialized {
+		return wraperror.Errorf(
+			errForPackage,
+			"grpcserver.Serve is not initialized. BasicGrpcServer.Initialize() must be called first.",
+		)
+	}
+
 	// Set up socket listener.
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcServer.Port))
 	if err != nil {
 		grpcServer.log(4001, grpcServer.Port, err)
 	}
-
-	// Create server.
-
-	aGrpcServer := grpc.NewServer(grpcServer.GrpcServerOptions...)
-
-	// Register services with gRPC server.
-
-	grpcServer.enableServices(ctx, aGrpcServer)
-
-	// Enable reflection.
-
-	reflection.Register(aGrpcServer)
+	defer listener.Close()
 
 	// Run server.
 
 	if !grpcServer.AvoidServing {
 		grpcServer.log(2003, listener.Addr())
-		err = aGrpcServer.Serve(listener)
+		err = grpcServer.grpcserver.Serve(listener)
 	} else {
 		grpcServer.log(2004)
-
-		err = listener.Close()
 	}
 
 	return wraperror.Errorf(err, "grpcserver.Serve error: %w", err)

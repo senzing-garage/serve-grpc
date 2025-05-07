@@ -175,6 +175,9 @@ func TestGrpcServerImpl_Serve(test *testing.T) {
 		SenzingInstanceName: "Test gRPC Server",
 		SenzingSettings:     senzingsettings,
 	}
+
+	err = grpcServer.Initialize(ctx)
+	require.NoError(test, err)
 	err = grpcServer.Serve(ctx)
 	require.NoError(test, err)
 }

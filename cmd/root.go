@@ -6,7 +6,9 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"fmt"
 	"os"
+	"sync"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
 	"github.com/senzing-garage/go-cmdhelping/option"
@@ -15,6 +17,7 @@ import (
 	tlshelper "github.com/senzing-garage/go-helpers/tls"
 	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/serve-grpc/grpcserver"
+	"github.com/senzing-garage/serve-grpc/httpserver"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
@@ -50,6 +53,14 @@ var clientCaCertificateFiless = option.ContextVariable{
 	Type:    optiontype.StringSlice,
 }
 
+var enableHTTP = option.ContextVariable{
+	Arg:     "enable-http",
+	Default: option.OsLookupEnvBool("SENZING_TOOLS_ENABLE_HTTP", false),
+	Envar:   "SENZING_TOOLS_ENABLE_HTTP",
+	Help:    "Enable GRPC over HTTP service [%s]",
+	Type:    optiontype.Bool,
+}
+
 var serverCertificateFile = option.ContextVariable{
 	Arg:     "server-certificate-file",
 	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_CERTIFICATE_FILE", ""),
@@ -77,9 +88,7 @@ var serverKeyPassPhrase = option.ContextVariable{
 var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	clientCaCertificateFile,
 	clientCaCertificateFiless,
-	serverCertificateFile,
-	serverKeyFile,
-	serverKeyPassPhrase,
+	enableHTTP,
 	option.AvoidServe,
 	option.DatabaseURL,
 	option.EnableAll,
@@ -91,9 +100,14 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	option.EngineInstanceName,
 	option.EngineLogLevel,
 	option.GrpcPort,
+	option.HTTPPort,
 	option.LogLevel,
 	option.ObserverOrigin,
 	option.ObserverURL,
+	option.ServerAddress,
+	serverCertificateFile,
+	serverKeyFile,
+	serverKeyPassPhrase,
 }
 
 var ContextVariables = append(ContextVariablesForMultiPlatform, ContextVariablesForOsArch...)
@@ -136,47 +150,21 @@ func RunE(_ *cobra.Command, _ []string) error {
 
 	ctx := context.Background()
 
-	// Build Senzing SDK configuration.
+	// Create and Initialize gRPC Server.
 
-	senzingSettings, err := settings.BuildAndVerifySettings(ctx, viper.GetViper())
+	grpcserver, err := buildBasicGrpcServer(ctx)
 	if err != nil {
-		return wraperror.Errorf(err, "cmd.RunE.BuildAndVerifySettings error: %w", err)
+		return wraperror.Errorf(err, "cmd.RunE.buildBasicGrpcServer error: %w", err)
 	}
 
-	// Aggregate gRPC server options.
-
-	var grpcServerOptions []grpc.ServerOption
-
-	tlsOption, err := getTLSOption()
+	err = grpcserver.Initialize(ctx)
 	if err != nil {
-		return err
+		return wraperror.Errorf(err, "cmd.RunE.Initialize error: %w", err)
 	}
 
-	if tlsOption != nil {
-		grpcServerOptions = append(grpcServerOptions, tlsOption)
-	}
+	// Start services.
 
-	// Create and Serve gRPC Server.
-
-	grpcserver := &grpcserver.BasicGrpcServer{
-		AvoidServing:          viper.GetBool(option.AvoidServe.Arg),
-		EnableAll:             viper.GetBool(option.EnableAll.Arg),
-		EnableSzConfig:        viper.GetBool(option.EnableSzConfig.Arg),
-		EnableSzConfigManager: viper.GetBool(option.EnableSzConfigManager.Arg),
-		EnableSzDiagnostic:    viper.GetBool(option.EnableSzDiagnostic.Arg),
-		EnableSzEngine:        viper.GetBool(option.EnableSzEngine.Arg),
-		EnableSzProduct:       viper.GetBool(option.EnableSzProduct.Arg),
-		GrpcServerOptions:     grpcServerOptions,
-		LogLevelName:          viper.GetString(option.LogLevel.Arg),
-		ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
-		ObserverURL:           viper.GetString(option.ObserverURL.Arg),
-		Port:                  viper.GetInt(option.GrpcPort.Arg),
-		SenzingSettings:       senzingSettings,
-		SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
-		SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
-	}
-
-	err = grpcserver.Serve(ctx)
+	err = startServers(ctx, grpcserver)
 
 	return wraperror.Errorf(err, "cmd.RunE error: %w", err)
 }
@@ -190,45 +178,76 @@ func Version() string {
 // Private functions
 // ----------------------------------------------------------------------------
 
-// Since init() is always invoked, define command line parameters.
-func init() {
-	cmdhelper.Init(RootCmd, ContextVariables)
-}
-
-// Get the appropriate GRPC server options.
-func getTLSOption() (grpc.ServerOption, error) {
+func buildBasicGrpcServer(ctx context.Context) (*grpcserver.BasicGrpcServer, error) {
 	var (
 		err    error
-		result grpc.ServerOption
+		result *grpcserver.BasicGrpcServer
 	)
 
-	serverCertificatePathValue := viper.GetString(serverCertificateFile.Arg)
-	serverKeyPathValue := viper.GetString(serverKeyFile.Arg)
+	senzingSettings, err := settings.BuildAndVerifySettings(ctx, viper.GetViper())
+	if err != nil {
+		return result, wraperror.Errorf(err, "cmd.buildBasicGrpcServer.BuildAndVerifySettings error: %w", err)
+	}
 
-	// Determine if TLS is requested.
+	// Aggregate gRPC server options.
 
-	switch {
-	case serverCertificatePathValue != "" && serverKeyPathValue != "":
-		result, err = createTLSOption(serverCertificatePathValue, serverKeyPathValue)
-	case serverCertificatePathValue != "" && serverKeyPathValue == "":
-		err = wraperror.Errorf(
-			errPackage,
-			"%s is set, but %s is not set. Both need to be set",
-			serverCertificateFile.Envar,
-			serverKeyFile.Envar,
-		)
-	case serverCertificatePathValue == "" && serverKeyPathValue != "":
-		err = wraperror.Errorf(
-			errPackage,
-			"%s is set, but %s is not set. Both need to be set",
-			serverKeyFile.Envar,
-			serverCertificateFile.Envar,
-		)
-	default:
-		err = nil
+	grpcServerOptions, err := getGrpcServerOptions()
+	if err != nil {
+		return result, wraperror.Errorf(err, "cmd.buildBasicGrpcServer.getGrpcServerOptions error: %w", err)
+	}
+
+	// Create Server.
+
+	result = &grpcserver.BasicGrpcServer{
+		AvoidServing:          viper.GetBool(option.AvoidServe.Arg),
+		EnableAll:             viper.GetBool(option.EnableAll.Arg),
+		EnableSzConfig:        viper.GetBool(option.EnableSzConfig.Arg),
+		EnableSzConfigManager: viper.GetBool(option.EnableSzConfigManager.Arg),
+		EnableSzDiagnostic:    viper.GetBool(option.EnableSzDiagnostic.Arg),
+		EnableSzEngine:        viper.GetBool(option.EnableSzEngine.Arg),
+		EnableSzProduct:       viper.GetBool(option.EnableSzProduct.Arg),
+		GrpcServerOptions:     grpcServerOptions,
+		LogLevelName:          viper.GetString(option.LogLevel.Arg),
+		ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
+		ObserverURL:           viper.GetString(option.ObserverURL.Arg),
+		Port:                  viper.GetInt(option.GrpcPort.Arg),
+		SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
+		SenzingSettings:       senzingSettings,
+		SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
 	}
 
 	return result, err
+}
+
+func buildBasicHTTPServer(grpcServer *grpc.Server) *httpserver.BasicHTTPServer {
+	return &httpserver.BasicHTTPServer{
+		AvoidServing:    viper.GetBool(option.AvoidServe.Arg),
+		EnableAll:       viper.GetBool(option.EnableAll.Arg),
+		EnableGRPC:      viper.GetBool(enableHTTP.Arg),
+		GRPCRoutePrefix: "grpc",
+		GRPCServer:      grpcServer,
+		LogLevelName:    viper.GetString(option.LogLevel.Arg),
+		ServerAddress:   viper.GetString(option.ServerAddress.Arg),
+		ServerPort:      viper.GetInt(option.HTTPPort.Arg),
+	}
+}
+
+func buildGrpcServerOption(
+	certificates []tls.Certificate,
+	clientAuth tls.ClientAuthType,
+	clientCAs *x509.CertPool,
+) grpc.ServerOption {
+	tlsConfig := &tls.Config{
+		Certificates: certificates,
+		ClientAuth:   clientAuth,
+		ClientCAs:    clientCAs,
+		MinVersion:   tls.VersionTLS12, // See https://pkg.go.dev/crypto/tls#pkg-constants
+		MaxVersion:   tls.VersionTLS13,
+	}
+	transportCredentials := credentials.NewTLS(tlsConfig)
+	result := grpc.Creds(transportCredentials)
+
+	return result
 }
 
 func createTLSOption(serverCertificatePathValue string, serverKeyPathValue string) (grpc.ServerOption, error) {
@@ -290,20 +309,95 @@ func createTLSOption(serverCertificatePathValue string, serverKeyPathValue strin
 	return result, wraperror.Errorf(err, "cmd.getServerSideTLSServerOption error: %w", err)
 }
 
-func buildGrpcServerOption(
-	certificates []tls.Certificate,
-	clientAuth tls.ClientAuthType,
-	clientCAs *x509.CertPool,
-) grpc.ServerOption {
-	tlsConfig := &tls.Config{
-		Certificates: certificates,
-		ClientAuth:   clientAuth,
-		ClientCAs:    clientCAs,
-		MinVersion:   tls.VersionTLS12, // See https://pkg.go.dev/crypto/tls#pkg-constants
-		MaxVersion:   tls.VersionTLS13,
-	}
-	transportCredentials := credentials.NewTLS(tlsConfig)
-	result := grpc.Creds(transportCredentials)
+func getGrpcServerOptions() ([]grpc.ServerOption, error) {
+	var result []grpc.ServerOption
 
-	return result
+	tlsOption, err := getTLSOption()
+	if err != nil {
+		return result, err
+	}
+
+	if tlsOption != nil {
+		result = append(result, tlsOption)
+	}
+
+	return result, err
+}
+
+// Get the appropriate GRPC server options.
+func getTLSOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+
+	serverCertificatePathValue := viper.GetString(serverCertificateFile.Arg)
+	serverKeyPathValue := viper.GetString(serverKeyFile.Arg)
+
+	// Determine if TLS is requested.
+
+	switch {
+	case serverCertificatePathValue != "" && serverKeyPathValue != "":
+		result, err = createTLSOption(serverCertificatePathValue, serverKeyPathValue)
+	case serverCertificatePathValue != "" && serverKeyPathValue == "":
+		err = wraperror.Errorf(
+			errPackage,
+			"%s is set, but %s is not set. Both need to be set",
+			serverCertificateFile.Envar,
+			serverKeyFile.Envar,
+		)
+	case serverCertificatePathValue == "" && serverKeyPathValue != "":
+		err = wraperror.Errorf(
+			errPackage,
+			"%s is set, but %s is not set. Both need to be set",
+			serverKeyFile.Envar,
+			serverCertificateFile.Envar,
+		)
+	default:
+		err = nil
+	}
+
+	return result, err
+}
+
+// Since init() is always invoked, define command line parameters.
+func init() {
+	cmdhelper.Init(RootCmd, ContextVariables)
+}
+
+func startServers(ctx context.Context, grpcserver *grpcserver.BasicGrpcServer) error {
+	var (
+		err       error
+		waitGroup sync.WaitGroup
+	)
+
+	waitGroup.Add(1)
+
+	go func() {
+		defer waitGroup.Done()
+
+		err = grpcserver.Serve(ctx)
+		if err != nil {
+			panic(fmt.Sprintf("Error: grpcServer - %v\n", err))
+		}
+	}()
+
+	if viper.GetBool(enableHTTP.Arg) {
+		httpserver := buildBasicHTTPServer(grpcserver.GetGRPCServer())
+
+		waitGroup.Add(1)
+
+		go func() {
+			defer waitGroup.Done()
+
+			err = httpserver.Serve(ctx)
+			if err != nil {
+				panic(fmt.Sprintf("Error: httpServer - %v\n", err))
+			}
+		}()
+	}
+
+	waitGroup.Wait()
+
+	return wraperror.Errorf(err, "cmd.startServers error: %w", err)
 }

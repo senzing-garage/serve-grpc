@@ -1,15 +1,17 @@
-package grpcserver
+package httpserver
 
 import (
 	"context"
-	"errors"
+	"net/http"
 )
 
 // ----------------------------------------------------------------------------
 // Types
 // ----------------------------------------------------------------------------
 
-type GrpcServer interface {
+// The HTTPServer interface...
+type HTTPServer interface {
+	Handler(ctx context.Context) *http.ServeMux
 	Serve(ctx context.Context) error
 }
 
@@ -18,13 +20,10 @@ type GrpcServer interface {
 // ----------------------------------------------------------------------------
 
 // Identfier of the  package found messages having the format "senzing-6204xxxx".
-const ComponentID = 6204
+const ComponentID = 6042
 
 // Log message prefix.
-const Prefix = "serve-grpc.grpcserver."
-
-// Default gRPC Observer port.
-const DefaultGrpcObserverPort = "8260"
+const Prefix = "serve-grpc.httpserver."
 
 // ----------------------------------------------------------------------------
 // Variables
@@ -32,18 +31,11 @@ const DefaultGrpcObserverPort = "8260"
 
 // Message templates.
 var IDMessages = map[int]string{
-	2000: "Entry: %+v",
-	2001: "SENZING_ENGINE_CONFIGURATION_JSON: %v",
-	2002: "Enabling all services.",
-	2003: "Server listening at %v",
-	2004: "Serving avoided.",
-	4001: "Call to net.Listen(tcp, %s) failed.",
-	4002: "Call to Szdiagnostic.PurgeRepository() failed.",
-	4003: "Call to Szengine.Destroy() failed.",
-	5001: "Failed to serve.",
+	1000: "gRPC Web request: %+v",
+	1001: "HTTP Web request: %+v",
+	2001: "Starting HTTP server on interface:port '%s'",
+	2002: "Serving GRPC over HTTP at http://localhost:%d/%s",
 }
 
 // Status strings for specific messages.
 var IDStatuses = map[int]string{}
-
-var errForPackage = errors.New("grpcserver")

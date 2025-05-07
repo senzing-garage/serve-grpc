@@ -152,6 +152,9 @@ linters:
         - '.+/szengineserver\.SzEngineServer$'
         - '.+/szproductserver\.SzProductServer$'
         - '.+/tls\.Config$'
+        - '.+/httpserver\.BasicHTTPServer$'
+        - '.+/http\.Server$'
+
     ireturn:
       allow:
         - error
@@ -166,6 +169,7 @@ linters:
     mnd:
       ignored-functions:
         - '^grpcServer\.log$'
+        - '^httpServer\.log$'
         - '^logger\.Log$'
         - '^logging\.OptionCallerSkip$'
         - '^server\.traceEntry$'

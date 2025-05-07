@@ -134,7 +134,11 @@ docker-build: docker-build-osarch-specific
 .PHONY: docker-run
 docker-run:
 	@docker run \
+		--env SENZING_TOOLS_ENABLE_HTTP=true \
+		--env SENZING_TOOLS_LOG_LEVEL=DEBUG \
 		--interactive \
+		--publish 8260:8260 \
+		--publish 8261:8261 \
 		--rm \
 		--tty \
 		--name $(DOCKER_CONTAINER_NAME) \
@@ -143,6 +147,13 @@ docker-run:
 
 .PHONY: run
 run: run-osarch-specific
+
+
+.PHONY: run-http
+run-http: export SENZING_TOOLS_ENABLE_HTTP=true
+run-http: export SENZING_TOOLS_LOG_LEVEL=DEBUG
+run-http:
+	@go run main.go --enable-all --enable-http
 
 
 .PHONY: run-mutual-tls
@@ -166,6 +177,11 @@ run-server-side-tls-encrypted-key: run-server-side-tls-encrypted-key-osarch-spec
 
 .PHONY: test
 test: test-osarch-specific
+
+
+.PHONY: test-http
+test-http: export SENZING_TOOLS_ENABLE_HTTP=true
+test-http: test-osarch-specific
 
 
 .PHONY: docker-test
@@ -248,6 +264,11 @@ update-pkg-cache:
 # -----------------------------------------------------------------------------
 # Specific programs
 # -----------------------------------------------------------------------------
+
+.PHONY: bearer
+bearer:
+	@bearer scan .
+
 
 .PHONY: cspell
 cspell:
