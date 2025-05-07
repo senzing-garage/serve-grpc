@@ -32,6 +32,7 @@ func getTestObject(ctx context.Context, t *testing.T) *httpserver.BasicHTTPServe
 		GRPCRoutePrefix:   "api",
 		AvoidServing:      true,
 		EnableAll:         true,
+		LogLevelName:      "INFO",
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 

@@ -130,36 +130,6 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 
 	// Run server.
 
-	// switch {
-	// case grpcServer.AvoidServing:
-	// 	grpcServer.log(2004)
-	// case grpcServer.EnableHTTP:
-
-	// 	wrappedOptions := []grpcweb.Option{}
-	// 	wrappedGrpc := grpcweb.WrapServer(grpcServer.grpcserver, wrappedOptions...)
-	// 	myHandler := http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
-	// 		if wrappedGrpc.IsGrpcWebRequest(req) {
-	// 			wrappedGrpc.ServeHTTP(resp, req)
-	// 			return
-	// 		}
-	// 		// Fall back to other servers.
-	// 		http.DefaultServeMux.ServeHTTP(resp, req)
-	// 	})
-
-	// 	httpServer := http.Server{
-	// 		Addr:    fmt.Sprintf(":%d", grpcServer.HTTPPort),
-	// 		Handler: http.HandlerFunc(myHandler),
-	// 	}
-
-	// 	if err := httpServer.ListenAndServe(); err != nil {
-	// 		panic(err)
-	// 	}
-
-	// default:
-	// 	grpcServer.log(2003, listener.Addr())
-	// 	err = grpcServer.grpcserver.Serve(listener)
-	// }
-
 	if !grpcServer.AvoidServing {
 		grpcServer.log(2003, listener.Addr())
 		err = grpcServer.grpcserver.Serve(listener)
