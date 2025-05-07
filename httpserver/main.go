@@ -2,7 +2,7 @@ package httpserver
 
 import (
 	"context"
-	"errors"
+	"net/http"
 )
 
 // ----------------------------------------------------------------------------
@@ -11,6 +11,7 @@ import (
 
 // The HTTPServer interface...
 type HTTPServer interface {
+	Handler(ctx context.Context) *http.ServeMux
 	Serve(ctx context.Context) error
 }
 
@@ -38,5 +39,3 @@ var IDMessages = map[int]string{
 
 // Status strings for specific messages.
 var IDStatuses = map[int]string{}
-
-var errForPackage = errors.New("httpserver")

@@ -169,6 +169,7 @@ linters:
     mnd:
       ignored-functions:
         - '^grpcServer\.log$'
+        - '^httpServer\.log$'
         - '^logger\.Log$'
         - '^logging\.OptionCallerSkip$'
         - '^server\.traceEntry$'

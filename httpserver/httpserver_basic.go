@@ -21,7 +21,7 @@ type BasicHTTPServer struct {
 	AvoidServing      bool
 	EnableAll         bool
 	EnableGRPC        bool
-	GRPCRoutePrefix   string // IMPROVE: Only works with "grpc"
+	GRPCRoutePrefix   string
 	GRPCServer        *grpc.Server
 	logger            logging.Logging
 	LogLevelName      string
@@ -37,6 +37,22 @@ const OptionCallerSkip = 3
 // ----------------------------------------------------------------------------
 
 /*
+The Handler method gets the http.ServeMux for the gRPC over HTTP service.
+
+Input
+  - ctx: A context to control lifecycle.
+
+Output
+  - httpServeMux - the Mux of the service.
+*/
+func (httpServer *BasicHTTPServer) Handler(ctx context.Context) *http.ServeMux {
+	rootMux := http.NewServeMux()
+	rootMux.HandleFunc("/", httpServer.grpcFunc(ctx))
+
+	return rootMux
+}
+
+/*
 The Serve method starts the HTTP server.
 
 Input
@@ -45,11 +61,8 @@ Input
 Output
   - Nothing is returned, except for an error.
 */
-
 func (httpServer *BasicHTTPServer) Serve(ctx context.Context) error {
-	var (
-		err error
-	)
+	var err error
 
 	rootMux := http.NewServeMux()
 
@@ -92,13 +105,23 @@ func (httpServer *BasicHTTPServer) grpcFunc(ctx context.Context) http.HandlerFun
 	return http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
 		if wrappedGrpc.IsGrpcWebRequest(req) {
 			httpServer.log(1000, req)
-			req = httpServer.modifyRequest(req)
 			wrappedGrpc.ServeHTTP(resp, req)
 		} else { // Fall back to other servers.
 			httpServer.log(1001, req)
 			http.DefaultServeMux.ServeHTTP(resp, req)
 		}
 	})
+}
+
+func (httpServer *BasicHTTPServer) registerGRPC(ctx context.Context, rootMux *http.ServeMux) {
+	if httpServer.EnableAll || httpServer.EnableGRPC {
+		pattern := fmt.Sprintf("/%s/", httpServer.GRPCRoutePrefix)
+		prefix := "/" + httpServer.GRPCRoutePrefix
+		grpcWebMux := httpServer.Handler(ctx)
+		handler := http.StripPrefix(prefix, grpcWebMux)
+		rootMux.Handle(pattern, handler)
+		httpServer.log(2002, httpServer.ServerPort, httpServer.GRPCRoutePrefix)
+	}
 }
 
 // --- Logging -------------------------------------------------------------------------
@@ -130,22 +153,4 @@ func (httpServer *BasicHTTPServer) getLogger() logging.Logging {
 // Log message.
 func (httpServer *BasicHTTPServer) log(messageNumber int, details ...interface{}) {
 	httpServer.getLogger().Log(messageNumber, details...)
-}
-
-// Tricky code to modify the incoming gRPC request.
-func (httpServer *BasicHTTPServer) modifyRequest(request *http.Request) *http.Request {
-	// Tricky code:  Modify the request to remove `/GRPCRoutePrefix` value.
-
-	prefixLen := len(httpServer.GRPCRoutePrefix) + 1
-	request.URL.Path = request.URL.Path[prefixLen:]
-	request.RequestURI = request.RequestURI[prefixLen:]
-	request.Pattern = "/"
-	return request
-}
-
-func (httpServer *BasicHTTPServer) registerGRPC(ctx context.Context, rootMux *http.ServeMux) {
-	if httpServer.EnableAll || httpServer.EnableGRPC {
-		rootMux.HandleFunc(fmt.Sprintf("/%s/", httpServer.GRPCRoutePrefix), httpServer.grpcFunc(ctx))
-		httpServer.log(2002, httpServer.ServerPort, httpServer.GRPCRoutePrefix)
-	}
 }

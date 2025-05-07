@@ -146,10 +146,7 @@ func PreRun(cobraCommand *cobra.Command, args []string) {
 
 // Used in construction of cobra.Command.
 func RunE(_ *cobra.Command, _ []string) error {
-	var (
-		err       error
-		waitGroup sync.WaitGroup
-	)
+	var err error
 
 	ctx := context.Background()
 
@@ -162,15 +159,9 @@ func RunE(_ *cobra.Command, _ []string) error {
 
 	// Aggregate gRPC server options.
 
-	var grpcServerOptions []grpc.ServerOption
-
-	tlsOption, err := getTLSOption()
+	grpcServerOptions, err := getGrpcServerOptions()
 	if err != nil {
-		return err
-	}
-
-	if tlsOption != nil {
-		grpcServerOptions = append(grpcServerOptions, tlsOption)
+		return wraperror.Errorf(err, "cmd.RunE.getGrpcServerOptions error: %w", err)
 	}
 
 	// Create and Serve gRPC Server.
@@ -182,33 +173,7 @@ func RunE(_ *cobra.Command, _ []string) error {
 		return wraperror.Errorf(err, "cmd.RunE.Initialize error: %w", err)
 	}
 
-	waitGroup.Add(1)
-
-	go func() {
-		defer waitGroup.Done()
-
-		err = grpcserver.Serve(ctx)
-		if err != nil {
-			panic(fmt.Sprintf("Error: grpcServer - %v\n", err))
-		}
-	}()
-
-	if viper.GetBool(enableHTTP.Arg) {
-		httpserver := buildBasicHTTPServer(grpcserver.GetGRPCServer())
-
-		waitGroup.Add(1)
-
-		go func() {
-			defer waitGroup.Done()
-
-			err = httpserver.Serve(ctx)
-			if err != nil {
-				panic(fmt.Sprintf("Error: httpServer - %v\n", err))
-			}
-		}()
-	}
-
-	waitGroup.Wait()
+	err = startServers(ctx, grpcserver)
 
 	return wraperror.Errorf(err, "cmd.RunE error: %w", err)
 }
@@ -332,6 +297,21 @@ func createTLSOption(serverCertificatePathValue string, serverKeyPathValue strin
 	return result, wraperror.Errorf(err, "cmd.getServerSideTLSServerOption error: %w", err)
 }
 
+func getGrpcServerOptions() ([]grpc.ServerOption, error) {
+	var result []grpc.ServerOption
+
+	tlsOption, err := getTLSOption()
+	if err != nil {
+		return result, err
+	}
+
+	if tlsOption != nil {
+		result = append(result, tlsOption)
+	}
+
+	return result, err
+}
+
 // Get the appropriate GRPC server options.
 func getTLSOption() (grpc.ServerOption, error) {
 	var (
@@ -371,4 +351,41 @@ func getTLSOption() (grpc.ServerOption, error) {
 // Since init() is always invoked, define command line parameters.
 func init() {
 	cmdhelper.Init(RootCmd, ContextVariables)
+}
+
+func startServers(ctx context.Context, grpcserver *grpcserver.BasicGrpcServer) error {
+	var (
+		err       error
+		waitGroup sync.WaitGroup
+	)
+
+	waitGroup.Add(1)
+
+	go func() {
+		defer waitGroup.Done()
+
+		err = grpcserver.Serve(ctx)
+		if err != nil {
+			panic(fmt.Sprintf("Error: grpcServer - %v\n", err))
+		}
+	}()
+
+	if viper.GetBool(enableHTTP.Arg) {
+		httpserver := buildBasicHTTPServer(grpcserver.GetGRPCServer())
+
+		waitGroup.Add(1)
+
+		go func() {
+			defer waitGroup.Done()
+
+			err = httpserver.Serve(ctx)
+			if err != nil {
+				panic(fmt.Sprintf("Error: httpServer - %v\n", err))
+			}
+		}()
+	}
+
+	waitGroup.Wait()
+
+	return wraperror.Errorf(err, "cmd.startServers error: %w", err)
 }
