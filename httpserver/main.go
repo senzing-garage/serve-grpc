@@ -31,8 +31,9 @@ const Prefix = "serve-grpc.httpserver."
 
 // Message templates.
 var IDMessages = map[int]string{
-	1000: "gRPC Web request: %+v",
-	1001: "HTTP Web request: %+v",
+	1000: "HTTP Web request: %+v",
+	1001: "gRPC Cors request: %+v",
+	1002: "gRPC Web request: %+v",
 	2001: "Starting HTTP server on interface:port '%s'",
 	2002: "Serving GRPC over HTTP at http://localhost:%d/%s",
 }
