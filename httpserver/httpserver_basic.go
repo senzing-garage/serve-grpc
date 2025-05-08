@@ -98,16 +98,25 @@ func (httpServer *BasicHTTPServer) Serve(ctx context.Context) error {
 // ----------------------------------------------------------------------------
 
 func (httpServer *BasicHTTPServer) grpcFunc(ctx context.Context) http.HandlerFunc {
+	var wrappedGrpcOptions []grpcweb.Option
+
 	_ = ctx
 
-	wrappedGrpc := grpcweb.WrapServer(httpServer.GRPCServer)
+	wrappedGrpcOptions = append(wrappedGrpcOptions, grpcweb.WithCorsForRegisteredEndpointsOnly(false))
+	wrappedGrpcOptions = append(wrappedGrpcOptions, grpcweb.WithOriginFunc(func(_ string) bool { return true }))
+
+	wrappedGrpc := grpcweb.WrapServer(httpServer.GRPCServer, wrappedGrpcOptions...)
 
 	return http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
-		if wrappedGrpc.IsGrpcWebRequest(req) {
-			httpServer.log(1000, req)
-			wrappedGrpc.ServeHTTP(resp, req)
-		} else { // Fall back to other servers.
+		switch {
+		case wrappedGrpc.IsAcceptableGrpcCorsRequest(req):
 			httpServer.log(1001, req)
+			wrappedGrpc.ServeHTTP(resp, req)
+		case wrappedGrpc.IsGrpcWebRequest(req):
+			httpServer.log(1002, req)
+			wrappedGrpc.ServeHTTP(resp, req)
+		default: // Fall back to other servers.
+			httpServer.log(1000, req)
 			http.DefaultServeMux.ServeHTTP(resp, req)
 		}
 	})
