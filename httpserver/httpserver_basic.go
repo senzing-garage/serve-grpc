@@ -98,9 +98,12 @@ func (httpServer *BasicHTTPServer) Serve(ctx context.Context) error {
 // ----------------------------------------------------------------------------
 
 func (httpServer *BasicHTTPServer) grpcFunc(ctx context.Context) http.HandlerFunc {
+	var wrappedGrpcOptions []grpcweb.Option
+
 	_ = ctx
 
-	wrappedGrpc := grpcweb.WrapServer(httpServer.GRPCServer)
+	wrappedGrpcOptions = append(wrappedGrpcOptions, grpcweb.WithCorsForRegisteredEndpointsOnly(false))
+	wrappedGrpc := grpcweb.WrapServer(httpServer.GRPCServer, wrappedGrpcOptions...)
 
 	return http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
 		if wrappedGrpc.IsGrpcWebRequest(req) {
