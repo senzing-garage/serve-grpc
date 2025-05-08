@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 -
 
+## [0.9.10] - 2025-05-08
+
+### Added in 0.9.10
+
+- CORS
+
 ## [0.9.9] - 2025-05-07
 
 ### Added in 0.9.9
