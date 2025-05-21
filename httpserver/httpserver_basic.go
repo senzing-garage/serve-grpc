@@ -90,7 +90,7 @@ func (httpServer *BasicHTTPServer) Serve(ctx context.Context) error {
 		}
 	}
 
-	return wraperror.Errorf(err, "httpserver error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // ----------------------------------------------------------------------------

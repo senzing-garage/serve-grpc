@@ -2,10 +2,10 @@ package cmd_test
 
 import (
 	"bytes"
-	"fmt"
 	"os"
 	"testing"
 
+	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/serve-grpc/cmd"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -114,7 +114,7 @@ func setArgs(cmd *cobra.Command, args []string) {
 	if cmd.Flags().Parsed() {
 		cmd.Flags().Visit(func(pf *pflag.Flag) {
 			if err := pf.Value.Set(pf.DefValue); err != nil {
-				panic(fmt.Errorf("reset argument[%s] value error %w", pf.Name, err))
+				panic(wraperror.Errorf(err, "reset argument[%s] value error", pf.Name))
 			}
 		})
 	}

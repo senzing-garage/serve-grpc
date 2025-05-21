@@ -913,7 +913,7 @@ func setupPurgeRepository(ctx context.Context, instanceName string, settings str
 	err = szDiagnostic.Destroy(ctx)
 	panicOnError(err)
 
-	return wraperror.Errorf(err, "szengineserver_test.setupPurgeRepository error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func setup() {

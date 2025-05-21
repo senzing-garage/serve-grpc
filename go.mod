@@ -5,10 +5,10 @@ go 1.24
 require (
 	github.com/aquilax/truncate v1.0.1
 	github.com/improbable-eng/grpc-web v0.15.0
-	github.com/senzing-garage/go-cmdhelping v0.3.4
-	github.com/senzing-garage/go-helpers v0.6.11
-	github.com/senzing-garage/go-logging v1.5.2
-	github.com/senzing-garage/go-observing v0.3.4
+	github.com/senzing-garage/go-cmdhelping v0.3.5
+	github.com/senzing-garage/go-helpers v0.6.12
+	github.com/senzing-garage/go-logging v1.5.3
+	github.com/senzing-garage/go-observing v0.3.5
 	github.com/senzing-garage/init-database v0.7.12
 	github.com/senzing-garage/sz-sdk-go v0.15.3
 	github.com/senzing-garage/sz-sdk-go-core v0.9.4
@@ -47,7 +47,7 @@ require (
 	github.com/rs/cors v1.11.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.9.0 // indirect
-	github.com/senzing-garage/go-databasing v0.5.7 // indirect
+	github.com/senzing-garage/go-databasing v0.5.8 // indirect
 	github.com/senzing-garage/go-messaging v1.5.3 // indirect
 	github.com/senzing-garage/go-sdk-abstract-factory v0.9.9 // indirect
 	github.com/senzing-garage/sz-sdk-go-grpc v0.9.5 // indirect
@@ -64,7 +64,7 @@ require (
 	golang.org/x/net v0.40.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.25.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250512202823-5a2f75b736a9 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250519155744-55703ea1f237 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	nhooyr.io/websocket v1.8.17 // indirect

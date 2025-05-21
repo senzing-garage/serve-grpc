@@ -300,7 +300,7 @@ func setupAddRecords(ctx context.Context, instanceName string, settings string, 
 	err = szEngine.Destroy(ctx)
 	panicOnError(err)
 
-	return wraperror.Errorf(err, "szdiagnosticserver.setupAddRecords error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func setupPurgeRepository(ctx context.Context, instanceName string, settings string, verboseLogging int64) error {
@@ -320,7 +320,7 @@ func setupPurgeRepository(ctx context.Context, instanceName string, settings str
 	err = szDiagnostic.Destroy(ctx)
 	panicOnError(err)
 
-	return wraperror.Errorf(err, "szdiagnosticserver.setupPurgeRepository error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func setup() {

@@ -96,24 +96,24 @@ func setupPurgeRepository(ctx context.Context, instanceName string, settings str
 	if err != nil {
 		err = localLogger.NewError(5903, err)
 
-		return wraperror.Errorf(err, "grpcserver_test.setupPurgeRepository.Initialize error: %w", err)
+		return wraperror.Errorf(err, "Initialize")
 	}
 
 	err = szDiagnostic.PurgeRepository(ctx)
 	if err != nil {
 		err = localLogger.NewError(5904, err)
 
-		return wraperror.Errorf(err, "grpcserver_test.setupPurgeRepository.PurgeRepository error: %w", err)
+		return wraperror.Errorf(err, "szDiagnostic.PurgeRepository")
 	}
 
 	err = szDiagnostic.Destroy(ctx)
 	if err != nil {
 		err = localLogger.NewError(5905, err)
 
-		return wraperror.Errorf(err, "grpcserver_test.setupPurgeRepository.Destroy error: %w", err)
+		return wraperror.Errorf(err, "szDiagnostic.Destroy")
 	}
 
-	return wraperror.Errorf(err, "grpcserver_test.setupPurgeRepository error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func setup() error {

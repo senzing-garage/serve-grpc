@@ -50,7 +50,7 @@ func (server *SzEngineServer) AddRecord(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.AddRecord error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) CloseExport(
@@ -71,7 +71,7 @@ func (server *SzEngineServer) CloseExport(
 	err = szEngine.CloseExport(ctx, uintptr(request.GetExportHandle()))
 	response := szpb.CloseExportResponse{}
 
-	return &response, wraperror.Errorf(err, "szengineserver.CloseExport error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) CountRedoRecords(
@@ -96,7 +96,7 @@ func (server *SzEngineServer) CountRedoRecords(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.CountRedoRecords error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) DeleteRecord(
@@ -119,7 +119,7 @@ func (server *SzEngineServer) DeleteRecord(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.DeleteRecord error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) ExportCsvEntityReport(
@@ -145,7 +145,7 @@ func (server *SzEngineServer) ExportCsvEntityReport(
 		Result: responseResult,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.ExportCsvEntityReport error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) ExportJsonEntityReport( //revive:disable-line var-naming
@@ -171,7 +171,7 @@ func (server *SzEngineServer) ExportJsonEntityReport( //revive:disable-line var-
 		Result: responseResult,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.ExportJsonEntityReport error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) FetchNext(
@@ -196,7 +196,7 @@ func (server *SzEngineServer) FetchNext(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.FetchNext error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) FindInterestingEntitiesByEntityId( //revive:disable-line var-naming
@@ -221,7 +221,7 @@ func (server *SzEngineServer) FindInterestingEntitiesByEntityId( //revive:disabl
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.FindInterestingEntitiesByEntityId error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) FindInterestingEntitiesByRecordId( //revive:disable-line var-naming
@@ -251,7 +251,7 @@ func (server *SzEngineServer) FindInterestingEntitiesByRecordId( //revive:disabl
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.FindInterestingEntitiesByRecordId error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) FindNetworkByEntityId( //revive:disable-line var-naming
@@ -283,7 +283,7 @@ func (server *SzEngineServer) FindNetworkByEntityId( //revive:disable-line var-n
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.FindNetworkByEntityId error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) FindNetworkByRecordId( //revive:disable-line var-naming
@@ -315,7 +315,7 @@ func (server *SzEngineServer) FindNetworkByRecordId( //revive:disable-line var-n
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.FindNetworkByRecordId error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) FindPathByEntityId( //revive:disable-line var-naming
@@ -348,7 +348,7 @@ func (server *SzEngineServer) FindPathByEntityId( //revive:disable-line var-nami
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.FindPathByEntityId error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) FindPathByRecordId( //revive:disable-line var-naming
@@ -383,7 +383,7 @@ func (server *SzEngineServer) FindPathByRecordId( //revive:disable-line var-nami
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.FindPathByRecordId error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) GetActiveConfigId( //revive:disable-line var-naming
@@ -408,7 +408,7 @@ func (server *SzEngineServer) GetActiveConfigId( //revive:disable-line var-namin
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.GetActiveConfigId error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) GetEntityByEntityId( //revive:disable-line var-naming
@@ -433,7 +433,7 @@ func (server *SzEngineServer) GetEntityByEntityId( //revive:disable-line var-nam
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.GetEntityByEntityId error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) GetEntityByRecordId( //revive:disable-line var-naming
@@ -463,7 +463,7 @@ func (server *SzEngineServer) GetEntityByRecordId( //revive:disable-line var-nam
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.GetEntityByRecordId error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) GetRecord(
@@ -488,7 +488,7 @@ func (server *SzEngineServer) GetRecord(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.GetRecord error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) GetRedoRecord(
@@ -513,7 +513,7 @@ func (server *SzEngineServer) GetRedoRecord(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.GetRedoRecord error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) GetStats(
@@ -538,7 +538,7 @@ func (server *SzEngineServer) GetStats(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.GetStats error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) GetVirtualEntityByRecordId( //revive:disable-line var-naming
@@ -563,7 +563,7 @@ func (server *SzEngineServer) GetVirtualEntityByRecordId( //revive:disable-line 
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.GetVirtualEntityByRecordId error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) HowEntityByEntityId( //revive:disable-line var-naming
@@ -588,7 +588,7 @@ func (server *SzEngineServer) HowEntityByEntityId( //revive:disable-line var-nam
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.HowEntityByEntityId error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) PreprocessRecord(
@@ -611,7 +611,7 @@ func (server *SzEngineServer) PreprocessRecord(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.PreprocessRecord error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) PrimeEngine(
@@ -632,7 +632,7 @@ func (server *SzEngineServer) PrimeEngine(
 	err = szEngine.PrimeEngine(ctx)
 	response := szpb.PrimeEngineResponse{}
 
-	return &response, wraperror.Errorf(err, "szengineserver.PrimeEngine error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) ProcessRedoRecord(
@@ -656,7 +656,7 @@ func (server *SzEngineServer) ProcessRedoRecord(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.ProcessRedoRecord error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) ReevaluateEntity(
@@ -681,7 +681,7 @@ func (server *SzEngineServer) ReevaluateEntity(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.ReevaluateEntity error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) ReevaluateRecord(
@@ -706,7 +706,7 @@ func (server *SzEngineServer) ReevaluateRecord(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.ReevaluateRecord error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) Reinitialize(
@@ -727,7 +727,7 @@ func (server *SzEngineServer) Reinitialize(
 	err = szEngine.Reinitialize(ctx, request.GetConfigId())
 	response := szpb.ReinitializeResponse{}
 
-	return &response, wraperror.Errorf(err, "szengineserver.Reinitialize error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) SearchByAttributes(
@@ -757,7 +757,7 @@ func (server *SzEngineServer) SearchByAttributes(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.SearchByAttributes error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) StreamExportCsvEntityReport(
@@ -779,7 +779,7 @@ func (server *SzEngineServer) StreamExportCsvEntityReport(
 
 	queryHandle, err = szEngine.ExportCsvEntityReport(ctx, request.GetCsvColumnList(), request.GetFlags())
 	if err != nil {
-		return wraperror.Errorf(err, "szengineserver.StreamExportCsvEntityReport.ExportCsvEntityReport error: %w", err)
+		return wraperror.Errorf(err, "ExportCsvEntityReport")
 	}
 
 	// Defer the CloseExport in case we exit early for any reason.
@@ -798,7 +798,7 @@ func (server *SzEngineServer) StreamExportCsvEntityReport(
 
 		fetchResult, err = szEngine.FetchNext(ctx, queryHandle)
 		if err != nil {
-			return wraperror.Errorf(err, "szengineserver.StreamExportCsvEntityReport.FetchNext error: %w", err)
+			return wraperror.Errorf(err, "FetchNext")
 		}
 
 		if len(fetchResult) == 0 {
@@ -809,7 +809,7 @@ func (server *SzEngineServer) StreamExportCsvEntityReport(
 			Result: fetchResult,
 		}
 		if err = stream.Send(&response); err != nil {
-			return wraperror.Errorf(err, "szengineserver.StreamExportCsvEntityReport.stream.Send error: %w", err)
+			return wraperror.Errorf(err, "stream.Send")
 		}
 
 		server.traceEntry(601, request, fetchResult)
@@ -819,7 +819,7 @@ func (server *SzEngineServer) StreamExportCsvEntityReport(
 
 	err = nil
 
-	return wraperror.Errorf(err, "szengineserver.StreamExportCsvEntityReport error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) StreamExportJsonEntityReport( //revive:disable-line var-naming
@@ -841,11 +841,7 @@ func (server *SzEngineServer) StreamExportJsonEntityReport( //revive:disable-lin
 
 	queryHandle, err = szEngine.ExportJSONEntityReport(ctx, request.GetFlags())
 	if err != nil {
-		return wraperror.Errorf(
-			err,
-			"szengineserver.StreamExportJsonEntityReport.ExportJSONEntityReport error: %w",
-			err,
-		)
+		return wraperror.Errorf(err, "ExportJSONEntityReport")
 	}
 
 	// Defer the CloseExport in case we exit early for any reason.
@@ -864,7 +860,7 @@ func (server *SzEngineServer) StreamExportJsonEntityReport( //revive:disable-lin
 
 		fetchResult, err = szEngine.FetchNext(ctx, queryHandle)
 		if err != nil {
-			return wraperror.Errorf(err, "szengineserver.StreamExportJsonEntityReport.FetchNext error: %w", err)
+			return wraperror.Errorf(err, "FetchNext")
 		}
 
 		if len(fetchResult) == 0 {
@@ -875,7 +871,7 @@ func (server *SzEngineServer) StreamExportJsonEntityReport( //revive:disable-lin
 			Result: fetchResult,
 		}
 		if err = stream.Send(&response); err != nil {
-			return wraperror.Errorf(err, "szengineserver.StreamExportJsonEntityReport.stream.Send error: %w", err)
+			return wraperror.Errorf(err, "stream.Send")
 		}
 
 		server.traceEntry(602, request, fetchResult)
@@ -885,7 +881,7 @@ func (server *SzEngineServer) StreamExportJsonEntityReport( //revive:disable-lin
 
 	err = nil
 
-	return wraperror.Errorf(err, "szengineserver.StreamExportJsonEntityReport error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) WhyEntities(
@@ -910,7 +906,7 @@ func (server *SzEngineServer) WhyEntities(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.WhyEntities error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) WhyRecordInEntity(
@@ -940,7 +936,7 @@ func (server *SzEngineServer) WhyRecordInEntity(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.WhyRecordInEntity error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) WhyRecords(
@@ -972,7 +968,7 @@ func (server *SzEngineServer) WhyRecords(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.WhyRecords error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) WhySearch(
@@ -1003,7 +999,7 @@ func (server *SzEngineServer) WhySearch(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szengineserver.WhySearch error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // ----------------------------------------------------------------------------
@@ -1063,12 +1059,12 @@ func (server *SzEngineServer) SetLogLevel(ctx context.Context, logLevelName stri
 	// }
 	err = server.getLogger().SetLogLevel(logLevelName)
 	if err != nil {
-		return wraperror.Errorf(err, "szengineserver.SetLogLevel.SetLogLevel error: %w", err)
+		return wraperror.Errorf(err, "SetLogLevel: %s", logLevelName)
 	}
 
 	server.isTrace = (logLevelName == logging.LevelTraceName)
 
-	return wraperror.Errorf(err, "szengineserver.SetLogLevel error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // --- Errors -----------------------------------------------------------------
@@ -1131,7 +1127,7 @@ func (server *SzEngineServer) RegisterObserver(ctx context.Context, observer obs
 
 	err = szEngine.RegisterObserver(ctx, observer)
 
-	return wraperror.Errorf(err, "szengineserver.RegisterObserver error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzEngineServer) SetObserverOrigin(ctx context.Context, origin string) {
@@ -1164,5 +1160,5 @@ func (server *SzEngineServer) UnregisterObserver(ctx context.Context, observer o
 
 	err = szEngine.UnregisterObserver(ctx, observer)
 
-	return wraperror.Errorf(err, "szengineserver.UnregisterObserver error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
