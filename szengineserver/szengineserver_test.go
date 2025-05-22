@@ -30,7 +30,29 @@ const (
 	defaultTruncation = 76
 	observerID        = "Observer 1"
 	observerOrigin    = "Observer 1 origin"
+	printErrors       = false
 	printResults      = false
+)
+
+// Bad parameters
+
+const (
+	badAttributes          = "}{"
+	badAvoidEntityIDs      = "}{"
+	badAvoidRecordKeys     = "}{"
+	badBuildOutDegrees     = int64(-1)
+	badBuildOutMaxEntities = int64(-1)
+	badCsvColumnList       = "BAD, CSV, COLUMN, LIST"
+	badDataSourceCode      = "BadDataSourceCode"
+	badEntityID            = int64(-1)
+	badExportHandle        = uintptr(0)
+	badLogLevelName        = "BadLogLevelName"
+	badMaxDegrees          = int64(-1)
+	badRecordDefinition    = "}{"
+	badRecordID            = "BadRecordID"
+	badRedoRecord          = "{}"
+	badRequiredDataSources = "}{"
+	badSearchProfile       = "}{"
 )
 
 type GetEntityByRecordIDResponse struct {
@@ -64,6 +86,7 @@ func TestSzEngineServer_AddRecord(test *testing.T) {
 		RecordId:         record1.ID,
 	}
 	response1, err := szEngineServer.AddRecord(ctx, request1)
+	printError(test, err)
 	require.NoError(test, err)
 	require.NotEmpty(test, response1.GetResult())
 	printActual(test, response1.GetResult())
@@ -75,9 +98,83 @@ func TestSzEngineServer_AddRecord(test *testing.T) {
 		RecordId:         record2.ID,
 	}
 	response2, err := szEngineServer.AddRecord(ctx, request2)
+	printError(test, err)
 	require.NoError(test, err)
 	require.NotEmpty(test, response1.GetResult())
 	printActual(test, response2.GetResult())
+}
+
+func TestSzengine_AddRecord_badDataSourceCodeInJSON(test *testing.T) {
+	ctx := test.Context()
+	szEngineServer := getTestObject(ctx, test)
+	record := truthset.CustomerRecords["1001"]
+	badRecordJSON := `{"DATA_SOURCE": "BOB", "RECORD_ID": "1002", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Bob", "DATE_OF_BIRTH": "11/12/1978", "ADDR_TYPE": "HOME", "ADDR_LINE1": "1515 Adela Lane", "ADDR_CITY": "Las Vegas", "ADDR_STATE": "NV", "ADDR_POSTAL_CODE": "89111", "PHONE_TYPE": "MOBILE", "PHONE_NUMBER": "702-919-1300", "DATE": "3/10/17", "STATUS": "Inactive", "AMOUNT": "200"}`
+	request := &szpb.AddRecordRequest{
+		DataSourceCode:   record.DataSource,
+		Flags:            senzing.SzWithInfo,
+		RecordDefinition: badRecordJSON,
+		RecordId:         record.ID,
+	}
+	_, err := szEngineServer.AddRecord(ctx, request)
+	printError(test, err)
+	require.Error(test, err)
+
+	expectedErr := `{"function": "szengineserver.(*SzEngineServer).AddRecord", "error": {"function": "szengine.(*Szengine).AddRecord", "error":{"id":"SZSDK60044002","reason":"SENZ0023|Conflicting DATA_SOURCE values 'CUSTOMERS' and 'BOB'"}}}`
+	require.JSONEq(test, expectedErr, err.Error())
+}
+
+func TestSzengine_AddRecord_badDataSourceCode(test *testing.T) {
+	ctx := test.Context()
+	szEngineServer := getTestObject(ctx, test)
+	record := truthset.CustomerRecords["1001"]
+	request := &szpb.AddRecordRequest{
+		DataSourceCode:   badDataSourceCode,
+		Flags:            senzing.SzWithInfo,
+		RecordDefinition: record.JSON,
+		RecordId:         record.ID,
+	}
+	_, err := szEngineServer.AddRecord(ctx, request)
+	printError(test, err)
+	require.Error(test, err)
+
+	expectedErr := `{"function": "szengineserver.(*SzEngineServer).AddRecord", "error": {"function": "szengine.(*Szengine).AddRecord", "error": {"id":"SZSDK60044002","reason":"SENZ0023|Conflicting DATA_SOURCE values 'BADDATASOURCECODE' and 'CUSTOMERS'"}}}`
+	require.JSONEq(test, expectedErr, err.Error())
+}
+
+func TestSzengine_AddRecord_badRecordID(test *testing.T) {
+	ctx := test.Context()
+	szEngineServer := getTestObject(ctx, test)
+	record := truthset.CustomerRecords["1001"]
+	request := &szpb.AddRecordRequest{
+		DataSourceCode:   record.DataSource,
+		Flags:            senzing.SzWithInfo,
+		RecordDefinition: record.JSON,
+		RecordId:         badRecordID,
+	}
+	_, err := szEngineServer.AddRecord(ctx, request)
+	printError(test, err)
+	require.Error(test, err)
+
+	expectedErr := `{"function": "szengineserver.(*SzEngineServer).AddRecord", "error": {"function": "szengine.(*Szengine).AddRecord", "error": {"id":"SZSDK60044002","reason":"SENZ0024|Conflicting RECORD_ID values 'BadRecordID' and '1001'"}}}`
+	require.JSONEq(test, expectedErr, err.Error())
+}
+
+func TestSzengine_AddRecord_badRecordDefinition(test *testing.T) {
+	ctx := test.Context()
+	szEngineServer := getTestObject(ctx, test)
+	record := truthset.CustomerRecords["1001"]
+	request := &szpb.AddRecordRequest{
+		DataSourceCode:   record.DataSource,
+		Flags:            senzing.SzWithInfo,
+		RecordDefinition: badRecordDefinition,
+		RecordId:         record.ID,
+	}
+	_, err := szEngineServer.AddRecord(ctx, request)
+	printError(test, err)
+	require.Error(test, err)
+
+	expectedErr := `{"function": "szengineserver.(*SzEngineServer).AddRecord", "error": {"function": "szengine.(*Szengine).AddRecord", "error": {"id":"SZSDK60044002","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`
+	require.JSONEq(test, expectedErr, err.Error())
 }
 
 func TestSzEngineServer_AddRecord_withInfo(test *testing.T) {
@@ -91,6 +188,7 @@ func TestSzEngineServer_AddRecord_withInfo(test *testing.T) {
 		RecordId:         record.ID,
 	}
 	response, err := szEngineServer.AddRecord(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	require.NotEmpty(test, response.GetResult())
 	printActual(test, response.GetResult())
@@ -101,6 +199,7 @@ func TestSzEngineServer_CountRedoRecords(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	request := &szpb.CountRedoRecordsRequest{}
 	response, err := szEngineServer.CountRedoRecords(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -113,6 +212,7 @@ func TestSzEngineServer_ExportJsonEntityReport(test *testing.T) {
 		Flags: flags,
 	}
 	response, err := szEngineServer.ExportJsonEntityReport(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -125,6 +225,7 @@ func TestSzEngineServer_ExportCsvEntityReport(test *testing.T) {
 		Flags:         senzing.SzNoFlags,
 	}
 	response, err := szEngineServer.ExportCsvEntityReport(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -139,6 +240,7 @@ func TestSzEngineServer_FindInterestingEntitiesByEntityId(test *testing.T) {
 		Flags:    flags,
 	}
 	response, err := szEngineServer.FindInterestingEntitiesByEntityId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response)
 }
@@ -154,6 +256,7 @@ func TestSzEngineServer_FindInterestingEntitiesByRecordId(test *testing.T) {
 		RecordId:       record.ID,
 	}
 	response, err := szEngineServer.FindInterestingEntitiesByRecordId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response)
 }
@@ -180,6 +283,7 @@ func TestSzEngineServer_FindNetworkByEntityId(test *testing.T) {
 		MaxDegrees:          maxDegrees,
 	}
 	response, err := szEngineServer.FindNetworkByEntityId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -203,6 +307,7 @@ func TestSzEngineServer_FindNetworkByEntityId_Not_Using_CUSTOMERS(test *testing.
 	}
 
 	_, err := szEngineServer.FindNetworkByEntityId(ctx, request)
+	printError(test, err)
 	require.ErrorIs(test, err, szerror.ErrSzNotFound)
 }
 
@@ -225,6 +330,7 @@ func TestSzEngineServer_FindNetworkByRecordId(test *testing.T) {
 		RecordKeys:          recordKeys,
 	}
 	response, err := szEngineServer.FindNetworkByRecordId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -243,6 +349,7 @@ func TestSzEngineServer_FindPathByEntityId(test *testing.T) {
 		StartEntityId: startEntityID,
 	}
 	response, err := szEngineServer.FindPathByEntityId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -264,6 +371,7 @@ func TestSzEngineServer_FindPathByEntityId_exclusions(test *testing.T) {
 		StartEntityId:  startEntityID,
 	}
 	response, err := szEngineServer.FindPathByEntityId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -285,6 +393,7 @@ func TestSzEngineServer_FindPathByEntityId_inclusions(test *testing.T) {
 		StartEntityId:       startEntityID,
 	}
 	response, err := szEngineServer.FindPathByEntityId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -305,6 +414,7 @@ func TestSzEngineServer_FindPathByRecordId(test *testing.T) {
 		StartRecordId:       record1.ID,
 	}
 	response, err := szEngineServer.FindPathByRecordId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -327,6 +437,7 @@ func TestSzEngineServer_FindPathByRecordId_exclusions(test *testing.T) {
 		StartRecordId:       record1.ID,
 	}
 	response, err := szEngineServer.FindPathByRecordId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -351,6 +462,7 @@ func TestSzEngineServer_FindPathByRecordId_inclusions(test *testing.T) {
 		StartRecordId:       record1.ID,
 	}
 	response, err := szEngineServer.FindPathByRecordId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -360,6 +472,7 @@ func TestSzEngineServer_GetActiveConfigId(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	request := &szpb.GetActiveConfigIdRequest{}
 	response, err := szEngineServer.GetActiveConfigId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -374,6 +487,7 @@ func TestSzEngineServer_GetEntityByEntityId(test *testing.T) {
 		Flags:    flags,
 	}
 	response, err := szEngineServer.GetEntityByEntityId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -389,6 +503,7 @@ func TestSzEngineServer_GetEntityByRecordId(test *testing.T) {
 		RecordId:       record.ID,
 	}
 	response, err := szEngineServer.GetEntityByRecordId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -404,6 +519,7 @@ func TestSzEngineServer_GetRecord(test *testing.T) {
 		RecordId:       record.ID,
 	}
 	response, err := szEngineServer.GetRecord(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -413,6 +529,7 @@ func TestSzEngineServer_GetRedoRecord(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	request := &szpb.GetRedoRecordRequest{}
 	response, err := szEngineServer.GetRedoRecord(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -429,6 +546,7 @@ func TestSzEngineServer_GetVirtualEntityByRecordId(test *testing.T) {
 		RecordKeys: recordKeys,
 	}
 	response, err := szEngineServer.GetVirtualEntityByRecordId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -443,6 +561,7 @@ func TestSzEngineServer_HowEntityByEntityId(test *testing.T) {
 		Flags:    flags,
 	}
 	response, err := szEngineServer.HowEntityByEntityId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -456,6 +575,7 @@ func TestSzEngineServer_PreprocessRecord(test *testing.T) {
 		RecordDefinition: record.JSON,
 	}
 	response, err := szEngineServer.PreprocessRecord(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -465,6 +585,7 @@ func TestSzEngineServer_PrimeEngine(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	request := &szpb.PrimeEngineRequest{}
 	response, err := szEngineServer.PrimeEngine(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response)
 }
@@ -484,6 +605,7 @@ func TestSzEngineServer_ReevaluateEntity(test *testing.T) {
 		Flags:    flags,
 	}
 	response, err := szEngineServer.ReevaluateEntity(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	require.Empty(test, response.GetResult())
 	printActual(test, response.GetResult())
@@ -499,6 +621,7 @@ func TestSzEngineServer_ReevaluateEntity_withInfo(test *testing.T) {
 		Flags:    flags,
 	}
 	response, err := szEngineServer.ReevaluateEntity(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	require.NotEmpty(test, response.GetResult())
 	printActual(test, response.GetResult())
@@ -515,6 +638,7 @@ func TestSzEngineServer_ReevaluateRecord(test *testing.T) {
 		RecordId:       record.ID,
 	}
 	response, err := szEngineServer.ReevaluateRecord(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	require.Empty(test, response.GetResult())
 	printActual(test, response.GetResult())
@@ -531,6 +655,7 @@ func TestSzEngineServer_ReevaluateRecord_withInfo(test *testing.T) {
 		RecordId:       record.ID,
 	}
 	response, err := szEngineServer.ReevaluateRecord(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	require.NotEmpty(test, response.GetResult())
 	printActual(test, response.GetResult())
@@ -542,12 +667,14 @@ func TestSzEngineServer_Reinitialize(test *testing.T) {
 
 	requestToGetActiveConfigID := &szpb.GetActiveConfigIdRequest{}
 	responseFromGetActiveConfigID, err := szEngineServer.GetActiveConfigId(ctx, requestToGetActiveConfigID)
+	printError(test, err)
 	require.NoError(test, err)
 
 	request := &szpb.ReinitializeRequest{
 		ConfigId: responseFromGetActiveConfigID.GetResult(),
 	}
 	response, err := szEngineServer.Reinitialize(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response)
 }
@@ -561,6 +688,7 @@ func TestSzEngineServer_SearchByAttributes(test *testing.T) {
 		Flags:      flags,
 	}
 	response, err := szEngineServer.SearchByAttributes(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -577,6 +705,7 @@ func TestSzEngineServer_SearchByAttributes_searchProfile(test *testing.T) {
 		SearchProfile: searchProfile,
 	}
 	response, err := szEngineServer.SearchByAttributes(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -586,6 +715,7 @@ func TestSzEngineServer_Stats(test *testing.T) {
 	szEngineServer := getTestObject(ctx, test)
 	request := &szpb.GetStatsRequest{}
 	response, err := szEngineServer.GetStats(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -612,6 +742,7 @@ func TestSzEngineServer_WhyEntities(test *testing.T) {
 		Flags:      flags,
 	}
 	response, err := szEngineServer.WhyEntities(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -627,6 +758,7 @@ func TestSzEngineServer_WhyRecordInEntity(test *testing.T) {
 		RecordId:       record1.ID,
 	}
 	response, err := szEngineServer.WhyRecordInEntity(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -645,6 +777,7 @@ func TestSzEngineServer_WhyRecords(test *testing.T) {
 		RecordId_2:       record2.ID,
 	}
 	response, err := szEngineServer.WhyRecords(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -663,6 +796,7 @@ func TestSzEngineServer_WhySearch(test *testing.T) {
 		Flags:         flags,
 	}
 	response, err := szEngineServer.WhySearch(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -678,6 +812,7 @@ func TestSzEngineServer_DeleteRecord(test *testing.T) {
 		RecordId:       record.ID,
 	}
 	response, err := szEngineServer.DeleteRecord(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	require.Empty(test, response.GetResult())
 	printActual(test, response.GetResult())
@@ -694,6 +829,7 @@ func TestSzEngineServer_DeleteRecord_withInfo(test *testing.T) {
 		RecordId:       record.ID,
 	}
 	response, err := szEngineServer.DeleteRecord(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	require.NotEmpty(test, response.GetResult())
 	printActual(test, response.GetResult())
@@ -707,6 +843,7 @@ func TestSzEngineServer_RegisterObserver(test *testing.T) {
 	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.RegisterObserver(ctx, observerSingleton)
+	printError(test, err)
 	require.NoError(test, err)
 }
 
@@ -714,6 +851,7 @@ func TestSzEngineServer_SetLogLevel(test *testing.T) {
 	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.SetLogLevel(ctx, "DEBUG")
+	printError(test, err)
 	require.NoError(test, err)
 }
 
@@ -721,6 +859,7 @@ func TestSzEngineServer__SetLogLevel_badLevelName(test *testing.T) {
 	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.SetLogLevel(ctx, "BADLEVELNAME")
+	printError(test, err)
 	require.Error(test, err)
 }
 
@@ -741,6 +880,7 @@ func TestSzEngineServer_UnregisterObserver(test *testing.T) {
 	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.UnregisterObserver(ctx, observerSingleton)
+	printError(test, err)
 	require.NoError(test, err)
 }
 
@@ -838,6 +978,16 @@ func panicOnError(err error) {
 func printActual(t *testing.T, actual interface{}) {
 	t.Helper()
 	printResult(t, "Actual", actual)
+}
+
+func printError(t *testing.T, err error) {
+	t.Helper()
+
+	if printErrors {
+		if err != nil {
+			t.Logf("Error: %s", err.Error())
+		}
+	}
 }
 
 func printResult(t *testing.T, title string, result interface{}) {

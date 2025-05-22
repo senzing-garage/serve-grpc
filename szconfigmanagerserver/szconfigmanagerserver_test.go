@@ -16,6 +16,7 @@ import (
 	"github.com/senzing-garage/sz-sdk-go-core/szabstractfactory"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
+	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szconfigpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	"github.com/stretchr/testify/assert"
@@ -27,8 +28,24 @@ const (
 	jsonIndentation   = "    "
 	observerID        = "Observer 1"
 	observerOrigin    = "Observer 1 origin"
+	printErrors       = false
 	printResults      = false
 )
+
+// Bad parameters
+
+const (
+	badConfigDefinition       = "\n\t"
+	badConfigID               = int64(0)
+	badCurrentDefaultConfigID = int64(0)
+	badLogLevelName           = "BadLogLevelName"
+	badNewDefaultConfigID     = int64(0)
+	baseTen                   = 10
+)
+
+// Nil/empty parameters
+
+var nilConfigDefinition string
 
 var (
 	logLevelName      = "INFO"
@@ -51,6 +68,7 @@ func TestSzConfigManagerServer_GetConfig(test *testing.T) {
 
 	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
 	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	printError(test, err)
 	require.NoError(test, err)
 
 	// Test GetConfig.
@@ -59,8 +77,24 @@ func TestSzConfigManagerServer_GetConfig(test *testing.T) {
 		ConfigId: responseFromGetDefaultConfigID.GetResult(),
 	}
 	response, err := szConfigManagerServer.GetConfig(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
+}
+
+func TestSzConfigManagerServer_GetConfig_badConfigID(test *testing.T) {
+	ctx := test.Context()
+	szConfigManagerServer := getTestObject(ctx, test)
+	request := &szpb.GetConfigRequest{
+		ConfigId: badConfigID,
+	}
+	response, err := szConfigManagerServer.GetConfig(ctx, request)
+	printError(test, err)
+	require.ErrorIs(test, err, szerror.ErrSzConfiguration)
+
+	expectedErr := `{"function":"szconfigmanagerserver.(*SzConfigManagerServer).GetConfig","text":"CreateConfigFromConfigID","error":{"function":"szconfigmanager.(*Szconfigmanager).CreateConfigFromConfigID","error":{"function":"szconfigmanager.(*Szconfigmanager).createConfigFromConfigIDChoreography","text":"getConfig(0)","error":{"id":"SZSDK60024003","reason":"SENZ7221|No engine configuration registered with data ID [0]."}}}}`
+	require.JSONEq(test, expectedErr, err.Error())
+	printActual(test, response)
 }
 
 func TestSzConfigManagerServer_GetConfigs(test *testing.T) {
@@ -68,6 +102,7 @@ func TestSzConfigManagerServer_GetConfigs(test *testing.T) {
 	szConfigManagerServer := getTestObject(ctx, test)
 	request := &szpb.GetConfigsRequest{}
 	response, err := szConfigManagerServer.GetConfigs(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -77,6 +112,7 @@ func TestSzConfigManagerServer_GetDefaultConfigID(test *testing.T) {
 	szConfigManagerServer := getTestObject(ctx, test)
 	request := &szpb.GetDefaultConfigIdRequest{}
 	response, err := szConfigManagerServer.GetDefaultConfigId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -86,6 +122,7 @@ func TestSzConfigManagerServer_GetTemplateConfig(test *testing.T) {
 	szConfigManagerServer := getTestObject(ctx, test)
 	request := &szpb.GetTemplateConfigRequest{}
 	response, err := szConfigManagerServer.GetTemplateConfig(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
 }
@@ -100,6 +137,7 @@ func TestSzConfigManagerServer_RegisterConfig(test *testing.T) {
 
 	requestToGetTemplateConfig := &szpb.GetTemplateConfigRequest{}
 	responseFromGetTemplateConfig, err := szConfigManagerServer.GetTemplateConfig(ctx, requestToGetTemplateConfig)
+	printError(test, err)
 	require.NoError(test, err)
 
 	// Add DataSource to the Senzing configuration.
@@ -109,6 +147,7 @@ func TestSzConfigManagerServer_RegisterConfig(test *testing.T) {
 		DataSourceCode:   "GO_TEST",
 	}
 	responseFromAddDataSource, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
+	printError(test, err)
 	require.NoError(test, err)
 
 	// Test RegisterConfig.
@@ -118,7 +157,42 @@ func TestSzConfigManagerServer_RegisterConfig(test *testing.T) {
 		ConfigComment:    fmt.Sprintf("szconfigmanagerserver_test at %s", now.UTC()),
 	}
 	response, err := szConfigManagerServer.RegisterConfig(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
+	printActual(test, response)
+}
+
+func TestSzConfigManagerServer_RegisterConfig_badConfigDefinition(test *testing.T) {
+	now := time.Now()
+	ctx := test.Context()
+	szConfigManagerServer := getTestObject(ctx, test)
+	request := &szpb.RegisterConfigRequest{
+		ConfigDefinition: badConfigDefinition,
+		ConfigComment:    fmt.Sprintf("szconfigmanagerserver_test at %s", now.UTC()),
+	}
+	response, err := szConfigManagerServer.RegisterConfig(ctx, request)
+	printError(test, err)
+	require.ErrorIs(test, err, szerror.ErrSzConfiguration)
+
+	expectedErr := `{"function":"szconfigmanagerserver.(*SzConfigManagerServer).RegisterConfig","error":{"function":"szconfigmanager.(*Szconfigmanager).RegisterConfig","error":{"id":"SZSDK60024001","reason":"SENZ0028|Invalid JSON config document"}}}`
+	require.JSONEq(test, expectedErr, err.Error())
+	printActual(test, response)
+}
+
+func TestSzConfigManagerServer_RegisterConfig_nilConfigDefinition(test *testing.T) {
+	now := time.Now()
+	ctx := test.Context()
+	szConfigManagerServer := getTestObject(ctx, test)
+	request := &szpb.RegisterConfigRequest{
+		ConfigDefinition: nilConfigDefinition,
+		ConfigComment:    fmt.Sprintf("szconfigmanagerserver_test at %s", now.UTC()),
+	}
+	response, err := szConfigManagerServer.RegisterConfig(ctx, request)
+	printError(test, err)
+	require.ErrorIs(test, err, szerror.ErrSzConfiguration)
+
+	expectedErr := `{"function":"szconfigmanagerserver.(*SzConfigManagerServer).RegisterConfig","error":{"function":"szconfigmanager.(*Szconfigmanager).RegisterConfig","error":{"id":"SZSDK60024001","reason":"SENZ0028|Invalid JSON config document"}}}`
+	require.JSONEq(test, expectedErr, err.Error())
 	printActual(test, response)
 }
 
@@ -130,6 +204,7 @@ func TestSzConfigManagerServer_ReplaceDefaultConfigID(test *testing.T) {
 
 	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
 	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	printError(test, err)
 	require.NoError(test, err)
 
 	// Test. Note: Cheating a little with replacing with same configId.
@@ -139,7 +214,56 @@ func TestSzConfigManagerServer_ReplaceDefaultConfigID(test *testing.T) {
 		NewDefaultConfigId:     responseFromGetDefaultConfigID.GetResult(),
 	}
 	response, err := szConfigManagerServer.ReplaceDefaultConfigId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
+	printActual(test, response)
+}
+
+func TestSzConfigManagerServer_ReplaceDefaultConfigID_badCurrentDefaultConfigID(test *testing.T) {
+	ctx := test.Context()
+	szConfigManagerServer := getTestObject(ctx, test)
+
+	// Get the ConfigID of the default Senzing configuration.
+
+	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	printError(test, err)
+	require.NoError(test, err)
+
+	request := &szpb.ReplaceDefaultConfigIdRequest{
+		CurrentDefaultConfigId: badCurrentDefaultConfigID,
+		NewDefaultConfigId:     responseFromGetDefaultConfigID.GetResult(),
+	}
+	response, err := szConfigManagerServer.ReplaceDefaultConfigId(ctx, request)
+	printError(test, err)
+	require.ErrorIs(test, err, szerror.ErrSzReplaceConflict)
+
+	expectedErr := `{"function":"szconfigmanagerserver.(*SzConfigManagerServer).ReplaceDefaultConfigId","error":{"function":"szconfigmanager.(*Szconfigmanager).ReplaceDefaultConfigID","error":{"id":"SZSDK60024007","reason":"SENZ7245|Current configuration ID does not match specified data ID [0]."}}}`
+	require.JSONEq(test, expectedErr, err.Error())
+	printActual(test, response)
+}
+
+func TestSzConfigManagerServer_ReplaceDefaultConfigID_badNewDefaultConfigID(test *testing.T) {
+	ctx := test.Context()
+	szConfigManagerServer := getTestObject(ctx, test)
+
+	// Get the ConfigID of the default Senzing configuration.
+
+	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
+	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	printError(test, err)
+	require.NoError(test, err)
+
+	request := &szpb.ReplaceDefaultConfigIdRequest{
+		CurrentDefaultConfigId: responseFromGetDefaultConfigID.GetResult(),
+		NewDefaultConfigId:     badNewDefaultConfigID,
+	}
+	response, err := szConfigManagerServer.ReplaceDefaultConfigId(ctx, request)
+	printError(test, err)
+	require.ErrorIs(test, err, szerror.ErrSzConfiguration)
+
+	expectedErr := `{"function":"szconfigmanagerserver.(*SzConfigManagerServer).ReplaceDefaultConfigId","error":{"function":"szconfigmanager.(*Szconfigmanager).ReplaceDefaultConfigID","error":{"id":"SZSDK60024007","reason":"SENZ7221|No engine configuration registered with data ID [0]."}}}`
+	require.JSONEq(test, expectedErr, err.Error())
 	printActual(test, response)
 }
 
@@ -152,6 +276,7 @@ func TestSzConfigManagerServer_SetDefaultConfig(test *testing.T) {
 
 	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
 	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	printError(test, err)
 	require.NoError(test, err)
 
 	defaultConfigID := responseFromGetDefaultConfigID.GetResult()
@@ -162,6 +287,7 @@ func TestSzConfigManagerServer_SetDefaultConfig(test *testing.T) {
 		ConfigId: defaultConfigID,
 	}
 	responseFromGetConfig, err := szConfigManagerServer.GetConfig(ctx, requestToGetConfig)
+	printError(test, err)
 	require.NoError(test, err)
 
 	defaultConfigDefinition := responseFromGetConfig.GetResult()
@@ -174,7 +300,23 @@ func TestSzConfigManagerServer_SetDefaultConfig(test *testing.T) {
 		ConfigComment:    "Just a test",
 	}
 	_, err = szConfigManagerServer.SetDefaultConfig(ctx, requestToSetDefaultConfig)
+	printError(test, err)
 	require.NoError(test, err)
+}
+
+func TestSzConfigManagerServer_SetDefaultConfig_badConfigDefinition(test *testing.T) {
+	ctx := test.Context()
+	szConfigManagerServer := getTestObject(ctx, test)
+	requestToSetDefaultConfig := &szpb.SetDefaultConfigRequest{
+		ConfigDefinition: badConfigDefinition,
+		ConfigComment:    "Just a test",
+	}
+	_, err := szConfigManagerServer.SetDefaultConfig(ctx, requestToSetDefaultConfig)
+	printError(test, err)
+	require.ErrorIs(test, err, szerror.ErrSzConfiguration)
+
+	expectedErr := `{"function":"szconfigmanagerserver.(*SzConfigManagerServer).SetDefaultConfig","error":{"function":"szconfigmanager.(*Szconfigmanager).SetDefaultConfig","error":{"function":"szconfigmanager.(*Szconfigmanager).setDefaultConfigChoreography","text":"registerConfig","error":{"id":"SZSDK60024001","reason":"SENZ0028|Invalid JSON config document"}}}}`
+	require.JSONEq(test, expectedErr, err.Error())
 }
 
 func TestSzConfigManagerServer_SetDefaultConfigId(test *testing.T) {
@@ -185,6 +327,7 @@ func TestSzConfigManagerServer_SetDefaultConfigId(test *testing.T) {
 
 	requestToGetDefaultConfigID := &szpb.GetDefaultConfigIdRequest{}
 	responseFromGetDefaultConfigID, err := szConfigManagerServer.GetDefaultConfigId(ctx, requestToGetDefaultConfigID)
+	printError(test, err)
 	require.NoError(test, err)
 
 	// Test GetDefaultConfigID.
@@ -193,7 +336,26 @@ func TestSzConfigManagerServer_SetDefaultConfigId(test *testing.T) {
 		ConfigId: responseFromGetDefaultConfigID.GetResult(),
 	}
 	response, err := szConfigManagerServer.SetDefaultConfigId(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
+	printActual(test, response)
+}
+
+func TestSzConfigManagerServer_SetDefaultConfigId_badConfigID(test *testing.T) {
+	ctx := test.Context()
+	szConfigManagerServer := getTestObject(ctx, test)
+
+	// Test GetDefaultConfigID.
+
+	request := &szpb.SetDefaultConfigIdRequest{
+		ConfigId: badConfigID,
+	}
+	response, err := szConfigManagerServer.SetDefaultConfigId(ctx, request)
+	printError(test, err)
+	require.ErrorIs(test, err, szerror.ErrSzConfiguration)
+
+	expectedErr := `{"function":"szconfigmanagerserver.(*SzConfigManagerServer).SetDefaultConfigId","error":{"function":"szconfigmanager.(*Szconfigmanager).SetDefaultConfigID","error":{"id":"SZSDK60024008","reason":"SENZ7221|No engine configuration registered with data ID [0]."}}}`
+	require.JSONEq(test, expectedErr, err.Error())
 	printActual(test, response)
 }
 
@@ -205,6 +367,7 @@ func TestSzConfigManagerServer_RegisterObserver(test *testing.T) {
 	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.RegisterObserver(ctx, observerSingleton)
+	printError(test, err)
 	require.NoError(test, err)
 }
 
@@ -212,6 +375,7 @@ func TestSzConfigManagerServer_SetLogLevel(test *testing.T) {
 	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.SetLogLevel(ctx, "DEBUG")
+	printError(test, err)
 	require.NoError(test, err)
 }
 
@@ -219,6 +383,7 @@ func TestSzConfigManagerServer__SetLogLevel_badLevelName(test *testing.T) {
 	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.SetLogLevel(ctx, "BADLEVELNAME")
+	printError(test, err)
 	require.Error(test, err)
 }
 
@@ -239,6 +404,7 @@ func TestSzConfigManagerServer_UnregisterObserver(test *testing.T) {
 	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.UnregisterObserver(ctx, observerSingleton)
+	printError(test, err)
 	require.NoError(test, err)
 }
 
@@ -317,6 +483,16 @@ func panicOnError(err error) {
 func printActual(t *testing.T, actual interface{}) {
 	t.Helper()
 	printResult(t, "Actual", actual)
+}
+
+func printError(t *testing.T, err error) {
+	t.Helper()
+
+	if printErrors {
+		if err != nil {
+			t.Logf("Error: %s", err.Error())
+		}
+	}
 }
 
 func printResult(t *testing.T, title string, result interface{}) {

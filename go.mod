@@ -6,12 +6,12 @@ require (
 	github.com/aquilax/truncate v1.0.1
 	github.com/improbable-eng/grpc-web v0.15.0
 	github.com/senzing-garage/go-cmdhelping v0.3.5
-	github.com/senzing-garage/go-helpers v0.6.12
+	github.com/senzing-garage/go-helpers v0.6.13-0.20250522172158-10a00138fa8f
 	github.com/senzing-garage/go-logging v1.5.3
 	github.com/senzing-garage/go-observing v0.3.5
 	github.com/senzing-garage/init-database v0.7.12
 	github.com/senzing-garage/sz-sdk-go v0.15.3
-	github.com/senzing-garage/sz-sdk-go-core v0.9.5
+	github.com/senzing-garage/sz-sdk-go-core v0.9.6-0.20250522200238-5c3ddf273e5e
 	github.com/senzing-garage/sz-sdk-proto v0.8.3
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
