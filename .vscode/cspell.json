@@ -67,6 +67,7 @@
     "szconfigmanager",
     "szconfigmanagerserver",
     "szconfigmgr",
+    "szconfigserver",
     "Szdiagnostic",
     "Szengine",
     "szengineserver",
