@@ -18,6 +18,7 @@ import (
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
 	"github.com/senzing-garage/sz-sdk-go-core/szengine"
 	"github.com/senzing-garage/sz-sdk-go/senzing"
+	"github.com/senzing-garage/sz-sdk-go/szerror"
 	szconfigmanagerpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 	"github.com/stretchr/testify/assert"
@@ -28,7 +29,23 @@ const (
 	defaultTruncation = 76
 	observerID        = "Observer 1"
 	observerOrigin    = "Observer 1 origin"
+	printErrors       = false
 	printResults      = false
+)
+
+// Bad parameters
+
+const (
+	badFeatureID    = int64(-1)
+	badLogLevelName = "BadLogLevelName"
+	badSecondsToRun = -1
+)
+
+// Nil/empty parameters
+
+var (
+	nilSecondsToRun int32
+	nilFeatureID    int64
 )
 
 var (
@@ -52,6 +69,31 @@ func TestSzDiagnosticServer_CheckDatastorePerformance(test *testing.T) {
 		SecondsToRun: int32(1),
 	}
 	response, err := szDiagnosticServer.CheckDatastorePerformance(ctx, request)
+	printError(test, err)
+	require.NoError(test, err)
+	printActual(test, response)
+}
+
+func TestSzDiagnosticServer_CheckDatastorePerformance_badSecondsToRun(test *testing.T) {
+	ctx := test.Context()
+	szDiagnosticServer := getTestObject(ctx, test)
+	request := &szpb.CheckDatastorePerformanceRequest{
+		SecondsToRun: badSecondsToRun,
+	}
+	response, err := szDiagnosticServer.CheckDatastorePerformance(ctx, request)
+	printError(test, err)
+	require.NoError(test, err)
+	printActual(test, response)
+}
+
+func TestSzDiagnosticServer_CheckDatastorePerformance_nilSecondsToRun(test *testing.T) {
+	ctx := test.Context()
+	szDiagnosticServer := getTestObject(ctx, test)
+	request := &szpb.CheckDatastorePerformanceRequest{
+		SecondsToRun: nilSecondsToRun,
+	}
+	response, err := szDiagnosticServer.CheckDatastorePerformance(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response)
 }
@@ -61,6 +103,7 @@ func TestSzDiagnosticServer_GetDatastoreInfo(test *testing.T) {
 	szDiagnosticServer := getTestObject(ctx, test)
 	request := &szpb.GetDatastoreInfoRequest{}
 	response, err := szDiagnosticServer.GetDatastoreInfo(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response)
 }
@@ -72,7 +115,38 @@ func TestSzDiagnosticServer_GetFeature(test *testing.T) {
 		FeatureId: int64(1),
 	}
 	response, err := szDiagnosticServer.GetFeature(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
+	printActual(test, response)
+}
+
+func TestSzDiagnosticServer_GetFeature_badFeatureID(test *testing.T) {
+	ctx := test.Context()
+	szDiagnosticServer := getTestObject(ctx, test)
+	request := &szpb.GetFeatureRequest{
+		FeatureId: badFeatureID,
+	}
+	response, err := szDiagnosticServer.GetFeature(ctx, request)
+	printError(test, err)
+	require.ErrorIs(test, err, szerror.ErrSz)
+
+	expectedErr := `{"function":"szdiagnosticserver.(*SzDiagnosticServer).GetFeature","error":{"function":"szdiagnostic.(*Szdiagnostic).GetFeature","error":{"id":"SZSDK60034004","reason":"SENZ0057|Unknown feature ID value '-1'"}}}`
+	require.JSONEq(test, expectedErr, err.Error())
+	printActual(test, response)
+}
+
+func TestSzDiagnosticServer_GetFeature_nilFeatureID(test *testing.T) {
+	ctx := test.Context()
+	szDiagnosticServer := getTestObject(ctx, test)
+	request := &szpb.GetFeatureRequest{
+		FeatureId: nilFeatureID,
+	}
+	response, err := szDiagnosticServer.GetFeature(ctx, request)
+	printError(test, err)
+	require.ErrorIs(test, err, szerror.ErrSz)
+
+	expectedErr := `{"function":"szdiagnosticserver.(*SzDiagnosticServer).GetFeature","error":{"function":"szdiagnostic.(*Szdiagnostic).GetFeature","error":{"id":"SZSDK60034004","reason":"SENZ0057|Unknown feature ID value '0'"}}}`
+	require.JSONEq(test, expectedErr, err.Error())
 	printActual(test, response)
 }
 
@@ -91,12 +165,14 @@ func TestSzDiagnosticServer_Reinitialize(test *testing.T) {
 	szConfigManager := getSzConfigManagerServer(ctx)
 	getDefaultConfigIDRequest := &szconfigmanagerpb.GetDefaultConfigIdRequest{}
 	getDefaultConfigIDResponse, err := szConfigManager.GetDefaultConfigId(ctx, getDefaultConfigIDRequest)
+	printError(test, err)
 	require.NoError(test, err)
 
 	request := &szpb.ReinitializeRequest{
 		ConfigId: getDefaultConfigIDResponse.GetResult(),
 	}
 	response, err := szDiagnostic.Reinitialize(ctx, request)
+	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response)
 }
@@ -109,6 +185,7 @@ func TestSzDiagnosticServer_RegisterObserver(test *testing.T) {
 	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.RegisterObserver(ctx, observerSingleton)
+	printError(test, err)
 	require.NoError(test, err)
 }
 
@@ -116,6 +193,7 @@ func TestSzDiagnosticServer_SetLogLevel(test *testing.T) {
 	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.SetLogLevel(ctx, "DEBUG")
+	printError(test, err)
 	require.NoError(test, err)
 }
 
@@ -123,6 +201,7 @@ func TestSzDiagnosticServer__SetLogLevel_badLevelName(test *testing.T) {
 	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.SetLogLevel(ctx, "BADLEVELNAME")
+	printError(test, err)
 	require.Error(test, err)
 }
 
@@ -143,6 +222,7 @@ func TestSzDiagnosticServer_UnregisterObserver(test *testing.T) {
 	ctx := test.Context()
 	testObject := getTestObject(ctx, test)
 	err := testObject.UnregisterObserver(ctx, observerSingleton)
+	printError(test, err)
 	require.NoError(test, err)
 }
 
@@ -224,6 +304,16 @@ func panicOnError(err error) {
 func printActual(t *testing.T, actual interface{}) {
 	t.Helper()
 	printResult(t, "Actual", actual)
+}
+
+func printError(t *testing.T, err error) {
+	t.Helper()
+
+	if printErrors {
+		if err != nil {
+			t.Logf("Error: %s", err.Error())
+		}
+	}
 }
 
 func printResult(t *testing.T, title string, result interface{}) {
