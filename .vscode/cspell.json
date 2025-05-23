@@ -79,6 +79,7 @@
     "szhelpers",
     "szinterface",
     "Szproduct",
+    "szproductserver",
     "SZSDK",
     "szssadm",
     "taskkill",
