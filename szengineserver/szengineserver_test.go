@@ -1186,6 +1186,57 @@ func TestSzEngine_FindNetworkByRecordID_nilBuildOutMaxEntities(test *testing.T) 
 
 func TestSzEngine_FindPathByEntityID(test *testing.T) {
 	ctx := test.Context()
+	testCases := getTestCasesForFindPathByEntityID()
+
+	for _, testCase := range testCases {
+		test.Run(testCase.name, func(test *testing.T) {
+
+			// Insert test data.
+
+			records := []record.Record{
+				truthset.CustomerRecords["1001"],
+				truthset.CustomerRecords["1002"],
+			}
+
+			defer func() { deleteRecords(ctx, records) }()
+
+			addRecords(ctx, records)
+
+			// Defaults.
+
+			szEngine := getTestObject(test)
+			startEntityID := getEntityID(truthset.CustomerRecords["1001"])
+			endEntityID := getEntityID(truthset.CustomerRecords["1002"])
+			flags := senzing.SzNoFlags
+			avoidEntityIDs := ""
+			if testCase.avoidEntityIDs != nil {
+				avoidEntityIDs = testCase.avoidEntityIDs()
+			}
+
+			// Test.
+
+			request := &szpb.FindPathByEntityIdRequest{
+				AvoidEntityIds:      xString(avoidEntityIDs, ""),
+				EndEntityId:         xInt64(testCase.endEntityID, endEntityID),
+				Flags:               xInt64(testCase.flags, flags),
+				MaxDegrees:          testCase.maxDegrees,
+				RequiredDataSources: testCase.requiredDataSources,
+				StartEntityId:       xInt64(testCase.startEntityID, startEntityID),
+			}
+			actual, err := szEngine.FindPathByEntityId(ctx, request)
+			printDebug(test, err, actual)
+			if testCase.expectedErr != nil {
+				require.ErrorIs(test, err, testCase.expectedErr)
+				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
+			} else {
+				require.NoError(test, err)
+			}
+		})
+	}
+}
+
+func TestSzEngine_FindPathByEntityID_original(test *testing.T) {
+	ctx := test.Context()
 	records := []record.Record{
 		truthset.CustomerRecords["1001"],
 		truthset.CustomerRecords["1002"],
@@ -1211,55 +1262,7 @@ func TestSzEngine_FindPathByEntityID(test *testing.T) {
 	require.NoError(test, err)
 }
 
-func TestSzEngine_FindPathByEntityID_badStartEntityID(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_badEndEntityID(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_badMaxDegrees(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_badAvoidEntityIDs(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_badRequiredDataSource(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_nilMaxDegrees(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_nilAvoidEntityIDs(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_nilRequiredDataSource(test *testing.T) {
-	// FIXME:
-}
-
 func TestSzEngine_FindPathByEntityID_avoiding(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_avoiding_badStartEntityID(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_avoidingAndIncluding(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_including(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_exclusions(test *testing.T) {
 	ctx := test.Context()
 	records := []record.Record{
 		truthset.CustomerRecords["1001"],
@@ -1287,6 +1290,18 @@ func TestSzEngine_FindPathByEntityID_exclusions(test *testing.T) {
 	actual, err := szEngine.FindPathByEntityId(ctx, request)
 	printDebug(test, err, actual)
 	require.NoError(test, err)
+}
+
+func TestSzEngine_FindPathByEntityID_avoiding_badStartEntityID(test *testing.T) {
+	// FIXME:
+}
+
+func TestSzEngine_FindPathByEntityID_avoidingAndIncluding(test *testing.T) {
+	// FIXME:
+}
+
+func TestSzEngine_FindPathByEntityID_including(test *testing.T) {
+	// FIXME:
 }
 
 func TestSzEngine_FindPathByEntityID_including_badStartEntityID(test *testing.T) {
@@ -2342,4 +2357,112 @@ func setup() {
 	setupSenzingConfig(ctx, instanceName, settings, verboseLogging)
 	err = setupPurgeRepository(ctx, instanceName, settings, verboseLogging)
 	panicOnError(err)
+}
+
+// ----------------------------------------------------------------------------
+// Test harness
+// ----------------------------------------------------------------------------
+
+type TestMetadataForFindPathByEntityID struct {
+	avoidEntityIDs      func() string
+	endEntityID         int64
+	expectedErr         error
+	expectedErrMessage  string
+	flags               int64
+	maxDegrees          int64
+	name                string
+	requiredDataSources string
+	startEntityID       int64
+}
+
+func getTestCasesForFindPathByEntityID() []TestMetadataForFindPathByEntityID {
+	result := []TestMetadataForFindPathByEntityID{
+		{
+			name: "default",
+		},
+		{
+			name:               "badStartEntityID",
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044017","reason":"SENZ0037|Unknown resolved entity value '-1'"}}}`,
+			startEntityID:      badEntityID,
+		},
+		{
+			name:               "badEndEntityID",
+			endEntityID:        badEntityID,
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044017","reason":"SENZ0037|Unknown resolved entity value '-1'"}}}`,
+		},
+		{
+			name:               "badMaxDegrees",
+			expectedErr:        szerror.ErrSz,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044017","reason":"SENZ0031|Invalid value of max degree '-1'"}}}`,
+			maxDegrees:         badMaxDegrees,
+		},
+		{
+			name:               "badAvoidEntityIDs",
+			avoidEntityIDs:     badAvoidEntityIDsFunc,
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044021","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
+		},
+		{
+			name:                "badRequiredDataSource",
+			expectedErr:         szerror.ErrSzBadInput,
+			expectedErrMessage:  `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044025","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
+			requiredDataSources: badRequiredDataSources,
+		},
+		{
+			name:       "nilMaxDegrees",
+			maxDegrees: nilMaxDegrees,
+		},
+		{
+			name:           "nilAvoidEntityIDs",
+			avoidEntityIDs: nilAvoidEntityIDsFunc,
+		},
+		{
+			name:                "nilRequiredDataSource",
+			requiredDataSources: nilRequiredDataSources,
+		},
+		{
+			name:           "avoiding",
+			avoidEntityIDs: avoidEntityIDsFunc,
+		},
+	}
+	return result
+}
+
+// Return first non-zero length candidate.  Last candidate is default.
+func xString(candidates ...string) string {
+	var result string
+	for _, result = range candidates {
+		if len(result) > 0 {
+			return result
+		}
+	}
+	return result
+}
+
+// Return first non-zero candidate.  Last candidate is default.
+func xInt64(candidates ...int64) int64 {
+	var result int64
+	for _, result = range candidates {
+		if result != 0 {
+			return result
+		}
+	}
+	return result
+}
+
+func avoidEntityIDsFunc() string {
+	record1 := truthset.CustomerRecords["1001"]
+	result := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDString(record1) + `}]}`
+
+	return result
+}
+
+func badAvoidEntityIDsFunc() string {
+	return badAvoidEntityIDs
+}
+
+func nilAvoidEntityIDsFunc() string {
+	return nilAvoidEntityIDs
 }
