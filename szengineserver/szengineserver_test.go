@@ -1554,6 +1554,7 @@ func TestBuildSimpleSystemConfigurationJsonUsingEnvVars(test *testing.T) {
 
 func addRecords(ctx context.Context, records []record.Record) {
 	szEngine := getSzEngineServer(ctx)
+
 	flags := senzing.SzWithoutInfo
 	for _, record := range records {
 		request := &szpb.AddRecordRequest{
@@ -1569,6 +1570,7 @@ func addRecords(ctx context.Context, records []record.Record) {
 
 func deleteRecords(ctx context.Context, records []record.Record) {
 	szEngine := getSzEngineServer(ctx)
+
 	flags := senzing.SzWithoutInfo
 	for _, record := range records {
 		request := &szpb.DeleteRecordRequest{
@@ -1594,9 +1596,11 @@ func getEntityIDForRecord(datasource string, recordID string) int64 {
 	}
 	response, err := szEngine.GetEntityByRecordId(ctx, request)
 	panicOnError(err)
+
 	getEntityByRecordIDResponse := &GetEntityByRecordIDResponse{}
 	err = json.Unmarshal([]byte(response.GetResult()), &getEntityByRecordIDResponse)
 	panicOnError(err)
+
 	return getEntityByRecordIDResponse.ResolvedEntity.EntityID
 }
 

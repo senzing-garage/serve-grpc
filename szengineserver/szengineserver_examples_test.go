@@ -349,7 +349,6 @@ func ExampleSzEngineServer_FindPathByEntityId_avoiding() {
 	//         }
 	//     ]
 	// }
-
 }
 
 func ExampleSzEngineServer_FindPathByEntityId_avoidingAndIncluding() {
@@ -389,7 +388,6 @@ func ExampleSzEngineServer_FindPathByEntityId_avoidingAndIncluding() {
 	//         }
 	//     ]
 	// }
-
 }
 
 func ExampleSzEngineServer_FindPathByRecordId() {
@@ -471,7 +469,6 @@ func ExampleSzEngineServer_FindPathByRecordId_avoiding() {
 	//         }
 	//     ]
 	// }
-
 }
 
 func ExampleSzEngineServer_FindPathByRecordId_avoidingAndIncluding() {
