@@ -39,8 +39,8 @@ const (
 	observerID          = "Observer 1"
 	observerOrigin      = "SzEngine observer"
 	originMessage       = "Machine: nn; Task: UnitTest"
-	printErrors         = true
-	printResults        = true
+	printErrors         = false
+	printResults        = false
 	requiredDataSources = senzing.SzNoRequiredDatasources
 	searchAttributes    = `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
 	searchProfile       = senzing.SzNoSearchProfile
