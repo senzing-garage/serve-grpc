@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/senzing-garage/go-helpers/jsonutil"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szconfig"
 	szconfigmanagerpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 )
@@ -15,7 +16,8 @@ import (
 // ----------------------------------------------------------------------------
 
 func ExampleSzConfigServer_AddDataSource() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigserver/szconfigserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigserver/szconfigserver_examples_test.go
 	ctx := context.TODO()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getSzConfigServer(ctx)
@@ -46,7 +48,8 @@ func ExampleSzConfigServer_AddDataSource() {
 }
 
 func ExampleSzConfigServer_DeleteDataSource() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigserver/szconfigserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigserver/szconfigserver_examples_test.go
 	ctx := context.TODO()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getSzConfigServer(ctx)
@@ -77,7 +80,8 @@ func ExampleSzConfigServer_DeleteDataSource() {
 }
 
 func ExampleSzConfigServer_GetDataSources() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigserver/szconfigserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigserver/szconfigserver_examples_test.go
 	ctx := context.TODO()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getSzConfigServer(ctx)
@@ -102,6 +106,6 @@ func ExampleSzConfigServer_GetDataSources() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
 	// Output: {"DATA_SOURCES":[{"DSRC_ID":1,"DSRC_CODE":"TEST"},{"DSRC_ID":2,"DSRC_CODE":"SEARCH"}]}
 }

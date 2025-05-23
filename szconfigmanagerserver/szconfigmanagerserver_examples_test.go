@@ -17,7 +17,8 @@ import (
 // ----------------------------------------------------------------------------
 
 func ExampleSzConfigManagerServer_GetConfig() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
 	ctx := context.TODO()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 
@@ -44,7 +45,8 @@ func ExampleSzConfigManagerServer_GetConfig() {
 }
 
 func ExampleSzConfigManagerServer_GetConfigs() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
 	ctx := context.TODO()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	request := &szpb.GetConfigsRequest{}
@@ -59,7 +61,8 @@ func ExampleSzConfigManagerServer_GetConfigs() {
 }
 
 func ExampleSzConfigManagerServer_GetDefaultConfigId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
 	ctx := context.TODO()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	request := &szpb.GetDefaultConfigIdRequest{}
@@ -88,7 +91,8 @@ func ExampleSzConfigManagerServer_GetTemplateConfig() {
 }
 
 func ExampleSzConfigManagerServer_RegisterConfig() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
 	now := time.Now()
 	ctx := context.TODO()
 	szConfigServer := getSzConfigServer(ctx)
@@ -132,7 +136,8 @@ func ExampleSzConfigManagerServer_RegisterConfig() {
 }
 
 func ExampleSzConfigManagerServer_ReplaceDefaultConfigId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
 	ctx := context.TODO()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 
@@ -162,7 +167,8 @@ func ExampleSzConfigManagerServer_ReplaceDefaultConfigId() {
 }
 
 func ExampleSzConfigManagerServer_SetDefaultConfig() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
 	ctx := context.TODO()
 
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
@@ -209,7 +215,8 @@ func ExampleSzConfigManagerServer_SetDefaultConfig() {
 }
 
 func ExampleSzConfigManagerServer_SetDefaultConfigId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigmanagerserver/szconfigmanagerserver_examples_test.go
 	ctx := context.TODO()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 

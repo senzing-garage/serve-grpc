@@ -18,6 +18,7 @@ import (
 
 const (
 	defaultTruncation = 76
+	jsonIndentation   = "    "
 	observerID        = "Observer 1"
 	observerOrigin    = "Observer 1 origin"
 	printResults      = false

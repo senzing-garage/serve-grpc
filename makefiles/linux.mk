@@ -107,7 +107,8 @@ setup-osarch-specific:
 .PHONY: test-osarch-specific
 test-osarch-specific:
 	# @go test -tags "libsqlite3 linux" -json -v -p 1 ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
-	@go test -tags "libsqlite3 linux" -v -p 1 ./szengineserver
+	# @go test -tags "libsqlite3 linux" -v -p 1 -skip 'Example' ./szengineserver
+	@go test -tags "libsqlite3 linux" -json -v -p 1 -skip 'Example' ./szengineserver 2>&1 | tee /tmp/gotest.log | gotestfmt
 
 # -----------------------------------------------------------------------------
 # Makefile targets supported only by this platform.

@@ -12,11 +12,12 @@ import (
 )
 
 // ----------------------------------------------------------------------------
-// Interface methods - Examples for godoc documentation
+// Interface methods
 // ----------------------------------------------------------------------------
 
 func ExampleSzEngineServer_AddRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.AddRecordRequest{
@@ -36,7 +37,8 @@ func ExampleSzEngineServer_AddRecord() {
 }
 
 func ExampleSzEngineServer_AddRecord_secondRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.AddRecordRequest{
@@ -56,7 +58,8 @@ func ExampleSzEngineServer_AddRecord_secondRecord() {
 }
 
 func ExampleSzEngineServer_AddRecord_withInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.AddRecordRequest{
@@ -71,12 +74,22 @@ func ExampleSzEngineServer_AddRecord_withInfo() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1003","AFFECTED_ENTITIES":[{"ENTITY_ID":100012}]}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "DATA_SOURCE": "CUSTOMERS",
+	//     "RECORD_ID": "1003",
+	//     "AFFECTED_ENTITIES": [
+	//         {
+	//             "ENTITY_ID": 100012
+	//         }
+	//     ]
+	// }
 }
 
 func ExampleSzEngineServer_CloseExport() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 
@@ -107,7 +120,8 @@ func ExampleSzEngineServer_CloseExport() {
 }
 
 func ExampleSzEngineServer_CountRedoRecords() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.CountRedoRecordsRequest{}
@@ -122,7 +136,8 @@ func ExampleSzEngineServer_CountRedoRecords() {
 }
 
 func ExampleSzEngineServer_ExportCsvEntityReport() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ExportCsvEntityReportRequest{
@@ -140,7 +155,8 @@ func ExampleSzEngineServer_ExportCsvEntityReport() {
 }
 
 func ExampleSzEngineServer_ExportJsonEntityReport() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ExportJsonEntityReportRequest{
@@ -157,7 +173,8 @@ func ExampleSzEngineServer_ExportJsonEntityReport() {
 }
 
 func ExampleSzEngineServer_FetchNext() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 
@@ -188,7 +205,8 @@ func ExampleSzEngineServer_FetchNext() {
 }
 
 func ExampleSzEngineServer_FindInterestingEntitiesByEntityId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngine := getSzEngineServer(ctx)
 	request := &szpb.FindInterestingEntitiesByEntityIdRequest{
@@ -201,12 +219,18 @@ func ExampleSzEngineServer_FindInterestingEntitiesByEntityId() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"INTERESTING_ENTITIES":{"ENTITIES":[]}}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "INTERESTING_ENTITIES": {
+	//         "ENTITIES": []
+	//     }
+	// }
 }
 
 func ExampleSzEngineServer_FindInterestingEntitiesByRecordId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngine := getSzEngineServer(ctx)
 	request := &szpb.FindInterestingEntitiesByRecordIdRequest{
@@ -220,12 +244,18 @@ func ExampleSzEngineServer_FindInterestingEntitiesByRecordId() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"INTERESTING_ENTITIES":{"ENTITIES":[]}}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "INTERESTING_ENTITIES": {
+	//         "ENTITIES": []
+	//     }
+	// }
 }
 
 func ExampleSzEngineServer_FindNetworkByEntityId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	entityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord(
@@ -248,12 +278,23 @@ func ExampleSzEngineServer_FindNetworkByEntityId() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"ENTITY_PATHS":[],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":100012}}]}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "ENTITY_PATHS": [],
+	//     "ENTITIES": [
+	//         {
+	//             "RESOLVED_ENTITY": {
+	//                 "ENTITY_ID": 100012
+	//             }
+	//         }
+	//     ]
+	// }
 }
 
 func ExampleSzEngineServer_FindNetworkByRecordId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindNetworkByRecordIdRequest{
@@ -269,12 +310,23 @@ func ExampleSzEngineServer_FindNetworkByRecordId() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"ENTITY_PATHS":[],"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":100012}}]}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "ENTITY_PATHS": [],
+	//     "ENTITIES": [
+	//         {
+	//             "RESOLVED_ENTITY": {
+	//                 "ENTITY_ID": 100012
+	//             }
+	//         }
+	//     ]
+	// }
 }
 
 func ExampleSzEngineServer_FindPathByEntityId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindPathByEntityIdRequest{
@@ -312,7 +364,8 @@ func ExampleSzEngineServer_FindPathByEntityId() {
 }
 
 func ExampleSzEngineServer_FindPathByEntityId_avoiding() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`
@@ -352,7 +405,8 @@ func ExampleSzEngineServer_FindPathByEntityId_avoiding() {
 }
 
 func ExampleSzEngineServer_FindPathByEntityId_avoidingAndIncluding() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`
@@ -391,7 +445,8 @@ func ExampleSzEngineServer_FindPathByEntityId_avoidingAndIncluding() {
 }
 
 func ExampleSzEngineServer_FindPathByRecordId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindPathByRecordIdRequest{
@@ -431,7 +486,8 @@ func ExampleSzEngineServer_FindPathByRecordId() {
 }
 
 func ExampleSzEngineServer_FindPathByRecordId_avoiding() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindPathByRecordIdRequest{
@@ -472,7 +528,8 @@ func ExampleSzEngineServer_FindPathByRecordId_avoiding() {
 }
 
 func ExampleSzEngineServer_FindPathByRecordId_avoidingAndIncluding() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindPathByRecordIdRequest{
@@ -512,7 +569,8 @@ func ExampleSzEngineServer_FindPathByRecordId_avoidingAndIncluding() {
 }
 
 func ExampleSzEngineServer_GetActiveConfigId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetActiveConfigIdRequest{}
@@ -527,7 +585,8 @@ func ExampleSzEngineServer_GetActiveConfigId() {
 }
 
 func ExampleSzEngineServer_GetEntityByEntityId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetEntityByEntityIdRequest{
@@ -540,12 +599,18 @@ func ExampleSzEngineServer_GetEntityByEntityId() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"RESOLVED_ENTITY":{"ENTITY_ID":100012}}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "RESOLVED_ENTITY": {
+	//         "ENTITY_ID": 100012
+	//     }
+	// }
 }
 
 func ExampleSzEngineServer_GetEntityByRecordId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetEntityByRecordIdRequest{
@@ -559,12 +624,18 @@ func ExampleSzEngineServer_GetEntityByRecordId() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"RESOLVED_ENTITY":{"ENTITY_ID":100012}}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "RESOLVED_ENTITY": {
+	//         "ENTITY_ID": 100012
+	//     }
+	// }
 }
 
 func ExampleSzEngineServer_GetRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetRecordRequest{
@@ -578,12 +649,18 @@ func ExampleSzEngineServer_GetRecord() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(jsonutil.Flatten(jsonutil.Normalize(response.GetResult())))
-	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001"}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "DATA_SOURCE": "CUSTOMERS",
+	//     "RECORD_ID": "1001"
+	// }
+
 }
 
 func ExampleSzEngineServer_GetRedoRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetRedoRecordRequest{}
@@ -603,11 +680,11 @@ func ExampleSzEngineServer_GetRedoRecord() {
 	//     "_ENTITY_CORRUPTION_TRANSIENT": true,
 	//     "DSRC_ACTION": "X"
 	// }
-
 }
 
 func ExampleSzEngineServer_GetStats() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetStatsRequest{}
@@ -622,7 +699,8 @@ func ExampleSzEngineServer_GetStats() {
 }
 
 func ExampleSzEngineServer_GetVirtualEntityByRecordId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetVirtualEntityByRecordIdRequest{
@@ -635,12 +713,18 @@ func ExampleSzEngineServer_GetVirtualEntityByRecordId() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"RESOLVED_ENTITY":{"ENTITY_ID":100012}}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "RESOLVED_ENTITY": {
+	//         "ENTITY_ID": 100012
+	//     }
+	// }
 }
 
 func ExampleSzEngineServer_HowEntityByEntityId() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.HowEntityByEntityIdRequest{
@@ -658,7 +742,8 @@ func ExampleSzEngineServer_HowEntityByEntityId() {
 }
 
 func ExampleSzEngineServer_PreprocessRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.PreprocessRecordRequest{
@@ -676,7 +761,8 @@ func ExampleSzEngineServer_PreprocessRecord() {
 }
 
 func ExampleSzEngineServer_PrimeEngine() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.PrimeEngineRequest{}
@@ -691,14 +777,16 @@ func ExampleSzEngineServer_PrimeEngine() {
 }
 
 func ExampleSzEngineServer_ProcessRedoRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	// IMPROVE: Document ExampleSzEngineServer_ProcessRedoRecord
 
 	// Output:
 }
 
 func ExampleSzEngineServer_SearchByAttributes() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.SearchByAttributesRequest{
@@ -740,7 +828,8 @@ func ExampleSzEngineServer_SearchByAttributes() {
 }
 
 func ExampleSzEngineServer_SearchByAttributes_searchProfile() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	// IMPROVE: Fix SearchProfile value
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
@@ -784,7 +873,8 @@ func ExampleSzEngineServer_SearchByAttributes_searchProfile() {
 }
 
 func ExampleSzEngineServer_WhyEntities() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.WhyEntitiesRequest{
@@ -823,7 +913,8 @@ func ExampleSzEngineServer_WhyEntities() {
 }
 
 func ExampleSzEngineServer_WhyRecords() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.WhyRecordsRequest{
@@ -843,8 +934,13 @@ func ExampleSzEngineServer_WhyRecords() {
 	// Output: {"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":100012}}...
 }
 
+// ----------------------------------------------------------------------------
+// Interface methods - Destructive, so order needs to be maintained
+// ----------------------------------------------------------------------------
+
 func ExampleSzEngineServer_ReevaluateEntity() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateEntityRequest{
@@ -862,7 +958,8 @@ func ExampleSzEngineServer_ReevaluateEntity() {
 }
 
 func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	// IMPROVE: Fix Output
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
@@ -876,12 +973,20 @@ func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"AFFECTED_ENTITIES":[{"ENTITY_ID":100012}]}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "AFFECTED_ENTITIES": [
+	//         {
+	//             "ENTITY_ID": 100012
+	//         }
+	//     ]
+	// }
 }
 
 func ExampleSzEngineServer_ReevaluateRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateRecordRequest{
@@ -900,7 +1005,8 @@ func ExampleSzEngineServer_ReevaluateRecord() {
 }
 
 func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	// IMPROVE: Fix Output
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
@@ -915,12 +1021,22 @@ func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1001","AFFECTED_ENTITIES":[{"ENTITY_ID":100012}]}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "DATA_SOURCE": "CUSTOMERS",
+	//     "RECORD_ID": "1001",
+	//     "AFFECTED_ENTITIES": [
+	//         {
+	//             "ENTITY_ID": 100012
+	//         }
+	//     ]
+	// }
 }
 
 func ExampleSzEngineServer_Reinitialize() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 
@@ -946,7 +1062,8 @@ func ExampleSzEngineServer_Reinitialize() {
 }
 
 func ExampleSzEngineServer_DeleteRecord() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.DeleteRecordRequest{
@@ -965,7 +1082,8 @@ func ExampleSzEngineServer_DeleteRecord() {
 }
 
 func ExampleSzEngineServer_DeleteRecord_withInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.DeleteRecordRequest{
@@ -979,6 +1097,12 @@ func ExampleSzEngineServer_DeleteRecord_withInfo() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"DATA_SOURCE":"CUSTOMERS","RECORD_ID":"1003","AFFECTED_ENTITIES":[]}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "DATA_SOURCE": "CUSTOMERS",
+	//     "RECORD_ID": "1003",
+	//     "AFFECTED_ENTITIES": []
+	// }
+
 }
