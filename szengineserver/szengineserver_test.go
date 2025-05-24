@@ -39,9 +39,8 @@ const (
 	observerID          = "Observer 1"
 	observerOrigin      = "SzEngine observer"
 	originMessage       = "Machine: nn; Task: UnitTest"
-	printErrors         = true
+	printErrors         = false
 	printResults        = false
-	requiredDataSources = senzing.SzNoRequiredDatasources
 	searchAttributes    = `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
 	searchProfile       = senzing.SzNoSearchProfile
 	verboseLogging      = senzing.SzNoLogging
@@ -51,7 +50,6 @@ const (
 
 const (
 	badAttributes          = "}{"
-	badAvoidEntityIDs      = "}{"
 	badAvoidRecordKeys     = "}{"
 	badBuildOutDegrees     = int64(-1)
 	badBuildOutMaxEntities = int64(-1)
@@ -64,7 +62,6 @@ const (
 	badRecordDefinition    = "}{"
 	badRecordID            = "BadRecordID"
 	badRedoRecord          = "{}"
-	badRequiredDataSources = "}{"
 	badSearchProfile       = "}{"
 )
 
@@ -72,7 +69,6 @@ const (
 
 var (
 	nilAttributes          string
-	nilAvoidEntityIDs      string
 	nilBuildOutDegrees     int64
 	nilBuildOutMaxEntities int64
 	nilCsvColumnList       string
@@ -1207,20 +1203,25 @@ func TestSzEngine_FindPathByEntityID(test *testing.T) {
 			szEngine := getTestObject(test)
 			startEntityID := getEntityID(truthset.CustomerRecords["1001"])
 			endEntityID := getEntityID(truthset.CustomerRecords["1002"])
-			flags := senzing.SzNoFlags
-			avoidEntityIDs := ""
+
+			avoidEntityIDs := senzing.SzNoAvoidance
 			if testCase.avoidEntityIDs != nil {
 				avoidEntityIDs = testCase.avoidEntityIDs()
+			}
+
+			requiredDataSources := senzing.SzNoRequiredDatasources
+			if testCase.requiredDataSources != nil {
+				requiredDataSources = testCase.requiredDataSources()
 			}
 
 			// Test.
 
 			request := &szpb.FindPathByEntityIdRequest{
-				AvoidEntityIds:      xString(avoidEntityIDs, ""),
+				AvoidEntityIds:      avoidEntityIDs,
 				EndEntityId:         xInt64(testCase.endEntityID, endEntityID),
-				Flags:               xInt64(testCase.flags, flags),
+				Flags:               testCase.flags,
 				MaxDegrees:          testCase.maxDegrees,
-				RequiredDataSources: testCase.requiredDataSources,
+				RequiredDataSources: requiredDataSources,
 				StartEntityId:       xInt64(testCase.startEntityID, startEntityID),
 			}
 			actual, err := szEngine.FindPathByEntityId(ctx, request)
@@ -1233,109 +1234,6 @@ func TestSzEngine_FindPathByEntityID(test *testing.T) {
 			}
 		})
 	}
-}
-
-func TestSzEngine_FindPathByEntityID_original(test *testing.T) {
-	ctx := test.Context()
-	records := []record.Record{
-		truthset.CustomerRecords["1001"],
-		truthset.CustomerRecords["1002"],
-	}
-
-	defer func() { deleteRecords(ctx, records) }()
-
-	addRecords(ctx, records)
-
-	szEngine := getTestObject(test)
-	startEntityID := getEntityID(truthset.CustomerRecords["1001"])
-	endEntityID := getEntityID(truthset.CustomerRecords["1002"])
-	maxDegrees := int64(1)
-	flags := senzing.SzNoFlags
-	request := &szpb.FindPathByEntityIdRequest{
-		EndEntityId:   endEntityID,
-		Flags:         flags,
-		MaxDegrees:    maxDegrees,
-		StartEntityId: startEntityID,
-	}
-	actual, err := szEngine.FindPathByEntityId(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
-}
-
-func TestSzEngine_FindPathByEntityID_avoiding(test *testing.T) {
-	ctx := test.Context()
-	records := []record.Record{
-		truthset.CustomerRecords["1001"],
-		truthset.CustomerRecords["1002"],
-	}
-
-	defer func() { deleteRecords(ctx, records) }()
-
-	addRecords(ctx, records)
-
-	szEngine := getTestObject(test)
-	record1 := truthset.CustomerRecords["1001"]
-	startEntityID := getEntityID(record1)
-	endEntityID := getEntityID(truthset.CustomerRecords["1002"])
-	maxDegrees := int64(1)
-	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDString(record1) + `}]}`
-	flags := senzing.SzNoFlags
-	request := &szpb.FindPathByEntityIdRequest{
-		AvoidEntityIds: avoidEntityIDs,
-		EndEntityId:    endEntityID,
-		Flags:          flags,
-		MaxDegrees:     maxDegrees,
-		StartEntityId:  startEntityID,
-	}
-	actual, err := szEngine.FindPathByEntityId(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
-}
-
-func TestSzEngine_FindPathByEntityID_avoiding_badStartEntityID(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_avoidingAndIncluding(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_including(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_including_badStartEntityID(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByEntityID_inclusions(test *testing.T) {
-	ctx := test.Context()
-	records := []record.Record{
-		truthset.CustomerRecords["1001"],
-		truthset.CustomerRecords["1002"],
-	}
-
-	defer func() { deleteRecords(ctx, records) }()
-
-	addRecords(ctx, records)
-
-	szEngine := getTestObject(test)
-	record1 := truthset.CustomerRecords["1001"]
-	startEntityID := getEntityID(record1)
-	endEntityID := getEntityID(truthset.CustomerRecords["1002"])
-	maxDegrees := int64(1)
-	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDString(record1) + `}]}`
-	requiredDataSources := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
-	request := &szpb.FindPathByEntityIdRequest{
-		AvoidEntityIds:      avoidEntityIDs,
-		EndEntityId:         endEntityID,
-		MaxDegrees:          maxDegrees,
-		RequiredDataSources: requiredDataSources,
-		StartEntityId:       startEntityID,
-	}
-	actual, err := szEngine.FindPathByEntityId(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
 }
 
 func TestSzEngine_FindPathByRecordID(test *testing.T) {
@@ -2371,7 +2269,7 @@ type TestMetadataForFindPathByEntityID struct {
 	flags               int64
 	maxDegrees          int64
 	name                string
-	requiredDataSources string
+	requiredDataSources func() string
 	startEntityID       int64
 }
 
@@ -2408,7 +2306,7 @@ func getTestCasesForFindPathByEntityID() []TestMetadataForFindPathByEntityID {
 			name:                "badRequiredDataSource",
 			expectedErr:         szerror.ErrSzBadInput,
 			expectedErrMessage:  `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044025","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
-			requiredDataSources: badRequiredDataSources,
+			requiredDataSources: badRequiredDataSourcesFunc,
 		},
 		{
 			name:       "nilMaxDegrees",
@@ -2420,26 +2318,50 @@ func getTestCasesForFindPathByEntityID() []TestMetadataForFindPathByEntityID {
 		},
 		{
 			name:                "nilRequiredDataSource",
-			requiredDataSources: nilRequiredDataSources,
+			requiredDataSources: nilRequiredDataSourcesFunc,
 		},
 		{
 			name:           "avoiding",
 			avoidEntityIDs: avoidEntityIDsFunc,
+		},
+		{
+			name:               "avoiding_badStartEntityID",
+			avoidEntityIDs:     avoidEntityIDsFunc,
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044021","reason":"SENZ0037|Unknown resolved entity value '-1'"}}}`,
+			startEntityID:      badEntityID,
+		},
+		{
+			name:                "avoiding_and_including",
+			avoidEntityIDs:      avoidEntityIDsFunc,
+			maxDegrees:          1,
+			requiredDataSources: requiredDataSourcesFunc,
+		},
+		{
+			name:                "including",
+			requiredDataSources: requiredDataSourcesFunc,
+		},
+		{
+			name:                "including_badStartEntityID",
+			expectedErr:         szerror.ErrSzNotFound,
+			expectedErrMessage:  `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044025","reason":"SENZ0037|Unknown resolved entity value '-1'"}}}`,
+			requiredDataSources: requiredDataSourcesFunc,
+			startEntityID:       badEntityID,
 		},
 	}
 	return result
 }
 
 // Return first non-zero length candidate.  Last candidate is default.
-func xString(candidates ...string) string {
-	var result string
-	for _, result = range candidates {
-		if len(result) > 0 {
-			return result
-		}
-	}
-	return result
-}
+// func xString(candidates ...string) string {
+// 	var result string
+// 	for _, result = range candidates {
+// 		if len(result) > 0 {
+// 			return result
+// 		}
+// 	}
+// 	return result
+// }
 
 // Return first non-zero candidate.  Last candidate is default.
 func xInt64(candidates ...int64) int64 {
@@ -2453,16 +2375,33 @@ func xInt64(candidates ...int64) int64 {
 }
 
 func avoidEntityIDsFunc() string {
-	record1 := truthset.CustomerRecords["1001"]
-	result := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDString(record1) + `}]}`
+	result := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1001") + `}]}`
 
 	return result
 }
 
 func badAvoidEntityIDsFunc() string {
-	return badAvoidEntityIDs
+	return "}{"
 }
 
 func nilAvoidEntityIDsFunc() string {
-	return nilAvoidEntityIDs
+	var result string
+
+	return result
+}
+
+func requiredDataSourcesFunc() string {
+	record := truthset.CustomerRecords["1001"]
+
+	return `{"DATA_SOURCES": ["` + record.DataSource + `"]}`
+}
+
+func badRequiredDataSourcesFunc() string {
+	return "}{"
+}
+
+func nilRequiredDataSourcesFunc() string {
+	var result string
+
+	return result
 }
