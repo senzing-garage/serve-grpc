@@ -1238,131 +1238,66 @@ func TestSzEngine_FindPathByEntityID(test *testing.T) {
 
 func TestSzEngine_FindPathByRecordID(test *testing.T) {
 	ctx := test.Context()
-	records := []record.Record{
-		truthset.CustomerRecords["1001"],
-		truthset.CustomerRecords["1002"],
+	testCases := getTestCasesForFindPathByRecordID()
+
+	for _, testCase := range testCases {
+		test.Run(testCase.name, func(test *testing.T) {
+
+			// Insert test data.
+
+			records := []record.Record{
+				truthset.CustomerRecords["1001"],
+				truthset.CustomerRecords["1002"],
+			}
+
+			defer func() { deleteRecords(ctx, records) }()
+
+			addRecords(ctx, records)
+
+			// Defaults.
+
+			szEngine := getTestObject(test)
+
+			record1 := truthset.CustomerRecords["1001"]
+			startDataSourceCode := record1.DataSource
+			startRecordId := record1.ID
+
+			record2 := truthset.CustomerRecords["1002"]
+			endDataSourceCode := record2.DataSource
+			endRecordId := record2.ID
+
+			avoidRecordKeys := senzing.SzNoAvoidance
+			if testCase.avoidRecordKeys != nil {
+				avoidRecordKeys = testCase.avoidRecordKeys()
+			}
+
+			requiredDataSources := senzing.SzNoRequiredDatasources
+			if testCase.requiredDataSources != nil {
+				requiredDataSources = testCase.requiredDataSources()
+			}
+
+			// Test.
+
+			request := &szpb.FindPathByRecordIdRequest{
+				AvoidRecordKeys:     avoidRecordKeys,
+				EndDataSourceCode:   xString(testCase.endDataSourceCode, endDataSourceCode),
+				EndRecordId:         xString(testCase.endRecordId, endRecordId),
+				Flags:               testCase.flags,
+				MaxDegrees:          testCase.maxDegrees,
+				RequiredDataSources: requiredDataSources,
+				StartDataSourceCode: xString(testCase.startDataSourceCode, startDataSourceCode),
+				StartRecordId:       xString(testCase.startRecordId, startRecordId),
+			}
+			actual, err := szEngine.FindPathByRecordId(ctx, request)
+			printDebug(test, err, actual)
+			if testCase.expectedErr != nil {
+				require.ErrorIs(test, err, testCase.expectedErr)
+				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
+			} else {
+				require.NoError(test, err)
+			}
+		})
 	}
-
-	defer func() { deleteRecords(ctx, records) }()
-
-	addRecords(ctx, records)
-
-	szEngine := getTestObject(test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	maxDegrees := int64(1)
-	flags := senzing.SzNoFlags
-	request := &szpb.FindPathByRecordIdRequest{
-		EndDataSourceCode:   record2.DataSource,
-		EndRecordId:         record2.ID,
-		Flags:               flags,
-		MaxDegrees:          maxDegrees,
-		StartDataSourceCode: record1.DataSource,
-		StartRecordId:       record1.ID,
-	}
-	actual, err := szEngine.FindPathByRecordId(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
-}
-
-func TestSzEngine_FindPathByRecordID_badDataSourceCode(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByRecordID_badRecordID(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByRecordID_badMaxDegrees(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByRecordID_badAvoidRecordKeys(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByRecordID_badRequiredDataSources(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByRecordID_avoiding(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByRecordID_avoiding_badStartDataSourceCode(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByRecordID_avoidingAndIncluding(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByRecordID_including(test *testing.T) {
-	ctx := test.Context()
-	records := []record.Record{
-		truthset.CustomerRecords["1001"],
-		truthset.CustomerRecords["1002"],
-	}
-
-	defer func() { deleteRecords(ctx, records) }()
-
-	addRecords(ctx, records)
-
-	szEngine := getTestObject(test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	maxDegrees := int64(1)
-	avoidRecordKeys := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDString(record1) + `}]}`
-	requiredDataSources := `{"DATA_SOURCES": ["` + record1.DataSource + `"]}`
-	flags := senzing.SzNoFlags
-	request := &szpb.FindPathByRecordIdRequest{
-		AvoidRecordKeys:     avoidRecordKeys,
-		EndDataSourceCode:   record2.DataSource,
-		EndRecordId:         record1.ID,
-		Flags:               flags,
-		MaxDegrees:          maxDegrees,
-		RequiredDataSources: requiredDataSources,
-		StartDataSourceCode: record1.DataSource,
-		StartRecordId:       record1.ID,
-	}
-	actual, err := szEngine.FindPathByRecordId(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
-}
-
-func TestSzEngine_FindPathByRecordID_including_badDataSourceCode(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_FindPathByRecordID_exclusions(test *testing.T) {
-	ctx := test.Context()
-	records := []record.Record{
-		truthset.CustomerRecords["1001"],
-		truthset.CustomerRecords["1002"],
-	}
-
-	defer func() { deleteRecords(ctx, records) }()
-
-	addRecords(ctx, records)
-
-	szEngine := getTestObject(test)
-	record1 := truthset.CustomerRecords["1001"]
-	record2 := truthset.CustomerRecords["1002"]
-	maxDegrees := int64(1)
-	avoidRecordKeys := `{"RECORDS": [{ "DATA_SOURCE": "` + record1.DataSource + `", "RECORD_ID": "` + record1.ID + `"}]}`
-	flags := senzing.SzNoFlags
-	request := &szpb.FindPathByRecordIdRequest{
-		AvoidRecordKeys:     avoidRecordKeys,
-		EndDataSourceCode:   record2.DataSource,
-		EndRecordId:         record2.ID,
-		Flags:               flags,
-		MaxDegrees:          maxDegrees,
-		StartDataSourceCode: record1.DataSource,
-		StartRecordId:       record1.ID,
-	}
-	actual, err := szEngine.FindPathByRecordId(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
 }
 
 func TestSzEngine_GetActiveConfigID(test *testing.T) {
@@ -2273,6 +2208,20 @@ type TestMetadataForFindPathByEntityID struct {
 	startEntityID       int64
 }
 
+type TestMetadataForFindPathByRecordID struct {
+	avoidRecordKeys     func() string
+	endDataSourceCode   string
+	endRecordId         string
+	expectedErr         error
+	expectedErrMessage  string
+	flags               int64
+	maxDegrees          int64
+	name                string
+	requiredDataSources func() string
+	startDataSourceCode string
+	startRecordId       string
+}
+
 func getTestCasesForFindPathByEntityID() []TestMetadataForFindPathByEntityID {
 	result := []TestMetadataForFindPathByEntityID{
 		{
@@ -2352,16 +2301,85 @@ func getTestCasesForFindPathByEntityID() []TestMetadataForFindPathByEntityID {
 	return result
 }
 
+func getTestCasesForFindPathByRecordID() []TestMetadataForFindPathByRecordID {
+	result := []TestMetadataForFindPathByRecordID{
+		{
+			name: "default",
+		},
+		{
+			name:                "badDataSourceCode",
+			expectedErr:         szerror.ErrSzUnknownDataSource,
+			expectedErrMessage:  `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044019","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
+			startDataSourceCode: badDataSourceCode,
+		},
+		{
+			name:               "badDataRecordID",
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044019","reason":"SENZ0033|Unknown record: dsrc[CUSTOMERS], record[BadRecordID]"}}}`,
+			startRecordId:      badRecordID,
+		},
+		{
+			name:               "badMaxDegrees",
+			expectedErr:        szerror.ErrSz,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044019","reason":"SENZ0031|Invalid value of max degree '-1'"}}}`,
+			maxDegrees:         badMaxDegrees,
+		},
+		{
+			name:               "badAvoidRecordKeys",
+			avoidRecordKeys:    badAvoidRecordIDsFunc,
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044023","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
+		},
+		{
+			name:               "badRequiredDataSources",
+			avoidRecordKeys:    badRequiredDataSourcesFunc,
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044023","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
+		},
+		{
+			name:            "avoiding",
+			avoidRecordKeys: avoidRecordIDsFunc,
+			maxDegrees:      1,
+		},
+		{
+			name:                "avoiding_badStartDataSourceCode",
+			avoidRecordKeys:     avoidRecordIDsFunc,
+			expectedErr:         szerror.ErrSzUnknownDataSource,
+			expectedErrMessage:  `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044023","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
+			startDataSourceCode: badDataSourceCode,
+		},
+		{
+			name:                "avoiding_and_including",
+			avoidRecordKeys:     avoidRecordIDsFunc,
+			maxDegrees:          1,
+			requiredDataSources: requiredDataSourcesFunc,
+		},
+		{
+			name:                "including",
+			avoidRecordKeys:     avoidRecordIDsFunc,
+			requiredDataSources: requiredDataSourcesFunc,
+		},
+		{
+			name:                "including_badDataSourceCode",
+			expectedErr:         szerror.ErrSzUnknownDataSource,
+			expectedErrMessage:  `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044027","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
+			requiredDataSources: requiredDataSourcesFunc,
+			startDataSourceCode: badDataSourceCode,
+		},
+	}
+	return result
+}
+
 // Return first non-zero length candidate.  Last candidate is default.
-// func xString(candidates ...string) string {
-// 	var result string
-// 	for _, result = range candidates {
-// 		if len(result) > 0 {
-// 			return result
-// 		}
-// 	}
-// 	return result
-// }
+func xString(candidates ...string) string {
+	var result string
+	for _, result = range candidates {
+		if len(result) > 0 {
+			return result
+		}
+	}
+	return result
+}
 
 // Return first non-zero candidate.  Last candidate is default.
 func xInt64(candidates ...int64) int64 {
@@ -2380,7 +2398,21 @@ func avoidEntityIDsFunc() string {
 	return result
 }
 
+func avoidRecordIDsFunc() string {
+	result := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1001") + `}]}`
+
+	return result
+}
+
 func badAvoidEntityIDsFunc() string {
+	return "}{"
+}
+
+func badAvoidRecordIDsFunc() string {
+	return "}{"
+}
+
+func badRequiredDataSourcesFunc() string {
 	return "}{"
 }
 
@@ -2390,18 +2422,14 @@ func nilAvoidEntityIDsFunc() string {
 	return result
 }
 
-func requiredDataSourcesFunc() string {
-	record := truthset.CustomerRecords["1001"]
-
-	return `{"DATA_SOURCES": ["` + record.DataSource + `"]}`
-}
-
-func badRequiredDataSourcesFunc() string {
-	return "}{"
-}
-
 func nilRequiredDataSourcesFunc() string {
 	var result string
 
 	return result
+}
+
+func requiredDataSourcesFunc() string {
+	record := truthset.CustomerRecords["1001"]
+
+	return `{"DATA_SOURCES": ["` + record.DataSource + `"]}`
 }
