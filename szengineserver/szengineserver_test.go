@@ -954,20 +954,17 @@ func TestSzEngine_ProcessRedoRecord(test *testing.T) {
 
 			// Test.
 
-			if len(redoRecord) > 0 {
-				test.Logf(">>>>>>> testing ProcessRedoRecord: %s\n", redoRecord)
-				request := &szpb.ProcessRedoRecordRequest{
-					Flags:      xInt64(testCase.flags, senzing.SzRecordDefaultFlags),
-					RedoRecord: redoRecord,
-				}
-				actual, err := szEngine.ProcessRedoRecord(ctx, request)
-				printDebug(test, err, actual)
-				if testCase.expectedErr != nil {
-					require.ErrorIs(test, err, testCase.expectedErr)
-					require.JSONEq(test, testCase.expectedErrMessage, err.Error())
-				} else {
-					require.NoError(test, err)
-				}
+			request := &szpb.ProcessRedoRecordRequest{
+				Flags:      xInt64(testCase.flags, senzing.SzRecordDefaultFlags),
+				RedoRecord: redoRecord,
+			}
+			actual, err := szEngine.ProcessRedoRecord(ctx, request)
+			printDebug(test, err, actual)
+			if testCase.expectedErr != nil {
+				require.ErrorIs(test, err, testCase.expectedErr)
+				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
+			} else {
+				require.NoError(test, err)
 			}
 		})
 	}
@@ -975,136 +972,86 @@ func TestSzEngine_ProcessRedoRecord(test *testing.T) {
 
 func TestSzEngine_ReevaluateEntity(test *testing.T) {
 	ctx := test.Context()
-	records := []record.Record{
-		truthset.CustomerRecords["1001"],
+	testCases := getTestCasesForReevaluateEntity()
+
+	for _, testCase := range testCases {
+		test.Run(testCase.name, func(test *testing.T) {
+
+			// Insert test data.
+
+			record1001 := truthset.CustomerRecords["1001"]
+
+			records := []record.Record{
+				record1001,
+			}
+
+			defer func() { deleteRecords(ctx, records) }()
+
+			addRecords(ctx, records)
+
+			// Defaults.
+
+			szEngine := getTestObject(test)
+			entityID := getEntityID(record1001)
+
+			// Test.
+
+			request := &szpb.ReevaluateEntityRequest{
+				Flags:    xInt64(testCase.flags, senzing.SzNoFlags),
+				EntityId: xInt64(testCase.entityID, entityID),
+			}
+			actual, err := szEngine.ReevaluateEntity(ctx, request)
+			printDebug(test, err, actual)
+			if testCase.expectedErr != nil {
+				require.ErrorIs(test, err, testCase.expectedErr)
+				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
+			} else {
+				require.NoError(test, err)
+			}
+		})
 	}
-
-	defer func() { deleteRecords(ctx, records) }()
-
-	addRecords(ctx, records)
-
-	szEngine := getTestObject(test)
-	entityID := getEntityID(truthset.CustomerRecords["1001"])
-	flags := senzing.SzWithoutInfo
-	request := &szpb.ReevaluateEntityRequest{
-		EntityId: entityID,
-		Flags:    flags,
-	}
-	actual, err := szEngine.ReevaluateEntity(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
-	require.Empty(test, actual.GetResult())
-}
-
-func TestSzEngine_ReevaluateEntity_badEntityID(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_ReevaluateEntity_nilEntityID(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_ReevaluateEntity_withInfo(test *testing.T) {
-	ctx := test.Context()
-	records := []record.Record{
-		truthset.CustomerRecords["1001"],
-	}
-
-	defer func() { deleteRecords(ctx, records) }()
-
-	addRecords(ctx, records)
-
-	szEngine := getTestObject(test)
-	entityID := getEntityID(truthset.CustomerRecords["1001"])
-	flags := senzing.SzWithInfo
-	request := &szpb.ReevaluateEntityRequest{
-		EntityId: entityID,
-		Flags:    flags,
-	}
-	actual, err := szEngine.ReevaluateEntity(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
-	require.NotEmpty(test, actual.GetResult())
-}
-
-func TestSzEngine_ReevaluateEntity_withInfo_badEntityID(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_ReevaluateEntity_withInfo_nilEntityID(test *testing.T) {
-	// FIXME:
 }
 
 func TestSzEngine_ReevaluateRecord(test *testing.T) {
 	ctx := test.Context()
-	records := []record.Record{
-		truthset.CustomerRecords["1001"],
+	testCases := getTestCasesForReevaluateRecord()
+
+	for _, testCase := range testCases {
+		test.Run(testCase.name, func(test *testing.T) {
+
+			// Insert test data.
+
+			record1001 := truthset.CustomerRecords["1001"]
+
+			records := []record.Record{
+				record1001,
+			}
+
+			defer func() { deleteRecords(ctx, records) }()
+
+			addRecords(ctx, records)
+
+			// Defaults.
+
+			szEngine := getTestObject(test)
+
+			// Test.
+
+			request := &szpb.ReevaluateRecordRequest{
+				DataSourceCode: xString(testCase.dataSourceCode, record1001.DataSource),
+				Flags:          xInt64(testCase.flags, senzing.SzNoFlags),
+				RecordId:       xString(testCase.recordID, record1001.ID),
+			}
+			actual, err := szEngine.ReevaluateRecord(ctx, request)
+			printDebug(test, err, actual)
+			if testCase.expectedErr != nil {
+				require.ErrorIs(test, err, testCase.expectedErr)
+				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
+			} else {
+				require.NoError(test, err)
+			}
+		})
 	}
-
-	defer func() { deleteRecords(ctx, records) }()
-
-	addRecords(ctx, records)
-
-	szEngine := getTestObject(test)
-	record := truthset.CustomerRecords["1001"]
-	flags := senzing.SzWithoutInfo
-	request := &szpb.ReevaluateRecordRequest{
-		DataSourceCode: record.DataSource,
-		Flags:          flags,
-		RecordId:       record.ID,
-	}
-	actual, err := szEngine.ReevaluateRecord(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
-	require.Empty(test, actual.GetResult())
-}
-
-func TestSzEngine_ReevaluateRecord_badDataSourceCode(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_ReevaluateRecord_badRecordID(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_ReevaluateRecord_nilDataSourceCode(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_ReevaluateRecord_nilRecordID(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_ReevaluateRecord_withInfo(test *testing.T) {
-	ctx := test.Context()
-	records := []record.Record{
-		truthset.CustomerRecords["1001"],
-	}
-
-	defer func() { deleteRecords(ctx, records) }()
-
-	addRecords(ctx, records)
-
-	szEngine := getTestObject(test)
-	record := truthset.CustomerRecords["1001"]
-	flags := senzing.SzWithInfo
-	request := &szpb.ReevaluateRecordRequest{
-		DataSourceCode: record.DataSource,
-		Flags:          flags,
-		RecordId:       record.ID,
-	}
-	actual, err := szEngine.ReevaluateRecord(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
-	require.NotEmpty(test, actual.GetResult())
-}
-
-func TestSzEngine_ReevaluateRecord_withInfo_badDataSourceCode(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_ReevaluateRecord_withInfo_nilDataSourceCode(test *testing.T) {
-	// FIXME:
 }
 
 func TestSzEngine_Reinitialize(test *testing.T) {
@@ -1126,60 +1073,44 @@ func TestSzEngine_Reinitialize(test *testing.T) {
 
 func TestSzEngine_SearchByAttributes(test *testing.T) {
 	ctx := test.Context()
-	records := []record.Record{
-		truthset.CustomerRecords["1001"],
-		truthset.CustomerRecords["1002"],
-		truthset.CustomerRecords["1003"],
+	testCases := getTestCasesForSearchByAttributes()
+
+	for _, testCase := range testCases {
+		test.Run(testCase.name, func(test *testing.T) {
+
+			// Insert test data.
+
+			records := []record.Record{
+				truthset.CustomerRecords["1001"],
+				truthset.CustomerRecords["1002"],
+				truthset.CustomerRecords["1003"],
+			}
+
+			defer func() { deleteRecords(ctx, records) }()
+
+			addRecords(ctx, records)
+
+			// Defaults.
+
+			szEngine := getTestObject(test)
+
+			// Test.
+
+			request := &szpb.SearchByAttributesRequest{
+				Attributes:    xString(testCase.attributes, defaultAttributes),
+				Flags:         xInt64(testCase.flags, senzing.SzNoFlags),
+				SearchProfile: xString(testCase.searchProfile, defaultSearchProfile),
+			}
+			actual, err := szEngine.SearchByAttributes(ctx, request)
+			printDebug(test, err, actual)
+			if testCase.expectedErr != nil {
+				require.ErrorIs(test, err, testCase.expectedErr)
+				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
+			} else {
+				require.NoError(test, err)
+			}
+		})
 	}
-
-	defer func() { deleteRecords(ctx, records) }()
-
-	addRecords(ctx, records)
-
-	szEngine := getTestObject(test)
-	flags := senzing.SzNoFlags
-	request := &szpb.SearchByAttributesRequest{
-		Attributes: defaultAttributes,
-		Flags:      flags,
-	}
-	actual, err := szEngine.SearchByAttributes(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
-}
-
-func TestSzEngine_SearchByAttributes_badAttributes(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_SearchByAttributes_badSearchProfile(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_SearchByAttributes_nilAttributes(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_SearchByAttributes_nilSearchProfile(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_SearchByAttributes_withSearchProfile(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_SearchByAttributes_searchProfile(test *testing.T) {
-	// IMPROVE:  Use actual searchProfile
-	ctx := test.Context()
-	szEngine := getTestObject(test)
-	flags := senzing.SzNoFlags
-	request := &szpb.SearchByAttributesRequest{
-		Attributes:    defaultAttributes,
-		Flags:         flags,
-		SearchProfile: defaultSearchProfile,
-	}
-	actual, err := szEngine.SearchByAttributes(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
 }
 
 func TestSzEngine_StreamExportCsvEntityReport(test *testing.T) {
@@ -2419,8 +2350,10 @@ func getTestCasesForProcessRedoRecord() []TestMetadataForProcessRedoRecord {
 			redoRecord:         badRedoRecord,
 		},
 		{
-			name:       "nilRedoRecord",
-			redoRecord: nilRedoRecord,
+			name:               "nilRedoRecord",
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ0007|Empty Message"}}}`,
+			redoRecord:         nilRedoRecord,
 		},
 		{
 			name: "default",
@@ -2437,9 +2370,11 @@ func getTestCasesForProcessRedoRecord() []TestMetadataForProcessRedoRecord {
 			redoRecord:         badRedoRecord,
 		},
 		{
-			name:       "withInfo_nilRedoRecord",
-			flags:      senzing.SzWithInfo,
-			redoRecord: nilRedoRecord,
+			name:               "withInfo_nilRedoRecord",
+			flags:              senzing.SzWithInfo,
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044045","reason":"SENZ0007|Empty Message"}}}`,
+			redoRecord:         nilRedoRecord,
 		},
 	}
 	return result
@@ -2448,7 +2383,29 @@ func getTestCasesForProcessRedoRecord() []TestMetadataForProcessRedoRecord {
 func getTestCasesForReevaluateEntity() []TestMetadataForReevaluateEntity {
 	result := []TestMetadataForReevaluateEntity{
 		{
+			name:     "badEntityID",
+			entityID: badEntityID,
+		},
+		{
 			name: "default",
+		},
+		{
+			name:     "nilEntityID",
+			entityID: nilEntityID,
+		},
+		{
+			name:  "withInfo",
+			flags: senzing.SzWithInfo,
+		},
+		{
+			name:     "withInfo_badEntityID",
+			entityID: badEntityID,
+			flags:    senzing.SzWithInfo,
+		},
+		{
+			name:     "withInfo_nilEntityID",
+			entityID: nilEntityID,
+			flags:    senzing.SzWithInfo,
 		},
 	}
 	return result
@@ -2457,7 +2414,55 @@ func getTestCasesForReevaluateEntity() []TestMetadataForReevaluateEntity {
 func getTestCasesForReevaluateRecord() []TestMetadataForReevaluateRecord {
 	result := []TestMetadataForReevaluateRecord{
 		{
+			name:               "badDataSourceCode",
+			expectedErr:        szerror.ErrSzUnknownDataSource,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ReevaluateRecord","error":{"function":"szengine.(*Szengine).ReevaluateRecord","error":{"id":"SZSDK60044048","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
+			dataSourceCode:     badDataSourceCode,
+		},
+		{
+			name:     "badRecordID",
+			recordID: badRecordID,
+		},
+		{
 			name: "default",
+		},
+		{
+			name:               "nilDataSourceCode",
+			dataSourceCode:     nilDataSourceCode,
+			expectedErr:        szerror.ErrSzUnknownDataSource,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ReevaluateRecord","error":{"function":"szengine.(*Szengine).ReevaluateRecord","error":{"id":"SZSDK60044048","reason":"SENZ2207|Data source code [] does not exist."}}}`,
+		},
+		{
+			name:     "nilRecordID",
+			recordID: nilRecordID,
+		},
+		{
+			name:  "withInfo",
+			flags: senzing.SzWithInfo,
+		},
+		{
+			name:               "withInfo_badDataSourceCode",
+			dataSourceCode:     badDataSourceCode,
+			expectedErr:        szerror.ErrSzUnknownDataSource,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ReevaluateRecord","error":{"function":"szengine.(*Szengine).ReevaluateRecord","error":{"id":"SZSDK60044049","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
+			flags:              senzing.SzWithInfo,
+		},
+		{
+			name:     "withInfo_badRecordID",
+			flags:    senzing.SzWithInfo,
+			recordID: badRecordID,
+		},
+		{
+			name:               "withInfo_nilDataSourceCode",
+			dataSourceCode:     nilDataSourceCode,
+			expectedErr:        szerror.ErrSzUnknownDataSource,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ReevaluateRecord","error":{"function":"szengine.(*Szengine).ReevaluateRecord","error":{"id":"SZSDK60044049","reason":"SENZ2207|Data source code [] does not exist."}}}`,
+			flags:              senzing.SzWithInfo,
+		},
+		{
+			name:     "withInfo_nilRecordID",
+			flags:    senzing.SzWithInfo,
+			recordID: nilRecordID,
 		},
 	}
 	return result
@@ -2466,7 +2471,61 @@ func getTestCasesForReevaluateRecord() []TestMetadataForReevaluateRecord {
 func getTestCasesForSearchByAttributes() []TestMetadataForSearchByAttributes {
 	result := []TestMetadataForSearchByAttributes{
 		{
+			name:               "attributes_badSearchProfile",
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).SearchByAttributes","error":{"function":"szengine.(*Szengine).SearchByAttributes","error":{"id":"SZSDK60044053","reason":"SENZ0088|Unknown search profile value '}{'"}}}`,
+			searchProfile:      badSearchProfile,
+		},
+		{
+			name: "attributes_nilSearchProfile",
+			// expectedErr:        szerror.ErrSz,
+			expectedErrMessage: ``,
+			searchProfile:      nilSearchProfile,
+		},
+		{
+			name:               "badAttributes",
+			attributes:         badAttributes,
+			expectedErr:        szerror.ErrSz,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).SearchByAttributes","error":{"function":"szengine.(*Szengine).SearchByAttributes","error":{"id":"SZSDK60044053","reason":"SENZ0027|Invalid value for search-attributes"}}}`,
+		},
+		{
+			name:               "badSearchProfile",
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).SearchByAttributes","error":{"function":"szengine.(*Szengine).SearchByAttributes","error":{"id":"SZSDK60044053","reason":"SENZ0088|Unknown search profile value '}{'"}}}`,
+			searchProfile:      badSearchProfile,
+		},
+		{
 			name: "default",
+		},
+		{
+			name:               "nilAttributes",
+			attributes:         nilAttributes,
+			expectedErr:        szerror.ErrSz,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).SearchByAttributes","error":{"function":"szengine.(*Szengine).SearchByAttributes","error":{"id":"SZSDK60044053","reason":"SENZ0027|Invalid value for search-attributes"}}}`,
+		},
+		{
+			name: "nilSearchProfile",
+			// expectedErr:        szerror.ErrSz,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).SearchByAttributes","error":{"function":"szengine.(*Szengine).SearchByAttributes","error":{"id":"SZSDK60044053","reason":"SENZ0027|Invalid value for search-attributes"}}}`,
+			searchProfile:      nilSearchProfile,
+		},
+		{
+			name:          "searchProfile",
+			searchProfile: defaultSearchProfile,
+		},
+		{
+			name:               "searchProfile_badAttributes",
+			attributes:         badAttributes,
+			expectedErr:        szerror.ErrSz,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).SearchByAttributes","error":{"function":"szengine.(*Szengine).SearchByAttributes","error":{"id":"SZSDK60044053","reason":"SENZ0027|Invalid value for search-attributes"}}}`,
+			searchProfile:      defaultSearchProfile,
+		},
+		{
+			name:               "searchProfile_nilAttributes",
+			attributes:         nilAttributes,
+			expectedErr:        szerror.ErrSz,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).SearchByAttributes","error":{"function":"szengine.(*Szengine).SearchByAttributes","error":{"id":"SZSDK60044053","reason":"SENZ0027|Invalid value for search-attributes"}}}`,
+			searchProfile:      defaultSearchProfile,
 		},
 	}
 	return result
