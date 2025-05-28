@@ -135,10 +135,14 @@ linters:
           deny:
             - pkg: io/ioutil
               desc: "replaced by io and os packages since Go 1.16: https://tip.golang.org/doc/go1.16#ioutil"
+    dupl:
+      threshold: 250
     exhaustruct:
       exclude:
         - '.+/cobra\.Command$'
         - '.+/grpcserver\.BasicGrpcServer$'
+        - '.+/http\.Server$'
+        - '.+/httpserver\.BasicHTTPServer$'
         - '.+/initializer\.BasicInitializer$'
         - '.+/observer\.NullObserver$'
         - '.+/szconfigmanagerserver\.SzConfigManagerServer$'
@@ -149,12 +153,33 @@ linters:
         - '.+/szengine\.GetEntityByRecordIdRequest$'
         - '.+/szengine\.SearchByAttributesRequest$'
         - '.+/szengineserver_test\.GetEntityByRecordIDResponse$'
+        - '.+/szengineserver_test\.TestMetadataForAddRecord$'
+        - '.+/szengineserver_test\.TestMetadataForDeleteRecord$'
+        - '.+/szengineserver_test\.TestMetadataForFindInterestingEntitiesByEntityID$'
+        - '.+/szengineserver_test\.TestMetadataForFindInterestingEntitiesByRecordID$'
+        - '.+/szengineserver_test\.TestMetadataForFindNetworkByEntityID$'
+        - '.+/szengineserver_test\.TestMetadataForFindNetworkByRecordID$'
+        - '.+/szengineserver_test\.TestMetadataForFindPathByEntityID$'
+        - '.+/szengineserver_test\.TestMetadataForFindPathByRecordID$'
+        - '.+/szengineserver_test\.TestMetadataForGetEntityByEntityID$'
+        - '.+/szengineserver_test\.TestMetadataForGetEntityByRecordID$'
+        - '.+/szengineserver_test\.TestMetadataForGetRecord$'
+        - '.+/szengineserver_test\.TestMetadataForGetVirtualEntityByRecordID$'
+        - '.+/szengineserver_test\.TestMetadataForHowEntityByEntityID$'
+        - '.+/szengineserver_test\.TestMetadataForPreprocessRecord$'
+        - '.+/szengineserver_test\.TestMetadataForProcessRedoRecord$'
+        - '.+/szengineserver_test\.TestMetadataForReevaluateEntity$'
+        - '.+/szengineserver_test\.TestMetadataForReevaluateRecord$'
+        - '.+/szengineserver_test\.TestMetadataForSearchByAttributes$'
+        - '.+/szengineserver_test\.TestMetadataForWhyEntities$'
+        - '.+/szengineserver_test\.TestMetadataForWhyRecordInEntity$'
+        - '.+/szengineserver_test\.TestMetadataForWhyRecords$'
+        - '.+/szengineserver_test\.TestMetadataForWhySearch$'
         - '.+/szengineserver\.SzEngineServer$'
         - '.+/szproductserver\.SzProductServer$'
         - '.+/tls\.Config$'
-        - '.+/httpserver\.BasicHTTPServer$'
-        - '.+/http\.Server$'
-
+    funlen:
+      lines: 95
     ireturn:
       allow:
         - error

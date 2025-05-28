@@ -76,13 +76,13 @@ var (
 	nilCsvColumnList       string
 	nilDataSourceCode      = nilSemaphoreString
 	nilEntityID            = nilSemaphoreInt64
-	nilExportHandle        uintptr
-	nilMaxDegrees          = nilSemaphoreInt64
-	nilRecordDefinition    = nilSemaphoreString
-	nilRecordID            = nilSemaphoreString
-	nilRedoRecord          = nilSemaphoreString
-	nilRequiredDataSources = nilSemaphoreString
-	nilSearchProfile       = nilSemaphoreString
+	// nilExportHandle        uintptr.
+	nilMaxDegrees       = nilSemaphoreInt64
+	nilRecordDefinition = nilSemaphoreString
+	nilRecordID         = nilSemaphoreString
+	nilRedoRecord       = nilSemaphoreString
+	// nilRequiredDataSources = nilSemaphoreString.
+	nilSearchProfile = nilSemaphoreString
 )
 
 var (
@@ -110,10 +110,8 @@ func TestSzEngine_AddRecord(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Defaults.
-
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(test) //nolint
 			record := truthset.CustomerRecords["1001"]
 
 			// Test.
@@ -130,11 +128,13 @@ func TestSzEngine_AddRecord(test *testing.T) {
 
 			actual, err := szEngine.AddRecord(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
 			} else {
 				require.NoError(test, err)
+
 				deleteRequest := &szpb.DeleteRecordRequest{
 					DataSourceCode: dataSourceCode,
 					Flags:          senzing.SzNoFlags,
@@ -164,9 +164,7 @@ func TestSzEngine_DeleteRecord(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			record1005 := truthset.CustomerRecords["1005"]
 
 			records := []record.Record{
@@ -179,7 +177,7 @@ func TestSzEngine_DeleteRecord(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(test) //nolint
 
 			// Test.
 
@@ -194,6 +192,7 @@ func TestSzEngine_DeleteRecord(test *testing.T) {
 
 			actual, err := szEngine.DeleteRecord(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -249,6 +248,7 @@ func TestSzEngine_ExportCsvEntityReport_badCsvColumnList(test *testing.T) {
 	actual, err := szEngine.ExportCsvEntityReport(ctx, request)
 	printDebug(test, err, actual)
 	require.ErrorIs(test, err, szerror.ErrSzBadInput)
+
 	expectedErr := `{"function":"szengineserver.(*SzEngineServer).ExportCsvEntityReport","error":{"function":"szengine.(*Szengine).ExportCsvEntityReport","error":{"id":"SZSDK60044007","reason":"SENZ3131|Invalid column [BAD] requested for CSV export."}}}`
 	require.JSONEq(test, expectedErr, err.Error())
 }
@@ -299,6 +299,7 @@ func TestSzEngine_ExportJSONEntityReport(test *testing.T) {
 
 func TestSzEngine_ExportJSONEntityReport_65536(test *testing.T) {
 	// IMPROVE:
+	_ = test
 }
 
 func TestSzEngine_FindInterestingEntitiesByEntityID(test *testing.T) {
@@ -307,9 +308,7 @@ func TestSzEngine_FindInterestingEntitiesByEntityID(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			record1001 := truthset.CustomerRecords["1001"]
 
 			records := []record.Record{
@@ -324,8 +323,8 @@ func TestSzEngine_FindInterestingEntitiesByEntityID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
-			entityID := getEntityID(record1001)
+			szEngine := getTestObject(test)     //nolint
+			entityID := getEntityID(record1001) //nolint
 
 			// Test.
 
@@ -335,6 +334,7 @@ func TestSzEngine_FindInterestingEntitiesByEntityID(test *testing.T) {
 			}
 			actual, err := szEngine.FindInterestingEntitiesByEntityId(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -351,9 +351,7 @@ func TestSzEngine_FindInterestingEntitiesByRecordID(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			record1001 := truthset.CustomerRecords["1001"]
 
 			records := []record.Record{
@@ -368,7 +366,7 @@ func TestSzEngine_FindInterestingEntitiesByRecordID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(test) //nolint
 
 			// Test.
 
@@ -380,6 +378,7 @@ func TestSzEngine_FindInterestingEntitiesByRecordID(test *testing.T) {
 
 			actual, err := szEngine.FindInterestingEntitiesByRecordId(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -396,9 +395,7 @@ func TestSzEngine_FindNetworkByEntityID(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			record1001 := truthset.CustomerRecords["1001"]
 			record1002 := truthset.CustomerRecords["1002"]
 
@@ -414,11 +411,11 @@ func TestSzEngine_FindNetworkByEntityID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(test) //nolint
 
 			entityIDs := entityIDsJSON(
-				getEntityID(record1001),
-				getEntityID(record1002))
+				getEntityID(record1001), //nolint
+				getEntityID(record1002)) //nolint
 
 			// Test.
 
@@ -431,6 +428,7 @@ func TestSzEngine_FindNetworkByEntityID(test *testing.T) {
 			}
 			actual, err := szEngine.FindNetworkByEntityId(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -468,9 +466,7 @@ func TestSzEngine_FindNetworkByRecordID(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			records := []record.Record{
 				truthset.CustomerRecords["1001"],
 				truthset.CustomerRecords["1002"],
@@ -501,6 +497,7 @@ func TestSzEngine_FindNetworkByRecordID(test *testing.T) {
 			}
 			actual, err := szEngine.FindNetworkByRecordId(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -517,9 +514,7 @@ func TestSzEngine_FindPathByEntityID(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			records := []record.Record{
 				truthset.CustomerRecords["1001"],
 				truthset.CustomerRecords["1002"],
@@ -557,6 +552,7 @@ func TestSzEngine_FindPathByEntityID(test *testing.T) {
 			}
 			actual, err := szEngine.FindPathByEntityId(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -573,9 +569,7 @@ func TestSzEngine_FindPathByRecordID(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			records := []record.Record{
 				truthset.CustomerRecords["1001"],
 				truthset.CustomerRecords["1002"],
@@ -591,11 +585,11 @@ func TestSzEngine_FindPathByRecordID(test *testing.T) {
 
 			record1 := truthset.CustomerRecords["1001"]
 			startDataSourceCode := record1.DataSource
-			startRecordId := record1.ID
+			startRecordID := record1.ID
 
 			record2 := truthset.CustomerRecords["1002"]
 			endDataSourceCode := record2.DataSource
-			endRecordId := record2.ID
+			endRecordID := record2.ID
 
 			avoidRecordKeys := senzing.SzNoAvoidance
 			if testCase.avoidRecordKeys != nil {
@@ -612,15 +606,16 @@ func TestSzEngine_FindPathByRecordID(test *testing.T) {
 			request := &szpb.FindPathByRecordIdRequest{
 				AvoidRecordKeys:     avoidRecordKeys,
 				EndDataSourceCode:   xString(testCase.endDataSourceCode, endDataSourceCode),
-				EndRecordId:         xString(testCase.endRecordId, endRecordId),
+				EndRecordId:         xString(testCase.endRecordID, endRecordID),
 				Flags:               xInt64(testCase.flags, senzing.SzFindNetworkDefaultFlags),
 				MaxDegrees:          xInt64(testCase.maxDegrees, defaultMaxDegrees),
 				RequiredDataSources: requiredDataSources,
 				StartDataSourceCode: xString(testCase.startDataSourceCode, startDataSourceCode),
-				StartRecordId:       xString(testCase.startRecordId, startRecordId),
+				StartRecordId:       xString(testCase.startRecordID, startRecordID),
 			}
 			actual, err := szEngine.FindPathByRecordId(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -646,9 +641,7 @@ func TestSzEngine_GetEntityByEntityID(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			records := []record.Record{
 				truthset.CustomerRecords["1001"],
 				truthset.CustomerRecords["1002"],
@@ -671,6 +664,7 @@ func TestSzEngine_GetEntityByEntityID(test *testing.T) {
 			}
 			actual, err := szEngine.GetEntityByEntityId(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -687,9 +681,7 @@ func TestSzEngine_GetEntityByRecordID(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			records := []record.Record{
 				truthset.CustomerRecords["1001"],
 				truthset.CustomerRecords["1002"],
@@ -713,6 +705,7 @@ func TestSzEngine_GetEntityByRecordID(test *testing.T) {
 			}
 			actual, err := szEngine.GetEntityByRecordId(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -729,9 +722,7 @@ func TestSzEngine_GetRecord(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			records := []record.Record{
 				truthset.CustomerRecords["1001"],
 				truthset.CustomerRecords["1002"],
@@ -755,6 +746,7 @@ func TestSzEngine_GetRecord(test *testing.T) {
 			}
 			actual, err := szEngine.GetRecord(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -789,9 +781,7 @@ func TestSzEngine_GetVirtualEntityByRecordID(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			records := []record.Record{
 				truthset.CustomerRecords["1001"],
 				truthset.CustomerRecords["1002"],
@@ -819,6 +809,7 @@ func TestSzEngine_GetVirtualEntityByRecordID(test *testing.T) {
 			}
 			actual, err := szEngine.GetVirtualEntityByRecordId(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -835,9 +826,7 @@ func TestSzEngine_HowEntityByEntityID(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			record1001 := truthset.CustomerRecords["1001"]
 
 			records := []record.Record{
@@ -862,6 +851,7 @@ func TestSzEngine_HowEntityByEntityID(test *testing.T) {
 			}
 			actual, err := szEngine.HowEntityByEntityId(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -878,9 +868,7 @@ func TestSzEngine_PreprocessRecord(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			record1001 := truthset.CustomerRecords["1001"]
 
 			records := []record.Record{
@@ -903,6 +891,7 @@ func TestSzEngine_PreprocessRecord(test *testing.T) {
 			}
 			actual, err := szEngine.PreprocessRecord(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -928,16 +917,15 @@ func TestSzEngine_ProcessRedoRecord(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			records := []record.Record{
 				truthset.CustomerRecords["1001"],
 				truthset.CustomerRecords["1002"],
 				truthset.CustomerRecords["1003"],
 				truthset.CustomerRecords["1004"],
 				truthset.CustomerRecords["1005"],
-				truthset.CustomerRecords["1009"]}
+				truthset.CustomerRecords["1009"],
+			}
 
 			defer func() { deleteRecords(ctx, records) }()
 
@@ -950,6 +938,7 @@ func TestSzEngine_ProcessRedoRecord(test *testing.T) {
 			redoRecordRequest := &szpb.GetRedoRecordRequest{}
 			redoRecordResponse, err := szEngine.GetRedoRecord(ctx, redoRecordRequest)
 			require.NoError(test, err)
+
 			redoRecord := xString(testCase.redoRecord, redoRecordResponse.GetResult())
 
 			// Test.
@@ -960,6 +949,7 @@ func TestSzEngine_ProcessRedoRecord(test *testing.T) {
 			}
 			actual, err := szEngine.ProcessRedoRecord(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -976,9 +966,7 @@ func TestSzEngine_ReevaluateEntity(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			record1001 := truthset.CustomerRecords["1001"]
 
 			records := []record.Record{
@@ -1002,6 +990,7 @@ func TestSzEngine_ReevaluateEntity(test *testing.T) {
 			}
 			actual, err := szEngine.ReevaluateEntity(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -1018,9 +1007,7 @@ func TestSzEngine_ReevaluateRecord(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			record1001 := truthset.CustomerRecords["1001"]
 
 			records := []record.Record{
@@ -1044,6 +1031,7 @@ func TestSzEngine_ReevaluateRecord(test *testing.T) {
 			}
 			actual, err := szEngine.ReevaluateRecord(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -1077,9 +1065,7 @@ func TestSzEngine_SearchByAttributes(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			records := []record.Record{
 				truthset.CustomerRecords["1001"],
 				truthset.CustomerRecords["1002"],
@@ -1103,6 +1089,7 @@ func TestSzEngine_SearchByAttributes(test *testing.T) {
 			}
 			actual, err := szEngine.SearchByAttributes(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -1129,9 +1116,7 @@ func TestSzEngine_WhyEntities(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			record1001 := truthset.CustomerRecords["1001"]
 			record1002 := truthset.CustomerRecords["1002"]
 
@@ -1159,6 +1144,7 @@ func TestSzEngine_WhyEntities(test *testing.T) {
 			}
 			actual, err := szEngine.WhyEntities(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -1175,9 +1161,7 @@ func TestSzEngine_WhyRecordInEntity(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			record1001 := truthset.CustomerRecords["1001"]
 
 			records := []record.Record{
@@ -1201,6 +1185,7 @@ func TestSzEngine_WhyRecordInEntity(test *testing.T) {
 			}
 			actual, err := szEngine.WhyRecordInEntity(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -1217,9 +1202,7 @@ func TestSzEngine_WhyRecords(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			record1001 := truthset.CustomerRecords["1001"]
 			record1002 := truthset.CustomerRecords["1002"]
 
@@ -1247,6 +1230,7 @@ func TestSzEngine_WhyRecords(test *testing.T) {
 			}
 			actual, err := szEngine.WhyRecords(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -1263,9 +1247,7 @@ func TestSzEngine_WhySearch(test *testing.T) {
 
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
-
 			// Insert test data.
-
 			records := []record.Record{
 				truthset.CustomerRecords["1001"],
 				truthset.CustomerRecords["1002"],
@@ -1291,6 +1273,7 @@ func TestSzEngine_WhySearch(test *testing.T) {
 			}
 			actual, err := szEngine.WhySearch(ctx, request)
 			printDebug(test, err, actual)
+
 			if testCase.expectedErr != nil {
 				require.ErrorIs(test, err, testCase.expectedErr)
 				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
@@ -1416,11 +1399,11 @@ func getEntityIDForRecord(datasource string, recordID string) int64 {
 	return getEntityByRecordIDResponse.ResolvedEntity.EntityID
 }
 
-func getEntityIDString(record record.Record) string {
-	entityID := getEntityID(record)
+// func getEntityIDString(record record.Record) string {
+// 	entityID := getEntityID(record)
 
-	return strconv.FormatInt(entityID, 10)
-}
+// 	return strconv.FormatInt(entityID, 10)
+// }
 
 func getEntityIDStringForRecord(datasource string, id string) string {
 	entityID := getEntityIDForRecord(datasource, id)
@@ -1452,6 +1435,7 @@ func getSzEngineServer(ctx context.Context) *szengineserver.SzEngineServer {
 }
 
 func getTestObject(t *testing.T) *szengineserver.SzEngineServer {
+	t.Helper()
 
 	return getSzEngineServer(t.Context())
 }
@@ -1463,10 +1447,12 @@ func panicOnError(err error) {
 }
 
 func printActual(t *testing.T, actual interface{}) {
+	t.Helper()
 	printResult(t, "Actual", actual)
 }
 
 func printDebug(t *testing.T, err error, items ...any) {
+	t.Helper()
 	printError(t, err)
 
 	for item := range items {
@@ -1475,6 +1461,7 @@ func printDebug(t *testing.T, err error, items ...any) {
 }
 
 func printError(t *testing.T, err error) {
+	t.Helper()
 
 	if printErrors {
 		if err != nil {
@@ -1484,6 +1471,7 @@ func printError(t *testing.T, err error) {
 }
 
 func printResult(t *testing.T, title string, result interface{}) {
+	t.Helper()
 
 	if printResults {
 		t.Logf("%s: %v", title, truncate(fmt.Sprintf("%v", result), defaultTruncation))
@@ -1645,7 +1633,7 @@ type TestMetadataForFindPathByEntityID struct {
 type TestMetadataForFindPathByRecordID struct {
 	avoidRecordKeys     func() string
 	endDataSourceCode   string
-	endRecordId         string
+	endRecordID         string
 	expectedErr         error
 	expectedErrMessage  string
 	flags               int64
@@ -1653,7 +1641,7 @@ type TestMetadataForFindPathByRecordID struct {
 	name                string
 	requiredDataSources func() string
 	startDataSourceCode string
-	startRecordId       string
+	startRecordID       string
 }
 
 type TestMetadataForGetEntityByEntityID struct {
@@ -1872,6 +1860,7 @@ func getTestCasesForAddRecord() []TestMetadataForAddRecord {
 			recordID: nilRecordID,
 		},
 	}
+
 	return result
 }
 
@@ -1929,6 +1918,7 @@ func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
 			recordID: nilRecordID,
 		},
 	}
+
 	return result
 }
 
@@ -1950,6 +1940,7 @@ func getTestCasesForFindInterestingEntitiesByEntityID() []TestMetadataForFindInt
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindInterestingEntitiesByEntityId","error":{"function":"szengine.(*Szengine).FindInterestingEntitiesByEntityID","error":{"id":"SZSDK60044010","reason":"SENZ0037|Unknown resolved entity value '0'"}}}`,
 		},
 	}
+
 	return result
 }
 
@@ -1983,6 +1974,7 @@ func getTestCasesForFindInterestingEntitiesByRecordID() []TestMetadataForFindInt
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindInterestingEntitiesByRecordId","error":{"function":"szengine.(*Szengine).FindInterestingEntitiesByRecordID","error":{"id":"SZSDK60044011","reason":"SENZ0033|Unknown record: dsrc[CUSTOMERS], record[]"}}}`,
 		},
 	}
+
 	return result
 }
 
@@ -1991,7 +1983,7 @@ func getTestCasesForFindNetworkByEntityID() []TestMetadataForFindNetworkByEntity
 		{
 			name:      "badEntityIDs",
 			entityIDs: badEntityIDsFunc,
-			// FIXME:
+			// IMPROVE:
 		},
 		{
 			name:               "badBuildOutDegrees",
@@ -2027,6 +2019,7 @@ func getTestCasesForFindNetworkByEntityID() []TestMetadataForFindNetworkByEntity
 			maxDegrees: nilMaxDegrees,
 		},
 	}
+
 	return result
 }
 
@@ -2066,6 +2059,7 @@ func getTestCasesForFindNetworkByRecordID() []TestMetadataForFindNetworkByRecord
 			name: "default",
 		},
 	}
+
 	return result
 }
 
@@ -2145,6 +2139,7 @@ func getTestCasesForFindPathByEntityID() []TestMetadataForFindPathByEntityID {
 			startEntityID:       badEntityID,
 		},
 	}
+
 	return result
 }
 
@@ -2163,7 +2158,7 @@ func getTestCasesForFindPathByRecordID() []TestMetadataForFindPathByRecordID {
 			name:               "badDataRecordID",
 			expectedErr:        szerror.ErrSzNotFound,
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044019","reason":"SENZ0033|Unknown record: dsrc[CUSTOMERS], record[BadRecordID]"}}}`,
-			startRecordId:      badRecordID,
+			startRecordID:      badRecordID,
 		},
 		{
 			name:               "badMaxDegrees",
@@ -2220,6 +2215,7 @@ func getTestCasesForFindPathByRecordID() []TestMetadataForFindPathByRecordID {
 			startDataSourceCode: nilDataSourceCode,
 		},
 	}
+
 	return result
 }
 
@@ -2241,12 +2237,12 @@ func getTestCasesForGetEntityByEntityID() []TestMetadataForGetEntityByEntityID {
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetEntityByEntityId","error":{"function":"szengine.(*Szengine).GetEntityByEntityID","error":{"id":"SZSDK60044030","reason":"SENZ0037|Unknown resolved entity value '0'"}}}`,
 		},
 	}
+
 	return result
 }
 
 func getTestCasesForGetEntityByRecordID() []TestMetadataForGetEntityByRecordID {
 	result := []TestMetadataForGetEntityByRecordID{
-
 		{
 			name:               "badDataSourceCode",
 			dataSourceCode:     badDataSourceCode,
@@ -2275,6 +2271,7 @@ func getTestCasesForGetEntityByRecordID() []TestMetadataForGetEntityByRecordID {
 			recordID:           nilRecordID,
 		},
 	}
+
 	return result
 }
 
@@ -2308,6 +2305,7 @@ func getTestCasesForGetRecord() []TestMetadataForGetRecord {
 			recordID:           nilRecordID,
 		},
 	}
+
 	return result
 }
 
@@ -2329,6 +2327,7 @@ func getTestCasesForGetVirtualEntityByRecordID() []TestMetadataForGetVirtualEnti
 			name: "default",
 		},
 	}
+
 	return result
 }
 
@@ -2350,6 +2349,7 @@ func getTestCasesForHowEntityByEntityID() []TestMetadataForHowEntityByEntityID {
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).HowEntityByEntityId","error":{"function":"szengine.(*Szengine).HowEntityByEntityID","error":{"id":"SZSDK60044040","reason":"SENZ0037|Unknown resolved entity value '0'"}}}`,
 		},
 	}
+
 	return result
 }
 
@@ -2365,6 +2365,7 @@ func getTestCasesForPreprocessRecord() []TestMetadataForPreprocessRecord {
 			name: "default",
 		},
 	}
+
 	return result
 }
 
@@ -2404,6 +2405,7 @@ func getTestCasesForProcessRedoRecord() []TestMetadataForProcessRedoRecord {
 			redoRecord:         nilRedoRecord,
 		},
 	}
+
 	return result
 }
 
@@ -2435,6 +2437,7 @@ func getTestCasesForReevaluateEntity() []TestMetadataForReevaluateEntity {
 			flags:    senzing.SzWithInfo,
 		},
 	}
+
 	return result
 }
 
@@ -2492,6 +2495,7 @@ func getTestCasesForReevaluateRecord() []TestMetadataForReevaluateRecord {
 			recordID: nilRecordID,
 		},
 	}
+
 	return result
 }
 
@@ -2523,6 +2527,7 @@ func getTestCasesForSearchByAttributes() []TestMetadataForSearchByAttributes {
 			searchProfile: nilSearchProfile,
 		},
 	}
+
 	return result
 }
 
@@ -2556,6 +2561,7 @@ func getTestCasesForWhyEntities() []TestMetadataForWhyEntities {
 			entityID2:          nilEntityID,
 		},
 	}
+
 	return result
 }
 
@@ -2589,6 +2595,7 @@ func getTestCasesForWhyRecordInEntity() []TestMetadataForWhyRecordInEntity {
 			recordID:           nilRecordID,
 		},
 	}
+
 	return result
 }
 
@@ -2646,6 +2653,7 @@ func getTestCasesForWhyRecords() []TestMetadataForWhyRecords {
 			recordID2:          nilRecordID,
 		},
 	}
+
 	return result
 }
 
@@ -2689,6 +2697,7 @@ func getTestCasesForWhySearch() []TestMetadataForWhySearch {
 			searchProfile: "SEARCH",
 		},
 	}
+
 	return result
 }
 
@@ -2855,10 +2864,12 @@ func xString(candidates ...string) string {
 		if result == nilSemaphoreString {
 			return ""
 		}
+
 		if len(result) > 0 {
 			return result
 		}
 	}
+
 	return result
 }
 
@@ -2869,9 +2880,11 @@ func xInt64(candidates ...int64) int64 {
 		if result == nilSemaphoreInt64 {
 			return 0
 		}
+
 		if result != 0 {
 			return result
 		}
 	}
+
 	return result
 }

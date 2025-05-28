@@ -655,7 +655,6 @@ func ExampleSzEngineServer_GetRecord() {
 	//     "DATA_SOURCE": "CUSTOMERS",
 	//     "RECORD_ID": "1001"
 	// }
-
 }
 
 func ExampleSzEngineServer_GetRedoRecord() {
@@ -1104,5 +1103,4 @@ func ExampleSzEngineServer_DeleteRecord_withInfo() {
 	//     "RECORD_ID": "1003",
 	//     "AFFECTED_ENTITIES": []
 	// }
-
 }
