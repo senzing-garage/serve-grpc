@@ -210,7 +210,7 @@ func ExampleSzEngineServer_FindInterestingEntitiesByEntityId() {
 	ctx := context.TODO()
 	szEngine := getSzEngineServer(ctx)
 	request := &szpb.FindInterestingEntitiesByEntityIdRequest{
-		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
 		Flags:    0,
 	}
 
@@ -330,8 +330,8 @@ func ExampleSzEngineServer_FindPathByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindPathByEntityIdRequest{
-		StartEntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
-		EndEntityId:   getEntityIDForRecord("CUSTOMERS", "1002"),
+		StartEntityId: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
+		EndEntityId:   getEntityIDForRecord(ctx, "CUSTOMERS", "1002"),
 		MaxDegrees:    1,
 		Flags:         senzing.SzNoFlags,
 	}
@@ -370,8 +370,8 @@ func ExampleSzEngineServer_FindPathByEntityId_avoiding() {
 	szEngineServer := getSzEngineServer(ctx)
 	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`
 	request := &szpb.FindPathByEntityIdRequest{
-		StartEntityId:  getEntityIDForRecord("CUSTOMERS", "1001"),
-		EndEntityId:    getEntityIDForRecord("CUSTOMERS", "1002"),
+		StartEntityId:  getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
+		EndEntityId:    getEntityIDForRecord(ctx, "CUSTOMERS", "1002"),
 		MaxDegrees:     1,
 		AvoidEntityIds: avoidEntityIDs,
 		Flags:          senzing.SzNoFlags,
@@ -411,8 +411,8 @@ func ExampleSzEngineServer_FindPathByEntityId_avoidingAndIncluding() {
 	szEngineServer := getSzEngineServer(ctx)
 	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`
 	request := &szpb.FindPathByEntityIdRequest{
-		StartEntityId:       getEntityIDForRecord("CUSTOMERS", "1001"),
-		EndEntityId:         getEntityIDForRecord("CUSTOMERS", "1002"),
+		StartEntityId:       getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
+		EndEntityId:         getEntityIDForRecord(ctx, "CUSTOMERS", "1002"),
 		MaxDegrees:          1,
 		AvoidEntityIds:      avoidEntityIDs,
 		RequiredDataSources: `{"DATA_SOURCES": ["CUSTOMERS"]}`,
@@ -590,7 +590,7 @@ func ExampleSzEngineServer_GetEntityByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetEntityByEntityIdRequest{
-		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
 		Flags:    senzing.SzNoFlags,
 	}
 
@@ -727,7 +727,7 @@ func ExampleSzEngineServer_HowEntityByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.HowEntityByEntityIdRequest{
-		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
 		Flags:    senzing.SzNoFlags,
 	}
 
@@ -877,8 +877,8 @@ func ExampleSzEngineServer_WhyEntities() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.WhyEntitiesRequest{
-		EntityId_1: getEntityIDForRecord("CUSTOMERS", "1001"),
-		EntityId_2: getEntityIDForRecord("CUSTOMERS", "1002"),
+		EntityId_1: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
+		EntityId_2: getEntityIDForRecord(ctx, "CUSTOMERS", "1002"),
 		Flags:      senzing.SzNoFlags,
 	}
 
@@ -943,7 +943,7 @@ func ExampleSzEngineServer_ReevaluateEntity() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateEntityRequest{
-		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
 		Flags:    senzing.SzWithoutInfo,
 	}
 
@@ -963,7 +963,7 @@ func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateEntityRequest{
-		EntityId: getEntityIDForRecord("CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
 		Flags:    senzing.SzWithInfo,
 	}
 

@@ -111,7 +111,7 @@ func TestSzEngine_AddRecord(test *testing.T) {
 	for _, testCase := range testCases {
 		test.Run(testCase.name, func(test *testing.T) {
 			// Defaults.
-			szEngine := getTestObject(test) //nolint
+			szEngine := getTestObject(ctx, test)
 			record := truthset.CustomerRecords["1001"]
 
 			// Test.
@@ -150,7 +150,7 @@ func TestSzEngine_AddRecord(test *testing.T) {
 func TestSzEngine_CountRedoRecords(test *testing.T) {
 	ctx := test.Context()
 	expected := int64(0)
-	szEngine := getTestObject(test)
+	szEngine := getTestObject(ctx, test)
 	request := &szpb.CountRedoRecordsRequest{}
 	actual, err := szEngine.CountRedoRecords(ctx, request)
 	printDebug(test, err, actual)
@@ -177,7 +177,7 @@ func TestSzEngine_DeleteRecord(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test) //nolint
+			szEngine := getTestObject(ctx, test)
 
 			// Test.
 
@@ -215,7 +215,7 @@ func TestSzEngine_ExportCsvEntityReport(test *testing.T) {
 
 	addRecords(ctx, records)
 
-	szEngine := getTestObject(test)
+	szEngine := getTestObject(ctx, test)
 	csvColumnList := ""
 	flags := senzing.SzExportIncludeAllEntities
 
@@ -238,7 +238,7 @@ func TestSzEngine_ExportCsvEntityReport_badCsvColumnList(test *testing.T) {
 
 	addRecords(ctx, records)
 
-	szEngine := getTestObject(test)
+	szEngine := getTestObject(ctx, test)
 	flags := senzing.SzExportIncludeAllEntities
 
 	request := &szpb.ExportCsvEntityReportRequest{
@@ -263,7 +263,7 @@ func TestSzEngine_ExportCsvEntityReport_nilCsvColumnList(test *testing.T) {
 
 	addRecords(ctx, records)
 
-	szEngine := getTestObject(test)
+	szEngine := getTestObject(ctx, test)
 	flags := senzing.SzExportIncludeAllEntities
 
 	request := &szpb.ExportCsvEntityReportRequest{
@@ -287,7 +287,7 @@ func TestSzEngine_ExportJSONEntityReport(test *testing.T) {
 
 	addRecords(ctx, records)
 
-	szEngine := getTestObject(test)
+	szEngine := getTestObject(ctx, test)
 	flags := senzing.SzNoFlags
 	request := &szpb.ExportJsonEntityReportRequest{
 		Flags: flags,
@@ -323,8 +323,8 @@ func TestSzEngine_FindInterestingEntitiesByEntityID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)     //nolint
-			entityID := getEntityID(record1001) //nolint
+			szEngine := getTestObject(ctx, test)
+			entityID := getEntityID(ctx, record1001)
 
 			// Test.
 
@@ -366,7 +366,7 @@ func TestSzEngine_FindInterestingEntitiesByRecordID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test) //nolint
+			szEngine := getTestObject(ctx, test)
 
 			// Test.
 
@@ -411,11 +411,11 @@ func TestSzEngine_FindNetworkByEntityID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test) //nolint
+			szEngine := getTestObject(ctx, test)
 
 			entityIDs := entityIDsJSON(
-				getEntityID(record1001), //nolint
-				getEntityID(record1002)) //nolint
+				getEntityID(ctx, record1001),
+				getEntityID(ctx, record1002))
 
 			// Test.
 
@@ -441,6 +441,20 @@ func TestSzEngine_FindNetworkByEntityID(test *testing.T) {
 
 // func TestSzEngine_FindNetworkByEntityID_Not_Using_CUSTOMERS(test *testing.T) {
 // 	ctx := test.Context()
+
+// 	record2012 := truthset.ReferenceRecords["2012"]
+// 	record2013 := truthset.ReferenceRecords["2013"]
+
+// 	records := []record.Record{
+// 		record2012,
+// 		record2013,
+// 		truthset.CustomerRecords["1003"],
+// 	}
+
+// 	defer func() { deleteRecords(ctx, records) }()
+
+// 	addRecords(ctx, records)
+
 // 	szEngine := getSzEngineServer(ctx)
 // 	entityIDs := `{"ENTITIES": [{"ENTITY_ID": ` +
 // 		getEntityIDStringForRecord("REFERENCE", "2012") +
@@ -457,7 +471,9 @@ func TestSzEngine_FindNetworkByEntityID(test *testing.T) {
 
 // 	actual, err := szEngine.FindNetworkByEntityId(ctx, request)
 // 	printDebug(test, err, actual)
-// 	require.ErrorIs(test, err, szerror.ErrSzNotFound)
+// 	// require.ErrorIs(test, err, szerror.ErrSzNotFound)
+// 	expectedErrMessage := ""
+// 	require.JSONEq(test, expectedErrMessage, err.Error())
 // }
 
 func TestSzEngine_FindNetworkByRecordID(test *testing.T) {
@@ -479,7 +495,7 @@ func TestSzEngine_FindNetworkByRecordID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(ctx, test)
 
 			recordKeys := recordKeysFunc()
 			if testCase.recordKeys != nil {
@@ -526,9 +542,9 @@ func TestSzEngine_FindPathByEntityID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
-			startEntityID := getEntityID(truthset.CustomerRecords["1001"])
-			endEntityID := getEntityID(truthset.CustomerRecords["1002"])
+			szEngine := getTestObject(ctx, test)
+			startEntityID := getEntityID(ctx, truthset.CustomerRecords["1001"])
+			endEntityID := getEntityID(ctx, truthset.CustomerRecords["1002"])
 
 			avoidEntityIDs := senzing.SzNoAvoidance
 			if testCase.avoidEntityIDs != nil {
@@ -581,7 +597,7 @@ func TestSzEngine_FindPathByRecordID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(ctx, test)
 
 			record1 := truthset.CustomerRecords["1001"]
 			startDataSourceCode := record1.DataSource
@@ -628,7 +644,7 @@ func TestSzEngine_FindPathByRecordID(test *testing.T) {
 
 func TestSzEngine_GetActiveConfigID(test *testing.T) {
 	ctx := test.Context()
-	szEngine := getTestObject(test)
+	szEngine := getTestObject(ctx, test)
 	request := &szpb.GetActiveConfigIdRequest{}
 	actual, err := szEngine.GetActiveConfigId(ctx, request)
 	printDebug(test, err, actual)
@@ -653,8 +669,8 @@ func TestSzEngine_GetEntityByEntityID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
-			entityID := getEntityID(truthset.CustomerRecords["1001"])
+			szEngine := getTestObject(ctx, test)
+			entityID := getEntityID(ctx, truthset.CustomerRecords["1001"])
 
 			// Test.
 
@@ -693,7 +709,7 @@ func TestSzEngine_GetEntityByRecordID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(ctx, test)
 			record := truthset.CustomerRecords["1001"]
 
 			// Test.
@@ -734,7 +750,7 @@ func TestSzEngine_GetRecord(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(ctx, test)
 			record := truthset.CustomerRecords["1001"]
 
 			// Test.
@@ -759,7 +775,7 @@ func TestSzEngine_GetRecord(test *testing.T) {
 
 func TestSzEngine_GetRedoRecord(test *testing.T) {
 	ctx := test.Context()
-	szEngine := getTestObject(test)
+	szEngine := getTestObject(ctx, test)
 	request := &szpb.GetRedoRecordRequest{}
 	actual, err := szEngine.GetRedoRecord(ctx, request)
 	printDebug(test, err, actual)
@@ -768,7 +784,7 @@ func TestSzEngine_GetRedoRecord(test *testing.T) {
 
 func TestSzEngine_GetStats(test *testing.T) {
 	ctx := test.Context()
-	szEngine := getTestObject(test)
+	szEngine := getTestObject(ctx, test)
 	request := &szpb.GetStatsRequest{}
 	actual, err := szEngine.GetStats(ctx, request)
 	printDebug(test, err, actual)
@@ -794,7 +810,7 @@ func TestSzEngine_GetVirtualEntityByRecordID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(ctx, test)
 
 			recordKeys := recordKeysFunc()
 			if testCase.recordKeys != nil {
@@ -840,8 +856,8 @@ func TestSzEngine_HowEntityByEntityID(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
-			entityID := getEntityID(record1001)
+			szEngine := getTestObject(ctx, test)
+			entityID := getEntityID(ctx, record1001)
 
 			// Test.
 
@@ -881,7 +897,7 @@ func TestSzEngine_PreprocessRecord(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(ctx, test)
 
 			// Test.
 
@@ -904,7 +920,7 @@ func TestSzEngine_PreprocessRecord(test *testing.T) {
 
 func TestSzEngine_PrimeEngine(test *testing.T) {
 	ctx := test.Context()
-	szEngine := getTestObject(test)
+	szEngine := getTestObject(ctx, test)
 	request := &szpb.PrimeEngineRequest{}
 	actual, err := szEngine.PrimeEngine(ctx, request)
 	printDebug(test, err, actual)
@@ -933,7 +949,7 @@ func TestSzEngine_ProcessRedoRecord(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(ctx, test)
 
 			redoRecordRequest := &szpb.GetRedoRecordRequest{}
 			redoRecordResponse, err := szEngine.GetRedoRecord(ctx, redoRecordRequest)
@@ -979,8 +995,8 @@ func TestSzEngine_ReevaluateEntity(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
-			entityID := getEntityID(record1001)
+			szEngine := getTestObject(ctx, test)
+			entityID := getEntityID(ctx, record1001)
 
 			// Test.
 
@@ -1020,7 +1036,7 @@ func TestSzEngine_ReevaluateRecord(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(ctx, test)
 
 			// Test.
 
@@ -1044,7 +1060,7 @@ func TestSzEngine_ReevaluateRecord(test *testing.T) {
 
 func TestSzEngine_Reinitialize(test *testing.T) {
 	ctx := test.Context()
-	szEngine := getTestObject(test)
+	szEngine := getTestObject(ctx, test)
 
 	requestToGetActiveConfigID := &szpb.GetActiveConfigIdRequest{}
 	responseFromGetActiveConfigID, err := szEngine.GetActiveConfigId(ctx, requestToGetActiveConfigID)
@@ -1078,7 +1094,7 @@ func TestSzEngine_SearchByAttributes(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(ctx, test)
 
 			// Test.
 
@@ -1131,9 +1147,9 @@ func TestSzEngine_WhyEntities(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
-			entityID1 := getEntityID(record1001)
-			entityID2 := getEntityID(record1002)
+			szEngine := getTestObject(ctx, test)
+			entityID1 := getEntityID(ctx, record1001)
+			entityID2 := getEntityID(ctx, record1002)
 
 			// Test.
 
@@ -1174,7 +1190,7 @@ func TestSzEngine_WhyRecordInEntity(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(ctx, test)
 
 			// Test.
 
@@ -1217,7 +1233,7 @@ func TestSzEngine_WhyRecords(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
+			szEngine := getTestObject(ctx, test)
 
 			// Test.
 
@@ -1260,8 +1276,8 @@ func TestSzEngine_WhySearch(test *testing.T) {
 
 			// Defaults.
 
-			szEngine := getTestObject(test)
-			entityID := getEntityID(truthset.CustomerRecords["1001"])
+			szEngine := getTestObject(ctx, test)
+			entityID := getEntityID(ctx, truthset.CustomerRecords["1001"])
 
 			// Test.
 
@@ -1290,7 +1306,7 @@ func TestSzEngine_WhySearch(test *testing.T) {
 
 func TestSzEngine_RegisterObserver(test *testing.T) {
 	ctx := test.Context()
-	testObject := getTestObject(test)
+	testObject := getTestObject(ctx, test)
 	err := testObject.RegisterObserver(ctx, observerSingleton)
 	printDebug(test, err)
 	require.NoError(test, err)
@@ -1298,7 +1314,7 @@ func TestSzEngine_RegisterObserver(test *testing.T) {
 
 func TestSzEngine_SetLogLevel(test *testing.T) {
 	ctx := test.Context()
-	testObject := getTestObject(test)
+	testObject := getTestObject(ctx, test)
 	err := testObject.SetLogLevel(ctx, "DEBUG")
 	printDebug(test, err)
 	require.NoError(test, err)
@@ -1306,7 +1322,7 @@ func TestSzEngine_SetLogLevel(test *testing.T) {
 
 func TestSzEngine_SetLogLevel_badLevelName(test *testing.T) {
 	ctx := test.Context()
-	testObject := getTestObject(test)
+	testObject := getTestObject(ctx, test)
 	err := testObject.SetLogLevel(ctx, "BADLEVELNAME")
 	printDebug(test, err)
 	require.Error(test, err)
@@ -1314,20 +1330,20 @@ func TestSzEngine_SetLogLevel_badLevelName(test *testing.T) {
 
 func TestSzEngine_SetObserverOrigin(test *testing.T) {
 	ctx := test.Context()
-	testObject := getTestObject(test)
+	testObject := getTestObject(ctx, test)
 	testObject.SetObserverOrigin(ctx, observerOrigin)
 }
 
 func TestSzEngine_GetObserverOrigin(test *testing.T) {
 	ctx := test.Context()
-	testObject := getTestObject(test)
+	testObject := getTestObject(ctx, test)
 	actual := testObject.GetObserverOrigin(ctx)
 	assert.Equal(test, observerOrigin, actual)
 }
 
 func TestSzEngine_UnregisterObserver(test *testing.T) {
 	ctx := test.Context()
-	testObject := getTestObject(test)
+	testObject := getTestObject(ctx, test)
 	err := testObject.UnregisterObserver(ctx, observerSingleton)
 	printDebug(test, err)
 	require.NoError(test, err)
@@ -1378,12 +1394,11 @@ func deleteRecords(ctx context.Context, records []record.Record) {
 	}
 }
 
-func getEntityID(record record.Record) int64 {
-	return getEntityIDForRecord(record.DataSource, record.ID)
+func getEntityID(ctx context.Context, record record.Record) int64 {
+	return getEntityIDForRecord(ctx, record.DataSource, record.ID)
 }
 
-func getEntityIDForRecord(datasource string, recordID string) int64 {
-	ctx := context.TODO()
+func getEntityIDForRecord(ctx context.Context, datasource string, recordID string) int64 {
 	szEngine := getSzEngineServer(ctx)
 	request := &szpb.GetEntityByRecordIdRequest{
 		DataSourceCode: datasource,
@@ -1405,8 +1420,9 @@ func getEntityIDForRecord(datasource string, recordID string) int64 {
 // 	return strconv.FormatInt(entityID, 10)
 // }
 
-func getEntityIDStringForRecord(datasource string, id string) string {
-	entityID := getEntityIDForRecord(datasource, id)
+func getEntityIDStringForRecord(datasource string, id string) string { //nolint
+	ctx := context.Background()
+	entityID := getEntityIDForRecord(ctx, datasource, id)
 
 	return strconv.FormatInt(entityID, 10)
 }
@@ -1434,10 +1450,10 @@ func getSzEngineServer(ctx context.Context) *szengineserver.SzEngineServer {
 	return szEngineTestSingleton
 }
 
-func getTestObject(t *testing.T) *szengineserver.SzEngineServer {
+func getTestObject(ctx context.Context, t *testing.T) *szengineserver.SzEngineServer {
 	t.Helper()
 
-	return getSzEngineServer(t.Context())
+	return getSzEngineServer(ctx)
 }
 
 func panicOnError(err error) {
