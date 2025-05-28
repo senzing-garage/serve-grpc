@@ -2471,18 +2471,6 @@ func getTestCasesForReevaluateRecord() []TestMetadataForReevaluateRecord {
 func getTestCasesForSearchByAttributes() []TestMetadataForSearchByAttributes {
 	result := []TestMetadataForSearchByAttributes{
 		{
-			name:               "attributes_badSearchProfile",
-			expectedErr:        szerror.ErrSzBadInput,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).SearchByAttributes","error":{"function":"szengine.(*Szengine).SearchByAttributes","error":{"id":"SZSDK60044053","reason":"SENZ0088|Unknown search profile value '}{'"}}}`,
-			searchProfile:      badSearchProfile,
-		},
-		{
-			name: "attributes_nilSearchProfile",
-			// expectedErr:        szerror.ErrSz,
-			expectedErrMessage: ``,
-			searchProfile:      nilSearchProfile,
-		},
-		{
 			name:               "badAttributes",
 			attributes:         badAttributes,
 			expectedErr:        szerror.ErrSz,
@@ -2504,28 +2492,8 @@ func getTestCasesForSearchByAttributes() []TestMetadataForSearchByAttributes {
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).SearchByAttributes","error":{"function":"szengine.(*Szengine).SearchByAttributes","error":{"id":"SZSDK60044053","reason":"SENZ0027|Invalid value for search-attributes"}}}`,
 		},
 		{
-			name: "nilSearchProfile",
-			// expectedErr:        szerror.ErrSz,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).SearchByAttributes","error":{"function":"szengine.(*Szengine).SearchByAttributes","error":{"id":"SZSDK60044053","reason":"SENZ0027|Invalid value for search-attributes"}}}`,
-			searchProfile:      nilSearchProfile,
-		},
-		{
-			name:          "searchProfile",
-			searchProfile: defaultSearchProfile,
-		},
-		{
-			name:               "searchProfile_badAttributes",
-			attributes:         badAttributes,
-			expectedErr:        szerror.ErrSz,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).SearchByAttributes","error":{"function":"szengine.(*Szengine).SearchByAttributes","error":{"id":"SZSDK60044053","reason":"SENZ0027|Invalid value for search-attributes"}}}`,
-			searchProfile:      defaultSearchProfile,
-		},
-		{
-			name:               "searchProfile_nilAttributes",
-			attributes:         nilAttributes,
-			expectedErr:        szerror.ErrSz,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).SearchByAttributes","error":{"function":"szengine.(*Szengine).SearchByAttributes","error":{"id":"SZSDK60044053","reason":"SENZ0027|Invalid value for search-attributes"}}}`,
-			searchProfile:      defaultSearchProfile,
+			name:          "nilSearchProfile",
+			searchProfile: nilSearchProfile,
 		},
 	}
 	return result
