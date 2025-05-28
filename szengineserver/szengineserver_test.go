@@ -1125,6 +1125,52 @@ func TestSzEngine_StreamExportJsonEntityReport(test *testing.T) {
 
 func TestSzEngine_WhyEntities(test *testing.T) {
 	ctx := test.Context()
+	testCases := getTestCasesForWhyEntities()
+
+	for _, testCase := range testCases {
+		test.Run(testCase.name, func(test *testing.T) {
+
+			// Insert test data.
+
+			record1001 := truthset.CustomerRecords["1001"]
+			record1002 := truthset.CustomerRecords["1002"]
+
+			records := []record.Record{
+				record1001,
+				record1002,
+			}
+
+			defer func() { deleteRecords(ctx, records) }()
+
+			addRecords(ctx, records)
+
+			// Defaults.
+
+			szEngine := getTestObject(test)
+			entityID1 := getEntityID(record1001)
+			entityID2 := getEntityID(record1002)
+
+			// Test.
+
+			request := &szpb.WhyEntitiesRequest{
+				EntityId_1: xInt64(testCase.entityID1, entityID1),
+				EntityId_2: xInt64(testCase.entityID2, entityID2),
+				Flags:      xInt64(testCase.flags, senzing.SzNoFlags),
+			}
+			actual, err := szEngine.WhyEntities(ctx, request)
+			printDebug(test, err, actual)
+			if testCase.expectedErr != nil {
+				require.ErrorIs(test, err, testCase.expectedErr)
+				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
+			} else {
+				require.NoError(test, err)
+			}
+		})
+	}
+}
+
+func TestSzEngine_WhyEntities_original(test *testing.T) {
+	ctx := test.Context()
 	records := []record.Record{
 		truthset.CustomerRecords["1001"],
 		truthset.CustomerRecords["1002"],
@@ -1146,22 +1192,6 @@ func TestSzEngine_WhyEntities(test *testing.T) {
 	actual, err := szEngine.WhyEntities(ctx, request)
 	printDebug(test, err, actual)
 	require.NoError(test, err)
-}
-
-func TestSzEngine_WhyEntities_badEnitity1(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_WhyEntities_badEnitity2(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_WhyEntities_nilEnitity1(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_WhyEntities_nilEnitity2(test *testing.T) {
-	// FIXME:
 }
 
 func TestSzEngine_WhyRecordInEntity(test *testing.T) {
@@ -2502,7 +2532,31 @@ func getTestCasesForSearchByAttributes() []TestMetadataForSearchByAttributes {
 func getTestCasesForWhyEntities() []TestMetadataForWhyEntities {
 	result := []TestMetadataForWhyEntities{
 		{
+			name:               "badEnitity1",
+			entityID1:          badEntityID,
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).WhyEntities","error":{"function":"szengine.(*Szengine).WhyEntities","error":{"id":"SZSDK60044056","reason":"SENZ0037|Unknown resolved entity value '-1'"}}}`,
+		},
+		{
+			name:               "badEnitity2",
+			entityID2:          badEntityID,
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).WhyEntities","error":{"function":"szengine.(*Szengine).WhyEntities","error":{"id":"SZSDK60044056","reason":"SENZ0037|Unknown resolved entity value '-1'"}}}`,
+		},
+		{
 			name: "default",
+		},
+		{
+			name:               "nilEnitity1",
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).WhyEntities","error":{"function":"szengine.(*Szengine).WhyEntities","error":{"id":"SZSDK60044056","reason":"SENZ0037|Unknown resolved entity value '0'"}}}`,
+			entityID1:          nilEntityID,
+		},
+		{
+			name:               "nilEnitity2",
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).WhyEntities","error":{"function":"szengine.(*Szengine).WhyEntities","error":{"id":"SZSDK60044056","reason":"SENZ0037|Unknown resolved entity value '0'"}}}`,
+			entityID2:          nilEntityID,
 		},
 	}
 	return result
