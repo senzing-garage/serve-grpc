@@ -762,45 +762,6 @@ func TestSzEngine_GetRecord(test *testing.T) {
 	}
 }
 
-func TestSzEngine_GetRecord_original(test *testing.T) {
-	ctx := test.Context()
-	records := []record.Record{
-		truthset.CustomerRecords["1001"],
-	}
-
-	defer func() { deleteRecords(ctx, records) }()
-
-	addRecords(ctx, records)
-
-	szEngine := getTestObject(test)
-	record := truthset.CustomerRecords["1001"]
-	flags := senzing.SzNoFlags
-	request := &szpb.GetRecordRequest{
-		DataSourceCode: record.DataSource,
-		Flags:          flags,
-		RecordId:       record.ID,
-	}
-	actual, err := szEngine.GetRecord(ctx, request)
-	printDebug(test, err, actual)
-	require.NoError(test, err)
-}
-
-func TestSzEngine_GetRecord_badDataSourceCode(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_GetRecord_badRecordID(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_GetRecord_nilDataSourceCode(test *testing.T) {
-	// FIXME:
-}
-
-func TestSzEngine_GetRecord_nilRecordID(test *testing.T) {
-	// FIXME:
-}
-
 func TestSzEngine_GetRedoRecord(test *testing.T) {
 	ctx := test.Context()
 	szEngine := getTestObject(test)
@@ -820,6 +781,52 @@ func TestSzEngine_GetStats(test *testing.T) {
 }
 
 func TestSzEngine_GetVirtualEntityByRecordID(test *testing.T) {
+	ctx := test.Context()
+	testCases := getTestCasesForGetVirtualEntityByRecordID()
+
+	for _, testCase := range testCases {
+		test.Run(testCase.name, func(test *testing.T) {
+
+			// Insert test data.
+
+			records := []record.Record{
+				truthset.CustomerRecords["1001"],
+				truthset.CustomerRecords["1002"],
+				truthset.CustomerRecords["1003"],
+			}
+
+			defer func() { deleteRecords(ctx, records) }()
+
+			addRecords(ctx, records)
+
+			// Defaults.
+
+			szEngine := getTestObject(test)
+
+			recordKeys := recordKeysFunc()
+			if testCase.recordKeys != nil {
+				recordKeys = testCase.recordKeys()
+			}
+
+			// Test.
+
+			request := &szpb.GetVirtualEntityByRecordIdRequest{
+				Flags:      xInt64(testCase.flags, senzing.SzRecordDefaultFlags),
+				RecordKeys: recordKeys,
+			}
+			actual, err := szEngine.GetVirtualEntityByRecordId(ctx, request)
+			printDebug(test, err, actual)
+			if testCase.expectedErr != nil {
+				require.ErrorIs(test, err, testCase.expectedErr)
+				require.JSONEq(test, testCase.expectedErrMessage, err.Error())
+			} else {
+				require.NoError(test, err)
+			}
+		})
+	}
+}
+
+func TestSzEngine_GetVirtualEntityByRecordID_original(test *testing.T) {
 	ctx := test.Context()
 	records := []record.Record{
 		truthset.CustomerRecords["1001"],
@@ -1786,11 +1793,8 @@ type TestMetadataForWhySearch struct {
 // ----------------------------------------------------------------------------
 
 func getTestCasesForAddRecord() []TestMetadataForAddRecord {
-
 	record1002 := truthset.CustomerRecords["1002"]
-
 	result := []TestMetadataForAddRecord{
-
 		{
 			name:               "badDataSourceCode",
 			dataSourceCode:     badDataSourceCode,
@@ -1994,7 +1998,8 @@ func getTestCasesForFindInterestingEntitiesByRecordID() []TestMetadataForFindInt
 func getTestCasesForFindNetworkByEntityID() []TestMetadataForFindNetworkByEntityID {
 	result := []TestMetadataForFindNetworkByEntityID{
 		{
-			name: "badEntityIDs",
+			name:      "badEntityIDs",
+			entityIDs: badEntityIDsFunc,
 			// FIXME:
 		},
 		{
@@ -2220,7 +2225,7 @@ func getTestCasesForFindPathByRecordID() []TestMetadataForFindPathByRecordID {
 		{
 			name:                "nilDataSourceCode",
 			expectedErr:         szerror.ErrSzUnknownDataSource,
-			expectedErrMessage:  `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044019","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
+			expectedErrMessage:  `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044019","reason":"SENZ2207|Data source code [] does not exist."}}}`,
 			startDataSourceCode: nilDataSourceCode,
 		},
 	}
@@ -2239,9 +2244,9 @@ func getTestCasesForGetEntityByEntityID() []TestMetadataForGetEntityByEntityID {
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetEntityByEntityId","error":{"function":"szengine.(*Szengine).GetEntityByEntityID","error":{"id":"SZSDK60044030","reason":"SENZ0037|Unknown resolved entity value '-1'"}}}`,
 		},
 		{
-			name:     "nilEntityID",
-			entityID: nilEntityID,
-			// expectedErr:        szerror.ErrSzNotFound,
+			name:               "nilEntityID",
+			entityID:           nilEntityID,
+			expectedErr:        szerror.ErrSzNotFound,
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetEntityByEntityId","error":{"function":"szengine.(*Szengine).GetEntityByEntityID","error":{"id":"SZSDK60044030","reason":"SENZ0037|Unknown resolved entity value '0'"}}}`,
 		},
 	}
@@ -2250,42 +2255,7 @@ func getTestCasesForGetEntityByEntityID() []TestMetadataForGetEntityByEntityID {
 
 func getTestCasesForGetEntityByRecordID() []TestMetadataForGetEntityByRecordID {
 	result := []TestMetadataForGetEntityByRecordID{
-		{
-			name: "default",
-		},
-		{
-			name:           "badDataSourceCode",
-			dataSourceCode: badDataSourceCode,
-			// expectedErr:        szerror.ErrSzUnknownDataSource,
-			expectedErrMessage: ``,
-		},
-		{
-			name: "badRecordID",
-			// expectedErr:        szerror.ErrSzNotFound,
-			expectedErrMessage: ``,
-			recordID:           badRecordID,
-		},
-		{
-			name:           "nilDataSourceCode",
-			dataSourceCode: nilDataSourceCode,
-			// expectedErr:        szerror.ErrSzUnknownDataSource,
-			expectedErrMessage: ``,
-		},
-		{
-			name: "nilRecordID",
-			// expectedErr:        szerror.ErrSzNotFound,
-			expectedErrMessage: ``,
-			recordID:           nilRecordID,
-		},
-	}
-	return result
-}
 
-func getTestCasesForGetRecord() []TestMetadataForGetRecord {
-	result := []TestMetadataForGetRecord{
-		{
-			name: "default",
-		},
 		{
 			name:               "badDataSourceCode",
 			dataSourceCode:     badDataSourceCode,
@@ -2297,6 +2267,9 @@ func getTestCasesForGetRecord() []TestMetadataForGetRecord {
 			expectedErr:        szerror.ErrSzNotFound,
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetEntityByRecordId","error":{"function":"szengine.(*Szengine).GetEntityByRecordID","error":{"id":"SZSDK60044032","reason":"SENZ0033|Unknown record: dsrc[CUSTOMERS], record[BadRecordID]"}}}`,
 			recordID:           badRecordID,
+		},
+		{
+			name: "default",
 		},
 		{
 			name:               "nilDataSourceCode",
@@ -2314,8 +2287,53 @@ func getTestCasesForGetRecord() []TestMetadataForGetRecord {
 	return result
 }
 
+func getTestCasesForGetRecord() []TestMetadataForGetRecord {
+	result := []TestMetadataForGetRecord{
+		{
+			name: "default",
+		},
+		{
+			name:               "badDataSourceCode",
+			dataSourceCode:     badDataSourceCode,
+			expectedErr:        szerror.ErrSzUnknownDataSource,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetRecord","error":{"function":"szengine.(*Szengine).GetRecord","error":{"id":"SZSDK60044035","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
+		},
+		{
+			name:               "badRecordID",
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetRecord","error":{"function":"szengine.(*Szengine).GetRecord","error":{"id":"SZSDK60044035","reason":"SENZ0033|Unknown record: dsrc[CUSTOMERS], record[BadRecordID]"}}}`,
+			recordID:           badRecordID,
+		},
+		{
+			name:               "nilDataSourceCode",
+			dataSourceCode:     nilDataSourceCode,
+			expectedErr:        szerror.ErrSzUnknownDataSource,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetRecord","error":{"function":"szengine.(*Szengine).GetRecord","error":{"id":"SZSDK60044035","reason":"SENZ2207|Data source code [] does not exist."}}}`,
+		},
+		{
+			name:               "nilRecordID",
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetRecord","error":{"function":"szengine.(*Szengine).GetRecord","error":{"id":"SZSDK60044035","reason":"SENZ0033|Unknown record: dsrc[CUSTOMERS], record[]"}}}`,
+			recordID:           nilRecordID,
+		},
+	}
+	return result
+}
+
 func getTestCasesForGetVirtualEntityByRecordID() []TestMetadataForGetVirtualEntityByRecordID {
 	result := []TestMetadataForGetVirtualEntityByRecordID{
+		{
+			name:               "badDataSourceCode",
+			expectedErr:        szerror.ErrSzUnknownDataSource,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetVirtualEntityByRecordId","error":{"function":"szengine.(*Szengine).GetVirtualEntityByRecordID","error":{"id":"SZSDK60044038","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
+			recordKeys:         badDataSourcesFunc,
+		},
+		{
+			name:               "badRecordID",
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetVirtualEntityByRecordId","error":{"function":"szengine.(*Szengine).GetVirtualEntityByRecordID","error":{"id":"SZSDK60044038","reason":"SENZ0033|Unknown record: dsrc[CUSTOMERS], record[BadRecordID]"}}}`,
+			recordKeys:         badRecordKeysFunc,
+		},
 		{
 			name: "default",
 		},
@@ -2439,6 +2457,42 @@ func badAvoidRecordIDsFunc() string {
 
 func badRequiredDataSourcesFunc() string {
 	return "}{"
+}
+
+func badDataSourcesFunc() string {
+	record1 := truthset.CustomerRecords["1001"]
+	record2 := truthset.CustomerRecords["1002"]
+
+	return `{"RECORDS": [{"DATA_SOURCE": "` +
+		badDataSourceCode +
+		`", "RECORD_ID": "` +
+		record1.ID +
+		`"}, {"DATA_SOURCE": "` +
+		record2.DataSource +
+		`", "RECORD_ID": "` +
+		record2.ID +
+		`"}]}`
+}
+
+func badEntityIDsFunc() string {
+	return `{"ENTITIES": [{"ENTITY_ID": ` +
+		strconv.FormatInt(badEntityID, baseTen) +
+		`}]}`
+}
+
+func badRecordKeysFunc() string {
+	record1 := truthset.CustomerRecords["1001"]
+	record2 := truthset.CustomerRecords["1002"]
+
+	return `{"RECORDS": [{"DATA_SOURCE": "` +
+		record1.DataSource +
+		`", "RECORD_ID": "` +
+		badRecordID +
+		`"}, {"DATA_SOURCE": "` +
+		record2.DataSource +
+		`", "RECORD_ID": "` +
+		record2.ID +
+		`"}]}`
 }
 
 func entityIDsJSON(entityIDs ...int64) string {
