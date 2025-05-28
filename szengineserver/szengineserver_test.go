@@ -923,28 +923,54 @@ func TestSzEngine_PrimeEngine(test *testing.T) {
 }
 
 func TestSzEngine_ProcessRedoRecord(test *testing.T) {
-	// FIXME: Implement TestSzEngine_ProcessRedoRecord
-	_ = test
-}
+	ctx := test.Context()
+	testCases := getTestCasesForProcessRedoRecord()
 
-func TestSzEngine_ProcessRedoRecord_badRedoRecord(test *testing.T) {
-	// FIXME:
-}
+	for _, testCase := range testCases {
+		test.Run(testCase.name, func(test *testing.T) {
 
-func TestSzEngine_ProcessRedoRecord_nilRedoRecord(test *testing.T) {
-	// FIXME:
-}
+			// Insert test data.
 
-func TestSzEngine_ProcessRedoRecord_withInfo(test *testing.T) {
-	// FIXME:
-}
+			records := []record.Record{
+				truthset.CustomerRecords["1001"],
+				truthset.CustomerRecords["1002"],
+				truthset.CustomerRecords["1003"],
+				truthset.CustomerRecords["1004"],
+				truthset.CustomerRecords["1005"],
+				truthset.CustomerRecords["1009"]}
 
-func TestSzEngine_ProcessRedoRecord_withInfo_badRedoRecord(test *testing.T) {
-	// FIXME:
-}
+			defer func() { deleteRecords(ctx, records) }()
 
-func TestSzEngine_ProcessRedoRecord_withInfo_nilRedoRecord(test *testing.T) {
-	// FIXME:
+			addRecords(ctx, records)
+
+			// Defaults.
+
+			szEngine := getTestObject(test)
+
+			redoRecordRequest := &szpb.GetRedoRecordRequest{}
+			redoRecordResponse, err := szEngine.GetRedoRecord(ctx, redoRecordRequest)
+			require.NoError(test, err)
+			redoRecord := xString(testCase.redoRecord, redoRecordResponse.GetResult())
+
+			// Test.
+
+			if len(redoRecord) > 0 {
+				test.Logf(">>>>>>> testing ProcessRedoRecord: %s\n", redoRecord)
+				request := &szpb.ProcessRedoRecordRequest{
+					Flags:      xInt64(testCase.flags, senzing.SzRecordDefaultFlags),
+					RedoRecord: redoRecord,
+				}
+				actual, err := szEngine.ProcessRedoRecord(ctx, request)
+				printDebug(test, err, actual)
+				if testCase.expectedErr != nil {
+					require.ErrorIs(test, err, testCase.expectedErr)
+					require.JSONEq(test, testCase.expectedErrMessage, err.Error())
+				} else {
+					require.NoError(test, err)
+				}
+			}
+		})
+	}
 }
 
 func TestSzEngine_ReevaluateEntity(test *testing.T) {
@@ -2387,10 +2413,33 @@ func getTestCasesForPreprocessRecord() []TestMetadataForPreprocessRecord {
 func getTestCasesForProcessRedoRecord() []TestMetadataForProcessRedoRecord {
 	result := []TestMetadataForProcessRedoRecord{
 		{
-			name: "badRecordDefinition",
+			name:               "badRedoRecord",
+			expectedErr:        szerror.ErrSzConfiguration,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
+			redoRecord:         badRedoRecord,
+		},
+		{
+			name:       "nilRedoRecord",
+			redoRecord: nilRedoRecord,
 		},
 		{
 			name: "default",
+		},
+		{
+			name:  "withInfo",
+			flags: senzing.SzWithInfo,
+		},
+		{
+			name:               "withInfo_badRedoRecord",
+			expectedErr:        szerror.ErrSzConfiguration,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044045","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
+			flags:              senzing.SzWithInfo,
+			redoRecord:         badRedoRecord,
+		},
+		{
+			name:       "withInfo_nilRedoRecord",
+			flags:      senzing.SzWithInfo,
+			redoRecord: nilRedoRecord,
 		},
 	}
 	return result
