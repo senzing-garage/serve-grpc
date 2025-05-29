@@ -51,7 +51,7 @@ var (
 var nilDataSourceCode string
 
 // ----------------------------------------------------------------------------
-// Interface functions - test
+// Interface methods - test
 // ----------------------------------------------------------------------------
 
 func TestSzConfigServer_AddDataSource(test *testing.T) {

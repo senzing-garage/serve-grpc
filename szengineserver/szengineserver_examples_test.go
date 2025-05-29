@@ -81,7 +81,7 @@ func ExampleSzEngineServer_AddRecord_withInfo() {
 	//     "RECORD_ID": "1003",
 	//     "AFFECTED_ENTITIES": [
 	//         {
-	//             "ENTITY_ID": 100012
+	//             "ENTITY_ID": 100070
 	//         }
 	//     ]
 	// }
@@ -132,7 +132,7 @@ func ExampleSzEngineServer_CountRedoRecords() {
 	}
 
 	fmt.Println(response.GetResult())
-	// Output: 3
+	// Output: 4
 }
 
 func ExampleSzEngineServer_ExportCsvEntityReport() {
@@ -285,7 +285,7 @@ func ExampleSzEngineServer_FindNetworkByEntityId() {
 	//     "ENTITIES": [
 	//         {
 	//             "RESOLVED_ENTITY": {
-	//                 "ENTITY_ID": 100012
+	//                 "ENTITY_ID": 100070
 	//             }
 	//         }
 	//     ]
@@ -317,7 +317,7 @@ func ExampleSzEngineServer_FindNetworkByRecordId() {
 	//     "ENTITIES": [
 	//         {
 	//             "RESOLVED_ENTITY": {
-	//                 "ENTITY_ID": 100012
+	//                 "ENTITY_ID": 100070
 	//             }
 	//         }
 	//     ]
@@ -346,17 +346,17 @@ func ExampleSzEngineServer_FindPathByEntityId() {
 	// {
 	//     "ENTITY_PATHS": [
 	//         {
-	//             "START_ENTITY_ID": 100012,
-	//             "END_ENTITY_ID": 100012,
+	//             "START_ENTITY_ID": 100070,
+	//             "END_ENTITY_ID": 100070,
 	//             "ENTITIES": [
-	//                 100012
+	//                 100070
 	//             ]
 	//         }
 	//     ],
 	//     "ENTITIES": [
 	//         {
 	//             "RESOLVED_ENTITY": {
-	//                 "ENTITY_ID": 100012
+	//                 "ENTITY_ID": 100070
 	//             }
 	//         }
 	//     ]
@@ -387,17 +387,17 @@ func ExampleSzEngineServer_FindPathByEntityId_avoiding() {
 	// {
 	//     "ENTITY_PATHS": [
 	//         {
-	//             "START_ENTITY_ID": 100012,
-	//             "END_ENTITY_ID": 100012,
+	//             "START_ENTITY_ID": 100070,
+	//             "END_ENTITY_ID": 100070,
 	//             "ENTITIES": [
-	//                 100012
+	//                 100070
 	//             ]
 	//         }
 	//     ],
 	//     "ENTITIES": [
 	//         {
 	//             "RESOLVED_ENTITY": {
-	//                 "ENTITY_ID": 100012
+	//                 "ENTITY_ID": 100070
 	//             }
 	//         }
 	//     ]
@@ -429,15 +429,15 @@ func ExampleSzEngineServer_FindPathByEntityId_avoidingAndIncluding() {
 	// {
 	//     "ENTITY_PATHS": [
 	//         {
-	//             "START_ENTITY_ID": 100012,
-	//             "END_ENTITY_ID": 100012,
+	//             "START_ENTITY_ID": 100070,
+	//             "END_ENTITY_ID": 100070,
 	//             "ENTITIES": []
 	//         }
 	//     ],
 	//     "ENTITIES": [
 	//         {
 	//             "RESOLVED_ENTITY": {
-	//                 "ENTITY_ID": 100012
+	//                 "ENTITY_ID": 100070
 	//             }
 	//         }
 	//     ]
@@ -468,17 +468,17 @@ func ExampleSzEngineServer_FindPathByRecordId() {
 	// {
 	//     "ENTITY_PATHS": [
 	//         {
-	//             "START_ENTITY_ID": 100012,
-	//             "END_ENTITY_ID": 100012,
+	//             "START_ENTITY_ID": 100070,
+	//             "END_ENTITY_ID": 100070,
 	//             "ENTITIES": [
-	//                 100012
+	//                 100070
 	//             ]
 	//         }
 	//     ],
 	//     "ENTITIES": [
 	//         {
 	//             "RESOLVED_ENTITY": {
-	//                 "ENTITY_ID": 100012
+	//                 "ENTITY_ID": 100070
 	//             }
 	//         }
 	//     ]
@@ -510,17 +510,17 @@ func ExampleSzEngineServer_FindPathByRecordId_avoiding() {
 	// {
 	//     "ENTITY_PATHS": [
 	//         {
-	//             "START_ENTITY_ID": 100012,
-	//             "END_ENTITY_ID": 100012,
+	//             "START_ENTITY_ID": 100070,
+	//             "END_ENTITY_ID": 100070,
 	//             "ENTITIES": [
-	//                 100012
+	//                 100070
 	//             ]
 	//         }
 	//     ],
 	//     "ENTITIES": [
 	//         {
 	//             "RESOLVED_ENTITY": {
-	//                 "ENTITY_ID": 100012
+	//                 "ENTITY_ID": 100070
 	//             }
 	//         }
 	//     ]
@@ -553,15 +553,15 @@ func ExampleSzEngineServer_FindPathByRecordId_avoidingAndIncluding() {
 	// {
 	//     "ENTITY_PATHS": [
 	//         {
-	//             "START_ENTITY_ID": 100012,
-	//             "END_ENTITY_ID": 100012,
+	//             "START_ENTITY_ID": 100070,
+	//             "END_ENTITY_ID": 100070,
 	//             "ENTITIES": []
 	//         }
 	//     ],
 	//     "ENTITIES": [
 	//         {
 	//             "RESOLVED_ENTITY": {
-	//                 "ENTITY_ID": 100012
+	//                 "ENTITY_ID": 100070
 	//             }
 	//         }
 	//     ]
@@ -603,7 +603,7 @@ func ExampleSzEngineServer_GetEntityByEntityId() {
 	// Output:
 	// {
 	//     "RESOLVED_ENTITY": {
-	//         "ENTITY_ID": 100012
+	//         "ENTITY_ID": 100070
 	//     }
 	// }
 }
@@ -628,7 +628,7 @@ func ExampleSzEngineServer_GetEntityByRecordId() {
 	// Output:
 	// {
 	//     "RESOLVED_ENTITY": {
-	//         "ENTITY_ID": 100012
+	//         "ENTITY_ID": 100070
 	//     }
 	// }
 }
@@ -676,7 +676,7 @@ func ExampleSzEngineServer_GetRedoRecord() {
 	//     "DATA_SOURCE": "CUSTOMERS",
 	//     "RECORD_ID": "1003",
 	//     "REEVAL_ITERATION": 1,
-	//     "_ENTITY_CORRUPTION_TRANSIENT": true,
+	//     "ENTITY_CORRUPTION_TRANSIENT": true,
 	//     "DSRC_ACTION": "X"
 	// }
 }
@@ -694,7 +694,7 @@ func ExampleSzEngineServer_GetStats() {
 	}
 
 	fmt.Println(jsonutil.Truncate(response.GetResult(), 5))
-	// Output: {"workload":{"abortedUnresolve":0,"actualAmbiguousTest":0,"addedRecords":14,...
+	// Output: {"workload":{"abortedUnresolve":0,"actualAmbiguousTest":0,"addedRecords":72,...
 }
 
 func ExampleSzEngineServer_GetVirtualEntityByRecordId() {
@@ -716,7 +716,7 @@ func ExampleSzEngineServer_GetVirtualEntityByRecordId() {
 	// Output:
 	// {
 	//     "RESOLVED_ENTITY": {
-	//         "ENTITY_ID": 100012
+	//         "ENTITY_ID": 100070
 	//     }
 	// }
 }
@@ -778,7 +778,15 @@ func ExampleSzEngineServer_PrimeEngine() {
 func ExampleSzEngineServer_ProcessRedoRecord() {
 	// For more information,
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
-	// IMPROVE: Document ExampleSzEngineServer_ProcessRedoRecord
+	// IMPROVE: Implement ExampleSzEngineServer_ProcessRedoRecord
+
+	// Output:
+}
+
+func ExampleSzEngineServer_ProcessRedoRecord_withInfo() {
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	// IMPROVE: Implement ExampleSzEngineServer_ProcessRedoRecord_withInfo
 
 	// Output:
 }
@@ -798,13 +806,13 @@ func ExampleSzEngineServer_SearchByAttributes() {
 		fmt.Println(err)
 	}
 
+	redactKeys := []string{"FIRST_SEEN_DT", "LAST_SEEN_DT"}
 	fmt.Println(
 		jsonutil.PrettyPrint(
 			jsonutil.Flatten(
 				jsonutil.Redact(
 					jsonutil.Flatten(jsonutil.NormalizeAndSort(response.GetResult())),
-					"FIRST_SEEN_DT",
-					"LAST_SEEN_DT",
+					redactKeys...,
 				),
 			), jsonIndentation))
 	// Output:
@@ -813,7 +821,7 @@ func ExampleSzEngineServer_SearchByAttributes() {
 	//         {
 	//             "ENTITY": {
 	//                 "RESOLVED_ENTITY": {
-	//                     "ENTITY_ID": 100012
+	//                     "ENTITY_ID": 100070
 	//                 }
 	//             },
 	//             "MATCH_INFO": {
@@ -843,13 +851,13 @@ func ExampleSzEngineServer_SearchByAttributes_searchProfile() {
 		fmt.Println(err)
 	}
 
+	redactKeys := []string{"FIRST_SEEN_DT", "LAST_SEEN_DT"}
 	fmt.Println(
 		jsonutil.PrettyPrint(
 			jsonutil.Flatten(
 				jsonutil.Redact(
 					jsonutil.Flatten(jsonutil.NormalizeAndSort(response.GetResult())),
-					"FIRST_SEEN_DT",
-					"LAST_SEEN_DT",
+					redactKeys...,
 				),
 			), jsonIndentation))
 	// Output:
@@ -858,7 +866,7 @@ func ExampleSzEngineServer_SearchByAttributes_searchProfile() {
 	//         {
 	//             "ENTITY": {
 	//                 "RESOLVED_ENTITY": {
-	//                     "ENTITY_ID": 100012
+	//                     "ENTITY_ID": 100070
 	//                 }
 	//             },
 	//             "MATCH_INFO": {
@@ -892,8 +900,8 @@ func ExampleSzEngineServer_WhyEntities() {
 	// {
 	//     "WHY_RESULTS": [
 	//         {
-	//             "ENTITY_ID": 100012,
-	//             "ENTITY_ID_2": 100012,
+	//             "ENTITY_ID": 100070,
+	//             "ENTITY_ID_2": 100070,
 	//             "MATCH_INFO": {
 	//                 "WHY_KEY": "+NAME+DOB+ADDRESS+PHONE+EMAIL",
 	//                 "WHY_ERRULE_CODE": "SF1_SNAME_CFF_CSTAB",
@@ -904,7 +912,53 @@ func ExampleSzEngineServer_WhyEntities() {
 	//     "ENTITIES": [
 	//         {
 	//             "RESOLVED_ENTITY": {
-	//                 "ENTITY_ID": 100012
+	//                 "ENTITY_ID": 100070
+	//             }
+	//         }
+	//     ]
+	// }
+}
+
+func ExampleSzEngineServer_WhyRecordInEntity() {
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	ctx := context.TODO()
+	szEngineServer := getSzEngineServer(ctx)
+	request := &szpb.WhyRecordInEntityRequest{
+		DataSourceCode: "CUSTOMERS",
+		Flags:          senzing.SzNoFlags,
+		RecordId:       "1001",
+	}
+
+	response, err := szEngineServer.WhyRecordInEntity(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "WHY_RESULTS": [
+	//         {
+	//             "INTERNAL_ID": 100070,
+	//             "ENTITY_ID": 100070,
+	//             "FOCUS_RECORDS": [
+	//                 {
+	//                     "DATA_SOURCE": "CUSTOMERS",
+	//                     "RECORD_ID": "1001"
+	//                 }
+	//             ],
+	//             "MATCH_INFO": {
+	//                 "WHY_KEY": "+NAME+DOB+PHONE+EMAIL",
+	//                 "WHY_ERRULE_CODE": "SF1_SNAME_CFF_CSTAB",
+	//                 "MATCH_LEVEL_CODE": "RESOLVED"
+	//             }
+	//         }
+	//     ],
+	//     "ENTITIES": [
+	//         {
+	//             "RESOLVED_ENTITY": {
+	//                 "ENTITY_ID": 100070
 	//             }
 	//         }
 	//     ]
@@ -930,7 +984,48 @@ func ExampleSzEngineServer_WhyRecords() {
 	}
 
 	fmt.Println(jsonutil.Truncate(response.GetResult(), 7))
-	// Output: {"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":100012}}...
+	// Output: {"ENTITIES":[{"RESOLVED_ENTITY":{"ENTITY_ID":100070}}...
+}
+
+func ExampleSzEngineServer_WhySearch() {
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
+	ctx := context.TODO()
+	szEngineServer := getSzEngineServer(ctx)
+	request := &szpb.WhySearchRequest{
+		Attributes:    `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "Smith"}], "EMAIL_ADDRESS": "bsmith@work.com"}`,
+		EntityId:      getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
+		SearchProfile: "SEARCH",
+		Flags:         senzing.SzNoFlags,
+	}
+
+	response, err := szEngineServer.WhySearch(ctx, request)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(
+		jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "WHY_RESULTS": [
+	//         {
+	//             "ENTITY_ID": 100070,
+	//             "MATCH_INFO": {
+	//                 "WHY_KEY": "+PNAME+EMAIL",
+	//                 "WHY_ERRULE_CODE": "SF1",
+	//                 "MATCH_LEVEL_CODE": "POSSIBLY_RELATED"
+	//             }
+	//         }
+	//     ],
+	//     "ENTITIES": [
+	//         {
+	//             "RESOLVED_ENTITY": {
+	//                 "ENTITY_ID": 100070
+	//             }
+	//         }
+	//     ]
+	// }
 }
 
 // ----------------------------------------------------------------------------
@@ -959,7 +1054,6 @@ func ExampleSzEngineServer_ReevaluateEntity() {
 func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
 	// For more information,
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
-	// IMPROVE: Fix Output
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateEntityRequest{
@@ -977,7 +1071,7 @@ func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
 	// {
 	//     "AFFECTED_ENTITIES": [
 	//         {
-	//             "ENTITY_ID": 100012
+	//             "ENTITY_ID": 100070
 	//         }
 	//     ]
 	// }
@@ -1006,7 +1100,6 @@ func ExampleSzEngineServer_ReevaluateRecord() {
 func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 	// For more information,
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
-	// IMPROVE: Fix Output
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateRecordRequest{
@@ -1027,7 +1120,7 @@ func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 	//     "RECORD_ID": "1001",
 	//     "AFFECTED_ENTITIES": [
 	//         {
-	//             "ENTITY_ID": 100012
+	//             "ENTITY_ID": 100070
 	//         }
 	//     ]
 	// }

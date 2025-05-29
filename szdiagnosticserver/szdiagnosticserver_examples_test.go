@@ -11,8 +11,10 @@ import (
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 )
 
+const AllLines = -1
+
 // ----------------------------------------------------------------------------
-// Interface functions - Examples for godoc documentation
+// Interface methods - Examples for godoc documentation
 // ----------------------------------------------------------------------------
 
 func ExampleSzDiagnosticServer_CheckDatastorePerformance() {
@@ -29,8 +31,12 @@ func ExampleSzDiagnosticServer_CheckDatastorePerformance() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(jsonutil.Truncate(response.GetResult(), 5))
-	// Output: {"numRecordsInserted":...
+	redactKeys := []string{"numRecordsInserted"}
+	fmt.Println(jsonutil.PrettyPrint(jsonutil.Truncate(response.GetResult(), AllLines, redactKeys...), jsonIndentation))
+	// Output:
+	// {
+	//     "insertTime": 1000
+	// }
 }
 
 func ExampleSzDiagnosticServer_GetDatastoreInfo() {
@@ -46,7 +52,16 @@ func ExampleSzDiagnosticServer_GetDatastoreInfo() {
 	}
 
 	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
-	// Output: {"dataStores":[{"id":"CORE","type":"sqlite3","location":"nowhere"}]}
+	// Output:
+	// {
+	//     "dataStores": [
+	//         {
+	//             "id": "CORE",
+	//             "type": "sqlite3",
+	//             "location": "nowhere"
+	//         }
+	//     ]
+	// }
 }
 
 func ExampleSzDiagnosticServer_GetFeature() {
@@ -64,7 +79,37 @@ func ExampleSzDiagnosticServer_GetFeature() {
 	}
 
 	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
-	// Output: {"LIB_FEAT_ID":1,"FTYPE_CODE":"NAME","ELEMENTS":[{"FELEM_CODE":"FULL_NAME","FELEM_VALUE":"Robert Smith"},{"FELEM_CODE":"SUR_NAME","FELEM_VALUE":"Smith"},{"FELEM_CODE":"GIVEN_NAME","FELEM_VALUE":"Robert"},{"FELEM_CODE":"CULTURE","FELEM_VALUE":"ANGLO"},{"FELEM_CODE":"CATEGORY","FELEM_VALUE":"PERSON"},{"FELEM_CODE":"TOKENIZED_NM","FELEM_VALUE":"ROBERT|SMITH"}]}
+	// Output:
+	// {
+	//     "LIB_FEAT_ID": 1,
+	//     "FTYPE_CODE": "NAME",
+	//     "ELEMENTS": [
+	//         {
+	//             "FELEM_CODE": "FULL_NAME",
+	//             "FELEM_VALUE": "Robert Smith"
+	//         },
+	//         {
+	//             "FELEM_CODE": "SUR_NAME",
+	//             "FELEM_VALUE": "Smith"
+	//         },
+	//         {
+	//             "FELEM_CODE": "GIVEN_NAME",
+	//             "FELEM_VALUE": "Robert"
+	//         },
+	//         {
+	//             "FELEM_CODE": "CULTURE",
+	//             "FELEM_VALUE": "ANGLO"
+	//         },
+	//         {
+	//             "FELEM_CODE": "CATEGORY",
+	//             "FELEM_VALUE": "PERSON"
+	//         },
+	//         {
+	//             "FELEM_CODE": "TOKENIZED_NM",
+	//             "FELEM_VALUE": "ROBERT|SMITH"
+	//         }
+	//     ]
+	// }
 }
 
 func ExampleSzDiagnosticServer_PurgeRepository() {

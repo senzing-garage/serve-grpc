@@ -57,7 +57,7 @@ var (
 )
 
 // ----------------------------------------------------------------------------
-// Interface functions - test
+// Interface methods - test
 // ----------------------------------------------------------------------------
 
 func TestSzConfigManagerServer_GetConfig(test *testing.T) {

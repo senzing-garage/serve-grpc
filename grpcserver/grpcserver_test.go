@@ -143,7 +143,7 @@ func teardown() error {
 }
 
 // ----------------------------------------------------------------------------
-// Test interface functions
+// Test interface methods
 // ----------------------------------------------------------------------------
 
 func TestGrpcServerImpl_Serve(test *testing.T) {

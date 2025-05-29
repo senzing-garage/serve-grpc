@@ -12,7 +12,7 @@ import (
 )
 
 // ----------------------------------------------------------------------------
-// Interface functions - Examples for godoc documentation
+// Interface methods - Examples for godoc documentation
 // ----------------------------------------------------------------------------
 
 func ExampleSzConfigServer_AddDataSource() {
@@ -43,8 +43,11 @@ func ExampleSzConfigServer_AddDataSource() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"DSRC_ID":1001}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "DSRC_ID": 1001
+	// }
 }
 
 func ExampleSzConfigServer_DeleteDataSource() {
@@ -107,5 +110,17 @@ func ExampleSzConfigServer_GetDataSources() {
 	}
 
 	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
-	// Output: {"DATA_SOURCES":[{"DSRC_ID":1,"DSRC_CODE":"TEST"},{"DSRC_ID":2,"DSRC_CODE":"SEARCH"}]}
+	// Output:
+	// {
+	//     "DATA_SOURCES": [
+	//         {
+	//             "DSRC_ID": 1,
+	//             "DSRC_CODE": "TEST"
+	//         },
+	//         {
+	//             "DSRC_ID": 2,
+	//             "DSRC_CODE": "SEARCH"
+	//         }
+	//     ]
+	// }
 }

@@ -60,7 +60,7 @@ var (
 )
 
 // ----------------------------------------------------------------------------
-// Interface functions - test
+// Interface methods - test
 // ----------------------------------------------------------------------------
 
 func TestSzDiagnosticServer_CheckDatastorePerformance(test *testing.T) {

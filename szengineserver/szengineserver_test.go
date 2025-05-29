@@ -76,13 +76,11 @@ var (
 	nilCsvColumnList       string
 	nilDataSourceCode      = nilSemaphoreString
 	nilEntityID            = nilSemaphoreInt64
-	// nilExportHandle        uintptr.
-	nilMaxDegrees       = nilSemaphoreInt64
-	nilRecordDefinition = nilSemaphoreString
-	nilRecordID         = nilSemaphoreString
-	nilRedoRecord       = nilSemaphoreString
-	// nilRequiredDataSources = nilSemaphoreString.
-	nilSearchProfile = nilSemaphoreString
+	nilMaxDegrees          = nilSemaphoreInt64
+	nilRecordDefinition    = nilSemaphoreString
+	nilRecordID            = nilSemaphoreString
+	nilRedoRecord          = nilSemaphoreString
+	nilSearchProfile       = nilSemaphoreString
 )
 
 var (
@@ -298,7 +296,7 @@ func TestSzEngine_ExportJSONEntityReport(test *testing.T) {
 }
 
 func TestSzEngine_ExportJSONEntityReport_65536(test *testing.T) {
-	// IMPROVE:
+	// IMPROVE: Implement TestSzEngine_ExportJSONEntityReport_65536
 	_ = test
 }
 
@@ -1797,6 +1795,12 @@ func getTestCasesForAddRecord() []TestMetadataForAddRecord {
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).AddRecord","error":{"function":"szengine.(*Szengine).AddRecord","error":{"id":"SZSDK60044001","reason":"SENZ0023|Conflicting DATA_SOURCE values 'BADDATASOURCECODE' and 'CUSTOMERS'"}}}`,
 		},
 		{
+			name:               "badDataSourceCode_asErrSz",
+			dataSourceCode:     badDataSourceCode,
+			expectedErr:        szerror.ErrSz,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).AddRecord","error":{"function":"szengine.(*Szengine).AddRecord","error":{"id":"SZSDK60044001","reason":"SENZ0023|Conflicting DATA_SOURCE values 'BADDATASOURCECODE' and 'CUSTOMERS'"}}}`,
+		},
+		{
 			name:               "badDataSourceCodeInJSON",
 			dataSourceCode:     record1002.DataSource,
 			expectedErr:        szerror.ErrSzBadInput,
@@ -1886,6 +1890,18 @@ func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
 			name:               "badDataSourceCode",
 			dataSourceCode:     badDataSourceCode,
 			expectedErr:        szerror.ErrSzUnknownDataSource,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).DeleteRecord","error":{"function":"szengine.(*Szengine).DeleteRecord","error":{"id":"SZSDK60044004","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
+		},
+		{
+			name:               "badDataSourceCode_asSzBadInputError",
+			dataSourceCode:     badDataSourceCode,
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).DeleteRecord","error":{"function":"szengine.(*Szengine).DeleteRecord","error":{"id":"SZSDK60044004","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
+		},
+		{
+			name:               "badDataSourceCode_asSzErr",
+			dataSourceCode:     badDataSourceCode,
+			expectedErr:        szerror.ErrSz,
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).DeleteRecord","error":{"function":"szengine.(*Szengine).DeleteRecord","error":{"id":"SZSDK60044004","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
 		},
 		{
@@ -2011,7 +2027,7 @@ func getTestCasesForFindNetworkByEntityID() []TestMetadataForFindNetworkByEntity
 		{
 			name:      "badEntityIDs",
 			entityIDs: badEntityIDsFunc,
-			// IMPROVE:
+			// IMPROVE: Shouldn't this error?
 		},
 		{
 			name:               "badMaxDegrees",

@@ -10,8 +10,10 @@ import (
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szproduct"
 )
 
+const AllLines = -1
+
 // ----------------------------------------------------------------------------
-// Interface functions - Examples for godoc documentation
+// Interface methods - Examples for godoc documentation
 // ----------------------------------------------------------------------------
 
 func ExampleSzProductServer_GetLicense() {
@@ -26,8 +28,17 @@ func ExampleSzProductServer_GetLicense() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
-	// Output: {"customer":"Senzing Public Test License","contract":"Senzing Public Test License","issueDate":"2025-04-10","licenseType":"EVAL (Solely for non-productive use)","licenseLevel":"STANDARD","billing":"YEARLY","expireDate":"2026-04-10","recordLimit":50000}
+	redactKeys := []string{"issueDate", "expireDate", "BUILD_VERSION"}
+	fmt.Println(jsonutil.PrettyPrint(jsonutil.Truncate(response.GetResult(), AllLines, redactKeys...), jsonIndentation))
+	// Output:
+	// {
+	//     "billing": "YEARLY",
+	//     "contract": "Senzing Public Test License",
+	//     "customer": "Senzing Public Test License",
+	//     "licenseLevel": "STANDARD",
+	//     "licenseType": "EVAL (Solely for non-productive use)",
+	//     "recordLimit": 50000
+	// }
 }
 
 func ExampleSzProductServer_GetVersion() {
@@ -42,6 +53,21 @@ func ExampleSzProductServer_GetVersion() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
-	// Output: {"PRODUCT_NAME":"Senzing SDK","VERSION":...
+	// fmt.Println(truncate(response.GetResult(), 43))
+
+	redactKeys := []string{"BUILD_DATE", "BUILD_NUMBER", "BUILD_VERSION"}
+	fmt.Println(jsonutil.PrettyPrint(jsonutil.Truncate(response.GetResult(), AllLines, redactKeys...), jsonIndentation))
+	// Output:
+	// {
+	//     "COMPATIBILITY_VERSION": {
+	//         "CONFIG_VERSION": "11"
+	//     },
+	//     "PRODUCT_NAME": "Senzing SDK",
+	//     "SCHEMA_VERSION": {
+	//         "ENGINE_SCHEMA_VERSION": "4.0",
+	//         "MAXIMUM_REQUIRED_SCHEMA_VERSION": "4.99",
+	//         "MINIMUM_REQUIRED_SCHEMA_VERSION": "4.0"
+	//     },
+	//     "VERSION": "4.0.0"
+	// }
 }
