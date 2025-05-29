@@ -1997,11 +1997,6 @@ func getTestCasesForFindInterestingEntitiesByRecordID() []TestMetadataForFindInt
 func getTestCasesForFindNetworkByEntityID() []TestMetadataForFindNetworkByEntityID {
 	result := []TestMetadataForFindNetworkByEntityID{
 		{
-			name:      "badEntityIDs",
-			entityIDs: badEntityIDsFunc,
-			// IMPROVE:
-		},
-		{
 			name:               "badBuildOutDegrees",
 			buildOutDegrees:    badBuildOutDegrees,
 			expectedErr:        szerror.ErrSz,
@@ -2012,6 +2007,11 @@ func getTestCasesForFindNetworkByEntityID() []TestMetadataForFindNetworkByEntity
 			buildOutMaxEntities: badBuildOutMaxEntities,
 			expectedErr:         szerror.ErrSz,
 			expectedErrMessage:  `{"function":"szengineserver.(*SzEngineServer).FindNetworkByEntityId","error":{"function":"szengine.(*Szengine).FindNetworkByEntityID","error":{"id":"SZSDK60044013","reason":"SENZ0029|Invalid value of max entities '-1'"}}}`,
+		},
+		{
+			name:      "badEntityIDs",
+			entityIDs: badEntityIDsFunc,
+			// IMPROVE:
 		},
 		{
 			name:               "badMaxDegrees",
@@ -2060,16 +2060,16 @@ func getTestCasesForFindNetworkByRecordID() []TestMetadataForFindNetworkByRecord
 			recordKeys:         recordKeysBadDataSourceCodeFunc,
 		},
 		{
-			name:               "badRecordID",
-			expectedErr:        szerror.ErrSzNotFound,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindNetworkByRecordId","error":{"function":"szengine.(*Szengine).FindNetworkByRecordID","error":{"id":"SZSDK60044015","reason":"SENZ0033|Unknown record: dsrc[CUSTOMERS], record[BadRecordID]"}}}`,
-			recordKeys:         recordKeysFuncBadRecordIDFunc,
-		},
-		{
 			name:               "badMaxDegree",
 			expectedErr:        szerror.ErrSz,
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindNetworkByRecordId","error":{"function":"szengine.(*Szengine).FindNetworkByRecordID","error":{"id":"SZSDK60044015","reason":"SENZ0031|Invalid value of max degree '-1'"}}}`,
 			maxDegrees:         badMaxDegrees,
+		},
+		{
+			name:               "badRecordID",
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindNetworkByRecordId","error":{"function":"szengine.(*Szengine).FindNetworkByRecordID","error":{"id":"SZSDK60044015","reason":"SENZ0033|Unknown record: dsrc[CUSTOMERS], record[BadRecordID]"}}}`,
+			recordKeys:         recordKeysFuncBadRecordIDFunc,
 		},
 		{
 			name: "default",
@@ -2082,13 +2082,27 @@ func getTestCasesForFindNetworkByRecordID() []TestMetadataForFindNetworkByRecord
 func getTestCasesForFindPathByEntityID() []TestMetadataForFindPathByEntityID {
 	result := []TestMetadataForFindPathByEntityID{
 		{
-			name: "default",
+			name:           "avoiding",
+			avoidEntityIDs: avoidEntityIDsFunc,
 		},
 		{
-			name:               "badStartEntityID",
+			name:                "avoiding_and_including",
+			avoidEntityIDs:      avoidEntityIDsFunc,
+			maxDegrees:          1,
+			requiredDataSources: requiredDataSourcesFunc,
+		},
+		{
+			name:               "avoiding_badStartEntityID",
+			avoidEntityIDs:     avoidEntityIDsFunc,
 			expectedErr:        szerror.ErrSzNotFound,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044017","reason":"SENZ0037|Unknown resolved entity value '-1'"}}}`,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044021","reason":"SENZ0037|Unknown resolved entity value '-1'"}}}`,
 			startEntityID:      badEntityID,
+		},
+		{
+			name:               "badAvoidEntityIDs",
+			avoidEntityIDs:     badAvoidEntityIDsFunc,
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044021","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
 		},
 		{
 			name:               "badEndEntityID",
@@ -2103,45 +2117,19 @@ func getTestCasesForFindPathByEntityID() []TestMetadataForFindPathByEntityID {
 			maxDegrees:         badMaxDegrees,
 		},
 		{
-			name:               "badAvoidEntityIDs",
-			avoidEntityIDs:     badAvoidEntityIDsFunc,
-			expectedErr:        szerror.ErrSzBadInput,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044021","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
-		},
-		{
 			name:                "badRequiredDataSource",
 			expectedErr:         szerror.ErrSzBadInput,
 			expectedErrMessage:  `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044025","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
 			requiredDataSources: badRequiredDataSourcesFunc,
 		},
 		{
-			name:       "nilMaxDegrees",
-			maxDegrees: nilMaxDegrees,
-		},
-		{
-			name:           "nilAvoidEntityIDs",
-			avoidEntityIDs: nilAvoidEntityIDsFunc,
-		},
-		{
-			name:                "nilRequiredDataSource",
-			requiredDataSources: nilRequiredDataSourcesFunc,
-		},
-		{
-			name:           "avoiding",
-			avoidEntityIDs: avoidEntityIDsFunc,
-		},
-		{
-			name:               "avoiding_badStartEntityID",
-			avoidEntityIDs:     avoidEntityIDsFunc,
+			name:               "badStartEntityID",
 			expectedErr:        szerror.ErrSzNotFound,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044021","reason":"SENZ0037|Unknown resolved entity value '-1'"}}}`,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByEntityId","error":{"function":"szengine.(*Szengine).FindPathByEntityID","error":{"id":"SZSDK60044017","reason":"SENZ0037|Unknown resolved entity value '-1'"}}}`,
 			startEntityID:      badEntityID,
 		},
 		{
-			name:                "avoiding_and_including",
-			avoidEntityIDs:      avoidEntityIDsFunc,
-			maxDegrees:          1,
-			requiredDataSources: requiredDataSourcesFunc,
+			name: "default",
 		},
 		{
 			name:                "including",
@@ -2154,6 +2142,18 @@ func getTestCasesForFindPathByEntityID() []TestMetadataForFindPathByEntityID {
 			requiredDataSources: requiredDataSourcesFunc,
 			startEntityID:       badEntityID,
 		},
+		{
+			name:           "nilAvoidEntityIDs",
+			avoidEntityIDs: nilAvoidEntityIDsFunc,
+		},
+		{
+			name:       "nilMaxDegrees",
+			maxDegrees: nilMaxDegrees,
+		},
+		{
+			name:                "nilRequiredDataSource",
+			requiredDataSources: nilRequiredDataSourcesFunc,
+		},
 	}
 
 	return result
@@ -2162,42 +2162,15 @@ func getTestCasesForFindPathByEntityID() []TestMetadataForFindPathByEntityID {
 func getTestCasesForFindPathByRecordID() []TestMetadataForFindPathByRecordID {
 	result := []TestMetadataForFindPathByRecordID{
 		{
-			name: "default",
-		},
-		{
-			name:                "badDataSourceCode",
-			expectedErr:         szerror.ErrSzUnknownDataSource,
-			expectedErrMessage:  `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044019","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
-			startDataSourceCode: badDataSourceCode,
-		},
-		{
-			name:               "badDataRecordID",
-			expectedErr:        szerror.ErrSzNotFound,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044019","reason":"SENZ0033|Unknown record: dsrc[CUSTOMERS], record[BadRecordID]"}}}`,
-			startRecordID:      badRecordID,
-		},
-		{
-			name:               "badMaxDegrees",
-			expectedErr:        szerror.ErrSz,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044019","reason":"SENZ0031|Invalid value of max degree '-1'"}}}`,
-			maxDegrees:         badMaxDegrees,
-		},
-		{
-			name:               "badAvoidRecordKeys",
-			avoidRecordKeys:    badAvoidRecordIDsFunc,
-			expectedErr:        szerror.ErrSzBadInput,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044023","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
-		},
-		{
-			name:               "badRequiredDataSources",
-			avoidRecordKeys:    badRequiredDataSourcesFunc,
-			expectedErr:        szerror.ErrSzBadInput,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044023","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
-		},
-		{
 			name:            "avoiding",
 			avoidRecordKeys: avoidRecordIDsFunc,
 			maxDegrees:      1,
+		},
+		{
+			name:                "avoiding_and_including",
+			avoidRecordKeys:     avoidRecordIDsFunc,
+			maxDegrees:          1,
+			requiredDataSources: requiredDataSourcesFunc,
 		},
 		{
 			name:                "avoiding_badStartDataSourceCode",
@@ -2207,10 +2180,37 @@ func getTestCasesForFindPathByRecordID() []TestMetadataForFindPathByRecordID {
 			startDataSourceCode: badDataSourceCode,
 		},
 		{
-			name:                "avoiding_and_including",
-			avoidRecordKeys:     avoidRecordIDsFunc,
-			maxDegrees:          1,
-			requiredDataSources: requiredDataSourcesFunc,
+			name:               "badAvoidRecordKeys",
+			avoidRecordKeys:    badAvoidRecordIDsFunc,
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044023","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
+		},
+		{
+			name:               "badDataRecordID",
+			expectedErr:        szerror.ErrSzNotFound,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044019","reason":"SENZ0033|Unknown record: dsrc[CUSTOMERS], record[BadRecordID]"}}}`,
+			startRecordID:      badRecordID,
+		},
+		{
+			name:                "badDataSourceCode",
+			expectedErr:         szerror.ErrSzUnknownDataSource,
+			expectedErrMessage:  `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044019","reason":"SENZ2207|Data source code [BADDATASOURCECODE] does not exist."}}}`,
+			startDataSourceCode: badDataSourceCode,
+		},
+		{
+			name:               "badMaxDegrees",
+			expectedErr:        szerror.ErrSz,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044019","reason":"SENZ0031|Invalid value of max degree '-1'"}}}`,
+			maxDegrees:         badMaxDegrees,
+		},
+		{
+			name:               "badRequiredDataSources",
+			avoidRecordKeys:    badRequiredDataSourcesFunc,
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).FindPathByRecordId","error":{"function":"szengine.(*Szengine).FindPathByRecordID","error":{"id":"SZSDK60044023","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
+		},
+		{
+			name: "default",
 		},
 		{
 			name:                "including",
@@ -2238,13 +2238,13 @@ func getTestCasesForFindPathByRecordID() []TestMetadataForFindPathByRecordID {
 func getTestCasesForGetEntityByEntityID() []TestMetadataForGetEntityByEntityID {
 	result := []TestMetadataForGetEntityByEntityID{
 		{
-			name: "default",
-		},
-		{
 			name:               "badEntityID",
 			entityID:           badEntityID,
 			expectedErr:        szerror.ErrSzNotFound,
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetEntityByEntityId","error":{"function":"szengine.(*Szengine).GetEntityByEntityID","error":{"id":"SZSDK60044030","reason":"SENZ0037|Unknown resolved entity value '-1'"}}}`,
+		},
+		{
+			name: "default",
 		},
 		{
 			name:               "nilEntityID",
@@ -2294,9 +2294,6 @@ func getTestCasesForGetEntityByRecordID() []TestMetadataForGetEntityByRecordID {
 func getTestCasesForGetRecord() []TestMetadataForGetRecord {
 	result := []TestMetadataForGetRecord{
 		{
-			name: "default",
-		},
-		{
 			name:               "badDataSourceCode",
 			dataSourceCode:     badDataSourceCode,
 			expectedErr:        szerror.ErrSzUnknownDataSource,
@@ -2307,6 +2304,9 @@ func getTestCasesForGetRecord() []TestMetadataForGetRecord {
 			expectedErr:        szerror.ErrSzNotFound,
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetRecord","error":{"function":"szengine.(*Szengine).GetRecord","error":{"id":"SZSDK60044035","reason":"SENZ0033|Unknown record: dsrc[CUSTOMERS], record[BadRecordID]"}}}`,
 			recordID:           badRecordID,
+		},
+		{
+			name: "default",
 		},
 		{
 			name:               "nilDataSourceCode",
@@ -2394,13 +2394,13 @@ func getTestCasesForProcessRedoRecord() []TestMetadataForProcessRedoRecord {
 			redoRecord:         badRedoRecord,
 		},
 		{
+			name: "default",
+		},
+		{
 			name:               "nilRedoRecord",
 			expectedErr:        szerror.ErrSzBadInput,
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ0007|Empty Message"}}}`,
 			redoRecord:         nilRedoRecord,
-		},
-		{
-			name: "default",
 		},
 		{
 			name:  "withInfo",
