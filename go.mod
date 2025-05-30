@@ -6,12 +6,12 @@ require (
 	github.com/aquilax/truncate v1.0.1
 	github.com/improbable-eng/grpc-web v0.15.0
 	github.com/senzing-garage/go-cmdhelping v0.3.5
-	github.com/senzing-garage/go-helpers v0.6.13-0.20250529172703-8bac79c8d2f9
+	github.com/senzing-garage/go-helpers v0.6.13-0.20250529212435-e54a2ea11cbb
 	github.com/senzing-garage/go-logging v1.5.3
 	github.com/senzing-garage/go-observing v0.3.5
 	github.com/senzing-garage/init-database v0.7.12
 	github.com/senzing-garage/sz-sdk-go v0.15.4
-	github.com/senzing-garage/sz-sdk-go-core v0.9.6-0.20250529203626-1030673779bc
+	github.com/senzing-garage/sz-sdk-go-core v0.9.6-0.20250530200438-8ae14f3a9d98
 	github.com/senzing-garage/sz-sdk-proto v0.8.3
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
@@ -60,7 +60,7 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v1.35.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.38.0 // indirect
-	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6 // indirect
+	golang.org/x/exp v0.0.0-20250530174510-65e920069ea6 // indirect
 	golang.org/x/net v0.40.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.25.0 // indirect
