@@ -10,7 +10,7 @@ import (
 )
 
 // ----------------------------------------------------------------------------
-// Test interface functions
+// Test interface methods
 // ----------------------------------------------------------------------------
 
 func TestBasicHTTPServer_Serve(test *testing.T) {

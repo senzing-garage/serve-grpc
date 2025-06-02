@@ -18,3 +18,5 @@ jobs:
 
       - name: Bearer
         uses: bearer/bearer-action@v2
+        with:
+          config-file: .github/linters/bearer.yml

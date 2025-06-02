@@ -46,7 +46,7 @@ func (server *SzProductServer) GetLicense(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szproduct.GetLicense error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzProductServer) GetVersion(
@@ -71,7 +71,7 @@ func (server *SzProductServer) GetVersion(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szproduct.GetVersion error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // ----------------------------------------------------------------------------
@@ -131,12 +131,12 @@ func (server *SzProductServer) SetLogLevel(ctx context.Context, logLevelName str
 	// }
 	err = server.getLogger().SetLogLevel(logLevelName)
 	if err != nil {
-		return wraperror.Errorf(err, "szproductserver.SetLogLevel.SetLogLevel error: %w", err)
+		return wraperror.Errorf(err, "SetLogLevel: %s", logLevelName)
 	}
 
 	server.isTrace = (logLevelName == logging.LevelTraceName)
 
-	return wraperror.Errorf(err, "szproductserver.SetLogLevel error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // --- Errors -----------------------------------------------------------------
@@ -199,7 +199,7 @@ func (server *SzProductServer) RegisterObserver(ctx context.Context, observer ob
 
 	err = szProduct.RegisterObserver(ctx, observer)
 
-	return wraperror.Errorf(err, "szproductserver.RegisterObserver error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzProductServer) SetObserverOrigin(ctx context.Context, origin string) {
@@ -232,5 +232,5 @@ func (server *SzProductServer) UnregisterObserver(ctx context.Context, observer 
 
 	err = szProduct.UnregisterObserver(ctx, observer)
 
-	return wraperror.Errorf(err, "szproductserver.UnregisterObserver error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }

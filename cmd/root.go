@@ -6,7 +6,6 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
-	"fmt"
 	"os"
 	"sync"
 
@@ -154,19 +153,19 @@ func RunE(_ *cobra.Command, _ []string) error {
 
 	grpcserver, err := buildBasicGrpcServer(ctx)
 	if err != nil {
-		return wraperror.Errorf(err, "cmd.RunE.buildBasicGrpcServer error: %w", err)
+		return wraperror.Errorf(err, "buildBasicGrpcServer")
 	}
 
 	err = grpcserver.Initialize(ctx)
 	if err != nil {
-		return wraperror.Errorf(err, "cmd.RunE.Initialize error: %w", err)
+		return wraperror.Errorf(err, "Initialize")
 	}
 
 	// Start services.
 
 	err = startServers(ctx, grpcserver)
 
-	return wraperror.Errorf(err, "cmd.RunE error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // Used in construction of cobra.Command.
@@ -186,14 +185,14 @@ func buildBasicGrpcServer(ctx context.Context) (*grpcserver.BasicGrpcServer, err
 
 	senzingSettings, err := settings.BuildAndVerifySettings(ctx, viper.GetViper())
 	if err != nil {
-		return result, wraperror.Errorf(err, "cmd.buildBasicGrpcServer.BuildAndVerifySettings error: %w", err)
+		return result, wraperror.Errorf(err, "BuildAndVerifySettings")
 	}
 
 	// Aggregate gRPC server options.
 
 	grpcServerOptions, err := getGrpcServerOptions()
 	if err != nil {
-		return result, wraperror.Errorf(err, "cmd.buildBasicGrpcServer.getGrpcServerOptions error: %w", err)
+		return result, wraperror.Errorf(err, "getGrpcServerOptions")
 	}
 
 	// Create Server.
@@ -270,7 +269,7 @@ func createTLSOption(serverCertificatePathValue string, serverKeyPathValue strin
 		serverKeyPassPhraseValue,
 	)
 	if err != nil {
-		return result, wraperror.Errorf(err, "cmd.getServerSideTLSServerOption.LoadX509KeyPair error: %w", err)
+		return result, wraperror.Errorf(err, "LoadX509KeyPair")
 	}
 
 	certificates = []tls.Certificate{serverCertificate}
@@ -291,7 +290,7 @@ func createTLSOption(serverCertificatePathValue string, serverKeyPathValue strin
 		for _, caCertificatePath := range caCertificatePathsValue {
 			pemClientCA, err := os.ReadFile(caCertificatePath)
 			if err != nil {
-				return result, wraperror.Errorf(err, "cmd.getServerSideTLSServerOption.os.ReadFile error: %w", err)
+				return result, wraperror.Errorf(err, "os.ReadFile %s", caCertificatePath)
 			}
 
 			if !clientCAs.AppendCertsFromPEM(pemClientCA) {
@@ -306,7 +305,7 @@ func createTLSOption(serverCertificatePathValue string, serverKeyPathValue strin
 
 	result = buildGrpcServerOption(certificates, clientAuth, clientCAs)
 
-	return result, wraperror.Errorf(err, "cmd.getServerSideTLSServerOption error: %w", err)
+	return result, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func getGrpcServerOptions() ([]grpc.ServerOption, error) {
@@ -378,7 +377,7 @@ func startServers(ctx context.Context, grpcserver *grpcserver.BasicGrpcServer) e
 
 		err = grpcserver.Serve(ctx)
 		if err != nil {
-			panic(fmt.Sprintf("Error: grpcServer - %v\n", err))
+			panic(wraperror.Errorf(err, "grpcserver.Serve"))
 		}
 	}()
 
@@ -392,12 +391,12 @@ func startServers(ctx context.Context, grpcserver *grpcserver.BasicGrpcServer) e
 
 			err = httpserver.Serve(ctx)
 			if err != nil {
-				panic(fmt.Sprintf("Error: httpServer - %v\n", err))
+				panic(wraperror.Errorf(err, "httpserver.Serve"))
 			}
 		}()
 	}
 
 	waitGroup.Wait()
 
-	return wraperror.Errorf(err, "cmd.startServers error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
