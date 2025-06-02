@@ -6,16 +6,20 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/senzing-garage/go-helpers/jsonutil"
 	szconfigmanagerpb "github.com/senzing-garage/sz-sdk-proto/go/szconfigmanager"
 	szpb "github.com/senzing-garage/sz-sdk-proto/go/szdiagnostic"
 )
 
+const AllLines = -1
+
 // ----------------------------------------------------------------------------
-// Interface functions - Examples for godoc documentation
+// Interface methods - Examples for godoc documentation
 // ----------------------------------------------------------------------------
 
 func ExampleSzDiagnosticServer_CheckDatastorePerformance() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_examples_test.go
 	ctx := context.TODO()
 	szDiagnosticServer := getSzDiagnosticServer(ctx)
 	request := &szpb.CheckDatastorePerformanceRequest{
@@ -27,12 +31,17 @@ func ExampleSzDiagnosticServer_CheckDatastorePerformance() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(truncate(response.GetResult(), 25))
-	// Output: {"numRecordsInserted":...
+	redactKeys := []string{"numRecordsInserted"}
+	fmt.Println(jsonutil.PrettyPrint(jsonutil.Truncate(response.GetResult(), AllLines, redactKeys...), jsonIndentation))
+	// Output:
+	// {
+	//     "insertTime": 1000
+	// }
 }
 
 func ExampleSzDiagnosticServer_GetDatastoreInfo() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_examples_test.go
 	ctx := context.TODO()
 	szDiagnosticServer := getSzDiagnosticServer(ctx)
 	request := &szpb.GetDatastoreInfoRequest{}
@@ -42,12 +51,22 @@ func ExampleSzDiagnosticServer_GetDatastoreInfo() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: {"dataStores":[{"id":"CORE","type":"sqlite3","location":"nowhere"}]}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "dataStores": [
+	//         {
+	//             "id": "CORE",
+	//             "type": "sqlite3",
+	//             "location": "nowhere"
+	//         }
+	//     ]
+	// }
 }
 
 func ExampleSzDiagnosticServer_GetFeature() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_examples_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_examples_test.go
 	ctx := context.TODO()
 	szDiagnosticServer := getSzDiagnosticServer(ctx)
 	request := &szpb.GetFeatureRequest{
@@ -58,14 +77,44 @@ func ExampleSzDiagnosticServer_GetFeature() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	// fmt.Println(truncate(response.GetResult(), 25))
-	fmt.Println(response.GetResult())
 
-	// Output: {"LIB_FEAT_ID":1,"FTYPE_CODE":"NAME","ELEMENTS":[{"FELEM_CODE":"FULL_NAME","FELEM_VALUE":"Robert Smith"},{"FELEM_CODE":"SUR_NAME","FELEM_VALUE":"Smith"},{"FELEM_CODE":"GIVEN_NAME","FELEM_VALUE":"Robert"},{"FELEM_CODE":"CULTURE","FELEM_VALUE":"ANGLO"},{"FELEM_CODE":"CATEGORY","FELEM_VALUE":"PERSON"},{"FELEM_CODE":"TOKENIZED_NM","FELEM_VALUE":"ROBERT|SMITH"}]}
+	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
+	// Output:
+	// {
+	//     "LIB_FEAT_ID": 1,
+	//     "FTYPE_CODE": "NAME",
+	//     "ELEMENTS": [
+	//         {
+	//             "FELEM_CODE": "FULL_NAME",
+	//             "FELEM_VALUE": "Robert Smith"
+	//         },
+	//         {
+	//             "FELEM_CODE": "SUR_NAME",
+	//             "FELEM_VALUE": "Smith"
+	//         },
+	//         {
+	//             "FELEM_CODE": "GIVEN_NAME",
+	//             "FELEM_VALUE": "Robert"
+	//         },
+	//         {
+	//             "FELEM_CODE": "CULTURE",
+	//             "FELEM_VALUE": "ANGLO"
+	//         },
+	//         {
+	//             "FELEM_CODE": "CATEGORY",
+	//             "FELEM_VALUE": "PERSON"
+	//         },
+	//         {
+	//             "FELEM_CODE": "TOKENIZED_NM",
+	//             "FELEM_VALUE": "ROBERT|SMITH"
+	//         }
+	//     ]
+	// }
 }
 
 func ExampleSzDiagnosticServer_PurgeRepository() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_test.go
 	ctx := context.TODO()
 	szDiagnosticServer := getSzDiagnosticServer(ctx)
 	request := &szpb.PurgeRepositoryRequest{}
@@ -80,7 +129,8 @@ func ExampleSzDiagnosticServer_PurgeRepository() {
 }
 
 func ExampleSzDiagnosticServer_Reinitialize() {
-	// For more information, visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_test.go
+	// For more information,
+	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_test.go
 	ctx := context.TODO()
 	szDiagnosticServer := getSzDiagnosticServer(ctx)
 	szConfigManagerServer := getSzConfigManagerServer(ctx)

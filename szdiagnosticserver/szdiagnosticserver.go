@@ -48,7 +48,7 @@ func (server *SzDiagnosticServer) CheckDatastorePerformance(
 		Result: result,
 	}
 
-	return response, wraperror.Errorf(err, "szdiagnosticserver.CheckDatastorePerformance error: %w", err)
+	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzDiagnosticServer) GetDatastoreInfo(
@@ -75,7 +75,7 @@ func (server *SzDiagnosticServer) GetDatastoreInfo(
 		Result: result,
 	}
 
-	return response, wraperror.Errorf(err, "szdiagnosticserver.GetDatastoreInfo error: %w", err)
+	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzDiagnosticServer) GetFeature(
@@ -100,7 +100,7 @@ func (server *SzDiagnosticServer) GetFeature(
 		Result: result,
 	}
 
-	return &response, wraperror.Errorf(err, "szdiagnosticserver.GetFeature error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzDiagnosticServer) PurgeRepository(
@@ -121,7 +121,7 @@ func (server *SzDiagnosticServer) PurgeRepository(
 	err = szDiagnostic.PurgeRepository(ctx)
 	response := szpb.PurgeRepositoryResponse{}
 
-	return &response, wraperror.Errorf(err, "szdiagnosticserver.PurgeRepository error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzDiagnosticServer) Reinitialize(
@@ -142,7 +142,7 @@ func (server *SzDiagnosticServer) Reinitialize(
 	err = szDiagnostic.Reinitialize(ctx, request.GetConfigId())
 	response := szpb.ReinitializeResponse{}
 
-	return &response, wraperror.Errorf(err, "szdiagnosticserver.Reinitialize error: %w", err)
+	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // ----------------------------------------------------------------------------
@@ -202,12 +202,12 @@ func (server *SzDiagnosticServer) SetLogLevel(ctx context.Context, logLevelName 
 	// }
 	err = server.getLogger().SetLogLevel(logLevelName)
 	if err != nil {
-		return wraperror.Errorf(err, "szdiagnosticserver.SetLogLevel.SetLogLevel error: %w", err)
+		return wraperror.Errorf(err, "SetLogLevel: %s", logLevelName)
 	}
 
 	server.isTrace = (logLevelName == logging.LevelTraceName)
 
-	return wraperror.Errorf(err, "szdiagnosticserver.SetLogLevel error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // --- Errors -----------------------------------------------------------------
@@ -270,7 +270,7 @@ func (server *SzDiagnosticServer) RegisterObserver(ctx context.Context, observer
 
 	err = szDiagnostic.RegisterObserver(ctx, observer)
 
-	return wraperror.Errorf(err, "szdiagnosticserver.RegisterObserver error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzDiagnosticServer) SetObserverOrigin(ctx context.Context, origin string) {
@@ -303,5 +303,5 @@ func (server *SzDiagnosticServer) UnregisterObserver(ctx context.Context, observ
 
 	err = szDiagnostic.UnregisterObserver(ctx, observer)
 
-	return wraperror.Errorf(err, "szdiagnosticserver.UnregisterObserver error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }

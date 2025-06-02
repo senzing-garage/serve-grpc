@@ -46,11 +46,7 @@ func (server *SzConfigManagerServer) GetConfig(
 
 	szConfig, err := szConfigManager.CreateConfigFromConfigID(ctx, request.GetConfigId())
 	if err != nil {
-		return response, wraperror.Errorf(
-			err,
-			"szconfigmanagerserver.GetConfig.CreateConfigFromConfigID error: %w",
-			err,
-		)
+		return response, wraperror.Errorf(err, "CreateConfigFromConfigID")
 	}
 
 	result, err = szConfig.Export(ctx)
@@ -58,7 +54,7 @@ func (server *SzConfigManagerServer) GetConfig(
 		Result: result,
 	}
 
-	return response, wraperror.Errorf(err, "szconfigmanagerserver.GetConfig error: %w", err)
+	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzConfigManagerServer) GetConfigs(
@@ -85,7 +81,7 @@ func (server *SzConfigManagerServer) GetConfigs(
 		Result: result,
 	}
 
-	return response, wraperror.Errorf(err, "szconfigmanagerserver.GetConfigs error: %w", err)
+	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzConfigManagerServer) GetDefaultConfigId( //revive:disable var-naming
@@ -110,18 +106,14 @@ func (server *SzConfigManagerServer) GetDefaultConfigId( //revive:disable var-na
 
 	result, err = szConfigManager.GetDefaultConfigID(ctx)
 	if err != nil {
-		return response, wraperror.Errorf(
-			err,
-			"szconfigmanagerserver.GetDefaultConfigId.GetDefaultConfigID error: %w",
-			err,
-		)
+		return response, wraperror.Errorf(err, "GetDefaultConfigID")
 	}
 
 	response = &szpb.GetDefaultConfigIdResponse{
 		Result: result,
 	}
 
-	return response, wraperror.Errorf(err, "szconfigmanagerserver.GetDefaultConfigId error: %w", err)
+	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzConfigManagerServer) GetTemplateConfig(
@@ -146,11 +138,7 @@ func (server *SzConfigManagerServer) GetTemplateConfig(
 
 	szConfig, err := szConfigManager.CreateConfigFromTemplate(ctx)
 	if err != nil {
-		return response, wraperror.Errorf(
-			err,
-			"szconfigmanagerserver.GetTemplateConfig.CreateConfigFromTemplate error: %w",
-			err,
-		)
+		return response, wraperror.Errorf(err, "CreateConfigFromTemplate")
 	}
 
 	configDefinition, err := szConfig.Export(ctx)
@@ -158,7 +146,7 @@ func (server *SzConfigManagerServer) GetTemplateConfig(
 		Result: configDefinition,
 	}
 
-	return response, wraperror.Errorf(err, "szconfigmanagerserver.GetTemplateConfig error: %w", err)
+	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzConfigManagerServer) RegisterConfig(
@@ -185,7 +173,7 @@ func (server *SzConfigManagerServer) RegisterConfig(
 		Result: result,
 	}
 
-	return response, wraperror.Errorf(err, "szconfigmanagerserver.RegisterConfig error: %w", err)
+	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzConfigManagerServer) ReplaceDefaultConfigId(
@@ -213,7 +201,7 @@ func (server *SzConfigManagerServer) ReplaceDefaultConfigId(
 	)
 	response = &szpb.ReplaceDefaultConfigIdResponse{}
 
-	return response, wraperror.Errorf(err, "szconfigmanagerserver.ReplaceDefaultConfigId error: %w", err)
+	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzConfigManagerServer) SetDefaultConfig(
@@ -239,7 +227,7 @@ func (server *SzConfigManagerServer) SetDefaultConfig(
 		Result: result,
 	}
 
-	return response, wraperror.Errorf(err, "szconfigmanagerserver.SetDefaultConfig error: %w", err)
+	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzConfigManagerServer) SetDefaultConfigId(
@@ -263,7 +251,7 @@ func (server *SzConfigManagerServer) SetDefaultConfigId(
 	err = szConfigManager.SetDefaultConfigID(ctx, request.GetConfigId())
 	response = &szpb.SetDefaultConfigIdResponse{}
 
-	return response, wraperror.Errorf(err, "szconfigmanagerserver.SetDefaultConfigId error: %w", err)
+	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // ----------------------------------------------------------------------------
@@ -323,12 +311,12 @@ func (server *SzConfigManagerServer) SetLogLevel(ctx context.Context, logLevelNa
 	// }
 	err = server.getLogger().SetLogLevel(logLevelName)
 	if err != nil {
-		return wraperror.Errorf(err, "szconfigmanagerserver.SetLogLevel.SetLogLevel error: %w", err)
+		return wraperror.Errorf(err, "SetLogLevel: %s", logLevelName)
 	}
 
 	server.isTrace = (logLevelName == logging.LevelTraceName)
 
-	return wraperror.Errorf(err, "szconfigmanagerserver.SetLogLevel error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // --- Errors -----------------------------------------------------------------
@@ -391,7 +379,7 @@ func (server *SzConfigManagerServer) RegisterObserver(ctx context.Context, obser
 
 	err = szConfigManager.RegisterObserver(ctx, observer)
 
-	return wraperror.Errorf(err, "szconfigmanagerserver.SetLogLevel error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (server *SzConfigManagerServer) SetObserverOrigin(ctx context.Context, origin string) {
@@ -424,5 +412,5 @@ func (server *SzConfigManagerServer) UnregisterObserver(ctx context.Context, obs
 
 	err = szConfigManager.UnregisterObserver(ctx, observer)
 
-	return wraperror.Errorf(err, "szconfigmanagerserver.SetLogLevel error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }

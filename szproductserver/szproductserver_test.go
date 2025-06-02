@@ -18,6 +18,7 @@ import (
 
 const (
 	defaultTruncation = 76
+	jsonIndentation   = "    "
 	observerID        = "Observer 1"
 	observerOrigin    = "Observer 1 origin"
 	printResults      = false
@@ -33,7 +34,7 @@ var (
 )
 
 // ----------------------------------------------------------------------------
-// Interface functions - test
+// Interface methods - test
 // ----------------------------------------------------------------------------
 
 func TestSzProductServer_GetLicense(test *testing.T) {

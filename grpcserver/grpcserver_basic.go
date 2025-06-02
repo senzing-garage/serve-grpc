@@ -105,7 +105,7 @@ func (grpcServer *BasicGrpcServer) Initialize(ctx context.Context) error {
 
 	grpcServer.isInitialized = true
 
-	return wraperror.Errorf(err, "grpcserver.Initialize error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
@@ -137,7 +137,7 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 		grpcServer.log(2004)
 	}
 
-	return wraperror.Errorf(err, "grpcserver.Serve error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // ----------------------------------------------------------------------------
@@ -194,7 +194,7 @@ func (grpcServer *BasicGrpcServer) createGrpcObserver(
 
 	grpcConnection, err := grpc.NewClient(target, grpcOptions)
 	if err != nil {
-		return result, wraperror.Errorf(err, "grpcserver.grpc.NewClient error: %w", err)
+		return result, wraperror.Errorf(err, "grpc.NewClient")
 	}
 
 	result = &observer.GrpcObserver{
@@ -202,7 +202,7 @@ func (grpcServer *BasicGrpcServer) createGrpcObserver(
 		ID:         "serve-grpc",
 	}
 
-	return result, wraperror.Errorf(err, "grpcserver.createGrpcObserver error: %w", err)
+	return result, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // --- Enabling services ---------------------------------------------------------------
@@ -392,13 +392,13 @@ func (grpcServer *BasicGrpcServer) setupObserver(ctx context.Context) error {
 
 	parsedURL, err := url.Parse(grpcServer.ObserverURL)
 	if err != nil {
-		return wraperror.Errorf(err, "grpcserver.setupObserver.urlParse error: %w", err)
+		return wraperror.Errorf(err, "url.Parse: %s", grpcServer.ObserverURL)
 	}
 
 	if parsedURL.Scheme == "grpc" {
 		anObserver, err = grpcServer.createGrpcObserver(ctx, *parsedURL)
 		if err != nil {
-			return wraperror.Errorf(err, "grpcserver.setupObserver.createGrpcObserver error: %w", err)
+			return wraperror.Errorf(err, "grpcServer.createGrpcObserver: %v", parsedURL)
 		}
 	}
 
@@ -406,7 +406,7 @@ func (grpcServer *BasicGrpcServer) setupObserver(ctx context.Context) error {
 		grpcServer.Observers = append(grpcServer.Observers, anObserver)
 	}
 
-	return wraperror.Errorf(err, "grpcserver.setupObserver error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 // ----------------------------------------------------------------------------
@@ -419,12 +419,12 @@ func initializeDatabase(ctx context.Context, senzingSettings string) error {
 
 	parsedSenzingSettings, err := settingsparser.New(senzingSettings)
 	if err != nil {
-		return wraperror.Errorf(err, "grpcserver.initializeDatabase.settingsparser.New error: %w", err)
+		return wraperror.Errorf(err, "New")
 	}
 
 	databaseURIs, err := parsedSenzingSettings.GetDatabaseURIs(ctx)
 	if err != nil {
-		return wraperror.Errorf(err, "grpcserver.initializeDatabase.GetDatabaseURIs error: %w", err)
+		return wraperror.Errorf(err, "GetDatabaseURIs")
 	}
 
 	if len(databaseURIs) >= 1 {
@@ -434,7 +434,7 @@ func initializeDatabase(ctx context.Context, senzingSettings string) error {
 		}
 	}
 
-	return wraperror.Errorf(err, "grpcserver.initializeDatabase error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
 
 func initializeSqlite(ctx context.Context, senzingSettings string, databaseURIs []string) error {
@@ -444,7 +444,7 @@ func initializeSqlite(ctx context.Context, senzingSettings string, databaseURIs 
 
 	parsedDatabaseURL, err := url.Parse(databaseURI)
 	if err != nil {
-		return wraperror.Errorf(err, "grpcserver.initializeSqlite.url.Parse error: %w", err)
+		return wraperror.Errorf(err, "url.Parse: %s", databaseURI)
 	}
 
 	queryParameters := parsedDatabaseURL.Query()
@@ -461,9 +461,9 @@ func initializeSqlite(ctx context.Context, senzingSettings string, databaseURIs 
 
 		err = initializer.Initialize(ctx)
 		if err != nil {
-			return wraperror.Errorf(err, "grpcserver.initializeSqlite.Initialize error: %w", err)
+			return wraperror.Errorf(err, "Initialize")
 		}
 	}
 
-	return wraperror.Errorf(err, "grpcserver.initializeSqlite error: %w", err)
+	return wraperror.Errorf(err, wraperror.NoMessage)
 }
