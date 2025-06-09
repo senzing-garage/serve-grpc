@@ -46,8 +46,8 @@ const (
 	defaultKeepaliveServerParameterMaxConnectionIdleInSeconds     = 0    // Infinity
 	defaultKeepaliveServerParameterTimeInSeconds                  = 7200 // 2 Hours
 	defaultKeepaliveServerParameterTimeoutInSeconds               = 20   // 20 Seconds
-	defaultMaxConcurrentStreams                                   = math.MaxUint32
-	defaultMaxHeaderListSizeInBytes                               = int(16 << 20)
+	defaultMaxConcurrentStreams                                   = uint32(math.MaxUint32)
+	defaultMaxHeaderListSizeInBytes                               = uint32(16 << 20)
 	defaultMaxReceiveMessageSizeInBytes                           = math.MaxInt32
 	defaultMaxSendMessageSizeInBytes                              = math.MaxInt32
 	defaultReadBufferSizeInBytes                                  = 32 * 1024
@@ -161,24 +161,24 @@ var keepaliveServerParameterTimeoutInSeconds = option.ContextVariable{
 
 var maxConcurrentStreams = option.ContextVariable{
 	Arg: "max-concurrent-streams",
-	Default: option.OsLookupEnvInt(
+	Default: option.OsLookupEnvUint32(
 		"SENZING_TOOLS_SERVER_MAX_CONCURRENT_STREAMS",
 		defaultMaxConcurrentStreams,
 	),
 	Envar: "SENZING_TOOLS_SERVER_MAX_CONCURRENT_STREAMS",
 	Help:  "See https://pkg.go.dev/google.golang.org/grpc#MaxConcurrentStreams. [%s]",
-	Type:  optiontype.Int,
+	Type:  optiontype.Uint32,
 }
 
 var maxHeaderListSizeInBytes = option.ContextVariable{
 	Arg: "max-header-list-size-in-bytes",
-	Default: option.OsLookupEnvInt(
+	Default: option.OsLookupEnvUint32(
 		"SENZING_TOOLS_SERVER_MAX_HEADER_LIST_SIZE_IN_BYTES",
 		defaultMaxHeaderListSizeInBytes,
 	),
 	Envar: "SENZING_TOOLS_SERVER_MAX_HEADER_LIST_SIZE_IN_BYTES",
 	Help:  "See https://pkg.go.dev/google.golang.org/grpc#MaxHeaderListSize. [%s]",
-	Type:  optiontype.Int,
+	Type:  optiontype.Uint32,
 }
 
 var maxReceiveMessageSizeInBytes = option.ContextVariable{
@@ -534,10 +534,8 @@ func getKeepaliveEnforcementPolicyOption() (grpc.ServerOption, error) {
 	// Determine if a grpc.ServerOption is needed.
 
 	if (keepaliveEnforcementPolicyMinTimeInSecondsValue != defaultKeepaliveEnforcementPolicyMinTimeInSeconds) ||
-		(keepaliveEnforcementPolicyPermitWithoutStreamValue != defaultKeepaliveEnforcementPolicyPermitWithoutStream) {
-
+		(keepaliveEnforcementPolicyPermitWithoutStreamValue != defaultKeepaliveEnforcementPolicyPermitWithoutStream) { //nolint
 		// Create grpc.ServerOption.
-
 		keepaliveEnforcementPolicy := keepalive.EnforcementPolicy{
 			MinTime:             time.Duration(keepaliveEnforcementPolicyMinTimeInSecondsValue) * time.Second,
 			PermitWithoutStream: keepaliveEnforcementPolicyPermitWithoutStreamValue,
@@ -575,9 +573,7 @@ func getKeepaliveParamsOption() (grpc.ServerOption, error) {
 		(keepaliveServerParameterMaxConnectionIdleInSecondsValue != defaultKeepaliveServerParameterMaxConnectionIdleInSeconds) ||
 		(keepaliveServerParameterTimeInSecondsValue != defaultKeepaliveServerParameterTimeInSeconds) ||
 		(keepaliveServerParameterTimeoutInSecondsValue != defaultKeepaliveServerParameterTimeoutInSeconds) {
-
 		// Create grpc.ServerOption.
-
 		keepaliveServerParameters := keepalive.ServerParameters{
 			MaxConnectionIdle: time.Duration(keepaliveServerParameterMaxConnectionIdleInSecondsValue) * time.Second,
 			MaxConnectionAge:  time.Duration(keepaliveServerParameterMaxConnectionAgeInSecondsValue) * time.Second,
@@ -598,11 +594,13 @@ func getMaxConcurrentStreamsOption() (grpc.ServerOption, error) {
 		err    error
 		result grpc.ServerOption
 	)
-	maxConcurrentStreamsValue := viper.GetInt(maxConcurrentStreams.Arg)
+
+	maxConcurrentStreamsValue := viper.GetUint32(maxConcurrentStreams.Arg)
 
 	if maxConcurrentStreamsValue != defaultMaxConcurrentStreams {
-		result = grpc.MaxConcurrentStreams(uint32(maxConcurrentStreamsValue))
+		result = grpc.MaxConcurrentStreams(maxConcurrentStreamsValue)
 	}
+
 	return result, err
 }
 
@@ -611,11 +609,13 @@ func getMaxHeaderListSizeOption() (grpc.ServerOption, error) {
 		err    error
 		result grpc.ServerOption
 	)
-	maxHeaderListSizeInBytesValue := viper.GetInt(maxHeaderListSizeInBytes.Arg)
+
+	maxHeaderListSizeInBytesValue := viper.GetUint32(maxHeaderListSizeInBytes.Arg)
 
 	if maxHeaderListSizeInBytesValue != defaultMaxHeaderListSizeInBytes {
-		result = grpc.MaxHeaderListSize(uint32(maxHeaderListSizeInBytesValue))
+		result = grpc.MaxHeaderListSize(maxHeaderListSizeInBytesValue)
 	}
+
 	return result, err
 }
 
@@ -624,11 +624,13 @@ func getMaxRecvMsgSizeOption() (grpc.ServerOption, error) {
 		err    error
 		result grpc.ServerOption
 	)
+
 	maxReceiveMessageSizeInBytesValue := viper.GetInt(maxReceiveMessageSizeInBytes.Arg)
 
 	if maxReceiveMessageSizeInBytesValue != defaultMaxReceiveMessageSizeInBytes {
 		result = grpc.MaxRecvMsgSize(maxReceiveMessageSizeInBytesValue)
 	}
+
 	return result, err
 }
 
@@ -637,11 +639,13 @@ func getMaxSendMsgSizeOption() (grpc.ServerOption, error) {
 		err    error
 		result grpc.ServerOption
 	)
+
 	maxSendMessageSizeInBytesValue := viper.GetInt(maxSendMessageSizeInBytes.Arg)
 
 	if maxSendMessageSizeInBytesValue != defaultMaxSendMessageSizeInBytes {
 		result = grpc.MaxSendMsgSize(maxSendMessageSizeInBytesValue)
 	}
+
 	return result, err
 }
 
@@ -650,11 +654,13 @@ func getReadBufferSizeOption() (grpc.ServerOption, error) {
 		err    error
 		result grpc.ServerOption
 	)
+
 	readBufferSizeInBytesValue := viper.GetInt(readBufferSizeInBytes.Arg)
 
 	if readBufferSizeInBytesValue != defaultReadBufferSizeInBytes {
 		result = grpc.ReadBufferSize(readBufferSizeInBytesValue)
 	}
+
 	return result, err
 }
 
@@ -663,11 +669,13 @@ func getWriteBufferSizeOption() (grpc.ServerOption, error) {
 		err    error
 		result grpc.ServerOption
 	)
+
 	writeBufferSizeInBytesValue := viper.GetInt(writeBufferSizeInBytes.Arg)
 
 	if writeBufferSizeInBytesValue != defaultWriteBufferSizeInBytes {
 		result = grpc.WriteBufferSize(writeBufferSizeInBytesValue)
 	}
+
 	return result, err
 }
 
