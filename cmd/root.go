@@ -8,6 +8,7 @@ import (
 	"crypto/x509"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
 	"github.com/senzing-garage/go-cmdhelping/option"
@@ -21,6 +22,7 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/keepalive"
 )
 
 const (
@@ -30,6 +32,11 @@ const (
  Start a gRPC server for the Senzing SDK API.
  For more information, visit https://github.com/senzing-garage/serve-grpc
 	 `
+)
+
+const (
+	defaultKeepaliveEnforcementPolicyMinTimeInSeconds    int = 300
+	defaultKeepaliveEnforcementPolicyPermitWithoutStream     = false
 )
 
 // ----------------------------------------------------------------------------
@@ -84,6 +91,32 @@ var serverKeyPassPhrase = option.ContextVariable{
 	Type:    optiontype.String,
 }
 
+// FIXME: New stuff. Sort once tested.
+
+var keepaliveEnforcementPolicyMinTimeInSeconds = option.ContextVariable{
+	Arg: "keepalive-enforcement-policy-min-time-in-seconds",
+	Default: option.OsLookupEnvInt(
+		"SENZING_TOOLS_SERVER_KEEPALIVE_ENFORCEMENT_POLICY_MIN_TIME_IN_SECONDS",
+		defaultKeepaliveEnforcementPolicyMinTimeInSeconds,
+	),
+	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_ENFORCEMENT_POLICY_MIN_TIME_IN_SECONDS",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#EnforcementPolicy. [%s]",
+	Type:  optiontype.Int,
+}
+
+var keepaliveEnforcementPolicyPermitWithoutStream = option.ContextVariable{
+	Arg: "keepalive-enforcement-policy-permit-without-stream",
+	Default: option.OsLookupEnvBool(
+		"SENZING_TOOLS_SERVER_KEEPALIVE_ENFORCEMENT_POLICY_PERMIT_WITHOUT_STREAM",
+		defaultKeepaliveEnforcementPolicyPermitWithoutStream,
+	),
+	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_ENFORCEMENT_POLICY_PERMIT_WITHOUT_STREAM",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#EnforcementPolicy. [%s]",
+	Type:  optiontype.Bool,
+}
+
+// End of new stuff.
+
 var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	clientCaCertificateFile,
 	clientCaCertificateFiless,
@@ -107,6 +140,8 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	serverCertificateFile,
 	serverKeyFile,
 	serverKeyPassPhrase,
+	keepaliveEnforcementPolicyMinTimeInSeconds,
+	keepaliveEnforcementPolicyPermitWithoutStream,
 }
 
 var ContextVariables = append(ContextVariablesForMultiPlatform, ContextVariablesForOsArch...)
@@ -318,6 +353,36 @@ func getGrpcServerOptions() ([]grpc.ServerOption, error) {
 
 	if tlsOption != nil {
 		result = append(result, tlsOption)
+	}
+
+	keepaliveEnforcementPolicyOption, err := getKeepaliveEnforcementPolicyOption()
+	if err != nil {
+		return result, err
+	}
+
+	if keepaliveEnforcementPolicyOption != nil {
+		result = append(result, keepaliveEnforcementPolicyOption)
+	}
+	return result, err
+}
+
+func getKeepaliveEnforcementPolicyOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+
+	keepaliveEnforcementPolicyMinTimeInSeconds := viper.GetInt(keepaliveEnforcementPolicyMinTimeInSeconds.Arg)
+	keepaliveEnforcementPolicyPermitWithoutStream := viper.GetBool(keepaliveEnforcementPolicyPermitWithoutStream.Arg)
+
+	if (keepaliveEnforcementPolicyMinTimeInSeconds != defaultKeepaliveEnforcementPolicyMinTimeInSeconds) ||
+		(defaultKeepaliveEnforcementPolicyPermitWithoutStream != keepaliveEnforcementPolicyPermitWithoutStream) {
+
+		keepaliveEnforcementPolicy := keepalive.EnforcementPolicy{
+			MinTime:             time.Duration(keepaliveEnforcementPolicyMinTimeInSeconds) * time.Second,
+			PermitWithoutStream: keepaliveEnforcementPolicyPermitWithoutStream,
+		}
+		result = grpc.KeepaliveEnforcementPolicy(keepaliveEnforcementPolicy)
 	}
 
 	return result, err
