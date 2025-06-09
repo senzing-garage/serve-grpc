@@ -487,34 +487,34 @@ func createTLSOption(serverCertificatePathValue string, serverKeyPathValue strin
 }
 
 func getGrpcServerOptions() ([]grpc.ServerOption, error) {
-	var result []grpc.ServerOption
+	var (
+		err    error
+		result []grpc.ServerOption
+	)
 
-	tlsOption, err := getTLSOption()
-	if err != nil {
-		return result, err
+	optionFunctions := []func() (grpc.ServerOption, error){
+		getTLSOption,
+		getKeepaliveEnforcementPolicyOption,
+		getKeepaliveParamsOption,
+		getMaxConcurrentStreamsOption,
+		getMaxHeaderListSizeOption,
+		getMaxRecvMsgSizeOption,
+		getMaxSendMsgSizeOption,
+		getReadBufferSizeOption,
+		getWriteBufferSizeOption,
 	}
 
-	if tlsOption != nil {
-		result = append(result, tlsOption)
+	for _, optionFunction := range optionFunctions {
+		option, err := optionFunction()
+		if err != nil {
+			return result, err
+		}
+
+		if option != nil {
+			result = append(result, option)
+		}
 	}
 
-	keepaliveEnforcementPolicyOption, err := getKeepaliveEnforcementPolicyOption()
-	if err != nil {
-		return result, err
-	}
-
-	if keepaliveEnforcementPolicyOption != nil {
-		result = append(result, keepaliveEnforcementPolicyOption)
-	}
-
-	keepaliveParamsOption, err := getKeepaliveParamsOption()
-	if err != nil {
-		return result, err
-	}
-
-	if keepaliveParamsOption != nil {
-		result = append(result, keepaliveParamsOption)
-	}
 	return result, err
 }
 
@@ -590,6 +590,84 @@ func getKeepaliveParamsOption() (grpc.ServerOption, error) {
 		result = grpc.KeepaliveParams(keepaliveServerParameters)
 	}
 
+	return result, err
+}
+
+func getMaxConcurrentStreamsOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+	maxConcurrentStreamsValue := viper.GetInt(maxConcurrentStreams.Arg)
+
+	if maxConcurrentStreamsValue != defaultMaxConcurrentStreams {
+		result = grpc.MaxConcurrentStreams(uint32(maxConcurrentStreamsValue))
+	}
+	return result, err
+}
+
+func getMaxHeaderListSizeOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+	maxHeaderListSizeInBytesValue := viper.GetInt(maxHeaderListSizeInBytes.Arg)
+
+	if maxHeaderListSizeInBytesValue != defaultMaxHeaderListSizeInBytes {
+		result = grpc.MaxHeaderListSize(uint32(maxHeaderListSizeInBytesValue))
+	}
+	return result, err
+}
+
+func getMaxRecvMsgSizeOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+	maxReceiveMessageSizeInBytesValue := viper.GetInt(maxReceiveMessageSizeInBytes.Arg)
+
+	if maxReceiveMessageSizeInBytesValue != defaultMaxReceiveMessageSizeInBytes {
+		result = grpc.MaxRecvMsgSize(maxReceiveMessageSizeInBytesValue)
+	}
+	return result, err
+}
+
+func getMaxSendMsgSizeOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+	maxSendMessageSizeInBytesValue := viper.GetInt(maxSendMessageSizeInBytes.Arg)
+
+	if maxSendMessageSizeInBytesValue != defaultMaxSendMessageSizeInBytes {
+		result = grpc.MaxSendMsgSize(maxSendMessageSizeInBytesValue)
+	}
+	return result, err
+}
+
+func getReadBufferSizeOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+	readBufferSizeInBytesValue := viper.GetInt(readBufferSizeInBytes.Arg)
+
+	if readBufferSizeInBytesValue != defaultReadBufferSizeInBytes {
+		result = grpc.ReadBufferSize(readBufferSizeInBytesValue)
+	}
+	return result, err
+}
+
+func getWriteBufferSizeOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+	writeBufferSizeInBytesValue := viper.GetInt(writeBufferSizeInBytes.Arg)
+
+	if writeBufferSizeInBytesValue != defaultWriteBufferSizeInBytes {
+		result = grpc.WriteBufferSize(writeBufferSizeInBytesValue)
+	}
 	return result, err
 }
 
