@@ -38,6 +38,7 @@
     "ICLA",
     "initdatabase",
     "isready",
+    "KEEPALIVE",
     "LDFLAGS",
     "libsqlite",
     "LICENSESTRINGBASE",
