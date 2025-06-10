@@ -64,7 +64,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 
 1. This usage has an SQLite database that is baked into the Docker container.
    The container is mutable and the data in the database is lost when the container is terminated.
-   Only use this technique for simple tests.
+   Use this technique for simple tests only.
    Example:
 
     ```console
@@ -78,9 +78,9 @@ If using multiple databases or non-system locations of Senzing binaries,
 
 ### Docker example - Using external SQLite database
 
-1. This usage has an SQLite database that is baked into the Docker container.
-   The container is mutable and the data in the database is lost when the container is terminated.
-   Only use this technique for simple tests.
+1. This usage creates an SQLite database that is outside the Docker container.
+   The SQLite database may be reused across multiple `docker run` commands.
+   Use this technique for simple tests only.
    Example:
 
    Specify a directory to store the database.
@@ -89,29 +89,30 @@ If using multiple databases or non-system locations of Senzing binaries,
     export MY_SENZING_DIRECTORY=~/my-senzing
     ```
 
-   Create an empty SQLite database.
+   Create an empty SQLite database and populate it with the Senzing schema and configuration.
    Remember `SENZING_TOOLS_DATABASE_URL` references the SQLite file *inside* the Docker container.
    Example:
 
     ```console
+    mkdir -p ${MY_SENZING_DIRECTORY}
     docker run \
-        --env SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/senzing/G2C.db \
-        --volume ${MY_SENZING_DIRECTORY}:/senzing \
+        --env SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db \
+        --rm \
+        --user $(id -u):$(id -g) \
+        --volume ${MY_SENZING_DIRECTORY}:/tmp/sqlite \
         senzing/senzing-tools init-database
     ```
 
-   Create the directory and run the Docker container.
+   Run the gRPC server with the SQLite database mounted.
 
     ```console
-    mkdir ${MY_SENZING_DIRECTORY}
-    touch ${MY_SENZING_DIRECTORY}/G2C.db
-
     docker run \
-        --env SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/senzing/G2C.db \
+        --env SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db \
         --interactive \
         --publish 8261:8261 \
         --rm \
         --tty \
-        --volume ${MY_SENZING_DIRECTORY}:/senzing \
+        --user $(id -u):$(id -g) \
+        --volume ${MY_SENZING_DIRECTORY}:/tmp/sqlite \
         senzing/serve-grpc
     ```
