@@ -57,10 +57,10 @@ If using multiple databases or non-system locations of Senzing binaries,
    Example:
 
     ```console
-    docker run -it -p 8261:8261 --rm senzing/serve-grpc --help
+    docker run --rm senzing/serve-grpc --help
     ```
 
-### Docker example - Using SQLite database
+### Docker example - Using internal, transient SQLite database
 
 1. This usage has an SQLite database that is baked into the Docker container.
    The container is mutable and the data in the database is lost when the container is terminated.
@@ -69,13 +69,37 @@ If using multiple databases or non-system locations of Senzing binaries,
 
     ```console
     docker run \
-        --env SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/tmp/sqlite/G2C.db \
         --interactive \
-        --publish 8258:8258 \
+        --publish 8261:8261 \
         --rm \
         --tty \
-        senzing/senzing-tools serve-grpc
-
+        senzing/serve-grpc
     ```
 
-   :warning: Only use SQLite for simple tests.
+### Docker example - Using external SQLite database
+
+1. This usage has an SQLite database that is baked into the Docker container.
+   The container is mutable and the data in the database is lost when the container is terminated.
+   Only use this technique for simple tests.
+   Example:
+
+   Specify a directory to store the database.
+
+    ```console
+    export MY_SENZING_DIRECTORY=~/my-senzing
+    ```
+
+   Create the directory and run the Docker container.
+
+    ```console
+    mkdir ${MY_SENZING_DIRECTORY}
+
+    docker run \
+        --env SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/senzing/G2C.db \
+        --interactive \
+        --publish 8261:8261 \
+        --rm \
+        --tty \
+        --volume ${MY_SENZING_DIRECTORY}:/senzing
+        senzing/senzing-tools serve-grpc
+    ```
