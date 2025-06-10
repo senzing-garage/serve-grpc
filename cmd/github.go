@@ -1,15 +1,15 @@
-// 0.9.12
-// Created by senzing-factory/github-action-make-go-github-file.yaml on Mon Jun  2 17:55:15 UTC 2025
+// 0.9.13
+// Created by senzing-factory/github-action-make-go-github-file.yaml on Tue Jun 10 17:20:00 UTC 2025
 //
 //lint:file-ignore U1000 Ignore all unused code, it's generated
 package cmd
 
 var (
-	githubDate           = "2025-06-02"
+	githubDate           = "2025-06-10"
 	githubIteration      = "0"
-	githubRef            = "refs/tags/0.9.12"
-	githubRefName        = "0.9.12"
+	githubRef            = "refs/tags/0.9.13"
+	githubRefName        = "0.9.13"
 	githubRepository     = "senzing-garage/serve-grpc"
 	githubRepositoryName = "serve-grpc"
-	githubVersion        = "0.9.12"
+	githubVersion        = "0.9.13"
 )
