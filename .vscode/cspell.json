@@ -102,6 +102,8 @@
     "**/*.mod",
     "**/*.sum",
     "bearer.ignore",
+    "coverage.html",
+    "coverage.out",
     "Makefile",
     "rootfs/*"
   ]
