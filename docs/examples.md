@@ -101,5 +101,5 @@ If using multiple databases or non-system locations of Senzing binaries,
         --rm \
         --tty \
         --volume ${MY_SENZING_DIRECTORY}:/senzing \
-        senzing/senzing-tools serve-grpc
+        senzing/serve-grpc
     ```
