@@ -6,8 +6,10 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"math"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/senzing-garage/go-cmdhelping/cmdhelper"
 	"github.com/senzing-garage/go-cmdhelping/option"
@@ -21,6 +23,7 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/keepalive"
 )
 
 const (
@@ -30,6 +33,25 @@ const (
  Start a gRPC server for the Senzing SDK API.
  For more information, visit https://github.com/senzing-garage/serve-grpc
 	 `
+)
+
+// For the following, see
+// - https://github.com/grpc/grpc-go/blob/master/internal/transport/defaults.go
+// - https://pkg.go.dev/google.golang.org/grpc#ServerOption
+const (
+	defaultKeepaliveEnforcementPolicyMinTimeInSeconds             = 300 // 5 Minutes
+	defaultKeepaliveEnforcementPolicyPermitWithoutStream          = false
+	defaultKeepaliveServerParameterMaxConnectionAgeGraceInSeconds = 0    // Infinity
+	defaultKeepaliveServerParameterMaxConnectionAgeInSeconds      = 0    // Infinity
+	defaultKeepaliveServerParameterMaxConnectionIdleInSeconds     = 0    // Infinity
+	defaultKeepaliveServerParameterTimeInSeconds                  = 7200 // 2 Hours
+	defaultKeepaliveServerParameterTimeoutInSeconds               = 20   // 20 Seconds
+	defaultMaxConcurrentStreams                                   = uint32(math.MaxUint32)
+	defaultMaxHeaderListSizeInBytes                               = uint32(16 << 20)
+	defaultMaxReceiveMessageSizeInBytes                           = math.MaxInt32
+	defaultMaxSendMessageSizeInBytes                              = math.MaxInt32
+	defaultReadBufferSizeInBytes                                  = 32 * 1024
+	defaultWriteBufferSizeInBytes                                 = 32 * 1024
 )
 
 // ----------------------------------------------------------------------------
@@ -60,6 +82,138 @@ var enableHTTP = option.ContextVariable{
 	Type:    optiontype.Bool,
 }
 
+var keepaliveEnforcementPolicyMinTimeInSeconds = option.ContextVariable{
+	Arg: "keepalive-enforcement-policy-min-time-in-seconds",
+	Default: option.OsLookupEnvInt(
+		"SENZING_TOOLS_SERVER_KEEPALIVE_ENFORCEMENT_POLICY_MIN_TIME_IN_SECONDS",
+		defaultKeepaliveEnforcementPolicyMinTimeInSeconds,
+	),
+	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_ENFORCEMENT_POLICY_MIN_TIME_IN_SECONDS",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#EnforcementPolicy. [%s]",
+	Type:  optiontype.Int,
+}
+
+var keepaliveEnforcementPolicyPermitWithoutStream = option.ContextVariable{
+	Arg: "keepalive-enforcement-policy-permit-without-stream",
+	Default: option.OsLookupEnvBool(
+		"SENZING_TOOLS_SERVER_KEEPALIVE_ENFORCEMENT_POLICY_PERMIT_WITHOUT_STREAM",
+		defaultKeepaliveEnforcementPolicyPermitWithoutStream,
+	),
+	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_ENFORCEMENT_POLICY_PERMIT_WITHOUT_STREAM",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#EnforcementPolicy. [%s]",
+	Type:  optiontype.Bool,
+}
+
+var keepaliveServerParameterMaxConnectionAgeGraceInSeconds = option.ContextVariable{
+	Arg: "keepalive-server-parameter-max-connection-age-grace-in-seconds",
+	Default: option.OsLookupEnvInt(
+		"SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_AGE_GRACE_IN_SECONDS",
+		defaultKeepaliveServerParameterMaxConnectionAgeGraceInSeconds,
+	),
+	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_AGE_GRACE_IN_SECONDS",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#ServerParameters. [%s]",
+	Type:  optiontype.Int,
+}
+
+var keepaliveServerParameterMaxConnectionAgeInSeconds = option.ContextVariable{
+	Arg: "keepalive-server-parameter-max-connection-age-in-seconds",
+	Default: option.OsLookupEnvInt(
+		"SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_AGE_IN_SECONDS",
+		defaultKeepaliveServerParameterMaxConnectionAgeInSeconds,
+	),
+	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_AGE_IN_SECONDS",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#ServerParameters. [%s]",
+	Type:  optiontype.Int,
+}
+
+var keepaliveServerParameterMaxConnectionIdleInSeconds = option.ContextVariable{
+	Arg: "keepalive-server-parameter-max-connection-idle-in-seconds",
+	Default: option.OsLookupEnvInt(
+		"SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_IDLE_IN_SECONDS",
+		defaultKeepaliveServerParameterMaxConnectionIdleInSeconds,
+	),
+	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_IDLE_IN_SECONDS",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#ServerParameters. [%s]",
+	Type:  optiontype.Int,
+}
+
+var keepaliveServerParameterTimeInSeconds = option.ContextVariable{
+	Arg: "keepalive-server-parameter-time-in-seconds",
+	Default: option.OsLookupEnvInt(
+		"SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_TIME_IN_SECONDS",
+		defaultKeepaliveServerParameterTimeInSeconds,
+	),
+	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_TIME_IN_SECONDS",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#ServerParameters. [%s]",
+	Type:  optiontype.Int,
+}
+
+var keepaliveServerParameterTimeoutInSeconds = option.ContextVariable{
+	Arg: "keepalive-server-parameter-timeout-in-seconds",
+	Default: option.OsLookupEnvInt(
+		"SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_TIMEOUT_IN_SECONDS",
+		defaultKeepaliveServerParameterTimeoutInSeconds,
+	),
+	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_TIMEOUT_IN_SECONDS",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#ServerParameters. [%s]",
+	Type:  optiontype.Int,
+}
+
+var maxConcurrentStreams = option.ContextVariable{
+	Arg: "max-concurrent-streams",
+	Default: option.OsLookupEnvUint32(
+		"SENZING_TOOLS_SERVER_MAX_CONCURRENT_STREAMS",
+		defaultMaxConcurrentStreams,
+	),
+	Envar: "SENZING_TOOLS_SERVER_MAX_CONCURRENT_STREAMS",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc#MaxConcurrentStreams. [%s]",
+	Type:  optiontype.Uint32,
+}
+
+var maxHeaderListSizeInBytes = option.ContextVariable{
+	Arg: "max-header-list-size-in-bytes",
+	Default: option.OsLookupEnvUint32(
+		"SENZING_TOOLS_SERVER_MAX_HEADER_LIST_SIZE_IN_BYTES",
+		defaultMaxHeaderListSizeInBytes,
+	),
+	Envar: "SENZING_TOOLS_SERVER_MAX_HEADER_LIST_SIZE_IN_BYTES",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc#MaxHeaderListSize. [%s]",
+	Type:  optiontype.Uint32,
+}
+
+var maxReceiveMessageSizeInBytes = option.ContextVariable{
+	Arg: "max-receive-message-size-in-bytes",
+	Default: option.OsLookupEnvInt(
+		"SENZING_TOOLS_SERVER_MAX_RECEIVE_MESSAGE_SIZE_IN_BYTES",
+		defaultMaxReceiveMessageSizeInBytes,
+	),
+	Envar: "SENZING_TOOLS_SERVER_MAX_RECEIVE_MESSAGE_SIZE_IN_BYTES",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc#MaxRecvMsgSize. [%s]",
+	Type:  optiontype.Int,
+}
+
+var maxSendMessageSizeInBytes = option.ContextVariable{
+	Arg: "max-send-message-size-in-bytes",
+	Default: option.OsLookupEnvInt(
+		"SENZING_TOOLS_SERVER_MAX_SEND_MESSAGE_SIZE_IN_BYTES",
+		defaultMaxSendMessageSizeInBytes,
+	),
+	Envar: "SENZING_TOOLS_SERVER_MAX_SEND_MESSAGE_SIZE_IN_BYTES",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc#MaxSendMsgSize. [%s]",
+	Type:  optiontype.Int,
+}
+
+var readBufferSizeInBytes = option.ContextVariable{
+	Arg: "read-buffer-size-in-bytes",
+	Default: option.OsLookupEnvInt(
+		"SENZING_TOOLS_SERVER_READ_BUFFER_SIZE_IN_BYTES",
+		defaultReadBufferSizeInBytes,
+	),
+	Envar: "SENZING_TOOLS_SERVER_READ_BUFFER_SIZE_IN_BYTES",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc#ReadBufferSize. [%s]",
+	Type:  optiontype.Int,
+}
+
 var serverCertificateFile = option.ContextVariable{
 	Arg:     "server-certificate-file",
 	Default: option.OsLookupEnvString("SENZING_TOOLS_SERVER_CERTIFICATE_FILE", ""),
@@ -84,10 +238,32 @@ var serverKeyPassPhrase = option.ContextVariable{
 	Type:    optiontype.String,
 }
 
+var writeBufferSizeInBytes = option.ContextVariable{
+	Arg: "write-buffer-size-in-bytes",
+	Default: option.OsLookupEnvInt(
+		"SENZING_TOOLS_SERVER_WRITE_BUFFER_SIZE_IN_BYTES",
+		defaultWriteBufferSizeInBytes,
+	),
+	Envar: "SENZING_TOOLS_SERVER_WRITE_BUFFER_SIZE_IN_BYTES",
+	Help:  "See https://pkg.go.dev/google.golang.org/grpc#WriteBufferSize. [%s]",
+	Type:  optiontype.Int,
+}
+
 var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	clientCaCertificateFile,
 	clientCaCertificateFiless,
 	enableHTTP,
+	keepaliveEnforcementPolicyMinTimeInSeconds,
+	keepaliveEnforcementPolicyPermitWithoutStream,
+	keepaliveServerParameterMaxConnectionAgeGraceInSeconds,
+	keepaliveServerParameterMaxConnectionAgeInSeconds,
+	keepaliveServerParameterMaxConnectionIdleInSeconds,
+	keepaliveServerParameterTimeInSeconds,
+	keepaliveServerParameterTimeoutInSeconds,
+	maxConcurrentStreams,
+	maxHeaderListSizeInBytes,
+	maxReceiveMessageSizeInBytes,
+	maxSendMessageSizeInBytes,
 	option.AvoidServe,
 	option.DatabaseURL,
 	option.EnableAll,
@@ -104,9 +280,11 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	option.ObserverOrigin,
 	option.ObserverURL,
 	option.ServerAddress,
+	readBufferSizeInBytes,
 	serverCertificateFile,
 	serverKeyFile,
 	serverKeyPassPhrase,
+	writeBufferSizeInBytes,
 }
 
 var ContextVariables = append(ContextVariablesForMultiPlatform, ContextVariablesForOsArch...)
@@ -309,15 +487,193 @@ func createTLSOption(serverCertificatePathValue string, serverKeyPathValue strin
 }
 
 func getGrpcServerOptions() ([]grpc.ServerOption, error) {
-	var result []grpc.ServerOption
+	var (
+		err    error
+		result []grpc.ServerOption
+	)
 
-	tlsOption, err := getTLSOption()
-	if err != nil {
-		return result, err
+	optionFunctions := []func() (grpc.ServerOption, error){
+		getTLSOption,
+		getKeepaliveEnforcementPolicyOption,
+		getKeepaliveParamsOption,
+		getMaxConcurrentStreamsOption,
+		getMaxHeaderListSizeOption,
+		getMaxRecvMsgSizeOption,
+		getMaxSendMsgSizeOption,
+		getReadBufferSizeOption,
+		getWriteBufferSizeOption,
 	}
 
-	if tlsOption != nil {
-		result = append(result, tlsOption)
+	for _, optionFunction := range optionFunctions {
+		option, err := optionFunction()
+		if err != nil {
+			return result, err
+		}
+
+		if option != nil {
+			result = append(result, option)
+		}
+	}
+
+	return result, err
+}
+
+func getKeepaliveEnforcementPolicyOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+
+	// Option parameters.
+
+	keepaliveEnforcementPolicyMinTimeInSecondsValue := viper.GetInt(keepaliveEnforcementPolicyMinTimeInSeconds.Arg)
+	keepaliveEnforcementPolicyPermitWithoutStreamValue := viper.GetBool(
+		keepaliveEnforcementPolicyPermitWithoutStream.Arg,
+	)
+
+	// Determine if a grpc.ServerOption is needed.
+
+	if (keepaliveEnforcementPolicyMinTimeInSecondsValue != defaultKeepaliveEnforcementPolicyMinTimeInSeconds) ||
+		(keepaliveEnforcementPolicyPermitWithoutStreamValue != defaultKeepaliveEnforcementPolicyPermitWithoutStream) { //nolint
+		// Create grpc.ServerOption.
+		keepaliveEnforcementPolicy := keepalive.EnforcementPolicy{
+			MinTime:             time.Duration(keepaliveEnforcementPolicyMinTimeInSecondsValue) * time.Second,
+			PermitWithoutStream: keepaliveEnforcementPolicyPermitWithoutStreamValue,
+		}
+		result = grpc.KeepaliveEnforcementPolicy(keepaliveEnforcementPolicy)
+	}
+
+	return result, err
+}
+
+func getKeepaliveParamsOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+
+	// Option parameters.
+
+	keepaliveServerParameterMaxConnectionAgeGraceInSecondsValue := viper.GetInt(
+		keepaliveEnforcementPolicyMinTimeInSeconds.Arg,
+	)
+	keepaliveServerParameterMaxConnectionAgeInSecondsValue := viper.GetInt(
+		keepaliveEnforcementPolicyMinTimeInSeconds.Arg,
+	)
+	keepaliveServerParameterMaxConnectionIdleInSecondsValue := viper.GetInt(
+		keepaliveEnforcementPolicyMinTimeInSeconds.Arg,
+	)
+	keepaliveServerParameterTimeInSecondsValue := viper.GetInt(keepaliveEnforcementPolicyMinTimeInSeconds.Arg)
+	keepaliveServerParameterTimeoutInSecondsValue := viper.GetInt(keepaliveEnforcementPolicyMinTimeInSeconds.Arg)
+
+	// Determine if a grpc.ServerOption is needed.
+
+	if (keepaliveServerParameterMaxConnectionAgeGraceInSecondsValue != defaultKeepaliveServerParameterMaxConnectionAgeGraceInSeconds) ||
+		(keepaliveServerParameterMaxConnectionAgeInSecondsValue != defaultKeepaliveServerParameterMaxConnectionAgeInSeconds) ||
+		(keepaliveServerParameterMaxConnectionIdleInSecondsValue != defaultKeepaliveServerParameterMaxConnectionIdleInSeconds) ||
+		(keepaliveServerParameterTimeInSecondsValue != defaultKeepaliveServerParameterTimeInSeconds) ||
+		(keepaliveServerParameterTimeoutInSecondsValue != defaultKeepaliveServerParameterTimeoutInSeconds) {
+		// Create grpc.ServerOption.
+		keepaliveServerParameters := keepalive.ServerParameters{
+			MaxConnectionIdle: time.Duration(keepaliveServerParameterMaxConnectionIdleInSecondsValue) * time.Second,
+			MaxConnectionAge:  time.Duration(keepaliveServerParameterMaxConnectionAgeInSecondsValue) * time.Second,
+			MaxConnectionAgeGrace: time.Duration(
+				keepaliveServerParameterMaxConnectionAgeGraceInSecondsValue,
+			) * time.Second,
+			Time:    time.Duration(keepaliveServerParameterTimeInSecondsValue) * time.Second,
+			Timeout: time.Duration(keepaliveServerParameterTimeoutInSecondsValue) * time.Second,
+		}
+		result = grpc.KeepaliveParams(keepaliveServerParameters)
+	}
+
+	return result, err
+}
+
+func getMaxConcurrentStreamsOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+
+	maxConcurrentStreamsValue := viper.GetUint32(maxConcurrentStreams.Arg)
+
+	if maxConcurrentStreamsValue != defaultMaxConcurrentStreams {
+		result = grpc.MaxConcurrentStreams(maxConcurrentStreamsValue)
+	}
+
+	return result, err
+}
+
+func getMaxHeaderListSizeOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+
+	maxHeaderListSizeInBytesValue := viper.GetUint32(maxHeaderListSizeInBytes.Arg)
+
+	if maxHeaderListSizeInBytesValue != defaultMaxHeaderListSizeInBytes {
+		result = grpc.MaxHeaderListSize(maxHeaderListSizeInBytesValue)
+	}
+
+	return result, err
+}
+
+func getMaxRecvMsgSizeOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+
+	maxReceiveMessageSizeInBytesValue := viper.GetInt(maxReceiveMessageSizeInBytes.Arg)
+
+	if maxReceiveMessageSizeInBytesValue != defaultMaxReceiveMessageSizeInBytes {
+		result = grpc.MaxRecvMsgSize(maxReceiveMessageSizeInBytesValue)
+	}
+
+	return result, err
+}
+
+func getMaxSendMsgSizeOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+
+	maxSendMessageSizeInBytesValue := viper.GetInt(maxSendMessageSizeInBytes.Arg)
+
+	if maxSendMessageSizeInBytesValue != defaultMaxSendMessageSizeInBytes {
+		result = grpc.MaxSendMsgSize(maxSendMessageSizeInBytesValue)
+	}
+
+	return result, err
+}
+
+func getReadBufferSizeOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+
+	readBufferSizeInBytesValue := viper.GetInt(readBufferSizeInBytes.Arg)
+
+	if readBufferSizeInBytesValue != defaultReadBufferSizeInBytes {
+		result = grpc.ReadBufferSize(readBufferSizeInBytesValue)
+	}
+
+	return result, err
+}
+
+func getWriteBufferSizeOption() (grpc.ServerOption, error) {
+	var (
+		err    error
+		result grpc.ServerOption
+	)
+
+	writeBufferSizeInBytesValue := viper.GetInt(writeBufferSizeInBytes.Arg)
+
+	if writeBufferSizeInBytesValue != defaultWriteBufferSizeInBytes {
+		result = grpc.WriteBufferSize(writeBufferSizeInBytesValue)
 	}
 
 	return result, err

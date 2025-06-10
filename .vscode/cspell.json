@@ -38,6 +38,7 @@
     "ICLA",
     "initdatabase",
     "isready",
+    "KEEPALIVE",
     "LDFLAGS",
     "libsqlite",
     "LICENSESTRINGBASE",
@@ -102,6 +103,8 @@
     "**/*.mod",
     "**/*.sum",
     "bearer.ignore",
+    "coverage.html",
+    "coverage.out",
     "Makefile",
     "rootfs/*"
   ]
