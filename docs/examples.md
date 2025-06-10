@@ -89,10 +89,22 @@ If using multiple databases or non-system locations of Senzing binaries,
     export MY_SENZING_DIRECTORY=~/my-senzing
     ```
 
+   Create an empty SQLite database.
+   Remember `SENZING_TOOLS_DATABASE_URL` references the SQLite file *inside* the Docker container.
+   Example:
+
+    ```console
+    docker run \
+        --env SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/senzing/G2C.db \
+        --volume ${MY_SENZING_DIRECTORY}:/senzing \
+        senzing/senzing-tools init-database
+    ```
+
    Create the directory and run the Docker container.
 
     ```console
     mkdir ${MY_SENZING_DIRECTORY}
+    touch ${MY_SENZING_DIRECTORY}/G2C.db
 
     docker run \
         --env SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/senzing/G2C.db \
