@@ -100,6 +100,6 @@ If using multiple databases or non-system locations of Senzing binaries,
         --publish 8261:8261 \
         --rm \
         --tty \
-        --volume ${MY_SENZING_DIRECTORY}:/senzing
+        --volume ${MY_SENZING_DIRECTORY}:/senzing \
         senzing/senzing-tools serve-grpc
     ```
