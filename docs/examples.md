@@ -83,7 +83,7 @@ If using multiple databases or non-system locations of Senzing binaries,
    Use this technique for simple tests only.
    Example:
 
-   Specify a directory to store the database.
+   :pencil2: Specify a directory to store the database.
 
     ```console
     export MY_SENZING_DIRECTORY=~/my-senzing
@@ -116,3 +116,7 @@ If using multiple databases or non-system locations of Senzing binaries,
         --volume ${MY_SENZING_DIRECTORY}:/tmp/sqlite \
         senzing/serve-grpc
     ```
+
+### Docker example - Using Postgresql database
+
+- TODO:
