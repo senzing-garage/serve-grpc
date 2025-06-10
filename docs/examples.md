@@ -51,6 +51,15 @@ If using multiple databases or non-system locations of Senzing binaries,
 
 ## Docker examples
 
+### Docker example - help
+
+1. Show help to list environment variables that can be used in `docker run`'s, `--env` parameter.
+   Example:
+
+    ```console
+    docker run -it -p 8261:8261 --rm senzing/serve-grpc --help
+    ```
+
 ### Docker example - Using SQLite database
 
 1. This usage has an SQLite database that is baked into the Docker container.
