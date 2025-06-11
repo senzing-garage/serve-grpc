@@ -76,7 +76,61 @@ If using multiple databases or non-system locations of Senzing binaries,
         senzing/serve-grpc
     ```
 
+### Docker example - Using Postgresql database
+
+1. :thinking:  Optional step to bring up a PostgreSQL database
+   using the [bitnami/postgresql] Docker image.
+
+    ```console
+    docker run \
+        --env POSTGRESQL_DATABASE=G2 \
+        --env POSTGRESQL_PASSWORD=senzing \
+        --env POSTGRESQL_POSTGRES_PASSWORD=postgres \
+        --env POSTGRESQL_USERNAME=senzing \
+        --publish 5423:5432 \
+        --name postgresql \
+        bitnami/postgresql:latest
+    ```
+
+    This example does not persist data after the Docker container is terminated.
+    For techniques on persisting data, see [bitnami/postgresql].
+
+1. Determine the IP address of the local system.
+   Reason:  If `localhost` is used in the database URL, the Docker container will look for a database server
+   *inside* the Docker container. The database is actually *outside* of the Docker container.
+
+    ```console
+    export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
+    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
+    ```
+
+1. Populate it with the Senzing schema and configuration.
+
+   FIXME:
+
+    ```console
+    docker run \
+        --env SENZING_TOOLS_DATABASE_URL \
+        --rm \
+        senzing/senzing-tools init-database
+    ```
+
+1. Run the gRPC server with the SQLite database mounted.
+
+    ```console
+    docker run \
+        --env SENZING_TOOLS_DATABASE_URL \
+        --interactive \
+        --publish 8261:8261 \
+        --rm \
+        --tty \
+        senzing/serve-grpc
+    ```
+
 ### Docker example - Using external SQLite database
+
+:no-entry: This technique is not recommended.
+It crashes on macOS and Windows and is unstable in Linux.
 
 1. This usage creates an SQLite database that is outside the Docker container.
    The SQLite database may be reused across multiple `docker run` commands.
@@ -117,6 +171,4 @@ If using multiple databases or non-system locations of Senzing binaries,
         senzing/serve-grpc
     ```
 
-### Docker example - Using Postgresql database
-
-- TODO:
+[bitnami/postgresql]: https://hub.docker.com/r/bitnami/postgresql
