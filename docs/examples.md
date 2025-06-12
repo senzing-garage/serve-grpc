@@ -87,9 +87,11 @@ If using multiple databases or non-system locations of Senzing binaries,
         --env POSTGRESQL_PASSWORD=senzing \
         --env POSTGRESQL_POSTGRES_PASSWORD=postgres \
         --env POSTGRESQL_USERNAME=senzing \
+        --interactive \
+        --name postgresql \
         --publish 5432:5432 \
         --rm \
-        --name postgresql \
+        --tty \
         bitnami/postgresql:latest
     ```
 
