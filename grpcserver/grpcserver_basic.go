@@ -73,7 +73,7 @@ func (grpcServer *BasicGrpcServer) Initialize(ctx context.Context) error {
 
 	// Log entry parameters.
 
-	grpcServer.log(2000, grpcServer)
+	grpcServer.log(1000, grpcServer)
 
 	// Initialize observing.
 

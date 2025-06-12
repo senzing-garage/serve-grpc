@@ -102,7 +102,7 @@ If using multiple databases or non-system locations of Senzing binaries,
     This example does not persist data after the Docker container is terminated.
     For techniques on persisting data, see [bitnami/postgresql].
 
-1. Populate the database with the Senzing schema and configuration.
+1. Using a separate terminal, populate the database with the Senzing schema and configuration.
 
     ```console
     docker run \
@@ -126,7 +126,9 @@ If using multiple databases or non-system locations of Senzing binaries,
         senzing/serve-grpc
     ```
 
-1. Cleanup.
+   The gRPC service is available on port 8261.
+
+1. When the gRPC server is no longer needed, here's how to clean up.
 
     ```console
     docker kill my-postgresql
