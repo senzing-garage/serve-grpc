@@ -120,7 +120,10 @@ If using multiple databases or non-system locations of Senzing binaries,
 
 1. Run the gRPC server with the external Postgres database.
 
-   *Note:* The value of `SENZING_TOOLS_DATABASE_URL` was set in a prior step.
+   *Note:* An example of `SENZING_TOOLS_DATABASE_URL` was set in a prior step.
+   It has the form:
+
+   > postgresql://*username*:*password*@*hostname*:5432/*database*/?sslmode=disable
 
     ```console
     docker run \
