@@ -89,7 +89,7 @@ If using multiple databases or non-system locations of Senzing binaries,
     ```console
     docker run \
         --env POSTGRESQL_DATABASE=G2 \
-        --env POSTGRESQL_POSTGRES_PASSWORD=my-password \
+        --env POSTGRESQL_PASSWORD=my-password \
         --interactive \
         --name my-postgresql \
         --network my-senzing-network \
@@ -106,7 +106,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 
     ```console
     docker run \
-        --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable
+        --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable \
         --network my-senzing-network \
         --rm \
         senzing/senzing-tools init-database
@@ -116,13 +116,22 @@ If using multiple databases or non-system locations of Senzing binaries,
 
     ```console
     docker run \
-        --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable
+        --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable \
         --interactive \
+        --name my-grpc-server \
         --network my-senzing-network \
         --publish 8261:8261 \
         --rm \
         --tty \
         senzing/serve-grpc
+    ```
+
+1. Cleanup.
+
+    ```console
+    docker kill my-postgresql
+    docker kill my-grpc-server
+    docker network rm my-senzing-network
     ```
 
 ### Docker example - Using external SQLite database
