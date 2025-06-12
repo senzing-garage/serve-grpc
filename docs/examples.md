@@ -137,7 +137,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 
 ### Docker example - Using external SQLite database
 
-:no-entry: This technique is not recommended.
+:no_entry: This technique is not recommended.
 It crashes on macOS and Windows and is unstable in Linux.
 
 1. This usage creates an SQLite database that is outside the Docker container.
