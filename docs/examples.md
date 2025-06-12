@@ -76,19 +76,23 @@ If using multiple databases or non-system locations of Senzing binaries,
         senzing/serve-grpc
     ```
 
-### Docker example - Using Postgresql database
+### Docker example - Using Postgresql database Docker container
 
-1. :thinking:  Optional step to bring up a PostgreSQL database
-   using the [bitnami/postgresql] Docker image.
+1. Create a Docker network.
+
+    ```console
+    docker network create my-senzing-network --driver bridge
+    ```
+
+1. Bring up a PostgreSQL database using the [bitnami/postgresql] Docker image.
 
     ```console
     docker run \
         --env POSTGRESQL_DATABASE=G2 \
-        --env POSTGRESQL_PASSWORD=senzing \
-        --env POSTGRESQL_POSTGRES_PASSWORD=postgres \
-        --env POSTGRESQL_USERNAME=senzing \
+        --env POSTGRESQL_POSTGRES_PASSWORD=my-password \
         --interactive \
-        --name postgresql \
+        --name my-postgresql \
+        --network my-senzing-network \
         --publish 5432:5432 \
         --rm \
         --tty \
@@ -98,37 +102,23 @@ If using multiple databases or non-system locations of Senzing binaries,
     This example does not persist data after the Docker container is terminated.
     For techniques on persisting data, see [bitnami/postgresql].
 
-1. :thinking: Optional step to create a Senzing schema in the database and insert a Senzing configuration.
-
-    1. Determine the IP address of the local system.
-    Reason:  If `localhost` is used in the database URL, the Docker container will look for a database server
-    *inside* the Docker container. The database is actually *outside* of the Docker container.
-
-        ```console
-        export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/senzing-garage/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
-        export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2/?sslmode=disable
-        ```
-
-    1. Populate the database with the Senzing schema and configuration.
-
-        ```console
-        docker run \
-            --env SENZING_TOOLS_DATABASE_URL \
-            --rm \
-            senzing/senzing-tools init-database
-        ```
-
-1. Run the gRPC server with the external Postgres database.
-
-   *Note:* An example of `SENZING_TOOLS_DATABASE_URL` was set in a prior step.
-   It has the form:
-
-   > postgresql://*username*:*password*@*hostname*:5432/*database*/?sslmode=disable
+1. Populate the database with the Senzing schema and configuration.
 
     ```console
     docker run \
-        --env SENZING_TOOLS_DATABASE_URL \
+        --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable
+        --network my-senzing-network \
+        --rm \
+        senzing/senzing-tools init-database
+    ```
+
+1. Run the gRPC server with the external Postgres database.
+
+    ```console
+    docker run \
+        --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable
         --interactive \
+        --network my-senzing-network \
         --publish 8261:8261 \
         --rm \
         --tty \
