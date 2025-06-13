@@ -102,7 +102,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 1. Run the gRPC server using the Postgres database.
 
     ```console
-    docker run --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgres:5432/G2/?sslmode=disable --name my-grpc-server --network my-senzing-network --rm senzing/serve-grpc
+    docker run --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgres:5432/G2/?sslmode=disable --name my-grpc-server --network my-senzing-network --publish 8261:8261 --rm senzing/serve-grpc
     ```
 
    The gRPC service is available on port 8261.
