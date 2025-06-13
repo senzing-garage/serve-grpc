@@ -76,7 +76,46 @@ If using multiple databases or non-system locations of Senzing binaries,
         senzing/serve-grpc
     ```
 
-### Docker example - Using Postgresql database Docker container
+### Docker example - Using postgres Docker container
+
+1. Create a Docker network.
+
+    ```console
+    docker network create my-senzing-network --driver bridge
+    ```
+
+1. Bring up a PostgreSQL database using the [postgresql] Docker image.
+
+    ```console
+    docker run --env POSTGRES_DB=G2 --env POSTGRES_PASSWORD=my-password --name my-postgresql --network my-senzing-network --rm postgres
+    ```
+
+    This example does not persist data after the Docker container is terminated.
+    For techniques on persisting data, see [postgresql].
+
+1. Using a separate terminal, populate the database with the Senzing schema and configuration.
+
+    ```console
+    docker run --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable --network my-senzing-network --rm senzing/senzing-tools init-database
+    ```
+
+1. Run the gRPC server using the Postgres database.
+
+    ```console
+    docker run --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable --name my-grpc-server --network my-senzing-network --rm senzing/serve-grpc
+    ```
+
+   The gRPC service is available on port 8261.
+
+1. When the gRPC server is no longer needed, here's how to clean up.
+
+    ```console
+    docker kill my-postgresql
+    docker kill my-grpc-server
+    docker network rm my-senzing-network
+    ```
+
+### Docker example - Using bitnami/postgresql Docker container
 
 1. Create a Docker network.
 
@@ -181,3 +220,4 @@ It crashes on macOS and Windows and is unstable in Linux.
     ```
 
 [bitnami/postgresql]: https://hub.docker.com/r/bitnami/postgresql
+[postgresql]: https://hub.docker.com/_/postgres
