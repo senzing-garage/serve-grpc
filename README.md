@@ -122,7 +122,7 @@ Senzing SDKs for accessing the gRPC server:
 [Senzing Protocol Buffer definitions]: https://github.com/senzing-garage/sz-sdk-proto
 [Senzing Quick Start guides]: https://docs.senzing.com/quickstart/
 [SENZING_TOOLS_AVOID_SERVING]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_avoid_serving
-[SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_client_certificate_file
+[SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_client_ca_certificate_file
 [SENZING_TOOLS_CONFIG_PATH]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_config_path
 [SENZING_TOOLS_DATABASE_URL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_database_url
 [SENZING_TOOLS_ENABLE_ALL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_all
