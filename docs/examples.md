@@ -22,6 +22,12 @@
     docker run -it --publish 8261:8261 --rm senzing/serve-grpc
     ```
 
+1. A quick test using [grpcurl].
+
+    ```console
+    grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetVersion
+    ```
+
 ### Docker example - Using postgres Docker container
 
 1. Create a Docker network.
