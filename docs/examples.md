@@ -53,7 +53,7 @@
 
    The gRPC service is available on port 8261.
 
-1. A quick test using [grepurl].
+1. A quick test using [grpcurl].
 
     ```console
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetVersion
@@ -98,7 +98,7 @@
 
    The gRPC service is available on port 8261.
 
-1. A quick test using [grepurl].
+1. A quick test using [grpcurl].
 
     ```console
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetVersion
@@ -208,4 +208,4 @@ If using multiple databases or non-system locations of Senzing binaries,
 
 [bitnami/postgresql]: https://hub.docker.com/r/bitnami/postgresql
 [postgresql]: https://hub.docker.com/_/postgres
-[grepurl]: https://pypi.org/project/grepurl/
+[grpcurl]: https://github.com/fullstorydev/grpcurl
