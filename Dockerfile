@@ -95,6 +95,8 @@ ENV LD_LIBRARY_PATH=/opt/senzing/er/lib/
 ENV SENZING_TOOLS_DATABASE_URL=sqlite3://na:na@nowhere/IN_MEMORY_DB?mode=memory&cache=shared
 ENV SENZING_TOOLS_ENABLE_ALL=true
 
+EXPOSE 8261
+
 # Runtime execution.
 
 WORKDIR /app

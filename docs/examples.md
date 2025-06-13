@@ -87,7 +87,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 1. Bring up a PostgreSQL database using the [postgresql] Docker image.
 
     ```console
-    docker run --env POSTGRES_DB=G2 --env POSTGRES_PASSWORD=my-password --name my-postgresql --network my-senzing-network --rm postgres
+    docker run --env POSTGRES_DB=G2 --env POSTGRES_PASSWORD=my-password --name my-postgres --network my-senzing-network --rm postgres
     ```
 
     This example does not persist data after the Docker container is terminated.
@@ -96,13 +96,13 @@ If using multiple databases or non-system locations of Senzing binaries,
 1. Using a separate terminal, populate the database with the Senzing schema and configuration.
 
     ```console
-    docker run --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable --network my-senzing-network --rm senzing/senzing-tools init-database
+    docker run --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgres:5432/G2/?sslmode=disable --network my-senzing-network --rm senzing/senzing-tools init-database
     ```
 
 1. Run the gRPC server using the Postgres database.
 
     ```console
-    docker run --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable --name my-grpc-server --network my-senzing-network --rm senzing/serve-grpc
+    docker run --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgres:5432/G2/?sslmode=disable --name my-grpc-server --network my-senzing-network --rm senzing/serve-grpc
     ```
 
    The gRPC service is available on port 8261.
@@ -110,7 +110,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 1. When the gRPC server is no longer needed, here's how to clean up.
 
     ```console
-    docker kill my-postgresql
+    docker kill my-postgres
     docker kill my-grpc-server
     docker network rm my-senzing-network
     ```
