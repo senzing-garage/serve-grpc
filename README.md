@@ -33,8 +33,9 @@ The response from the Senzing Go SDK is returned to the gRPC client.
 
 Senzing SDKs for accessing the gRPC server:
 
-1. Go: [sz-sdk-go-grpc]
 1. Python: [sz-sdk-python-grpc]
+1. Java: [sz-sdk-java-grpc]
+1. Go: [sz-sdk-go-grpc]
 
 ## Install
 
@@ -45,7 +46,7 @@ Senzing SDKs for accessing the gRPC server:
    Example:
 
     ```console
-    docker run -it --name senzing-serve-grpc -p 8261:8261 --read-only --rm senzing/serve-grpc
+    docker run -it -p 8261:8261 --rm senzing/serve-grpc
     ```
 
 1. See [Parameters](#parameters) for additional parameters.
@@ -54,10 +55,10 @@ Senzing SDKs for accessing the gRPC server:
 
 - **[SENZING_TOOLS_AVOID_SERVING]**
 - **[SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE]**
-- **[SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILES]**
 - **[SENZING_TOOLS_CONFIG_PATH]**
 - **[SENZING_TOOLS_DATABASE_URL]**
 - **[SENZING_TOOLS_ENABLE_ALL]**
+- **[SENZING_TOOLS_ENABLE_HTTP]**
 - **[SENZING_TOOLS_ENABLE_SZCONFIG]**
 - **[SENZING_TOOLS_ENABLE_SZCONFIGMANAGER]**
 - **[SENZING_TOOLS_ENABLE_SZDIAGNOSTIC]**
@@ -66,14 +67,30 @@ Senzing SDKs for accessing the gRPC server:
 - **[SENZING_TOOLS_ENGINE_INSTANCE_NAME]**
 - **[SENZING_TOOLS_ENGINE_LOG_LEVEL]**
 - **[SENZING_TOOLS_GRPC_PORT]**
+- **[SENZING_TOOLS_HTTP_PORT]**
 - **[SENZING_TOOLS_LICENSE_STRING_BASE64]**
 - **[SENZING_TOOLS_LOG_LEVEL]**
 - **[SENZING_TOOLS_OBSERVER_ORIGIN]**
 - **[SENZING_TOOLS_OBSERVER_URL]**
 - **[SENZING_TOOLS_RESOURCE_PATH]**
 - **[SENZING_TOOLS_SENZING_DIRECTORY]**
+- **[SENZING_TOOLS_SERVER_ADDRESS]**
 - **[SENZING_TOOLS_SERVER_CERTIFICATE_FILE]**
+- **[SENZING_TOOLS_SERVER_KEEPALIVE_ENFORCEMENT_POLICY_MIN_TIME_IN_SECONDS]**
+- **[SENZING_TOOLS_SERVER_KEEPALIVE_ENFORCEMENT_POLICY_PERMIT_WITHOUT_STREAM]**
+- **[SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_AGE_GRACE_IN_SECONDS]**
+- **[SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_AGE_IN_SECONDS]**
+- **[SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_IDLE_IN_SECONDS]**
+- **[SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_TIME_IN_SECONDS]**
+- **[SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_TIMEOUT_IN_SECONDS]**
 - **[SENZING_TOOLS_SERVER_KEY_FILE]**
+- **[SENZING_TOOLS_SERVER_KEY_PASSPHRASE]**
+- **[SENZING_TOOLS_SERVER_MAX_CONCURRENT_STREAMS]**
+- **[SENZING_TOOLS_SERVER_MAX_HEADER_LIST_SIZE_IN_BYTES]**
+- **[SENZING_TOOLS_SERVER_MAX_RECEIVE_MESSAGE_SIZE_IN_BYTES]**
+- **[SENZING_TOOLS_SERVER_MAX_SEND_MESSAGE_SIZE_IN_BYTES]**
+- **[SENZING_TOOLS_SERVER_READ_BUFFER_SIZE_IN_BYTES]**
+- **[SENZING_TOOLS_SERVER_WRITE_BUFFER_SIZE_IN_BYTES]**
 - **[SENZING_TOOLS_SUPPORT_PATH]**
 
 ## References
@@ -106,10 +123,10 @@ Senzing SDKs for accessing the gRPC server:
 [Senzing Quick Start guides]: https://docs.senzing.com/quickstart/
 [SENZING_TOOLS_AVOID_SERVING]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_avoid_serving
 [SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_client_certificate_file
-[SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILES]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_client_ca_certificate_files
 [SENZING_TOOLS_CONFIG_PATH]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_config_path
 [SENZING_TOOLS_DATABASE_URL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_database_url
 [SENZING_TOOLS_ENABLE_ALL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_all
+[SENZING_TOOLS_ENABLE_HTTP]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_http
 [SENZING_TOOLS_ENABLE_SZCONFIG]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_szconfig
 [SENZING_TOOLS_ENABLE_SZCONFIGMANAGER]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_szconfigmanager
 [SENZING_TOOLS_ENABLE_SZDIAGNOSTIC]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_szdiagnostic
@@ -118,16 +135,33 @@ Senzing SDKs for accessing the gRPC server:
 [SENZING_TOOLS_ENGINE_INSTANCE_NAME]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_instance_name
 [SENZING_TOOLS_ENGINE_LOG_LEVEL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_log_level
 [SENZING_TOOLS_GRPC_PORT]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_grpc_port
+[SENZING_TOOLS_HTTP_PORT]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_http_path
 [SENZING_TOOLS_LICENSE_STRING_BASE64]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_license_string_base64
 [SENZING_TOOLS_LOG_LEVEL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_log_level
 [SENZING_TOOLS_OBSERVER_ORIGIN]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_observer_origin
 [SENZING_TOOLS_OBSERVER_URL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_observer_url
 [SENZING_TOOLS_RESOURCE_PATH]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_resource_path
 [SENZING_TOOLS_SENZING_DIRECTORY]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_senzing_directory
+[SENZING_TOOLS_SERVER_ADDRESS]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_address
 [SENZING_TOOLS_SERVER_CERTIFICATE_FILE]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_certificate_file
+[SENZING_TOOLS_SERVER_KEEPALIVE_ENFORCEMENT_POLICY_MIN_TIME_IN_SECONDS]:https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_keepalive_enforcement_policy_min_time_in_seconds
+[SENZING_TOOLS_SERVER_KEEPALIVE_ENFORCEMENT_POLICY_PERMIT_WITHOUT_STREAM]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_keepalive_enforcement_policy_permit_without_stream
+[SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_AGE_GRACE_IN_SECONDS]:https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_keepalive_server_parameter_max_connection_age_grace_in_seconds
+[SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_AGE_IN_SECONDS]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_keepalive_server_parameter_max_connection_age_in_seconds
+[SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_IDLE_IN_SECONDS]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_keepalive_server_parameter_max_connection_idle_in_seconds
+[SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_TIME_IN_SECONDS]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_keepalive_server_parameter_time_in_seconds
+[SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_TIMEOUT_IN_SECONDS]:https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_keepalive_server_parameter_timeout_in_seconds
 [SENZING_TOOLS_SERVER_KEY_FILE]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_key_file
+[SENZING_TOOLS_SERVER_KEY_PASSPHRASE]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_key_passphrase
+[SENZING_TOOLS_SERVER_MAX_CONCURRENT_STREAMS]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_max_concurrent_streams
+[SENZING_TOOLS_SERVER_MAX_HEADER_LIST_SIZE_IN_BYTES]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_max_header_list_size_in_bytes
+[SENZING_TOOLS_SERVER_MAX_RECEIVE_MESSAGE_SIZE_IN_BYTES]:https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_max_receive_message_size_in_bytes
+[SENZING_TOOLS_SERVER_MAX_SEND_MESSAGE_SIZE_IN_BYTES]:https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_max_send_message_size_in_bytes
+[SENZING_TOOLS_SERVER_READ_BUFFER_SIZE_IN_BYTES]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_read_buffer_size_in_bytes
+[SENZING_TOOLS_SERVER_WRITE_BUFFER_SIZE_IN_BYTES]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_server_write_buffer_size_in_bytes
 [SENZING_TOOLS_SUPPORT_PATH]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_support_path
 [Senzing]: https://senzing.com/
 [senzing/sz-sdk-go-core]: https://github.com/senzing-garage/sz-sdk-go-core
 [sz-sdk-go-grpc]: https://github.com/senzing-garage/sz-sdk-go-grpc
+[sz-sdk-java-grpc]: https://github.com/senzing-garage/sz-sdk-java-grpc
 [sz-sdk-python-grpc]: https://github.com/senzing-garage/sz-sdk-python-grpc

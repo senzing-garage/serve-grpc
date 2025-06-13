@@ -32,8 +32,8 @@ const DefaultGrpcObserverPort = "8260"
 
 // Message templates.
 var IDMessages = map[int]string{
-	2000: "Entry: %+v",
-	2001: "SENZING_ENGINE_CONFIGURATION_JSON: %v",
+	1000: "Entry: %+v",
+	1001: "SENZING_ENGINE_CONFIGURATION_JSON: %v",
 	2002: "Enabling all services.",
 	2003: "Server listening at %v",
 	2004: "Serving avoided.",
