@@ -53,6 +53,12 @@
 
    The gRPC service is available on port 8261.
 
+1. A quick test using [grepurl].
+
+    ```console
+    grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetVersion
+    ```
+
 1. When the gRPC server is no longer needed, here's how to clean up.
 
     ```console
