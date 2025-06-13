@@ -92,6 +92,12 @@
 
    The gRPC service is available on port 8261.
 
+1. A quick test using [grepurl].
+
+    ```console
+    grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetVersion
+    ```
+
 1. When the gRPC server is no longer needed, here's how to clean up.
 
     ```console
@@ -145,9 +151,6 @@ It crashes on macOS and Windows and is unstable in Linux.
         senzing/serve-grpc
     ```
 
-[bitnami/postgresql]: https://hub.docker.com/r/bitnami/postgresql
-[postgresql]: https://hub.docker.com/_/postgres
-
 ## Command line examples using senzing-tools
 
 ### Command line example - Enable only szengine gRPC service
@@ -196,3 +199,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 
 1. For more information, visit
    [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON](https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_configuration_json)
+
+[bitnami/postgresql]: https://hub.docker.com/r/bitnami/postgresql
+[postgresql]: https://hub.docker.com/_/postgres
+[grepurl]: https://pypi.org/project/grepurl/

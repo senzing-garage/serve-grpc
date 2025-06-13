@@ -34,6 +34,7 @@
     "gotestfmt",
     "gotesttools",
     "govulncheck",
+    "grepurl",
     "grpcurl",
     "HEALTHCHECK",
     "ICLA",
