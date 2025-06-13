@@ -1,59 +1,10 @@
 # serve-grpc examples
 
-## Command line examples
-
-### Command line example - Enable only szengine gRPC service
-
-For security reasons, it may be that only certain gRPC services are started.
-In this example, only the SzEngine gRPC is started.
-
-1. Using command line options.
-   Example:
-
-    ```console
-    export LD_LIBRARY_PATH=/opt/senzing/er/lib/
-    senzing-tools serve-grpc \
-        --database-url postgresql://username:password@postgres.example.com:5432/G2 \
-        --enable-szengine
-    ```
-
-### Command line example - using SENZING_TOOLS_ENGINE_CONFIGURATION_JSON environment variable
-
-If using multiple databases or non-system locations of Senzing binaries,
-`SENZING_TOOLS_ENGINE_CONFIGURATION_JSON` is used to configure the Senzing runtime engine.
-
-1. :pencil2: Set the value of `SENZING_TOOLS_ENGINE_CONFIGURATION_JSON`.
-   Example:
-
-    ```console
-    export SENZING_TOOLS_ENGINE_CONFIGURATION_JSON='{
-        "PIPELINE": {
-            "CONFIGPATH": "/etc/opt/senzing",
-            "RESOURCEPATH": "/opt/senzing/er/resources",
-            "SUPPORTPATH": "/opt/senzing/data"
-        },
-        "SQL": {
-            "CONNECTION": "postgresql://username:password@host.example.com:G2/"
-        }
-    }'
-    ```
-
-1. Run the gRPC server.
-   Example:
-
-    ```console
-    export LD_LIBRARY_PATH=/opt/senzing/er/lib/
-    senzing-tools serve-grpc
-    ```
-
-1. For more information, visit
-   [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON](https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_configuration_json)
-
 ## Docker examples
 
 ### Docker example - help
 
-1. Show help to list environment variables that can be used in `docker run`'s, `--env` parameter.
+1. Show help to list environment variables that can be used in `docker run`'s `--env` parameter.
    Example:
 
     ```console
@@ -68,12 +19,7 @@ If using multiple databases or non-system locations of Senzing binaries,
    Example:
 
     ```console
-    docker run \
-        --interactive \
-        --publish 8261:8261 \
-        --rm \
-        --tty \
-        senzing/serve-grpc
+    docker run -it --publish 8261:8261 --rm senzing/serve-grpc
     ```
 
 ### Docker example - Using postgres Docker container
@@ -126,16 +72,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 1. Bring up a PostgreSQL database using the [bitnami/postgresql] Docker image.
 
     ```console
-    docker run \
-        --env POSTGRESQL_DATABASE=G2 \
-        --env POSTGRESQL_PASSWORD=my-password \
-        --interactive \
-        --name my-postgresql \
-        --network my-senzing-network \
-        --publish 5432:5432 \
-        --rm \
-        --tty \
-        bitnami/postgresql:latest
+    docker run -it --env POSTGRESQL_DATABASE=G2 --env POSTGRESQL_PASSWORD=my-password --name my-postgresql --network my-senzing-network --publish 5432:5432 --rm bitnami/postgresql
     ```
 
     This example does not persist data after the Docker container is terminated.
@@ -144,25 +81,13 @@ If using multiple databases or non-system locations of Senzing binaries,
 1. Using a separate terminal, populate the database with the Senzing schema and configuration.
 
     ```console
-    docker run \
-        --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable \
-        --network my-senzing-network \
-        --rm \
-        senzing/senzing-tools init-database
+    docker run --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable --network my-senzing-network --rm senzing/senzing-tools init-database
     ```
 
 1. Run the gRPC server with the external Postgres database.
 
     ```console
-    docker run \
-        --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable \
-        --interactive \
-        --name my-grpc-server \
-        --network my-senzing-network \
-        --publish 8261:8261 \
-        --rm \
-        --tty \
-        senzing/serve-grpc
+    docker run -it --env SENZING_TOOLS_DATABASE_URL=postgresql://postgres:my-password@my-postgresql:5432/G2/?sslmode=disable --name my-grpc-server --network my-senzing-network --publish 8261:8261 --rm senzing/serve-grpc
     ```
 
    The gRPC service is available on port 8261.
@@ -179,6 +104,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 
 :no_entry: This technique is not recommended.
 It crashes on macOS and Windows and is unstable in Linux.
+:no_entry:
 
 1. This usage creates an SQLite database that is outside the Docker container.
    The SQLite database may be reused across multiple `docker run` commands.
@@ -221,3 +147,52 @@ It crashes on macOS and Windows and is unstable in Linux.
 
 [bitnami/postgresql]: https://hub.docker.com/r/bitnami/postgresql
 [postgresql]: https://hub.docker.com/_/postgres
+
+## Command line examples using senzing-tools
+
+### Command line example - Enable only szengine gRPC service
+
+For security reasons, it may be that only certain gRPC services are started.
+In this example, only the SzEngine gRPC is started.
+
+1. Using command line options.
+   Example:
+
+    ```console
+    export LD_LIBRARY_PATH=/opt/senzing/er/lib/
+    senzing-tools serve-grpc \
+        --database-url postgresql://username:password@postgres.example.com:5432/G2 \
+        --enable-szengine
+    ```
+
+### Command line example - using SENZING_TOOLS_ENGINE_CONFIGURATION_JSON environment variable
+
+If using multiple databases or non-system locations of Senzing binaries,
+`SENZING_TOOLS_ENGINE_CONFIGURATION_JSON` is used to configure the Senzing runtime engine.
+
+1. :pencil2: Set the value of `SENZING_TOOLS_ENGINE_CONFIGURATION_JSON`.
+   Example:
+
+    ```console
+    export SENZING_TOOLS_ENGINE_CONFIGURATION_JSON='{
+        "PIPELINE": {
+            "CONFIGPATH": "/etc/opt/senzing",
+            "RESOURCEPATH": "/opt/senzing/er/resources",
+            "SUPPORTPATH": "/opt/senzing/data"
+        },
+        "SQL": {
+            "CONNECTION": "postgresql://username:password@host.example.com:G2/"
+        }
+    }'
+    ```
+
+1. Run the gRPC server.
+   Example:
+
+    ```console
+    export LD_LIBRARY_PATH=/opt/senzing/er/lib/
+    senzing-tools serve-grpc
+    ```
+
+1. For more information, visit
+   [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON](https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_configuration_json)
