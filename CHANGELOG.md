@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 -
 
+## [0.9.14] - 2025-06-16
+
+### Added in 0.9.14
+
+- Added `SENZING_TOOLS_LICENSE_STRING_BASE64`
+
 ## [0.9.13] - 2025-06-13
 
 ### Changed in 0.9.13

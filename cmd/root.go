@@ -276,6 +276,7 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	option.EngineLogLevel,
 	option.GrpcPort,
 	option.HTTPPort,
+	option.LicenseStringBase64,
 	option.LogLevel,
 	option.ObserverOrigin,
 	option.ObserverURL,
