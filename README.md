@@ -35,6 +35,7 @@ Senzing SDKs for accessing the gRPC server:
 
 1. Python: [sz-sdk-python-grpc]
 1. Java: [sz-sdk-java-grpc]
+1. C-sharp [sz-sdk-csharp-grpc]
 1. Go: [sz-sdk-go-grpc]
 
 ## Install
@@ -49,7 +50,8 @@ Senzing SDKs for accessing the gRPC server:
     docker run -it -p 8261:8261 --rm senzing/serve-grpc
     ```
 
-1. See [Parameters](#parameters) for additional parameters.
+1. See [Parameters] for additional parameters.
+1. See [Examples] for using external databases, custom licenses, TLS, etc.
 
 ### Parameters
 
@@ -118,6 +120,7 @@ Senzing SDKs for accessing the gRPC server:
 [License Badge]: https://img.shields.io/badge/License-Apache2-brightgreen.svg
 [License]: https://github.com/senzing-garage/serve-grpc/blob/main/LICENSE
 [Package reference]: https://pkg.go.dev/github.com/senzing-garage/serve-grpc
+[Parameters]: #parameters
 [Senzing Garage]: https://github.com/senzing-garage
 [Senzing Protocol Buffer definitions]: https://github.com/senzing-garage/sz-sdk-proto
 [Senzing Quick Start guides]: https://docs.senzing.com/quickstart/
@@ -162,6 +165,7 @@ Senzing SDKs for accessing the gRPC server:
 [SENZING_TOOLS_SUPPORT_PATH]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_support_path
 [Senzing]: https://senzing.com/
 [senzing/sz-sdk-go-core]: https://github.com/senzing-garage/sz-sdk-go-core
+[sz-sdk-csharp-grpc]: https://github.com/senzing-garage/sz-sdk-csharp-grpc
 [sz-sdk-go-grpc]: https://github.com/senzing-garage/sz-sdk-go-grpc
 [sz-sdk-java-grpc]: https://github.com/senzing-garage/sz-sdk-java-grpc
 [sz-sdk-python-grpc]: https://github.com/senzing-garage/sz-sdk-python-grpc

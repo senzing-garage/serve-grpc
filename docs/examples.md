@@ -6,7 +6,8 @@
 1. [Using internal, transient SQLite database]
 1. [Using Postgres database]
 1. [Using custom Senzing license]
-1. [Using Server-side TLS]
+1. [Using TLS server-side authentication]
+1. [Using TLS mutual authentication]
 1. [Using bitnami/postgresql Docker container]
 
 ### Docker example - Help
@@ -145,9 +146,9 @@ This example shows how to use your Senzing license key with the Senzing gRPC Ser
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
     ```
 
-### Docker example - Using Server-side TLS
+### Docker example - Using TLS server-side authentication
 
-This example shows how to enable server-side Transport Layer Security (TLS) in the Senzing gRPC Server.
+This example shows how to enable [server-side authentication] Transport Layer Security (TLS) in the Senzing gRPC Server.
 
 1. To run this example, [git clone] the `senzing/serve-grpc` repository.
    Example:
@@ -160,20 +161,20 @@ This example shows how to enable server-side Transport Layer Security (TLS) in t
     git clone https://github.com/senzing-garage/serve-grpc.git ${MY_SENZING_REPOSITORY}
     ```
 
-1. Run the Senzing gRPC Server container with mounted volume and `SENZING_TOOLS_SERVER_CERTIFICATE_FILE` and `SENZING_TOOLS_SERVER_KEY_FILE`
-   environment variables.
+1. Run the Senzing gRPC Server container with `SENZING_TOOLS_SERVER_CERTIFICATE_FILE` and `SENZING_TOOLS_SERVER_KEY_FILE`
+   environment variables set and `${MY_SENZING_REPOSITORY}` volume mounted.
 
     ```console
     docker run --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/serve-grpc/testdata/certificates/server/certificate.pem --env SENZING_TOOLS_SERVER_KEY_FILE=/serve-grpc/testdata/certificates/server/private_key.pem --publish 8261:8261 --rm --volume ${MY_SENZING_REPOSITORY}:/serve-grpc senzing/serve-grpc
     ```
 
-1. A failing test using [grpcurl].
+1. In a separate terminal, run a "no TLS" failing test using [grpcurl].
 
     ```console
     grpcurl -format text localhost:8261 szproduct.SzProduct.GetVersion
     ```
 
-1. A successful test using [grpcurl].
+1. Run a successful test using [grpcurl].
 
     ```console
     export MY_SENZING_REPOSITORY=~/serve-grpc
@@ -181,6 +182,62 @@ This example shows how to enable server-side Transport Layer Security (TLS) in t
 
     ```console
     grpcurl -authority www.senzing.com -cacert ${MY_SENZING_REPOSITORY}/testdata/certificates/certificate-authority/certificate.pem -format text localhost:8261 szproduct.SzProduct.GetVersion
+    ```
+
+### Docker example - Using TLS mutual authentication
+
+This example shows how to enable [mutual authentication] Transport Layer Security (TLS) in the Senzing gRPC Server.
+
+1. To run this example, [git clone] the `senzing/serve-grpc` repository.
+   Example:
+
+    ```console
+    export MY_SENZING_REPOSITORY=~/serve-grpc
+    ```
+
+    ```console
+    git clone https://github.com/senzing-garage/serve-grpc.git ${MY_SENZING_REPOSITORY}
+    ```
+
+1. Run the Senzing gRPC Server container with `SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE`,
+   `SENZING_TOOLS_SERVER_CERTIFICATE_FILE` and `SENZING_TOOLS_SERVER_KEY_FILE` environment variables set
+   and `${MY_SENZING_REPOSITORY}` volume mounted.
+
+    ```console
+    docker run --env SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE=/serve-grpc/testdata/certificates/certificate-authority/certificate.pem --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/serve-grpc/testdata/certificates/server/certificate.pem --env SENZING_TOOLS_SERVER_KEY_FILE=/serve-grpc/testdata/certificates/server/private_key.pem --publish 8261:8261 --rm --volume ${MY_SENZING_REPOSITORY}:/serve-grpc senzing/serve-grpc
+    ```
+
+1. In a separate terminal, run a "no TLS" failing test using [grpcurl].
+
+    ```console
+    grpcurl -format text localhost:8261 szproduct.SzProduct.GetVersion
+    ```
+
+1. Run another failing "server-side TLS" test using [grpcurl].
+
+    ```console
+    export MY_SENZING_REPOSITORY=~/serve-grpc
+    ```
+
+    ```console
+    grpcurl -authority www.senzing.com -cacert ${MY_SENZING_REPOSITORY}/testdata/certificates/certificate-authority/certificate.pem -format text localhost:8261 szproduct.SzProduct.GetVersion
+    ```
+
+1. Run a successful "mutual TLS" test using [grpcurl].
+
+    ```console
+    export MY_SENZING_REPOSITORY=~/serve-grpc
+    ```
+
+    ```console
+    grpcurl \
+    -authority www.senzing.com \
+    -cacert ${MY_SENZING_REPOSITORY}/testdata/certificates/certificate-authority/certificate.pem \
+    -cert ${MY_SENZING_REPOSITORY}/testdata/certificates/client/certificate.pem \
+    -format text \
+    -key ${MY_SENZING_REPOSITORY}/testdata/certificates/client/private_key.pem \
+    localhost:8261 \
+        szproduct.SzProduct.GetVersion
     ```
 
 ### Docker example - Using bitnami/postgresql Docker container
@@ -323,12 +380,15 @@ If using multiple databases or non-system locations of Senzing binaries,
    [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON](https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_configuration_json)
 
 [bitnami/postgresql]: https://hub.docker.com/r/bitnami/postgresql
-[postgresql]: https://hub.docker.com/_/postgres
+[git clone]: https://git-scm.com/docs/git-clone
 [grpcurl]: https://github.com/fullstorydev/grpcurl
 [Help]: #docker-example---help
+[mutual authentication]: https://en.wikipedia.org/wiki/Transport_Layer_Security#Client-authenticated_TLS_handshake
+[postgresql]: https://hub.docker.com/_/postgres
+[server-side authentication]: https://en.wikipedia.org/wiki/Transport_Layer_Security#Basic_TLS_handshake
+[Using bitnami/postgresql Docker container]: #docker-example---using-bitnamipostgresql-docker-container
+[Using custom Senzing license]: #docker-example---using-custom-senzing-license
 [Using internal, transient SQLite database]: #docker-example---using-internal-transient-sqlite-database
 [Using Postgres database]: #docker-example---using-postgres-database
-[Using custom Senzing license]: #docker-example---using-custom-senzing-license
-[Using bitnami/postgresql Docker container]: #docker-example---using-bitnamipostgresql-docker-container
-[Using Server-side TLS]: #
-[git clone]: #
+[Using TLS mutual authentication]: #docker-example---using-tls-mutual-authentication
+[Using TLS server-side authentication]: #docker-example---using-tls-server-side-authentication
