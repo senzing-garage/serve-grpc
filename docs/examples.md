@@ -230,14 +230,7 @@ This example shows how to enable [mutual authentication] Transport Layer Securit
     ```
 
     ```console
-    grpcurl \
-    -authority www.senzing.com \
-    -cacert ${MY_SENZING_REPOSITORY}/testdata/certificates/certificate-authority/certificate.pem \
-    -cert ${MY_SENZING_REPOSITORY}/testdata/certificates/client/certificate.pem \
-    -format text \
-    -key ${MY_SENZING_REPOSITORY}/testdata/certificates/client/private_key.pem \
-    localhost:8261 \
-        szproduct.SzProduct.GetVersion
+    grpcurl -authority www.senzing.com -cacert ${MY_SENZING_REPOSITORY}/testdata/certificates/certificate-authority/certificate.pem -cert ${MY_SENZING_REPOSITORY}/testdata/certificates/client/certificate.pem -format text -key ${MY_SENZING_REPOSITORY}/testdata/certificates/client/private_key.pem localhost:8261 szproduct.SzProduct.GetVersion
     ```
 
 ### Docker example - Using bitnami/postgresql Docker container
