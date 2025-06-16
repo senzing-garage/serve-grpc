@@ -6,6 +6,7 @@
 1. [Using internal, transient SQLite database]
 1. [Using Postgres database]
 1. [Using custom Senzing license]
+1. [Using Server-side TLS]
 1. [Using bitnami/postgresql Docker container]
 
 ### Docker example - Help
@@ -142,6 +143,44 @@ This example shows how to use your Senzing license key with the Senzing gRPC Ser
 
     ```console
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
+    ```
+
+### Docker example - Using Server-side TLS
+
+This example shows how to enable server-side Transport Layer Security (TLS) in the Senzing gRPC Server.
+
+1. To run this example, [git clone] the `senzing/serve-grpc` repository.
+   Example:
+
+    ```console
+    export MY_SENZING_REPOSITORY=~/serve-grpc
+    ```
+
+    ```console
+    git clone https://github.com/senzing-garage/serve-grpc.git ${MY_SENZING_REPOSITORY}
+    ```
+
+1. Run the Senzing gRPC Server container with mounted volume and `SENZING_TOOLS_SERVER_CERTIFICATE_FILE` and `SENZING_TOOLS_SERVER_KEY_FILE`
+   environment variables.
+
+    ```console
+    docker run --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/serve-grpc/testdata/certificates/server/certificate.pem --env SENZING_TOOLS_SERVER_KEY_FILE=/serve-grpc/testdata/certificates/server/private_key.pem --publish 8261:8261 --rm --volume ${MY_SENZING_REPOSITORY}:/serve-grpc senzing/serve-grpc
+    ```
+
+1. A failing test using [grpcurl].
+
+    ```console
+    grpcurl -format text localhost:8261 szproduct.SzProduct.GetVersion
+    ```
+
+1. A successful test using [grpcurl].
+
+    ```console
+    export MY_SENZING_REPOSITORY=~/serve-grpc
+    ```
+
+    ```console
+    grpcurl -authority www.senzing.com -cacert ${MY_SENZING_REPOSITORY}/testdata/certificates/certificate-authority/certificate.pem -format text localhost:8261 szproduct.SzProduct.GetVersion
     ```
 
 ### Docker example - Using bitnami/postgresql Docker container
@@ -286,8 +325,10 @@ If using multiple databases or non-system locations of Senzing binaries,
 [bitnami/postgresql]: https://hub.docker.com/r/bitnami/postgresql
 [postgresql]: https://hub.docker.com/_/postgres
 [grpcurl]: https://github.com/fullstorydev/grpcurl
-[Help]: (#docker-example---help)
-[Using internal, transient SQLite database]: (#docker-example---help)
-[Using Postgres database]: (#docker-example---help)
-[Using custom Senzing license]: (#docker-example---help)
-[Using bitnami/postgresql Docker container]: (#docker-example---help)
+[Help]: #docker-example---help
+[Using internal, transient SQLite database]: #docker-example---using-internal-transient-sqlite-database
+[Using Postgres database]: #docker-example---using-postgres-database
+[Using custom Senzing license]: #docker-example---using-custom-senzing-license
+[Using bitnami/postgresql Docker container]: #docker-example---using-bitnamipostgresql-docker-container
+[Using Server-side TLS]: #
+[git clone]: #
