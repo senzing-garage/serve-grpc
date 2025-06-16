@@ -83,21 +83,21 @@
     docker run -it --publish 8261:8261 --rm senzing/serve-grpc
     ```
 
-   Then view the license using [grpcurl].
+   In a separate terminal, view the license using [grpcurl].
 
     ```console
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
     ```
 
-1. The use your custom license, a parameter may be used.
-   To see this license, run
+1. To use your custom license, a parameter may be used.
+   To see your license, run
    Example:
 
     ```console
     docker run -it --publish 8261:8261 --rm senzing/serve-grpc --BASE_64.....
     ```
 
-   Then view the license using [grpcurl].
+   In a separate terminal, view your license using [grpcurl].
 
     ```console
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
@@ -115,7 +115,7 @@
     docker run -it --env SENZING_TOOLS_LICENSE_STRING_BASE64 --publish 8261:8261 --rm senzing/serve-grpc
     ```
 
-   Then view the license using [grpcurl].
+   In a separate terminal, view your license using [grpcurl].
 
     ```console
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
