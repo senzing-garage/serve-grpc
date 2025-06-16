@@ -150,7 +150,7 @@ This example shows how to use your Senzing license key with the Senzing gRPC Ser
 
 This example shows how to enable [server-side authentication] Transport Layer Security (TLS) in the Senzing gRPC Server.
 
-1. To run this example, [git clone] the `senzing/serve-grpc` repository.
+1. :pencil2: To run this example, [git clone] the `senzing/serve-grpc` repository.
    Example:
 
     ```console
@@ -174,7 +174,7 @@ This example shows how to enable [server-side authentication] Transport Layer Se
     grpcurl -format text localhost:8261 szproduct.SzProduct.GetVersion
     ```
 
-1. Run a successful test using [grpcurl].
+1. :pencil2: Run a successful test using [grpcurl].
 
     ```console
     export MY_SENZING_REPOSITORY=~/serve-grpc
@@ -188,7 +188,7 @@ This example shows how to enable [server-side authentication] Transport Layer Se
 
 This example shows how to enable [mutual authentication] Transport Layer Security (TLS) in the Senzing gRPC Server.
 
-1. To run this example, [git clone] the `senzing/serve-grpc` repository.
+1. :pencil2: To run this example, [git clone] the `senzing/serve-grpc` repository.
    Example:
 
     ```console
@@ -213,7 +213,7 @@ This example shows how to enable [mutual authentication] Transport Layer Securit
     grpcurl -format text localhost:8261 szproduct.SzProduct.GetVersion
     ```
 
-1. Run another failing "server-side TLS" test using [grpcurl].
+1. :pencil2: Run another failing "server-side TLS" test using [grpcurl].
 
     ```console
     export MY_SENZING_REPOSITORY=~/serve-grpc
@@ -223,7 +223,7 @@ This example shows how to enable [mutual authentication] Transport Layer Securit
     grpcurl -authority www.senzing.com -cacert ${MY_SENZING_REPOSITORY}/testdata/certificates/certificate-authority/certificate.pem -format text localhost:8261 szproduct.SzProduct.GetVersion
     ```
 
-1. Run a successful "mutual TLS" test using [grpcurl].
+1. :pencil2: Run a successful "mutual TLS" test using [grpcurl].
 
     ```console
     export MY_SENZING_REPOSITORY=~/serve-grpc
