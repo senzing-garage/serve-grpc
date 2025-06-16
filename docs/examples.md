@@ -2,9 +2,15 @@
 
 ## Docker examples
 
-### Docker example - help
+1. [Help]
+1. [Using internal, transient SQLite database]
+1. [Using Postgres database]
+1. [Using custom Senzing license]
+1. [Using bitnami/postgresql Docker container]
 
-This example shows command-line and environment variables used to modify the behavior of the Senzing gRPC Server.
+### Docker example - Help
+
+This example shows environment variables and command-line arguments used to modify the behavior of the Senzing gRPC Server.
 
 1. Show help to list environment variables that can be used in `docker run`'s `--env` parameter.
    Example:
@@ -35,13 +41,15 @@ The container is mutable and the data in the database is lost when the container
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetVersion
     ```
 
-### Docker example - Using postgres Docker container
+### Docker example - Using Postgres database
 
 This example shows how to use a Postgres database with the Senzing gRPC Server.
 
 The example brings up a Postgres Docker container.
 If you already have a Postgres database,
-steps #1 and #2 may be skipped and the `SENZING_TOOLS_DATABASE_URL` value needs to reference your Postgres database.
+steps #1 and #2 may be skipped,
+the `SENZING_TOOLS_DATABASE_URL` value needs to reference your Postgres database,
+and the `--network` argument is no longer needed.
 
 1. Create a Docker network.
 
@@ -86,9 +94,9 @@ steps #1 and #2 may be skipped and the `SENZING_TOOLS_DATABASE_URL` value needs 
     docker network rm my-senzing-network
     ```
 
-### Docker example - Using custom license
+### Docker example - Using custom Senzing license
 
-This example shows how to use your Senzing license key with the Senzing gRPC server.
+This example shows how to use your Senzing license key with the Senzing gRPC Server.
 
 1. The Senzing engine come with a complementary license.
    To see this license, run
@@ -104,12 +112,12 @@ This example shows how to use your Senzing license key with the Senzing gRPC ser
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
     ```
 
-1. :pencil2: To use your custom license, a parameter may be used.
-   To see your license, replace the `--license-string-base64` value with your license key.
+1. :pencil2: To use your custom license, a command-line argument may be used.
+   To see your license, replace the value of `--license-string-base64` with your license key.
    Example:
 
     ```console
-    docker run -it --publish 8261:8261 --rm senzing/serve-grpc --license-string-base64 xxxxx
+    docker run -it --publish 8261:8261 --rm senzing/serve-grpc --license-string-base64 AQAAADgCAAAAAAAAU2VuemluZyBQdWJsaWMgVGVzdCBMaWNlbnNlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU2VuemluZyBQdWJsaWMgVGVzdCBMaWNlbnNlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADIwMjUtMDQtMTAAAAAAAAAAAAAARVZBTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFNUQU5EQVJEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0a38AAFDDAAAAAAAAMjAyNi0wNC0xMAAAAAAAAAAAAABZRUFSTFkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa38AAAdjieyNnaZ+HQ+tUuj/6evC1/aiPQdyJryw2ykMKzhkQyiRkoRdm4gm06fh9YVnmkTVlvdQVH39SH6xCEFje1hfzC/rV69NyFEcaPPrdG7WTmx9NZA2S6AcxRTxH93H1fK9sRaDnrpHJfOdTyJVqI+AYZfcQiNl9ooXkSsvGCsjk5znS6hlNOzdUVcuq98h3LGNk5IKpnW9+oB5Dnr+43yvaufrxTUET9SQrfXSpeB9yvYZZXKqPFNEijqrxEAt0JSNIqOqoRSnINfoUCTqjkjrcJIW+a5u9wuWTBUH/nY/vOf52wP5/YbR1r7wpTRboB0meEBz5JmxsiiWp9g9mszhmmnTLLFH2ocZK3SN4UX/UyEB257gd6vb4e2OuF8OZORSZNhN3u+xr2zYJyDpup+ZApPb1kho8GjBv2G4JsSJvQhZzZPcsgQ9YYkXWn+H+5aFmK79JknK6rt4VK/E4s9i0Ga0xU7Nxq/i2pbCmEbwBUAHCeOq2hAQJgA9NycBV222nzJ1jMBkGWN/PxmRNtQ6sGxzTxYRpNmF05oW4UEZGSbcBPVU67TuaAJZ0/v3GfUy2eSKuoqRdGJ6C42HcqzB5+/o09eeNXf4DFgXGJQxvr/G/9myXzcojJco4QAmaYrf9xiAsS3lnEzb0dtcuzzeS/4hO6yIVuTNV9gv3AQ5
     ```
 
    In a separate terminal, view your license using [grpcurl].
@@ -119,7 +127,7 @@ This example shows how to use your Senzing license key with the Senzing gRPC ser
     ```
 
 1. :pencil2: Alternatively, to use your custom license, an environment variable may be used.
-   To see this license, replace the value of `SENZING_TOOLS_LICENSE_STRING_BASE64` with your license key and run
+   To see your license, replace the value of `SENZING_TOOLS_LICENSE_STRING_BASE64` with your license key.
    Example:
 
     ```console
@@ -278,3 +286,8 @@ If using multiple databases or non-system locations of Senzing binaries,
 [bitnami/postgresql]: https://hub.docker.com/r/bitnami/postgresql
 [postgresql]: https://hub.docker.com/_/postgres
 [grpcurl]: https://github.com/fullstorydev/grpcurl
+[Help]: (#docker-example---help)
+[Using internal, transient SQLite database]: (#docker-example---help)
+[Using Postgres database]: (#docker-example---help)
+[Using custom Senzing license]: (#docker-example---help)
+[Using bitnami/postgresql Docker container]: (#docker-example---help)
