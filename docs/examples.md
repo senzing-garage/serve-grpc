@@ -73,6 +73,36 @@
     docker network rm my-senzing-network
     ```
 
+### Docker example - Using custom license
+
+1. The Senzing engine come with a complementary license.
+   To see this license, run
+   Example:
+
+    ```console
+    docker run -it --publish 8261:8261 --rm senzing/serve-grpc
+    ```
+
+   Then view the license using [grpcurl].
+
+    ```console
+    grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
+    ```
+
+1. The use your custom license, a parameter is needed.
+   To see this license, run
+   Example:
+
+    ```console
+    docker run -it --publish 8261:8261 --rm senzing/serve-grpc
+    ```
+
+   Then view the license using [grpcurl].
+
+    ```console
+    grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
+    ```
+
 ### Docker example - Using bitnami/postgresql Docker container
 
 1. Create a Docker network.
