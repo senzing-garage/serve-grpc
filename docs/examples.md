@@ -168,7 +168,7 @@ This example shows how to enable [server-side authentication] Transport Layer Se
     docker run --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/serve-grpc/testdata/certificates/server/certificate.pem --env SENZING_TOOLS_SERVER_KEY_FILE=/serve-grpc/testdata/certificates/server/private_key.pem --publish 8261:8261 --rm --volume ${MY_SENZING_REPOSITORY}:/serve-grpc senzing/serve-grpc
     ```
 
-1. In a separate terminal, run a "no TLS" failing test using [grpcurl].
+1. In a separate terminal, run a failing "no TLS" test using [grpcurl].
 
     ```console
     grpcurl -format text localhost:8261 szproduct.SzProduct.GetVersion
@@ -207,7 +207,7 @@ This example shows how to enable [mutual authentication] Transport Layer Securit
     docker run --env SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE=/serve-grpc/testdata/certificates/certificate-authority/certificate.pem --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/serve-grpc/testdata/certificates/server/certificate.pem --env SENZING_TOOLS_SERVER_KEY_FILE=/serve-grpc/testdata/certificates/server/private_key.pem --publish 8261:8261 --rm --volume ${MY_SENZING_REPOSITORY}:/serve-grpc senzing/serve-grpc
     ```
 
-1. In a separate terminal, run a "no TLS" failing test using [grpcurl].
+1. In a separate terminal, run a failing "no TLS" test using [grpcurl].
 
     ```console
     grpcurl -format text localhost:8261 szproduct.SzProduct.GetVersion
