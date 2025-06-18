@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning].
 
 ### Added in 0.9.15
 
-- Update dependencies
+- Rename `SzConfigManager.GetConfigs` to `SzConfigManger.GetConfigRegistry`
 
 ## [0.9.14] - 2025-06-16
 
