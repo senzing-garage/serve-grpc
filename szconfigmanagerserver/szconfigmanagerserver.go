@@ -57,13 +57,13 @@ func (server *SzConfigManagerServer) GetConfig(
 	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
-func (server *SzConfigManagerServer) GetConfigs(
+func (server *SzConfigManagerServer) GetConfigRegistry(
 	ctx context.Context,
-	request *szpb.GetConfigsRequest,
-) (*szpb.GetConfigsResponse, error) {
+	request *szpb.GetConfigRegistryRequest,
+) (*szpb.GetConfigRegistryResponse, error) {
 	var (
 		err      error
-		response *szpb.GetConfigsResponse
+		response *szpb.GetConfigRegistryResponse
 		result   string
 	)
 
@@ -76,8 +76,8 @@ func (server *SzConfigManagerServer) GetConfigs(
 	}
 
 	szConfigManager := getSzConfigManager()
-	result, err = szConfigManager.GetConfigs(ctx)
-	response = &szpb.GetConfigsResponse{
+	result, err = szConfigManager.GetConfigRegistry(ctx)
+	response = &szpb.GetConfigRegistryResponse{
 		Result: result,
 	}
 

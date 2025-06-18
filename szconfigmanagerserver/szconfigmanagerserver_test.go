@@ -97,11 +97,11 @@ func TestSzConfigManagerServer_GetConfig_badConfigID(test *testing.T) {
 	printActual(test, response)
 }
 
-func TestSzConfigManagerServer_GetConfigs(test *testing.T) {
+func TestSzConfigManagerServer_GetConfigRegistry(test *testing.T) {
 	ctx := test.Context()
 	szConfigManagerServer := getTestObject(ctx, test)
-	request := &szpb.GetConfigsRequest{}
-	response, err := szConfigManagerServer.GetConfigs(ctx, request)
+	request := &szpb.GetConfigRegistryRequest{}
+	response, err := szConfigManagerServer.GetConfigRegistry(ctx, request)
 	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response.GetResult())
