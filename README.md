@@ -35,6 +35,7 @@ Senzing SDKs for accessing the gRPC server:
 
 1. Python: [sz-sdk-python-grpc]
 1. Java: [sz-sdk-java-grpc]
+1. C-sharp [sz-sdk-csharp-grpc]
 1. Go: [sz-sdk-go-grpc]
 
 ## Install
@@ -49,7 +50,8 @@ Senzing SDKs for accessing the gRPC server:
     docker run -it -p 8261:8261 --rm senzing/serve-grpc
     ```
 
-1. See [Parameters](#parameters) for additional parameters.
+1. See [Parameters] for additional parameters.
+1. See [Examples] for using external databases, custom licenses, TLS, etc.
 
 ### Parameters
 
@@ -118,11 +120,12 @@ Senzing SDKs for accessing the gRPC server:
 [License Badge]: https://img.shields.io/badge/License-Apache2-brightgreen.svg
 [License]: https://github.com/senzing-garage/serve-grpc/blob/main/LICENSE
 [Package reference]: https://pkg.go.dev/github.com/senzing-garage/serve-grpc
+[Parameters]: #parameters
 [Senzing Garage]: https://github.com/senzing-garage
 [Senzing Protocol Buffer definitions]: https://github.com/senzing-garage/sz-sdk-proto
 [Senzing Quick Start guides]: https://docs.senzing.com/quickstart/
 [SENZING_TOOLS_AVOID_SERVING]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_avoid_serving
-[SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_client_certificate_file
+[SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_client_ca_certificate_file
 [SENZING_TOOLS_CONFIG_PATH]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_config_path
 [SENZING_TOOLS_DATABASE_URL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_database_url
 [SENZING_TOOLS_ENABLE_ALL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_enable_all
@@ -135,10 +138,10 @@ Senzing SDKs for accessing the gRPC server:
 [SENZING_TOOLS_ENGINE_INSTANCE_NAME]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_instance_name
 [SENZING_TOOLS_ENGINE_LOG_LEVEL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_log_level
 [SENZING_TOOLS_GRPC_PORT]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_grpc_port
-[SENZING_TOOLS_HTTP_PORT]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_http_path
+[SENZING_TOOLS_HTTP_PORT]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_http_port
 [SENZING_TOOLS_LICENSE_STRING_BASE64]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_license_string_base64
 [SENZING_TOOLS_LOG_LEVEL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_log_level
-[SENZING_TOOLS_OBSERVER_ORIGIN]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_observer_origin
+[SENZING_TOOLS_OBSERVER_ORIGIN]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_observer_origin
 [SENZING_TOOLS_OBSERVER_URL]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_observer_url
 [SENZING_TOOLS_RESOURCE_PATH]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_resource_path
 [SENZING_TOOLS_SENZING_DIRECTORY]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_senzing_directory
@@ -162,6 +165,7 @@ Senzing SDKs for accessing the gRPC server:
 [SENZING_TOOLS_SUPPORT_PATH]: https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_support_path
 [Senzing]: https://senzing.com/
 [senzing/sz-sdk-go-core]: https://github.com/senzing-garage/sz-sdk-go-core
+[sz-sdk-csharp-grpc]: https://github.com/senzing-garage/sz-sdk-csharp-grpc
 [sz-sdk-go-grpc]: https://github.com/senzing-garage/sz-sdk-go-grpc
 [sz-sdk-java-grpc]: https://github.com/senzing-garage/sz-sdk-java-grpc
 [sz-sdk-python-grpc]: https://github.com/senzing-garage/sz-sdk-python-grpc

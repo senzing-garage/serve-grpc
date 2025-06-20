@@ -2,10 +2,19 @@
 
 ## Docker examples
 
-### Docker example - help
+1. [Help]
+1. [Using internal, transient SQLite database]
+1. [Using Postgres database]
+1. [Using custom Senzing license]
+1. [Using TLS server-side authentication]
+1. [Using TLS mutual authentication]
+1. [Using bitnami/postgresql Docker container]
+
+### Docker example - Help
+
+This example shows environment variables and command-line arguments used to modify the behavior of the Senzing gRPC Server.
 
 1. Show help to list environment variables that can be used in `docker run`'s `--env` parameter.
-   Example:
 
     ```console
     docker run --rm senzing/serve-grpc --help
@@ -13,10 +22,14 @@
 
 ### Docker example - Using internal, transient SQLite database
 
-1. This usage has an SQLite database that is baked into the Docker container.
-   The container is mutable and the data in the database is lost when the container is terminated.
-   Use this technique for simple tests only.
-   Example:
+This example shows the simplest use of the Senzing gRPC Server.
+
+This usage has an SQLite database baked into the Docker container.
+The container is mutable and the data in the database is lost when the container is terminated.
+
+:warning: Use this technique for simple tests only.
+
+1. Start the Senzing gRPC Server.
 
     ```console
     docker run -it --publish 8261:8261 --rm senzing/serve-grpc
@@ -28,7 +41,16 @@
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetVersion
     ```
 
-### Docker example - Using postgres Docker container
+### Docker example - Using Postgres database
+
+This example shows how to use a Postgres database with the Senzing gRPC Server.
+
+The example brings up a Postgres Docker container.
+If you already have a Postgres database:
+
+- Steps #1 and #2 may be skipped
+- The `SENZING_TOOLS_DATABASE_URL` value needs to reference your Postgres database
+- The `--network` argument is no longer needed
 
 1. Create a Docker network.
 
@@ -71,6 +93,148 @@
     docker kill my-postgres
     docker kill my-grpc-server
     docker network rm my-senzing-network
+    ```
+
+### Docker example - Using custom Senzing license
+
+This example shows how to use your Senzing license key with the Senzing gRPC Server.
+
+1. The Senzing engine comes with a complimentary license.
+   To see this license, start the Senzing gRPC server without a license.
+
+    ```console
+    docker run -it --publish 8261:8261 --rm senzing/serve-grpc
+    ```
+
+   In a separate terminal, view the complimentary license using [grpcurl].
+
+    ```console
+    grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
+    ```
+
+1. To use your custom license, a command-line argument may be used.
+   Replace the value of `--license-string-base64` with your license key.
+   *Note:* The example uses a license that is more restrictive than the complimentary license.
+
+   :pencil2: Example:
+
+    ```console
+    docker run -it --publish 8261:8261 --rm senzing/serve-grpc --license-string-base64 AQAAADgCAAAAAAAAU2VuemluZyBUdXRvcmlhbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARVZBTCAtIHN1cHBvcnRAc2VuemluZy5jb20AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADIwMjUtMDYtMTcAAAAAAAAAAAAARVZBTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFNUQU5EQVJEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQKX8AAAEAAAAAAAAAMjAyNi0wNi0xNwAAAAAAAAAAAABZRUFSTFkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJ4NL/lYgnQcCMaMH6xHcSdR1Tjky7Ontd6s3VHQUmqQhCA5/9JVvd8O/V9qBetVWyDJ5XJKGIc7NgvYDJjd+etW68P6DCh3H9yY3WK+LMlvXWoBcpkEJS/Zx0zwpL/gMjii2GwjsTDUiYyg1xUDs/ScmA08B6gP44A4UQzqzWAGsVngGtcjsEgEyNvcVnEOR96xw3R5GBaagwE8C5RlMfyjijtSqNRo859VRo60zDaPIpLW9WCAD7FPxtVEESHSlnYCWIIp5Yv6Ba1v/i+4dLM6rtiVBC3Ukz5vjYZkj7wf3GdtcpGzEYfAWsaYT2rU75iymO1stw44i8Gguz8D8+xZJoeC8MmoXkmXfIz7ZKiFspUeer8kFcIeRu/qaXzwG10iut537P/YG6UbJh78lGlpWwdiuEf3I7kqaQiigCq/egjj2fB7E871PXitBFvYwhDEnGi6DYNbnOlaWN8QOZAEexES2uwYeFWXnnmreTf52Sxz66jPXNCGYcxgBXDmBRpZa3tUqpYsY+fxu/QyPC7nJIt29Peaa8Cxna4807BesCaSiYOZllSRTcZNkQK6LIzMTgTZwXVVL0uVcIk2GIhpC3C84KjBj8dDnBiyRMFs/ubWmrJQFSkMr2AOFFZwr4w7Zp0TNCoVNJ5zUjQBTDDd4RgNGozYHrHvWr1l3+NL
+    ```
+
+   In a separate terminal, view your license using [grpcurl].
+
+    ```console
+    grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
+    ```
+
+1. Alternatively, to use your custom license, an environment variable may be used.
+   To see your license, replace the value of `SENZING_TOOLS_LICENSE_STRING_BASE64` with your license key.
+   *Note:* The example uses a license that is more restrictive than the complimentary license.
+
+   :pencil2: Example:
+
+    ```console
+    export SENZING_TOOLS_LICENSE_STRING_BASE64=AQAAADgCAAAAAAAAU2VuemluZyBUdXRvcmlhbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARVZBTCAtIHN1cHBvcnRAc2VuemluZy5jb20AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADIwMjUtMDYtMTcAAAAAAAAAAAAARVZBTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFNUQU5EQVJEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQKX8AAAEAAAAAAAAAMjAyNi0wNi0xNwAAAAAAAAAAAABZRUFSTFkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJ4NL/lYgnQcCMaMH6xHcSdR1Tjky7Ontd6s3VHQUmqQhCA5/9JVvd8O/V9qBetVWyDJ5XJKGIc7NgvYDJjd+etW68P6DCh3H9yY3WK+LMlvXWoBcpkEJS/Zx0zwpL/gMjii2GwjsTDUiYyg1xUDs/ScmA08B6gP44A4UQzqzWAGsVngGtcjsEgEyNvcVnEOR96xw3R5GBaagwE8C5RlMfyjijtSqNRo859VRo60zDaPIpLW9WCAD7FPxtVEESHSlnYCWIIp5Yv6Ba1v/i+4dLM6rtiVBC3Ukz5vjYZkj7wf3GdtcpGzEYfAWsaYT2rU75iymO1stw44i8Gguz8D8+xZJoeC8MmoXkmXfIz7ZKiFspUeer8kFcIeRu/qaXzwG10iut537P/YG6UbJh78lGlpWwdiuEf3I7kqaQiigCq/egjj2fB7E871PXitBFvYwhDEnGi6DYNbnOlaWN8QOZAEexES2uwYeFWXnnmreTf52Sxz66jPXNCGYcxgBXDmBRpZa3tUqpYsY+fxu/QyPC7nJIt29Peaa8Cxna4807BesCaSiYOZllSRTcZNkQK6LIzMTgTZwXVVL0uVcIk2GIhpC3C84KjBj8dDnBiyRMFs/ubWmrJQFSkMr2AOFFZwr4w7Zp0TNCoVNJ5zUjQBTDDd4RgNGozYHrHvWr1l3+NL
+    ```
+
+    ```console
+    docker run -it --env SENZING_TOOLS_LICENSE_STRING_BASE64 --publish 8261:8261 --rm senzing/serve-grpc
+    ```
+
+   In a separate terminal, view your license using [grpcurl].
+
+    ```console
+    grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
+    ```
+
+### Docker example - Using TLS server-side authentication
+
+This example shows how to enable [server-side authentication] Transport Layer Security (TLS) in the Senzing gRPC Server.
+
+1. To run this example, [git clone] the `senzing/serve-grpc` repository.
+
+   :pencil2: Example:
+
+    ```console
+    export MY_SENZING_REPOSITORY=~/my-senzing-serve-grpc
+    ```
+
+    ```console
+    git clone https://github.com/senzing-garage/serve-grpc.git ${MY_SENZING_REPOSITORY}
+    ```
+
+1. Run the Senzing gRPC Server container with `SENZING_TOOLS_SERVER_CERTIFICATE_FILE` and `SENZING_TOOLS_SERVER_KEY_FILE`
+   environment variables set and `${MY_SENZING_REPOSITORY}` volume mounted.
+
+    ```console
+    docker run --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/serve-grpc/testdata/certificates/server/certificate.pem --env SENZING_TOOLS_SERVER_KEY_FILE=/serve-grpc/testdata/certificates/server/private_key.pem --publish 8261:8261 --rm --volume ${MY_SENZING_REPOSITORY}:/serve-grpc senzing/serve-grpc
+    ```
+
+1. In a separate terminal, run a failing "no TLS" test using [grpcurl].
+
+    ```console
+    grpcurl -format text localhost:8261 szproduct.SzProduct.GetVersion
+    ```
+
+1. :pencil2: Run a successful test using [grpcurl].
+
+    ```console
+    export MY_SENZING_REPOSITORY=~/my-senzing-serve-grpc
+    ```
+
+    ```console
+    grpcurl -authority www.senzing.com -cacert ${MY_SENZING_REPOSITORY}/testdata/certificates/certificate-authority/certificate.pem -format text localhost:8261 szproduct.SzProduct.GetVersion
+    ```
+
+### Docker example - Using TLS mutual authentication
+
+This example shows how to enable [mutual authentication] Transport Layer Security (TLS) in the Senzing gRPC Server.
+
+1. To run this example, [git clone] the `senzing/serve-grpc` repository.
+
+   :pencil2: Example:
+
+    ```console
+    export MY_SENZING_REPOSITORY=~/my-senzing-serve-grpc
+    ```
+
+    ```console
+    git clone https://github.com/senzing-garage/serve-grpc.git ${MY_SENZING_REPOSITORY}
+    ```
+
+1. Run the Senzing gRPC Server container with `SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE`,
+   `SENZING_TOOLS_SERVER_CERTIFICATE_FILE` and `SENZING_TOOLS_SERVER_KEY_FILE` environment variables set
+   and `${MY_SENZING_REPOSITORY}` volume mounted.
+
+    ```console
+    docker run --env SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE=/serve-grpc/testdata/certificates/certificate-authority/certificate.pem --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/serve-grpc/testdata/certificates/server/certificate.pem --env SENZING_TOOLS_SERVER_KEY_FILE=/serve-grpc/testdata/certificates/server/private_key.pem --publish 8261:8261 --rm --volume ${MY_SENZING_REPOSITORY}:/serve-grpc senzing/serve-grpc
+    ```
+
+1. In a separate terminal, run a failing "no TLS" test using [grpcurl].
+
+    ```console
+    grpcurl -format text localhost:8261 szproduct.SzProduct.GetVersion
+    ```
+
+1. :pencil2: Run another failing "server-side TLS" test using [grpcurl].
+
+    ```console
+    export MY_SENZING_REPOSITORY=~/my-senzing-serve-grpc
+    ```
+
+    ```console
+    grpcurl -authority www.senzing.com -cacert ${MY_SENZING_REPOSITORY}/testdata/certificates/certificate-authority/certificate.pem -format text localhost:8261 szproduct.SzProduct.GetVersion
+    ```
+
+1. :pencil2: Run a successful "mutual TLS" test using [grpcurl].
+
+    ```console
+    export MY_SENZING_REPOSITORY=~/my-senzing-serve-grpc
+    ```
+
+    ```console
+    grpcurl -authority www.senzing.com -cacert ${MY_SENZING_REPOSITORY}/testdata/certificates/certificate-authority/certificate.pem -cert ${MY_SENZING_REPOSITORY}/testdata/certificates/client/certificate.pem -format text -key ${MY_SENZING_REPOSITORY}/testdata/certificates/client/private_key.pem localhost:8261 szproduct.SzProduct.GetVersion
     ```
 
 ### Docker example - Using bitnami/postgresql Docker container
@@ -127,9 +291,10 @@ It crashes on macOS and Windows and is unstable in Linux.
 1. This usage creates an SQLite database that is outside the Docker container.
    The SQLite database may be reused across multiple `docker run` commands.
    Use this technique for simple tests only.
-   Example:
 
-   :pencil2: Specify a directory to store the database.
+   Specify a directory to store the database.
+
+   :pencil2: Example:
 
     ```console
     export MY_SENZING_DIRECTORY=~/my-senzing
@@ -137,7 +302,6 @@ It crashes on macOS and Windows and is unstable in Linux.
 
    Create an empty SQLite database and populate it with the Senzing schema and configuration.
    Remember `SENZING_TOOLS_DATABASE_URL` references the SQLite file *inside* the Docker container.
-   Example:
 
     ```console
     mkdir -p ${MY_SENZING_DIRECTORY}
@@ -185,8 +349,9 @@ In this example, only the SzEngine gRPC is started.
 If using multiple databases or non-system locations of Senzing binaries,
 `SENZING_TOOLS_ENGINE_CONFIGURATION_JSON` is used to configure the Senzing runtime engine.
 
-1. :pencil2: Set the value of `SENZING_TOOLS_ENGINE_CONFIGURATION_JSON`.
-   Example:
+1. Set the value of `SENZING_TOOLS_ENGINE_CONFIGURATION_JSON`.
+
+   :pencil2: Example:
 
     ```console
     export SENZING_TOOLS_ENGINE_CONFIGURATION_JSON='{
@@ -202,7 +367,6 @@ If using multiple databases or non-system locations of Senzing binaries,
     ```
 
 1. Run the gRPC server.
-   Example:
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/er/lib/
@@ -213,5 +377,15 @@ If using multiple databases or non-system locations of Senzing binaries,
    [SENZING_TOOLS_ENGINE_CONFIGURATION_JSON](https://github.com/senzing-garage/knowledge-base/blob/main/lists/environment-variables.md#senzing_tools_engine_configuration_json)
 
 [bitnami/postgresql]: https://hub.docker.com/r/bitnami/postgresql
+[git clone]: https://git-scm.com/docs/git-clone
+[grpcurl]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/grpcurl.md
+[Help]: #docker-example---help
+[mutual authentication]: https://en.wikipedia.org/wiki/Transport_Layer_Security#Client-authenticated_TLS_handshake
 [postgresql]: https://hub.docker.com/_/postgres
-[grpcurl]: https://github.com/fullstorydev/grpcurl
+[server-side authentication]: https://en.wikipedia.org/wiki/Transport_Layer_Security#Basic_TLS_handshake
+[Using bitnami/postgresql Docker container]: #docker-example---using-bitnamipostgresql-docker-container
+[Using custom Senzing license]: #docker-example---using-custom-senzing-license
+[Using internal, transient SQLite database]: #docker-example---using-internal-transient-sqlite-database
+[Using Postgres database]: #docker-example---using-postgres-database
+[Using TLS mutual authentication]: #docker-example---using-tls-mutual-authentication
+[Using TLS server-side authentication]: #docker-example---using-tls-server-side-authentication
