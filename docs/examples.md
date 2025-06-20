@@ -117,7 +117,7 @@ This example shows how to use your Senzing license key with the Senzing gRPC Ser
 
 1. :pencil2: To use your custom license, a command-line argument may be used.
    To see your license, replace the value of `--license-string-base64` with your license key.
-   *Note:* The example uses a non-working, expired license.
+   *Note:* The example uses a license that is more restrictive than the complimentary license.
    Example:
 
     ```console
