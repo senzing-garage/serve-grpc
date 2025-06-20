@@ -377,7 +377,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 
 [bitnami/postgresql]: https://hub.docker.com/r/bitnami/postgresql
 [git clone]: https://git-scm.com/docs/git-clone
-[grpcurl]: https://github.com/fullstorydev/grpcurl
+[grpcurl]: https://github.com/senzing-garage/knowledge-base/blob/main/WHATIS/grpcurl.md
 [Help]: #docker-example---help
 [mutual authentication]: https://en.wikipedia.org/wiki/Transport_Layer_Security#Client-authenticated_TLS_handshake
 [postgresql]: https://hub.docker.com/_/postgres
