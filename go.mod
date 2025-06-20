@@ -12,7 +12,7 @@ require (
 	github.com/senzing-garage/init-database v0.7.15
 	github.com/senzing-garage/sz-sdk-go v0.15.6
 	github.com/senzing-garage/sz-sdk-go-core v0.9.7
-	github.com/senzing-garage/sz-sdk-proto v0.8.5
+	github.com/senzing-garage/sz-sdk-proto v0.8.6
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.20.1
