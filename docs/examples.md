@@ -24,7 +24,7 @@ This example shows environment variables and command-line arguments used to modi
 
 This example shows the simplest use of the Senzing gRPC Server.
 
-This usage has an SQLite database that is baked into the Docker container.
+This usage has an SQLite database baked into the Docker container.
 The container is mutable and the data in the database is lost when the container is terminated.
 
 :warning: Use this technique for simple tests only.
@@ -99,14 +99,14 @@ If you already have a Postgres database:
 
 This example shows how to use your Senzing license key with the Senzing gRPC Server.
 
-1. The Senzing engine come with a complementary license.
+1. The Senzing engine comes with a complimentary license.
    To see this license, start the Senzing gRPC server without a license.
 
     ```console
     docker run -it --publish 8261:8261 --rm senzing/serve-grpc
     ```
 
-   In a separate terminal, view the license using [grpcurl].
+   In a separate terminal, view the complimentary license using [grpcurl].
 
     ```console
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
