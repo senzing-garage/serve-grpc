@@ -15,7 +15,6 @@
 This example shows environment variables and command-line arguments used to modify the behavior of the Senzing gRPC Server.
 
 1. Show help to list environment variables that can be used in `docker run`'s `--env` parameter.
-   Example:
 
     ```console
     docker run --rm senzing/serve-grpc --help
@@ -31,7 +30,6 @@ The container is mutable and the data in the database is lost when the container
 :warning: Use this technique for simple tests only.
 
 1. Start the Senzing gRPC Server.
-   Example:
 
     ```console
     docker run -it --publish 8261:8261 --rm senzing/serve-grpc
@@ -102,8 +100,7 @@ If you already have a Postgres database:
 This example shows how to use your Senzing license key with the Senzing gRPC Server.
 
 1. The Senzing engine come with a complementary license.
-   To see this license, run
-   Example:
+   To see this license, start the Senzing gRPC server without a license.
 
     ```console
     docker run -it --publish 8261:8261 --rm senzing/serve-grpc
@@ -156,6 +153,7 @@ This example shows how to use your Senzing license key with the Senzing gRPC Ser
 This example shows how to enable [server-side authentication] Transport Layer Security (TLS) in the Senzing gRPC Server.
 
 1. :pencil2: To run this example, [git clone] the `senzing/serve-grpc` repository.
+
    Example:
 
     ```console
@@ -194,6 +192,7 @@ This example shows how to enable [server-side authentication] Transport Layer Se
 This example shows how to enable [mutual authentication] Transport Layer Security (TLS) in the Senzing gRPC Server.
 
 1. :pencil2: To run this example, [git clone] the `senzing/serve-grpc` repository.
+
    Example:
 
     ```console
@@ -292,9 +291,10 @@ It crashes on macOS and Windows and is unstable in Linux.
 1. This usage creates an SQLite database that is outside the Docker container.
    The SQLite database may be reused across multiple `docker run` commands.
    Use this technique for simple tests only.
-   Example:
 
    :pencil2: Specify a directory to store the database.
+
+   Example:
 
     ```console
     export MY_SENZING_DIRECTORY=~/my-senzing
@@ -302,7 +302,6 @@ It crashes on macOS and Windows and is unstable in Linux.
 
    Create an empty SQLite database and populate it with the Senzing schema and configuration.
    Remember `SENZING_TOOLS_DATABASE_URL` references the SQLite file *inside* the Docker container.
-   Example:
 
     ```console
     mkdir -p ${MY_SENZING_DIRECTORY}
@@ -351,6 +350,7 @@ If using multiple databases or non-system locations of Senzing binaries,
 `SENZING_TOOLS_ENGINE_CONFIGURATION_JSON` is used to configure the Senzing runtime engine.
 
 1. :pencil2: Set the value of `SENZING_TOOLS_ENGINE_CONFIGURATION_JSON`.
+
    Example:
 
     ```console
@@ -367,7 +367,6 @@ If using multiple databases or non-system locations of Senzing binaries,
     ```
 
 1. Run the gRPC server.
-   Example:
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/er/lib/
