@@ -132,7 +132,7 @@ This example shows how to use your Senzing license key with the Senzing gRPC Ser
 
 1. :pencil2: Alternatively, to use your custom license, an environment variable may be used.
    To see your license, replace the value of `SENZING_TOOLS_LICENSE_STRING_BASE64` with your license key.
-    *Note:* The example uses a non-working, expired license.
+   *Note:* The example uses a license that is more restrictive than the complimentary license.
    Example:
 
     ```console
