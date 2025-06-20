@@ -112,11 +112,11 @@ This example shows how to use your Senzing license key with the Senzing gRPC Ser
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
     ```
 
-1. :pencil2: To use your custom license, a command-line argument may be used.
+1. To use your custom license, a command-line argument may be used.
    Replace the value of `--license-string-base64` with your license key.
    *Note:* The example uses a license that is more restrictive than the complimentary license.
 
-   Example:
+   :pencil2: Example:
 
     ```console
     docker run -it --publish 8261:8261 --rm senzing/serve-grpc --license-string-base64 AQAAADgCAAAAAAAAU2VuemluZyBUdXRvcmlhbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARVZBTCAtIHN1cHBvcnRAc2VuemluZy5jb20AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADIwMjUtMDYtMTcAAAAAAAAAAAAARVZBTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFNUQU5EQVJEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQKX8AAAEAAAAAAAAAMjAyNi0wNi0xNwAAAAAAAAAAAABZRUFSTFkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJ4NL/lYgnQcCMaMH6xHcSdR1Tjky7Ontd6s3VHQUmqQhCA5/9JVvd8O/V9qBetVWyDJ5XJKGIc7NgvYDJjd+etW68P6DCh3H9yY3WK+LMlvXWoBcpkEJS/Zx0zwpL/gMjii2GwjsTDUiYyg1xUDs/ScmA08B6gP44A4UQzqzWAGsVngGtcjsEgEyNvcVnEOR96xw3R5GBaagwE8C5RlMfyjijtSqNRo859VRo60zDaPIpLW9WCAD7FPxtVEESHSlnYCWIIp5Yv6Ba1v/i+4dLM6rtiVBC3Ukz5vjYZkj7wf3GdtcpGzEYfAWsaYT2rU75iymO1stw44i8Gguz8D8+xZJoeC8MmoXkmXfIz7ZKiFspUeer8kFcIeRu/qaXzwG10iut537P/YG6UbJh78lGlpWwdiuEf3I7kqaQiigCq/egjj2fB7E871PXitBFvYwhDEnGi6DYNbnOlaWN8QOZAEexES2uwYeFWXnnmreTf52Sxz66jPXNCGYcxgBXDmBRpZa3tUqpYsY+fxu/QyPC7nJIt29Peaa8Cxna4807BesCaSiYOZllSRTcZNkQK6LIzMTgTZwXVVL0uVcIk2GIhpC3C84KjBj8dDnBiyRMFs/ubWmrJQFSkMr2AOFFZwr4w7Zp0TNCoVNJ5zUjQBTDDd4RgNGozYHrHvWr1l3+NL
@@ -128,11 +128,11 @@ This example shows how to use your Senzing license key with the Senzing gRPC Ser
     grpcurl -plaintext -format text localhost:8261 szproduct.SzProduct.GetLicense
     ```
 
-1. :pencil2: Alternatively, to use your custom license, an environment variable may be used.
+1. Alternatively, to use your custom license, an environment variable may be used.
    To see your license, replace the value of `SENZING_TOOLS_LICENSE_STRING_BASE64` with your license key.
    *Note:* The example uses a license that is more restrictive than the complimentary license.
 
-   Example:
+   :pencil2: Example:
 
     ```console
     export SENZING_TOOLS_LICENSE_STRING_BASE64=AQAAADgCAAAAAAAAU2VuemluZyBUdXRvcmlhbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARVZBTCAtIHN1cHBvcnRAc2VuemluZy5jb20AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADIwMjUtMDYtMTcAAAAAAAAAAAAARVZBTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFNUQU5EQVJEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQKX8AAAEAAAAAAAAAMjAyNi0wNi0xNwAAAAAAAAAAAABZRUFSTFkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJ4NL/lYgnQcCMaMH6xHcSdR1Tjky7Ontd6s3VHQUmqQhCA5/9JVvd8O/V9qBetVWyDJ5XJKGIc7NgvYDJjd+etW68P6DCh3H9yY3WK+LMlvXWoBcpkEJS/Zx0zwpL/gMjii2GwjsTDUiYyg1xUDs/ScmA08B6gP44A4UQzqzWAGsVngGtcjsEgEyNvcVnEOR96xw3R5GBaagwE8C5RlMfyjijtSqNRo859VRo60zDaPIpLW9WCAD7FPxtVEESHSlnYCWIIp5Yv6Ba1v/i+4dLM6rtiVBC3Ukz5vjYZkj7wf3GdtcpGzEYfAWsaYT2rU75iymO1stw44i8Gguz8D8+xZJoeC8MmoXkmXfIz7ZKiFspUeer8kFcIeRu/qaXzwG10iut537P/YG6UbJh78lGlpWwdiuEf3I7kqaQiigCq/egjj2fB7E871PXitBFvYwhDEnGi6DYNbnOlaWN8QOZAEexES2uwYeFWXnnmreTf52Sxz66jPXNCGYcxgBXDmBRpZa3tUqpYsY+fxu/QyPC7nJIt29Peaa8Cxna4807BesCaSiYOZllSRTcZNkQK6LIzMTgTZwXVVL0uVcIk2GIhpC3C84KjBj8dDnBiyRMFs/ubWmrJQFSkMr2AOFFZwr4w7Zp0TNCoVNJ5zUjQBTDDd4RgNGozYHrHvWr1l3+NL
@@ -152,9 +152,9 @@ This example shows how to use your Senzing license key with the Senzing gRPC Ser
 
 This example shows how to enable [server-side authentication] Transport Layer Security (TLS) in the Senzing gRPC Server.
 
-1. :pencil2: To run this example, [git clone] the `senzing/serve-grpc` repository.
+1. To run this example, [git clone] the `senzing/serve-grpc` repository.
 
-   Example:
+   :pencil2: Example:
 
     ```console
     export MY_SENZING_REPOSITORY=~/my-senzing-serve-grpc
@@ -191,9 +191,9 @@ This example shows how to enable [server-side authentication] Transport Layer Se
 
 This example shows how to enable [mutual authentication] Transport Layer Security (TLS) in the Senzing gRPC Server.
 
-1. :pencil2: To run this example, [git clone] the `senzing/serve-grpc` repository.
+1. To run this example, [git clone] the `senzing/serve-grpc` repository.
 
-   Example:
+   :pencil2: Example:
 
     ```console
     export MY_SENZING_REPOSITORY=~/my-senzing-serve-grpc
@@ -292,9 +292,9 @@ It crashes on macOS and Windows and is unstable in Linux.
    The SQLite database may be reused across multiple `docker run` commands.
    Use this technique for simple tests only.
 
-   :pencil2: Specify a directory to store the database.
+   Specify a directory to store the database.
 
-   Example:
+   :pencil2: Example:
 
     ```console
     export MY_SENZING_DIRECTORY=~/my-senzing
@@ -349,9 +349,9 @@ In this example, only the SzEngine gRPC is started.
 If using multiple databases or non-system locations of Senzing binaries,
 `SENZING_TOOLS_ENGINE_CONFIGURATION_JSON` is used to configure the Senzing runtime engine.
 
-1. :pencil2: Set the value of `SENZING_TOOLS_ENGINE_CONFIGURATION_JSON`.
+1. Set the value of `SENZING_TOOLS_ENGINE_CONFIGURATION_JSON`.
 
-   Example:
+   :pencil2: Example:
 
     ```console
     export SENZING_TOOLS_ENGINE_CONFIGURATION_JSON='{
