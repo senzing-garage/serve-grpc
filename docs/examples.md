@@ -48,10 +48,10 @@ The container is mutable and the data in the database is lost when the container
 This example shows how to use a Postgres database with the Senzing gRPC Server.
 
 The example brings up a Postgres Docker container.
-If you already have a Postgres database,
-steps #1 and #2 may be skipped,
-the `SENZING_TOOLS_DATABASE_URL` value needs to reference your Postgres database,
-and the `--network` argument is no longer needed.
+If you already have a Postgres database:
+    - Steps #1 and #2 may be skipped
+    - The `SENZING_TOOLS_DATABASE_URL` value needs to reference your Postgres database
+    - The `--network` argument is no longer needed
 
 1. Create a Docker network.
 
