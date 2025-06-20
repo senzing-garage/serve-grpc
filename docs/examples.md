@@ -159,7 +159,7 @@ This example shows how to enable [server-side authentication] Transport Layer Se
    Example:
 
     ```console
-    export MY_SENZING_REPOSITORY=~/serve-grpc
+    export MY_SENZING_REPOSITORY=~/my-senzing-serve-grpc
     ```
 
     ```console
@@ -182,7 +182,7 @@ This example shows how to enable [server-side authentication] Transport Layer Se
 1. :pencil2: Run a successful test using [grpcurl].
 
     ```console
-    export MY_SENZING_REPOSITORY=~/serve-grpc
+    export MY_SENZING_REPOSITORY=~/my-senzing-serve-grpc
     ```
 
     ```console
@@ -197,7 +197,7 @@ This example shows how to enable [mutual authentication] Transport Layer Securit
    Example:
 
     ```console
-    export MY_SENZING_REPOSITORY=~/serve-grpc
+    export MY_SENZING_REPOSITORY=~/my-senzing-serve-grpc
     ```
 
     ```console
@@ -221,7 +221,7 @@ This example shows how to enable [mutual authentication] Transport Layer Securit
 1. :pencil2: Run another failing "server-side TLS" test using [grpcurl].
 
     ```console
-    export MY_SENZING_REPOSITORY=~/serve-grpc
+    export MY_SENZING_REPOSITORY=~/my-senzing-serve-grpc
     ```
 
     ```console
@@ -231,7 +231,7 @@ This example shows how to enable [mutual authentication] Transport Layer Securit
 1. :pencil2: Run a successful "mutual TLS" test using [grpcurl].
 
     ```console
-    export MY_SENZING_REPOSITORY=~/serve-grpc
+    export MY_SENZING_REPOSITORY=~/my-senzing-serve-grpc
     ```
 
     ```console
