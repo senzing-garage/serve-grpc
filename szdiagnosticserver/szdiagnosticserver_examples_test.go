@@ -17,16 +17,16 @@ const AllLines = -1
 // Interface methods - Examples for godoc documentation
 // ----------------------------------------------------------------------------
 
-func ExampleSzDiagnosticServer_CheckDatastorePerformance() {
+func ExampleSzDiagnosticServer_CheckRepositoryPerformance() {
 	// For more information,
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_examples_test.go
 	ctx := context.TODO()
 	szDiagnosticServer := getSzDiagnosticServer(ctx)
-	request := &szpb.CheckDatastorePerformanceRequest{
+	request := &szpb.CheckRepositoryPerformanceRequest{
 		SecondsToRun: int32(1),
 	}
 
-	response, err := szDiagnosticServer.CheckDatastorePerformance(ctx, request)
+	response, err := szDiagnosticServer.CheckRepositoryPerformance(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -39,14 +39,14 @@ func ExampleSzDiagnosticServer_CheckDatastorePerformance() {
 	// }
 }
 
-func ExampleSzDiagnosticServer_GetDatastoreInfo() {
+func ExampleSzDiagnosticServer_GetRepositoryInfo() {
 	// For more information,
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szdiagnosticserver/szdiagnosticserver_examples_test.go
 	ctx := context.TODO()
 	szDiagnosticServer := getSzDiagnosticServer(ctx)
-	request := &szpb.GetDatastoreInfoRequest{}
+	request := &szpb.GetRepositoryInfoRequest{}
 
-	response, err := szDiagnosticServer.GetDatastoreInfo(ctx, request)
+	response, err := szDiagnosticServer.GetRepositoryInfo(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}

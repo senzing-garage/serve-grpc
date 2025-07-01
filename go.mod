@@ -10,9 +10,9 @@ require (
 	github.com/senzing-garage/go-logging v1.5.3
 	github.com/senzing-garage/go-observing v0.3.6
 	github.com/senzing-garage/init-database v0.7.15
-	github.com/senzing-garage/sz-sdk-go v0.15.6
-	github.com/senzing-garage/sz-sdk-go-core v0.9.7
-	github.com/senzing-garage/sz-sdk-proto v0.8.6
+	github.com/senzing-garage/sz-sdk-go v0.15.7-0.20250630212001-1026fbdadbbc
+	github.com/senzing-garage/sz-sdk-go-core v0.9.8-0.20250701124748-58c5f645b7dd
+	github.com/senzing-garage/sz-sdk-proto v0.8.7-0.20250630193148-790d7d99ea9f
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.20.1
@@ -31,7 +31,7 @@ require (
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
 	github.com/go-sql-driver/mysql v1.9.3 // indirect
 	github.com/go-viper/mapstructure/v2 v2.3.0 // indirect
-	github.com/godror/godror v0.48.3 // indirect
+	github.com/godror/godror v0.49.0 // indirect
 	github.com/godror/knownpb v0.3.0 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
@@ -39,7 +39,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/lib/pq v1.10.9 // indirect
 	github.com/mattn/go-sqlite3 v1.14.28 // indirect
-	github.com/microsoft/go-mssqldb v1.8.2 // indirect
+	github.com/microsoft/go-mssqldb v1.9.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rogpeppe/go-internal v1.13.1 // indirect
@@ -50,14 +50,14 @@ require (
 	github.com/senzing-garage/go-messaging v1.5.3 // indirect
 	github.com/senzing-garage/go-sdk-abstract-factory v0.9.11 // indirect
 	github.com/senzing-garage/sz-sdk-go-grpc v0.9.7 // indirect
-	github.com/senzing-garage/sz-sdk-go-mock v0.8.9 // indirect
+	github.com/senzing-garage/sz-sdk-go-mock v0.8.10-0.20250701151723-cc0254498311 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.14.0 // indirect
 	github.com/spf13/cast v1.9.2 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.39.0 // indirect
-	golang.org/x/exp v0.0.0-20250606033433-dcc06ee1d476 // indirect
+	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b // indirect
 	golang.org/x/net v0.41.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.26.0 // indirect

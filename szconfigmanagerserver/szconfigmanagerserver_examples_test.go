@@ -109,12 +109,12 @@ func ExampleSzConfigManagerServer_RegisterConfig() {
 
 	// Add DataSource to the Senzing configuration.
 
-	requestToAddDataSource := &szconfigpb.AddDataSourceRequest{
+	requestToRegisterDataSource := &szconfigpb.RegisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   "GO_TEST",
 	}
 
-	responseFromAddDataSource, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
+	responseFromRegisterDataSource, err := szConfigServer.RegisterDataSource(ctx, requestToRegisterDataSource)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -122,7 +122,7 @@ func ExampleSzConfigManagerServer_RegisterConfig() {
 	// Test RegisterConfig.
 
 	request := &szpb.RegisterConfigRequest{
-		ConfigDefinition: responseFromAddDataSource.GetResult(),
+		ConfigDefinition: responseFromRegisterDataSource.GetResult(),
 		ConfigComment:    fmt.Sprintf("szconfigmanagerserver_test at %s", now.UTC()),
 	}
 

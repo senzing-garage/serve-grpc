@@ -87,7 +87,7 @@ func ExampleSzEngineServer_AddRecord_withInfo() {
 	// }
 }
 
-func ExampleSzEngineServer_CloseExport() {
+func ExampleSzEngineServer_CloseExportReport() {
 	// For more information,
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
@@ -106,11 +106,11 @@ func ExampleSzEngineServer_CloseExport() {
 		fmt.Println(err)
 	}
 	// Example
-	request := &szpb.CloseExportRequest{
+	request := &szpb.CloseExportReportRequest{
 		ExportHandle: responseFromExportJSONEntityReport.GetResult(),
 	}
 
-	response, err := szEngineServer.CloseExport(ctx, request)
+	response, err := szEngineServer.CloseExportReport(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}

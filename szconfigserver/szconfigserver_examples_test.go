@@ -15,7 +15,7 @@ import (
 // Interface methods - Examples for godoc documentation
 // ----------------------------------------------------------------------------
 
-func ExampleSzConfigServer_AddDataSource() {
+func ExampleSzConfigServer_RegisterDataSource() {
 	// For more information,
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigserver/szconfigserver_examples_test.go
 	ctx := context.TODO()
@@ -33,12 +33,12 @@ func ExampleSzConfigServer_AddDataSource() {
 
 	// Add DataSource to the Senzing configuration.
 
-	requestToAddDataSource := &szpb.AddDataSourceRequest{
+	requestToRegisterDataSource := &szpb.RegisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   "GO_TEST",
 	}
 
-	response, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
+	response, err := szConfigServer.RegisterDataSource(ctx, requestToRegisterDataSource)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -50,7 +50,7 @@ func ExampleSzConfigServer_AddDataSource() {
 	// }
 }
 
-func ExampleSzConfigServer_DeleteDataSource() {
+func ExampleSzConfigServer_UnregisterDataSource() {
 	// For more information,
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigserver/szconfigserver_examples_test.go
 	ctx := context.TODO()
@@ -68,12 +68,12 @@ func ExampleSzConfigServer_DeleteDataSource() {
 
 	// Add DataSource to the Senzing configuration.
 
-	requestToDeleteDataSource := &szpb.DeleteDataSourceRequest{
+	requestToUnregisterDataSource := &szpb.UnregisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   "GO_TEST",
 	}
 
-	response, err := szConfigServer.DeleteDataSource(ctx, requestToDeleteDataSource)
+	response, err := szConfigServer.UnregisterDataSource(ctx, requestToUnregisterDataSource)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -82,7 +82,7 @@ func ExampleSzConfigServer_DeleteDataSource() {
 	// Output:
 }
 
-func ExampleSzConfigServer_GetDataSources() {
+func ExampleSzConfigServer_GetDataSourceRegistry() {
 	// For more information,
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szconfigserver/szconfigserver_examples_test.go
 	ctx := context.TODO()
@@ -100,11 +100,11 @@ func ExampleSzConfigServer_GetDataSources() {
 
 	// Get Datasources in the Senzing configuration.
 
-	requestToDeleteDataSource := &szpb.GetDataSourcesRequest{
+	requestToUnregisterDataSource := &szpb.GetDataSourceRegistryRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 	}
 
-	response, err := szConfigServer.GetDataSources(ctx, requestToDeleteDataSource)
+	response, err := szConfigServer.GetDataSourceRegistry(ctx, requestToUnregisterDataSource)
 	if err != nil {
 		fmt.Println(err)
 	}
