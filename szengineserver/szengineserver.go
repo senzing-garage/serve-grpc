@@ -591,10 +591,10 @@ func (server *SzEngineServer) HowEntityByEntityId( //revive:disable-line var-nam
 	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
-func (server *SzEngineServer) PreprocessRecord(
+func (server *SzEngineServer) GetRecordPreview(
 	ctx context.Context,
-	request *szpb.PreprocessRecordRequest,
-) (*szpb.PreprocessRecordResponse, error) {
+	request *szpb.GetRecordPreviewRequest,
+) (*szpb.GetRecordPreviewResponse, error) {
 	var err error
 
 	if server.isTrace {
@@ -606,8 +606,8 @@ func (server *SzEngineServer) PreprocessRecord(
 	}
 
 	szEngine := getSzEngine()
-	result, err := szEngine.PreprocessRecord(ctx, request.GetRecordDefinition(), request.GetFlags())
-	response := szpb.PreprocessRecordResponse{
+	result, err := szEngine.GetRecordPreview(ctx, request.GetRecordDefinition(), request.GetFlags())
+	response := szpb.GetRecordPreviewResponse{
 		Result: result,
 	}
 

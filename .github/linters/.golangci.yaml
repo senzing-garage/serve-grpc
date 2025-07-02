@@ -166,7 +166,7 @@ linters:
         - '.+/szengineserver_test\.TestMetadataForGetRecord$'
         - '.+/szengineserver_test\.TestMetadataForGetVirtualEntityByRecordID$'
         - '.+/szengineserver_test\.TestMetadataForHowEntityByEntityID$'
-        - '.+/szengineserver_test\.TestMetadataForPreprocessRecord$'
+        - '.+/szengineserver_test\.TestMetadataForGetRecordPreview$'
         - '.+/szengineserver_test\.TestMetadataForProcessRedoRecord$'
         - '.+/szengineserver_test\.TestMetadataForReevaluateEntity$'
         - '.+/szengineserver_test\.TestMetadataForReevaluateRecord$'
