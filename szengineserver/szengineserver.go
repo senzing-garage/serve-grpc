@@ -53,10 +53,10 @@ func (server *SzEngineServer) AddRecord(
 	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
-func (server *SzEngineServer) CloseExport(
+func (server *SzEngineServer) CloseExportReport(
 	ctx context.Context,
-	request *szpb.CloseExportRequest,
-) (*szpb.CloseExportResponse, error) {
+	request *szpb.CloseExportReportRequest,
+) (*szpb.CloseExportReportResponse, error) {
 	var err error
 
 	if server.isTrace {
@@ -68,8 +68,8 @@ func (server *SzEngineServer) CloseExport(
 	}
 
 	szEngine := getSzEngine()
-	err = szEngine.CloseExport(ctx, uintptr(request.GetExportHandle()))
-	response := szpb.CloseExportResponse{}
+	err = szEngine.CloseExportReport(ctx, uintptr(request.GetExportHandle()))
+	response := szpb.CloseExportReportResponse{}
 
 	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
@@ -591,10 +591,10 @@ func (server *SzEngineServer) HowEntityByEntityId( //revive:disable-line var-nam
 	return &response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
-func (server *SzEngineServer) PreprocessRecord(
+func (server *SzEngineServer) GetRecordPreview(
 	ctx context.Context,
-	request *szpb.PreprocessRecordRequest,
-) (*szpb.PreprocessRecordResponse, error) {
+	request *szpb.GetRecordPreviewRequest,
+) (*szpb.GetRecordPreviewResponse, error) {
 	var err error
 
 	if server.isTrace {
@@ -606,8 +606,8 @@ func (server *SzEngineServer) PreprocessRecord(
 	}
 
 	szEngine := getSzEngine()
-	result, err := szEngine.PreprocessRecord(ctx, request.GetRecordDefinition(), request.GetFlags())
-	response := szpb.PreprocessRecordResponse{
+	result, err := szEngine.GetRecordPreview(ctx, request.GetRecordDefinition(), request.GetFlags())
+	response := szpb.GetRecordPreviewResponse{
 		Result: result,
 	}
 
@@ -782,10 +782,10 @@ func (server *SzEngineServer) StreamExportCsvEntityReport(
 		return wraperror.Errorf(err, "ExportCsvEntityReport")
 	}
 
-	// Defer the CloseExport in case we exit early for any reason.
+	// Defer the CloseExportReport in case we exit early for any reason.
 
 	defer func() {
-		err = szEngine.CloseExport(ctx, queryHandle)
+		err = szEngine.CloseExportReport(ctx, queryHandle)
 		if server.isTrace {
 			server.traceExit(158, request, rowsFetched, err, time.Since(entryTime))
 		}
@@ -844,10 +844,10 @@ func (server *SzEngineServer) StreamExportJsonEntityReport( //revive:disable-lin
 		return wraperror.Errorf(err, "ExportJSONEntityReport")
 	}
 
-	// Defer the CloseExport in case we exit early for any reason.
+	// Defer the CloseExportReport in case we exit early for any reason.
 
 	defer func() {
-		err = szEngine.CloseExport(ctx, queryHandle)
+		err = szEngine.CloseExportReport(ctx, queryHandle)
 		if server.isTrace {
 			server.traceExit(160, request, rowsFetched, err, time.Since(entryTime))
 		}

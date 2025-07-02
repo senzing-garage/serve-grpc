@@ -54,7 +54,7 @@ var nilDataSourceCode string
 // Interface methods - test
 // ----------------------------------------------------------------------------
 
-func TestSzConfigServer_AddDataSource(test *testing.T) {
+func TestSzConfigServer_RegisterDataSource(test *testing.T) {
 	ctx := test.Context()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getTestObject(ctx, test)
@@ -69,17 +69,17 @@ func TestSzConfigServer_AddDataSource(test *testing.T) {
 
 	// Add DataSource to the Senzing configuration.
 
-	requestToAddDataSource := &szpb.AddDataSourceRequest{
+	requestToRegisterDataSource := &szpb.RegisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   "GO_TEST",
 	}
-	responseFromAddDataSource, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
+	responseFromRegisterDataSource, err := szConfigServer.RegisterDataSource(ctx, requestToRegisterDataSource)
 	printError(test, err)
 	require.NoError(test, err)
-	printActual(test, responseFromAddDataSource.GetResult())
+	printActual(test, responseFromRegisterDataSource.GetResult())
 }
 
-func TestSzConfigServer_AddDataSource_badDataSourceCode(test *testing.T) {
+func TestSzConfigServer_RegisterDataSource_badDataSourceCode(test *testing.T) {
 	ctx := test.Context()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getTestObject(ctx, test)
@@ -94,19 +94,19 @@ func TestSzConfigServer_AddDataSource_badDataSourceCode(test *testing.T) {
 
 	// Add DataSource to the Senzing configuration.
 
-	requestToAddDataSource := &szpb.AddDataSourceRequest{
+	requestToRegisterDataSource := &szpb.RegisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   badDataSourceCode,
 	}
-	_, err = szConfigServer.AddDataSource(ctx, requestToAddDataSource)
+	_, err = szConfigServer.RegisterDataSource(ctx, requestToRegisterDataSource)
 	printError(test, err)
 	require.ErrorIs(test, err, szerror.ErrSzBadInput)
 
-	expectedErr := `{"function":"szconfigserver.(*SzConfigServer).AddDataSource","text":"AddDataSource: \n\tGO_TEST","error":{"function":"szconfig.(*Szconfig).AddDataSource","error":{"function":"szconfig.(*Szconfig).addDataSourceChoreography","text":"addDataSource: \n\tGO_TEST","error":{"id":"SZSDK60014001","reason":"SENZ3121|JSON Parsing Failure [code=12,offset=15]"}}}}`
+	expectedErr := `{"function":"szconfigserver.(*SzConfigServer).RegisterDataSource","text":"RegisterDataSource: \n\tGO_TEST","error":{"function":"szconfig.(*Szconfig).RegisterDataSource","error":{"function":"szconfig.(*Szconfig).registerDataSourceChoreography","text":"registerDataSource: \n\tGO_TEST","error":{"id":"SZSDK60014001","reason":"SENZ3121|JSON Parsing Failure [code=12,offset=15]"}}}}`
 	require.JSONEq(test, expectedErr, err.Error())
 }
 
-func TestSzConfigServer_AddDataSource_nilDataSourceCode(test *testing.T) {
+func TestSzConfigServer_RegisterDataSource_nilDataSourceCode(test *testing.T) {
 	ctx := test.Context()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getTestObject(ctx, test)
@@ -121,19 +121,19 @@ func TestSzConfigServer_AddDataSource_nilDataSourceCode(test *testing.T) {
 
 	// Add DataSource to the Senzing configuration.
 
-	requestToAddDataSource := &szpb.AddDataSourceRequest{
+	requestToRegisterDataSource := &szpb.RegisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   nilDataSourceCode,
 	}
-	_, err = szConfigServer.AddDataSource(ctx, requestToAddDataSource)
+	_, err = szConfigServer.RegisterDataSource(ctx, requestToRegisterDataSource)
 	printError(test, err)
 	require.ErrorIs(test, err, szerror.ErrSzBadInput)
 
-	expectedErr := `{"function":"szconfigserver.(*SzConfigServer).AddDataSource","text":"AddDataSource: ","error":{"function":"szconfig.(*Szconfig).AddDataSource","error":{"function":"szconfig.(*Szconfig).addDataSourceChoreography","text":"addDataSource: ","error":{"id":"SZSDK60014001","reason":"SENZ7313|A non-empty value for [DSRC_CODE] must be specified."}}}}`
+	expectedErr := `{"function":"szconfigserver.(*SzConfigServer).RegisterDataSource","text":"RegisterDataSource: ","error":{"function":"szconfig.(*Szconfig).RegisterDataSource","error":{"function":"szconfig.(*Szconfig).registerDataSourceChoreography","text":"registerDataSource: ","error":{"id":"SZSDK60014001","reason":"SENZ7313|A non-empty value for [DSRC_CODE] must be specified."}}}}`
 	require.JSONEq(test, expectedErr, err.Error())
 }
 
-func TestSzConfigServer_DeleteDataSource(test *testing.T) {
+func TestSzConfigServer_UnregisterDataSource(test *testing.T) {
 	ctx := test.Context()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getTestObject(ctx, test)
@@ -148,16 +148,16 @@ func TestSzConfigServer_DeleteDataSource(test *testing.T) {
 
 	// Delete DataSource to the Senzing configuration.
 
-	requestToDeleteDataSource := &szpb.DeleteDataSourceRequest{
+	requestToUnregisterDataSource := &szpb.UnregisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   "GO_TEST",
 	}
-	_, err = szConfigServer.DeleteDataSource(ctx, requestToDeleteDataSource)
+	_, err = szConfigServer.UnregisterDataSource(ctx, requestToUnregisterDataSource)
 	printError(test, err)
 	require.NoError(test, err)
 }
 
-func TestSzConfigServer_DeleteDataSource_badDataSourceCode(test *testing.T) {
+func TestSzConfigServer_UnregisterDataSource_badDataSourceCode(test *testing.T) {
 	ctx := test.Context()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getTestObject(ctx, test)
@@ -172,19 +172,19 @@ func TestSzConfigServer_DeleteDataSource_badDataSourceCode(test *testing.T) {
 
 	// Delete DataSource to the Senzing configuration.
 
-	requestToDeleteDataSource := &szpb.DeleteDataSourceRequest{
+	requestToUnregisterDataSource := &szpb.UnregisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   badDataSourceCode,
 	}
-	_, err = szConfigServer.DeleteDataSource(ctx, requestToDeleteDataSource)
+	_, err = szConfigServer.UnregisterDataSource(ctx, requestToUnregisterDataSource)
 	printError(test, err)
 	require.ErrorIs(test, err, szerror.ErrSzBadInput)
 
-	expectedErr := `{"function":"szconfigserver.(*SzConfigServer).DeleteDataSource","text":"DeleteDataSource: \n\tGO_TEST","error":{"function":"szconfig.(*Szconfig).DeleteDataSource","error":{"function":"szconfig.(*Szconfig).deleteDataSourceChoreography","text":"deleteDataSource(\n\tGO_TEST)","error":{"id":"SZSDK60014004","reason":"SENZ3121|JSON Parsing Failure [code=12,offset=15]"}}}}`
+	expectedErr := `{"function":"szconfigserver.(*SzConfigServer).UnregisterDataSource","text":"UnregisterDataSource: \n\tGO_TEST","error":{"function":"szconfig.(*Szconfig).UnregisterDataSource","error":{"function":"szconfig.(*Szconfig).unregisterDataSourceChoreography","text":"unregisterDataSource(\n\tGO_TEST)","error":{"id":"SZSDK60014004","reason":"SENZ3121|JSON Parsing Failure [code=12,offset=15]"}}}}`
 	require.JSONEq(test, expectedErr, err.Error())
 }
 
-func TestSzConfigServer_DeleteDataSource_nilDataSourceCode(test *testing.T) {
+func TestSzConfigServer_UnregisterDataSource_nilDataSourceCode(test *testing.T) {
 	ctx := test.Context()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getTestObject(ctx, test)
@@ -199,19 +199,19 @@ func TestSzConfigServer_DeleteDataSource_nilDataSourceCode(test *testing.T) {
 
 	// Delete DataSource to the Senzing configuration.
 
-	requestToDeleteDataSource := &szpb.DeleteDataSourceRequest{
+	requestToUnregisterDataSource := &szpb.UnregisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   nilDataSourceCode,
 	}
-	_, err = szConfigServer.DeleteDataSource(ctx, requestToDeleteDataSource)
+	_, err = szConfigServer.UnregisterDataSource(ctx, requestToUnregisterDataSource)
 	printError(test, err)
 	require.ErrorIs(test, err, szerror.ErrSzBadInput)
 
-	expectedErr := `{"function":"szconfigserver.(*SzConfigServer).DeleteDataSource","text":"DeleteDataSource: ","error":{"function":"szconfig.(*Szconfig).DeleteDataSource","error":{"function":"szconfig.(*Szconfig).deleteDataSourceChoreography","text":"deleteDataSource()","error":{"id":"SZSDK60014004","reason":"SENZ7313|A non-empty value for [DSRC_CODE] must be specified."}}}}`
+	expectedErr := `{"function":"szconfigserver.(*SzConfigServer).UnregisterDataSource","text":"UnregisterDataSource: ","error":{"function":"szconfig.(*Szconfig).UnregisterDataSource","error":{"function":"szconfig.(*Szconfig).unregisterDataSourceChoreography","text":"unregisterDataSource()","error":{"id":"SZSDK60014004","reason":"SENZ7313|A non-empty value for [DSRC_CODE] must be specified."}}}}`
 	require.JSONEq(test, expectedErr, err.Error())
 }
 
-func TestSzConfigServer_GetDataSources(test *testing.T) {
+func TestSzConfigServer_GetDataSourceRegistry(test *testing.T) {
 	ctx := test.Context()
 	szConfigManagerServer := getSzConfigManagerServer(ctx)
 	szConfigServer := getTestObject(ctx, test)
@@ -226,13 +226,13 @@ func TestSzConfigServer_GetDataSources(test *testing.T) {
 
 	// Delete DataSource to the Senzing configuration.
 
-	requestToGetDataSources := &szpb.GetDataSourcesRequest{
+	requestToGetDataSourceRegistry := &szpb.GetDataSourceRegistryRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 	}
-	responseFromGetDataSources, err := szConfigServer.GetDataSources(ctx, requestToGetDataSources)
+	responseFromGetDataSourceRegistry, err := szConfigServer.GetDataSourceRegistry(ctx, requestToGetDataSourceRegistry)
 	printError(test, err)
 	require.NoError(test, err)
-	printActual(test, responseFromGetDataSources.GetResult())
+	printActual(test, responseFromGetDataSourceRegistry.GetResult())
 }
 
 func TestSzConfigServer_VerifyConfig(test *testing.T) {
@@ -253,10 +253,10 @@ func TestSzConfigServer_VerifyConfig(test *testing.T) {
 	requestToVerifyConfig := &szpb.VerifyConfigRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 	}
-	responseFromGetDataSources, err := szConfigServer.VerifyConfig(ctx, requestToVerifyConfig)
+	responseFromGetDataSourceRegistry, err := szConfigServer.VerifyConfig(ctx, requestToVerifyConfig)
 	printError(test, err)
 	require.NoError(test, err)
-	printActual(test, responseFromGetDataSources.GetResult())
+	printActual(test, responseFromGetDataSourceRegistry.GetResult())
 }
 
 func TestSzConfigServer_VerifyConfig_bad_config(test *testing.T) {
@@ -270,13 +270,13 @@ func TestSzConfigServer_VerifyConfig_bad_config(test *testing.T) {
 	requestToVerifyConfig := &szpb.VerifyConfigRequest{
 		ConfigDefinition: badConfigDefinition,
 	}
-	responseFromGetDataSources, err := szConfigServer.VerifyConfig(ctx, requestToVerifyConfig)
+	responseFromGetDataSourceRegistry, err := szConfigServer.VerifyConfig(ctx, requestToVerifyConfig)
 	printError(test, err)
 	require.ErrorIs(test, err, szerror.ErrSzBadInput)
 
 	expectedErr := `{"function":"szconfigserver.(*SzConfigServer).createSzConfig","error":{"function":"szconfigmanager.(*Szconfigmanager).CreateConfigFromStringChoreography","text":"VerifyConfigDefinition","error":{"function":"szconfig.(*Szconfig).VerifyConfigDefinition","error":{"function":"szconfig.(*Szconfig).verifyConfigDefinitionChoreography","text":"load","error":{"id":"SZSDK60014009","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}}}`
 	require.JSONEq(test, expectedErr, err.Error())
-	printActual(test, responseFromGetDataSources.GetResult())
+	printActual(test, responseFromGetDataSourceRegistry.GetResult())
 }
 
 // ----------------------------------------------------------------------------

@@ -142,18 +142,18 @@ func TestSzConfigManagerServer_RegisterConfig(test *testing.T) {
 
 	// Add DataSource to the Senzing configuration.
 
-	requestToAddDataSource := &szconfigpb.AddDataSourceRequest{
+	requestToRegisterDataSource := &szconfigpb.RegisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
 		DataSourceCode:   "GO_TEST",
 	}
-	responseFromAddDataSource, err := szConfigServer.AddDataSource(ctx, requestToAddDataSource)
+	responseFromRegisterDataSource, err := szConfigServer.RegisterDataSource(ctx, requestToRegisterDataSource)
 	printError(test, err)
 	require.NoError(test, err)
 
 	// Test RegisterConfig.
 
 	request := &szpb.RegisterConfigRequest{
-		ConfigDefinition: responseFromAddDataSource.GetResult(),
+		ConfigDefinition: responseFromRegisterDataSource.GetResult(),
 		ConfigComment:    fmt.Sprintf("szconfigmanagerserver_test at %s", now.UTC()),
 	}
 	response, err := szConfigManagerServer.RegisterConfig(ctx, request)
@@ -536,7 +536,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 
 	datasourceNames := []string{"CUSTOMERS", "REFERENCE", "WATCHLIST"}
 	for _, dataSourceCode := range datasourceNames {
-		_, err := szConfig.AddDataSource(ctx, dataSourceCode)
+		_, err := szConfig.RegisterDataSource(ctx, dataSourceCode)
 		panicOnError(err)
 	}
 

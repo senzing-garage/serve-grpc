@@ -63,47 +63,47 @@ var (
 // Interface methods - test
 // ----------------------------------------------------------------------------
 
-func TestSzDiagnosticServer_CheckDatastorePerformance(test *testing.T) {
+func TestSzDiagnosticServer_CheckRepositoryPerformance(test *testing.T) {
 	ctx := test.Context()
 	szDiagnosticServer := getTestObject(ctx, test)
-	request := &szpb.CheckDatastorePerformanceRequest{
+	request := &szpb.CheckRepositoryPerformanceRequest{
 		SecondsToRun: int32(1),
 	}
-	response, err := szDiagnosticServer.CheckDatastorePerformance(ctx, request)
+	response, err := szDiagnosticServer.CheckRepositoryPerformance(ctx, request)
 	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response)
 }
 
-func TestSzDiagnosticServer_CheckDatastorePerformance_badSecondsToRun(test *testing.T) {
+func TestSzDiagnosticServer_CheckRepositoryPerformance_badSecondsToRun(test *testing.T) {
 	ctx := test.Context()
 	szDiagnosticServer := getTestObject(ctx, test)
-	request := &szpb.CheckDatastorePerformanceRequest{
+	request := &szpb.CheckRepositoryPerformanceRequest{
 		SecondsToRun: badSecondsToRun,
 	}
-	response, err := szDiagnosticServer.CheckDatastorePerformance(ctx, request)
+	response, err := szDiagnosticServer.CheckRepositoryPerformance(ctx, request)
 	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response)
 }
 
-func TestSzDiagnosticServer_CheckDatastorePerformance_nilSecondsToRun(test *testing.T) {
+func TestSzDiagnosticServer_CheckRepositoryPerformance_nilSecondsToRun(test *testing.T) {
 	ctx := test.Context()
 	szDiagnosticServer := getTestObject(ctx, test)
-	request := &szpb.CheckDatastorePerformanceRequest{
+	request := &szpb.CheckRepositoryPerformanceRequest{
 		SecondsToRun: nilSecondsToRun,
 	}
-	response, err := szDiagnosticServer.CheckDatastorePerformance(ctx, request)
+	response, err := szDiagnosticServer.CheckRepositoryPerformance(ctx, request)
 	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response)
 }
 
-func TestSzDiagnosticServer_GetDatastoreInfo(test *testing.T) {
+func TestSzDiagnosticServer_GetRepositoryInfo(test *testing.T) {
 	ctx := test.Context()
 	szDiagnosticServer := getTestObject(ctx, test)
-	request := &szpb.GetDatastoreInfoRequest{}
-	response, err := szDiagnosticServer.GetDatastoreInfo(ctx, request)
+	request := &szpb.GetRepositoryInfoRequest{}
+	response, err := szDiagnosticServer.GetRepositoryInfo(ctx, request)
 	printError(test, err)
 	require.NoError(test, err)
 	printActual(test, response)
@@ -358,7 +358,7 @@ func setupSenzingConfig(ctx context.Context, instanceName string, settings strin
 
 	datasourceNames := []string{"CUSTOMERS", "REFERENCE", "WATCHLIST"}
 	for _, dataSourceCode := range datasourceNames {
-		_, err := szConfig.AddDataSource(ctx, dataSourceCode)
+		_, err := szConfig.RegisterDataSource(ctx, dataSourceCode)
 		panicOnError(err)
 	}
 

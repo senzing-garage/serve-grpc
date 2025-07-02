@@ -70,7 +70,7 @@ var IDMessages = map[int]string{
 	5905: "During test setup, call to szengine.Destroy() failed.",
 	5906: "During test setup, call to szconfig.Init() failed.",
 	5907: "During test setup, call to szconfig.Create() failed.",
-	5908: "During test setup, call to szconfig.AddDataSource() failed.",
+	5908: "During test setup, call to szconfig.RegisterDataSource() failed.",
 	5909: "During test setup, call to szconfig.Save() failed.",
 	5910: "During test setup, call to szconfig.Close() failed.",
 	5911: "During test setup, call to szconfig.Destroy() failed.",

@@ -24,13 +24,13 @@ var (
 // Interface methods for github.com/senzing-garage/sz-sdk-go/szdiagnostic.SzDdiagnostic
 // ----------------------------------------------------------------------------
 
-func (server *SzDiagnosticServer) CheckDatastorePerformance(
+func (server *SzDiagnosticServer) CheckRepositoryPerformance(
 	ctx context.Context,
-	request *szpb.CheckDatastorePerformanceRequest,
-) (*szpb.CheckDatastorePerformanceResponse, error) {
+	request *szpb.CheckRepositoryPerformanceRequest,
+) (*szpb.CheckRepositoryPerformanceResponse, error) {
 	var (
 		err      error
-		response *szpb.CheckDatastorePerformanceResponse
+		response *szpb.CheckRepositoryPerformanceResponse
 		result   string
 	)
 
@@ -43,21 +43,21 @@ func (server *SzDiagnosticServer) CheckDatastorePerformance(
 	}
 
 	szDiagnostic := getSzDiagnostic()
-	result, err = szDiagnostic.CheckDatastorePerformance(ctx, int(request.GetSecondsToRun()))
-	response = &szpb.CheckDatastorePerformanceResponse{
+	result, err = szDiagnostic.CheckRepositoryPerformance(ctx, int(request.GetSecondsToRun()))
+	response = &szpb.CheckRepositoryPerformanceResponse{
 		Result: result,
 	}
 
 	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
-func (server *SzDiagnosticServer) GetDatastoreInfo(
+func (server *SzDiagnosticServer) GetRepositoryInfo(
 	ctx context.Context,
-	request *szpb.GetDatastoreInfoRequest,
-) (*szpb.GetDatastoreInfoResponse, error) {
+	request *szpb.GetRepositoryInfoRequest,
+) (*szpb.GetRepositoryInfoResponse, error) {
 	var (
 		err      error
-		response *szpb.GetDatastoreInfoResponse
+		response *szpb.GetRepositoryInfoResponse
 		result   string
 	)
 
@@ -70,8 +70,8 @@ func (server *SzDiagnosticServer) GetDatastoreInfo(
 	}
 
 	szDiagnostic := getSzDiagnostic()
-	result, err = szDiagnostic.GetDatastoreInfo(ctx)
-	response = &szpb.GetDatastoreInfoResponse{
+	result, err = szDiagnostic.GetRepositoryInfo(ctx)
+	response = &szpb.GetRepositoryInfoResponse{
 		Result: result,
 	}
 

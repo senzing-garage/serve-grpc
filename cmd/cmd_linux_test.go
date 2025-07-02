@@ -71,6 +71,7 @@ func Test_RootCmd_Execute_tls_encrypted_key(test *testing.T) {
 
 func Test_DocsAction(test *testing.T) {
 	var buffer bytes.Buffer
+
 	err := cmd.DocsAction(&buffer, "/tmp")
 	require.NoError(test, err)
 }

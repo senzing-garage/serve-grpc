@@ -25,13 +25,13 @@ var (
 // Interface methods for github.com/senzing-garage/sz-sdk-go/szconfig.SzConfig
 // ----------------------------------------------------------------------------
 
-func (server *SzConfigServer) AddDataSource(
+func (server *SzConfigServer) RegisterDataSource(
 	ctx context.Context,
-	request *szpb.AddDataSourceRequest,
-) (*szpb.AddDataSourceResponse, error) {
+	request *szpb.RegisterDataSourceRequest,
+) (*szpb.RegisterDataSourceResponse, error) {
 	var (
 		err      error
-		response *szpb.AddDataSourceResponse
+		response *szpb.RegisterDataSourceResponse
 		result   string
 	)
 
@@ -48,13 +48,13 @@ func (server *SzConfigServer) AddDataSource(
 		return response, wraperror.Errorf(err, "createSzConfig")
 	}
 
-	result, err = szConfig.AddDataSource(ctx, request.GetDataSourceCode())
+	result, err = szConfig.RegisterDataSource(ctx, request.GetDataSourceCode())
 	if err != nil {
-		return response, wraperror.Errorf(err, "AddDataSource: %s", request.GetDataSourceCode())
+		return response, wraperror.Errorf(err, "RegisterDataSource: %s", request.GetDataSourceCode())
 	}
 
 	configDefinition, err := szConfig.Export(ctx)
-	response = &szpb.AddDataSourceResponse{
+	response = &szpb.RegisterDataSourceResponse{
 		Result:           result,
 		ConfigDefinition: configDefinition,
 	}
@@ -62,13 +62,13 @@ func (server *SzConfigServer) AddDataSource(
 	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
-func (server *SzConfigServer) DeleteDataSource(
+func (server *SzConfigServer) UnregisterDataSource(
 	ctx context.Context,
-	request *szpb.DeleteDataSourceRequest,
-) (*szpb.DeleteDataSourceResponse, error) {
+	request *szpb.UnregisterDataSourceRequest,
+) (*szpb.UnregisterDataSourceResponse, error) {
 	var (
 		err      error
-		response *szpb.DeleteDataSourceResponse
+		response *szpb.UnregisterDataSourceResponse
 	)
 
 	if server.isTrace {
@@ -84,13 +84,13 @@ func (server *SzConfigServer) DeleteDataSource(
 		return response, wraperror.Errorf(err, "createSzConfig")
 	}
 
-	result, err := szConfig.DeleteDataSource(ctx, request.GetDataSourceCode())
+	result, err := szConfig.UnregisterDataSource(ctx, request.GetDataSourceCode())
 	if err != nil {
-		return response, wraperror.Errorf(err, "DeleteDataSource: %s", request.GetDataSourceCode())
+		return response, wraperror.Errorf(err, "UnregisterDataSource: %s", request.GetDataSourceCode())
 	}
 
 	configDefinition, err := szConfig.Export(ctx)
-	response = &szpb.DeleteDataSourceResponse{
+	response = &szpb.UnregisterDataSourceResponse{
 		Result:           result,
 		ConfigDefinition: configDefinition,
 	}
@@ -98,13 +98,13 @@ func (server *SzConfigServer) DeleteDataSource(
 	return response, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
-func (server *SzConfigServer) GetDataSources(
+func (server *SzConfigServer) GetDataSourceRegistry(
 	ctx context.Context,
-	request *szpb.GetDataSourcesRequest,
-) (*szpb.GetDataSourcesResponse, error) {
+	request *szpb.GetDataSourceRegistryRequest,
+) (*szpb.GetDataSourceRegistryResponse, error) {
 	var (
 		err      error
-		response *szpb.GetDataSourcesResponse
+		response *szpb.GetDataSourceRegistryResponse
 		result   string
 	)
 
@@ -121,8 +121,8 @@ func (server *SzConfigServer) GetDataSources(
 		return response, err
 	}
 
-	result, err = szConfig.GetDataSources(ctx)
-	response = &szpb.GetDataSourcesResponse{
+	result, err = szConfig.GetDataSourceRegistry(ctx)
+	response = &szpb.GetDataSourceRegistryResponse{
 		Result: result,
 	}
 

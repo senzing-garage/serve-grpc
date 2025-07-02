@@ -87,7 +87,7 @@ func ExampleSzEngineServer_AddRecord_withInfo() {
 	// }
 }
 
-func ExampleSzEngineServer_CloseExport() {
+func ExampleSzEngineServer_CloseExportReport() {
 	// For more information,
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
@@ -106,11 +106,11 @@ func ExampleSzEngineServer_CloseExport() {
 		fmt.Println(err)
 	}
 	// Example
-	request := &szpb.CloseExportRequest{
+	request := &szpb.CloseExportReportRequest{
 		ExportHandle: responseFromExportJSONEntityReport.GetResult(),
 	}
 
-	response, err := szEngineServer.CloseExport(ctx, request)
+	response, err := szEngineServer.CloseExportReport(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -740,17 +740,17 @@ func ExampleSzEngineServer_HowEntityByEntityId() {
 	// Output: {"HOW_RESULTS":{"FINAL_STATE":{"NEED_REEVALUATION":0,"VIRTUAL_ENTITIES":[...
 }
 
-func ExampleSzEngineServer_PreprocessRecord() {
+func ExampleSzEngineServer_GetRecordPreview() {
 	// For more information,
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	request := &szpb.PreprocessRecordRequest{
+	request := &szpb.GetRecordPreviewRequest{
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
 		Flags:            senzing.SzNoFlags,
 	}
 
-	response, err := szEngineServer.PreprocessRecord(ctx, request)
+	response, err := szEngineServer.GetRecordPreview(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
