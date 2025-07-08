@@ -371,8 +371,8 @@ github.com/senzing-garage/sz-sdk-go-grpc v0.9.8 h1:r7HH/HxHglf3DfnbdyWoxBu+jAHrd
 github.com/senzing-garage/sz-sdk-go-grpc v0.9.8/go.mod h1:sm3NV2SnhQxY1YYrhnYiCVHPqkHM57FbRCvYyvdMc0I=
 github.com/senzing-garage/sz-sdk-go-mock v0.8.10 h1:YqI2zMtOTf5cgm4gfgorv07mw0gCj66w8bVqH61m/vc=
 github.com/senzing-garage/sz-sdk-go-mock v0.8.10/go.mod h1:vIqGjfuOgORc0wNJ8+/0YBmEcOXl5Z79G5fhl0S6R6g=
-github.com/senzing-garage/sz-sdk-proto v0.8.7 h1:8umFMr83fN4AdrIOWvtuzxTWkS3mOHCfNEV/qf2wtkI=
-github.com/senzing-garage/sz-sdk-proto v0.8.7/go.mod h1:TiYEb9IAgBTmTmF2X4YL8lJf2FhqaeHmwGG1G4YTFro=
+github.com/senzing-garage/sz-sdk-proto v0.8.8 h1:jOX/GqLxvrdH4E9/nVGpYfgmxD6pXPb1H1RqjuYuSlw=
+github.com/senzing-garage/sz-sdk-proto v0.8.8/go.mod h1:TiYEb9IAgBTmTmF2X4YL8lJf2FhqaeHmwGG1G4YTFro=
 github.com/shurcooL/sanitized_anchor_name v1.0.0/go.mod h1:1NzhyTcUVG4SuEtjjoZeVRXNmyL/1OwPU0+IJeTBvfc=
 github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
 github.com/sirupsen/logrus v1.4.2/go.mod h1:tLMulIdttU9McNUspp0xgXVQah82FyeX6MwdIuYE2rE=
