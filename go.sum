@@ -365,8 +365,8 @@ github.com/senzing-garage/init-database v0.7.16 h1:SkCnr0Uo3f+wjj5oHkJz50bY/U4BE
 github.com/senzing-garage/init-database v0.7.16/go.mod h1:Y4IcQVHwqD5H7rqR1jnQgrNujSwtrcYQR/B46E5bvH8=
 github.com/senzing-garage/sz-sdk-go v0.15.7 h1:S3EoKO5ldpliC20ekPMkSOTFsIq64wZ2vRsjbPQH3Is=
 github.com/senzing-garage/sz-sdk-go v0.15.7/go.mod h1:nfr5X+d17jd+PwHhpbT0JmB+yStJZERJADJweHAyZ0U=
-github.com/senzing-garage/sz-sdk-go-core v0.9.8 h1:NGdjPCs/fY1WKyj+GsU6ehyYQ3IdSLw+pmdi37qvBqM=
-github.com/senzing-garage/sz-sdk-go-core v0.9.8/go.mod h1:XO+rzzUceAlgiMaOvnKDo9G8T92INQjcGArCUBBca3U=
+github.com/senzing-garage/sz-sdk-go-core v0.9.9 h1:j6UALI/oHftCAe8xVN3i3JA20XhxT11WXW7OINP2CA4=
+github.com/senzing-garage/sz-sdk-go-core v0.9.9/go.mod h1:G01JEE8O7uSyMrTEyaTUXest6yIKa9aFOHdjMQ9PwnA=
 github.com/senzing-garage/sz-sdk-go-grpc v0.9.8 h1:r7HH/HxHglf3DfnbdyWoxBu+jAHrdRPk4Z8LpLMaXDo=
 github.com/senzing-garage/sz-sdk-go-grpc v0.9.8/go.mod h1:sm3NV2SnhQxY1YYrhnYiCVHPqkHM57FbRCvYyvdMc0I=
 github.com/senzing-garage/sz-sdk-go-mock v0.8.10 h1:YqI2zMtOTf5cgm4gfgorv07mw0gCj66w8bVqH61m/vc=
@@ -568,8 +568,8 @@ google.golang.org/genproto v0.0.0-20190819201941-24fa4b261c55/go.mod h1:DMBHOl98
 google.golang.org/genproto v0.0.0-20200423170343-7949de9c1215/go.mod h1:55QSHmfGQM9UVYDPBsyGGes0y52j32PQ3BqQfXhyH3c=
 google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013/go.mod h1:NbSheEEYHJ7i3ixzK3sjbqSGDJWnxyFXZblF3eUsNvo=
 google.golang.org/genproto v0.0.0-20210126160654-44e461bb6506/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
-google.golang.org/genproto/googleapis/rpc v0.0.0-20250603155806-513f23925822 h1:fc6jSaCT0vBduLYZHYrBBNY4dsWuvgyff9noRNDdBeE=
-google.golang.org/genproto/googleapis/rpc v0.0.0-20250603155806-513f23925822/go.mod h1:qQ0YXyHHx3XkvlzUtpXDkS29lDSafHMZBAZDc03LQ3A=
+google.golang.org/genproto/googleapis/rpc v0.0.0-20250707201910-8d1bb00bc6a7 h1:pFyd6EwwL2TqFf8emdthzeX+gZE1ElRq3iM8pui4KBY=
+google.golang.org/genproto/googleapis/rpc v0.0.0-20250707201910-8d1bb00bc6a7/go.mod h1:qQ0YXyHHx3XkvlzUtpXDkS29lDSafHMZBAZDc03LQ3A=
 google.golang.org/grpc v1.17.0/go.mod h1:6QZJwpn2B+Zp71q/5VxRsJ6NXXVCE5NRUHRo+f3cWCs=
 google.golang.org/grpc v1.19.0/go.mod h1:mqu4LbDTu4XGKhr4mRzUsmM4RtVoemTSY81AxZiDr8c=
 google.golang.org/grpc v1.20.0/go.mod h1:chYK+tFQF0nDUGJgXMSgLCQk3phJEuONr2DCgLDdAQM=
