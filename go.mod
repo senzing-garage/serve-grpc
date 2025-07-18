@@ -10,7 +10,7 @@ require (
 	github.com/senzing-garage/go-logging v1.5.3
 	github.com/senzing-garage/go-observing v0.3.6
 	github.com/senzing-garage/init-database v0.7.17
-	github.com/senzing-garage/sz-sdk-go v0.15.7
+	github.com/senzing-garage/sz-sdk-go v0.15.9
 	github.com/senzing-garage/sz-sdk-go-core v0.9.9
 	github.com/senzing-garage/sz-sdk-proto v0.8.8
 	github.com/spf13/cobra v1.9.1
