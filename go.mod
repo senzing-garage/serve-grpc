@@ -9,9 +9,9 @@ require (
 	github.com/senzing-garage/go-helpers v0.6.13
 	github.com/senzing-garage/go-logging v1.5.3
 	github.com/senzing-garage/go-observing v0.3.6
-	github.com/senzing-garage/init-database v0.7.18-0.20250718141633-dc4e2b76b02b
+	github.com/senzing-garage/init-database v0.7.18
 	github.com/senzing-garage/sz-sdk-go v0.15.9
-	github.com/senzing-garage/sz-sdk-go-core v0.9.11-0.20250718135233-36c370f04adb
+	github.com/senzing-garage/sz-sdk-go-core v0.9.11
 	github.com/senzing-garage/sz-sdk-proto v0.8.8
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.7
@@ -48,7 +48,7 @@ require (
 	github.com/sagikazarmark/locafero v0.9.0 // indirect
 	github.com/senzing-garage/go-databasing v0.5.8 // indirect
 	github.com/senzing-garage/go-messaging v1.5.3 // indirect
-	github.com/senzing-garage/go-sdk-abstract-factory v0.9.15-0.20250718141342-52943123188a // indirect
+	github.com/senzing-garage/go-sdk-abstract-factory v0.9.15 // indirect
 	github.com/senzing-garage/sz-sdk-go-grpc v0.9.10 // indirect
 	github.com/senzing-garage/sz-sdk-go-mock v0.8.12 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
@@ -57,7 +57,7 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.40.0 // indirect
-	golang.org/x/exp v0.0.0-20250717185816-542afb5b7346 // indirect
+	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792 // indirect
 	golang.org/x/net v0.42.0 // indirect
 	golang.org/x/sys v0.34.0 // indirect
 	golang.org/x/text v0.27.0 // indirect
