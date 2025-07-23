@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/senzing-garage/go-cmdhelping/option"
 	"github.com/senzing-garage/go-helpers/settingsparser"
@@ -109,9 +110,13 @@ func (grpcServer *BasicGrpcServer) Initialize(ctx context.Context) error {
 }
 
 func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
-	var err error
+	const (
+		timeoutSeconds   = 30
+		keepAliveSeconds = 30
+		ctxSeconds       = 5
+	)
 
-	_ = ctx
+	var err error
 
 	if !grpcServer.isInitialized {
 		return wraperror.Errorf(
@@ -120,13 +125,23 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 		)
 	}
 
+	listenConfig := &net.ListenConfig{ //nolint
+		KeepAlive: keepAliveSeconds * time.Second,
+	}
+
 	// Set up socket listener.
 
-	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcServer.Port))
+	listener, err := listenConfig.Listen(ctx, "tcp", fmt.Sprintf(":%d", grpcServer.Port))
 	if err != nil {
 		grpcServer.log(4001, grpcServer.Port, err)
 	}
-	defer listener.Close()
+
+	defer func() {
+		err := listener.Close()
+		if err != nil {
+			panic(err)
+		}
+	}()
 
 	// Run server.
 
