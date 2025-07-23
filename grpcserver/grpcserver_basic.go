@@ -111,9 +111,7 @@ func (grpcServer *BasicGrpcServer) Initialize(ctx context.Context) error {
 
 func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 	const (
-		timeoutSeconds   = 30
 		keepAliveSeconds = 30
-		ctxSeconds       = 5
 	)
 
 	var err error
