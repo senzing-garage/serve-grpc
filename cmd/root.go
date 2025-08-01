@@ -267,6 +267,7 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	option.AvoidServe,
 	option.CoreInstanceName,
 	option.CoreLogLevel,
+	option.CoreSettings,
 	option.DatabaseURL,
 	option.EnableAll,
 	option.EnableSzConfig,
@@ -362,9 +363,14 @@ func buildBasicGrpcServer(ctx context.Context) (*grpcserver.BasicGrpcServer, err
 		result *grpcserver.BasicGrpcServer
 	)
 
-	senzingSettings, err := settings.BuildAndVerifySettings(ctx, viper.GetViper())
-	if err != nil {
-		return result, wraperror.Errorf(err, "BuildAndVerifySettings")
+	// Get or construct the Senzing configuration JSON.
+
+	senzingSettings := viper.GetString(option.CoreSettings.Arg)
+	if len(senzingSettings) == 0 {
+		senzingSettings, err = settings.BuildAndVerifySettings(ctx, viper.GetViper())
+		if err != nil {
+			return result, wraperror.Errorf(err, "BuildAndVerifySettings")
+		}
 	}
 
 	// Aggregate gRPC server options.

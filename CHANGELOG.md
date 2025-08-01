@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning].
 
 -
 
+## [0.9.20] - 2025-08-01
+
+### Changed in 0.9.20
+
+- Update command line options
+  - From `--engine-instance-name` to `--core-instance-name`
+  - From `--engine-log-level` to `--core-log-level`
+  - From `--engine-settings` to `--core-settings`
+
 ## [0.9.19] - 2025-07-18
 
 ### Added in 0.9.19
