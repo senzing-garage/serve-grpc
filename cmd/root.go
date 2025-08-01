@@ -265,6 +265,8 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	maxReceiveMessageSizeInBytes,
 	maxSendMessageSizeInBytes,
 	option.AvoidServe,
+	option.CoreInstanceName,
+	option.CoreLogLevel,
 	option.DatabaseURL,
 	option.EnableAll,
 	option.EnableSzConfig,
@@ -272,8 +274,6 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	option.EnableSzDiagnostic,
 	option.EnableSzEngine,
 	option.EnableSzProduct,
-	option.EngineInstanceName,
-	option.EngineLogLevel,
 	option.GrpcPort,
 	option.HTTPPort,
 	option.LicenseStringBase64,
@@ -389,9 +389,9 @@ func buildBasicGrpcServer(ctx context.Context) (*grpcserver.BasicGrpcServer, err
 		ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
 		ObserverURL:           viper.GetString(option.ObserverURL.Arg),
 		Port:                  viper.GetInt(option.GrpcPort.Arg),
-		SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
+		SenzingInstanceName:   viper.GetString(option.CoreInstanceName.Arg),
 		SenzingSettings:       senzingSettings,
-		SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
+		SenzingVerboseLogging: viper.GetInt64(option.CoreLogLevel.Arg),
 	}
 
 	return result, err
