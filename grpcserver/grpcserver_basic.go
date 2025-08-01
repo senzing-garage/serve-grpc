@@ -466,10 +466,10 @@ func initializeSqlite(ctx context.Context, senzingSettings string, databaseURIs 
 			DatabaseURLs:          databaseURIs,
 			ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
 			ObserverURL:           viper.GetString(option.ObserverURL.Arg),
-			SenzingInstanceName:   viper.GetString(option.EngineInstanceName.Arg),
+			SenzingInstanceName:   viper.GetString(option.CoreInstanceName.Arg),
 			SenzingLogLevel:       viper.GetString(option.LogLevel.Arg),
 			SenzingSettings:       senzingSettings,
-			SenzingVerboseLogging: viper.GetInt64(option.EngineLogLevel.Arg),
+			SenzingVerboseLogging: viper.GetInt64(option.CoreLogLevel.Arg),
 		}
 
 		err = initializer.Initialize(ctx)
