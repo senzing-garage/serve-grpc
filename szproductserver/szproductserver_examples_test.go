@@ -32,6 +32,7 @@ func ExampleSzProductServer_GetLicense() {
 	fmt.Println(jsonutil.PrettyPrint(jsonutil.Truncate(response.GetResult(), AllLines, redactKeys...), jsonIndentation))
 	// Output:
 	// {
+	//     "advSearch": 0,
 	//     "billing": "YEARLY",
 	//     "contract": "Senzing Public Test License",
 	//     "customer": "Senzing Public Test License",
