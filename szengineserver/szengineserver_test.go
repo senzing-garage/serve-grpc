@@ -28,20 +28,14 @@ import (
 const (
 	baseTen                    = 10
 	defaultAttributes          = `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
-	defaultAvoidEntityIDs      = senzing.SzNoAvoidance
-	defaultAvoidRecordKeys     = senzing.SzNoAvoidance
 	defaultBuildOutDegrees     = int64(2)
 	defaultBuildOutMaxEntities = int64(10)
 	defaultMaxDegrees          = int64(2)
-	defaultSearchAttributes    = `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "JOHNSON"}], "SSN_NUMBER": "053-39-3251"}`
 	defaultSearchProfile       = senzing.SzNoSearchProfile
 	defaultTruncation          = 76
-	defaultVerboseLogging      = senzing.SzNoLogging
-	instanceName               = "SzEngine Test"
 	jsonIndentation            = "    "
 	observerID                 = "Observer 1"
 	observerOrigin             = "SzEngine observer"
-	originMessage              = "Machine: nn; Task: UnitTest"
 	printErrors                = false
 	printResults               = false
 )
@@ -50,14 +44,11 @@ const (
 
 const (
 	badAttributes          = "}{"
-	badAvoidRecordKeys     = "}{"
 	badBuildOutDegrees     = int64(-1)
 	badBuildOutMaxEntities = int64(-1)
 	badCsvColumnList       = "BAD, CSV, COLUMN, LIST"
 	badDataSourceCode      = "BadDataSourceCode"
 	badEntityID            = int64(-1)
-	badExportHandle        = uintptr(0)
-	badLogLevelName        = "BadLogLevelName"
 	badMaxDegrees          = int64(-1)
 	badRecordDefinition    = "}{"
 	badRecordID            = "BadRecordID"
@@ -1918,8 +1909,10 @@ func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).DeleteRecord","error":{"function":"szengine.(*Szengine).DeleteRecord","error":{"id":"SZSDK60044004","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
 		},
 		{
-			name:     "nilRecordID",
-			recordID: nilRecordID,
+			name:               "nilRecordID",
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).DeleteRecord", "error": {"function": "szengine.(*Szengine).DeleteRecord", "error":{"id":"SZSDK60044004","reason":"SENZ0053|RECORD_ID must be provided"}}}`,
+			recordID:           nilRecordID,
 		},
 		{
 			name:  "withInfo",
@@ -1945,9 +1938,11 @@ func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).DeleteRecord","error":{"function":"szengine.(*Szengine).DeleteRecord","error":{"id":"SZSDK60044005","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
 		},
 		{
-			name:     "withInfo_nilRecordID",
-			flags:    senzing.SzWithInfo,
-			recordID: nilRecordID,
+			name:               "withInfo_nilRecordID",
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).DeleteRecord", "error": {"function": "szengine.(*Szengine).DeleteRecord", "error":{"id":"SZSDK60044005","reason":"SENZ0053|RECORD_ID must be provided"}}}`,
+			flags:              senzing.SzWithInfo,
+			recordID:           nilRecordID,
 		},
 	}
 
@@ -2495,8 +2490,10 @@ func getTestCasesForReevaluateRecord() []TestMetadataForReevaluateRecord {
 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ReevaluateRecord","error":{"function":"szengine.(*Szengine).ReevaluateRecord","error":{"id":"SZSDK60044048","reason":"SENZ2207|Data source code [] does not exist."}}}`,
 		},
 		{
-			name:     "nilRecordID",
-			recordID: nilRecordID,
+			name:               "nilRecordID",
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).ReevaluateRecord", "error": {"function": "szengine.(*Szengine).ReevaluateRecord", "error":{"id":"SZSDK60044048","reason":"SENZ0053|RECORD_ID must be provided"}}}`,
+			recordID:           nilRecordID,
 		},
 		{
 			name:  "withInfo",
@@ -2522,9 +2519,11 @@ func getTestCasesForReevaluateRecord() []TestMetadataForReevaluateRecord {
 			flags:              senzing.SzWithInfo,
 		},
 		{
-			name:     "withInfo_nilRecordID",
-			flags:    senzing.SzWithInfo,
-			recordID: nilRecordID,
+			name:               "withInfo_nilRecordID",
+			expectedErr:        szerror.ErrSzBadInput,
+			expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).ReevaluateRecord", "error": {"function": "szengine.(*Szengine).ReevaluateRecord", "error":{"id":"SZSDK60044049","reason":"SENZ0053|RECORD_ID must be provided"}}}`,
+			flags:              senzing.SzWithInfo,
+			recordID:           nilRecordID,
 		},
 	}
 
