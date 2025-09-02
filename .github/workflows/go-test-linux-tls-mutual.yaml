@@ -44,7 +44,7 @@ jobs:
       - name: Docker run on port 8261
         run: |
           docker run \
-            --detach \
+            # --detach \
             --env SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE=/testdata/certificates/certificate-authority/certificate.pem \
             --env SENZING_TOOLS_ENABLE_ALL=true \
             --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/testdata/certificates/server/certificate.pem \
