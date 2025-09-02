@@ -46,6 +46,7 @@ jobs:
           docker run \
             --env SENZING_TOOLS_CLIENT_CA_CERTIFICATE_FILE=/testdata/certificates/certificate-authority/certificate.pem \
             --env SENZING_TOOLS_ENABLE_ALL=true \
+            --env SENZING_TOOLS_ENABLE_ALL=true \
             --env SENZING_TOOLS_SERVER_CERTIFICATE_FILE=/testdata/certificates/server/certificate.pem \
             --env SENZING_TOOLS_SERVER_KEY_FILE=/testdata/certificates/server/private_key.pem \
             --name servegrpc-8261 \
