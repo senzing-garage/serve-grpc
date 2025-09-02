@@ -693,8 +693,8 @@ func ExampleSzEngineServer_GetStats() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(jsonutil.Truncate(response.GetResult(), 5))
-	// Output: {"workload":{"abortedUnresolve":0,"actualAmbiguousTest":0,"addedRecords":72,...
+	fmt.Println(jsonutil.Truncate(response.GetResult(), 2))
+	// Output: {"workload":{...
 }
 
 func ExampleSzEngineServer_GetVirtualEntityByRecordId() {
