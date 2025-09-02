@@ -54,6 +54,8 @@ jobs:
             --rm \
             --volume ${{ github.workspace }}/testdata:/testdata \
             senzing/serve-grpc:github-action
+          sleep 30
+          docker ps -a
 
       - name: Docker run with encrypted private key on port 8262
         run: |
@@ -69,10 +71,11 @@ jobs:
             --rm \
             --volume ${{ github.workspace }}/testdata:/testdata \
             senzing/serve-grpc:github-action
+          sleep 30
+          docker ps -a
 
       - name: Test using grpcurl on port 8261
         run: |
-          sleep 30
           docker ps -a
           grpcurl \
             -authority www.senzing.com \
@@ -85,7 +88,6 @@ jobs:
 
       - name: Test using grpcurl on port 8262
         run: |
-          sleep 30
           docker ps -a
           grpcurl \
             -authority www.senzing.com \
