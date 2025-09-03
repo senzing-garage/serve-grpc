@@ -463,13 +463,14 @@ func initializeSqlite(ctx context.Context, senzingSettings string, databaseURIs 
 	queryParameters := parsedDatabaseURL.Query()
 	if (queryParameters.Get("mode") == "memory") && (queryParameters.Get("cache") == "shared") {
 		initializer := &initializer.BasicInitializer{
-			DatabaseURLs:          databaseURIs,
-			ObserverOrigin:        viper.GetString(option.ObserverOrigin.Arg),
-			ObserverURL:           viper.GetString(option.ObserverURL.Arg),
-			SenzingInstanceName:   viper.GetString(option.CoreInstanceName.Arg),
-			SenzingLogLevel:       viper.GetString(option.LogLevel.Arg),
-			SenzingSettings:       senzingSettings,
-			SenzingVerboseLogging: viper.GetInt64(option.CoreLogLevel.Arg),
+			DatabaseURLs:                databaseURIs,
+			InstallSenzingConfiguration: true,
+			ObserverOrigin:              viper.GetString(option.ObserverOrigin.Arg),
+			ObserverURL:                 viper.GetString(option.ObserverURL.Arg),
+			SenzingInstanceName:         viper.GetString(option.CoreInstanceName.Arg),
+			SenzingLogLevel:             viper.GetString(option.LogLevel.Arg),
+			SenzingSettings:             senzingSettings,
+			SenzingVerboseLogging:       viper.GetInt64(option.CoreLogLevel.Arg),
 		}
 
 		err = initializer.Initialize(ctx)
