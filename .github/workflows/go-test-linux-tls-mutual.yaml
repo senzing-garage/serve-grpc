@@ -7,14 +7,15 @@ on:
     - cron: "15 7 * * *"
   workflow_dispatch:
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   go-test-linux:
     name: "Go test with OS: ${{ matrix.os }}"
     outputs:
       status: ${{ job.status }}
+    permissions:
+      contents: read
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
