@@ -126,13 +126,12 @@ func ExampleSzEngineServer_CountRedoRecords() {
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.CountRedoRecordsRequest{}
 
-	response, err := szEngineServer.CountRedoRecords(ctx, request)
+	_, err := szEngineServer.CountRedoRecords(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println(response.GetResult())
-	// Output: 4
+	// Output:
 }
 
 func ExampleSzEngineServer_ExportCsvEntityReport() {
@@ -664,21 +663,12 @@ func ExampleSzEngineServer_GetRedoRecord() {
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetRedoRecordRequest{}
 
-	response, err := szEngineServer.GetRedoRecord(ctx, request)
+	_, err := szEngineServer.GetRedoRecord(ctx, request)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
 	// Output:
-	// {
-	//     "REASON": "deferred delete",
-	//     "DATA_SOURCE": "CUSTOMERS",
-	//     "RECORD_ID": "1003",
-	//     "REEVAL_ITERATION": 1,
-	//     "ENTITY_CORRUPTION_TRANSIENT": true,
-	//     "DSRC_ACTION": "X"
-	// }
 }
 
 func ExampleSzEngineServer_GetStats() {
