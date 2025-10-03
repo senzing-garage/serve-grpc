@@ -11,6 +11,8 @@ permissions:
 
 jobs:
   docker-build-container:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
 
     steps:
