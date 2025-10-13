@@ -39,6 +39,7 @@ import (
 // BasicGrpcServer is the default implementation of the GrpcServer interface.
 type BasicGrpcServer struct {
 	AvoidServing          bool
+	BindAddress           string
 	EnableAll             bool
 	EnableSzConfig        bool
 	EnableSzConfigManager bool
@@ -129,7 +130,7 @@ func (grpcServer *BasicGrpcServer) Serve(ctx context.Context) error {
 
 	// Set up socket listener.
 
-	listener, err := listenConfig.Listen(ctx, "tcp", fmt.Sprintf(":%d", grpcServer.Port))
+	listener, err := listenConfig.Listen(ctx, "tcp", fmt.Sprintf("%s:%d", grpcServer.BindAddress, grpcServer.Port))
 	if err != nil {
 		grpcServer.log(4001, grpcServer.Port, err)
 	}

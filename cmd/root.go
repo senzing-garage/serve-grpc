@@ -384,6 +384,7 @@ func buildBasicGrpcServer(ctx context.Context) (*grpcserver.BasicGrpcServer, err
 
 	result = &grpcserver.BasicGrpcServer{
 		AvoidServing:          viper.GetBool(option.AvoidServe.Arg),
+		BindAddress:           viper.GetString(option.BindAddress.Arg),
 		EnableAll:             viper.GetBool(option.EnableAll.Arg),
 		EnableSzConfig:        viper.GetBool(option.EnableSzConfig.Arg),
 		EnableSzConfigManager: viper.GetBool(option.EnableSzConfigManager.Arg),
