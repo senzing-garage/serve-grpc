@@ -5,7 +5,7 @@ go 1.24.4
 require (
 	github.com/aquilax/truncate v1.0.1
 	github.com/improbable-eng/grpc-web v0.15.0
-	github.com/senzing-garage/go-cmdhelping v0.3.8-0.20251013133711-02190fa584b3
+	github.com/senzing-garage/go-cmdhelping v0.3.8
 	github.com/senzing-garage/go-helpers v0.6.13
 	github.com/senzing-garage/go-logging v1.5.3
 	github.com/senzing-garage/go-observing v0.3.6
