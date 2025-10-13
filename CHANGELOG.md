@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 -
 
+## [0.9.22] - 2025-10-13
+
+### Changed in 0.9.22
+
+- Add `bind-address` option
+
 ## [0.9.21] - 2025-09-02
 
 ### Changed in 0.9.21
