@@ -56,11 +56,6 @@ jobs:
             echo "LD_LIBRARY_PATH=${SENZING_PATH}/er/lib"
           } >> "$GITHUB_ENV"
 
-      - name: Copy /etc files
-        run: |
-          sudo mkdir -p /etc/opt/senzing
-          sudo cp testdata/senzing-license/g2.lic /etc/opt/senzing/g2.lic
-
       - name: Copy test database files
         run: |
           mkdir -p /tmp/sqlite
