@@ -10,8 +10,8 @@ require (
 	github.com/senzing-garage/go-logging v1.5.3
 	github.com/senzing-garage/go-observing v0.3.6
 	github.com/senzing-garage/init-database v0.7.21
-	github.com/senzing-garage/sz-sdk-go v0.15.9
-	github.com/senzing-garage/sz-sdk-go-core v0.9.11
+	github.com/senzing-garage/sz-sdk-go v0.15.11
+	github.com/senzing-garage/sz-sdk-go-core v0.9.12
 	github.com/senzing-garage/sz-sdk-proto v0.8.8
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/pflag v1.0.10
@@ -31,7 +31,7 @@ require (
 	github.com/go-logfmt/logfmt v0.6.1 // indirect
 	github.com/go-sql-driver/mysql v1.9.3 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
-	github.com/godror/godror v0.49.3 // indirect
+	github.com/godror/godror v0.49.4 // indirect
 	github.com/godror/knownpb v0.3.0 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
@@ -56,11 +56,11 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/crypto v0.43.0 // indirect
-	golang.org/x/exp v0.0.0-20251009144603-d2f985daa21b // indirect
+	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546 // indirect
 	golang.org/x/net v0.46.0 // indirect
 	golang.org/x/sys v0.37.0 // indirect
 	golang.org/x/text v0.30.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20251007200510-49b9836ed3ff // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20251022142026-3a174f9686a8 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	nhooyr.io/websocket v1.8.17 // indirect
