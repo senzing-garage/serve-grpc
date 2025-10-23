@@ -1910,7 +1910,7 @@ func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
 		},
 		{
 			name:               "nilRecordID",
-			expectedErr:        szerror.ErrSzBadInput,
+			expectedErr:        szerror.ErrSzNotInitialized,
 			expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).DeleteRecord", "error": {"function": "szengine.(*Szengine).DeleteRecord", "error":{"id":"SZSDK60044004","reason":"SENZ0053|RECORD_ID must be provided"}}}`,
 			recordID:           nilRecordID,
 		},
@@ -1939,7 +1939,7 @@ func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
 		},
 		{
 			name:               "withInfo_nilRecordID",
-			expectedErr:        szerror.ErrSzBadInput,
+			expectedErr:        szerror.ErrSzNotInitialized,
 			expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).DeleteRecord", "error": {"function": "szengine.(*Szengine).DeleteRecord", "error":{"id":"SZSDK60044005","reason":"SENZ0053|RECORD_ID must be provided"}}}`,
 			flags:              senzing.SzWithInfo,
 			recordID:           nilRecordID,
@@ -2491,7 +2491,7 @@ func getTestCasesForReevaluateRecord() []TestMetadataForReevaluateRecord {
 		},
 		{
 			name:               "nilRecordID",
-			expectedErr:        szerror.ErrSzBadInput,
+			expectedErr:        szerror.ErrSzNotInitialized,
 			expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).ReevaluateRecord", "error": {"function": "szengine.(*Szengine).ReevaluateRecord", "error":{"id":"SZSDK60044048","reason":"SENZ0053|RECORD_ID must be provided"}}}`,
 			recordID:           nilRecordID,
 		},
@@ -2520,7 +2520,7 @@ func getTestCasesForReevaluateRecord() []TestMetadataForReevaluateRecord {
 		},
 		{
 			name:               "withInfo_nilRecordID",
-			expectedErr:        szerror.ErrSzBadInput,
+			expectedErr:        szerror.ErrSzNotInitialized,
 			expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).ReevaluateRecord", "error": {"function": "szengine.(*Szengine).ReevaluateRecord", "error":{"id":"SZSDK60044049","reason":"SENZ0053|RECORD_ID must be provided"}}}`,
 			flags:              senzing.SzWithInfo,
 			recordID:           nilRecordID,

@@ -52,10 +52,6 @@ jobs:
         run: |
           Add-Content "$env:GITHUB_PATH" "$Env:USERPROFILE\Senzing\er\lib"
 
-      - name: Copy /etc files
-        run: |
-          copy testdata/senzing-license/g2.lic "$Env:USERPROFILE\Senzing\er\etc\g2.lic"
-
       - name: Copy test database files
         run: |
           mkdir "C:\Temp\sqlite"

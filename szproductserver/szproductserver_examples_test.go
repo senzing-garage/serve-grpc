@@ -33,12 +33,12 @@ func ExampleSzProductServer_GetLicense() {
 	// Output:
 	// {
 	//     "advSearch": 0,
-	//     "billing": "YEARLY",
-	//     "contract": "Senzing Public Test License",
-	//     "customer": "Senzing Public Test License",
-	//     "licenseLevel": "STANDARD",
+	//     "billing": "",
+	//     "contract": "",
+	//     "customer": "",
+	//     "licenseLevel": "",
 	//     "licenseType": "EVAL (Solely for non-productive use)",
-	//     "recordLimit": 50000
+	//     "recordLimit": 500
 	// }
 }
 
