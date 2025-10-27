@@ -48,9 +48,9 @@ require (
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
 	github.com/senzing-garage/go-databasing v0.5.8 // indirect
 	github.com/senzing-garage/go-messaging v1.5.3 // indirect
-	github.com/senzing-garage/go-sdk-abstract-factory v0.9.15 // indirect
-	github.com/senzing-garage/sz-sdk-go-grpc v0.9.10 // indirect
-	github.com/senzing-garage/sz-sdk-go-mock v0.8.12 // indirect
+	github.com/senzing-garage/go-sdk-abstract-factory v0.9.16 // indirect
+	github.com/senzing-garage/sz-sdk-go-grpc v0.9.11 // indirect
+	github.com/senzing-garage/sz-sdk-go-mock v0.8.13 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
