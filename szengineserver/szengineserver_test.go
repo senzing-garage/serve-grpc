@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -2797,12 +2798,15 @@ func badRecordKeysFunc() string {
 }
 
 func entityIDsJSON(entityIDs ...int64) string {
-	result := `{"ENTITIES": [`
+	var resultBuilder strings.Builder
+
+	resultBuilder.WriteString(`{"ENTITIES": [`)
 
 	for _, entityID := range entityIDs {
-		result += `{"ENTITY_ID":` + strconv.FormatInt(entityID, baseTen) + `},`
+		resultBuilder.WriteString(`{"ENTITY_ID":` + strconv.FormatInt(entityID, baseTen) + `},`)
 	}
 
+	result := resultBuilder.String()
 	result = result[:len(result)-1] // Remove final comma.
 	result += `]}`
 
