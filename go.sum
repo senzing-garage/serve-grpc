@@ -121,8 +121,8 @@ github.com/go-viper/mapstructure/v2 v2.4.0/go.mod h1:oJDH3BJKyqBA2TXFhDsKDGDTlnd
 github.com/gobwas/httphead v0.0.0-20180130184737-2c6c146eadee/go.mod h1:L0fX3K22YWvt/FAX9NnzrNzcI4wNYi9Yku4O0LKYflo=
 github.com/gobwas/pool v0.2.0/go.mod h1:q8bcK0KcYlCgd9e7WYLm9LpyS+YeLd8JVDW6WezmKEw=
 github.com/gobwas/ws v1.0.2/go.mod h1:szmBTxLgaFppYjEmNtny/v3w89xOydFnnZMcgRRu/EM=
-github.com/godror/godror v0.49.4 h1:8kKWKoR17nPX7u10hr4GwD4u10hzTZED9ihdkuzRrKI=
-github.com/godror/godror v0.49.4/go.mod h1:kTMcxZzRw73RT5kn9v3JkBK4kHI6dqowHotqV72ebU8=
+github.com/godror/godror v0.49.5 h1:8w2LaxfH1bgrZwtT4OX3G//ld9AUDsZMxZu89NaCTLk=
+github.com/godror/godror v0.49.5/go.mod h1:kTMcxZzRw73RT5kn9v3JkBK4kHI6dqowHotqV72ebU8=
 github.com/godror/knownpb v0.3.0 h1:+caUdy8hTtl7X05aPl3tdL540TvCcaQA6woZQroLZMw=
 github.com/godror/knownpb v0.3.0/go.mod h1:PpTyfJwiOEAzQl7NtVCM8kdPCnp3uhxsZYIzZ5PV4zU=
 github.com/gogo/googleapis v1.1.0/go.mod h1:gf4bu3Q80BeJ6H1S1vYPm8/ELATdvryBaNFGgqEef3s=
@@ -248,8 +248,8 @@ github.com/mattn/go-runewidth v0.0.2/go.mod h1:LwmH8dsx7+W8Uxz3IHJYH5QSwggIsqBzp
 github.com/mattn/go-sqlite3 v1.14.32 h1:JD12Ag3oLy1zQA+BNn74xRgaBbdhbNIDYvQUEuuErjs=
 github.com/mattn/go-sqlite3 v1.14.32/go.mod h1:Uh1q+B4BYcTPb+yiD3kU8Ct7aC0hY9fxUwlHK0RXw+Y=
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
-github.com/microsoft/go-mssqldb v1.9.3 h1:hy4p+LDC8LIGvI3JATnLVmBOLMJbmn5X400mr5j0lPs=
-github.com/microsoft/go-mssqldb v1.9.3/go.mod h1:GBbW9ASTiDC+mpgWDGKdm3FnFLTUsLYN3iFL90lQ+PA=
+github.com/microsoft/go-mssqldb v1.9.4 h1:sHrj3GcdgkxytZ09aZ3+ys72pMeyEXJowT44j74pNgs=
+github.com/microsoft/go-mssqldb v1.9.4/go.mod h1:GBbW9ASTiDC+mpgWDGKdm3FnFLTUsLYN3iFL90lQ+PA=
 github.com/miekg/dns v1.0.14/go.mod h1:W1PPwlIAgtquWBMBEV9nkV9Cazfe8ScdGz/Lj7v3Nrg=
 github.com/mitchellh/cli v1.0.0/go.mod h1:hNIlj7HEI86fIcpObd7a0FcrxTWetlwJDGcceTlRvqc=
 github.com/mitchellh/go-homedir v1.0.0/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=
@@ -361,8 +361,8 @@ github.com/senzing-garage/go-observing v0.3.6 h1:vIQTaWbCxYRSJFw4pDKKfTqOYqugB2r
 github.com/senzing-garage/go-observing v0.3.6/go.mod h1:ghkX9HSaKGjwYzsPLZVt+FO9AU/w4jzqvI2MAXmfGXs=
 github.com/senzing-garage/go-sdk-abstract-factory v0.9.16 h1:aPnHivQu9GZA9ynx3UlVS3RnUB7woWI+/BUqS6OrdsU=
 github.com/senzing-garage/go-sdk-abstract-factory v0.9.16/go.mod h1:rYsWBT0J+13RYiPyVQ/hOaIwNewVsxW+hb0QaqN4mIw=
-github.com/senzing-garage/init-database v0.7.22 h1:LNJU+gpabh3PdPPNSZN4Kbs4709ysym38ZrG0PT8P68=
-github.com/senzing-garage/init-database v0.7.22/go.mod h1:JkUvEC/MP/dT9Ik50E1EBP3jVD4hfiQaWhKBBewiksM=
+github.com/senzing-garage/init-database v0.8.0 h1:li3Dz+Ysn4K6jPiZrpH9f+eJ48P9t9LZiZx4LjutzVI=
+github.com/senzing-garage/init-database v0.8.0/go.mod h1:VTcRxMLUm3kw9k+BFhLwTDroQHpmkyM/WpfIGQnp9KA=
 github.com/senzing-garage/sz-sdk-go v0.15.11 h1:uVw3JldDZTCwT9F8JMmmzCXcaijQGxvhAsILaCYllt4=
 github.com/senzing-garage/sz-sdk-go v0.15.11/go.mod h1:OO/kisqP2NBG/3eRG0M1q9diOZDfFEHf+g+exCv6yv0=
 github.com/senzing-garage/sz-sdk-go-core v0.9.12 h1:Xx/RdEQ3dewBKkOM4Y+svN0Xy9SondLLqmpXnX8aX6w=
