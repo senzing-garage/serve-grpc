@@ -1,11 +1,16 @@
 name: Go test linux - No TLS
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
   schedule:
     - cron: "15 7 * * *"
-  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
 
 permissions: {}
 
@@ -21,6 +26,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
