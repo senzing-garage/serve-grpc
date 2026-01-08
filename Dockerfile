@@ -65,7 +65,7 @@ FROM ${IMAGE_FINAL} AS final
 ENV REFRESHED_AT=2024-07-01
 LABEL Name="senzing/serve-grpc" \
       Maintainer="support@senzing.com" \
-      Version="0.9.1"
+      Version="0.9.24"
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD ["/app/healthcheck.sh"]
 USER root
 

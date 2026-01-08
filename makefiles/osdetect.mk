@@ -4,7 +4,7 @@ ifeq ($(OS),Windows_NT)
         OSARCH = x86_64
     endif
     ifeq ($(PROCESSOR_ARCHITECTURE), ARM64)
-        OSARCH = arm4
+        OSARCH = arm64
     endif
 else
     OSTYPE = $(shell uname -s | tr '[:upper:]' '[:lower:]')

@@ -2,9 +2,15 @@ name: Go test linux
 
 on:
   push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   schedule:
     - cron: "15 7 * * *"
-  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
 
 env:
   SENZING_LOG_LEVEL: TRACE
@@ -26,6 +32,7 @@ jobs:
         go: ["1.24"]
         os: [ubuntu-latest]
         senzingsdk-version: [production-v4, staging-v4]
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository

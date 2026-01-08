@@ -375,7 +375,7 @@ func buildBasicGrpcServer(ctx context.Context) (*grpcserver.BasicGrpcServer, err
 
 	// Aggregate gRPC server options.
 
-	grpcServerOptions, err := getGrpcServerOptions()
+	grpcServerOptions, err := getGrpcServerOptions(ctx)
 	if err != nil {
 		return result, wraperror.Errorf(err, "getGrpcServerOptions")
 	}
@@ -435,7 +435,11 @@ func buildGrpcServerOption(
 	return result
 }
 
-func createTLSOption(serverCertificatePathValue string, serverKeyPathValue string) (grpc.ServerOption, error) {
+func createTLSOption(
+	ctx context.Context,
+	serverCertificatePathValue string,
+	serverKeyPathValue string,
+) (grpc.ServerOption, error) {
 	var (
 		err          error
 		result       grpc.ServerOption
@@ -450,6 +454,7 @@ func createTLSOption(serverCertificatePathValue string, serverKeyPathValue strin
 	clientAuth = tls.NoClientCert
 
 	serverCertificate, err := tlshelper.LoadX509KeyPair(
+		ctx,
 		serverCertificatePathValue,
 		serverKeyPathValue,
 		serverKeyPassPhraseValue,
@@ -494,13 +499,13 @@ func createTLSOption(serverCertificatePathValue string, serverKeyPathValue strin
 	return result, wraperror.Errorf(err, wraperror.NoMessage)
 }
 
-func getGrpcServerOptions() ([]grpc.ServerOption, error) {
+func getGrpcServerOptions(ctx context.Context) ([]grpc.ServerOption, error) {
 	var (
 		err    error
 		result []grpc.ServerOption
 	)
 
-	optionFunctions := []func() (grpc.ServerOption, error){
+	optionFunctions := []func(context.Context) (grpc.ServerOption, error){
 		getTLSOption,
 		getKeepaliveEnforcementPolicyOption,
 		getKeepaliveParamsOption,
@@ -513,7 +518,7 @@ func getGrpcServerOptions() ([]grpc.ServerOption, error) {
 	}
 
 	for _, optionFunction := range optionFunctions {
-		option, err := optionFunction()
+		option, err := optionFunction(ctx)
 		if err != nil {
 			return result, err
 		}
@@ -526,11 +531,13 @@ func getGrpcServerOptions() ([]grpc.ServerOption, error) {
 	return result, err
 }
 
-func getKeepaliveEnforcementPolicyOption() (grpc.ServerOption, error) {
+func getKeepaliveEnforcementPolicyOption(ctx context.Context) (grpc.ServerOption, error) {
 	var (
 		err    error
 		result grpc.ServerOption
 	)
+
+	_ = ctx
 
 	// Option parameters.
 
@@ -554,11 +561,13 @@ func getKeepaliveEnforcementPolicyOption() (grpc.ServerOption, error) {
 	return result, err
 }
 
-func getKeepaliveParamsOption() (grpc.ServerOption, error) {
+func getKeepaliveParamsOption(ctx context.Context) (grpc.ServerOption, error) {
 	var (
 		err    error
 		result grpc.ServerOption
 	)
+
+	_ = ctx
 
 	// Option parameters.
 
@@ -597,11 +606,13 @@ func getKeepaliveParamsOption() (grpc.ServerOption, error) {
 	return result, err
 }
 
-func getMaxConcurrentStreamsOption() (grpc.ServerOption, error) {
+func getMaxConcurrentStreamsOption(ctx context.Context) (grpc.ServerOption, error) {
 	var (
 		err    error
 		result grpc.ServerOption
 	)
+
+	_ = ctx
 
 	maxConcurrentStreamsValue := viper.GetUint32(maxConcurrentStreams.Arg)
 
@@ -612,11 +623,13 @@ func getMaxConcurrentStreamsOption() (grpc.ServerOption, error) {
 	return result, err
 }
 
-func getMaxHeaderListSizeOption() (grpc.ServerOption, error) {
+func getMaxHeaderListSizeOption(ctx context.Context) (grpc.ServerOption, error) {
 	var (
 		err    error
 		result grpc.ServerOption
 	)
+
+	_ = ctx
 
 	maxHeaderListSizeInBytesValue := viper.GetUint32(maxHeaderListSizeInBytes.Arg)
 
@@ -627,11 +640,13 @@ func getMaxHeaderListSizeOption() (grpc.ServerOption, error) {
 	return result, err
 }
 
-func getMaxRecvMsgSizeOption() (grpc.ServerOption, error) {
+func getMaxRecvMsgSizeOption(ctx context.Context) (grpc.ServerOption, error) {
 	var (
 		err    error
 		result grpc.ServerOption
 	)
+
+	_ = ctx
 
 	maxReceiveMessageSizeInBytesValue := viper.GetInt(maxReceiveMessageSizeInBytes.Arg)
 
@@ -642,11 +657,13 @@ func getMaxRecvMsgSizeOption() (grpc.ServerOption, error) {
 	return result, err
 }
 
-func getMaxSendMsgSizeOption() (grpc.ServerOption, error) {
+func getMaxSendMsgSizeOption(ctx context.Context) (grpc.ServerOption, error) {
 	var (
 		err    error
 		result grpc.ServerOption
 	)
+
+	_ = ctx
 
 	maxSendMessageSizeInBytesValue := viper.GetInt(maxSendMessageSizeInBytes.Arg)
 
@@ -657,11 +674,13 @@ func getMaxSendMsgSizeOption() (grpc.ServerOption, error) {
 	return result, err
 }
 
-func getReadBufferSizeOption() (grpc.ServerOption, error) {
+func getReadBufferSizeOption(ctx context.Context) (grpc.ServerOption, error) {
 	var (
 		err    error
 		result grpc.ServerOption
 	)
+
+	_ = ctx
 
 	readBufferSizeInBytesValue := viper.GetInt(readBufferSizeInBytes.Arg)
 
@@ -672,11 +691,13 @@ func getReadBufferSizeOption() (grpc.ServerOption, error) {
 	return result, err
 }
 
-func getWriteBufferSizeOption() (grpc.ServerOption, error) {
+func getWriteBufferSizeOption(ctx context.Context) (grpc.ServerOption, error) {
 	var (
 		err    error
 		result grpc.ServerOption
 	)
+
+	_ = ctx
 
 	writeBufferSizeInBytesValue := viper.GetInt(writeBufferSizeInBytes.Arg)
 
@@ -688,7 +709,7 @@ func getWriteBufferSizeOption() (grpc.ServerOption, error) {
 }
 
 // Get the appropriate GRPC server options.
-func getTLSOption() (grpc.ServerOption, error) {
+func getTLSOption(ctx context.Context) (grpc.ServerOption, error) {
 	var (
 		err    error
 		result grpc.ServerOption
@@ -701,7 +722,7 @@ func getTLSOption() (grpc.ServerOption, error) {
 
 	switch {
 	case serverCertificatePathValue != "" && serverKeyPathValue != "":
-		result, err = createTLSOption(serverCertificatePathValue, serverKeyPathValue)
+		result, err = createTLSOption(ctx, serverCertificatePathValue, serverKeyPathValue)
 	case serverCertificatePathValue != "" && serverKeyPathValue == "":
 		err = wraperror.Errorf(
 			errPackage,

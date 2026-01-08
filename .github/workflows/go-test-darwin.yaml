@@ -7,6 +7,10 @@ on:
     - cron: "15 7 * * *"
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 env:
   SENZING_LOG_LEVEL: TRACE
   SENZING_TOOLS_DATABASE_URL: sqlite3://na:na@nowhere/tmp/sqlite/G2C.db
@@ -27,6 +31,7 @@ jobs:
         go: ["1.24"]
         os: [macos-latest]
         senzingsdk-version: [production-v4, staging-v4]
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
