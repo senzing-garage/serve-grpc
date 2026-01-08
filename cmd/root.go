@@ -265,6 +265,7 @@ var ContextVariablesForMultiPlatform = []option.ContextVariable{
 	maxReceiveMessageSizeInBytes,
 	maxSendMessageSizeInBytes,
 	option.AvoidServe,
+	option.BindAddress,
 	option.CoreInstanceName,
 	option.CoreLogLevel,
 	option.CoreSettings,
