@@ -9,6 +9,13 @@ This project adheres to [Semantic Versioning].
 
 -
 
+## [0.9.24] - 2026-01-08
+
+### Changed in 0.9.24
+
+- Update dependencies
+- Update Docker base images to golang 1.25.5, senzingsdk-runtime 4.1.0, and Alpine
+
 ## [0.9.23] - 2025-10-27
 
 ### Changed in 0.9.23

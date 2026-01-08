@@ -9,6 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Prerequisites
 
 The Senzing C library must be installed:
+
 - `/opt/senzing/er/lib` - shared objects
 - `/opt/senzing/er/sdk/c` - SDK header files
 - `/etc/opt/senzing` - configuration
@@ -100,6 +101,7 @@ Default ports: gRPC on 8261, HTTP on 8260.
 ### Configuration
 
 Configuration is via environment variables (`SENZING_TOOLS_*`) or CLI flags. Key options:
+
 - `SENZING_TOOLS_DATABASE_URL` - Database connection string
 - `SENZING_TOOLS_ENABLE_ALL` - Enable all services
 - `SENZING_TOOLS_GRPC_PORT` / `SENZING_TOOLS_HTTP_PORT` - Server ports
