@@ -21,7 +21,7 @@
 go.work
 
 # macOS artifacts
-.DS_STORE
+.DS_Store
 
 # Visual Studio code
 .vscode/*
@@ -37,3 +37,5 @@ target/
 cover.out
 coverage.html
 coverage.out
+
+.claude/settings.local.json
