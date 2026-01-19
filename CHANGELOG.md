@@ -9,6 +9,18 @@ This project adheres to [Semantic Versioning].
 
 -
 
+## [0.9.25] - 2026-01-19
+
+### Added in 0.9.25
+
+- Dockerfile verification support
+
+### Changed in 0.9.25
+
+- Update dependencies
+- Update Docker base images to golang 1.24.4, golang 1.25.5, and Alpine
+- Update to project template
+
 ## [0.9.24] - 2026-01-08
 
 ### Changed in 0.9.24

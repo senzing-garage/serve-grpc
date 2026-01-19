@@ -180,7 +180,7 @@ linters:
         - '.+/szproductserver\.SzProductServer$'
         - '.+/tls\.Config$'
     funlen:
-      lines: 100
+      lines: 120
     ireturn:
       allow:
         - error

@@ -16,6 +16,7 @@ import (
 	"github.com/senzing-garage/go-helpers/truthset"
 	"github.com/senzing-garage/go-helpers/wraperror"
 	"github.com/senzing-garage/go-observing/observer"
+	"github.com/senzing-garage/serve-grpc/getversion"
 	"github.com/senzing-garage/serve-grpc/szengineserver"
 	"github.com/senzing-garage/sz-sdk-go-core/szabstractfactory"
 	"github.com/senzing-garage/sz-sdk-go-core/szdiagnostic"
@@ -81,6 +82,7 @@ var (
 		ID:       observerID,
 		IsSilent: true,
 	}
+	senzingVersion        = 0
 	szEngineTestSingleton *szengineserver.SzEngineServer
 )
 
@@ -93,6 +95,10 @@ type GetEntityByRecordIDResponse struct {
 // ----------------------------------------------------------------------------
 // Interface methods
 // ----------------------------------------------------------------------------
+
+func TestSzEngine_PrintSenzingVersion(test *testing.T) {
+	test.Logf("Detected Senzing version: %d", senzingVersion)
+}
 
 func TestSzEngine_AddRecord(test *testing.T) {
 	ctx := test.Context()
@@ -1493,6 +1499,9 @@ func truncate(aString string, length int) string {
 // ----------------------------------------------------------------------------
 
 func TestMain(m *testing.M) {
+	ctx := context.Background()
+	senzingVersion = getversion.GetSenzingVersion(ctx)
+
 	setup()
 
 	code := m.Run()
@@ -1877,6 +1886,8 @@ func getTestCasesForAddRecord() []TestMetadataForAddRecord {
 }
 
 func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
+	var addendum []TestMetadataForDeleteRecord
+
 	result := []TestMetadataForDeleteRecord{
 		{
 			name:               "badDataSourceCode",
@@ -1904,18 +1915,6 @@ func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
 			name: "default",
 		},
 		{
-			name:               "nilDataSourceCode",
-			dataSourceCode:     nilDataSourceCode,
-			expectedErr:        szerror.ErrSzConfiguration,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).DeleteRecord","error":{"function":"szengine.(*Szengine).DeleteRecord","error":{"id":"SZSDK60044004","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
-		},
-		{
-			name:               "nilRecordID",
-			expectedErr:        szerror.ErrSzNotInitialized,
-			expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).DeleteRecord", "error": {"function": "szengine.(*Szengine).DeleteRecord", "error":{"id":"SZSDK60044004","reason":"SENZ0053|RECORD_ID must be provided"}}}`,
-			recordID:           nilRecordID,
-		},
-		{
 			name:  "withInfo",
 			flags: senzing.SzWithInfo,
 		},
@@ -1931,21 +1930,71 @@ func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
 			flags:    senzing.SzWithInfo,
 			recordID: badRecordID,
 		},
-		{
-			name:               "withInfo_nilDataSourceCode",
-			flags:              senzing.SzWithInfo,
-			dataSourceCode:     nilDataSourceCode,
-			expectedErr:        szerror.ErrSzConfiguration,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).DeleteRecord","error":{"function":"szengine.(*Szengine).DeleteRecord","error":{"id":"SZSDK60044005","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
-		},
-		{
-			name:               "withInfo_nilRecordID",
-			expectedErr:        szerror.ErrSzNotInitialized,
-			expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).DeleteRecord", "error": {"function": "szengine.(*Szengine).DeleteRecord", "error":{"id":"SZSDK60044005","reason":"SENZ0053|RECORD_ID must be provided"}}}`,
-			flags:              senzing.SzWithInfo,
-			recordID:           nilRecordID,
-		},
 	}
+
+	switch {
+	case senzingVersion < 40200:
+		addendum = []TestMetadataForDeleteRecord{
+			{
+				name:               "nilDataSourceCode",
+				dataSourceCode:     nilDataSourceCode,
+				expectedErr:        szerror.ErrSzConfiguration,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).DeleteRecord","error":{"function":"szengine.(*Szengine).DeleteRecord","error":{"id":"SZSDK60044004","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
+			},
+			{
+				name:               "nilRecordID",
+				expectedErr:        szerror.ErrSzNotInitialized,
+				expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).DeleteRecord", "error": {"function": "szengine.(*Szengine).DeleteRecord", "error":{"id":"SZSDK60044004","reason":"SENZ0053|RECORD_ID must be provided"}}}`,
+				recordID:           nilRecordID,
+			},
+			{
+				name:               "withInfo_nilDataSourceCode",
+				flags:              senzing.SzWithInfo,
+				dataSourceCode:     nilDataSourceCode,
+				expectedErr:        szerror.ErrSzConfiguration,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).DeleteRecord","error":{"function":"szengine.(*Szengine).DeleteRecord","error":{"id":"SZSDK60044005","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
+			},
+			{
+				name:               "withInfo_nilRecordID",
+				expectedErr:        szerror.ErrSzNotInitialized,
+				expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).DeleteRecord", "error": {"function": "szengine.(*Szengine).DeleteRecord", "error":{"id":"SZSDK60044005","reason":"SENZ0053|RECORD_ID must be provided"}}}`,
+				flags:              senzing.SzWithInfo,
+				recordID:           nilRecordID,
+			},
+		}
+
+	default:
+		addendum = []TestMetadataForDeleteRecord{
+			{
+				name:               "nilDataSourceCode",
+				dataSourceCode:     nilDataSourceCode,
+				expectedErr:        szerror.ErrSzUnknownDataSource,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).DeleteRecord","error":{"function":"szengine.(*Szengine).DeleteRecord","error":{"id":"SZSDK60044004","reason":"SENZ2207|Data source code [] does not exist."}}}`,
+			},
+			{
+				name:               "nilRecordID",
+				expectedErr:        szerror.ErrSz,
+				expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).DeleteRecord", "error": {"function": "szengine.(*Szengine).DeleteRecord", "error":{"id":"SZSDK60044004","reason":"SENZ2288|No record ID found."}}}`,
+				recordID:           nilRecordID,
+			},
+			{
+				name:               "withInfo_nilDataSourceCode",
+				flags:              senzing.SzWithInfo,
+				dataSourceCode:     nilDataSourceCode,
+				expectedErr:        szerror.ErrSzUnknownDataSource,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).DeleteRecord","error":{"function":"szengine.(*Szengine).DeleteRecord","error":{"id":"SZSDK60044005","reason":"SENZ2207|Data source code [] does not exist."}}}`,
+			},
+			{
+				name:               "withInfo_nilRecordID",
+				expectedErr:        szerror.ErrSz,
+				expectedErrMessage: `{"function": "szengineserver.(*SzEngineServer).DeleteRecord", "error": {"function": "szengine.(*Szengine).DeleteRecord", "error":{"id":"SZSDK60044005","reason":"SENZ2288|No record ID found."}}}`,
+				flags:              senzing.SzWithInfo,
+				recordID:           nilRecordID,
+			},
+		}
+	}
+
+	result = append(result, addendum...)
 
 	return result
 }
@@ -2382,57 +2431,117 @@ func getTestCasesForHowEntityByEntityID() []TestMetadataForHowEntityByEntityID {
 }
 
 func getTestCasesForGetRecordPreview() []TestMetadataForGetRecordPreview {
+	var addendum []TestMetadataForGetRecordPreview
+
 	result := []TestMetadataForGetRecordPreview{
-		{
-			name:               "badRecordDefinition",
-			expectedErr:        szerror.ErrSzBadInput,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetRecordPreview","error":{"function":"szengine.(*Szengine).GetRecordPreview","error":{"id":"SZSDK60044061","reason":"SENZ0002|Invalid Message"}}}`,
-			recordDefinition:   badRecordDefinition,
-		},
 		{
 			name: "default",
 		},
 	}
+
+	switch {
+	case senzingVersion < 40200:
+		addendum = []TestMetadataForGetRecordPreview{
+			{
+				name:               "badRecordDefinition",
+				expectedErr:        szerror.ErrSzBadInput,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetRecordPreview","error":{"function":"szengine.(*Szengine).GetRecordPreview","error":{"id":"SZSDK60044061","reason":"SENZ0002|Invalid Message"}}}`,
+				recordDefinition:   badRecordDefinition,
+			},
+		}
+
+	default:
+		addendum = []TestMetadataForGetRecordPreview{
+			{
+				name:               "badRecordDefinition",
+				expectedErr:        szerror.ErrSzBadInput,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).GetRecordPreview","error":{"function":"szengine.(*Szengine).GetRecordPreview","error":{"id":"SZSDK60044061","reason":"SENZ3121|JSON Parsing Failure [code=3,offset=0]"}}}`,
+				recordDefinition:   badRecordDefinition,
+			},
+		}
+	}
+
+	result = append(result, addendum...)
 
 	return result
 }
 
 func getTestCasesForProcessRedoRecord() []TestMetadataForProcessRedoRecord {
+	var addendum []TestMetadataForProcessRedoRecord
+
 	result := []TestMetadataForProcessRedoRecord{
 		{
-			name:               "badRedoRecord",
-			expectedErr:        szerror.ErrSzConfiguration,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
-			redoRecord:         badRedoRecord,
-		},
-		{
 			name: "default",
-		},
-		{
-			name:               "nilRedoRecord",
-			expectedErr:        szerror.ErrSzBadInput,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ0007|Empty Message"}}}`,
-			redoRecord:         nilRedoRecord,
 		},
 		{
 			name:  "withInfo",
 			flags: senzing.SzWithInfo,
 		},
-		{
-			name:               "withInfo_badRedoRecord",
-			expectedErr:        szerror.ErrSzConfiguration,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044045","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
-			flags:              senzing.SzWithInfo,
-			redoRecord:         badRedoRecord,
-		},
-		{
-			name:               "withInfo_nilRedoRecord",
-			flags:              senzing.SzWithInfo,
-			expectedErr:        szerror.ErrSzBadInput,
-			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044045","reason":"SENZ0007|Empty Message"}}}`,
-			redoRecord:         nilRedoRecord,
-		},
 	}
+
+	switch {
+	case senzingVersion < 40200:
+		addendum = []TestMetadataForProcessRedoRecord{
+			{
+				name:               "badRedoRecord",
+				expectedErr:        szerror.ErrSzConfiguration,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
+				redoRecord:         badRedoRecord,
+			},
+			{
+				name:               "nilRedoRecord",
+				expectedErr:        szerror.ErrSzBadInput,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ0007|Empty Message"}}}`,
+				redoRecord:         nilRedoRecord,
+			},
+			{
+				name:               "withInfo_badRedoRecord",
+				expectedErr:        szerror.ErrSzConfiguration,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044045","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
+				flags:              senzing.SzWithInfo,
+				redoRecord:         badRedoRecord,
+			},
+			{
+				name:               "withInfo_nilRedoRecord",
+				flags:              senzing.SzWithInfo,
+				expectedErr:        szerror.ErrSzBadInput,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044045","reason":"SENZ0007|Empty Message"}}}`,
+				redoRecord:         nilRedoRecord,
+			},
+		}
+
+	default:
+		addendum = []TestMetadataForProcessRedoRecord{
+			{
+				name:               "badRedoRecord",
+				expectedErr:        szerror.ErrSzUnknownDataSource,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ2207|Data source code [] does not exist."}}}`,
+				redoRecord:         badRedoRecord,
+			},
+			{
+				name:               "nilRedoRecord",
+				expectedErr:        szerror.ErrSz,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ0002|Invalid Message"}}}`,
+				redoRecord:         nilRedoRecord,
+			},
+			{
+				name:               "withInfo_badRedoRecord",
+				expectedErr:        szerror.ErrSzUnknownDataSource,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044045","reason":"SENZ2207|Data source code [] does not exist."}}}`,
+				flags:              senzing.SzWithInfo,
+				redoRecord:         badRedoRecord,
+			},
+			{
+				name:               "withInfo_nilRedoRecord",
+				flags:              senzing.SzWithInfo,
+				expectedErr:        szerror.ErrSz,
+				expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044045","reason":"SENZ0002|Invalid Message"}}}`,
+				redoRecord:         nilRedoRecord,
+			},
+		}
+	}
+
+	result = append(result, addendum...)
 
 	return result
 }
