@@ -1933,7 +1933,7 @@ func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
 	}
 
 	switch {
-	case senzingVersion < 40200:
+	case senzingVersion < 40201:
 		addendum = []TestMetadataForDeleteRecord{
 			{
 				name:               "nilDataSourceCode",
@@ -2480,7 +2480,7 @@ func getTestCasesForProcessRedoRecord() []TestMetadataForProcessRedoRecord {
 	}
 
 	switch {
-	case senzingVersion < 40200:
+	case senzingVersion < 40201:
 		addendum = []TestMetadataForProcessRedoRecord{
 			{
 				name:               "badRedoRecord",
