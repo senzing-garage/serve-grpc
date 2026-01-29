@@ -17,15 +17,13 @@ import (
 // ----------------------------------------------------------------------------
 
 func Test_RootCmd_Execute(test *testing.T) {
-	_ = test
 	args := []string{"--avoid-serving"}
 	setArgs(cmd.RootCmd, args)
 	err := cmd.RootCmd.Execute()
 	require.NoError(test, err)
 }
 
-func Test_PreRun(test *testing.T) {
-	_ = test
+func Test_PreRun(_ *testing.T) {
 	args := []string{"command-name", "--help"}
 	cmd.PreRun(cmd.RootCmd, args)
 }
@@ -39,7 +37,6 @@ func Test_RunE(test *testing.T) {
 }
 
 func Test_RootCmd_Execute_tls_bad_server_certificate_file(test *testing.T) {
-	_ = test
 	args := []string{
 		"--avoid-serving",
 		"--server-certificate-file",
