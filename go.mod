@@ -11,7 +11,7 @@ require (
 	github.com/senzing-garage/go-observing v0.3.7
 	github.com/senzing-garage/init-database v0.8.2
 	github.com/senzing-garage/sz-sdk-go v0.15.12
-	github.com/senzing-garage/sz-sdk-go-core v0.9.13
+	github.com/senzing-garage/sz-sdk-go-core v0.9.14
 	github.com/senzing-garage/sz-sdk-proto v0.8.8
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
