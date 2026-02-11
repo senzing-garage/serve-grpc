@@ -1887,7 +1887,6 @@ func getTestCasesForAddRecord() []TestMetadataForAddRecord {
 
 func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
 	// var addendum []TestMetadataForDeleteRecord
-
 	result := []TestMetadataForDeleteRecord{
 		{
 			name:               "badDataSourceCode",
@@ -2441,7 +2440,6 @@ func getTestCasesForGetRecordPreview() []TestMetadataForGetRecordPreview {
 
 func getTestCasesForProcessRedoRecord() []TestMetadataForProcessRedoRecord {
 	// var addendum []TestMetadataForProcessRedoRecord
-
 	result := []TestMetadataForProcessRedoRecord{
 		{
 			name:               "badRedoRecord",
