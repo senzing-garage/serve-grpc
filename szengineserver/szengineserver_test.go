@@ -1886,7 +1886,6 @@ func getTestCasesForAddRecord() []TestMetadataForAddRecord {
 }
 
 func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
-	// var addendum []TestMetadataForDeleteRecord
 	result := []TestMetadataForDeleteRecord{
 		{
 			name:               "badDataSourceCode",
@@ -1957,16 +1956,6 @@ func getTestCasesForDeleteRecord() []TestMetadataForDeleteRecord {
 			recordID:           nilRecordID,
 		},
 	}
-
-	// switch {
-	// case senzingVersion < 40201:
-	// 	addendum = []TestMetadataForDeleteRecord{}
-
-	// default:
-	// 	addendum = []TestMetadataForDeleteRecord{}
-	// }
-
-	// result = append(result, addendum...)
 
 	return result
 }
@@ -2439,7 +2428,6 @@ func getTestCasesForGetRecordPreview() []TestMetadataForGetRecordPreview {
 }
 
 func getTestCasesForProcessRedoRecord() []TestMetadataForProcessRedoRecord {
-	// var addendum []TestMetadataForProcessRedoRecord
 	result := []TestMetadataForProcessRedoRecord{
 		{
 			name:               "badRedoRecord",
@@ -2476,70 +2464,6 @@ func getTestCasesForProcessRedoRecord() []TestMetadataForProcessRedoRecord {
 			redoRecord:         nilRedoRecord,
 		},
 	}
-
-	// switch {
-	// case senzingVersion < 40201:
-	// 	addendum = []TestMetadataForProcessRedoRecord{
-	// 		{
-	// 			name:               "badRedoRecord",
-	// 			expectedErr:        szerror.ErrSzConfiguration,
-	// 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
-	// 			redoRecord:         badRedoRecord,
-	// 		},
-	// 		{
-	// 			name:               "nilRedoRecord",
-	// 			expectedErr:        szerror.ErrSzBadInput,
-	// 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ0007|Empty Message"}}}`,
-	// 			redoRecord:         nilRedoRecord,
-	// 		},
-	// 		{
-	// 			name:               "withInfo_badRedoRecord",
-	// 			expectedErr:        szerror.ErrSzConfiguration,
-	// 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044045","reason":"SENZ2136|Error in input mapping, missing required field[DATA_SOURCE]"}}}`,
-	// 			flags:              senzing.SzWithInfo,
-	// 			redoRecord:         badRedoRecord,
-	// 		},
-	// 		{
-	// 			name:               "withInfo_nilRedoRecord",
-	// 			flags:              senzing.SzWithInfo,
-	// 			expectedErr:        szerror.ErrSzBadInput,
-	// 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044045","reason":"SENZ0007|Empty Message"}}}`,
-	// 			redoRecord:         nilRedoRecord,
-	// 		},
-	// 	}
-
-	// default:
-	// 	addendum = []TestMetadataForProcessRedoRecord{
-	// 		{
-	// 			name:               "badRedoRecord",
-	// 			expectedErr:        szerror.ErrSzUnknownDataSource,
-	// 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ2207|Data source code [] does not exist."}}}`,
-	// 			redoRecord:         badRedoRecord,
-	// 		},
-	// 		{
-	// 			name:               "nilRedoRecord",
-	// 			expectedErr:        szerror.ErrSz,
-	// 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044044","reason":"SENZ0002|Invalid Message"}}}`,
-	// 			redoRecord:         nilRedoRecord,
-	// 		},
-	// 		{
-	// 			name:               "withInfo_badRedoRecord",
-	// 			expectedErr:        szerror.ErrSzUnknownDataSource,
-	// 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044045","reason":"SENZ2207|Data source code [] does not exist."}}}`,
-	// 			flags:              senzing.SzWithInfo,
-	// 			redoRecord:         badRedoRecord,
-	// 		},
-	// 		{
-	// 			name:               "withInfo_nilRedoRecord",
-	// 			flags:              senzing.SzWithInfo,
-	// 			expectedErr:        szerror.ErrSz,
-	// 			expectedErrMessage: `{"function":"szengineserver.(*SzEngineServer).ProcessRedoRecord","error":{"function":"szengine.(*Szengine).ProcessRedoRecord","error":{"id":"SZSDK60044045","reason":"SENZ0002|Invalid Message"}}}`,
-	// 			redoRecord:         nilRedoRecord,
-	// 		},
-	// 	}
-	// }
-
-	// result = append(result, addendum...)
 
 	return result
 }
