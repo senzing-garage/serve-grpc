@@ -2,7 +2,7 @@
 # Stages
 # -----------------------------------------------------------------------------
 
-ARG IMAGE_SENZINGSDK_RUNTIME=senzing/senzingsdk-runtime:4.2.0@sha256:063a2f7514bc6ee7ad9953e035cf836ba33967fa5591c5656fa8c4c723aaae76
+ARG IMAGE_SENZINGSDK_RUNTIME=senzing/senzingsdk-runtime:4.2.0@sha256:072ff062d9d3ee224e68848e8a37b9f4d6db9ada016fdd0313c3a5bd946df8b9
 ARG IMAGE_BUILDER=golang:1.25.6-bookworm@sha256:f4490d7b261d73af4543c46ac6597d7d101b6e1755bcdd8c5159fda7046b6b3e
 ARG IMAGE_FPM=dockter/fpm:1.1.0@sha256:a92ac598d35f1a7a4a659e26bd0e1bd25f317aafdcd4be8bf2795314c421d89b
 ARG IMAGE_FINAL=alpine@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
