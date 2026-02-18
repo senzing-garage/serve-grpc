@@ -2,6 +2,7 @@ package szengineserver
 
 import (
 	"context"
+	"math"
 	"sync"
 	"time"
 
@@ -68,7 +69,13 @@ func (server *SzEngineServer) CloseExportReport(
 	}
 
 	szEngine := getSzEngine()
-	err = szEngine.CloseExportReport(ctx, uintptr(request.GetExportHandle()))
+
+	exportHandle, convertErr := int64ToUintptr(request.GetExportHandle())
+	if convertErr != nil {
+		return &szpb.CloseExportReportResponse{}, wraperror.Errorf(convertErr, wraperror.NoMessage)
+	}
+
+	err = szEngine.CloseExportReport(ctx, exportHandle)
 	response := szpb.CloseExportReportResponse{}
 
 	return &response, wraperror.Errorf(err, wraperror.NoMessage)
@@ -140,7 +147,12 @@ func (server *SzEngineServer) ExportCsvEntityReport(
 
 	szEngine := getSzEngine()
 	result, err = szEngine.ExportCsvEntityReport(ctx, request.GetCsvColumnList(), request.GetFlags())
-	responseResult := int64(result)
+
+	responseResult, convertErr := uintptrToInt64(result)
+	if convertErr != nil {
+		return &szpb.ExportCsvEntityReportResponse{}, wraperror.Errorf(convertErr, wraperror.NoMessage)
+	}
+
 	response := szpb.ExportCsvEntityReportResponse{
 		Result: responseResult,
 	}
@@ -166,7 +178,12 @@ func (server *SzEngineServer) ExportJsonEntityReport( //revive:disable-line var-
 
 	szEngine := getSzEngine()
 	result, err = szEngine.ExportJSONEntityReport(ctx, request.GetFlags())
-	responseResult := int64(result)
+
+	responseResult, convertErr := uintptrToInt64(result)
+	if convertErr != nil {
+		return &szpb.ExportJsonEntityReportResponse{}, wraperror.Errorf(convertErr, wraperror.NoMessage)
+	}
+
 	response := szpb.ExportJsonEntityReportResponse{
 		Result: responseResult,
 	}
@@ -191,7 +208,13 @@ func (server *SzEngineServer) FetchNext(
 	}
 
 	szEngine := getSzEngine()
-	result, err = szEngine.FetchNext(ctx, uintptr(request.GetExportHandle()))
+
+	exportHandle, convertErr := int64ToUintptr(request.GetExportHandle())
+	if convertErr != nil {
+		return &szpb.FetchNextResponse{}, wraperror.Errorf(convertErr, wraperror.NoMessage)
+	}
+
+	result, err = szEngine.FetchNext(ctx, exportHandle)
 	response := szpb.FetchNextResponse{
 		Result: result,
 	}
@@ -1073,6 +1096,24 @@ func (server *SzEngineServer) SetLogLevel(ctx context.Context, logLevelName stri
 // func (server *SzEngineServer) error(messageNumber int, details ...interface{}) error {
 // 	return server.getLogger().NewError(messageNumber, details...)
 // }
+
+// --- Conversions ------------------------------------------------------------
+
+func int64ToUintptr(value int64) (uintptr, error) {
+	if value < 0 {
+		return 0, wraperror.Errorf(errPackage, "cannot convert negative int64 (%d) to uintptr", value)
+	}
+
+	return uintptr(value), nil
+}
+
+func uintptrToInt64(value uintptr) (int64, error) {
+	if uint64(value) > math.MaxInt64 {
+		return 0, wraperror.Errorf(errPackage, "uintptr value %d overflows int64", value)
+	}
+
+	return int64(value), nil
+}
 
 // --- Services ---------------------------------------------------------------
 
