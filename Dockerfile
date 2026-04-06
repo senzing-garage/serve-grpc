@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 ARG IMAGE_BUILDER=golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
-ARG IMAGE_FINAL=senzing/senzingsdk-runtime:4.2.1@sha256:b3af3bace2ae835e1de6ac10637e0ab3a9cf26b8803d22d32f26b8da12a74bed
+ARG IMAGE_FINAL=senzing/senzingsdk-runtime:4.2.2@sha256:70356376f28800f9934940f9468315babf4337be9f7a532c0e3776f0f1cf4a66
 
 # -----------------------------------------------------------------------------
 # Stage: senzingsdk_runtime
