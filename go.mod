@@ -9,7 +9,7 @@ require (
 	github.com/senzing-garage/go-helpers v0.6.15
 	github.com/senzing-garage/go-logging v1.5.4
 	github.com/senzing-garage/go-observing v0.3.7
-	github.com/senzing-garage/init-database v0.8.2
+	github.com/senzing-garage/init-database v0.8.3
 	github.com/senzing-garage/sz-sdk-go v0.15.12
 	github.com/senzing-garage/sz-sdk-go-core v0.9.14
 	github.com/senzing-garage/sz-sdk-proto v0.8.8
