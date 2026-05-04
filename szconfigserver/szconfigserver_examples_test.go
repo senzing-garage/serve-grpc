@@ -35,7 +35,7 @@ func ExampleSzConfigServer_RegisterDataSource() {
 
 	requestToRegisterDataSource := &szpb.RegisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
-		DataSourceCode:   "GO_TEST",
+		DataSourceCode:   dataSourceCode,
 	}
 
 	response, err := szConfigServer.RegisterDataSource(ctx, requestToRegisterDataSource)
@@ -70,7 +70,7 @@ func ExampleSzConfigServer_UnregisterDataSource() {
 
 	requestToUnregisterDataSource := &szpb.UnregisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
-		DataSourceCode:   "GO_TEST",
+		DataSourceCode:   dataSourceCode,
 	}
 
 	response, err := szConfigServer.UnregisterDataSource(ctx, requestToUnregisterDataSource)

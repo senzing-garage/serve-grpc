@@ -12,19 +12,27 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+const (
+	flagAvoidServing          = "--avoid-serving"
+	flagServerCertificateFile = "--server-certificate-file"
+	flagServerKeyFile         = "--server-key-file"
+	commandName               = "command-name"
+	testServerCertificatePath = "../testdata/certificates/server/certificate.pem"
+)
+
 // ----------------------------------------------------------------------------
 // Test public functions
 // ----------------------------------------------------------------------------
 
 func Test_RootCmd_Execute(test *testing.T) {
-	args := []string{"--avoid-serving"}
+	args := []string{flagAvoidServing}
 	setArgs(cmd.RootCmd, args)
 	err := cmd.RootCmd.Execute()
 	require.NoError(test, err)
 }
 
 func Test_PreRun(_ *testing.T) {
-	args := []string{"command-name", "--help"}
+	args := []string{commandName, "--help"}
 	cmd.PreRun(cmd.RootCmd, args)
 }
 
@@ -38,10 +46,10 @@ func Test_RunE(test *testing.T) {
 
 func Test_RootCmd_Execute_tls_bad_server_certificate_file(test *testing.T) {
 	args := []string{
-		"--avoid-serving",
-		"--server-certificate-file",
+		flagAvoidServing,
+		flagServerCertificateFile,
 		"",
-		"--server-key-file",
+		flagServerKeyFile,
 		"../testdata/certificates/server/private_key.pem",
 	}
 
@@ -53,10 +61,10 @@ func Test_RootCmd_Execute_tls_bad_server_certificate_file(test *testing.T) {
 func Test_RootCmd_Execute_tls_bad_server_key_file(test *testing.T) {
 	_ = test
 	args := []string{
-		"--avoid-serving",
-		"--server-certificate-file",
-		"../testdata/certificates/server/certificate.pem",
-		"--server-key-file",
+		flagAvoidServing,
+		flagServerCertificateFile,
+		testServerCertificatePath,
+		flagServerKeyFile,
 		"",
 	}
 	setArgs(cmd.RootCmd, args)
@@ -67,10 +75,10 @@ func Test_RootCmd_Execute_tls_bad_server_key_file(test *testing.T) {
 func Test_RootCmd_Execute_tls(test *testing.T) {
 	_ = test
 	args := []string{
-		"--avoid-serving",
-		"--server-certificate-file",
-		"../testdata/certificates/server/certificate.pem",
-		"--server-key-file",
+		flagAvoidServing,
+		flagServerCertificateFile,
+		testServerCertificatePath,
+		flagServerKeyFile,
 		"../testdata/certificates/server/private_key.pem",
 	}
 	setArgs(cmd.RootCmd, args)

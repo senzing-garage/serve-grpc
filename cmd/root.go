@@ -35,6 +35,8 @@ const (
 	 `
 )
 
+const helpServerParameters = "See https://pkg.go.dev/google.golang.org/grpc/keepalive#ServerParameters. [%s]"
+
 // For the following, see
 // - https://github.com/grpc/grpc-go/blob/master/internal/transport/defaults.go
 // - https://pkg.go.dev/google.golang.org/grpc#ServerOption
@@ -111,7 +113,7 @@ var keepaliveServerParameterMaxConnectionAgeGraceInSeconds = option.ContextVaria
 		defaultKeepaliveServerParameterMaxConnectionAgeGraceInSeconds,
 	),
 	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_AGE_GRACE_IN_SECONDS",
-	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#ServerParameters. [%s]",
+	Help:  helpServerParameters,
 	Type:  optiontype.Int,
 }
 
@@ -122,7 +124,7 @@ var keepaliveServerParameterMaxConnectionAgeInSeconds = option.ContextVariable{
 		defaultKeepaliveServerParameterMaxConnectionAgeInSeconds,
 	),
 	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_AGE_IN_SECONDS",
-	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#ServerParameters. [%s]",
+	Help:  helpServerParameters,
 	Type:  optiontype.Int,
 }
 
@@ -133,7 +135,7 @@ var keepaliveServerParameterMaxConnectionIdleInSeconds = option.ContextVariable{
 		defaultKeepaliveServerParameterMaxConnectionIdleInSeconds,
 	),
 	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_MAX_CONNECTION_IDLE_IN_SECONDS",
-	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#ServerParameters. [%s]",
+	Help:  helpServerParameters,
 	Type:  optiontype.Int,
 }
 
@@ -144,7 +146,7 @@ var keepaliveServerParameterTimeInSeconds = option.ContextVariable{
 		defaultKeepaliveServerParameterTimeInSeconds,
 	),
 	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_TIME_IN_SECONDS",
-	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#ServerParameters. [%s]",
+	Help:  helpServerParameters,
 	Type:  optiontype.Int,
 }
 
@@ -155,7 +157,7 @@ var keepaliveServerParameterTimeoutInSeconds = option.ContextVariable{
 		defaultKeepaliveServerParameterTimeoutInSeconds,
 	),
 	Envar: "SENZING_TOOLS_SERVER_KEEPALIVE_SERVER_PARAMETER_TIMEOUT_IN_SECONDS",
-	Help:  "See https://pkg.go.dev/google.golang.org/grpc/keepalive#ServerParameters. [%s]",
+	Help:  helpServerParameters,
 	Type:  optiontype.Int,
 }
 

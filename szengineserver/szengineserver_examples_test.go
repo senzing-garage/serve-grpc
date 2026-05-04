@@ -21,7 +21,7 @@ func ExampleSzEngineServer_AddRecord() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.AddRecordRequest{
-		DataSourceCode:   "CUSTOMERS",
+		DataSourceCode:   dataSourceCustomers,
 		RecordId:         "1001",
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Robert", "DATE_OF_BIRTH": "12/11/1978", "ADDR_TYPE": "MAILING", "ADDR_LINE1": "123 Main Street, Las Vegas NV 89132", "PHONE_TYPE": "HOME", "PHONE_NUMBER": "702-919-1300", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "1/2/18", "STATUS": "Active", "AMOUNT": "100"}`,
 		Flags:            senzing.SzWithoutInfo,
@@ -42,7 +42,7 @@ func ExampleSzEngineServer_AddRecord_secondRecord() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.AddRecordRequest{
-		DataSourceCode:   "CUSTOMERS",
+		DataSourceCode:   dataSourceCustomers,
 		RecordId:         "1002",
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1002", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Bob", "DATE_OF_BIRTH": "11/12/1978", "ADDR_TYPE": "HOME", "ADDR_LINE1": "1515 Adela Lane", "ADDR_CITY": "Las Vegas", "ADDR_STATE": "NV", "ADDR_POSTAL_CODE": "89111", "PHONE_TYPE": "MOBILE", "PHONE_NUMBER": "702-919-1300", "DATE": "3/10/17", "STATUS": "Inactive", "AMOUNT": "200"}`,
 		Flags:            senzing.SzWithoutInfo,
@@ -63,7 +63,7 @@ func ExampleSzEngineServer_AddRecord_withInfo() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.AddRecordRequest{
-		DataSourceCode:   "CUSTOMERS",
+		DataSourceCode:   dataSourceCustomers,
 		RecordId:         "1003",
 		RecordDefinition: `{"DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1003", "RECORD_TYPE": "PERSON", "PRIMARY_NAME_LAST": "Smith", "PRIMARY_NAME_FIRST": "Bob", "PRIMARY_NAME_MIDDLE": "J", "DATE_OF_BIRTH": "12/11/1978", "EMAIL_ADDRESS": "bsmith@work.com", "DATE": "4/9/16", "STATUS": "Inactive", "AMOUNT": "300"}`,
 		Flags:            senzing.SzWithInfo,
@@ -77,7 +77,7 @@ func ExampleSzEngineServer_AddRecord_withInfo() {
 	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
 	// Output:
 	// {
-	//     "DATA_SOURCE": "CUSTOMERS",
+	//     "DATA_SOURCE": dataSourceCustomers,
 	//     "RECORD_ID": "1003",
 	//     "AFFECTED_ENTITIES": [
 	//         {
@@ -209,7 +209,7 @@ func ExampleSzEngineServer_FindInterestingEntitiesByEntityId() {
 	ctx := context.TODO()
 	szEngine := getSzEngineServer(ctx)
 	request := &szpb.FindInterestingEntitiesByEntityIdRequest{
-		EntityId: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord(ctx, dataSourceCustomers, "1001"),
 		Flags:    0,
 	}
 
@@ -233,7 +233,7 @@ func ExampleSzEngineServer_FindInterestingEntitiesByRecordId() {
 	ctx := context.TODO()
 	szEngine := getSzEngineServer(ctx)
 	request := &szpb.FindInterestingEntitiesByRecordIdRequest{
-		DataSourceCode: "CUSTOMERS",
+		DataSourceCode: dataSourceCustomers,
 		RecordId:       "1001",
 		Flags:          0,
 	}
@@ -258,10 +258,10 @@ func ExampleSzEngineServer_FindNetworkByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	entityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord(
-		"CUSTOMERS",
+		dataSourceCustomers,
 		"1001",
 	) + `}, {"ENTITY_ID": ` + getEntityIDStringForRecord(
-		"CUSTOMERS",
+		dataSourceCustomers,
 		"1002",
 	) + `}]}`
 	request := &szpb.FindNetworkByEntityIdRequest{
@@ -329,8 +329,8 @@ func ExampleSzEngineServer_FindPathByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindPathByEntityIdRequest{
-		StartEntityId: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
-		EndEntityId:   getEntityIDForRecord(ctx, "CUSTOMERS", "1002"),
+		StartEntityId: getEntityIDForRecord(ctx, dataSourceCustomers, "1001"),
+		EndEntityId:   getEntityIDForRecord(ctx, dataSourceCustomers, "1002"),
 		MaxDegrees:    1,
 		Flags:         senzing.SzNoFlags,
 	}
@@ -367,10 +367,10 @@ func ExampleSzEngineServer_FindPathByEntityId_avoiding() {
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`
+	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord(dataSourceCustomers, "1003") + `}]}`
 	request := &szpb.FindPathByEntityIdRequest{
-		StartEntityId:  getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
-		EndEntityId:    getEntityIDForRecord(ctx, "CUSTOMERS", "1002"),
+		StartEntityId:  getEntityIDForRecord(ctx, dataSourceCustomers, "1001"),
+		EndEntityId:    getEntityIDForRecord(ctx, dataSourceCustomers, "1002"),
 		MaxDegrees:     1,
 		AvoidEntityIds: avoidEntityIDs,
 		Flags:          senzing.SzNoFlags,
@@ -408,10 +408,10 @@ func ExampleSzEngineServer_FindPathByEntityId_avoidingAndIncluding() {
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
-	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`
+	avoidEntityIDs := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord(dataSourceCustomers, "1003") + `}]}`
 	request := &szpb.FindPathByEntityIdRequest{
-		StartEntityId:       getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
-		EndEntityId:         getEntityIDForRecord(ctx, "CUSTOMERS", "1002"),
+		StartEntityId:       getEntityIDForRecord(ctx, dataSourceCustomers, "1001"),
+		EndEntityId:         getEntityIDForRecord(ctx, dataSourceCustomers, "1002"),
 		MaxDegrees:          1,
 		AvoidEntityIds:      avoidEntityIDs,
 		RequiredDataSources: `{"DATA_SOURCES": ["CUSTOMERS"]}`,
@@ -449,9 +449,9 @@ func ExampleSzEngineServer_FindPathByRecordId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindPathByRecordIdRequest{
-		StartDataSourceCode: "CUSTOMERS",
+		StartDataSourceCode: dataSourceCustomers,
 		StartRecordId:       "1001",
-		EndDataSourceCode:   "CUSTOMERS",
+		EndDataSourceCode:   dataSourceCustomers,
 		EndRecordId:         "1002",
 		MaxDegrees:          1,
 		Flags:               senzing.SzNoFlags,
@@ -490,9 +490,9 @@ func ExampleSzEngineServer_FindPathByRecordId_avoiding() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.FindPathByRecordIdRequest{
-		StartDataSourceCode: "CUSTOMERS",
+		StartDataSourceCode: dataSourceCustomers,
 		StartRecordId:       "1001",
-		EndDataSourceCode:   "CUSTOMERS",
+		EndDataSourceCode:   dataSourceCustomers,
 		EndRecordId:         "1002",
 		MaxDegrees:          1,
 		AvoidRecordKeys:     `{"RECORDS": [{ "DATA_SOURCE": "CUSTOMERS", "RECORD_ID": "1001"}]}`,
@@ -531,13 +531,14 @@ func ExampleSzEngineServer_FindPathByRecordId_avoidingAndIncluding() {
 	// visit https://github.com/senzing-garage/serve-grpc/blob/main/szengineserver/szengineserver_test.go
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
+	avoidRecordKeys := `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord(dataSourceCustomers, "1003") + `}]}`
 	request := &szpb.FindPathByRecordIdRequest{
-		StartDataSourceCode: "CUSTOMERS",
+		StartDataSourceCode: dataSourceCustomers,
 		StartRecordId:       "1001",
-		EndDataSourceCode:   "CUSTOMERS",
+		EndDataSourceCode:   dataSourceCustomers,
 		EndRecordId:         "1002",
 		MaxDegrees:          1,
-		AvoidRecordKeys:     `{"ENTITIES": [{"ENTITY_ID": ` + getEntityIDStringForRecord("CUSTOMERS", "1003") + `}]}`,
+		AvoidRecordKeys:     avoidRecordKeys,
 		RequiredDataSources: `{"DATA_SOURCES": ["CUSTOMERS"]}`,
 		Flags:               senzing.SzNoFlags,
 	}
@@ -589,7 +590,7 @@ func ExampleSzEngineServer_GetEntityByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetEntityByEntityIdRequest{
-		EntityId: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord(ctx, dataSourceCustomers, "1001"),
 		Flags:    senzing.SzNoFlags,
 	}
 
@@ -613,7 +614,7 @@ func ExampleSzEngineServer_GetEntityByRecordId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetEntityByRecordIdRequest{
-		DataSourceCode: "CUSTOMERS",
+		DataSourceCode: dataSourceCustomers,
 		RecordId:       "1001",
 		Flags:          senzing.SzNoFlags,
 	}
@@ -638,7 +639,7 @@ func ExampleSzEngineServer_GetRecord() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.GetRecordRequest{
-		DataSourceCode: "CUSTOMERS",
+		DataSourceCode: dataSourceCustomers,
 		RecordId:       "1001",
 		Flags:          senzing.SzNoFlags,
 	}
@@ -651,7 +652,7 @@ func ExampleSzEngineServer_GetRecord() {
 	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
 	// Output:
 	// {
-	//     "DATA_SOURCE": "CUSTOMERS",
+	//     "DATA_SOURCE": dataSourceCustomers,
 	//     "RECORD_ID": "1001"
 	// }
 }
@@ -717,7 +718,7 @@ func ExampleSzEngineServer_HowEntityByEntityId() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.HowEntityByEntityIdRequest{
-		EntityId: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord(ctx, dataSourceCustomers, "1001"),
 		Flags:    senzing.SzNoFlags,
 	}
 
@@ -787,7 +788,7 @@ func ExampleSzEngineServer_SearchByAttributes() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.SearchByAttributesRequest{
-		Attributes: `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "Smith"}], "EMAIL_ADDRESS": "bsmith@work.com"}`,
+		Attributes: smithSearchAttributes,
 		Flags:      senzing.SzNoFlags,
 	}
 
@@ -831,8 +832,8 @@ func ExampleSzEngineServer_SearchByAttributes_searchProfile() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.SearchByAttributesRequest{
-		Attributes:    `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "Smith"}], "EMAIL_ADDRESS": "bsmith@work.com"}`,
-		SearchProfile: "SEARCH",
+		Attributes:    smithSearchAttributes,
+		SearchProfile: searchProfileSearch,
 		Flags:         senzing.SzNoFlags,
 	}
 
@@ -875,8 +876,8 @@ func ExampleSzEngineServer_WhyEntities() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.WhyEntitiesRequest{
-		EntityId_1: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
-		EntityId_2: getEntityIDForRecord(ctx, "CUSTOMERS", "1002"),
+		EntityId_1: getEntityIDForRecord(ctx, dataSourceCustomers, "1001"),
+		EntityId_2: getEntityIDForRecord(ctx, dataSourceCustomers, "1002"),
 		Flags:      senzing.SzNoFlags,
 	}
 
@@ -915,7 +916,7 @@ func ExampleSzEngineServer_WhyRecordInEntity() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.WhyRecordInEntityRequest{
-		DataSourceCode: "CUSTOMERS",
+		DataSourceCode: dataSourceCustomers,
 		Flags:          senzing.SzNoFlags,
 		RecordId:       "1001",
 	}
@@ -934,7 +935,7 @@ func ExampleSzEngineServer_WhyRecordInEntity() {
 	//             "ENTITY_ID": 100070,
 	//             "FOCUS_RECORDS": [
 	//                 {
-	//                     "DATA_SOURCE": "CUSTOMERS",
+	//                     "DATA_SOURCE": dataSourceCustomers,
 	//                     "RECORD_ID": "1001"
 	//                 }
 	//             ],
@@ -961,9 +962,9 @@ func ExampleSzEngineServer_WhyRecords() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.WhyRecordsRequest{
-		DataSourceCode_1: "CUSTOMERS",
+		DataSourceCode_1: dataSourceCustomers,
 		RecordId_1:       "1001",
-		DataSourceCode_2: "CUSTOMERS",
+		DataSourceCode_2: dataSourceCustomers,
 		RecordId_2:       "1002",
 		Flags:            senzing.SzNoFlags,
 	}
@@ -983,9 +984,9 @@ func ExampleSzEngineServer_WhySearch() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.WhySearchRequest{
-		Attributes:    `{"NAMES": [{"NAME_TYPE": "PRIMARY", "NAME_LAST": "Smith"}], "EMAIL_ADDRESS": "bsmith@work.com"}`,
-		EntityId:      getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
-		SearchProfile: "SEARCH",
+		Attributes:    smithSearchAttributes,
+		EntityId:      getEntityIDForRecord(ctx, dataSourceCustomers, "1001"),
+		SearchProfile: searchProfileSearch,
 		Flags:         senzing.SzNoFlags,
 	}
 
@@ -1028,7 +1029,7 @@ func ExampleSzEngineServer_ReevaluateEntity() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateEntityRequest{
-		EntityId: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord(ctx, dataSourceCustomers, "1001"),
 		Flags:    senzing.SzWithoutInfo,
 	}
 
@@ -1047,7 +1048,7 @@ func ExampleSzEngineServer_ReevaluateEntity_withInfo() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateEntityRequest{
-		EntityId: getEntityIDForRecord(ctx, "CUSTOMERS", "1001"),
+		EntityId: getEntityIDForRecord(ctx, dataSourceCustomers, "1001"),
 		Flags:    senzing.SzWithInfo,
 	}
 
@@ -1073,7 +1074,7 @@ func ExampleSzEngineServer_ReevaluateRecord() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateRecordRequest{
-		DataSourceCode: "CUSTOMERS",
+		DataSourceCode: dataSourceCustomers,
 		RecordId:       "1001",
 		Flags:          senzing.SzWithoutInfo,
 	}
@@ -1093,7 +1094,7 @@ func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.ReevaluateRecordRequest{
-		DataSourceCode: "CUSTOMERS",
+		DataSourceCode: dataSourceCustomers,
 		RecordId:       "1001",
 		Flags:          senzing.SzWithInfo,
 	}
@@ -1106,7 +1107,7 @@ func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
 	// Output:
 	// {
-	//     "DATA_SOURCE": "CUSTOMERS",
+	//     "DATA_SOURCE": dataSourceCustomers,
 	//     "RECORD_ID": "1001",
 	//     "AFFECTED_ENTITIES": [
 	//         {
@@ -1149,7 +1150,7 @@ func ExampleSzEngineServer_DeleteRecord() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.DeleteRecordRequest{
-		DataSourceCode: "CUSTOMERS",
+		DataSourceCode: dataSourceCustomers,
 		RecordId:       "1003",
 		Flags:          senzing.SzWithoutInfo,
 	}
@@ -1169,7 +1170,7 @@ func ExampleSzEngineServer_DeleteRecord_withInfo() {
 	ctx := context.TODO()
 	szEngineServer := getSzEngineServer(ctx)
 	request := &szpb.DeleteRecordRequest{
-		DataSourceCode: "CUSTOMERS",
+		DataSourceCode: dataSourceCustomers,
 		RecordId:       "1003",
 		Flags:          senzing.SzWithInfo,
 	}
@@ -1182,7 +1183,7 @@ func ExampleSzEngineServer_DeleteRecord_withInfo() {
 	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
 	// Output:
 	// {
-	//     "DATA_SOURCE": "CUSTOMERS",
+	//     "DATA_SOURCE": dataSourceCustomers,
 	//     "RECORD_ID": "1003",
 	//     "AFFECTED_ENTITIES": []
 	// }

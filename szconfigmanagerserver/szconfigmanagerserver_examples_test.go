@@ -202,7 +202,7 @@ func ExampleSzConfigManagerServer_SetDefaultConfig() {
 
 	requestToSetDefaultConfig := &szpb.SetDefaultConfigRequest{
 		ConfigDefinition: defaultConfigDefinition,
-		ConfigComment:    "Just a test",
+		ConfigComment:    configComment,
 	}
 
 	response, err := szConfigManagerServer.SetDefaultConfig(ctx, requestToSetDefaultConfig)

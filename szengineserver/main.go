@@ -28,6 +28,11 @@ const ComponentID = 6014
 // Log message prefix.
 const Prefix = "serve-grpc.szengineserver."
 
+const (
+	msgSzEngineInitFailed    = "During test setup, call to szengine.Init() failed."
+	msgSzEngineDestroyFailed = "During test setup, call to szengine.Destroy() failed."
+)
+
 // ----------------------------------------------------------------------------
 // Variables
 // ----------------------------------------------------------------------------
@@ -183,9 +188,9 @@ var IDMessages = map[int]string{
 	4003: Prefix + "InitWithConfigID() not supported in gRPC",
 	5901: "During test setup, call to messagelogger.NewSenzingApiLogger() failed.",
 	5902: "During test setup, call to szengineconfigurationjson.BuildSimpleSystemConfigurationJson() failed.",
-	5903: "During test setup, call to szengine.Init() failed.",
+	5903: msgSzEngineInitFailed,
 	5904: "During test setup, call to szdiagnostic.PurgeRepository() failed.",
-	5905: "During test setup, call to szengine.Destroy() failed.",
+	5905: msgSzEngineDestroyFailed,
 	5906: "During test setup, call to szconfig.Init() failed.",
 	5907: "During test setup, call to szconfig.Create() failed.",
 	5908: "During test setup, call to szconfig.RegisterDataSource() failed.",
@@ -196,15 +201,15 @@ var IDMessages = map[int]string{
 	5913: "During test setup, call to szconfigmgr.AddConfig() failed.",
 	5914: "During test setup, call to szconfigmgr.SetDefaultConfigID() failed.",
 	5915: "During test setup, call to szconfigmgr.Destroy() failed.",
-	5916: "During test setup, call to szengine.Init() failed.",
+	5916: msgSzEngineInitFailed,
 	5917: "During test setup, call to szengine.AddRecord() failed.",
-	5918: "During test setup, call to szengine.Destroy() failed.",
+	5918: msgSzEngineDestroyFailed,
 	5920: "During test setup, call to setupSenzingConfig() failed.",
 	5921: "During test setup, call to setupPurgeRepository() failed.",
 	5922: "During test setup, call to setupAddRecords() failed.",
-	5931: "During test setup, call to szengine.Init() failed.",
+	5931: msgSzEngineInitFailed,
 	5932: "During test setup, call to szdiagnostic.PurgeRepository() failed.",
-	5933: "During test setup, call to szengine.Destroy() failed.",
+	5933: msgSzEngineDestroyFailed,
 }
 
 // Status strings for specific szengineserver messages.
