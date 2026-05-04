@@ -77,7 +77,7 @@ func ExampleSzEngineServer_AddRecord_withInfo() {
 	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
 	// Output:
 	// {
-	//     "DATA_SOURCE": dataSourceCustomers,
+	//     "DATA_SOURCE": "CUSTOMERS",
 	//     "RECORD_ID": "1003",
 	//     "AFFECTED_ENTITIES": [
 	//         {
@@ -652,7 +652,7 @@ func ExampleSzEngineServer_GetRecord() {
 	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
 	// Output:
 	// {
-	//     "DATA_SOURCE": dataSourceCustomers,
+	//     "DATA_SOURCE": "CUSTOMERS",
 	//     "RECORD_ID": "1001"
 	// }
 }
@@ -935,7 +935,7 @@ func ExampleSzEngineServer_WhyRecordInEntity() {
 	//             "ENTITY_ID": 100070,
 	//             "FOCUS_RECORDS": [
 	//                 {
-	//                     "DATA_SOURCE": dataSourceCustomers,
+	//                     "DATA_SOURCE": "CUSTOMERS",
 	//                     "RECORD_ID": "1001"
 	//                 }
 	//             ],
@@ -1107,7 +1107,7 @@ func ExampleSzEngineServer_ReevaluateRecord_withInfo() {
 	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
 	// Output:
 	// {
-	//     "DATA_SOURCE": dataSourceCustomers,
+	//     "DATA_SOURCE": "CUSTOMERS",
 	//     "RECORD_ID": "1001",
 	//     "AFFECTED_ENTITIES": [
 	//         {
@@ -1183,7 +1183,7 @@ func ExampleSzEngineServer_DeleteRecord_withInfo() {
 	fmt.Println(jsonutil.PrettyPrint(response.GetResult(), jsonIndentation))
 	// Output:
 	// {
-	//     "DATA_SOURCE": dataSourceCustomers,
+	//     "DATA_SOURCE": "CUSTOMERS",
 	//     "RECORD_ID": "1003",
 	//     "AFFECTED_ENTITIES": []
 	// }
