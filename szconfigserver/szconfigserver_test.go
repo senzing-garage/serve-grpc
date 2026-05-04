@@ -25,6 +25,7 @@ const (
 	observerOrigin    = "Observer 1 origin"
 	printErrors       = false
 	printResults      = false
+	dataSourceCode    = "GO_TEST"
 )
 
 // Bad parameters
@@ -71,7 +72,7 @@ func TestSzConfigServer_RegisterDataSource(test *testing.T) {
 
 	requestToRegisterDataSource := &szpb.RegisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
-		DataSourceCode:   "GO_TEST",
+		DataSourceCode:   dataSourceCode,
 	}
 	responseFromRegisterDataSource, err := szConfigServer.RegisterDataSource(ctx, requestToRegisterDataSource)
 	printError(test, err)
@@ -150,7 +151,7 @@ func TestSzConfigServer_UnregisterDataSource(test *testing.T) {
 
 	requestToUnregisterDataSource := &szpb.UnregisterDataSourceRequest{
 		ConfigDefinition: responseFromGetTemplateConfig.GetResult(),
-		DataSourceCode:   "GO_TEST",
+		DataSourceCode:   dataSourceCode,
 	}
 	_, err = szConfigServer.UnregisterDataSource(ctx, requestToUnregisterDataSource)
 	printError(test, err)

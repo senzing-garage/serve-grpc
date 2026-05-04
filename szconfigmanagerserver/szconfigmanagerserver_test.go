@@ -30,6 +30,7 @@ const (
 	observerOrigin    = "Observer 1 origin"
 	printErrors       = false
 	printResults      = false
+	configComment     = "Just a test"
 )
 
 // Bad parameters
@@ -297,7 +298,7 @@ func TestSzConfigManagerServer_SetDefaultConfig(test *testing.T) {
 
 	requestToSetDefaultConfig := &szpb.SetDefaultConfigRequest{
 		ConfigDefinition: defaultConfigDefinition,
-		ConfigComment:    "Just a test",
+		ConfigComment:    configComment,
 	}
 	_, err = szConfigManagerServer.SetDefaultConfig(ctx, requestToSetDefaultConfig)
 	printError(test, err)
@@ -309,7 +310,7 @@ func TestSzConfigManagerServer_SetDefaultConfig_badConfigDefinition(test *testin
 	szConfigManagerServer := getTestObject(ctx, test)
 	requestToSetDefaultConfig := &szpb.SetDefaultConfigRequest{
 		ConfigDefinition: badConfigDefinition,
-		ConfigComment:    "Just a test",
+		ConfigComment:    configComment,
 	}
 	_, err := szConfigManagerServer.SetDefaultConfig(ctx, requestToSetDefaultConfig)
 	printError(test, err)

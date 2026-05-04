@@ -17,10 +17,10 @@ import (
 func Test_RootCmd_Execute_tls_encrypted_key(test *testing.T) {
 	_ = test
 	args := []string{
-		"--avoid-serving",
-		"--server-certificate-file",
-		"../testdata/certificates/server/certificate.pem",
-		"--server-key-file",
+		flagAvoidServing,
+		flagServerCertificateFile,
+		testServerCertificatePath,
+		flagServerKeyFile,
 		"../testdata/certificates/server/private_key_encrypted.pem",
 		"--server-key-passphrase",
 		"Passw0rd",
