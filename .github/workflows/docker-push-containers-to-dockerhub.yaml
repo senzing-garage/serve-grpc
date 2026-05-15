@@ -33,12 +33,10 @@ jobs:
           sign-image: true
           username: ${{ secrets.DOCKERHUB_USERNAME }}
 
-  slack-notification:
-    needs: [docker-push-containers-to-dockerhub]
-    if: ${{ always() && contains(fromJSON('["failure", "cancelled"]'), needs.docker-push-containers-to-dockerhub.result) }}
-    secrets:
-      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-    uses: senzing-factory/build-resources/.github/workflows/build-failure-slack-notification.yaml@v4
-    with:
-      job-status: ${{ needs.docker-push-containers-to-dockerhub.result }}
+      - name: Notify Slack on failure
+        if: failure() || cancelled()
+        uses: senzing-factory/build-resources/slack-failure-notification@v4
+        with:
+          job-status: ${{ job.status }}
+          slack-channel: ${{ secrets.SLACK_CHANNEL }}
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}

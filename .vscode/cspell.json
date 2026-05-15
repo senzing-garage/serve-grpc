@@ -101,7 +101,8 @@
     "unmarshalling",
     "USERPROFILE",
     "WATCHLIST",
-    "wraperror"
+    "wraperror",
+    "zizmor"
   ],
   "ignorePaths": [
     ".dockerignore",
