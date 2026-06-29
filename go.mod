@@ -6,10 +6,10 @@ require (
 	github.com/aquilax/truncate v1.0.1
 	github.com/improbable-eng/grpc-web v0.15.0
 	github.com/senzing-garage/go-cmdhelping v0.3.8
-	github.com/senzing-garage/go-helpers v0.6.15
+	github.com/senzing-garage/go-helpers v0.6.16
 	github.com/senzing-garage/go-logging v1.5.4
 	github.com/senzing-garage/go-observing v0.3.7
-	github.com/senzing-garage/init-database v0.8.3
+	github.com/senzing-garage/init-database v0.8.4
 	github.com/senzing-garage/sz-sdk-go v0.15.14
 	github.com/senzing-garage/sz-sdk-go-core v0.9.14
 	github.com/senzing-garage/sz-sdk-proto v0.8.8
@@ -27,20 +27,20 @@ require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/desertbit/timer v1.0.1 // indirect
-	github.com/fsnotify/fsnotify v1.9.0 // indirect
+	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/go-logfmt/logfmt v0.6.1 // indirect
-	github.com/go-sql-driver/mysql v1.9.3 // indirect
+	github.com/go-sql-driver/mysql v1.10.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
-	github.com/godror/godror v0.50.0 // indirect
+	github.com/godror/godror v0.51.0 // indirect
 	github.com/godror/knownpb v0.3.0 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/lib/pq v1.11.2 // indirect
-	github.com/mattn/go-sqlite3 v1.14.34 // indirect
-	github.com/microsoft/go-mssqldb v1.9.8 // indirect
-	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
+	github.com/lib/pq v1.12.3 // indirect
+	github.com/mattn/go-sqlite3 v1.14.47 // indirect
+	github.com/microsoft/go-mssqldb v1.10.0 // indirect
+	github.com/pelletier/go-toml/v2 v2.4.2 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rogpeppe/go-internal v1.13.1 // indirect
 	github.com/rs/cors v1.11.1 // indirect
@@ -56,12 +56,12 @@ require (
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/crypto v0.48.0 // indirect
-	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa // indirect
-	golang.org/x/net v0.51.0 // indirect
-	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260226221140-a57be14db171 // indirect
+	golang.org/x/crypto v0.53.0 // indirect
+	golang.org/x/exp v0.0.0-20260611194520-c48552f49976 // indirect
+	golang.org/x/net v0.56.0 // indirect
+	golang.org/x/sys v0.46.0 // indirect
+	golang.org/x/text v0.38.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260622175928-b703f567277d // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	nhooyr.io/websocket v1.8.17 // indirect
