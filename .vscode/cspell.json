@@ -52,6 +52,7 @@
     "LDFLAGS",
     "libsqlite",
     "LICENSESTRINGBASE",
+    "openpgp",
     "OSARCH",
     "OSTYPE",
     "Passw",
