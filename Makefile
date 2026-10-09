@@ -4,6 +4,10 @@
 
 include makefiles/osdetect.mk
 
+# Tool versions, shared across OS-specific makefiles.
+
+include makefiles/versions.mk
+
 # -----------------------------------------------------------------------------
 # Variables
 # -----------------------------------------------------------------------------
@@ -79,6 +83,7 @@ dependencies-for-development: dependencies-for-development-osarch-specific
 	@go install golang.org/x/tools/cmd/godoc@latest
 	@go install golang.org/x/vuln/cmd/govulncheck@latest
 	@go install mvdan.cc/gofumpt@latest
+	@docker-compose pull 2>/dev/null || true
 	@sudo npm install -g cspell@latest
 
 
@@ -186,6 +191,10 @@ test-http: export SENZING_TOOLS_ENABLE_HTTP=true
 test-http: test-osarch-specific
 
 
+.PHONY: test-verbose
+test-verbose: test-verbose-osarch-specific
+
+
 .PHONY: docker-test
 docker-test:
 	@docker-compose -f docker-compose.test.yaml up
@@ -243,6 +252,13 @@ clean: clean-osarch-specific
 # -----------------------------------------------------------------------------
 # Utility targets
 # -----------------------------------------------------------------------------
+
+.PHONY: docker-rmi-for-build
+docker-rmi-for-build:
+	-docker rmi --force \
+		$(DOCKER_IMAGE_NAME):$(GIT_VERSION) \
+		$(DOCKER_IMAGE_NAME)
+
 
 .PHONY: help
 help:

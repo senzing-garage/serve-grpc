@@ -21,6 +21,8 @@ permissions: {}
 
 jobs:
   sdk-versions:
+    # Emits a static version matrix; needs no token.
+    permissions: {}
     runs-on: ubuntu-latest
     outputs:
       senzingsdk-versions: ${{ steps.cfg.outputs.senzingsdk-versions }}
@@ -37,24 +39,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        go: ["1.26"]
+        go: ["1.27"]
         os: [ubuntu-latest]
         senzingsdk-version: ${{ fromJSON(needs.sdk-versions.outputs.senzingsdk-versions) }}
     timeout-minutes: 30
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Setup go ${{ matrix.go }}
-        uses: actions/setup-go@v7.0.0
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: ${{ matrix.go }}
 
       - name: Set up gotestfmt
-        uses: gotesttools/gotestfmt-action@v2.3.0
+        uses: gotesttools/gotestfmt-action@eba2ac97f623e866e7b1b117c99f18b43cd36d18 # v2.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -71,6 +73,11 @@ jobs:
             echo "LD_LIBRARY_PATH=${SENZING_PATH}/er/lib"
           } >> "$GITHUB_ENV"
 
+      - name: Copy /etc files
+        run: |
+          sudo mkdir -p /etc/opt/senzing
+          sudo cp testdata/senzing-license/g2.lic /etc/opt/senzing/g2.lic
+
       - name: Copy test database files
         run: |
           mkdir -p /tmp/sqlite
@@ -83,13 +90,13 @@ jobs:
           go test -json -v -p 1 -coverprofile="./cover-${SENZING_SDK_VERSION}.out" -covermode=atomic -coverpkg=./... ./...  2>&1 | tee "/tmp/gotest-${SENZING_SDK_VERSION}.log" | gotestfmt
 
       - name: Store coverage file
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: "cover-${{ matrix.senzingsdk-version }}.out"
           path: "./cover-${{ matrix.senzingsdk-version }}.out"
 
       - name: Upload test log
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
           name: "test-log-${{ matrix.senzingsdk-version }}"
@@ -103,6 +110,7 @@ jobs:
           job-status: ${{ job.status }}
           slack-channel: ${{ secrets.SLACK_CHANNEL }}
           slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          additional-info: "SDK: ${{ matrix.senzingsdk-version }} | Go: ${{ matrix.go }}"
 
   coverage:
     name: Coverage
