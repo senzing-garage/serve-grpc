@@ -24,7 +24,7 @@ linters:
     - errname
     - errorlint
     - exhaustive
-    - exhaustruct
+    - exhaustruct_v5
     - exptostd
     - fatcontext
     - forbidigo
@@ -44,7 +44,7 @@ linters:
     - godox
     - goheader
     - gomoddirectives
-    - gomodguard
+    - gomodguard_v2
     - goprintffuncname
     - gosec
     - gosmopolitan
@@ -130,7 +130,7 @@ linters:
     depguard:
       rules:
         prevent_unmaintained_packages:
-          list-mode: lax # allow unless explicitely denied
+          list-mode: lax # allow unless explicitly denied
           allow:
             - github.com/stretchr/testify/*
           deny:
@@ -138,8 +138,8 @@ linters:
               desc: "replaced by io and os packages since Go 1.16: https://tip.golang.org/doc/go1.16#ioutil"
     dupl:
       threshold: 250
-    exhaustruct:
-      exclude:
+    exhaustruct_v5:
+      ignore-patterns:
         - '.+/cobra\.Command$'
         - '.+/grpcserver\.BasicGrpcServer$'
         - '.+/http\.Server$'
@@ -183,6 +183,8 @@ linters:
       lines: 120
     ireturn:
       allow:
+        - anon
+        - empty
         - error
         - grpc.ServerOption
         - logging.Logging
@@ -192,6 +194,7 @@ linters:
         - senzing.SzDiagnostic
         - senzing.SzEngine
         - senzing.SzProduct
+        - stdlib
     mnd:
       ignored-functions:
         - '^grpcServer\.log$'

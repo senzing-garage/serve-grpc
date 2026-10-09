@@ -25,6 +25,26 @@ jobs:
           echo "repo=$(basename ${{ github.repository }})" >> "$GITHUB_OUTPUT"
         shell: bash
 
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: false
+          swap-storage: true
+
+      # The action sets up QEMU, which pulls docker.io/tonistiigi/binfmt, before
+      # it logs in to Docker Hub. Logging in first keeps that pull off the
+      # anonymous rate limit.
+      - name: Login to Docker Hub
+        uses: docker/login-action@abd2ef45e78c5afb21d64d4ca52ee8550d9572c7 # v4.5.1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
       - name: Build docker image
         uses: senzing-factory/github-action-docker-buildx-build@v2
         with:

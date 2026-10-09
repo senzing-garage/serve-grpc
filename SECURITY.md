@@ -6,8 +6,8 @@ The following versions of this repository are supported with security updates.
 
 | Version |     Supported      |
 | ------- | :----------------: |
-| 0.1.x   | :white_check_mark: |
-| < 0.1   |        :x:         |
+| 0.10.x  | :white_check_mark: |
+| < 0.10  |        :x:         |
 
 ## Reporting a Vulnerability
 
