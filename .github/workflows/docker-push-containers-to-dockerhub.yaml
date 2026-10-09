@@ -1,3 +1,5 @@
+# This workflow should only be added to public repositories
+
 name: Docker push containers to dockerhub
 
 on:
