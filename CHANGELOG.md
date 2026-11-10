@@ -9,6 +9,20 @@ This project adheres to [Semantic Versioning].
 
 -
 
+## [0.10.1] - 2026-11-10
+
+### Changed in 0.10.1
+
+- Update to Go 1.27.3
+- Update dependencies
+  - github.com/senzing-garage/go-helpers v0.8.0
+  - github.com/senzing-garage/init-database v0.9.2
+  - google.golang.org/grpc v1.85.0
+
+### Fixed in 0.10.1
+
+- Server no longer fails to start when `cfgVariant.json` is absent from `PIPELINE.CONFIGPATH`
+
 ## [0.10.0] - 2026-10-09
 
 ### Changed in 0.10.0
