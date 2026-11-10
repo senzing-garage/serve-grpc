@@ -56,13 +56,18 @@ func ExampleSzProductServer_GetVersion() {
 
 	// fmt.Println(truncate(response.GetResult(), 43))
 
-	redactKeys := []string{"BUILD_DATE", "BUILD_NUMBER", "BUILD_VERSION", "ENGINE_SCHEMA_VERSION", "VERSION"}
+	redactKeys := []string{
+		"BUILD_DATE",
+		"BUILD_NUMBER",
+		"BUILD_VERSION",
+		"CONFIG_VERSION",
+		"ENGINE_SCHEMA_VERSION",
+		"VERSION",
+	}
 	fmt.Println(jsonutil.PrettyPrint(jsonutil.Truncate(response.GetResult(), AllLines, redactKeys...), jsonIndentation))
 	// Output:
 	// {
-	//     "COMPATIBILITY_VERSION": {
-	//         "CONFIG_VERSION": "11"
-	//     },
+	//     "COMPATIBILITY_VERSION": {},
 	//     "PRODUCT_NAME": "Senzing SDK",
 	//     "SCHEMA_VERSION": {
 	//         "MAXIMUM_REQUIRED_SCHEMA_VERSION": "4.99",
